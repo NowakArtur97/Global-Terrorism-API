@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TargetNode {
+public class Target {
 
 	@Id
 	@GeneratedValue
