@@ -19,6 +19,11 @@ public class Target {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	private String target;
+
+	public Target(String target) {
+
+		this.target = target;
+	}
 }
