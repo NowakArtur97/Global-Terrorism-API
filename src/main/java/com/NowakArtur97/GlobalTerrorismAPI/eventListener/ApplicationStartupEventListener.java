@@ -14,6 +14,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.monitorjbl.xlsx.StreamingReader;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,12 @@ public class ApplicationStartupEventListener {
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-		log.info("START");
 		File globalTerrorismFile = new File(pathToFile);
 
 		InputStream inputStream;
 
 		try {
-			
+
 			inputStream = new FileInputStream(globalTerrorismFile);
 
 			Workbook workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
@@ -54,16 +54,17 @@ public class ApplicationStartupEventListener {
 
 					Cell cell = cellIterator.next();
 
-					if (targetIndex == 39 && !cell.getStringCellValue().isBlank()) {
+					if (targetIndex == XlsxColumnType.TARGET.getIndex() && !cell.getStringCellValue().isBlank()) {
 
 						log.info(cell.getStringCellValue());
 					}
-					
+
 					targetIndex++;
 				}
 			}
 		} catch (FileNotFoundException e) {
 
+			log.info("File in path: " + pathToFile + " not found");
 		}
 
 	}
