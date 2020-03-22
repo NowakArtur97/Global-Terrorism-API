@@ -7,7 +7,7 @@ public enum XlsxColumnType {
 	TARGET(39);
 
 	@Getter
-	private final int index;
+	private int index;
 
 	private XlsxColumnType(int index) {
 

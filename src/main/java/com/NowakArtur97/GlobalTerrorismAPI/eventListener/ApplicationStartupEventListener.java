@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ApplicationStartupEventListener {
 
-	private final static String pathToFile = "C:\\Users\\Samsung\\Spring\\eclipse-workspace\\Projects\\GlobalTerrorismAPI\\src\\main\\resources\\data\\globalterrorismdb_0919dist-mini.xlsx";
+	private final static String pathToFile = "C:\\Users\\Samsung\\Spring\\eclipse-workspace\\Projects\\GlobalTerrorismAPI\\src\\main\\resources\\data\\globalterrorismdb_0919dist.xlsx";
 
 	private final TargetRepository targetRepository;
 
@@ -47,23 +47,49 @@ public class ApplicationStartupEventListener {
 
 			Sheet sheet = workbook.getSheetAt(0);
 
-			Iterator<Row> rowIterator = sheet.rowIterator();
-
-			while (rowIterator.hasNext()) {
+			for (Row row : sheet) {
 
 				int targetIndex = 0;
 
-				Row row = rowIterator.next();
+				for (int i = 0; i < row.getLastCellNum(); i++) {
 
-				Iterator<Cell> cellIterator = row.cellIterator();
+					Cell cell = row.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
-				while (cellIterator.hasNext()) {
+					if (cell != null && targetIndex == XlsxColumnType.TARGET.getIndex()) {
 
-					Cell cell = cellIterator.next();
+						String targetValue = null;
 
-					if (targetIndex == XlsxColumnType.TARGET.getIndex() && !cell.getStringCellValue().isBlank()) {
+						switch (cell.getCellType()) {
 
-						Target target = new Target(cell.getStringCellValue());
+						case NUMERIC:
+							Double doubleValue = cell.getNumericCellValue();
+							targetValue = doubleValue.toString();
+							break;
+						case STRING:
+							targetValue = cell.getStringCellValue();
+							break;
+						case FORMULA:
+							targetValue = cell.getCellFormula();
+							break;
+						case BLANK:
+							targetValue = "BLANK";
+							break;
+						case BOOLEAN:
+							boolean booleanValue = cell.getBooleanCellValue();
+							targetValue = "" + booleanValue;
+							break;
+						case ERROR:
+							byte byteValue = cell.getErrorCellValue();
+							targetValue = "" + byteValue;
+							break;
+						case _NONE:
+							targetValue = "_NONE";
+							break;
+						default:
+							break;
+						}
+						
+						Target target = new Target(targetValue);
 
 						targetRepository.save(target);
 					}
@@ -74,7 +100,6 @@ public class ApplicationStartupEventListener {
 		} catch (FileNotFoundException e) {
 
 			log.info("File in path: " + pathToFile + " not found");
-		}
-
+		} 
 	}
 }
