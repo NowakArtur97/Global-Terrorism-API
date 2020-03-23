@@ -66,4 +66,21 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetsExpected.size(), targetsActual.size(), () -> "should return list with: "
 						+ targetsExpected.size() + " elements, but was: " + targetsActual.size()));
 	}
+
+	@Test
+	@DisplayName("when targets not exist and return all targets")
+	public void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
+
+		List<Target> targetsExpected = new ArrayList<>();
+
+		when(targetRepository.findAll()).thenReturn(targetsExpected);
+
+		List<Target> targetsActual = targetService.findAll();
+
+		assertAll(() -> assertNotNull(targetsActual, () -> "shouldn`t return null"),
+				() -> assertTrue(targetsActual.isEmpty(),
+						() -> "should be empty, but was containing: " + targetsActual),
+				() -> assertEquals(targetsExpected.size(), targetsActual.size(), () -> "should return list with: "
+						+ targetsExpected.size() + " elements, but was: " + targetsActual.size()));
+	}
 }
