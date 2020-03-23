@@ -1,10 +1,15 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.api;
 
-import java.util.List;
+import java.util.Optional;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.Target;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 
 public interface TargetService {
 
-	List<Target> findAll();
+	Page<TargetNode> findAll(Pageable pageable);
+
+	Optional<TargetNode> findById(Long id);
 }

@@ -1,14 +1,16 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service.api;
+package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.Target;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +22,14 @@ public class TargetServiceImpl implements TargetService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Target> findAll() {
+	public Page<TargetNode> findAll(Pageable pageable) {
 
-		return IterableUtils.toList(targetRepository.findAll());
+		return targetRepository.findAll(pageable);
+	}
+
+	@Override
+	public Optional<TargetNode> findById(Long id) {
+
+		return targetRepository.findById(id);
 	}
 }
