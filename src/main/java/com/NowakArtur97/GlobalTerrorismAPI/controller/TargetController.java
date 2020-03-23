@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +13,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/targets")
+@RequestMapping(value = "/targets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TargetController {
 
 	private final TargetService targetService;
 
 	@GetMapping
-	public Iterable<Target> findAllTargets() {
+	public List<Target> findAllTargets() {
 
 		return targetService.findAll();
 	}
