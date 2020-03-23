@@ -17,7 +17,7 @@ public class TargetController {
 
 	private final TargetService targetService;
 
-	@GetMapping(path = "/")
+	@GetMapping
 	public Iterable<Target> findAllTargets() {
 
 		return targetService.findAll();
