@@ -21,7 +21,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TargetController {
 
@@ -31,7 +31,7 @@ public class TargetController {
 
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
-	@GetMapping("targets")
+	@GetMapping(path = "/targets")
 	public ResponseEntity<PagedModel<TargetModel>> findAllTargets(@PageableDefault(size = 100) Pageable pageable) {
 
 		Page<TargetNode> targets = targetService.findAll(pageable);
@@ -40,7 +40,7 @@ public class TargetController {
 		return new ResponseEntity<>(pagedModel, HttpStatus.OK);
 	}
 
-	@GetMapping("targets/{id}")
+	@GetMapping(path = "/targets/{id}")
 	public ResponseEntity<TargetModel> findTargetById(@PathVariable("id") Long id) {
 
 		return targetService.findById(id).map(targetModelAssembler::toModel).map(ResponseEntity::ok)

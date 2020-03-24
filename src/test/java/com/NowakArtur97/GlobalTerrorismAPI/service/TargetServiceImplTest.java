@@ -28,7 +28,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("TargetNode Service Impl Tests")
+@DisplayName("Target Node Service Impl Tests")
 @Tag("TargetServiceImpl_Tests")
 public class TargetServiceImplTest {
 
