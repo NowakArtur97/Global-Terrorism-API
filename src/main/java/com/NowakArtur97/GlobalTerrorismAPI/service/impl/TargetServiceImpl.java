@@ -28,6 +28,7 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<TargetNode> findById(Long id) {
 
 		return targetRepository.findById(id);
