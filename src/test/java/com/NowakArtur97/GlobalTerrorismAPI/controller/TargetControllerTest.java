@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -63,7 +66,7 @@ public class TargetControllerTest {
 	public void setUp() {
 
 		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler);
-		mockMvc = MockMvcBuilders.standaloneSetup(targetController)
+		mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new TargetControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 	}
 
@@ -346,6 +349,26 @@ public class TargetControllerTest {
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("links[0].href", is(linkExpected)))
 				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
+				() -> verify(targetService, times(1)).findById(targetId));
+	}
+
+	@Test
+	@DisplayName("when find target, but target not exists")
+	public void when_find_target_but_target_not_exists_should_return_error_response() {
+
+		Long targetId = 1L;
+
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
+
+		when(targetService.findById(targetId)).thenReturn(Optional.empty());
+
+		assertAll(
+				() -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isNotFound())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("timestamp",
+								is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
+						.andExpect(content().json("{'status': 404}"))
+						.andExpect(jsonPath("error", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).findById(targetId));
 	}
 }
