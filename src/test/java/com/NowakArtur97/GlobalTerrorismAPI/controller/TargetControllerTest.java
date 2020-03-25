@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -68,8 +69,8 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when targets exist with default parameters in link return all targets")
-	public void when_targets_exist_with_default_parameters_in_link_return_all_targets_should_return_targets() {
+	@DisplayName("when find all targets with default parameters in link and targets exist return all targets")
+	public void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
 		String targetName1 = "target1";
@@ -171,8 +172,8 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when targets exist with changed parameters in link return all targets")
-	public void when_targets_exist_with_changed_parameters_in_link_return_all_targets_should_return_targets() {
+	@DisplayName("when find all targets with changed parameters in link and targets exist return all targets")
+	public void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
 		String targetName1 = "target1";
@@ -274,8 +275,8 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when targets not exist")
-	public void when_targets_not_exist_return_empty_list() {
+	@DisplayName("when find all targets, but targets not exist")
+	public void when_find_all_targets_but_targets_not_exist_should_return_empty_list() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
 
@@ -311,17 +312,41 @@ public class TargetControllerTest {
 
 		assertAll(
 				() -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
-						.andDo(MockMvcResultHandlers.print())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(firstPageLink)))
 						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
 						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
-						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
-						.andExpect(jsonPath("content").isEmpty())
+						.andExpect(jsonPath("links[3].href", is(lastPageLink))).andExpect(jsonPath("content").isEmpty())
 						.andExpect(jsonPath("page.size", is(sizeExpected)))
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
 				() -> verify(targetService, times(1)).findAll(pageable));
+	}
+
+	@Test
+	@DisplayName("when find target and target exists")
+	public void when_find_target_and_target_exists_should_return_target() {
+
+		Long targetId = 1L;
+		String targetName = "target";
+		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetModel targetModel = new TargetModel(targetId, targetName);
+
+		String pathToLink = BASE_PATH + "/" + targetId.intValue();
+		Link link = new Link(pathToLink);
+		targetModel.add(link);
+
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
+		String linkExpected = BASE_PATH + "/" + targetId;
+
+		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+
+		assertAll(() -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("links[0].href", is(linkExpected)))
+				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
+				() -> verify(targetService, times(1)).findById(targetId));
 	}
 }
