@@ -68,15 +68,16 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when targets exist and return all targets")
-	public void when_targets_exist_and_return_all_targets_should_return_targets() {
+	@DisplayName("when targets exist with default parameters in link return all targets")
+	public void when_targets_exist_with_default_parameters_in_link_return_all_targets_should_return_targets() {
 
 		Long targetId1 = 1L;
 		String targetName1 = "target1";
 		TargetNode targetNode1 = new TargetNode(targetId1, targetName1);
 		TargetModel targetModel1 = new TargetModel(targetId1, targetName1);
 
-		Link link1 = new Link(BASE_PATH + targetId1.intValue());
+		String pathToLink1 = BASE_PATH + targetId1.intValue();
+		Link link1 = new Link(pathToLink1);
 		targetModel1.add(link1);
 
 		Long targetId2 = 2L;
@@ -84,7 +85,8 @@ public class TargetControllerTest {
 		TargetNode targetNode2 = new TargetNode(targetId2, targetName2);
 		TargetModel targetModel2 = new TargetModel(targetId2, targetName2);
 
-		Link link2 = new Link(BASE_PATH + targetId2.intValue());
+		String pathToLink2 = BASE_PATH + targetId2.intValue();
+		Link link2 = new Link(pathToLink2);
 		targetModel2.add(link2);
 
 		Long targetId3 = 3L;
@@ -92,32 +94,51 @@ public class TargetControllerTest {
 		TargetNode targetNode3 = new TargetNode(targetId3, targetName3);
 		TargetModel targetModel3 = new TargetModel(targetId3, targetName3);
 
-		Link link3 = new Link(BASE_PATH + targetId3.intValue());
+		String pathToLink3 = BASE_PATH + targetId3.intValue();
+		Link link3 = new Link(pathToLink3);
 		targetModel3.add(link3);
+
+		Long targetId4 = 4L;
+		String targetName4 = "target4";
+		TargetNode targetNode4 = new TargetNode(targetId4, targetName4);
+		TargetModel targetModel4 = new TargetModel(targetId4, targetName4);
+
+		String pathToLink4 = BASE_PATH + targetId4.intValue();
+		Link link4 = new Link(pathToLink4);
+		targetModel4.add(link4);
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
 		targetsListExpected.add(targetNode1);
 		targetsListExpected.add(targetNode2);
 		targetsListExpected.add(targetNode3);
+		targetsListExpected.add(targetNode4);
 
 		List<TargetModel> targetModelsListExpected = new ArrayList<>();
 		targetModelsListExpected.add(targetModel1);
 		targetModelsListExpected.add(targetModel2);
 		targetModelsListExpected.add(targetModel3);
+		targetModelsListExpected.add(targetModel4);
 
 		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
-		Pageable pageable = PageRequest.of(0, 100);
-
-		int sizeExpected = 3;
-		int totalElementsExpected = 3;
+		int sizeExpected = 100;
+		int totalElementsExpected = 4;
 		int totalPagesExpected = 1;
 		int numberExpected = 0;
+		int pageExpected = 0;
+		int lastPageExpected = 0;
 
-		Link pageLink1 = new Link(BASE_PATH + "?page=0&size=100", "first");
-		Link pageLink2 = new Link(BASE_PATH + "?page=0&size=100", "self");
-		Link pageLink3 = new Link(BASE_PATH + "?page=0&size=100", "next");
-		Link pageLink4 = new Link(BASE_PATH + "?page=0&size=100", "last");
+		Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+		String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+		String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+		String firstPageLink = BASE_PATH + urlParameters1;
+		String lastPageLink = BASE_PATH + urlParameters2;
+
+		Link pageLink1 = new Link(firstPageLink, "first");
+		Link pageLink2 = new Link(firstPageLink, "self");
+		Link pageLink3 = new Link(lastPageLink, "next");
+		Link pageLink4 = new Link(lastPageLink, "last");
 
 		PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
 		PagedModel<TargetModel> resources = new PagedModel<>(targetModelsListExpected, metadata, pageLink1, pageLink2,
@@ -126,27 +147,181 @@ public class TargetControllerTest {
 		when(targetService.findAll(pageable)).thenReturn(targetsExpected);
 		when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
 
-		assertAll(() -> mockMvc.perform(get(BASE_PATH)).andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(jsonPath("links[0].href", is(BASE_PATH + "?page=0&size=100")))
-				.andExpect(jsonPath("links[1].href", is(BASE_PATH + "?page=0&size=100")))
-				.andExpect(jsonPath("links[2].href", is(BASE_PATH + "?page=0&size=100")))
-				.andExpect(jsonPath("links[3].href", is(BASE_PATH + "?page=0&size=100")))
-				.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
-				.andExpect(jsonPath("content[0].target", is(targetName1)))
-				.andExpect(jsonPath("content[0].links[0].href", is(link1.getHref())))
-				.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
-				.andExpect(jsonPath("content[1].target", is(targetName2)))
-				.andExpect(jsonPath("content[1].links[0].href", is(link2.getHref())))
-				.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
-				.andExpect(jsonPath("content[2].target", is(targetName3)))
-				.andExpect(jsonPath("content[2].links[0].href", is(link3.getHref())))
-				.andExpect(jsonPath("page.size", is(sizeExpected)))
-				.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
-				.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
-				.andExpect(jsonPath("page.number", is(numberExpected)))
-//				.andExpect(jsonPath("links[0].href", is(BASE_PATH))),
-				, () -> verify(targetService, times(1)).findAll(pageable));
+		assertAll(
+				() -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("links[0].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
+						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
+						.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
+						.andExpect(jsonPath("content[0].target", is(targetName1)))
+						.andExpect(jsonPath("content[0].links[0].href", is(link1.getHref())))
+						.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
+						.andExpect(jsonPath("content[1].target", is(targetName2)))
+						.andExpect(jsonPath("content[1].links[0].href", is(link2.getHref())))
+						.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
+						.andExpect(jsonPath("content[2].target", is(targetName3)))
+						.andExpect(jsonPath("content[2].links[0].href", is(link3.getHref())))
+						.andExpect(jsonPath("page.size", is(sizeExpected)))
+						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+						.andExpect(jsonPath("page.number", is(numberExpected))),
+				() -> verify(targetService, times(1)).findAll(pageable));
+	}
+
+	@Test
+	@DisplayName("when targets exist with changed parameters in link return all targets")
+	public void when_targets_exist_with_changed_parameters_in_link_return_all_targets_should_return_targets() {
+
+		Long targetId1 = 1L;
+		String targetName1 = "target1";
+		TargetNode targetNode1 = new TargetNode(targetId1, targetName1);
+		TargetModel targetModel1 = new TargetModel(targetId1, targetName1);
+
+		String pathToLink1 = BASE_PATH + targetId1.intValue();
+		Link link1 = new Link(pathToLink1);
+		targetModel1.add(link1);
+
+		Long targetId2 = 2L;
+		String targetName2 = "target2";
+		TargetNode targetNode2 = new TargetNode(targetId2, targetName2);
+		TargetModel targetModel2 = new TargetModel(targetId2, targetName2);
+
+		String pathToLink2 = BASE_PATH + targetId2.intValue();
+		Link link2 = new Link(pathToLink2);
+		targetModel2.add(link2);
+
+		Long targetId3 = 3L;
+		String targetName3 = "target3";
+		TargetNode targetNode3 = new TargetNode(targetId3, targetName3);
+		TargetModel targetModel3 = new TargetModel(targetId3, targetName3);
+
+		String pathToLink3 = BASE_PATH + targetId3.intValue();
+		Link link3 = new Link(pathToLink3);
+		targetModel3.add(link3);
+
+		Long targetId4 = 4L;
+		String targetName4 = "target4";
+		TargetNode targetNode4 = new TargetNode(targetId4, targetName4);
+		TargetModel targetModel4 = new TargetModel(targetId4, targetName4);
+
+		String pathToLink4 = BASE_PATH + targetId4.intValue();
+		Link link4 = new Link(pathToLink4);
+		targetModel4.add(link4);
+
+		List<TargetNode> targetsListExpected = new ArrayList<>();
+		targetsListExpected.add(targetNode1);
+		targetsListExpected.add(targetNode2);
+		targetsListExpected.add(targetNode3);
+		targetsListExpected.add(targetNode4);
+
+		List<TargetModel> targetModelsListExpected = new ArrayList<>();
+		targetModelsListExpected.add(targetModel1);
+		targetModelsListExpected.add(targetModel2);
+		targetModelsListExpected.add(targetModel3);
+		targetModelsListExpected.add(targetModel4);
+
+		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
+
+		int sizeExpected = 3;
+		int totalElementsExpected = 4;
+		int totalPagesExpected = 2;
+		int numberExpected = 0;
+		int pageExpected = 0;
+		int lastPageExpected = 1;
+
+		Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+		String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+		String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+		String firstPageLink = BASE_PATH + urlParameters1;
+		String lastPageLink = BASE_PATH + urlParameters2;
+
+		Link pageLink1 = new Link(firstPageLink, "first");
+		Link pageLink2 = new Link(firstPageLink, "self");
+		Link pageLink3 = new Link(lastPageLink, "next");
+		Link pageLink4 = new Link(lastPageLink, "last");
+
+		PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+		PagedModel<TargetModel> resources = new PagedModel<>(targetModelsListExpected, metadata, pageLink1, pageLink2,
+				pageLink3, pageLink4);
+
+		when(targetService.findAll(pageable)).thenReturn(targetsExpected);
+		when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
+
+		assertAll(
+				() -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("links[0].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
+						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
+						.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
+						.andExpect(jsonPath("content[0].target", is(targetName1)))
+						.andExpect(jsonPath("content[0].links[0].href", is(link1.getHref())))
+						.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
+						.andExpect(jsonPath("content[1].target", is(targetName2)))
+						.andExpect(jsonPath("content[1].links[0].href", is(link2.getHref())))
+						.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
+						.andExpect(jsonPath("content[2].target", is(targetName3)))
+						.andExpect(jsonPath("content[2].links[0].href", is(link3.getHref())))
+						.andExpect(jsonPath("page.size", is(sizeExpected)))
+						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+						.andExpect(jsonPath("page.number", is(numberExpected))),
+				() -> verify(targetService, times(1)).findAll(pageable));
+	}
+
+	@Test
+	@DisplayName("when targets not exist")
+	public void when_targets_not_exist_return_empty_list() {
+
+		List<TargetNode> targetsListExpected = new ArrayList<>();
+
+		List<TargetModel> targetModelsListExpected = new ArrayList<>();
+
+		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
+
+		int sizeExpected = 100;
+		int totalElementsExpected = 0;
+		int totalPagesExpected = 0;
+		int numberExpected = 0;
+		int pageExpected = 0;
+		int lastPageExpected = 0;
+
+		Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+		String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+		String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+		String firstPageLink = BASE_PATH + urlParameters1;
+		String lastPageLink = BASE_PATH + urlParameters2;
+
+		Link pageLink1 = new Link(firstPageLink, "first");
+		Link pageLink2 = new Link(firstPageLink, "self");
+		Link pageLink3 = new Link(lastPageLink, "next");
+		Link pageLink4 = new Link(lastPageLink, "last");
+
+		PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+		PagedModel<TargetModel> resources = new PagedModel<>(targetModelsListExpected, metadata, pageLink1, pageLink2,
+				pageLink3, pageLink4);
+
+		when(targetService.findAll(pageable)).thenReturn(targetsExpected);
+		when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
+
+		assertAll(
+				() -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+						.andDo(MockMvcResultHandlers.print())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("links[0].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
+						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
+						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
+						.andExpect(jsonPath("content").isEmpty())
+						.andExpect(jsonPath("page.size", is(sizeExpected)))
+						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+						.andExpect(jsonPath("page.number", is(numberExpected))),
+				() -> verify(targetService, times(1)).findAll(pageable));
 	}
 }
