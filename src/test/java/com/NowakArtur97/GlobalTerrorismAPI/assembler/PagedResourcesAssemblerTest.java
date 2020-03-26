@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
 @DisplayName("Paged Resources Assembler Tests")
+@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("PagedResourcesAssembler_Tests")
 public class PagedResourcesAssemblerTest {
 
@@ -62,7 +65,6 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node page to paged model without targets")
 	public void when_map_target_node_page_to_paged_model_without_targets_should_return_empty_page() {
 
 		int page = 0;
@@ -99,7 +101,6 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node page to paged model on first page")
 	public void when_map_target_node_page_to_paged_model_on_first_page_should_return_paged_model_with_links() {
 
 		int page = 0;
@@ -146,7 +147,6 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node page to paged model on lasst page")
 	public void when_map_target_node_page_to_paged_model_on_last_page_should_return_paged_model_with_links() {
 
 		int page = 2;
@@ -192,7 +192,6 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node page to paged model with previous and next links")
 	public void when_map_target_node_page_to_paged_model_with_previous_and_next_link_should_return_paged_model_with_links() {
 
 		int page = 1;

@@ -7,13 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
 @DisplayName("Target Model Assembler Tests")
+@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("TargetModelAssembler_Tests")
 public class TargetModelAssemblerTest {
 
@@ -26,8 +29,7 @@ public class TargetModelAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node to model")
-	public void when_map_target_node_to_model() {
+	public void when_map_target_node_to_model_should_return_target_model() {
 
 		Long targetId = 1L;
 		String targetName = "target1";

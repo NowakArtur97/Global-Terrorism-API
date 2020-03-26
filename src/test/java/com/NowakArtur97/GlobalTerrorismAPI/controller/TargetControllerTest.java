@@ -74,7 +74,6 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	//@DisplayName("when find all targets with default parameters in link and targets exist return all targets")
 	public void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
@@ -177,7 +176,6 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	//@DisplayName("when find all targets with changed parameters in link and targets exist return all targets")
 	public void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
@@ -280,7 +278,6 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	//@DisplayName("when find all targets, but targets not exist")
 	public void when_find_all_targets_but_targets_not_exist_should_return_empty_list() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
@@ -330,7 +327,6 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	//@DisplayName("when find target and target exists")
 	public void when_find_target_and_target_exists_should_return_target() {
 
 		Long targetId = 1L;
@@ -356,7 +352,6 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	//@DisplayName("when find target, but target not exists")
 	public void when_find_target_but_target_not_exists_should_return_error_response() {
 
 		Long targetId = 1L;

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,9 +27,11 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Target Node Service Impl Tests")
+@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("TargetServiceImpl_Tests")
 public class TargetServiceImplTest {
 
@@ -44,7 +47,6 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("when targets exist and return all targets")
 	public void when_targets_exist_and_return_all_targets_should_return_targets() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
@@ -74,7 +76,6 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("when targets not exist and return all targets")
 	public void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
@@ -97,7 +98,6 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("when target exists and return one target")
 	public void when_targets_exists_and_return_one_target_should_return_one_target() {
 
 		Long expectedTargetId = 1L;
@@ -119,7 +119,6 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("when target not exists and return one target")
 	public void when_targets_not_exists_and_return_one_target_should_return_empty_optional() {
 
 		Long expectedTargetId = 1L;
