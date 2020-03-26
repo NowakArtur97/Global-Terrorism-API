@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Target Controller Tests")
 @DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("TargetController_Tests")
 public class TargetControllerTest {

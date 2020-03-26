@@ -9,7 +9,6 @@ import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
-@DisplayName("Paged Resources Assembler Tests")
 @DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("PagedResourcesAssembler_Tests")
 public class PagedResourcesAssemblerTest {
