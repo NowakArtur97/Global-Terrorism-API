@@ -60,41 +60,55 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	@DisplayName("when map target node page to paged model")
-	public void when_map_target_node_page_to_paged_model() {
+	@DisplayName("when map target node page to paged model with previous and next links")
+	public void when_map_target_node_page_to_paged_with_previous_and_next_link_model_should_returnpaged_model_with_links() {
 
-		Long targetId1 = 1L;
-		String targetName1 = "target1";
-		TargetNode targetNode1 = new TargetNode(targetId1, targetName1);
+		int page = 1;
+		int size = 1;
 
-		Long targetId2 = 2L;
-		String targetName2 = "target2";
-		TargetNode targetNode2 = new TargetNode(targetId2, targetName2);
+		List<TargetNode> targetsListExpected = createTargetNodesList(3);
 
-		Long targetId3 = 3L;
-		String targetName3 = "target3";
-		TargetNode targetNode3 = new TargetNode(targetId3, targetName3);
+		Page<TargetNode> targetsPage = createPageOfTargetNodes(targetsListExpected, page, size);
 
-		Long targetId4 = 4L;
-		String targetName4 = "target4";
-		TargetNode targetNode4 = new TargetNode(targetId4, targetName4);
+		PagedModel<TargetModel> targetsPagedModel = pagedResourcesAssembler.toModel(targetsPage, targetModelAssembler);
+		System.out.println(targetsPagedModel);
+		assertAll(
+				() -> assertTrue(targetsPagedModel.hasLinks(),
+						() -> "should have links, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getNextLink().isPresent(),
+						() -> "should have next link, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getPreviousLink().isPresent(),
+						() -> "should have prevoius link, but haven`t: " + targetsPagedModel));
+	}
+
+	private List<TargetNode> createTargetNodesList(int listSize) {
+
+		Long targetId = 1L;
+		String targetName = "target";
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
-		targetsListExpected.add(targetNode1);
-		targetsListExpected.add(targetNode2);
-		targetsListExpected.add(targetNode3);
-		targetsListExpected.add(targetNode4);
 
-		Pageable request = PageRequest.of(1, 1);
+		int count = 0;
 
-		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected, request, 4);
+		while (count < listSize) {
 
-		PagedModel<TargetModel> targetsPage = pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler);
+			TargetNode targetNode = new TargetNode(targetId, targetName + targetId);
 
-		assertAll(() -> assertTrue(targetsPage.hasLinks(), () -> "should have links, but haven`t: " + targetsPage),
-				() -> assertTrue(targetsPage.getNextLink().isPresent(),
-						() -> "should have next link, but haven`t: " + targetsPage),
-				() -> assertTrue(targetsPage.getPreviousLink().isPresent(),
-						() -> "should have prevoius link, but haven`t: " + targetsPage));
+			targetsListExpected.add(targetNode);
+
+			targetId++;
+			count++;
+		}
+
+		return targetsListExpected;
+	}
+
+	private Page<TargetNode> createPageOfTargetNodes(List<TargetNode> targetsListExpected, int page, int size) {
+
+		Pageable pageRequest = PageRequest.of(page, size);
+
+		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected, pageRequest, targetsListExpected.size());
+
+		return targetsExpected;
 	}
 }
