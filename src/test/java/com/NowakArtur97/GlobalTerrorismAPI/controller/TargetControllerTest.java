@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,9 +42,11 @@ import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Target Controller Tests")
+@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
 @Tag("TargetController_Tests")
 public class TargetControllerTest {
 
@@ -71,7 +74,7 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when find all targets with default parameters in link and targets exist return all targets")
+	//@DisplayName("when find all targets with default parameters in link and targets exist return all targets")
 	public void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
@@ -174,7 +177,7 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when find all targets with changed parameters in link and targets exist return all targets")
+	//@DisplayName("when find all targets with changed parameters in link and targets exist return all targets")
 	public void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 		Long targetId1 = 1L;
@@ -277,7 +280,7 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when find all targets, but targets not exist")
+	//@DisplayName("when find all targets, but targets not exist")
 	public void when_find_all_targets_but_targets_not_exist_should_return_empty_list() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
@@ -327,7 +330,7 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when find target and target exists")
+	//@DisplayName("when find target and target exists")
 	public void when_find_target_and_target_exists_should_return_target() {
 
 		Long targetId = 1L;
@@ -353,7 +356,7 @@ public class TargetControllerTest {
 	}
 
 	@Test
-	@DisplayName("when find target, but target not exists")
+	//@DisplayName("when find target, but target not exists")
 	public void when_find_target_but_target_not_exists_should_return_error_response() {
 
 		Long targetId = 1L;
