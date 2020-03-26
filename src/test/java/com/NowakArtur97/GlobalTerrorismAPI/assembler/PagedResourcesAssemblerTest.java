@@ -62,6 +62,43 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
+	@DisplayName("when map target node page to paged model without targets")
+	public void when_map_target_node_page_to_paged_model_without_targets_should_return_empty_page() {
+
+		int page = 0;
+		int size = 1;
+		int listSize = 0;
+
+		List<TargetNode> targetsListExpected = createTargetNodesList(listSize);
+
+		Page<TargetNode> targetsPage = createPageOfTargetNodes(targetsListExpected, page, size);
+
+		PagedModel<TargetModel> targetsPagedModel = pagedResourcesAssembler.toModel(targetsPage, targetModelAssembler);
+
+		String selfLink = getLink(page, size);
+
+		assertAll(
+				() -> assertTrue(targetsPagedModel.hasLinks(),
+						() -> "should have links, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").isEmpty(),
+						() -> "should not have first link, but had: "
+								+ targetsPagedModel.getLink("first").get().getHref()),
+				() -> assertTrue(targetsPagedModel.getLink("self").isPresent(),
+						() -> "should have self link, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("self").get().getHref().equals(selfLink),
+						() -> "should have self link with url: " + selfLink + ", but had: "
+								+ targetsPagedModel.getLink("self").get().getHref()),
+				() -> assertTrue(targetsPagedModel.getNextLink().isEmpty(),
+						() -> "should not have next link, but had: " + targetsPagedModel.getNextLink().get().getHref()),
+				() -> assertTrue(targetsPagedModel.getPreviousLink().isEmpty(),
+						() -> "should not have previous link, but had: "
+								+ targetsPagedModel.getPreviousLink().get().getHref()),
+				() -> assertTrue(targetsPagedModel.getLink("last").isEmpty(),
+						() -> "should not have last link, but had: "
+								+ targetsPagedModel.getLink("last").get().getHref()));
+	}
+
+	@Test
 	@DisplayName("when map target node page to paged model on first page")
 	public void when_map_target_node_page_to_paged_model_on_first_page_should_return_paged_model_with_links() {
 
@@ -75,6 +112,7 @@ public class PagedResourcesAssemblerTest {
 
 		PagedModel<TargetModel> targetsPagedModel = pagedResourcesAssembler.toModel(targetsPage, targetModelAssembler);
 
+		String firstLink = getLink(0, size);
 		String selfLink = getLink(page, size);
 		String nextLink = getLink(page + 1, size);
 		String lastLink = getLink(listSize / size - 1, size);
@@ -82,6 +120,11 @@ public class PagedResourcesAssemblerTest {
 		assertAll(
 				() -> assertTrue(targetsPagedModel.hasLinks(),
 						() -> "should have links, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").isPresent(),
+						() -> "should have first link, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").get().getHref().equals(firstLink),
+						() -> "should have first link with url: " + firstLink + ", but had: "
+								+ targetsPagedModel.getLink("first").get().getHref()),
 				() -> assertTrue(targetsPagedModel.getLink("self").isPresent(),
 						() -> "should have self link, but haven`t: " + targetsPagedModel),
 				() -> assertTrue(targetsPagedModel.getLink("self").get().getHref().equals(selfLink),
@@ -116,6 +159,7 @@ public class PagedResourcesAssemblerTest {
 
 		PagedModel<TargetModel> targetsPagedModel = pagedResourcesAssembler.toModel(targetsPage, targetModelAssembler);
 
+		String firstLink = getLink(0, size);
 		String selfLink = getLink(page, size);
 		String previousLink = getLink(page - 1, size);
 		String lastLink = getLink(listSize / size - 1, size);
@@ -123,6 +167,11 @@ public class PagedResourcesAssemblerTest {
 		assertAll(
 				() -> assertTrue(targetsPagedModel.hasLinks(),
 						() -> "should have links, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").isPresent(),
+						() -> "should have first link, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").get().getHref().equals(firstLink),
+						() -> "should have first link with url: " + firstLink + ", but had: "
+								+ targetsPagedModel.getLink("first").get().getHref()),
 				() -> assertTrue(targetsPagedModel.getLink("self").isPresent(),
 						() -> "should have self link, but haven`t: " + targetsPagedModel),
 				() -> assertTrue(targetsPagedModel.getLink("self").get().getHref().equals(selfLink),
@@ -156,6 +205,7 @@ public class PagedResourcesAssemblerTest {
 
 		PagedModel<TargetModel> targetsPagedModel = pagedResourcesAssembler.toModel(targetsPage, targetModelAssembler);
 
+		String firstLink = getLink(0, size);
 		String selfLink = getLink(page, size);
 		String previousLink = getLink(page - 1, size);
 		String nextLink = getLink(page + 1, size);
@@ -164,6 +214,11 @@ public class PagedResourcesAssemblerTest {
 		assertAll(
 				() -> assertTrue(targetsPagedModel.hasLinks(),
 						() -> "should have links, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").isPresent(),
+						() -> "should have first link, but haven`t: " + targetsPagedModel),
+				() -> assertTrue(targetsPagedModel.getLink("first").get().getHref().equals(firstLink),
+						() -> "should have first link with url: " + firstLink + ", but had: "
+								+ targetsPagedModel.getLink("first").get().getHref()),
 				() -> assertTrue(targetsPagedModel.getLink("self").isPresent(),
 						() -> "should have self link, but haven`t: " + targetsPagedModel),
 				() -> assertTrue(targetsPagedModel.getLink("self").get().getHref().equals(selfLink),
