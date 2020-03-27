@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.NowakArtur97.GlobalTerrorismAPI.properties.SwaggerConfigurationProperties;
+import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
