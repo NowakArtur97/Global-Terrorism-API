@@ -1,10 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
-import java.util.Collections;
-
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.NowakArtur97.GlobalTerrorismAPI.properties.SwaggerConfigurationProperties;
+
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -15,27 +17,31 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@EnableConfigurationProperties(value = SwaggerConfigurationProperties.class)
 public class SwaggerConfiguration {
 
 	@Bean
-	public Docket docket() {
+	public Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.NowakArtur97.GlobalTerrorismAPI.controller"))
-				.paths(PathSelectors.ant("/api/**")).build().apiInfo(apiDetails());
+					.apis(RequestHandlerSelectors.basePackage(swaggerConfigurationProperties.getBasePackage()))
+					.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
+				.build()
+					.apiInfo(apiDetails(swaggerConfigurationProperties));
 	}
 
-	private ApiInfo apiDetails() {
+	private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
-		Contact contact = new Contact("Artur Nowak", "https://github.com/NowakArtur97", "");
+		Contact contact = new Contact(swaggerConfigurationProperties.getContactName(),
+				swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
 
-		return new ApiInfo("Global Terrorism API", 
-				"REST API providing information on terrorist attacks", 
-				"1.0",
-				"Free to use", 
-				contact, 
-				"MIT", 
-				"https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE",
-				Collections.emptyList());
+		return new ApiInfoBuilder().version(swaggerConfigurationProperties.getApiVersion())
+					.title(swaggerConfigurationProperties.getTitle())
+					.description(swaggerConfigurationProperties.getDescription())
+					.termsOfServiceUrl(swaggerConfigurationProperties.getTermsOfServiceUrl())
+					.license(swaggerConfigurationProperties.getLicense())
+					.licenseUrl(swaggerConfigurationProperties.getLicenseUrl())
+					.contact(contact)
+				.build();
 	}
 }
