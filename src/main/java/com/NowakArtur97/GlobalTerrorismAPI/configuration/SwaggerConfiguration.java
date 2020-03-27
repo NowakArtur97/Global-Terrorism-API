@@ -25,8 +25,8 @@ public class SwaggerConfiguration {
 
 		return new Docket(DocumentationType.SWAGGER_2)
 					.select()
-					.apis(RequestHandlerSelectors.any())
-					.paths(PathSelectors.any())
+					.apis(RequestHandlerSelectors.basePackage("com.NowakArtur97.GlobalTerrorismAPI.controller"))
+					.paths(PathSelectors.ant("/api/**"))
 				.build();
 	}
 
