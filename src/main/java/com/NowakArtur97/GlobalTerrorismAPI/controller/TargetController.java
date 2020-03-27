@@ -19,6 +19,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,6 +35,7 @@ public class TargetController {
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
 	@GetMapping(path = "/targets")
+	@ApiOperation(value = "Find All Targets", notes = "Look up all targets", response = ResponseEntity.class)
 	public ResponseEntity<PagedModel<TargetModel>> findAllTargets(@PageableDefault(size = 100) Pageable pageable) {
 
 		Page<TargetNode> targets = targetService.findAll(pageable);
@@ -42,7 +45,11 @@ public class TargetController {
 	}
 
 	@GetMapping(path = "/targets/{id}")
-	public ResponseEntity<TargetModel> findTargetById(@PathVariable("id") Long id) {
+	@ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific target from all terrorism attacks targets", 
+		response = ResponseEntity.class)
+	public ResponseEntity<TargetModel> findTargetById(
+			@ApiParam(value = "ID value for the target you need to retrieve", required = true, example = "1") 
+			@PathVariable("id") Long id) {
 
 		return targetService.findById(id).map(targetModelAssembler::toModel).map(ResponseEntity::ok)
 				.orElseThrow(() -> new TargetNotFoundException(id));
