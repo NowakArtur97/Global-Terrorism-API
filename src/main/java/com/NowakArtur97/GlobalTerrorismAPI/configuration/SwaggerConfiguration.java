@@ -1,17 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.hateoas.client.LinkDiscoverer;
-import org.springframework.hateoas.client.LinkDiscoverers;
-import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
-import org.springframework.plugin.core.SimplePluginRegistry;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -23,20 +20,22 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket docket() {
 
-		return new Docket(DocumentationType.SWAGGER_2)
-					.select()
-					.apis(RequestHandlerSelectors.basePackage("com.NowakArtur97.GlobalTerrorismAPI.controller"))
-					.paths(PathSelectors.ant("/api/**"))
-				.build();
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.NowakArtur97.GlobalTerrorismAPI.controller"))
+				.paths(PathSelectors.ant("/api/**")).build().apiInfo(apiDetails());
 	}
 
-	@Bean
-	public LinkDiscoverers discoverers() {
+	private ApiInfo apiDetails() {
 
-		List<LinkDiscoverer> plugins = new ArrayList<>();
+		Contact contact = new Contact("Artur Nowak", "https://github.com/NowakArtur97", "");
 
-		plugins.add(new CollectionJsonLinkDiscoverer());
-
-		return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
+		return new ApiInfo("Global Terrorism API", 
+				"REST API providing information on terrorist attacks", 
+				"1.0",
+				"Free to use", 
+				contact, 
+				"MIT", 
+				"https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE",
+				Collections.emptyList());
 	}
 }
