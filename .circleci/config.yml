@@ -3,12 +3,12 @@ jobs:
   build:
     docker:
     - image: circleci/openjdk:11.0.3-jdk-stretch
-    - image: bitnami/neo4j:3.5.7
+    - image: bitnami/neo4j:4.0.2
       environment:
         NEO4J_USER: neo4j
-        NEO4J_PASSWORD: secret
+        NEO4J_PASSWORD: bitnami
         NEO4J_URL: bolt://localhost:7687/neo4j
-    working_directory: ~/world_of_manga
+    working_directory: ~/global_terrorism_api
     environment:
       MAVEN_OPTS: -Xmx3200m
     steps:
@@ -16,7 +16,8 @@ jobs:
     - setup_remote_docker
     - run:
         name: Neo4j
-        command: docker run \ --publish=7474:7474 --publish=7687:7687 \ --volume=$HOME/neo4j/data:/data \ neo4j
+        command: docker run --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:4.0.2
+
     - restore_cache:
         keys:
         - v1-dependencies-{{ checksum "pom.xml" }}
@@ -27,23 +28,23 @@ jobs:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
     - run: mvn test
-  deploy:
-    docker:
-    - image: circleci/buildpack-deps:trusty
-    steps:
-    - checkout
-    - run:
-        name: Deploy app on heroku
-        command: |
-          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-    - build
-    - deploy:
-        requires:
-        - build
-        filters:
-          branches:
-            only: deploy
+#  deploy:
+#    docker:
+#    - image: circleci/buildpack-deps:trusty
+#    steps:
+#    - checkout
+#    - run:
+#        name: Deploy app on heroku
+#        command: |
+#          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+#workflows:
+#  version: 2
+#  build-deploy:
+#    jobs:
+#    - build
+#    - deploy:
+#        requires:
+#        - build
+#        filters:
+#          branches:
+#            only: deploy
