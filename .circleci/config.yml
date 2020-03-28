@@ -14,10 +14,6 @@ jobs:
     steps:
     - checkout
     - setup_remote_docker
-    - run:
-        name: Neo4j
-        command: docker run --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:3.5.7
-
     - restore_cache:
         keys:
         - v1-dependencies-{{ checksum "pom.xml" }}
@@ -27,6 +23,12 @@ jobs:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
+    - run:
+        name: Install Neo4j
+        command: docker run --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:3.5.7
+    - run:
+        name: Wait for Neo4j
+        command: dockerize -wait tcp://localhost:7474 -timeout 1m
     - run: mvn test
 #  deploy:
 #    docker:
