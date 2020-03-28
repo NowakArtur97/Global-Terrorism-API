@@ -3,11 +3,10 @@ jobs:
   build:
     docker:
     - image: circleci/openjdk:11.0.3-jdk-stretch
-    - image: bitnami/neo4j:latest
+    - image: bitnami/neo4j:3.5.7
       environment:
         NEO4J_USER: neo4j
         NEO4J_PASSWORD: bitnami
-        NEO4J_URL: bolt://127.0.0.1:7687/neo4j
     working_directory: ~/global_terrorism_api
     environment:
       MAVEN_OPTS: -Xmx3200m
@@ -25,7 +24,7 @@ jobs:
         key: v1-dependencies-{{ checksum "pom.xml" }}
     - run:
         name: Install Neo4j
-        command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/bitnami bitnami/n3o4j:latest
+        command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/bitnami neo4j:3.5.7
     - run:
         name: Wait for Neo4j
         command: dockerize -wait tcp://localhost:7474 -timeout 1m
