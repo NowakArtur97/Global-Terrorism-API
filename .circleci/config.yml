@@ -7,7 +7,7 @@ jobs:
       environment:
         NEO4J_USER: neo4j
         NEO4J_PASSWORD: bitnami
-        NEO4J_URL: bolt://localhost:7687/neo4j
+        NEO4J_URL: bolt://127.0.0.1:7687
     working_directory: ~/global_terrorism_api
     environment:
       MAVEN_OPTS: -Xmx3200m
