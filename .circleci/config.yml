@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
     - image: circleci/openjdk:11.0.3-jdk-stretch
-    - image: bitnami/neo4j:4.0.2
+    - image: bitnami/neo4j:3.5.7
       environment:
         NEO4J_USER: neo4j
         NEO4J_PASSWORD: bitnami
@@ -16,7 +16,7 @@ jobs:
     - setup_remote_docker
     - run:
         name: Neo4j
-        command: docker run --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:4.0.2
+        command: docker run --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:3.5.7
 
     - restore_cache:
         keys:
