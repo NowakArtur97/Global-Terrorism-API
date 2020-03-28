@@ -25,7 +25,7 @@ jobs:
         key: v1-dependencies-{{ checksum "pom.xml" }}
     - run:
         name: Install Neo4j
-        command: docker run  -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:3.5.7
+        command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=none neo4j:3.5.7
     - run:
         name: Wait for Neo4j
         command: dockerize -wait tcp://localhost:7474 -timeout 1m
