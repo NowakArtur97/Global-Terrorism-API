@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -32,5 +33,14 @@ public class TargetServiceImpl implements TargetService {
 	public Optional<TargetNode> findById(Long id) {
 
 		return targetRepository.findById(id);
+	}
+
+	@Override
+	@Transactional
+	public Optional<TargetNode> save(TargetModel targetModel) {
+
+		TargetNode targetNode = targetRepository.save(new TargetNode(targetModel.getTarget()));
+
+		return Optional.of(targetNode);
 	}
 }
