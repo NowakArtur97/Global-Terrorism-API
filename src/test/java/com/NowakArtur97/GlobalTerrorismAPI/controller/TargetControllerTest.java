@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,10 +39,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -346,7 +349,8 @@ public class TargetControllerTest {
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("links[0].href", is(linkExpected)))
 				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).findById(targetId));
+				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
 	@Test
@@ -366,5 +370,48 @@ public class TargetControllerTest {
 						.andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("error", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).findById(targetId));
+	}
+
+	@Test
+	public void when_add_valid_target_should_return_new_target_as_model() {
+
+		Long targetId = 1L;
+		String targetName = "target";
+		TargetDTO targetDTO = new TargetDTO(targetName);
+		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetModel targetModel = new TargetModel(targetId, targetName);
+
+		String pathToLink = BASE_PATH + "/" + targetId.intValue();
+		Link link = new Link(pathToLink);
+		targetModel.add(link);
+
+		String linkExpected = BASE_PATH + "/" + targetId;
+
+		when(targetService.save(targetDTO)).thenReturn(targetNode);
+		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+
+		assertAll(
+				() -> mockMvc
+						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.andExpect(status().isCreated())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("links[0].href", is(linkExpected)))
+						.andExpect(jsonPath("id", is(targetId.intValue())))
+						.andExpect(jsonPath("target", is(targetName))),
+				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+	}
+
+	public static String asJsonString(final Object obj) {
+
+		try {
+
+			return new ObjectMapper().writeValueAsString(obj);
+		} catch (Exception e) {
+
+			throw new RuntimeException(e);
+		}
 	}
 }
