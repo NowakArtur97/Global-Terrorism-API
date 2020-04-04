@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.TargetNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -64,10 +67,10 @@ public class TargetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TargetModel> addTarget(@RequestBody TargetModel targetModel) {
+	public ResponseEntity<TargetNode> addTarget(@RequestBody @Valid TargetDTO targetDTO) {
 
-		targetService.save(targetModel);
-		
-		return new ResponseEntity<TargetModel>(targetModel, HttpStatus.CREATED);
+		TargetNode targetNode = targetService.save(targetDTO);
+
+		return new ResponseEntity<TargetNode>(targetNode, HttpStatus.CREATED);
 	}
 }

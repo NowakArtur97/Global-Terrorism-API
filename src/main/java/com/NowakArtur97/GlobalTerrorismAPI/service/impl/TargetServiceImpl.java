@@ -8,7 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.TargetMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -20,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class TargetServiceImpl implements TargetService {
 
 	private final TargetRepository targetRepository;
+
+	private final TargetMapper targetMapper;;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -37,9 +40,11 @@ public class TargetServiceImpl implements TargetService {
 
 	@Override
 	@Transactional
-	public TargetNode save(TargetModel targetModel) {
+	public TargetNode save(TargetDTO targetDTO) {
 
-		TargetNode targetNode = targetRepository.save(new TargetNode(targetModel.getTarget()));
+		TargetNode targetNode = targetMapper.mapDTOToNode(targetDTO);
+
+		targetNode = targetRepository.save(targetNode);
 
 		return targetNode;
 	}
