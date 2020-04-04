@@ -24,6 +24,9 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -415,41 +418,11 @@ public class TargetControllerTest {
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
-	@Test
-	public void when_add_target_as_null_should_return_errors() {
+	@ParameterizedTest(name = "{index}: Target Name: {0}")
+	@NullAndEmptySource
+	@ValueSource(strings = { " ", "\t", "\n" })
+	public void when_add_invalid_target_should_return_errors(String targetName) {
 
-		TargetDTO targetDTO = new TargetDTO();
-
-		assertAll(
-				() -> mockMvc
-						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
-						.andExpect(jsonPath("status", is(400)))
-						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
-	}
-
-	@Test
-	public void when_add_empty_target_should_return_errors() {
-
-		String targetName = "";
-		TargetDTO targetDTO = new TargetDTO(targetName);
-
-		assertAll(
-				() -> mockMvc
-						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
-						.andExpect(jsonPath("status", is(400)))
-						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
-	}
-
-	@Test
-	public void when_add_blank_target_should_return_errors() {
-
-		String targetName = "   ";
 		TargetDTO targetDTO = new TargetDTO(targetName);
 
 		assertAll(
