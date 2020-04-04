@@ -67,10 +67,13 @@ public class TargetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TargetNode> addTarget(@RequestBody @Valid TargetDTO targetDTO) {
+	public ResponseEntity<TargetModel> addTarget(@RequestBody @Valid TargetDTO targetDTO) {
 
 		TargetNode targetNode = targetService.save(targetDTO);
 
-		return new ResponseEntity<TargetNode>(targetNode, HttpStatus.CREATED);
+		Long id = targetNode.getId();
+
+		return new ResponseEntity<>(targetService.findById(id).map(targetModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(id)), HttpStatus.CREATED);
 	}
 }
