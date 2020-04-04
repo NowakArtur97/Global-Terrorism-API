@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.TargetMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -38,10 +42,13 @@ public class TargetServiceImplTest {
 	@Mock
 	private TargetRepository targetRepository;
 
+	@Mock
+	private TargetMapper targetMapper;
+
 	@BeforeEach
 	void setUp() {
 
-		targetService = new TargetServiceImpl(targetRepository);
+		targetService = new TargetServiceImpl(targetRepository, targetMapper);
 	}
 
 	@Test
@@ -70,7 +77,8 @@ public class TargetServiceImplTest {
 						() -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
 				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
 						() -> "should return page with: " + targetsExpected.getNumberOfElements()
-								+ " elements, but was: " + targetsActual.getNumberOfElements()));
+								+ " elements, but was: " + targetsActual.getNumberOfElements()),
+				() -> verify(targetRepository, times(1)).findAll(pageable));
 	}
 
 	@Test
@@ -92,7 +100,8 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetsListExpected, targetsActual.getContent(),
 						() -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
 				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
-						() -> "should return empty page, but was: " + targetsActual.getNumberOfElements()));
+						() -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
+				() -> verify(targetRepository, times(1)).findAll(pageable));
 	}
 
 	@Test
@@ -113,7 +122,8 @@ public class TargetServiceImplTest {
 						() -> "should return target with id: " + expectedTargetId + ", but was" + targetActual.getId()),
 				() -> assertEquals(targetExpected.getTarget(), targetActual.getTarget(),
 						() -> "should return target with target: " + targetExpected.getTarget() + ", but was"
-								+ targetActual.getTarget()));
+								+ targetActual.getTarget()),
+				() -> verify(targetRepository, times(1)).findById(expectedTargetId));
 	}
 
 	@Test
@@ -125,6 +135,29 @@ public class TargetServiceImplTest {
 
 		Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
 
-		assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"));
+		assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
+				() -> verify(targetRepository, times(1)).findById(expectedTargetId));
+	}
+
+	@Test
+	public void when_save_new_target_should_save_target() {
+
+		String targetName = "Target";
+
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+
+		TargetNode targetNodeExpected = new TargetNode(targetName);
+
+		when(targetMapper.mapDTOToNode(targetDTOExpected)).thenReturn(targetNodeExpected);
+		when(targetRepository.save(targetNodeExpected)).thenReturn(targetNodeExpected);
+
+		TargetNode targetNodeActual = targetService.save(targetDTOExpected);
+
+		assertAll(
+				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+								+ targetNodeActual.getTarget()),
+				() -> verify(targetMapper, times(1)).mapDTOToNode(targetDTOExpected),
+				() -> verify(targetRepository, times(1)).save(targetNodeExpected));
 	}
 }
