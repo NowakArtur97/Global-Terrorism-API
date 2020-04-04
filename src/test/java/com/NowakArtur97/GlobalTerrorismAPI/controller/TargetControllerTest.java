@@ -1,9 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,6 +39,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
@@ -57,6 +60,8 @@ public class TargetControllerTest {
 
 	private TargetController targetController;
 
+	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
+
 	@Mock
 	private TargetService targetService;
 
@@ -70,7 +75,11 @@ public class TargetControllerTest {
 	public void setUp() {
 
 		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler);
-		mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new TargetControllerAdvice())
+
+		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+
+		mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler)
+				.setControllerAdvice(new TargetControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 	}
 
@@ -369,7 +378,8 @@ public class TargetControllerTest {
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
 						.andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("error", is("Could not find target with id: " + targetId))),
-				() -> verify(targetService, times(1)).findById(targetId));
+				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -400,8 +410,56 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("links[0].href", is(linkExpected)))
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
+				() -> verify(targetService, times(1)).save(targetDTO),
 				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+	}
+
+	@Test
+	public void when_add_target_as_null_should_return_errors() {
+
+		TargetDTO targetDTO = new TargetDTO();
+
+		assertAll(
+				() -> mockMvc
+						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
+	}
+
+	@Test
+	public void when_add_empty_target_should_return_errors() {
+
+		String targetName = "";
+		TargetDTO targetDTO = new TargetDTO(targetName);
+
+		assertAll(
+				() -> mockMvc
+						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
+	}
+
+	@Test
+	public void when_add_blank_target_should_return_errors() {
+
+		String targetName = "   ";
+		TargetDTO targetDTO = new TargetDTO(targetName);
+
+		assertAll(
+				() -> mockMvc
+						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	public static String asJsonString(final Object obj) {
