@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
 
-@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
+@DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetModelAssembler_Tests")
 public class TargetModelAssemblerTest {
 

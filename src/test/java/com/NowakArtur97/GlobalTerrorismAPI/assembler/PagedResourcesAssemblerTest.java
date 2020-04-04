@@ -25,9 +25,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
 
-@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
+@DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("PagedResourcesAssembler_Tests")
 public class PagedResourcesAssemblerTest {
 
