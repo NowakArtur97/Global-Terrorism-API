@@ -62,4 +62,12 @@ public class TargetController {
 		return targetService.findById(id).map(targetModelAssembler::toModel).map(ResponseEntity::ok)
 				.orElseThrow(() -> new TargetNotFoundException(id));
 	}
+
+	@PostMapping
+	public ResponseEntity<TargetModel> addTarget(@RequestBody TargetModel targetModel) {
+
+		targetService.save(targetModel);
+		
+		return new ResponseEntity<TargetModel>(targetModel, HttpStatus.CREATED);
+	}
 }

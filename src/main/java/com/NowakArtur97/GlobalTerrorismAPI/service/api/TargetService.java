@@ -14,5 +14,5 @@ public interface TargetService {
 
 	Optional<TargetNode> findById(Long id);
 
-	Optional<TargetNode> save(TargetModel targetModel);
+	TargetNode save(TargetModel targetModel);
 }

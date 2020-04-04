@@ -37,10 +37,10 @@ public class TargetServiceImpl implements TargetService {
 
 	@Override
 	@Transactional
-	public Optional<TargetNode> save(TargetModel targetModel) {
+	public TargetNode save(TargetModel targetModel) {
 
 		TargetNode targetNode = targetRepository.save(new TargetNode(targetModel.getTarget()));
 
-		return Optional.of(targetNode);
+		return targetNode;
 	}
 }
