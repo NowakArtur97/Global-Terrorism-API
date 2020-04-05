@@ -30,7 +30,7 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
-		return new Docket(DocumentationType.SWAGGER_2).select()
+		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
 				.apis(RequestHandlerSelectors.basePackage(swaggerConfigurationProperties.getBasePackage()))
 				.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors())).build()
 				.apiInfo(apiDetails(swaggerConfigurationProperties)).tags(new Tag(TARGET_TAG, TARGET_TAG_DESCRIPTION));

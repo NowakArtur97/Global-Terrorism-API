@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
@@ -39,10 +40,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/targets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(tags = { SwaggerConfiguration.TARGET_TAG })
-@ApiResponses(value = { @ApiResponse(code = 200, message = "Success response"),
-		@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-		@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-		@ApiResponse(code = 404, message = "The resource sought was not found") })
+@ApiResponses(value = { 
+		@ApiResponse(code = 401, message = "No permission to view resource"),
+		@ApiResponse(code = 403, message = "Access to the resource is prohibited") })
 public class TargetController {
 
 	private final TargetService targetService;
@@ -52,8 +52,9 @@ public class TargetController {
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
 	@GetMapping
-	@ApiOperation(value = "Find All Targets", notes = "Look up all targets", response = ResponseEntity.class)
-	@ApiResponses({ @ApiResponse(code = 404, message = "Targets not found") })
+	@ApiOperation(value = "Find All Targets", notes = "Look up all targets")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Displayed list of all Targets", response = PagedModel.class) })
 	@ApiPageable
 	public ResponseEntity<PagedModel<TargetModel>> findAllTargets(
 			@ApiIgnore @PageableDefault(size = 100) Pageable pageable) {
@@ -65,22 +66,27 @@ public class TargetController {
 	}
 
 	@GetMapping(path = "/{id}")
-	@ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific target from all terrorism attacks targets", response = ResponseEntity.class)
-	@ApiResponses({ @ApiResponse(code = 200, message = "Target found by provided id", response = ResponseEntity.class),
+	@ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific Target from all terrorism attacks targets")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Target found by provided id", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Invalid Target id supplied"),
-			@ApiResponse(code = 404, message = "Could not find target with provided id", response = ErrorResponse.class) })
+			@ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> findTargetById(
-			@ApiParam(value = "Id value for the target you need to retrieve", required = true, example = "1") @PathVariable("id") Long id) {
+			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") 
+			@PathVariable("id") Long id) {
 
 		return targetService.findById(id).map(targetModelAssembler::toModel).map(ResponseEntity::ok)
 				.orElseThrow(() -> new TargetNotFoundException(id));
 	}
 
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
 	@ApiOperation(value = "Add Target", notes = "Add new Target", response = ResponseEntity.class)
-	@ApiResponses({
-			@ApiResponse(code = 201, message = "Successfully added new Target", response = ResponseEntity.class) })
-	public ResponseEntity<TargetModel> addTarget(@RequestBody @Valid TargetDTO targetDTO) {
+	@ApiResponses({ 
+		@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class) })
+	public ResponseEntity<TargetModel> addTarget(
+			@ApiParam(value = "New Target", name = "target", required = true)
+			@RequestBody @Valid TargetDTO targetDTO) {
 
 		TargetNode targetNode = targetService.save(targetDTO);
 
