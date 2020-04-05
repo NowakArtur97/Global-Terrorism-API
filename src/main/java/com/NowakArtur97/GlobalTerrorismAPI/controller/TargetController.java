@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,7 +81,7 @@ public class TargetController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
-	@ApiOperation(value = "Add Target", notes = "Add new Target", response = ResponseEntity.class)
+	@ApiOperation(value = "Add Target", notes = "Add new Target")
 	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> addTarget(
@@ -86,9 +89,20 @@ public class TargetController {
 
 		TargetNode targetNode = targetService.save(targetDTO);
 
-		Long id = targetNode.getId();
+		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
+	}
 
-		return new ResponseEntity<>(targetService.findById(id).map(targetModelAssembler::toModel)
-				.orElseThrow(() -> new TargetNotFoundException(id)), HttpStatus.CREATED);
+	@DeleteMapping
+	@ApiOperation(value = "Delete Target by id", notes = "Provide an id to delete specific Target")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully deleted Target", response = TargetModel.class),
+			@ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class) })
+	public ResponseEntity<TargetModel> deleteTarget(
+			@ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+
+		TargetNode targetNode = targetService.delete(id);
+
+		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
 	}
 }
