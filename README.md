@@ -33,11 +33,12 @@ The demo will be available soon...
 - Add Target
 - Get Target by id
 - Get All Targets
+- Delete Target By id
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 
 ## To Do
-- Update and Delete Targets
+- Update Targets
 - JWT support
 
 ## Status
