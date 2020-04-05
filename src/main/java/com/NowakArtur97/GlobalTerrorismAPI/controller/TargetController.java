@@ -43,7 +43,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/targets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(tags = { SwaggerConfiguration.TARGET_TAG })
-@ApiResponses(value = { @ApiResponse(code = 401, message = "No permission to view resource"),
+@ApiResponses(value = { 
+		@ApiResponse(code = 401, message = "No permission to view resource"),
 		@ApiResponse(code = 403, message = "Access to the resource is prohibited") })
 public class TargetController {
 
@@ -69,7 +70,8 @@ public class TargetController {
 
 	@GetMapping(path = "/{id}")
 	@ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific Target from all terrorism attacks targets")
-	@ApiResponses({ @ApiResponse(code = 200, message = "Target found by provided id", response = TargetModel.class),
+	@ApiResponses({ 
+			@ApiResponse(code = 200, message = "Target found by provided id", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Invalid Target id supplied"),
 			@ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> findTargetById(
@@ -82,7 +84,8 @@ public class TargetController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
 	@ApiOperation(value = "Add Target", notes = "Add new Target")
-	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
+	@ApiResponses({ 
+			@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> addTarget(
 			@ApiParam(value = "New Target", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
@@ -93,16 +96,18 @@ public class TargetController {
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping
+	@DeleteMapping(path = "/{id}")
 	@ApiOperation(value = "Delete Target by id", notes = "Provide an id to delete specific Target")
-	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully deleted Target", response = TargetModel.class),
+	@ApiResponses({ 
+			@ApiResponse(code = 200, message = "Successfully deleted Target", response = TargetModel.class),
 			@ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> deleteTarget(
 			@ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
-		TargetNode targetNode = targetService.delete(id);
+		Optional<TargetNode> targetNode = targetService.delete(id);
 
-		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
-				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
+		return new ResponseEntity<>(
+				targetNode.map(targetModelAssembler::toModel).orElseThrow(() -> new TargetNotFoundException(id)),
+				HttpStatus.OK);
 	}
 }
