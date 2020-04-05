@@ -380,7 +380,7 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("timestamp",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
 						.andExpect(content().json("{'status': 404}"))
-						.andExpect(jsonPath("error", is("Could not find target with id: " + targetId))),
+						.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
