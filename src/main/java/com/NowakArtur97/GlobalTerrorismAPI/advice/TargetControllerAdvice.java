@@ -18,9 +18,10 @@ public class TargetControllerAdvice extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(TargetNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleTargetNotFound(TargetNotFoundException exception) {
 
-		ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
-				exception.getMessage());
+		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value());
 
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		errorResponse.addError(exception.getMessage());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 }

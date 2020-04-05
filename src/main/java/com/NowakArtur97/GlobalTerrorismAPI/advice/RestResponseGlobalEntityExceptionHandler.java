@@ -1,10 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
+
 @ControllerAdvice
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -21,15 +19,11 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		Map<String, Object> body = new LinkedHashMap<>();
-		body.put("timestamp", new Date());
-		body.put("status", status.value());
+		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value());
 
-		List<String> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
-				.map(error -> error.getDefaultMessage()).collect(Collectors.toList());
+		ex.getBindingResult().getFieldErrors().stream()
+				.forEach(error -> errorResponse.addError(error.getDefaultMessage()));
 
-		body.put("errors", fieldErrors);
-
-		return new ResponseEntity<>(body, headers, status);
+		return new ResponseEntity<>(errorResponse, headers, status);
 	}
 }
