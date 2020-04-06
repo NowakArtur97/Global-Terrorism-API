@@ -12,6 +12,8 @@
 ## General info
 REST API providing information on terrorist attacks
 
+The data was downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
+
 ## Demo
 The demo will be available soon...
 
