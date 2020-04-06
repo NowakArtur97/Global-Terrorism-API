@@ -41,7 +41,7 @@ public class SwaggerConfiguration {
 		Contact contact = new Contact(swaggerConfigurationProperties.getContactName(),
 				swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
 
-		return new ApiInfoBuilder().version(swaggerConfigurationProperties.getApiVersion())
+		return new ApiInfoBuilder().version(swaggerConfigurationProperties.getVersion())
 				.title(swaggerConfigurationProperties.getTitle())
 				.description(swaggerConfigurationProperties.getDescription())
 				.termsOfServiceUrl(swaggerConfigurationProperties.getTermsOfServiceUrl())
