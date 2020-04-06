@@ -5,8 +5,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -287,7 +288,8 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
-				() -> verify(targetService, times(1)).findAll(pageable));
+				() -> verify(targetService, times(1)).findAll(pageable),
+				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler));
 	}
 
 	@Test
@@ -336,11 +338,12 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
-				() -> verify(targetService, times(1)).findAll(pageable));
+				() -> verify(targetService, times(1)).findAll(pageable),
+				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler));
 	}
 
 	@Test
-	public void when_find_target_and_target_exists_should_return_target() {
+	public void when_find_existing_target_should_return_target() {
 
 		Long targetId = 1L;
 		String targetName = "target";
@@ -382,7 +385,7 @@ public class TargetControllerTest {
 						.andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verifyNoMoreInteractions(targetModelAssembler));
+				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -401,7 +404,6 @@ public class TargetControllerTest {
 		String linkExpected = BASE_PATH + "/" + targetId;
 
 		when(targetService.save(targetDTO)).thenReturn(targetNode);
-		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
@@ -414,7 +416,6 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).save(targetDTO),
-				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
@@ -432,7 +433,53 @@ public class TargetControllerTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoMoreInteractions(targetService), () -> verifyNoMoreInteractions(targetModelAssembler));
+				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+	}
+
+	@Test
+	public void when_delete_existing_target_should_return_target() {
+
+		Long targetId = 1L;
+		String targetName = "target";
+		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetModel targetModel = new TargetModel(targetId, targetName);
+
+		String pathToLink = BASE_PATH + "/" + targetId.intValue();
+		Link link = new Link(pathToLink);
+		targetModel.add(link);
+
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
+		String linkExpected = BASE_PATH + "/" + targetId;
+
+		when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
+		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+
+		assertAll(() -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("links[0].href", is(linkExpected)))
+				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
+				() -> verify(targetService, times(1)).delete(targetId),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+	}
+
+	@Test
+	public void when_delete_target_but_target_not_exists_should_return_error_response() {
+
+		Long targetId = 1L;
+
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
+
+		when(targetService.delete(targetId)).thenReturn(Optional.empty());
+
+		assertAll(
+				() -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNotFound())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("timestamp",
+								is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
+						.andExpect(content().json("{'status': 404}"))
+						.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
+				() -> verify(targetService, times(1)).delete(targetId),
+				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
 	public static String asJsonString(final Object obj) {
