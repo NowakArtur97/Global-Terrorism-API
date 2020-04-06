@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.configuration.SwaggerConfiguration;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.TargetNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping("/api/targets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(tags = { SwaggerConfiguration.TARGET_TAG })
+@Api(tags = { TargetTag.RESOURCE })
 @ApiResponses(value = { 
 		@ApiResponse(code = 401, message = "No permission to view resource"),
 		@ApiResponse(code = 403, message = "Access to the resource is prohibited") })

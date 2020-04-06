@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,16 +25,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfiguration {
 
-	public static final String TARGET_TAG = "Target Resource";
-	public static final String TARGET_TAG_DESCRIPTION = "Operations related to Targets";
-
 	@Bean
 	public Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
 		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
 				.apis(RequestHandlerSelectors.basePackage(swaggerConfigurationProperties.getBasePackage()))
 				.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors())).build()
-				.apiInfo(apiDetails(swaggerConfigurationProperties)).tags(new Tag(TARGET_TAG, TARGET_TAG_DESCRIPTION));
+				.apiInfo(apiDetails(swaggerConfigurationProperties))
+				.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION));
 	}
 
 	private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
