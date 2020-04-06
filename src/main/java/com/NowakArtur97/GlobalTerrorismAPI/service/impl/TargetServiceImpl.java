@@ -15,11 +15,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Slf4j
 public class TargetServiceImpl implements TargetService {
 
 	private final TargetRepository targetRepository;
@@ -56,7 +54,7 @@ public class TargetServiceImpl implements TargetService {
 		Optional<TargetNode> targetNode = findById(id);
 
 		if (targetNode.isPresent()) {
-			log.info("HELLO");
+
 			targetRepository.delete(targetNode.get());
 		}
 

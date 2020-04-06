@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -159,5 +160,44 @@ public class TargetServiceImplTest {
 								+ targetNodeActual.getTarget()),
 				() -> verify(targetMapper, times(1)).mapDTOToNode(targetDTOExpected),
 				() -> verify(targetRepository, times(1)).save(targetNodeExpected));
+	}
+
+	@Test
+	public void when_delete_target_by_id_target_should_delete_and_return_target() {
+
+		String targetName = "Target";
+
+		Long targetId = 1L;
+
+		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
+
+		when(targetRepository.findById(targetId)).thenReturn(Optional.of(targetNodeExpected));
+
+		Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
+
+		TargetNode targetNodeActual = targetNodeOptional.get();
+
+		assertAll(
+				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+								+ targetNodeActual.getTarget()),
+				() -> verify(targetRepository, times(1)).findById(targetId),
+				() -> verify(targetRepository, times(1)).delete(targetNodeActual));
+	}
+
+	@Test
+	public void when_delete_target_by_id_not_existing_target_should_return_empty_optional() {
+
+		Long targetId = 1L;
+
+		when(targetRepository.findById(targetId)).thenReturn(Optional.empty());
+
+		Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
+
+		assertAll(
+				() -> assertTrue(targetNodeOptional.isEmpty(),
+						() -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
+				() -> verify(targetRepository, times(1)).findById(targetId),
+				() -> verifyNoMoreInteractions(targetRepository));
 	}
 }
