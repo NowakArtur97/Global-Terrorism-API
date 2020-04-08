@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -94,6 +95,32 @@ public class TargetController {
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
+	}
+
+	@PutMapping
+	@ApiOperation(value = "Add Target", notes = "Add new Target")
+	@ApiResponses({ 
+			@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
+			@ApiResponse(code = 204, message = "Successfully updated Target", response = TargetModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<TargetModel> updateTarget(
+			@ApiParam(value = "Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
+
+		Optional<TargetNode> targetNodeOptional = targetService.findById(targetDTO.getId());
+
+		if (targetNodeOptional.isEmpty()) {
+
+			TargetNode targetNode = targetService.save(targetDTO);
+
+			return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+					.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
+		} else {
+
+			TargetNode targetNode = targetService.update(targetDTO);
+
+			return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+					.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
+		}
 	}
 
 	@DeleteMapping(path = "/{id}")
