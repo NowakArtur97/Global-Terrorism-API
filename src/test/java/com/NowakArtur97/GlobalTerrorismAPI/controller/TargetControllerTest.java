@@ -403,7 +403,7 @@ public class TargetControllerTest {
 
 		String linkExpected = BASE_PATH + "/" + targetId;
 
-		when(targetService.save(targetDTO)).thenReturn(targetNode);
+		when(targetService.saveOrUpdate(targetDTO)).thenReturn(targetNode);
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
@@ -415,7 +415,7 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("links[0].href", is(linkExpected)))
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).save(targetDTO),
+				() -> verify(targetService, times(1)).saveOrUpdate(targetDTO),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 

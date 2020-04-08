@@ -152,7 +152,7 @@ public class TargetServiceImplTest {
 		when(targetMapper.mapDTOToNode(targetDTOExpected)).thenReturn(targetNodeExpected);
 		when(targetRepository.save(targetNodeExpected)).thenReturn(targetNodeExpected);
 
-		TargetNode targetNodeActual = targetService.save(targetDTOExpected);
+		TargetNode targetNodeActual = targetService.saveOrUpdate(targetDTOExpected);
 
 		assertAll(
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
