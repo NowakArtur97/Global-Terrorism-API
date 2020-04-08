@@ -145,7 +145,7 @@ public class TargetServiceImplTest {
 
 		String targetName = "Target";
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+		TargetDTO targetDTOExpected = new TargetDTO(null, targetName);
 
 		TargetNode targetNodeExpected = new TargetNode(targetName);
 
@@ -158,6 +158,8 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
 						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()),
+				() -> assertNotNull(targetNodeActual.getTarget(),
+						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
 				() -> verify(targetMapper, times(1)).mapDTOToNode(targetDTOExpected),
 				() -> verify(targetRepository, times(1)).save(targetNodeExpected));
 	}

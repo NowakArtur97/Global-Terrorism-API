@@ -38,9 +38,10 @@ public class TargetMapperTest {
 	@Test
 	public void when_map_target_dto_to_node_should_return_target_node() {
 
+		Long targetId = 1L;
 		String targetName = "Target";
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+		TargetDTO targetDTOExpected = new TargetDTO(targetId, targetName);
 
 		TargetNode targetNodeExpected = new TargetNode(targetName);
 

@@ -393,7 +393,7 @@ public class TargetControllerTest {
 
 		Long targetId = 1L;
 		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(targetName);
+		TargetDTO targetDTO = new TargetDTO(null, targetName);
 		TargetNode targetNode = new TargetNode(targetId, targetName);
 		TargetModel targetModel = new TargetModel(targetId, targetName);
 
@@ -424,7 +424,7 @@ public class TargetControllerTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	public void when_add_invalid_target_should_return_errors(String targetName) {
 
-		TargetDTO targetDTO = new TargetDTO(targetName);
+		TargetDTO targetDTO = new TargetDTO(null, targetName);
 
 		assertAll(
 				() -> mockMvc
