@@ -35,11 +35,11 @@ public class TargetServiceImpl implements TargetService {
 	@Transactional(readOnly = true)
 	public Optional<TargetNode> findById(Long id) {
 
-		return targetRepository.findById(id);
+		return id != null ? targetRepository.findById(id) : Optional.empty();
 	}
 
 	@Override
-	public TargetNode save(TargetDTO targetDTO) {
+	public TargetNode saveOrUpdate(TargetDTO targetDTO) {
 
 		TargetNode targetNode = targetMapper.mapDTOToNode(targetDTO);
 
@@ -48,16 +48,23 @@ public class TargetServiceImpl implements TargetService {
 		return targetNode;
 	}
 
+
 	@Override
 	public Optional<TargetNode> delete(Long id) {
 
-		Optional<TargetNode> targetNode = findById(id);
+		Optional<TargetNode> targetNodeOptional = findById(id);
 
-		if (targetNode.isPresent()) {
+		if (targetNodeOptional.isPresent()) {
 
-			targetRepository.delete(targetNode.get());
+			targetRepository.delete(targetNodeOptional.get());
 		}
 
-		return targetNode;
+		return targetNodeOptional;
+	}
+
+	@Override
+	public boolean doesTargetExist(Long id) {
+
+		return targetRepository.existsById(id);
 	}
 }

@@ -14,9 +14,9 @@ public interface TargetService {
 
 	Optional<TargetNode> findById(Long id);
 
-	TargetNode save(TargetDTO targetDTO);
-
-	TargetNode update(TargetDTO targetDTO);
+	TargetNode saveOrUpdate(TargetDTO targetDTO);
 
 	Optional<TargetNode> delete(Long id);
+
+	boolean doesTargetExist(Long id);
 }
