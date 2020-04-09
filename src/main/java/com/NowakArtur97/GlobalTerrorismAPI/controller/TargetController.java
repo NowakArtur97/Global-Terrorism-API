@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -121,6 +122,21 @@ public class TargetController {
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), httpStatus);
+	}
+
+	@PatchMapping(path = "/{id}")
+	@ApiOperation(value = "Update Target fields", notes = "Update Target fiels")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<TargetModel> updateTargetFields(
+			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
+
+		TargetNode targetNode = targetService.partialUpdate(id, targetDTO);
+		
+		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/{id}")
