@@ -48,7 +48,6 @@ public class TargetServiceImpl implements TargetService {
 		return targetNode;
 	}
 
-
 	@Override
 	public Optional<TargetNode> delete(Long id) {
 
@@ -60,11 +59,5 @@ public class TargetServiceImpl implements TargetService {
 		}
 
 		return targetNodeOptional;
-	}
-
-	@Override
-	public boolean doesTargetExist(Long id) {
-
-		return targetRepository.existsById(id);
 	}
 }

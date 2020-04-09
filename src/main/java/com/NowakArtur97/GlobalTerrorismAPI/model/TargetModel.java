@@ -21,6 +21,6 @@ public class TargetModel extends RepresentationModel<TargetModel> {
 	@ApiModelProperty(notes = "The unique id of the Target")
 	private Long id;
 
-	@ApiModelProperty(notes = "The target's name")
+	@ApiModelProperty(notes = "The target's name", required = true)
 	private String target;
 }
