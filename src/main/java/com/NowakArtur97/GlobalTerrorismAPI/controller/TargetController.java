@@ -2,6 +2,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import java.util.Optional;
 
+import javax.json.JsonMergePatch;
+import javax.json.JsonPatch;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +57,8 @@ public class TargetController {
 	private final TargetModelAssembler targetModelAssembler;
 
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
+
+	private final PatchHelper patchHelper;
 
 	@GetMapping
 	@ApiOperation(value = "Find All Targets", notes = "Look up all targets")
@@ -124,18 +129,41 @@ public class TargetController {
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), httpStatus);
 	}
 
-	@PatchMapping(path = "/{id}")
-	@ApiOperation(value = "Update Target fields", notes = "Update Target fiels")
+	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+	@ApiOperation(value = "Update Target fields using Json Patch", notes = "Update Target fields using Json Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
 			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
+			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonoPatch) {
 
-		TargetNode targetNode = targetService.partialUpdate(id, targetDTO);
-		
-		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
+		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
+
+		TargetNode targetNodePatched = patchHelper.patch(targetAsJsonoPatch, targetNode, TargetNode.class);
+
+		targetNodePatched = targetService.partialUpdate(targetNodePatched);
+
+		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
+	}
+
+	@PatchMapping(path = "/{id}", consumes = "application/merge-patch+json")
+	@ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<TargetModel> updateTargetFields(
+			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonoMergePatch) {
+
+		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
+
+		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonoMergePatch, targetNode, TargetNode.class);
+
+		targetNodePatched = targetService.partialUpdate(targetNodePatched);
+
+		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
 	}
 

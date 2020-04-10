@@ -49,15 +49,11 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode partialUpdate(Long id, TargetDTO targetDTO) {
+	public TargetNode partialUpdate(TargetNode targetNode) {
 
-		Optional<TargetNode> targetNodeOptional = findById(id);
-		
-		
-	
-		return null;
+		return targetRepository.save(targetNode);
 	}
-	
+
 	@Override
 	public Optional<TargetNode> delete(Long id) {
 
