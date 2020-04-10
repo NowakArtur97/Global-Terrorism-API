@@ -15,6 +15,8 @@ public interface TargetService {
 	Optional<TargetNode> findById(Long id);
 
 	TargetNode saveOrUpdate(TargetDTO targetDTO);
+	
+	TargetNode partialUpdate(Long id, TargetDTO targetDTO);
 
 	Optional<TargetNode> delete(Long id);
 }
