@@ -143,16 +143,18 @@ public class TargetServiceImplTest {
 	@Test
 	public void when_save_new_target_should_save_target() {
 
+		Long targetId = 1L;
+		
 		String targetName = "Target";
 
-		TargetDTO targetDTOExpected = new TargetDTO(null, targetName);
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
-		TargetNode targetNodeExpected = new TargetNode(targetName);
+		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
 		when(targetMapper.mapDTOToNode(targetDTOExpected)).thenReturn(targetNodeExpected);
 		when(targetRepository.save(targetNodeExpected)).thenReturn(targetNodeExpected);
 
-		TargetNode targetNodeActual = targetService.saveOrUpdate(targetDTOExpected);
+		TargetNode targetNodeActual = targetService.saveOrUpdate(null, targetDTOExpected);
 
 		assertAll(
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),

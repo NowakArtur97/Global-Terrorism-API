@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,10 +39,9 @@ public class TargetMapperTest {
 	@Test
 	public void when_map_target_dto_to_node_should_return_target_node() {
 
-		Long targetId = 1L;
 		String targetName = "Target";
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetId, targetName);
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
 		TargetNode targetNodeExpected = new TargetNode(targetName);
 
@@ -50,6 +50,8 @@ public class TargetMapperTest {
 		TargetNode targetNodeActual = targetMapper.mapDTOToNode(targetDTOExpected);
 
 		assertAll(
+				() -> assertNull(targetNodeActual.getId(),
+						() -> "should return target node with id as null, but was: " + targetNodeActual.getId()),
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
 						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()),

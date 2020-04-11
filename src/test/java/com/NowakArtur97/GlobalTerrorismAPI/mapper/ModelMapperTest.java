@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,38 +27,17 @@ public class ModelMapperTest {
 	}
 
 	@Test
-	public void when_map_target_dto_without_id_to_node_should_return_valid_node() {
+	public void when_map_target_dto_to_node_should_return_valid_node() {
 
-		Long targetId = null;
 		String targetName = "Target";
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetId, targetName);
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
 		TargetNode targetNodeActual = modelMapper.map(targetDTOExpected, TargetNode.class);
 
 		assertAll(
-				() -> assertEquals(targetId, targetNodeActual.getId(),
-						() -> "should return target node with id: " + targetId + ", but was: "
-								+ targetNodeActual.getId()),
-				() -> assertEquals(targetName, targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetName + ", but was: "
-								+ targetNodeActual.getTarget()));
-	}
-
-	@Test
-	public void when_map_target_dto_with_id_to_node_should_return_valid_node() {
-
-		Long targetId = 1L;
-		String targetName = "Target";
-
-		TargetDTO targetDTOExpected = new TargetDTO(targetId, targetName);
-
-		TargetNode targetNodeActual = modelMapper.map(targetDTOExpected, TargetNode.class);
-
-		assertAll(
-				() -> assertEquals(targetId, targetNodeActual.getId(),
-						() -> "should return target node with id: " + targetId + ", but was: "
-								+ targetNodeActual.getId()),
+				() -> assertNull(targetNodeActual.getId(),
+						() -> "should return target node with id as null, but was: " + targetNodeActual.getId()),
 				() -> assertEquals(targetName, targetNodeActual.getTarget(),
 						() -> "should return target node with target: " + targetName + ", but was: "
 								+ targetNodeActual.getTarget()));
