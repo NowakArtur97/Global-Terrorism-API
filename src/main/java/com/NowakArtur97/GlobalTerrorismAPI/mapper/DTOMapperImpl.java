@@ -15,8 +15,8 @@ public class DTOMapperImpl implements DTOMapper {
 	private final ModelMapper modelMapper;
 
 	@Override
-	public Object convertToEntity(Object object, DTOEntity dto) {
+	public <T> T convertToEntity(DTOEntity dto, Class<T> destinationType) {
 
-		return modelMapper.map(object, dto.getClass());
+		return modelMapper.map(dto, destinationType);
 	}
 }

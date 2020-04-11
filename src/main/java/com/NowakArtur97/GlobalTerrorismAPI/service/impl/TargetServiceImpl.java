@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.TargetMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -22,7 +22,7 @@ public class TargetServiceImpl implements TargetService {
 
 	private final TargetRepository targetRepository;
 
-	private final TargetMapper targetMapper;;
+	private final DTOMapper dtoMapper;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -41,10 +41,10 @@ public class TargetServiceImpl implements TargetService {
 	@Override
 	public TargetNode saveOrUpdate(Long id, TargetDTO targetDTO) {
 
-		TargetNode targetNode = targetMapper.mapDTOToNode(targetDTO);
+		TargetNode targetNode = dtoMapper.convertToEntity(targetDTO, TargetNode.class);
 
 		targetNode.setId(id != null ? id : null);
-		
+
 		targetNode = targetRepository.save(targetNode);
 
 		return targetNode;

@@ -4,5 +4,5 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.DTOEntity;
 
 public interface DTOMapper {
 
-	Object convertToEntity(Object object, DTOEntity dto);
+	<T> T convertToEntity(DTOEntity dto, Class<T> destinationType);
 }
