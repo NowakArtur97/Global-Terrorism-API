@@ -14,9 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TargetDTO {
 
-	@ApiModelProperty(notes = "The target's id")
-	private Long id;
-	
 	@ApiModelProperty(notes = "The target's name")
 	@NotBlank(message = "{target.target.notBlank}")
 	private String target;

@@ -94,36 +94,35 @@ public class TargetController {
 	public ResponseEntity<TargetModel> addTarget(
 			@ApiParam(value = "New Target", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
-		TargetNode targetNode = targetService.saveOrUpdate(targetDTO);
+		TargetNode targetNode = targetService.saveOrUpdate(null, targetDTO);
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
 	}
 
-	@PutMapping
-	@ApiOperation(value = "Update Target", notes = "Update Target")
+	@PutMapping(path = "/{id}")
+	@ApiOperation(value = "Update Target", notes = "Update Target. If the Target id is not found for update, a new Target with the next free id will be created")
 	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
 			@ApiResponse(code = 200, message = "Successfully updated Target", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTarget(
+			@ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
 			@ApiParam(value = "Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
 		HttpStatus httpStatus;
 
-		Long targetId = targetDTO.getId();
-
-		if (targetId != null && targetService.findById(targetId).isPresent()) {
+		if (id != null && targetService.findById(id).isPresent()) {
 
 			httpStatus = HttpStatus.OK;
 
 		} else {
 
-			targetDTO.setId(null);
-
+			id = null;
+			
 			httpStatus = HttpStatus.CREATED;
 		}
 
-		TargetNode targetNode = targetService.saveOrUpdate(targetDTO);
+		TargetNode targetNode = targetService.saveOrUpdate(id, targetDTO);
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), httpStatus);
@@ -135,8 +134,8 @@ public class TargetController {
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
-			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-			@ApiParam(value = "Target fields to update", name = "target", required = true, example = "[ { \"op\": \"replace\", \"path\": \"/target\", \"value\": \"Tar\" } ]") @RequestBody JsonPatch targetAsJsonoPatch) {
+			@ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonoPatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
 
@@ -155,7 +154,7 @@ public class TargetController {
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
-			@ApiParam(value = "Target id value needed to retrieve details", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
+			@ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonoMergePatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));

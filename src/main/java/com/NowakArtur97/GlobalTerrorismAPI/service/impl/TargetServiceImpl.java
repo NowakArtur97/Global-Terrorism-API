@@ -39,10 +39,12 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode saveOrUpdate(TargetDTO targetDTO) {
+	public TargetNode saveOrUpdate(Long id, TargetDTO targetDTO) {
 
 		TargetNode targetNode = targetMapper.mapDTOToNode(targetDTO);
 
+		targetNode.setId(id != null ? id : null);
+		
 		targetNode = targetRepository.save(targetNode);
 
 		return targetNode;
