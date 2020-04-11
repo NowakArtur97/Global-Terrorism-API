@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -85,7 +84,8 @@ public class TargetControllerTest {
 	@BeforeEach
 	public void setUp() {
 
-		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler, patchHelper);
+		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
+				patchHelper);
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
@@ -399,8 +399,9 @@ public class TargetControllerTest {
 	public void when_add_valid_target_should_return_new_target_as_model() {
 
 		Long targetId = 1L;
+		Long targetIdBeforeSave = null;
 		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(null, targetName);
+		TargetDTO targetDTO = new TargetDTO(targetName);
 		TargetNode targetNode = new TargetNode(targetId, targetName);
 		TargetModel targetModel = new TargetModel(targetId, targetName);
 
@@ -410,19 +411,19 @@ public class TargetControllerTest {
 
 		String linkExpected = BASE_PATH + "/" + targetId;
 
-		when(targetService.saveOrUpdate(targetDTO)).thenReturn(targetNode);
+		when(targetService.saveOrUpdate(targetIdBeforeSave, targetDTO)).thenReturn(targetNode);
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
 				() -> mockMvc
-						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+						.perform(post(BASE_PATH, targetIdBeforeSave).content(asJsonString(targetDTO))
 								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isCreated())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(linkExpected)))
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).saveOrUpdate(targetDTO),
+				() -> verify(targetService, times(1)).saveOrUpdate(targetIdBeforeSave, targetDTO),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
@@ -431,7 +432,7 @@ public class TargetControllerTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	public void when_add_invalid_target_should_return_errors(String targetName) {
 
-		TargetDTO targetDTO = new TargetDTO(null, targetName);
+		TargetDTO targetDTO = new TargetDTO(targetName);
 
 		assertAll(
 				() -> mockMvc
@@ -449,7 +450,7 @@ public class TargetControllerTest {
 		Long targetId = 1L;
 		String oldTargetName = "target";
 		String updatedTargetName = "updated target";
-		TargetDTO targetDTO = new TargetDTO(targetId, oldTargetName);
+		TargetDTO targetDTO = new TargetDTO(oldTargetName);
 		TargetNode targetNode = new TargetNode(targetId, updatedTargetName);
 		TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
 
@@ -458,15 +459,16 @@ public class TargetControllerTest {
 		targetModel.add(link);
 
 		String linkExpected = BASE_PATH + "/" + targetId;
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-		when(targetService.saveOrUpdate(targetDTO)).thenReturn(targetNode);
+		when(targetService.saveOrUpdate(targetId, targetDTO)).thenReturn(targetNode);
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
 				() -> mockMvc
-						.perform(put(BASE_PATH).content(asJsonString(targetDTO)).contentType(MediaType.APPLICATION_JSON)
-								.accept(MediaType.APPLICATION_JSON))
+						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(linkExpected)))
@@ -474,39 +476,7 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("target", is(updatedTargetName)))
 						.andExpect(jsonPath("target", not(oldTargetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetService, times(1)).saveOrUpdate(targetDTO),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
-	}
-
-	@Test
-	public void when_update_valid_target_without_id_should_return_new_target_as_model() {
-
-		Long targetId = 1L;
-		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(null, targetName);
-		TargetNode targetNode = new TargetNode(targetId, targetName);
-		TargetModel targetModel = new TargetModel(targetId, targetName);
-
-		String pathToLink = BASE_PATH + "/" + targetId.intValue();
-		Link link = new Link(pathToLink);
-		targetModel.add(link);
-
-		String linkExpected = BASE_PATH + "/" + targetId;
-
-		when(targetService.saveOrUpdate(targetDTO)).thenReturn(targetNode);
-		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
-
-		assertAll(
-				() -> mockMvc
-						.perform(put(BASE_PATH).content(asJsonString(targetDTO)).contentType(MediaType.APPLICATION_JSON)
-								.accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isCreated())
-						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("links[0].href", is(linkExpected)))
-						.andExpect(jsonPath("id", is(targetId.intValue())))
-						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, never()).findById(targetId),
-				() -> verify(targetService, times(1)).saveOrUpdate(targetDTO),
+				() -> verify(targetService, times(1)).saveOrUpdate(targetId, targetDTO),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
@@ -514,9 +484,9 @@ public class TargetControllerTest {
 	public void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
 		Long targetId = 1L;
+		Long targetIdAssignedIfTargetNotFound = null;
 		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(targetId, targetName);
-		TargetDTO targetDTOAfterSet = new TargetDTO(null, targetName);
+		TargetDTO targetDTO = new TargetDTO(targetName);
 		TargetNode targetNode = new TargetNode(targetId, targetName);
 		TargetModel targetModel = new TargetModel(targetId, targetName);
 
@@ -525,22 +495,23 @@ public class TargetControllerTest {
 		targetModel.add(link);
 
 		String linkExpected = BASE_PATH + "/" + targetId;
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 		when(targetService.findById(targetId)).thenReturn(Optional.empty());
-		when(targetService.saveOrUpdate(targetDTOAfterSet)).thenReturn(targetNode);
+		when(targetService.saveOrUpdate(targetIdAssignedIfTargetNotFound, targetDTO)).thenReturn(targetNode);
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
 				() -> mockMvc
-						.perform(put(BASE_PATH).content(asJsonString(targetDTO)).contentType(MediaType.APPLICATION_JSON)
-								.accept(MediaType.APPLICATION_JSON))
+						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isCreated())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(linkExpected)))
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetService, times(1)).saveOrUpdate(targetDTOAfterSet),
+				() -> verify(targetService, times(1)).saveOrUpdate(targetIdAssignedIfTargetNotFound, targetDTO),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
 	}
 
@@ -549,16 +520,21 @@ public class TargetControllerTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	public void when_update_invalid_target_should_return_errors(String targetName) {
 
-		TargetDTO targetDTO = new TargetDTO(null, targetName);
+		Long targetId = 1L;
+
+		TargetDTO targetDTO = new TargetDTO(targetName);
+
+		String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 		assertAll(
 				() -> mockMvc
-						.perform(put(BASE_PATH).content(asJsonString(targetDTO)).contentType(MediaType.APPLICATION_JSON)
-								.accept(MediaType.APPLICATION_JSON))
+						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
 	@Test
