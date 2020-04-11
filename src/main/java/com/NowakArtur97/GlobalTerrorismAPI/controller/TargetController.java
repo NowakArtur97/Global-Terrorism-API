@@ -141,11 +141,11 @@ public class TargetController {
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonoPatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
-
-		violationHelper.violate(targetNode, TargetDTO.class);
 		
 		TargetNode targetNodePatched = patchHelper.patch(targetAsJsonoPatch, targetNode, TargetNode.class);
 
+		violationHelper.violate(targetNodePatched, TargetDTO.class);
+		
 		targetNodePatched = targetService.partialUpdate(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
@@ -163,11 +163,11 @@ public class TargetController {
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonoMergePatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
-
-		violationHelper.violate(targetNode, TargetDTO.class);
 		
 		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonoMergePatch, targetNode, TargetNode.class);
 
+		violationHelper.violate(targetNodePatched, TargetDTO.class);
+		
 		targetNodePatched = targetService.partialUpdate(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
