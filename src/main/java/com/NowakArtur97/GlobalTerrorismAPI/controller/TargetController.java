@@ -35,6 +35,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,8 @@ public class TargetController {
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
 	private final PatchHelper patchHelper;
+	
+	private final ViolationHelper violationHelper;
 
 	@GetMapping
 	@ApiOperation(value = "Find All Targets", notes = "Look up all targets")
@@ -139,6 +142,8 @@ public class TargetController {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
 
+		violationHelper.violate(targetNode, TargetDTO.class);
+		
 		TargetNode targetNodePatched = patchHelper.patch(targetAsJsonoPatch, targetNode, TargetNode.class);
 
 		targetNodePatched = targetService.partialUpdate(targetNodePatched);
@@ -159,6 +164,8 @@ public class TargetController {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
 
+		violationHelper.violate(targetNode, TargetDTO.class);
+		
 		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonoMergePatch, targetNode, TargetNode.class);
 
 		targetNodePatched = targetService.partialUpdate(targetNodePatched);
