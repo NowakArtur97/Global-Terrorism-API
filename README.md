@@ -19,7 +19,7 @@ The demo will be available soon...
 
 ## Built With 
 - Java 11
-- Spring (Boot, MVC, Security, Data Neo4j) - 2.2.5
+- Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
 - Swagger (Core, Ben Valdiation, UI) - 2.92
 - Lombok - 1.18.12
 - jUnit5 - 5.5.2
@@ -27,20 +27,17 @@ The demo will be available soon...
 - Model Mapper - 2.3.7
 - Apache POI (poi, poi-ooxml) - 4.1.2
 - Excel Streaming Reader - 2.1.0
+- Apache Johnzon (core) - 1.2.3
 - Maven
 - Neo4j
 - CircleCI
 
 ## Features
-- Add Target
-- Get Target by id
-- Get All Targets
-- Delete Target By id
+- Target (GET, POST, PUT, PATCH, DELETE)
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 
 ## To Do
-- Update Targets
 - JWT support
 
 ## Status
