@@ -136,7 +136,7 @@ public class TargetController {
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
 			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonoPatch) {
+			@ApiParam(value = "Target fields to update", name = "target", required = true, example = "[ { \"op\": \"replace\", \"path\": \"/target\", \"value\": \"Tar\" } ]") @RequestBody JsonPatch targetAsJsonoPatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
 
@@ -148,13 +148,14 @@ public class TargetController {
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
 	}
 
-	@PatchMapping(path = "/{id}", consumes = "application/merge-patch+json")
+	// id2 was used because Swagger does not allow two PATCH methods for the same path – even if they have different parameters (parameters have no effect on uniqueness)
+	@PatchMapping(path = "/{id2}", consumes = "application/merge-patch+json")
 	@ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
-			@ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Target id value needed to retrieve details", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonoMergePatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));

@@ -28,11 +28,14 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
-		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
-				.apis(RequestHandlerSelectors.basePackage(swaggerConfigurationProperties.getBasePackage()))
-				.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors())).build()
-				.apiInfo(apiDetails(swaggerConfigurationProperties))
-				.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION));
+		return new Docket(DocumentationType.SWAGGER_2)
+				.useDefaultResponseMessages(false)
+				.select()
+					.apis(RequestHandlerSelectors.basePackage(swaggerConfigurationProperties.getBasePackage()))
+					.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
+				.build()
+					.apiInfo(apiDetails(swaggerConfigurationProperties))
+					.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION));
 	}
 
 	private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
@@ -40,11 +43,14 @@ public class SwaggerConfiguration {
 		Contact contact = new Contact(swaggerConfigurationProperties.getContactName(),
 				swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
 
-		return new ApiInfoBuilder().version(swaggerConfigurationProperties.getVersion())
-				.title(swaggerConfigurationProperties.getTitle())
-				.description(swaggerConfigurationProperties.getDescription())
-				.termsOfServiceUrl(swaggerConfigurationProperties.getTermsOfServiceUrl())
-				.license(swaggerConfigurationProperties.getLicense())
-				.licenseUrl(swaggerConfigurationProperties.getLicenseUrl()).contact(contact).build();
+		return new ApiInfoBuilder()
+					.version(swaggerConfigurationProperties.getVersion())
+					.title(swaggerConfigurationProperties.getTitle())
+					.description(swaggerConfigurationProperties.getDescription())
+					.termsOfServiceUrl(swaggerConfigurationProperties.getTermsOfServiceUrl())
+					.license(swaggerConfigurationProperties.getLicense())
+					.licenseUrl(swaggerConfigurationProperties.getLicenseUrl())
+					.contact(contact)
+				.build();
 	}
 }
