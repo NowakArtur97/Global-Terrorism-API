@@ -54,6 +54,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -81,11 +82,14 @@ public class TargetControllerTest {
 	@Mock
 	private PatchHelper patchHelper;
 
+	@Mock
+	private ViolationHelper violationHelper;
+
 	@BeforeEach
 	public void setUp() {
 
 		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-				patchHelper);
+				patchHelper, violationHelper);
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
