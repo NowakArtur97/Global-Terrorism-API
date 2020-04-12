@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetDTO implements DTOEntity {
+public class TargetDTO implements DTONode {
 
 	@ApiModelProperty(notes = "The target's name")
 	@NotBlank(message = "{target.target.notBlank}")

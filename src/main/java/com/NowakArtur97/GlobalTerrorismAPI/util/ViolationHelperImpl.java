@@ -24,7 +24,7 @@ public class ViolationHelperImpl implements ViolationHelper {
 	@Override
 	public <T> void violate(Object entity, Class<T> dtoType) {
 
-		T dto = dtoMapper.convertToDTO(entity, dtoType);
+		T dto = dtoMapper.mapToDTO(entity, dtoType);
 
 		Set<ConstraintViolation<T>> violations = valdiator.validate(dto);
 

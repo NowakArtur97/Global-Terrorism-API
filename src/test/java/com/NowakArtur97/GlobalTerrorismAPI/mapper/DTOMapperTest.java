@@ -22,10 +22,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("TargetMapper_Tests")
-public class TargetMapperTest {
+@Tag("DTOMapper_Tests")
+public class DTOMapperTest {
 
-	private TargetMapper targetMapper;
+	private DTOMapper dtoMapper;
 
 	@Mock
 	private ModelMapper modelMapper;
@@ -33,7 +33,7 @@ public class TargetMapperTest {
 	@BeforeEach
 	public void setUp() {
 
-		targetMapper = new TargetMapperImpl(modelMapper);
+		dtoMapper = new DTOMapperImpl(modelMapper);
 	}
 
 	@Test
@@ -45,9 +45,9 @@ public class TargetMapperTest {
 
 		TargetNode targetNodeExpected = new TargetNode(targetName);
 
-		when(targetMapper.mapDTOToNode(targetDTOExpected)).thenReturn(targetNodeExpected);
+		when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
 
-		TargetNode targetNodeActual = targetMapper.mapDTOToNode(targetDTOExpected);
+		TargetNode targetNodeActual = dtoMapper.mapToNode(targetDTOExpected, TargetNode.class);
 
 		assertAll(
 				() -> assertNull(targetNodeActual.getId(),
@@ -56,5 +56,25 @@ public class TargetMapperTest {
 						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()),
 				() -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class));
+	}
+
+	@Test
+	public void when_map_target_node_to_dto_should_return_target_dto() {
+
+		String targetName = "Target";
+
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+
+		TargetNode targetNodeExpected = new TargetNode(targetName);
+
+		when(modelMapper.map(targetNodeExpected, TargetDTO.class)).thenReturn(targetDTOExpected);
+
+		TargetDTO targetDTOActual = dtoMapper.mapToDTO(targetNodeExpected, TargetDTO.class);
+
+		assertAll(
+				() -> assertEquals(targetDTOExpected.getTarget(), targetDTOActual.getTarget(),
+						() -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
+								+ targetDTOActual.getTarget()),
+				() -> verify(modelMapper, times(1)).map(targetNodeExpected, TargetDTO.class));
 	}
 }

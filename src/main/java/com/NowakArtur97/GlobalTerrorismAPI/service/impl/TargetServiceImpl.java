@@ -41,7 +41,7 @@ public class TargetServiceImpl implements TargetService {
 	@Override
 	public TargetNode saveOrUpdate(Long id, TargetDTO targetDTO) {
 
-		TargetNode targetNode = dtoMapper.convertToEntity(targetDTO, TargetNode.class);
+		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
 
 		targetNode.setId(id != null ? id : null);
 
