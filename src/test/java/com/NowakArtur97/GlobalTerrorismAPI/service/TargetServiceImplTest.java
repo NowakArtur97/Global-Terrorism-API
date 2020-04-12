@@ -26,7 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.TargetMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -44,12 +44,12 @@ public class TargetServiceImplTest {
 	private TargetRepository targetRepository;
 
 	@Mock
-	private TargetMapper targetMapper;
+	private DTOMapper dtoMapper;
 
 	@BeforeEach
 	void setUp() {
 
-		targetService = new TargetServiceImpl(targetRepository, targetMapper);
+		targetService = new TargetServiceImpl(targetRepository, dtoMapper);
 	}
 
 	@Test
@@ -144,14 +144,14 @@ public class TargetServiceImplTest {
 	public void when_save_new_target_should_save_target() {
 
 		Long targetId = 1L;
-		
+
 		String targetName = "Target";
 
 		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
 		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-		when(targetMapper.mapDTOToNode(targetDTOExpected)).thenReturn(targetNodeExpected);
+		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
 		when(targetRepository.save(targetNodeExpected)).thenReturn(targetNodeExpected);
 
 		TargetNode targetNodeActual = targetService.saveOrUpdate(null, targetDTOExpected);
@@ -162,7 +162,7 @@ public class TargetServiceImplTest {
 								+ targetNodeActual.getTarget()),
 				() -> assertNotNull(targetNodeActual.getTarget(),
 						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-				() -> verify(targetMapper, times(1)).mapDTOToNode(targetDTOExpected),
+				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
 				() -> verify(targetRepository, times(1)).save(targetNodeExpected));
 	}
 
