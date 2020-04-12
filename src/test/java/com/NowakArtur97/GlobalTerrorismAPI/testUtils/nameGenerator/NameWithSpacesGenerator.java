@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.testUtils;
+package com.NowakArtur97.GlobalTerrorismAPI.testUtils.nameGenerator;
 
 import java.lang.reflect.Method;
 

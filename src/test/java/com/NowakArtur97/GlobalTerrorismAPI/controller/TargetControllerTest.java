@@ -592,6 +592,7 @@ public class TargetControllerTest {
 		try {
 
 			return new ObjectMapper().writeValueAsString(obj);
+
 		} catch (Exception e) {
 
 			throw new RuntimeException(e);
