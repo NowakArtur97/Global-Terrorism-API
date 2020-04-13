@@ -49,6 +49,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -110,7 +111,8 @@ public class TargetControllerTest {
 		mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler)
 				.setControllerAdvice(new TargetControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-				.setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter())
+				.setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
+						new MappingJackson2HttpMessageConverter())
 				.build();
 	}
 
@@ -581,15 +583,17 @@ public class TargetControllerTest {
 		when(targetService.partialUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
 		when(targetModelAssembler.toModel(targetNodeUpdated)).thenReturn(targetModel);
 
-		assertAll(() -> mockMvc.perform(patch(linkWithParameter, targetId)
-				.content((fromFile(PATH_TO_JSON_FILES + "patch-with-valid-json-merge-patch-payload.json")))
-				.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
-//						.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
-				.andExpect(jsonPath("links[0].href", is(linkExpected)))
-				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(updatedTargetName)))
-				.andExpect(jsonPath("target", not(oldTargetName))),
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, targetId).content(
+								(fromFile(PATH_TO_JSON_FILES + "patch-with-valid-json-merge-patch-payload.json")))
+								.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
+						.andExpect(status().isOk())
+						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+						.andExpect(jsonPath("links[0].href", is(linkExpected)))
+						.andExpect(jsonPath("id", is(targetId.intValue())))
+						.andExpect(jsonPath("target", is(updatedTargetName)))
+						.andExpect(jsonPath("target", not(oldTargetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode),
 						ArgumentMatchers.<Class<TargetNode>>any()),
