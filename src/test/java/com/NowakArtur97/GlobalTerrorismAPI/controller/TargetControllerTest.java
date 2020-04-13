@@ -4,12 +4,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.json.JsonMergePatch;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -30,8 +35,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -49,13 +56,18 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExcept
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.mediaType.PatchMediaType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.SneakyThrows;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -63,6 +75,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TargetControllerTest {
 
 	private final String BASE_PATH = "http://localhost:8080/api/targets";
+
+	private final String PATH_TO_JSON_FILES = "json/target/";
 
 	private MockMvc mockMvc;
 
@@ -95,7 +109,9 @@ public class TargetControllerTest {
 
 		mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler)
 				.setControllerAdvice(new TargetControllerAdvice())
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+				.setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter())
+				.build();
 	}
 
 	@Test
@@ -542,6 +558,46 @@ public class TargetControllerTest {
 	}
 
 	@Test
+	public void when_partial_update_valid_target_should_return_partially_updated_node() {
+
+		Long targetId = 1L;
+		String oldTargetName = "target";
+		String updatedTargetName = "updated target";
+		TargetNode targetNode = new TargetNode(targetId, oldTargetName);
+		TargetNode targetNodeUpdated = new TargetNode(targetId, updatedTargetName);
+		TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+
+		String pathToLink = BASE_PATH + "/" + targetId.intValue();
+		Link link = new Link(pathToLink);
+		targetModel.add(link);
+
+		String linkExpected = BASE_PATH + "/" + targetId;
+		String linkWithParameter = BASE_PATH + "/" + "{id2}";
+
+		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+//		doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
+		when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
+				ArgumentMatchers.<Class<TargetNode>>any())).thenReturn(targetNodeUpdated);
+		when(targetService.partialUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
+		when(targetModelAssembler.toModel(targetNodeUpdated)).thenReturn(targetModel);
+
+		assertAll(() -> mockMvc.perform(patch(linkWithParameter, targetId)
+				.content((fromFile(PATH_TO_JSON_FILES + "patch-with-valid-json-merge-patch-payload.json")))
+				.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
+//						.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
+				.andExpect(jsonPath("links[0].href", is(linkExpected)))
+				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(updatedTargetName)))
+				.andExpect(jsonPath("target", not(oldTargetName))),
+				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode),
+						ArgumentMatchers.<Class<TargetNode>>any()),
+				() -> verify(targetService, times(1)).partialUpdate(targetNodeUpdated),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated));
+	}
+
+	@Test
 	public void when_delete_existing_target_should_return_target() {
 
 		Long targetId = 1L;
@@ -597,5 +653,11 @@ public class TargetControllerTest {
 
 			throw new RuntimeException(e);
 		}
+	}
+
+	@SneakyThrows
+	private byte[] fromFile(String path) {
+
+		return new ClassPathResource(path).getInputStream().readAllBytes();
 	}
 }

@@ -160,11 +160,11 @@ public class TargetController {
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
 	public ResponseEntity<TargetModel> updateTargetFields(
 			@ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
-			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonoMergePatch) {
+			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonMergePatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
 		
-		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonoMergePatch, targetNode, TargetNode.class);
+		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
 
 		violationHelper.violate(targetNodePatched, TargetDTO.class);
 		

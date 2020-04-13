@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtils.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtils.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetModelAssembler_Tests")
