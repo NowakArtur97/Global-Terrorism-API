@@ -38,7 +38,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -68,16 +67,12 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.SneakyThrows;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
 public class TargetControllerTest {
 
 	private final String BASE_PATH = "http://localhost:8080/api/targets";
-
-	private final String PATH_TO_JSON_FILES = "json/target/";
 
 	private MockMvc mockMvc;
 
@@ -585,8 +580,7 @@ public class TargetControllerTest {
 
 		assertAll(
 				() -> mockMvc
-						.perform(patch(linkWithParameter, targetId).content(
-								(fromFile(PATH_TO_JSON_FILES + "patch-with-valid-json-merge-patch-payload.json")))
+						.perform(patch(linkWithParameter, targetId).content("{ \"target\": \"updated target\" }")
 								.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
 						.andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -657,11 +651,5 @@ public class TargetControllerTest {
 
 			throw new RuntimeException(e);
 		}
-	}
-
-	@SneakyThrows
-	private byte[] fromFile(String path) {
-
-		return new ClassPathResource(path).getInputStream().readAllBytes();
 	}
 }
