@@ -6,9 +6,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -210,7 +212,10 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
-				() -> verify(targetService, times(1)).findAll(pageable));
+				() -> verify(targetService, times(1)).findAll(pageable),
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
+				() -> verifyNoMoreInteractions(pagedResourcesAssembler));
 	}
 
 	@Test
@@ -313,7 +318,9 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
 				() -> verify(targetService, times(1)).findAll(pageable),
-				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
+				() -> verifyNoMoreInteractions(pagedResourcesAssembler));
 	}
 
 	@Test
@@ -363,7 +370,9 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
 						.andExpect(jsonPath("page.number", is(numberExpected))),
 				() -> verify(targetService, times(1)).findAll(pageable),
-				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
+				() -> verifyNoMoreInteractions(pagedResourcesAssembler));
 	}
 
 	@Test
@@ -389,7 +398,9 @@ public class TargetControllerTest {
 				.andExpect(jsonPath("links[0].href", is(linkExpected)))
 				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -409,6 +420,7 @@ public class TargetControllerTest {
 						.andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verifyNoMoreInteractions(targetService),
 				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
@@ -441,7 +453,9 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).saveOrUpdate(targetIdBeforeSave, targetDTO),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@ParameterizedTest(name = "{index}: Target Name: {0}")
@@ -494,7 +508,9 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("target", not(oldTargetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verify(targetService, times(1)).saveOrUpdate(targetId, targetDTO),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -529,7 +545,9 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
 				() -> verify(targetService, times(1)).saveOrUpdate(targetIdAssignedIfTargetNotFound, targetDTO),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@ParameterizedTest(name = "{index}: Target Name: {0}")
@@ -550,7 +568,7 @@ public class TargetControllerTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+				() -> verifyNoInteractions(targetService), 
 				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
@@ -572,7 +590,7 @@ public class TargetControllerTest {
 		String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
 		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-//		doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
+		doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
 		when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
 				ArgumentMatchers.<Class<TargetNode>>any())).thenReturn(targetNodeUpdated);
 		when(targetService.partialUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
@@ -589,10 +607,15 @@ public class TargetControllerTest {
 						.andExpect(jsonPath("target", is(updatedTargetName)))
 						.andExpect(jsonPath("target", not(oldTargetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
+				() -> verify(violationHelper, times(1)).violate(targetNodeUpdated, TargetDTO.class),
+				() -> verifyNoMoreInteractions(violationHelper),
 				() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode),
 						ArgumentMatchers.<Class<TargetNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper),
 				() -> verify(targetService, times(1)).partialUpdate(targetNodeUpdated),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -618,7 +641,9 @@ public class TargetControllerTest {
 				.andExpect(jsonPath("links[0].href", is(linkExpected)))
 				.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
 				() -> verify(targetService, times(1)).delete(targetId),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode));
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
 
 	@Test
@@ -638,6 +663,7 @@ public class TargetControllerTest {
 						.andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 				() -> verify(targetService, times(1)).delete(targetId),
+				() -> verifyNoMoreInteractions(targetService),
 				() -> verifyNoInteractions(targetModelAssembler));
 	}
 
