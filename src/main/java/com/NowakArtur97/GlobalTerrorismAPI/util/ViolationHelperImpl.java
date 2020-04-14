@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ViolationHelperImpl implements ViolationHelper {
 
-	private final Validator valdiator;
+	private final Validator validator;
 
 	private final DTOMapper dtoMapper;
 
@@ -26,7 +26,7 @@ public class ViolationHelperImpl implements ViolationHelper {
 
 		T dto = dtoMapper.mapToDTO(entity, dtoType);
 
-		Set<ConstraintViolation<T>> violations = valdiator.validate(dto);
+		Set<ConstraintViolation<T>> violations = validator.validate(dto);
 
 		if (!violations.isEmpty()) {
 
