@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.testUtils.mediaType;
+package com.NowakArtur97.GlobalTerrorismAPI.testUtil.mediaType;
 
 import org.springframework.http.MediaType;
 
