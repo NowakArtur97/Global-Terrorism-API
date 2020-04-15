@@ -27,8 +27,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("ViolationHelper_Tests")
-public class ViolationHelperTest {
+@Tag("ViolationHelperImpl_Tests")
+public class ViolationHelperImplTest {
 
 	private ViolationHelper violationHelper;
 

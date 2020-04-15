@@ -27,8 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PatchHelper_Tests")
-public class PatchHelperTest {
+@Tag("PatchHelperImpl_Tests")
+public class PatchHelperImplTest {
 
 	private PatchHelper patchHelper;
 
