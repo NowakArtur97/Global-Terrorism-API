@@ -38,8 +38,8 @@ public class ModelMapperTest {
 		assertAll(
 				() -> assertNull(targetNodeActual.getId(),
 						() -> "should return target node with id as null, but was: " + targetNodeActual.getId()),
-				() -> assertEquals(targetName, targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetName + ", but was: "
+				() -> assertEquals(targetDTOExpected.getTarget(), targetNodeActual.getTarget(),
+						() -> "should return target node with target: " + targetDTOExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()));
 	}
 }

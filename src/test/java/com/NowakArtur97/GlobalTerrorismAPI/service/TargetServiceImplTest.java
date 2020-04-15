@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -79,7 +80,8 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
 						() -> "should return page with: " + targetsExpected.getNumberOfElements()
 								+ " elements, but was: " + targetsActual.getNumberOfElements()),
-				() -> verify(targetRepository, times(1)).findAll(pageable));
+				() -> verify(targetRepository, times(1)).findAll(pageable),
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 
 	@Test
@@ -102,7 +104,8 @@ public class TargetServiceImplTest {
 						() -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
 				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
 						() -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
-				() -> verify(targetRepository, times(1)).findAll(pageable));
+				() -> verify(targetRepository, times(1)).findAll(pageable),
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 
 	@Test
@@ -124,7 +127,8 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetExpected.getTarget(), targetActual.getTarget(),
 						() -> "should return target with target: " + targetExpected.getTarget() + ", but was"
 								+ targetActual.getTarget()),
-				() -> verify(targetRepository, times(1)).findById(expectedTargetId));
+				() -> verify(targetRepository, times(1)).findById(expectedTargetId),
+				() -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(dtoMapper));
 	}
 
 	@Test
@@ -137,7 +141,8 @@ public class TargetServiceImplTest {
 		Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
 
 		assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
-				() -> verify(targetRepository, times(1)).findById(expectedTargetId));
+				() -> verify(targetRepository, times(1)).findById(expectedTargetId),
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 
 	@Test
@@ -149,10 +154,11 @@ public class TargetServiceImplTest {
 
 		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
+		TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
 		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
-		when(targetRepository.save(targetNodeExpected)).thenReturn(targetNodeExpected);
+		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
+		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
 		TargetNode targetNodeActual = targetService.saveOrUpdate(null, targetDTOExpected);
 
@@ -160,10 +166,12 @@ public class TargetServiceImplTest {
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
 						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()),
-				() -> assertNotNull(targetNodeActual.getTarget(),
+				() -> assertNotNull(targetNodeActual.getId(),
 						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
 				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
-				() -> verify(targetRepository, times(1)).save(targetNodeExpected));
+				() -> verifyNoMoreInteractions(dtoMapper),
+				() -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
+				() -> verifyNoMoreInteractions(targetRepository));
 	}
 
 	@Test
@@ -186,7 +194,8 @@ public class TargetServiceImplTest {
 						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
 								+ targetNodeActual.getTarget()),
 				() -> verify(targetRepository, times(1)).findById(targetId),
-				() -> verify(targetRepository, times(1)).delete(targetNodeActual));
+				() -> verify(targetRepository, times(1)).delete(targetNodeActual),
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 
 	@Test
@@ -202,6 +211,6 @@ public class TargetServiceImplTest {
 				() -> assertTrue(targetNodeOptional.isEmpty(),
 						() -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
 				() -> verify(targetRepository, times(1)).findById(targetId),
-				() -> verifyNoMoreInteractions(targetRepository));
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 }
