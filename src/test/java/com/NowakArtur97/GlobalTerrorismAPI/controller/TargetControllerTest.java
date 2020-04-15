@@ -611,7 +611,7 @@ public class TargetControllerTest {
 			when(patchHelper.patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()))
 					.thenReturn(targetNodeUpdated);
 			doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
-			when(targetService.partialUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
+			when(targetService.persistUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
 			when(targetModelAssembler.toModel(targetNodeUpdated)).thenReturn(targetModel);
 
 			assertAll(
@@ -631,7 +631,7 @@ public class TargetControllerTest {
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(violationHelper, times(1)).violate(targetNodeUpdated, TargetDTO.class),
 					() -> verifyNoMoreInteractions(violationHelper),
-					() -> verify(targetService, times(1)).partialUpdate(targetNodeUpdated),
+					() -> verify(targetService, times(1)).persistUpdate(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetModelAssembler));
@@ -658,7 +658,7 @@ public class TargetControllerTest {
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
 					ArgumentMatchers.<Class<TargetNode>>any())).thenReturn(targetNodeUpdated);
 			doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
-			when(targetService.partialUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
+			when(targetService.persistUpdate(targetNodeUpdated)).thenReturn(targetNodeUpdated);
 			when(targetModelAssembler.toModel(targetNodeUpdated)).thenReturn(targetModel);
 
 			assertAll(
@@ -677,7 +677,7 @@ public class TargetControllerTest {
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(violationHelper, times(1)).violate(targetNodeUpdated, TargetDTO.class),
 					() -> verifyNoMoreInteractions(violationHelper),
-					() -> verify(targetService, times(1)).partialUpdate(targetNodeUpdated),
+					() -> verify(targetService, times(1)).persistUpdate(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetModelAssembler));

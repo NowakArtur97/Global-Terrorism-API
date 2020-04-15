@@ -175,6 +175,30 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
+	public void when_persist_update_new_target_should_update_target() {
+
+		Long targetId = 1L;
+
+		String targetName = "Target";
+
+		TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
+		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
+
+		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
+
+		TargetNode targetNodeActual = targetService.persistUpdate(targetNodeExpectedBeforeSave);
+
+		assertAll(
+				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+								+ targetNodeActual.getTarget()),
+				() -> assertNotNull(targetNodeActual.getId(),
+						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
+				() -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
+				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+	}
+
+	@Test
 	public void when_delete_target_by_id_target_should_delete_and_return_target() {
 
 		String targetName = "Target";

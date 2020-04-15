@@ -146,7 +146,7 @@ public class TargetController {
 
 		violationHelper.violate(targetNodePatched, TargetDTO.class);
 		
-		targetNodePatched = targetService.partialUpdate(targetNodePatched);
+		targetNodePatched = targetService.persistUpdate(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
@@ -168,7 +168,7 @@ public class TargetController {
 
 		violationHelper.violate(targetNodePatched, TargetDTO.class);
 		
-		targetNodePatched = targetService.partialUpdate(targetNodePatched);
+		targetNodePatched = targetService.persistUpdate(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
