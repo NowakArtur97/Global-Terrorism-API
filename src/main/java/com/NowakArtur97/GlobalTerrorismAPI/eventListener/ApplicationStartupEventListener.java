@@ -31,24 +31,24 @@ public class ApplicationStartupEventListener {
 
 	private final static String PATH_TO_FILE = "classpath:data/globalterrorismdb_0919dist-mini.xlsx";
 
-//	private final TargetService targetService;
+	private final TargetService targetService;
 
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-//		if (targetService.isDatabaseEmpty()) {
-//
-//			try {
-//
-//				Sheet sheet = loadSheetFromFile();
-//
-//				insertDataToDatabase(sheet);
-//
-//			} catch (FileNotFoundException e) {
-//
-//				log.info("File in path: " + PATH_TO_FILE + " not found");
-//			}
-//		}
+		if (targetService.isDatabaseEmpty()) {
+
+			try {
+
+				Sheet sheet = loadSheetFromFile();
+
+				insertDataToDatabase(sheet);
+
+			} catch (FileNotFoundException e) {
+
+				log.info("File in path: " + PATH_TO_FILE + " not found");
+			}
+		}
 	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
@@ -89,7 +89,7 @@ public class ApplicationStartupEventListener {
 
 			TargetNode target = new TargetNode(targetValue);
 
-//			targetService.persistUpdate(target);
+			targetService.persistUpdate(target);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class ApplicationStartupEventListener {
 			targetValue = "UNKNOWN";
 			break;
 		}
-		
+
 		return targetValue;
 	}
 }
