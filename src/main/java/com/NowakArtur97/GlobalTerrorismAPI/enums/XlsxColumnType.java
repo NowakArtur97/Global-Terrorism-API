@@ -4,7 +4,8 @@ import lombok.Getter;
 
 public enum XlsxColumnType {
 
-	TARGET(39);
+	YEAR_OF_EVENT(1), MONTH_OF_EVENT(2), DAY_OF_EVENT(3), EVENT_SUMMARY(18), WAS_PART_OF_MULTIPLE_INCIDENTS(25),
+	WAS_SUCCESS(26), WAS_SUICIDE(27), TARGET(39), MOTIVE(64);
 
 	@Getter
 	private int index;

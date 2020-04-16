@@ -28,9 +28,9 @@ public class EventNode {
 
 	private Date date;
 
-	private boolean partOfMultipleIncident;
+	private boolean wasPartOfMultipleIncidents;
 
-	private boolean successful;
+	private boolean wasSuccessful;
 
-	private boolean suicide;
+	private boolean wasSuicide;
 }
