@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
@@ -236,5 +237,35 @@ public class TargetServiceImplTest {
 						() -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
 				() -> verify(targetRepository, times(1)).findById(targetId),
 				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+	}
+
+	@Test
+	public void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
+
+		Long databaseSize = 0L;
+
+		when(targetRepository.count()).thenReturn(databaseSize);
+
+		boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+
+		assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
+				() -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+				() -> verifyNoInteractions(dtoMapper));
+	}
+
+	@Test
+	public void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
+
+		Long databaseSize = 10L;
+
+		when(targetRepository.count()).thenReturn(databaseSize);
+
+		boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+
+		assertAll(
+				() -> assertFalse(isDatabaseEmpty,
+						() -> "should not database be empty, but that was: " + isDatabaseEmpty),
+				() -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+				() -> verifyNoInteractions(dtoMapper));
 	}
 }
