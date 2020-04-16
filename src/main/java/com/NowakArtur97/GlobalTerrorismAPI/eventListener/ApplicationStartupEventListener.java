@@ -37,77 +37,104 @@ public class ApplicationStartupEventListener {
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
 		if (targetService.isDatabaseEmpty()) {
-			
+
 			try {
 
-				File globalTerrorismFile = ResourceUtils.getFile(PATH_TO_FILE);
+				Sheet sheet = loadSheetFromFile();
 
-				InputStream inputStream = new FileInputStream(globalTerrorismFile);
+				insertDataToDatabase(sheet);
 
-				Workbook workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
-
-				Sheet sheet = workbook.getSheetAt(0);
-
-				for (Row row : sheet) {
-
-					int targetIndex = 0;
-
-					for (int i = 0; i < row.getLastCellNum(); i++) {
-
-						Cell cell = row.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
-
-						if (cell != null && targetIndex == XlsxColumnType.TARGET.getIndex()) {
-
-							String targetValue = null;
-
-							switch (cell.getCellType()) {
-
-							case NUMERIC:
-								Double doubleValue = cell.getNumericCellValue();
-								targetValue = doubleValue.toString();
-								break;
-
-							case STRING:
-								targetValue = cell.getStringCellValue();
-								break;
-							case FORMULA:
-								targetValue = cell.getCellFormula();
-								break;
-
-							case BLANK:
-								targetValue = "BLANK";
-								break;
-
-							case BOOLEAN:
-								boolean booleanValue = cell.getBooleanCellValue();
-								targetValue = "" + booleanValue;
-								break;
-
-							case ERROR:
-								byte byteValue = cell.getErrorCellValue();
-								targetValue = "" + byteValue;
-								break;
-
-							case _NONE:
-								targetValue = "_NONE";
-								break;
-
-							default:
-								break;
-							}
-
-							TargetNode target = new TargetNode(targetValue);
-
-							targetService.persistUpdate(target);
-						}
-
-						targetIndex++;
-					}
-				}
 			} catch (FileNotFoundException e) {
 
 				log.info("File in path: " + PATH_TO_FILE + " not found");
 			}
 		}
+	}
+
+	private Sheet loadSheetFromFile() throws FileNotFoundException {
+
+		File globalTerrorismFile = ResourceUtils.getFile(PATH_TO_FILE);
+
+		InputStream inputStream = new FileInputStream(globalTerrorismFile);
+
+		Workbook workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
+
+		Sheet sheet = workbook.getSheetAt(0);
+
+		return sheet;
+	}
+
+	private void insertDataToDatabase(Sheet sheet) {
+
+		for (Row row : sheet) {
+
+			int targetIndex = 0;
+
+			for (int i = 0; i < row.getLastCellNum(); i++) {
+
+				Cell cell = row.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+				saveTarget(targetIndex, cell);
+
+				targetIndex++;
+			}
+		}
+	}
+
+	private void saveTarget(int targetIndex, Cell cell) {
+
+		if (cell != null && targetIndex == XlsxColumnType.TARGET.getIndex()) {
+
+			String targetValue = getTargetName(cell);
+
+			TargetNode target = new TargetNode(targetValue);
+
+			targetService.persistUpdate(target);
+		}
+	}
+
+	private String getTargetName(Cell cell) {
+
+		String targetValue = null;
+
+		switch (cell.getCellType()) {
+
+		case NUMERIC:
+			Double doubleValue = cell.getNumericCellValue();
+			targetValue = doubleValue.toString();
+			break;
+
+		case STRING:
+			targetValue = cell.getStringCellValue();
+			break;
+
+		case FORMULA:
+			targetValue = cell.getCellFormula();
+			break;
+
+		case BLANK:
+			targetValue = "BLANK";
+			break;
+
+		case BOOLEAN:
+			boolean booleanValue = cell.getBooleanCellValue();
+			targetValue = "" + booleanValue;
+			break;
+
+		case ERROR:
+			byte byteValue = cell.getErrorCellValue();
+			targetValue = "" + byteValue;
+			break;
+
+		case _NONE:
+			targetValue = "NONE";
+			break;
+
+		default:
+			targetValue = "UNKNOWN";
+			break;
+		}
+		
+		return targetValue;
 	}
 }
