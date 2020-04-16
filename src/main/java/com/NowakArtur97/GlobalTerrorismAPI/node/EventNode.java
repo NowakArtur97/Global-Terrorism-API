@@ -23,7 +23,7 @@ public class EventNode {
 	private Long id;
 
 	private String summary;
-	
+
 	private String motive;
 
 	private Date date;
@@ -33,4 +33,15 @@ public class EventNode {
 	private boolean wasSuccessful;
 
 	private boolean wasSuicide;
+
+	public EventNode(String summary, String motive, Date date, boolean wasPartOfMultipleIncidents,
+			boolean wasSuccessful, boolean wasSuicide) {
+
+		this.summary = summary;
+		this.motive = motive;
+		this.date = date;
+		this.wasPartOfMultipleIncidents = wasPartOfMultipleIncidents;
+		this.wasSuccessful = wasSuccessful;
+		this.wasSuicide = wasSuicide;
+	}
 }
