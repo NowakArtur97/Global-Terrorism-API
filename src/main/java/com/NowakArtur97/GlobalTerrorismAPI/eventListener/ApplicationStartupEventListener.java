@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -29,26 +32,28 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ApplicationStartupEventListener {
 
-	private final static String PATH_TO_FILE = "classpath:data/globalterrorismdb_0919dist-mini.xlsx";
+	private final static String PATH_TO_FILE = "classpath:data/globalterrorismdb_0919dist-mini2.xlsx";
 
 	private final TargetService targetService;
+
+//	private final EventRepository eventRepository;
 
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-		if (targetService.isDatabaseEmpty()) {
+//		if (targetService.isDatabaseEmpty()) {
 
-			try {
+		try {
 
-				Sheet sheet = loadSheetFromFile();
+			Sheet sheet = loadSheetFromFile();
 
-				insertDataToDatabase(sheet);
+			insertDataToDatabase(sheet);
 
-			} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 
-				log.info("File in path: " + PATH_TO_FILE + " not found");
-			}
+			log.info("File in path: " + PATH_TO_FILE + " not found");
 		}
+//		}
 	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
@@ -68,73 +73,146 @@ public class ApplicationStartupEventListener {
 
 		for (Row row : sheet) {
 
-			int targetIndex = 0;
+			int columnIndex = 0;
+
+			int yearOfEvent;
+			int monthOfEvent;
+			int dayOfEvent;
+			String eventSummary;
+			boolean wasPartOfMultipleIncidents;
+			boolean wasSuccessful;
+			boolean wasSuicide;
+			String motive;
 
 			for (int i = 0; i < row.getLastCellNum(); i++) {
 
 				Cell cell = row.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
-				saveTarget(targetIndex, cell);
+				if (cell != null) {
 
-				targetIndex++;
+					if (columnIndex == XlsxColumnType.TARGET.getIndex()) {
+
+//						saveTarget(cell);
+
+					} else if (columnIndex == XlsxColumnType.YEAR_OF_EVENT.getIndex()) {
+
+						log.info("YEAR: " + getCellValue(cell).toString());
+//						yearOfEvent = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.MONTH_OF_EVENT.getIndex()) {
+
+						log.info("MONTH: " + getCellValue(cell).toString());
+//						monthOfEvent = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.DAY_OF_EVENT.getIndex()) {
+
+						log.info("DAY: " + getCellValue(cell).toString());
+//						dayOfEvent = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.EVENT_SUMMARY.getIndex()) {
+
+						log.info("SUMMARY: " + getCellValue(cell).toString());
+//						eventSummary = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
+
+						log.info("WAS PART OF MULTIPLE INCIDENTS: " + getCellValue(cell).toString());
+//						wasPartOfMultipleIncidents = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
+
+						log.info("WAS SUCCESS: " + getCellValue(cell).toString());
+//						wasSuccessful = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
+
+						log.info("WAS SUICIDE: " + getCellValue(cell).toString());
+//						wasSuicide = getCellValue(cell);
+
+					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
+
+						log.info("MOTIVE: " + getCellValue(cell).toString());
+//						motive = getCellValue(cell);
+					}
+				}
+
+				log.info("************************************");
+
+				columnIndex++;
 			}
+
+//			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents, wasSuccessful,
+//					wasSuicide, motive);
 		}
 	}
 
-	private void saveTarget(int targetIndex, Cell cell) {
+	private void saveTarget(Cell cell) {
 
-		if (cell != null && targetIndex == XlsxColumnType.TARGET.getIndex()) {
+		String targetName = getCellValue(cell);
 
-			String targetValue = getTargetName(cell);
+		TargetNode target = new TargetNode(targetName);
 
-			TargetNode target = new TargetNode(targetValue);
-
-			targetService.persistUpdate(target);
-		}
+		targetService.persistUpdate(target);
 	}
 
-	private String getTargetName(Cell cell) {
+	private void saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
+			boolean wasPartOfMultipleIncidents, boolean wasSuccessful, boolean wasSuicide, String motive) {
 
-		String targetValue = null;
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, yearOfEvent);
+		cal.set(Calendar.MONTH, monthOfEvent);
+		cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
+		Date date = cal.getTime();
+
+		EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
+				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
+				.wasSuicide(wasSuicide).build();
+
+//		eventRepository.save(eventNode);
+	}
+
+	private String getCellValue(Cell cell) {
+
+		String value = null;
 
 		switch (cell.getCellType()) {
 
 		case NUMERIC:
 			Double doubleValue = cell.getNumericCellValue();
-			targetValue = doubleValue.toString();
+			value = doubleValue.toString();
 			break;
 
 		case STRING:
-			targetValue = cell.getStringCellValue();
+			value = cell.getStringCellValue();
 			break;
 
 		case FORMULA:
-			targetValue = cell.getCellFormula();
+			value = cell.getCellFormula();
 			break;
 
 		case BLANK:
-			targetValue = "BLANK";
+			value = "BLANK";
 			break;
 
 		case BOOLEAN:
 			boolean booleanValue = cell.getBooleanCellValue();
-			targetValue = "" + booleanValue;
+			value = "" + booleanValue;
 			break;
 
 		case ERROR:
 			byte byteValue = cell.getErrorCellValue();
-			targetValue = "" + byteValue;
+			value = "" + byteValue;
 			break;
 
 		case _NONE:
-			targetValue = "NONE";
+			value = "NONE";
 			break;
 
 		default:
-			targetValue = "UNKNOWN";
+			value = "UNKNOWN";
 			break;
 		}
 
-		return targetValue;
+		return value;
 	}
 }
