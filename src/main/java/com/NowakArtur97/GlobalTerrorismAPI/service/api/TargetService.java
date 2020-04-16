@@ -19,4 +19,6 @@ public interface TargetService {
 	TargetNode persistUpdate(TargetNode targetNode);
 
 	Optional<TargetNode> delete(Long id);
+
+	boolean isDatabaseEmpty();
 }

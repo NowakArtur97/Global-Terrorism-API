@@ -68,4 +68,10 @@ public class TargetServiceImpl implements TargetService {
 
 		return targetNodeOptional;
 	}
+
+	@Override
+	public boolean isDatabaseEmpty() {
+
+		return targetRepository.count() == 0;
+	}
 }
