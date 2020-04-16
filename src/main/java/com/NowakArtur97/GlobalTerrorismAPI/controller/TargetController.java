@@ -49,7 +49,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/targets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(tags = { TargetTag.RESOURCE })
-@ApiResponses(value = { @ApiResponse(code = 401, message = "No permission to view resource"),
+@ApiResponses(value = { @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
 		@ApiResponse(code = 403, message = "Access to the resource is prohibited") })
 public class TargetController {
 
