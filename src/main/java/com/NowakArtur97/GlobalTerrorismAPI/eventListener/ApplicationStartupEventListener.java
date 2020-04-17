@@ -104,7 +104,7 @@ public class ApplicationStartupEventListener {
 						if (isNumeric) {
 							yearOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
-							log.info("YEAR_OF_EVENT: " + yearOfEvent);
+//							log.info("YEAR_OF_EVENT: " + yearOfEvent);
 						}
 
 					} else if (columnIndex == XlsxColumnType.MONTH_OF_EVENT.getIndex()) {
@@ -116,7 +116,7 @@ public class ApplicationStartupEventListener {
 						if (isNumeric) {
 							monthOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
-							log.info("MONTH_OF_EVENT: " + monthOfEvent);
+//							log.info("MONTH_OF_EVENT: " + monthOfEvent);
 						}
 
 					} else if (columnIndex == XlsxColumnType.DAY_OF_EVENT.getIndex()) {
@@ -128,7 +128,7 @@ public class ApplicationStartupEventListener {
 						if (isNumeric) {
 							dayOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
-							log.info("DAY_OF_EVENT: " + dayOfEvent);
+//							log.info("DAY_OF_EVENT: " + dayOfEvent);
 						}
 
 					} else if (columnIndex == XlsxColumnType.EVENT_SUMMARY.getIndex()) {
@@ -137,18 +137,27 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
 
-//						log.info("WAS PART OF MULTIPLE INCIDENTS: " + getCellValue(cell).toString());
-//						wasPartOfMultipleIncidents = getCellValue(cell);
+						String cellVal = getCellValue(cell);
+
+						wasPartOfMultipleIncidents = "1".equals(cellVal) || "1.0".equals(cellVal);
+
+						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
 
-//						log.info("WAS SUCCESS: " + getCellValue(cell).toString());
-//						wasSuccessful = getCellValue(cell);
+						String cellVal = getCellValue(cell);
+
+						wasSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
+
+						log.info(cellVal + " WAS_SUCCESS: " + wasSuccessful);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
 
-//						log.info("WAS SUICIDE: " + getCellValue(cell).toString());
-//						wasSuicide = getCellValue(cell);
+						String cellVal = getCellValue(cell);
+
+						wasSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
+
+						log.info(cellVal + " WAS_SUICIDE: " + wasSuicide);
 
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
@@ -163,15 +172,15 @@ public class ApplicationStartupEventListener {
 
 			if ((dayOfEvent > 0 && dayOfEvent <= 31) && (monthOfEvent > 0 && monthOfEvent <= 12)
 					&& (yearOfEvent > 1900 && yearOfEvent <= 2020)) {
-				
+
 				Calendar cal = Calendar.getInstance();
 				cal.set(Calendar.YEAR, yearOfEvent);
 				cal.set(Calendar.MONTH, monthOfEvent);
 				cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
 				Date date = cal.getTime();
-				log.info(date.toString());
+//				log.info(date.toString());
 
-				log.info("************************************");
+//				log.info("************************************");
 			}
 		}
 
