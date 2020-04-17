@@ -22,6 +22,7 @@ import org.springframework.util.ResourceUtils;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
 
@@ -33,11 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ApplicationStartupEventListener {
 
-	private final static String PATH_TO_FILE = "classpath:data/globalterrorismdb_0919dist-mini2.xlsx";
+	private final static String PATH_TO_FILE = "classpath:data/globalterrorismdb_0919dist-mini.xlsx";
 
 	private final TargetService targetService;
 
-//	private final EventRepository eventRepository;
+	private final EventRepository eventRepository;
 
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -162,7 +163,7 @@ public class ApplicationStartupEventListener {
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
 						motive = getCellValue(cell);
-						
+
 //						log.info("MOTIVE: " + motive);
 					}
 				}
@@ -213,7 +214,7 @@ public class ApplicationStartupEventListener {
 
 	private String getCellValue(Cell cell) {
 
-		String value = null;
+		String value = "";
 
 		switch (cell.getCellType()) {
 
@@ -243,7 +244,6 @@ public class ApplicationStartupEventListener {
 		case BLANK:
 		case _NONE:
 		default:
-			value = "";
 			break;
 		}
 
