@@ -77,13 +77,13 @@ public class ApplicationStartupEventListener {
 			int columnIndex = 0;
 
 			int yearOfEvent = 1900;
-			int monthOfEvent = 12;
-			int dayOfEvent = 12;
-			String eventSummary;
-			boolean wasPartOfMultipleIncidents;
-			boolean wasSuccessful;
-			boolean wasSuicide;
-			String motive;
+			int monthOfEvent = 1;
+			int dayOfEvent = 1;
+			String eventSummary = "";
+			boolean wasPartOfMultipleIncidents = false;
+			boolean wasSuccessful = false;
+			boolean wasSuicide = false;
+			String motive = "";
 
 			for (int i = 0; i < row.getLastCellNum(); i++) {
 
@@ -141,7 +141,7 @@ public class ApplicationStartupEventListener {
 
 						wasPartOfMultipleIncidents = "1".equals(cellVal) || "1.0".equals(cellVal);
 
-						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
+//						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
 
@@ -149,7 +149,7 @@ public class ApplicationStartupEventListener {
 
 						wasSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
 
-						log.info(cellVal + " WAS_SUCCESS: " + wasSuccessful);
+//						log.info(cellVal + " WAS_SUCCESS: " + wasSuccessful);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
 
@@ -157,27 +157,25 @@ public class ApplicationStartupEventListener {
 
 						wasSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
 
-						log.info(cellVal + " WAS_SUICIDE: " + wasSuicide);
+//						log.info(cellVal + " WAS_SUICIDE: " + wasSuicide);
 
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
 						motive = getCellValue(cell);
+						
+//						log.info("MOTIVE: " + motive);
 					}
 				}
 
 				columnIndex++;
 			}
-//			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents, wasSuccessful,
-//					wasSuicide, motive);
 
 			if ((dayOfEvent > 0 && dayOfEvent <= 31) && (monthOfEvent > 0 && monthOfEvent <= 12)
 					&& (yearOfEvent > 1900 && yearOfEvent <= 2020)) {
 
-				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, yearOfEvent);
-				cal.set(Calendar.MONTH, monthOfEvent);
-				cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
-				Date date = cal.getTime();
+				saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents,
+						wasSuccessful, wasSuicide, motive);
+
 //				log.info(date.toString());
 
 //				log.info("************************************");
@@ -206,7 +204,9 @@ public class ApplicationStartupEventListener {
 
 		EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
 				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
-				.wasSuicide(wasSuicide).build();
+				.wasSuicide(wasSuicide).motive(motive).build();
+
+		log.info(eventNode.toString());
 
 //		eventRepository.save(eventNode);
 	}
