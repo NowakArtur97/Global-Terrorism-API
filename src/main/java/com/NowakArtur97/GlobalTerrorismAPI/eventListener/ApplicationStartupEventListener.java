@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
@@ -75,9 +76,9 @@ public class ApplicationStartupEventListener {
 
 			int columnIndex = 0;
 
-			int yearOfEvent;
-			int monthOfEvent;
-			int dayOfEvent;
+			int yearOfEvent = 1900;
+			int monthOfEvent = 12;
+			int dayOfEvent = 12;
 			String eventSummary;
 			boolean wasPartOfMultipleIncidents;
 			boolean wasSuccessful;
@@ -96,54 +97,80 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.YEAR_OF_EVENT.getIndex()) {
 
-						log.info("YEAR: " + getCellValue(cell).toString());
-//						yearOfEvent = getCellValue(cell);
+//						log.info("YEAR: " + getCellValue(cell).toString());
+
+						String cellVal = getCellValue(cell);
+
+						boolean isNumeric = NumberUtils.isParsable(cellVal);
+
+						if (isNumeric) {
+							yearOfEvent = (int) Double.parseDouble(getCellValue(cell));
+						}
 
 					} else if (columnIndex == XlsxColumnType.MONTH_OF_EVENT.getIndex()) {
 
-						log.info("MONTH: " + getCellValue(cell).toString());
-//						monthOfEvent = getCellValue(cell);
+//						log.info("MONTH: " + getCellValue(cell).toString());
+						String cellVal = getCellValue(cell);
+
+						boolean isNumeric = NumberUtils.isParsable(cellVal);
+
+						if (isNumeric) {
+							monthOfEvent = (int) Double.parseDouble(getCellValue(cell));
+						}
 
 					} else if (columnIndex == XlsxColumnType.DAY_OF_EVENT.getIndex()) {
 
-						log.info("DAY: " + getCellValue(cell).toString());
-//						dayOfEvent = getCellValue(cell);
+//						log.info("DAY: " + getCellValue(cell).toString());
+						String cellVal = getCellValue(cell);
+
+						boolean isNumeric = NumberUtils.isParsable(cellVal);
+
+						if (isNumeric) {
+							dayOfEvent = (int) Double.parseDouble(getCellValue(cell));
+						}
 
 					} else if (columnIndex == XlsxColumnType.EVENT_SUMMARY.getIndex()) {
 
-						log.info("SUMMARY: " + getCellValue(cell).toString());
-//						eventSummary = getCellValue(cell);
+//						log.info("SUMMARY: " + getCellValue(cell).toString());
+						eventSummary = getCellValue(cell);
 
 					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
 
-						log.info("WAS PART OF MULTIPLE INCIDENTS: " + getCellValue(cell).toString());
+//						log.info("WAS PART OF MULTIPLE INCIDENTS: " + getCellValue(cell).toString());
 //						wasPartOfMultipleIncidents = getCellValue(cell);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
 
-						log.info("WAS SUCCESS: " + getCellValue(cell).toString());
+//						log.info("WAS SUCCESS: " + getCellValue(cell).toString());
 //						wasSuccessful = getCellValue(cell);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
 
-						log.info("WAS SUICIDE: " + getCellValue(cell).toString());
+//						log.info("WAS SUICIDE: " + getCellValue(cell).toString());
 //						wasSuicide = getCellValue(cell);
 
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
-						log.info("MOTIVE: " + getCellValue(cell).toString());
+//						log.info("MOTIVE: " + getCellValue(cell).toString());
 //						motive = getCellValue(cell);
 					}
 				}
 
-				log.info("************************************");
-
 				columnIndex++;
 			}
-
 //			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents, wasSuccessful,
 //					wasSuicide, motive);
+
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, yearOfEvent);
+			cal.set(Calendar.MONTH, monthOfEvent);
+			cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
+			Date date = cal.getTime();
+			log.info(date.toString());
+
+			log.info("************************************");
 		}
+
 	}
 
 	private void saveTarget(Cell cell) {
@@ -190,10 +217,6 @@ public class ApplicationStartupEventListener {
 			value = cell.getCellFormula();
 			break;
 
-		case BLANK:
-			value = "BLANK";
-			break;
-
 		case BOOLEAN:
 			boolean booleanValue = cell.getBooleanCellValue();
 			value = "" + booleanValue;
@@ -204,12 +227,10 @@ public class ApplicationStartupEventListener {
 			value = "" + byteValue;
 			break;
 
+		case BLANK:
 		case _NONE:
-			value = "NONE";
-			break;
-
 		default:
-			value = "UNKNOWN";
+			value = "";
 			break;
 		}
 
