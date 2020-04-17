@@ -176,10 +176,6 @@ public class ApplicationStartupEventListener {
 
 				saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents,
 						wasSuccessful, wasSuicide, motive);
-
-//				log.info(date.toString());
-
-//				log.info("************************************");
 			}
 		}
 
@@ -207,9 +203,7 @@ public class ApplicationStartupEventListener {
 				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
 				.wasSuicide(wasSuicide).motive(motive).build();
 
-		log.info(eventNode.toString());
-
-//		eventRepository.save(eventNode);
+		eventRepository.save(eventNode);
 	}
 
 	private String getCellValue(Cell cell) {
