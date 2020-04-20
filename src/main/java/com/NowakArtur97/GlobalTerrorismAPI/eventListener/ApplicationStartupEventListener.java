@@ -85,6 +85,7 @@ public class ApplicationStartupEventListener {
 			boolean wasSuccessful = false;
 			boolean wasSuicide = false;
 			String motive = "";
+			TargetNode target = new TargetNode();
 
 			for (int i = 0; i < row.getLastCellNum(); i++) {
 
@@ -94,7 +95,7 @@ public class ApplicationStartupEventListener {
 
 					if (columnIndex == XlsxColumnType.TARGET.getIndex()) {
 
-//						saveTarget(cell);
+						target = saveTarget(cell);
 
 					} else if (columnIndex == XlsxColumnType.YEAR_OF_EVENT.getIndex()) {
 
@@ -175,23 +176,24 @@ public class ApplicationStartupEventListener {
 					&& (yearOfEvent > 1900 && yearOfEvent <= 2020)) {
 
 				saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents,
-						wasSuccessful, wasSuicide, motive);
+						wasSuccessful, wasSuicide, motive, target);
 			}
 		}
 
 	}
 
-	private void saveTarget(Cell cell) {
+	private TargetNode saveTarget(Cell cell) {
 
 		String targetName = getCellValue(cell);
 
 		TargetNode target = new TargetNode(targetName);
 
-		targetService.persistUpdate(target);
+		return targetService.persistUpdate(target);
 	}
 
 	private void saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
-			boolean wasPartOfMultipleIncidents, boolean wasSuccessful, boolean wasSuicide, String motive) {
+			boolean wasPartOfMultipleIncidents, boolean wasSuccessful, boolean wasSuicide, String motive,
+			TargetNode target) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, yearOfEvent);
