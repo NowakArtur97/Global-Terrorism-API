@@ -43,7 +43,7 @@ public class ApplicationStartupEventListener {
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-		if (targetService.isDatabaseEmpty()) {
+//		if (targetService.isDatabaseEmpty()) {
 
 			try {
 
@@ -55,7 +55,7 @@ public class ApplicationStartupEventListener {
 
 				log.info("File in path: " + PATH_TO_FILE + " not found");
 			}
-		}
+//		}
 	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
@@ -186,7 +186,7 @@ public class ApplicationStartupEventListener {
 
 	private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
 
-		monthOfEvent = isMonthCorrect(monthOfEvent) ? monthOfEvent : 1;
+		monthOfEvent = isMonthCorrect(monthOfEvent) ? monthOfEvent - 1 : 0;
 		dayOfEvent = isDayCorrect(dayOfEvent) ? dayOfEvent : 1;
 
 		Calendar cal = Calendar.getInstance();
