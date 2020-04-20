@@ -81,9 +81,9 @@ public class ApplicationStartupEventListener {
 			int monthOfEvent = 1;
 			int dayOfEvent = 1;
 			String eventSummary = "";
-			boolean wasPartOfMultipleIncidents = false;
-			boolean wasSuccessful = false;
-			boolean wasSuicide = false;
+			boolean isPartOfMultipleIncidents = false;
+			boolean isSuccessful = false;
+			boolean isSuicide = false;
 			String motive = "";
 			TargetNode target = new TargetNode();
 
@@ -132,21 +132,21 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
 
-						wasPartOfMultipleIncidents = parseBoolean(cellVal);
+						isPartOfMultipleIncidents = parseBoolean(cellVal);
 
-//						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
+//						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + isPartOfMultipleIncidents);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
 
-						wasSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
+						isSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
 
-//						log.info(cellVal + " WAS_SUCCESS: " + wasSuccessful);
+//						log.info(cellVal + " WAS_SUCCESS: " + isSuccessful);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
 
-						wasSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
+						isSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
 
-//						log.info(cellVal + " WAS_SUICIDE: " + wasSuicide);
+//						log.info(cellVal + " WAS_SUICIDE: " + isSuicide);
 
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
@@ -159,8 +159,8 @@ public class ApplicationStartupEventListener {
 				columnIndex++;
 			}
 
-			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents, wasSuccessful,
-					wasSuicide, motive, target);
+			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, isPartOfMultipleIncidents, isSuccessful,
+					isSuicide, motive, target);
 		}
 	}
 
@@ -172,14 +172,14 @@ public class ApplicationStartupEventListener {
 	}
 
 	private void saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
-			boolean wasPartOfMultipleIncidents, boolean wasSuccessful, boolean wasSuicide, String motive,
+			boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicide, String motive,
 			TargetNode target) {
 
 		Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
 
 		EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
-				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
-				.wasSuicide(wasSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(target).build();
 
 		eventService.save(eventNode);
 	}

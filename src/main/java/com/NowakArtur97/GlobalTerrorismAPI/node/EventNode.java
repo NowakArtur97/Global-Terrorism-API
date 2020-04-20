@@ -29,30 +29,30 @@ public class EventNode {
 
 	private Date date;
 
-	private boolean wasPartOfMultipleIncidents;
+	private boolean isPartOfMultipleIncidents;
 
-	private boolean wasSuccessful;
+	private boolean isSuccessful;
 
-	private boolean wasSuicide;
+	private boolean isSuicide;
 
 	@Relationship("TARGETS")
 	private TargetNode target;
 
-	public EventNode(String summary, String motive, Date date, boolean wasPartOfMultipleIncidents,
-			boolean wasSuccessful, boolean wasSuicide) {
+	public EventNode(String summary, String motive, Date date, boolean isPartOfMultipleIncidents,
+			boolean isSuccessful, boolean isSuicide) {
 
 		this.summary = summary;
 		this.motive = motive;
 		this.date = date;
-		this.wasPartOfMultipleIncidents = wasPartOfMultipleIncidents;
-		this.wasSuccessful = wasSuccessful;
-		this.wasSuicide = wasSuicide;
+		this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
+		this.isSuccessful = isSuccessful;
+		this.isSuicide = isSuicide;
 	}
 
-	public EventNode(String summary, String motive, Date date, boolean wasPartOfMultipleIncidents,
-			boolean wasSuccessful, boolean wasSuicide, TargetNode target) {
+	public EventNode(String summary, String motive, Date date, boolean isPartOfMultipleIncidents,
+			boolean isSuccessful, boolean isSuicide, TargetNode target) {
 
-		this(summary, motive, date, wasPartOfMultipleIncidents, wasSuccessful, wasSuicide);
+		this(summary, motive, date, isPartOfMultipleIncidents, isSuccessful, isSuicide);
 		
 		this.target = target;
 	}
