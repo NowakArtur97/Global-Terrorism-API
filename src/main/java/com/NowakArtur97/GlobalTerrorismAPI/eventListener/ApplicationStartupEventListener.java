@@ -101,9 +101,8 @@ public class ApplicationStartupEventListener {
 
 						String cellVal = getCellValue(cell);
 
-						boolean isNumeric = NumberUtils.isParsable(cellVal);
-
-						if (isNumeric) {
+						if (isNumeric(cellVal)) {
+							
 							yearOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
 //							log.info("YEAR_OF_EVENT: " + yearOfEvent);
@@ -113,9 +112,8 @@ public class ApplicationStartupEventListener {
 
 						String cellVal = getCellValue(cell);
 
-						boolean isNumeric = NumberUtils.isParsable(cellVal);
+						if (isNumeric(cellVal)) {
 
-						if (isNumeric) {
 							monthOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
 //							log.info("MONTH_OF_EVENT: " + monthOfEvent);
@@ -125,9 +123,8 @@ public class ApplicationStartupEventListener {
 
 						String cellVal = getCellValue(cell);
 
-						boolean isNumeric = NumberUtils.isParsable(cellVal);
+						if (isNumeric(cellVal)) {
 
-						if (isNumeric) {
 							dayOfEvent = (int) Double.parseDouble(getCellValue(cell));
 
 //							log.info("DAY_OF_EVENT: " + dayOfEvent);
@@ -223,6 +220,11 @@ public class ApplicationStartupEventListener {
 		return dayOfEvent > 0 && dayOfEvent <= 31;
 	}
 
+	private boolean isNumeric(String number) {
+		
+		return NumberUtils.isParsable(number);
+	}
+	
 	private String getCellValue(Cell cell) {
 
 		String value = "";
