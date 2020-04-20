@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-//@Api(tags = { EventTag.RESOURCE })
+@Api(tags = { EventTag.RESOURCE })
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
 		@ApiResponse(code = 403, message = "Access to the resource is prohibited") })
 public class EventController {
