@@ -128,11 +128,11 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.EVENT_SUMMARY.getIndex()) {
 
-						eventSummary = getCellValue(cell);
+						eventSummary = cellVal;
 
 					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
 
-						wasPartOfMultipleIncidents = "1".equals(cellVal) || "1.0".equals(cellVal);
+						wasPartOfMultipleIncidents = parseBoolean(cellVal);
 
 //						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
 
@@ -150,7 +150,7 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
 
-						motive = getCellValue(cell);
+						motive = cellVal;
 
 //						log.info("MOTIVE: " + motive);
 					}
@@ -198,26 +198,6 @@ public class ApplicationStartupEventListener {
 		return cal.getTime();
 	}
 
-	private boolean isMonthCorrect(int monthOfEvent) {
-
-		return monthOfEvent > 0 && monthOfEvent <= 12;
-	}
-
-	private boolean isDayCorrect(int dayOfEvent) {
-
-		return dayOfEvent > 0 && dayOfEvent <= 31;
-	}
-
-	private boolean isNumeric(String number) {
-
-		return NumberUtils.isParsable(number);
-	}
-
-	private int parseInt(String stringToParse) {
-
-		return (int) Double.parseDouble(stringToParse);
-	}
-
 	private String getCellValue(Cell cell) {
 
 		String value = "";
@@ -254,5 +234,30 @@ public class ApplicationStartupEventListener {
 		}
 
 		return value;
+	}
+
+	private boolean isMonthCorrect(int monthOfEvent) {
+
+		return monthOfEvent > 0 && monthOfEvent <= 12;
+	}
+
+	private boolean isDayCorrect(int dayOfEvent) {
+
+		return dayOfEvent > 0 && dayOfEvent <= 31;
+	}
+
+	private boolean isNumeric(String number) {
+
+		return NumberUtils.isParsable(number);
+	}
+
+	private int parseInt(String stringToParse) {
+
+		return (int) Double.parseDouble(stringToParse);
+	}
+
+	private boolean parseBoolean(String stringToParse) {
+
+		return "1".equals(stringToParse) || "1.0".equals(stringToParse);
 	}
 }
