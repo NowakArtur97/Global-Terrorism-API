@@ -93,39 +93,35 @@ public class ApplicationStartupEventListener {
 
 				if (cell != null) {
 
+					String cellVal = getCellValue(cell);
+
 					if (columnIndex == XlsxColumnType.TARGET.getIndex()) {
 
-						target = saveTarget(cell);
+						target = saveTarget(cellVal);
 
 					} else if (columnIndex == XlsxColumnType.YEAR_OF_EVENT.getIndex()) {
 
-						String cellVal = getCellValue(cell);
-
 						if (isNumeric(cellVal)) {
-							
-							yearOfEvent = (int) Double.parseDouble(getCellValue(cell));
+
+							yearOfEvent = parseInt(cellVal);
 
 //							log.info("YEAR_OF_EVENT: " + yearOfEvent);
 						}
 
 					} else if (columnIndex == XlsxColumnType.MONTH_OF_EVENT.getIndex()) {
 
-						String cellVal = getCellValue(cell);
-
 						if (isNumeric(cellVal)) {
 
-							monthOfEvent = (int) Double.parseDouble(getCellValue(cell));
+							monthOfEvent = parseInt(cellVal);
 
 //							log.info("MONTH_OF_EVENT: " + monthOfEvent);
 						}
 
 					} else if (columnIndex == XlsxColumnType.DAY_OF_EVENT.getIndex()) {
 
-						String cellVal = getCellValue(cell);
-
 						if (isNumeric(cellVal)) {
 
-							dayOfEvent = (int) Double.parseDouble(getCellValue(cell));
+							dayOfEvent = parseInt(cellVal);
 
 //							log.info("DAY_OF_EVENT: " + dayOfEvent);
 						}
@@ -136,23 +132,17 @@ public class ApplicationStartupEventListener {
 
 					} else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
 
-						String cellVal = getCellValue(cell);
-
 						wasPartOfMultipleIncidents = "1".equals(cellVal) || "1.0".equals(cellVal);
 
 //						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + wasPartOfMultipleIncidents);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
 
-						String cellVal = getCellValue(cell);
-
 						wasSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
 
 //						log.info(cellVal + " WAS_SUCCESS: " + wasSuccessful);
 
 					} else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
-
-						String cellVal = getCellValue(cell);
 
 						wasSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
 
@@ -174,9 +164,7 @@ public class ApplicationStartupEventListener {
 		}
 	}
 
-	private TargetNode saveTarget(Cell cell) {
-
-		String targetName = getCellValue(cell);
+	private TargetNode saveTarget(String targetName) {
 
 		TargetNode target = new TargetNode(targetName);
 
@@ -221,10 +209,15 @@ public class ApplicationStartupEventListener {
 	}
 
 	private boolean isNumeric(String number) {
-		
+
 		return NumberUtils.isParsable(number);
 	}
-	
+
+	private int parseInt(String stringToParse) {
+
+		return (int) Double.parseDouble(stringToParse);
+	}
+
 	private String getCellValue(Cell cell) {
 
 		String value = "";
