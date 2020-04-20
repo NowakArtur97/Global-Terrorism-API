@@ -5,6 +5,7 @@ import java.util.Date;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,9 @@ public class EventNode {
 
 	private boolean wasSuicide;
 
+	@Relationship("TARGETS")
+	private TargetNode target;
+
 	public EventNode(String summary, String motive, Date date, boolean wasPartOfMultipleIncidents,
 			boolean wasSuccessful, boolean wasSuicide) {
 
@@ -43,5 +47,13 @@ public class EventNode {
 		this.wasPartOfMultipleIncidents = wasPartOfMultipleIncidents;
 		this.wasSuccessful = wasSuccessful;
 		this.wasSuicide = wasSuicide;
+	}
+
+	public EventNode(String summary, String motive, Date date, boolean wasPartOfMultipleIncidents,
+			boolean wasSuccessful, boolean wasSuicide, TargetNode target) {
+
+		this(summary, motive, date, wasPartOfMultipleIncidents, wasSuccessful, wasSuicide);
+		
+		this.target = target;
 	}
 }

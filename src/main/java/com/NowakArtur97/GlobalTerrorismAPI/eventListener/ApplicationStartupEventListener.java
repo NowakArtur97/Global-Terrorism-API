@@ -203,7 +203,7 @@ public class ApplicationStartupEventListener {
 
 		EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
 				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
-				.wasSuicide(wasSuicide).motive(motive).build();
+				.wasSuicide(wasSuicide).motive(motive).target(target).build();
 
 		eventRepository.save(eventNode);
 	}

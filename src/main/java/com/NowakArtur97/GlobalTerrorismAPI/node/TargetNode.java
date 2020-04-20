@@ -21,7 +21,7 @@ public class TargetNode {
 	private Long id;
 
 	private String target;
-
+	
 	public TargetNode(String target) {
 
 		this.target = target;
