@@ -3,14 +3,15 @@ package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 
 @Component
 public class EventModelAssembler extends RepresentationModelAssemblerSupport<EventNode, EventModel> {
 
-	public EventModelAssembler(Class<?> controllerClass, Class<EventModel> resourceType) {
-		super(controllerClass, resourceType);
+	public EventModelAssembler() {
+		super(EventController.class, EventModel.class);
 	}
 
 	@Override
@@ -30,5 +31,4 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 
 		return eventModel;
 	}
-
 }
