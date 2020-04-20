@@ -43,19 +43,19 @@ public class ApplicationStartupEventListener {
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-//		if (targetService.isDatabaseEmpty()) {
+		if (targetService.isDatabaseEmpty()) {
 
-		try {
+			try {
 
-			Sheet sheet = loadSheetFromFile();
+				Sheet sheet = loadSheetFromFile();
 
-			insertDataToDatabase(sheet);
+				insertDataToDatabase(sheet);
 
-		} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException e) {
 
-			log.info("File in path: " + PATH_TO_FILE + " not found");
+				log.info("File in path: " + PATH_TO_FILE + " not found");
+			}
 		}
-//		}
 	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
@@ -172,14 +172,9 @@ public class ApplicationStartupEventListener {
 				columnIndex++;
 			}
 
-			if ((dayOfEvent > 0 && dayOfEvent <= 31) && (monthOfEvent > 0 && monthOfEvent <= 12)
-					&& (yearOfEvent > 1900 && yearOfEvent <= 2020)) {
-
-				saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents,
-						wasSuccessful, wasSuicide, motive, target);
-			}
+			saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, wasPartOfMultipleIncidents, wasSuccessful,
+					wasSuicide, motive, target);
 		}
-
 	}
 
 	private TargetNode saveTarget(Cell cell) {
@@ -195,17 +190,37 @@ public class ApplicationStartupEventListener {
 			boolean wasPartOfMultipleIncidents, boolean wasSuccessful, boolean wasSuicide, String motive,
 			TargetNode target) {
 
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, yearOfEvent);
-		cal.set(Calendar.MONTH, monthOfEvent);
-		cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
-		Date date = cal.getTime();
+		Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
 
 		EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
 				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
 				.wasSuicide(wasSuicide).motive(motive).target(target).build();
 
 		eventRepository.save(eventNode);
+	}
+
+	private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
+
+		monthOfEvent = isMonthCorrect(monthOfEvent) ? monthOfEvent : 1;
+		dayOfEvent = isDayCorrect(dayOfEvent) ? dayOfEvent : 1;
+
+		Calendar cal = Calendar.getInstance();
+
+		cal.set(Calendar.YEAR, yearOfEvent);
+		cal.set(Calendar.MONTH, monthOfEvent);
+		cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
+
+		return cal.getTime();
+	}
+
+	private boolean isMonthCorrect(int monthOfEvent) {
+
+		return monthOfEvent > 0 && monthOfEvent <= 12;
+	}
+
+	private boolean isDayCorrect(int dayOfEvent) {
+
+		return dayOfEvent > 0 && dayOfEvent <= 31;
 	}
 
 	private String getCellValue(Cell cell) {
