@@ -22,7 +22,7 @@ import org.springframework.util.ResourceUtils;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
 
@@ -38,12 +38,12 @@ public class ApplicationStartupEventListener {
 
 	private final TargetService targetService;
 
-	private final EventRepository eventRepository;
+	private final EventService eventService;
 
 	@EventListener
 	public void onApplicationStartup(ContextRefreshedEvent event) {
 
-//		if (targetService.isDatabaseEmpty()) {
+		if (targetService.isDatabaseEmpty()) {
 
 			try {
 
@@ -55,7 +55,7 @@ public class ApplicationStartupEventListener {
 
 				log.info("File in path: " + PATH_TO_FILE + " not found");
 			}
-//		}
+		}
 	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
@@ -181,7 +181,7 @@ public class ApplicationStartupEventListener {
 				.wasPartOfMultipleIncidents(wasPartOfMultipleIncidents).wasSuccessful(wasSuccessful)
 				.wasSuicide(wasSuicide).motive(motive).target(target).build();
 
-		eventRepository.save(eventNode);
+		eventService.save(eventNode);
 	}
 
 	private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
