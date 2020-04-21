@@ -110,7 +110,7 @@ class TargetServiceImplTest {
 	}
 
 	@Test
-	void when_targets_exists_and_return_one_target_should_return_one_target() {
+	void when_target_exists_and_return_one_target_should_return_one_target() {
 
 		Long expectedTargetId = 1L;
 
@@ -133,7 +133,7 @@ class TargetServiceImplTest {
 	}
 
 	@Test
-	void when_targets_not_exists_and_return_one_target_should_return_empty_optional() {
+	void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
 
 		Long expectedTargetId = 1L;
 

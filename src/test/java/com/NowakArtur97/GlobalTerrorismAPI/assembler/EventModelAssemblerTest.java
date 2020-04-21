@@ -88,14 +88,14 @@ class EventModelAssemblerTest {
 								+ eventModel.getDate()),
 				() -> assertEquals(eventNode.isPartOfMultipleIncidents(), eventModel.isPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNode.isPartOfMultipleIncidents() + ", but that was: "
+								+ eventNode.isPartOfMultipleIncidents() + ", but was: "
 								+ eventModel.isPartOfMultipleIncidents()),
 				() -> assertEquals(eventNode.isSuccessful(), eventModel.isSuccessful(),
 						() -> "should return event node which was successful: " + eventNode.isSuccessful()
-								+ ", but that was: " + eventModel.isSuccessful()),
+								+ ", but was: " + eventModel.isSuccessful()),
 				() -> assertEquals(eventNode.isSuicide(), eventModel.isSuicide(),
 						() -> "should return event node which was suicide: " + eventNode.isSuicide()
-								+ ", but that was: " + eventModel.isSuicide()),
+								+ ", but was: " + eventModel.isSuicide()),
 				() -> assertNotNull(eventNode.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(targetModel, eventModel.getTarget(),

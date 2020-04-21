@@ -3,12 +3,16 @@ package com.NowakArtur97.GlobalTerrorismAPI.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -17,6 +21,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -40,6 +48,80 @@ public class EventServiceImplTest {
 	private void setUp() {
 
 		eventService = new EventServiceImpl(eventRepository);
+	}
+
+	@Test
+	void when_events_exist_and_return_all_events_should_return_events() {
+
+		List<EventNode> eventsListExpected = new ArrayList<>();
+
+		Long eventId = 1L;
+
+		String eventSummary = "summary";
+		String eventMotive = "motive";
+		Date eventDate = Calendar.getInstance().getTime();
+		boolean isEventPartOfMultipleIncidents = true;
+		boolean isEventSuccessful = true;
+		boolean isEventSuicide = true;
+
+		TargetNode target = new TargetNode(1L, "target");
+
+		EventNode event1 = EventNode.builder().id(eventId++).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+
+		EventNode event2 = EventNode.builder().id(eventId++).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+
+		EventNode event3 = EventNode.builder().id(eventId++).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+
+		eventsListExpected.add(event1);
+		eventsListExpected.add(event2);
+		eventsListExpected.add(event3);
+
+		Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+
+		Pageable pageable = PageRequest.of(0, 100);
+
+		when(eventRepository.findAll(pageable)).thenReturn(eventsExpected);
+
+		Page<EventNode> eventsActual = eventService.findAll(pageable);
+
+		assertAll(() -> assertNotNull(eventsActual, () -> "shouldn`t return null"),
+				() -> assertEquals(eventsListExpected, eventsActual.getContent(),
+						() -> "should contain: " + eventsListExpected + ", but was: " + eventsActual.getContent()),
+				() -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
+						() -> "should return page with: " + eventsExpected.getNumberOfElements()
+								+ " elements, but was: " + eventsActual.getNumberOfElements()),
+				() -> verify(eventRepository, times(1)).findAll(pageable),
+				() -> verifyNoMoreInteractions(eventRepository));
+	}
+
+	@Test
+	void when_events_not_exist_and_return_all_events_should_not_return_any_events() {
+
+		List<EventNode> eventsListExpected = new ArrayList<>();
+
+		Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+
+		Pageable pageable = PageRequest.of(0, 100);
+
+		when(eventRepository.findAll(pageable)).thenReturn(eventsExpected);
+
+		Page<EventNode> eventsActual = eventService.findAll(pageable);
+
+		assertAll(() -> assertNotNull(eventsActual, () -> "shouldn`t return null"),
+				() -> assertEquals(eventsListExpected, eventsActual.getContent(),
+						() -> "should contain empty list, but was: " + eventsActual.getContent()),
+				() -> assertEquals(eventsListExpected, eventsActual.getContent(),
+						() -> "should contain: " + eventsListExpected + ", but was: " + eventsActual.getContent()),
+				() -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
+						() -> "should return empty page, but was: " + eventsActual.getNumberOfElements()),
+				() -> verify(eventRepository, times(1)).findAll(pageable),
+				() -> verifyNoMoreInteractions(eventRepository));
 	}
 
 	@Test
@@ -83,14 +165,14 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
 						eventNodeActual.isPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but that was: "
+								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
 								+ eventNodeActual.isPartOfMultipleIncidents()),
 				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
 						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but that was: " + eventNodeActual.isSuccessful()),
+								+ ", but was: " + eventNodeActual.isSuccessful()),
 				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
 						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but that was: " + eventNodeActual.isSuicide()),
+								+ ", but was: " + eventNodeActual.isSuicide()),
 				() -> assertNotNull(eventNodeExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
