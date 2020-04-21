@@ -9,11 +9,15 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
@@ -21,6 +25,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +57,17 @@ public class EventController {
 		PagedModel<EventModel> pagedModel = pagedResourcesAssembler.toModel(events, eventModelAssembler);
 
 		return new ResponseEntity<>(pagedModel, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/{id}")
+	@ApiOperation(value = "Find Event by id", notes = "Provide an id to look up specific Event from all terrorism attacks events")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Event found by provided id", response = EventModel.class),
+			@ApiResponse(code = 400, message = "Invalid Event id supplied"),
+			@ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class) })
+	public ResponseEntity<EventModel> findEventById(
+			@ApiParam(value = "Event id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+
+		return eventService.findById(id).map(eventModelAssembler::toModel).map(ResponseEntity::ok)
+				.orElseThrow(() -> new EventNotFoundException(id));
 	}
 }
