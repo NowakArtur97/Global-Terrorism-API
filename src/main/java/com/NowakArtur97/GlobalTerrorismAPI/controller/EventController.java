@@ -18,7 +18,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
@@ -58,7 +57,7 @@ public class EventController {
 
 		return new ResponseEntity<>(pagedModel, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(path = "/{id}")
 	@ApiOperation(value = "Find Event by id", notes = "Provide an id to look up specific Event from all terrorism attacks events")
 	@ApiResponses({ @ApiResponse(code = 200, message = "Event found by provided id", response = EventModel.class),

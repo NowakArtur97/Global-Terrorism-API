@@ -1,5 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +36,7 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 		eventModel.setSuccessful((eventNode.isSuicide()));
 		eventModel.setTarget(targetModelAssembler.toModel(eventNode.getTarget()));
 
-//		eventModel.add(linkTo(methodOn(EventController.class).findEventById(eventModel.getId())).withSelfRel());
+		eventModel.add(linkTo(methodOn(EventController.class).findEventById(eventModel.getId())).withSelfRel());
 
 		return eventModel;
 	}
