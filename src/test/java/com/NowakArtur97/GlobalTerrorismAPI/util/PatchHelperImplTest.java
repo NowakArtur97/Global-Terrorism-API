@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("PatchHelperImpl_Tests")
-public class PatchHelperImplTest {
+class PatchHelperImplTest {
 
 	private PatchHelper patchHelper;
 
@@ -36,13 +36,13 @@ public class PatchHelperImplTest {
 	private ObjectMapper objectMapper;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		patchHelper = new PatchHelperImpl(objectMapper);
 	}
 
 	@Test
-	public void when_patch_target_node_should_return_patched_target_node() {
+	void when_patch_target_node_should_return_patched_target_node() {
 
 		Long targetId = 1L;
 		String oldTargetName = "target";
@@ -74,7 +74,7 @@ public class PatchHelperImplTest {
 	}
 
 	@Test
-	public void when_merge_patch_target_node_should_return_patched_target_node() {
+	void when_merge_patch_target_node_should_return_patched_target_node() {
 
 		Long targetId = 1L;
 		String oldTargetName = "target";

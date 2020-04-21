@@ -16,18 +16,18 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetModelAssembler_Tests")
-public class TargetModelAssemblerTest {
+class TargetModelAssemblerTest {
 
 	private TargetModelAssembler targetModelAssembler;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		targetModelAssembler = new TargetModelAssembler();
 	}
 
 	@Test
-	public void when_map_target_node_to_model_should_return_target_model() {
+	void when_map_target_node_to_model_should_return_target_model() {
 
 		Long targetId = 1L;
 		String targetName = "target1";

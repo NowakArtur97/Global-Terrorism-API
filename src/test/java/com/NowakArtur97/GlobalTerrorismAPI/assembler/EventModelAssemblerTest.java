@@ -30,7 +30,7 @@ import com.ibm.icu.util.Calendar;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventModelAssembler_Tests")
-public class EventModelAssemblerTest {
+class EventModelAssemblerTest {
 
 	private final String BASE_PATH = "http://localhost:8080/api/targets";
 
@@ -40,13 +40,13 @@ public class EventModelAssemblerTest {
 	private TargetModelAssembler targetModelAssembler;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		eventModelAssembler = new EventModelAssembler(targetModelAssembler);
 	}
 
 	@Test
-	public void when_map_event_node_to_model_should_return_event_model() {
+	void when_map_event_node_to_model_should_return_event_model() {
 
 		Long eventId = 1L;
 

@@ -16,18 +16,18 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("ModelMapper_Tests")
-public class ModelMapperTest {
+class ModelMapperTest {
 
 	private ModelMapper modelMapper;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		modelMapper = new ModelMapper();
 	}
 
 	@Test
-	public void when_map_target_dto_to_node_should_return_valid_node() {
+	void when_map_target_dto_to_node_should_return_valid_node() {
 
 		String targetName = "Target";
 

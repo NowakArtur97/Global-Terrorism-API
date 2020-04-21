@@ -38,7 +38,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetServiceImpl_Tests")
-public class TargetServiceImplTest {
+class TargetServiceImplTest {
 
 	private TargetService targetService;
 
@@ -49,13 +49,13 @@ public class TargetServiceImplTest {
 	private DTOMapper dtoMapper;
 
 	@BeforeEach
-	void setUp() {
+	private void setUp() {
 
 		targetService = new TargetServiceImpl(targetRepository, dtoMapper);
 	}
 
 	@Test
-	public void when_targets_exist_and_return_all_targets_should_return_targets() {
+	void when_targets_exist_and_return_all_targets_should_return_targets() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
+	void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_targets_exists_and_return_one_target_should_return_one_target() {
+	void when_targets_exists_and_return_one_target_should_return_one_target() {
 
 		Long expectedTargetId = 1L;
 
@@ -133,7 +133,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_targets_not_exists_and_return_one_target_should_return_empty_optional() {
+	void when_targets_not_exists_and_return_one_target_should_return_empty_optional() {
 
 		Long expectedTargetId = 1L;
 
@@ -147,7 +147,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_save_new_target_should_save_target() {
+	void when_save_new_target_should_save_target() {
 
 		Long targetId = 1L;
 
@@ -176,7 +176,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_persist_update_new_target_should_update_target() {
+	void when_persist_update_new_target_should_update_target() {
 
 		Long targetId = 1L;
 
@@ -200,7 +200,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_delete_target_by_id_target_should_delete_and_return_target() {
+	void when_delete_target_by_id_target_should_delete_and_return_target() {
 
 		String targetName = "Target";
 
@@ -224,7 +224,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_delete_target_by_id_not_existing_target_should_return_empty_optional() {
+	void when_delete_target_by_id_not_existing_target_should_return_empty_optional() {
 
 		Long targetId = 1L;
 
@@ -240,7 +240,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
+	void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
 
 		Long databaseSize = 0L;
 
@@ -254,7 +254,7 @@ public class TargetServiceImplTest {
 	}
 
 	@Test
-	public void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
+	void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
 
 		Long databaseSize = 10L;
 

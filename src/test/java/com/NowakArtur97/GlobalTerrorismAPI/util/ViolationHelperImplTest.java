@@ -28,7 +28,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("ViolationHelperImpl_Tests")
-public class ViolationHelperImplTest {
+class ViolationHelperImplTest {
 
 	private ViolationHelper violationHelper;
 
@@ -43,13 +43,13 @@ public class ViolationHelperImplTest {
 	private ConstraintViolation constraintViolation;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		violationHelper = new ViolationHelperImpl(validator, dtoMapper);
 	}
 
 	@Test
-	public void when_violate_valid_target_should_not_have_violations() {
+	void when_violate_valid_target_should_not_have_violations() {
 
 		Long targetId = 1L;
 		String targetName = "some invalid target name";
@@ -67,7 +67,7 @@ public class ViolationHelperImplTest {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void when_violate_invalid_target_should_have_violations() {
+	void when_violate_invalid_target_should_have_violations() {
 
 		Long targetId = 1L;
 		String targetName = "some invalid target name";

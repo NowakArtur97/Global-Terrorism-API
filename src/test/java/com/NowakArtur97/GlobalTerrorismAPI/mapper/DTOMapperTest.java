@@ -23,7 +23,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("DTOMapper_Tests")
-public class DTOMapperTest {
+class DTOMapperTest {
 
 	private DTOMapper dtoMapper;
 
@@ -31,13 +31,13 @@ public class DTOMapperTest {
 	private ModelMapper modelMapper;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		dtoMapper = new DTOMapperImpl(modelMapper);
 	}
 
 	@Test
-	public void when_map_target_dto_to_node_should_return_target_node() {
+	void when_map_target_dto_to_node_should_return_target_node() {
 
 		String targetName = "Target";
 
@@ -59,7 +59,7 @@ public class DTOMapperTest {
 	}
 
 	@Test
-	public void when_map_target_node_to_dto_should_return_target_dto() {
+	void when_map_target_node_to_dto_should_return_target_dto() {
 
 		String targetName = "Target";
 

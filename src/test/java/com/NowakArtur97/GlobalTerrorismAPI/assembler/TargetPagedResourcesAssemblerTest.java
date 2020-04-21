@@ -28,8 +28,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PagedResourcesAssembler_Tests")
-public class PagedResourcesAssemblerTest {
+@Tag("TargetPagedResourcesAssembler_Tests")
+class TargetPagedResourcesAssemblerTest {
 
 	private final String BASE_URL = "http://localhost";
 
@@ -40,14 +40,14 @@ public class PagedResourcesAssemblerTest {
 	private TargetModelAssembler targetModelAssembler;
 
 	@BeforeAll
-	public static void innit() {
+	private static void innit() {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 	}
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
@@ -57,13 +57,13 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@AfterAll
-	public static void tearDown() {
+	static void tearDown() {
 
 		RequestContextHolder.resetRequestAttributes();
 	}
 
 	@Test
-	public void when_map_target_node_page_to_paged_model_without_targets_should_return_empty_page() {
+	void when_map_target_node_page_to_paged_model_without_targets_should_return_empty_page() {
 
 		int page = 0;
 		int size = 1;
@@ -99,7 +99,7 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	public void when_map_target_node_page_to_paged_model_on_first_page_should_return_paged_model_with_links() {
+	void when_map_target_node_page_to_paged_model_on_first_page_should_return_paged_model_with_links() {
 
 		int page = 0;
 		int size = 1;
@@ -145,7 +145,7 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	public void when_map_target_node_page_to_paged_model_on_last_page_should_return_paged_model_with_links() {
+	void when_map_target_node_page_to_paged_model_on_last_page_should_return_paged_model_with_links() {
 
 		int page = 2;
 		int size = 1;
@@ -190,7 +190,7 @@ public class PagedResourcesAssemblerTest {
 	}
 
 	@Test
-	public void when_map_target_node_page_to_paged_model_with_previous_and_next_link_should_return_paged_model_with_links() {
+	void when_map_target_node_page_to_paged_model_with_previous_and_next_link_should_return_paged_model_with_links() {
 
 		int page = 1;
 		int size = 1;

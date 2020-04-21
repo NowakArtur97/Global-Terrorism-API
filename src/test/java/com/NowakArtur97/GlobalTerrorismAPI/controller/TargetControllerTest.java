@@ -74,7 +74,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
-public class TargetControllerTest {
+class TargetControllerTest {
 
 	private final String BASE_PATH = "http://localhost:8080/api/targets";
 
@@ -100,7 +100,7 @@ public class TargetControllerTest {
 	private ViolationHelper violationHelper;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
 				patchHelper, violationHelper);
@@ -120,7 +120,7 @@ public class TargetControllerTest {
 	class GetTargetRequestTest {
 
 		@Test
-		public void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
+		void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 			Long targetId1 = 1L;
 			String targetName1 = "target1";
@@ -225,7 +225,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
+		void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
 			Long targetId1 = 1L;
 			String targetName1 = "target1";
@@ -330,7 +330,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_find_all_targets_but_targets_not_exist_should_return_empty_list() {
+		void when_find_all_targets_but_targets_not_exist_should_return_empty_list() {
 
 			List<TargetNode> targetsListExpected = new ArrayList<>();
 
@@ -382,7 +382,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_find_existing_target_should_return_target() {
+		void when_find_existing_target_should_return_target() {
 
 			Long targetId = 1L;
 			String targetName = "target";
@@ -410,7 +410,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_find_target_but_target_not_exists_should_return_error_response() {
+		void when_find_target_but_target_not_exists_should_return_error_response() {
 
 			Long targetId = 1L;
 
@@ -434,7 +434,7 @@ public class TargetControllerTest {
 	@Tag("PostTargetRequest_Tests")
 	class PostTargetRequestTest {
 		@Test
-		public void when_add_valid_target_should_return_new_target_as_model() {
+		void when_add_valid_target_should_return_new_target_as_model() {
 
 			Long targetId = 1L;
 			Long targetIdBeforeSave = null;
@@ -470,7 +470,7 @@ public class TargetControllerTest {
 		@ParameterizedTest(name = "{index}: Target Name: {0}")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		public void when_add_invalid_target_should_return_errors(String targetName) {
+		void when_add_invalid_target_should_return_errors(String targetName) {
 
 			TargetDTO targetDTO = new TargetDTO(targetName);
 
@@ -490,7 +490,7 @@ public class TargetControllerTest {
 	class PutTargetRequestTest {
 
 		@Test
-		public void when_update_valid_target_should_return_updated_target_as_model() {
+		void when_update_valid_target_should_return_updated_target_as_model() {
 
 			Long targetId = 1L;
 			String oldTargetName = "target";
@@ -528,7 +528,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
+		void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
 			Long targetId = 1L;
 			Long targetIdAssignedIfTargetNotFound = null;
@@ -567,7 +567,7 @@ public class TargetControllerTest {
 		@ParameterizedTest(name = "{index}: Target Name: {0}")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		public void when_update_invalid_target_should_return_errors(String targetName) {
+		void when_update_invalid_target_should_return_errors(String targetName) {
 
 			Long targetId = 1L;
 
@@ -591,7 +591,7 @@ public class TargetControllerTest {
 	class PatchTargetRequestTest {
 
 		@Test
-		public void when_partial_update_valid_target_using_json_patch_should_return_partially_updated_node() {
+		void when_partial_update_valid_target_using_json_patch_should_return_partially_updated_node() {
 
 			Long targetId = 1L;
 			String oldTargetName = "target";
@@ -638,7 +638,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_partial_update_valid_target_usingjson_merge_patch_should_return_partially_updated_node() {
+		void when_partial_update_valid_target_usingjson_merge_patch_should_return_partially_updated_node() {
 
 			Long targetId = 1L;
 			String oldTargetName = "target";
@@ -689,7 +689,7 @@ public class TargetControllerTest {
 	class DeleteTargetRequestTest {
 
 		@Test
-		public void when_delete_existing_target_should_return_target() {
+		void when_delete_existing_target_should_return_target() {
 
 			Long targetId = 1L;
 			String targetName = "target";
@@ -717,7 +717,7 @@ public class TargetControllerTest {
 		}
 
 		@Test
-		public void when_delete_target_but_target_not_exists_should_return_error_response() {
+		void when_delete_target_but_target_not_exists_should_return_error_response() {
 
 			Long targetId = 1L;
 

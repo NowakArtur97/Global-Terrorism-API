@@ -37,13 +37,13 @@ public class EventServiceImplTest {
 	private EventRepository eventRepository;
 
 	@BeforeEach
-	void setUp() {
+	private void setUp() {
 
 		eventService = new EventServiceImpl(eventRepository);
 	}
 
 	@Test
-	public void when_save_new_event_should_save_and_return_event() {
+	void when_save_new_event_should_save_and_return_event() {
 
 		Long eventId = 1L;
 

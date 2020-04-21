@@ -30,14 +30,14 @@ public class TargetDTOValidationTest {
 	private Validator validator;
 
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
 
 	@Test
-	public void when_target_dto_is_valid_should_not_have_violations() {
+	void when_target_dto_is_valid_should_not_have_violations() {
 
 		String targetName = "Target";
 
@@ -52,7 +52,7 @@ public class TargetDTOValidationTest {
 	@ParameterizedTest(name = "{index}: Target Name: {0}")
 	@NullAndEmptySource
 	@ValueSource(strings = { " ", "\t", "\n" })
-	public void when_target_dto_is_invalid_should_have_violations(String targetName) {
+	void when_target_dto_is_invalid_should_have_violations(String targetName) {
 
 		TargetDTO targetDTO = new TargetDTO(targetName);
 
