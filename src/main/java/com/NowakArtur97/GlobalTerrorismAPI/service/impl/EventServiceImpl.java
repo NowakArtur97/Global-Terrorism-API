@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +28,15 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public Optional<EventNode> findById(Long id) {
+
+		return id != null ? eventRepository.findById(id) : Optional.empty();
+	}
+
+	@Override
 	public EventNode save(EventNode eventNode) {
 
 		return eventRepository.save(eventNode);
 	}
-
 }
