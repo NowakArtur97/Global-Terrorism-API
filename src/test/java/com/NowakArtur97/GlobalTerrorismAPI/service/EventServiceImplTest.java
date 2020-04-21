@@ -125,6 +125,75 @@ public class EventServiceImplTest {
 	}
 
 	@Test
+	void when_event_exists_and_return_one_event_should_return_one_event() {
+
+		Long expectedEventId = 1L;
+
+		String eventSummary = "summary";
+		String eventMotive = "motive";
+		Date eventDate = Calendar.getInstance().getTime();
+		boolean isEventPartOfMultipleIncidents = true;
+		boolean isEventSuccessful = true;
+		boolean isEventSuicide = true;
+
+		TargetNode target = new TargetNode(1L, "target");
+
+		EventNode eventExpected = EventNode.builder().id(expectedEventId).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+
+		when(eventRepository.findById(expectedEventId)).thenReturn(Optional.of(eventExpected));
+
+		Optional<EventNode> eventActualOptional = eventService.findById(expectedEventId);
+
+		EventNode eventActual = eventActualOptional.get();
+
+		assertAll(
+				() -> assertNotNull(eventActual.getId(),
+						() -> "should return event node with new id, but was: " + eventActual.getId()),
+				() -> assertEquals(eventExpected.getSummary(), eventActual.getSummary(),
+						() -> "should return event node with summary: " + eventExpected.getSummary() + ", but was: "
+								+ eventActual.getSummary()),
+				() -> assertEquals(eventExpected.getMotive(), eventActual.getMotive(),
+						() -> "should return event node with motive: " + eventExpected.getMotive() + ", but was: "
+								+ eventActual.getMotive()),
+				() -> assertEquals(eventExpected.getDate(), eventActual.getDate(),
+						() -> "should return event node with date: " + eventExpected.getDate() + ", but was: "
+								+ eventActual.getDate()),
+				() -> assertEquals(eventExpected.isPartOfMultipleIncidents(), eventActual.isPartOfMultipleIncidents(),
+						() -> "should return event node which was part of multiple incidents: "
+								+ eventExpected.isPartOfMultipleIncidents() + ", but was: "
+								+ eventActual.isPartOfMultipleIncidents()),
+				() -> assertEquals(eventExpected.isSuccessful(), eventActual.isSuccessful(),
+						() -> "should return event node which was successful: " + eventExpected.isSuccessful()
+								+ ", but was: " + eventActual.isSuccessful()),
+				() -> assertEquals(eventExpected.isSuicide(), eventActual.isSuicide(),
+						() -> "should return event node which was suicide: " + eventExpected.isSuicide()
+								+ ", but was: " + eventActual.isSuicide()),
+				() -> assertNotNull(eventExpected.getTarget(),
+						() -> "should return event node with not null target, but was: null"),
+				() -> assertEquals(eventExpected.getTarget(), eventActual.getTarget(),
+						() -> "should return event node with target: " + eventExpected.getTarget() + ", but was: "
+								+ eventActual.getTarget()),
+				() -> verify(eventRepository, times(1)).findById(expectedEventId),
+				() -> verifyNoMoreInteractions(eventRepository));
+	}
+
+	@Test
+	void when_event_not_exists_and_return_one_event_should_return_empty_optional() {
+
+		Long expectedEventId = 1L;
+
+		when(eventRepository.findById(expectedEventId)).thenReturn(Optional.empty());
+
+		Optional<EventNode> eventActualOptional = eventService.findById(expectedEventId);
+
+		assertAll(() -> assertTrue(eventActualOptional.isEmpty(), () -> "should return empty optional"),
+				() -> verify(eventRepository, times(1)).findById(expectedEventId),
+				() -> verifyNoMoreInteractions(eventRepository));
+	}
+
+	@Test
 	void when_save_new_event_should_save_and_return_event() {
 
 		Long eventId = 1L;
