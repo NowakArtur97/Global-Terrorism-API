@@ -40,23 +40,23 @@ public class ApplicationStartupEventListener {
 
 	private final EventService eventService;
 
-	@EventListener
-	public void onApplicationStartup(ContextRefreshedEvent event) {
-
-		if (targetService.isDatabaseEmpty()) {
-
-			try {
-
-				Sheet sheet = loadSheetFromFile();
-
-				insertDataToDatabase(sheet);
-
-			} catch (FileNotFoundException e) {
-
-				log.info("File in path: " + PATH_TO_FILE + " not found");
-			}
-		}
-	}
+//	@EventListener
+//	public void onApplicationStartup(ContextRefreshedEvent event) {
+//
+//		if (targetService.isDatabaseEmpty()) {
+//
+//			try {
+//
+//				Sheet sheet = loadSheetFromFile();
+//
+//				insertDataToDatabase(sheet);
+//
+//			} catch (FileNotFoundException e) {
+//
+//				log.info("File in path: " + PATH_TO_FILE + " not found");
+//			}
+//		}
+//	}
 
 	private Sheet loadSheetFromFile() throws FileNotFoundException {
 

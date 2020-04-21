@@ -27,17 +27,20 @@ The demo will be available soon...
 - Model Mapper - 2.3.7
 - Apache POI (poi, poi-ooxml) - 4.1.2
 - Excel Streaming Reader - 2.1.0
-- Apache Johnzon (core) - 1.2.3
+- Apache Johnzon (johnzon-core) - 1.2.3
+- Jackson (jackson-datatype-jsr353) - 2.10.2
 - Maven
 - Neo4j
 - CircleCI
 
 ## Features
 - Target (GET, POST, PUT, PATCH, DELETE)
+- Event (GET)
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 
 ## To Do
+- Target (POST, PUT, PATCH, DELETE)
 - JWT support
 
 ## Status
