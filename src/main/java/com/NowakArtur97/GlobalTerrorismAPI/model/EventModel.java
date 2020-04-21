@@ -43,4 +43,7 @@ public class EventModel extends RepresentationModel<EventModel> {
 
 	@ApiModelProperty(notes = "Was the event suicide?", required = true)
 	private boolean isSuicide;
+
+	@ApiModelProperty(notes = "The event`s target", required = true)
+	private TargetModel target;
 }

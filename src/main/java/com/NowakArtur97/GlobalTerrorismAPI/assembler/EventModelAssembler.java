@@ -10,8 +10,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 @Component
 public class EventModelAssembler extends RepresentationModelAssemblerSupport<EventNode, EventModel> {
 
-	public EventModelAssembler() {
+	private final TargetModelAssembler targetModelAssembler;
+
+	public EventModelAssembler(TargetModelAssembler targetModelAssembler) {
+
 		super(EventController.class, EventModel.class);
+
+		this.targetModelAssembler = targetModelAssembler;
 	}
 
 	@Override
@@ -26,6 +31,7 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 		eventModel.setPartOfMultipleIncidents((eventNode.isPartOfMultipleIncidents()));
 		eventModel.setSuccessful((eventNode.isSuccessful()));
 		eventModel.setSuccessful((eventNode.isSuicide()));
+		eventModel.setTarget(targetModelAssembler.toModel(eventNode.getTarget()));
 
 //		eventModel.add(linkTo(methodOn(EventController.class).findEventById(eventModel.getId())).withSelfRel());
 
