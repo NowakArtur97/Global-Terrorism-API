@@ -21,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -207,13 +205,16 @@ class TargetControllerTest {
 							.andExpect(jsonPath("links[3].href", is(lastPageLink)))
 							.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
 							.andExpect(jsonPath("content[0].target", is(targetName1)))
-							.andExpect(jsonPath("content[0].links[0].href", is(link1.getHref())))
+							.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
 							.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
 							.andExpect(jsonPath("content[1].target", is(targetName2)))
-							.andExpect(jsonPath("content[1].links[0].href", is(link2.getHref())))
+							.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
 							.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
 							.andExpect(jsonPath("content[2].target", is(targetName3)))
-							.andExpect(jsonPath("content[2].links[0].href", is(link3.getHref())))
+							.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
+							.andExpect(jsonPath("content[3].id", is(targetId4.intValue())))
+							.andExpect(jsonPath("content[3].target", is(targetName4)))
+							.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
 							.andExpect(jsonPath("page.size", is(sizeExpected)))
 							.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 							.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -312,13 +313,16 @@ class TargetControllerTest {
 							.andExpect(jsonPath("links[3].href", is(lastPageLink)))
 							.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
 							.andExpect(jsonPath("content[0].target", is(targetName1)))
-							.andExpect(jsonPath("content[0].links[0].href", is(link1.getHref())))
+							.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
 							.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
 							.andExpect(jsonPath("content[1].target", is(targetName2)))
-							.andExpect(jsonPath("content[1].links[0].href", is(link2.getHref())))
+							.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
 							.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
 							.andExpect(jsonPath("content[2].target", is(targetName3)))
-							.andExpect(jsonPath("content[2].links[0].href", is(link3.getHref())))
+							.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
+							.andExpect(jsonPath("content[3].id", is(targetId4.intValue())))
+							.andExpect(jsonPath("content[3].target", is(targetName4)))
+							.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
 							.andExpect(jsonPath("page.size", is(sizeExpected)))
 							.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 							.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -421,9 +425,7 @@ class TargetControllerTest {
 			assertAll(
 					() -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isNotFound())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("timestamp",
-									is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
-							.andExpect(content().json("{'status': 404}"))
+							.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
 							.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 					() -> verify(targetService, times(1)).findById(targetId),
 					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
@@ -728,9 +730,7 @@ class TargetControllerTest {
 			assertAll(
 					() -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNotFound())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("timestamp",
-									is(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()))))
-							.andExpect(content().json("{'status': 404}"))
+							.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
 							.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 					() -> verify(targetService, times(1)).delete(targetId),
 					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
