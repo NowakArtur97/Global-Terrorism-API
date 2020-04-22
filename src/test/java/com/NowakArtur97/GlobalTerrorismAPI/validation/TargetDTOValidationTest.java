@@ -58,7 +58,7 @@ public class TargetDTOValidationTest {
 
 		Set<ConstraintViolation<TargetDTO>> violations = validator.validate(targetDTO);
 
-		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but: "), () -> assertEquals(1,
+		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"), () -> assertEquals(1,
 				violations.size(), () -> "should have one violation, but have: " + violations.size()));
 	}
 }
