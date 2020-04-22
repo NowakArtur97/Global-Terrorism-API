@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
@@ -658,6 +659,57 @@ class EventControllerTest {
 							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 							.andExpect(jsonPath("target.id", is(targetId.intValue())))
 							.andExpect(jsonPath("target.target", is(target))),
+					() -> verify(eventService, times(1)).findById(eventId),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_find_existing_event_withput_target_should_return_event_withput_target() {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = Calendar.getInstance().getTime();
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).build();
+
+			EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModel.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+			String linkExpected = EVENT_BASE_PATH + "/" + eventId;
+
+			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+			assertAll(
+					() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
+							.andDo(MockMvcResultHandlers.print())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(eventSummary)))
+							.andExpect(jsonPath("motive", is(eventMotive)))
+							.andExpect(jsonPath("date",
+									is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
+											eventDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+							.andExpect(jsonPath("suicide", is(isEventSuicide)))
+							.andExpect(jsonPath("successful", is(isEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target").value(IsNull.nullValue())),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
