@@ -14,4 +14,6 @@ public interface EventService {
 	EventNode save(EventNode eventNode);
 
 	Optional<EventNode> findById(Long id);
+
+	Optional<EventNode> delete(Long id);
 }

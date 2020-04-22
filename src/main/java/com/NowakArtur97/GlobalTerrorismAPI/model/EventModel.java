@@ -5,6 +5,8 @@ import java.util.Date;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,5 +47,6 @@ public class EventModel extends RepresentationModel<EventModel> {
 	private boolean isSuicide;
 
 	@ApiModelProperty(notes = "The event's target", required = true)
+	@JsonInclude(Include.ALWAYS)
 	private TargetModel target;
 }

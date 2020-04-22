@@ -39,4 +39,17 @@ public class EventServiceImpl implements EventService {
 
 		return eventRepository.save(eventNode);
 	}
+
+	@Override
+	public Optional<EventNode> delete(Long id) {
+
+		Optional<EventNode> eventNodeOptional = findById(id);
+
+		if (eventNodeOptional.isPresent()) {
+
+			eventRepository.delete(eventNodeOptional.get());
+		}
+
+		return eventNodeOptional;
+	}
 }
