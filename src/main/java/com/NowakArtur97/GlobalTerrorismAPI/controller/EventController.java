@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +10,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +71,19 @@ public class EventController {
 
 		return eventService.findById(id).map(eventModelAssembler::toModel).map(ResponseEntity::ok)
 				.orElseThrow(() -> new EventNotFoundException(id));
+	}
+	
+	@DeleteMapping(path = "/{id}")
+	@ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully deleted Event", response = EventModel.class),
+			@ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class) })
+	public ResponseEntity<EventModel> deleteEvent(
+			@ApiParam(value = "Event id value needed to delete Event", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+
+		Optional<EventNode> eventNode = eventService.delete(id);
+
+		return new ResponseEntity<>(
+				eventNode.map(eventModelAssembler::toModel).orElseThrow(() -> new EventNotFoundException(id)),
+				HttpStatus.OK);
 	}
 }
