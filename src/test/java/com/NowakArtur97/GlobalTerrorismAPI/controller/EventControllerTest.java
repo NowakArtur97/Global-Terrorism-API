@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,7 +40,6 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
@@ -644,7 +644,6 @@ class EventControllerTest {
 
 			assertAll(
 					() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
-							.andDo(MockMvcResultHandlers.print())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(linkExpected)))
 							.andExpect(jsonPath("id", is(eventId.intValue())))
@@ -697,7 +696,6 @@ class EventControllerTest {
 
 			assertAll(
 					() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
-							.andDo(MockMvcResultHandlers.print())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(linkExpected)))
 							.andExpect(jsonPath("id", is(eventId.intValue())))
@@ -732,6 +730,88 @@ class EventControllerTest {
 							.andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+	}
+
+	@Nested
+	@Tag("DeleteEventRequest_Tests")
+	class DeleteEventRequestTest {
+
+		@Test
+		void when_delete_existing_event_should_return_event() {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = Calendar.getInstance().getTime();
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetModel targetModel = new TargetModel(targetId, target);
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetModel).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModel.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+			String linkExpected = EVENT_BASE_PATH + "/" + eventId;
+
+			when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
+			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+			assertAll(
+					() -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isOk())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(eventSummary)))
+							.andExpect(jsonPath("motive", is(eventMotive)))
+							.andExpect(jsonPath("date",
+									is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
+											eventDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+							.andExpect(jsonPath("suicide", is(isEventSuicide)))
+							.andExpect(jsonPath("successful", is(isEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(target))),
+					() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_delete_event_but_event_not_exists_should_return_error_response() {
+
+			Long eventId = 1L;
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			when(eventService.delete(eventId)).thenReturn(Optional.empty());
+
+			assertAll(
+					() -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNotFound())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
+							.andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
+					() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
+					() -> verifyNoInteractions(eventModelAssembler));
 		}
 	}
 
