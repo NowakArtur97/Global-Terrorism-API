@@ -168,7 +168,7 @@ public class ApplicationStartupEventListener {
 
 		TargetNode target = new TargetNode(targetName);
 
-		return targetService.persistUpdate(target);
+		return targetService.save(target);
 	}
 
 	private void saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,

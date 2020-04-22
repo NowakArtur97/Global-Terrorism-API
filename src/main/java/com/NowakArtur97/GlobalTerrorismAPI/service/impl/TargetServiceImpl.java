@@ -51,7 +51,7 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode persistUpdate(TargetNode targetNode) {
+	public TargetNode save(TargetNode targetNode) {
 
 		return targetRepository.save(targetNode);
 	}

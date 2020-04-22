@@ -16,7 +16,7 @@ public interface TargetService {
 
 	TargetNode saveOrUpdate(Long id, TargetDTO targetDTO);
 
-	TargetNode persistUpdate(TargetNode targetNode);
+	TargetNode save(TargetNode targetNode);
 
 	Optional<TargetNode> delete(Long id);
 

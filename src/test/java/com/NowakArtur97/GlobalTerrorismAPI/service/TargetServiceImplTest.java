@@ -187,7 +187,7 @@ class TargetServiceImplTest {
 
 		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
-		TargetNode targetNodeActual = targetService.persistUpdate(targetNodeExpectedBeforeSave);
+		TargetNode targetNodeActual = targetService.save(targetNodeExpectedBeforeSave);
 
 		assertAll(
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
