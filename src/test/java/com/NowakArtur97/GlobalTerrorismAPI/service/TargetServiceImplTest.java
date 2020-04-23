@@ -207,7 +207,7 @@ class TargetServiceImplTest {
 	}
 	
 	@Test
-	void when_persist_update_new_target_should_update_target() {
+	void when_save_target_should_save_target() {
 
 		Long targetId = 1L;
 
