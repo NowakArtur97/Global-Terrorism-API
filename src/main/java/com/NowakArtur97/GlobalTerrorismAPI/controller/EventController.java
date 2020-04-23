@@ -80,19 +80,19 @@ public class EventController {
 				.orElseThrow(() -> new EventNotFoundException(id));
 	}
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
-	@ApiOperation(value = "Add Event", notes = "Add new Event")
-	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
-			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
-	public ResponseEntity<EventModel> addEvent(
-			@ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
-
-		EventNode eventNode = eventService.saveOrUpdate(null, eventDTO);
-
-		return new ResponseEntity<>((Optional.of(eventNode)).map(eventModelAssembler::toModel)
-				.orElseThrow(() -> new TargetNotFoundException(eventNode.getId())), HttpStatus.CREATED);
-	}
+//	@PostMapping
+//	@ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
+//	@ApiOperation(value = "Add Event", notes = "Add new Event")
+//	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
+//			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+//	public ResponseEntity<EventModel> addEvent(
+//			@ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
+//
+//		EventNode eventNode = eventService.saveOrUpdate(null, eventDTO);
+//
+//		return new ResponseEntity<>((Optional.of(eventNode)).map(eventModelAssembler::toModel)
+//				.orElseThrow(() -> new TargetNotFoundException(eventNode.getId())), HttpStatus.CREATED);
+//	}
 
 	@DeleteMapping(path = "/{id}")
 	@ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")

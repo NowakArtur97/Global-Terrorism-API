@@ -60,7 +60,7 @@ public class TargetController {
 	private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
 	private final PatchHelper patchHelper;
-	
+
 	private final ViolationHelper violationHelper;
 
 	@GetMapping
@@ -97,7 +97,7 @@ public class TargetController {
 	public ResponseEntity<TargetModel> addTarget(
 			@ApiParam(value = "New Target", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
-		TargetNode targetNode = targetService.saveOrUpdate(null, targetDTO);
+		TargetNode targetNode = targetService.saveNew(targetDTO);
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.CREATED);
@@ -113,19 +113,20 @@ public class TargetController {
 			@ApiParam(value = "Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
 		HttpStatus httpStatus;
+		TargetNode targetNode;
 
 		if (id != null && targetService.findById(id).isPresent()) {
 
 			httpStatus = HttpStatus.OK;
 
+			targetNode = targetService.update(id, targetDTO);
+
 		} else {
 
-			id = null;
-			
 			httpStatus = HttpStatus.CREATED;
-		}
 
-		TargetNode targetNode = targetService.saveOrUpdate(id, targetDTO);
+			targetNode = targetService.saveNew(targetDTO);
+		}
 
 		return new ResponseEntity<>((Optional.of(targetNode)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), httpStatus);
@@ -141,18 +142,20 @@ public class TargetController {
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonPatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
-		
+
 		TargetNode targetNodePatched = patchHelper.patch(targetAsJsonPatch, targetNode, TargetNode.class);
 
 		violationHelper.violate(targetNodePatched, TargetDTO.class);
-		
+
 		targetNodePatched = targetService.save(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), HttpStatus.OK);
 	}
 
-	// id2 was used because Swagger does not allow two PATCH methods for the same path – even if they have different parameters (parameters have no effect on uniqueness)
+	// id2 was used because Swagger does not allow two PATCH methods for the same
+	// path – even if they have different parameters (parameters have no effect on
+	// uniqueness)
 	@PatchMapping(path = "/{id2}", consumes = "application/merge-patch+json")
 	@ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch")
 	@ApiResponses({
@@ -163,11 +166,11 @@ public class TargetController {
 			@ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonMergePatch) {
 
 		TargetNode targetNode = targetService.findById(id).orElseThrow(() -> new TargetNotFoundException(id));
-		
+
 		TargetNode targetNodePatched = patchHelper.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
 
 		violationHelper.violate(targetNodePatched, TargetDTO.class);
-		
+
 		targetNodePatched = targetService.save(targetNodePatched);
 
 		return new ResponseEntity<>((Optional.of(targetNodePatched)).map(targetModelAssembler::toModel)
