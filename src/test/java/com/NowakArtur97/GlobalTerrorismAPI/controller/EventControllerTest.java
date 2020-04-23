@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +46,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -637,7 +640,6 @@ class EventControllerTest {
 			eventModel.add(eventLink);
 
 			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-			String linkExpected = EVENT_BASE_PATH + "/" + eventId;
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
@@ -645,7 +647,7 @@ class EventControllerTest {
 			assertAll(
 					() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 							.andExpect(jsonPath("id", is(eventId.intValue())))
 							.andExpect(jsonPath("summary", is(eventSummary)))
 							.andExpect(jsonPath("motive", is(eventMotive)))
@@ -665,7 +667,7 @@ class EventControllerTest {
 		}
 
 		@Test
-		void when_find_existing_event_withput_target_should_return_event_withput_target() {
+		void when_find_existing_event_without_target_should_return_event_withput_target() {
 
 			Long eventId = 1L;
 
@@ -689,7 +691,6 @@ class EventControllerTest {
 			eventModel.add(eventLink);
 
 			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-			String linkExpected = EVENT_BASE_PATH + "/" + eventId;
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
@@ -697,7 +698,7 @@ class EventControllerTest {
 			assertAll(
 					() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 							.andExpect(jsonPath("id", is(eventId.intValue())))
 							.andExpect(jsonPath("summary", is(eventSummary)))
 							.andExpect(jsonPath("motive", is(eventMotive)))
@@ -730,6 +731,77 @@ class EventControllerTest {
 							.andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+	}
+
+	@Nested
+	@Tag("PostEventRequest_Tests")
+	class PostEventRequestTest {
+
+		@Test
+		void when_add_valid_event_should_return_new_event_as_model() {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = Calendar.getInstance().getTime();
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetModel targetModel = new TargetModel(targetId, target);
+
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+
+			EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetModel).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModel.add(eventLink);
+
+			when(eventService.saveNew(eventDTO)).thenReturn(eventNode);
+			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(targetDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isCreated())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(eventSummary)))
+							.andExpect(jsonPath("motive", is(eventMotive)))
+							.andExpect(jsonPath("date",
+									is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
+											eventDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+							.andExpect(jsonPath("suicide", is(isEventSuicide)))
+							.andExpect(jsonPath("successful", is(isEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(target))),
+					() -> verify(eventService, times(1)).saveNew(eventDTO),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
 		}
 	}
 
@@ -770,7 +842,6 @@ class EventControllerTest {
 			eventModel.add(eventLink);
 
 			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-			String linkExpected = EVENT_BASE_PATH + "/" + eventId;
 
 			when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
 			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
@@ -778,7 +849,7 @@ class EventControllerTest {
 			assertAll(
 					() -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 							.andExpect(jsonPath("id", is(eventId.intValue())))
 							.andExpect(jsonPath("summary", is(eventSummary)))
 							.andExpect(jsonPath("motive", is(eventMotive)))

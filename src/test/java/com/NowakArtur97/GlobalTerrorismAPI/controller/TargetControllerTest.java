@@ -398,14 +398,13 @@ class TargetControllerTest {
 			targetModel.add(link);
 
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
-			String linkExpected = BASE_PATH + "/" + targetId;
-
+			
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 			assertAll(() -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isOk())
 					.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-					.andExpect(jsonPath("links[0].href", is(linkExpected)))
+					.andExpect(jsonPath("links[0].href", is(pathToLink)))
 					.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
 					() -> verify(targetService, times(1)).findById(targetId),
 					() -> verifyNoMoreInteractions(targetService),
@@ -450,8 +449,6 @@ class TargetControllerTest {
 			Link link = new Link(pathToLink);
 			targetModel.add(link);
 
-			String linkExpected = BASE_PATH + "/" + targetId;
-
 			when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
@@ -461,7 +458,7 @@ class TargetControllerTest {
 									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isCreated())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToLink)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(targetName))),
 					() -> verify(targetService, times(1)).saveNew(targetDTO),
@@ -506,7 +503,6 @@ class TargetControllerTest {
 			Link link = new Link(pathToLink);
 			targetModel.add(link);
 
-			String linkExpected = BASE_PATH + "/" + targetId;
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
@@ -519,7 +515,7 @@ class TargetControllerTest {
 									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToLink)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(updatedTargetName)))
 							.andExpect(jsonPath("target", not(oldTargetName))),
@@ -543,7 +539,6 @@ class TargetControllerTest {
 			Link link = new Link(pathToLink);
 			targetModel.add(link);
 
-			String linkExpected = BASE_PATH + "/" + targetId;
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.empty());
@@ -556,7 +551,7 @@ class TargetControllerTest {
 									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isCreated())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToLink)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(targetName))),
 					() -> verify(targetService, times(1)).findById(targetId),
@@ -606,7 +601,6 @@ class TargetControllerTest {
 			Link link = new Link(pathToLink);
 			targetModel.add(link);
 
-			String linkExpected = BASE_PATH + "/" + targetId;
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
@@ -623,7 +617,7 @@ class TargetControllerTest {
 									.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToLink)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(updatedTargetName)))
 							.andExpect(jsonPath("target", not(oldTargetName))),
@@ -653,7 +647,6 @@ class TargetControllerTest {
 			Link link = new Link(pathToLink);
 			targetModel.add(link);
 
-			String linkExpected = BASE_PATH + "/" + targetId;
 			String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
@@ -669,7 +662,7 @@ class TargetControllerTest {
 									.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("links[0].href", is(linkExpected)))
+							.andExpect(jsonPath("links[0].href", is(pathToLink)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(updatedTargetName)))
 							.andExpect(jsonPath("target", not(oldTargetName))),
@@ -703,14 +696,13 @@ class TargetControllerTest {
 			targetModel.add(link);
 
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
-			String linkExpected = BASE_PATH + "/" + targetId;
 
 			when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 			assertAll(() -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isOk())
 					.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-					.andExpect(jsonPath("links[0].href", is(linkExpected)))
+					.andExpect(jsonPath("links[0].href", is(pathToLink)))
 					.andExpect(jsonPath("id", is(targetId.intValue()))).andExpect(jsonPath("target", is(targetName))),
 					() -> verify(targetService, times(1)).delete(targetId),
 					() -> verifyNoMoreInteractions(targetService),
