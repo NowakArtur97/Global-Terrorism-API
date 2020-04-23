@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
@@ -19,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class EventServiceImpl implements EventService {
 
 	private final EventRepository eventRepository;
+
+	private final DTOMapper dtoMapper;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -38,6 +42,16 @@ public class EventServiceImpl implements EventService {
 	public EventNode save(EventNode eventNode) {
 
 		return eventRepository.save(eventNode);
+	}
+
+	@Override
+	public EventNode saveNew(EventDTO eventDTO) {
+
+		EventNode eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+
+		eventNode = eventRepository.save(eventNode);
+
+		return eventNode;
 	}
 
 	@Override

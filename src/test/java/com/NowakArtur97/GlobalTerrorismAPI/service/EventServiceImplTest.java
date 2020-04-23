@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
@@ -44,10 +45,13 @@ public class EventServiceImplTest {
 	@Mock
 	private EventRepository eventRepository;
 
+	@Mock
+	private DTOMapper dtoMapper;
+
 	@BeforeEach
 	private void setUp() {
 
-		eventService = new EventServiceImpl(eventRepository);
+		eventService = new EventServiceImpl(eventRepository, dtoMapper);
 	}
 
 	@Test
@@ -168,8 +172,8 @@ public class EventServiceImplTest {
 						() -> "should return event node which was successful: " + eventExpected.isSuccessful()
 								+ ", but was: " + eventActual.isSuccessful()),
 				() -> assertEquals(eventExpected.isSuicide(), eventActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventExpected.isSuicide()
-								+ ", but was: " + eventActual.isSuicide()),
+						() -> "should return event node which was suicide: " + eventExpected.isSuicide() + ", but was: "
+								+ eventActual.isSuicide()),
 				() -> assertNotNull(eventExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventExpected.getTarget(), eventActual.getTarget(),
