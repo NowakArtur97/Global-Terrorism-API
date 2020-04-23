@@ -380,4 +380,20 @@ public class EventServiceImplTest {
 				() -> verify(eventRepository, times(1)).delete(eventNodeExpected),
 				() -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper));
 	}
+
+	@Test
+	void when_delete_event_by_id_not_existing_event_should_return_empty_optional() {
+
+		Long eventId = 1L;
+
+		when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+		Optional<EventNode> eventNodeOptional = eventService.delete(eventId);
+
+		assertAll(
+				() -> assertTrue(eventNodeOptional.isEmpty(),
+						() -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
+				() -> verify(eventRepository, times(1)).findById(eventId),
+				() -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper));
+	}
 }
