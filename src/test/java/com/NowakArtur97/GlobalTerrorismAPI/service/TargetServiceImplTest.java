@@ -161,7 +161,7 @@ class TargetServiceImplTest {
 		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
 		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
-		TargetNode targetNodeActual = targetService.saveOrUpdate(null, targetDTOExpected);
+		TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
 
 		assertAll(
 				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
@@ -175,6 +175,37 @@ class TargetServiceImplTest {
 				() -> verifyNoMoreInteractions(targetRepository));
 	}
 
+	@Test
+	void when_update_target_should_update_target() {
+
+		Long targetId = 1L;
+
+		String targetName = "Target";
+		String targetNameUpdated = "Target";
+
+		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+
+		TargetNode targetNodeExpectedAfterMapping = new TargetNode(null, targetName);
+		TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
+
+		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
+		when(targetRepository.save(targetNodeExpectedAfterUpdate)).thenReturn(targetNodeExpectedAfterUpdate);
+
+		TargetNode targetNodeActual = targetService.update(targetId, targetDTOExpected);
+
+		assertAll(
+				() -> assertEquals(targetNodeExpectedAfterUpdate.getId(), targetNodeActual.getId(),
+						() -> "should return target node with id: " + targetNodeExpectedAfterUpdate.getId() + ", but was: "
+								+ targetNodeActual.getId()),
+				() -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
+						() -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: "
+								+ targetNodeActual.getTarget()),
+				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
+				() -> verifyNoMoreInteractions(dtoMapper),
+				() -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterUpdate),
+				() -> verifyNoMoreInteractions(targetRepository));
+	}
+	
 	@Test
 	void when_persist_update_new_target_should_update_target() {
 
