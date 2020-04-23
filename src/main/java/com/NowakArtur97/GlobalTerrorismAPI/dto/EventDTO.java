@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
 import java.util.Date;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -48,6 +49,7 @@ public class EventDTO implements DTONode {
 	@NotNull(message = "{event.isSuicide.notNull}")
 	private Boolean isSuicide;
 
-//	@ApiModelProperty(notes = "The event's event", required = true)
-//	private TArgetDTO target;
+	@ApiModelProperty(notes = "The event's target", required = true)
+	@Valid
+	private final TargetDTO target = new TargetDTO();
 }
