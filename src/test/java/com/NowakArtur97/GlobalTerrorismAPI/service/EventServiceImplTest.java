@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -198,7 +199,7 @@ public class EventServiceImplTest {
 	}
 
 	@Test
-	void when_save_new_event_should_save_and_return_event() {
+	void when_save_event_should_save_and_return_event() {
 
 		Long eventId = 1L;
 
@@ -252,6 +253,63 @@ public class EventServiceImplTest {
 						() -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
 								+ eventNodeActual.getTarget()),
 				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
-				() -> verifyNoMoreInteractions(eventRepository));
+				() -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper));
+	}
+
+	@Test
+	void when_delete_event_should_delete_and_return_event() {
+
+		Long eventId = 1L;
+
+		String eventSummary = "summary";
+		String eventMotive = "motive";
+		Date eventDate = Calendar.getInstance().getTime();
+		boolean isEventPartOfMultipleIncidents = true;
+		boolean isEventSuccessful = true;
+		boolean isEventSuicide = true;
+
+		TargetNode target = new TargetNode(1L, "target");
+
+		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+
+		when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
+
+		Optional<EventNode> eventNodeOptionalActual = eventService.delete(eventId);
+
+		EventNode eventNodeActual = eventNodeOptionalActual.get();
+
+		assertAll(
+				() -> assertNotNull(eventNodeActual.getId(),
+						() -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+				() -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+						() -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+								+ eventNodeActual.getSummary()),
+				() -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+						() -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+								+ eventNodeActual.getMotive()),
+				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+								+ eventNodeActual.getDate()),
+				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
+						eventNodeActual.isPartOfMultipleIncidents(),
+						() -> "should return event node which was part of multiple incidents: "
+								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.isPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
+								+ ", but was: " + eventNodeActual.isSuccessful()),
+				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
+								+ ", but was: " + eventNodeActual.isSuicide()),
+				() -> assertNotNull(eventNodeExpected.getTarget(),
+						() -> "should return event node with not null target, but was: null"),
+				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+						() -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
+								+ eventNodeActual.getTarget()),
+				() -> verify(eventRepository, times(1)).findById(eventId),
+				() -> verify(eventRepository, times(1)).delete(eventNodeExpected),
+				() -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper));
 	}
 }
