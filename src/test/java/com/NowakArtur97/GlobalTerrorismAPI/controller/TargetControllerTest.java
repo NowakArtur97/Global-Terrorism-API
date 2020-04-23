@@ -435,6 +435,7 @@ class TargetControllerTest {
 	@Nested
 	@Tag("PostTargetRequest_Tests")
 	class PostTargetRequestTest {
+		
 		@Test
 		void when_add_valid_target_should_return_new_target_as_model() {
 
@@ -451,7 +452,7 @@ class TargetControllerTest {
 
 			String linkExpected = BASE_PATH + "/" + targetId;
 
-			when(targetService.saveOrUpdate(targetIdBeforeSave, targetDTO)).thenReturn(targetNode);
+			when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 			assertAll(
@@ -463,7 +464,7 @@ class TargetControllerTest {
 							.andExpect(jsonPath("links[0].href", is(linkExpected)))
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(targetName))),
-					() -> verify(targetService, times(1)).saveOrUpdate(targetIdBeforeSave, targetDTO),
+					() -> verify(targetService, times(1)).saveNew(targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
 					() -> verifyNoMoreInteractions(targetModelAssembler));
@@ -509,7 +510,7 @@ class TargetControllerTest {
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-			when(targetService.saveOrUpdate(targetId, targetDTO)).thenReturn(targetNode);
+			when(targetService.update(targetId, targetDTO)).thenReturn(targetNode);
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 			assertAll(
@@ -523,7 +524,7 @@ class TargetControllerTest {
 							.andExpect(jsonPath("target", is(updatedTargetName)))
 							.andExpect(jsonPath("target", not(oldTargetName))),
 					() -> verify(targetService, times(1)).findById(targetId),
-					() -> verify(targetService, times(1)).saveOrUpdate(targetId, targetDTO),
+					() -> verify(targetService, times(1)).update(targetId, targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
 					() -> verifyNoMoreInteractions(targetModelAssembler));
@@ -533,7 +534,6 @@ class TargetControllerTest {
 		void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
 			Long targetId = 1L;
-			Long targetIdAssignedIfTargetNotFound = null;
 			String targetName = "target";
 			TargetDTO targetDTO = new TargetDTO(targetName);
 			TargetNode targetNode = new TargetNode(targetId, targetName);
@@ -547,7 +547,7 @@ class TargetControllerTest {
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 			when(targetService.findById(targetId)).thenReturn(Optional.empty());
-			when(targetService.saveOrUpdate(targetIdAssignedIfTargetNotFound, targetDTO)).thenReturn(targetNode);
+			when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 			assertAll(
@@ -560,7 +560,7 @@ class TargetControllerTest {
 							.andExpect(jsonPath("id", is(targetId.intValue())))
 							.andExpect(jsonPath("target", is(targetName))),
 					() -> verify(targetService, times(1)).findById(targetId),
-					() -> verify(targetService, times(1)).saveOrUpdate(targetIdAssignedIfTargetNotFound, targetDTO),
+					() -> verify(targetService, times(1)).saveNew(targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
 					() -> verifyNoMoreInteractions(targetModelAssembler));
