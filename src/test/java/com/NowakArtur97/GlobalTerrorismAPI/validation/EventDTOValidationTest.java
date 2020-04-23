@@ -126,8 +126,9 @@ public class EventDTOValidationTest {
 	@Test
 	void when_event_dto_has_date_in_the_future_should_have_violation() {
 
-		@SuppressWarnings("deprecation")
-		Date invalidEventDate = new Date(2099, 12, 31);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2090, 1, 1);
+		Date invalidDate = calendar.getTime();
 
 		String motive = "motive";
 		String summary = "summary";
@@ -135,7 +136,7 @@ public class EventDTOValidationTest {
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
 
-		EventDTO eventDTO = EventDTO.builder().date(invalidEventDate).summary(summary).motive(motive)
+		EventDTO eventDTO = EventDTO.builder().date(invalidDate).summary(summary).motive(motive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
 				.build();
 

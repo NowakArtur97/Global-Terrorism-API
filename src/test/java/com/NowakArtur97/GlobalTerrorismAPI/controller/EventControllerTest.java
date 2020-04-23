@@ -1,6 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,6 +32,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -739,13 +746,13 @@ class EventControllerTest {
 	class PostEventRequestTest {
 
 		@Test
-		void when_add_valid_event_should_return_new_event_as_model() {
+		void when_add_valid_event_should_return_new_event_as_model() throws ParseException {
 
 			Long eventId = 1L;
 
 			String eventSummary = "summary";
 			String eventMotive = "motive";
-			Date eventDate = Calendar.getInstance().getTime();
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents = true;
 			boolean isEventSuccessful = true;
 			boolean isEventSuicide = true;
@@ -781,7 +788,7 @@ class EventControllerTest {
 
 			assertAll(
 					() -> mockMvc
-							.perform(post(EVENT_BASE_PATH).content(asJsonString(targetDTO))
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
 									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isCreated())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -789,9 +796,7 @@ class EventControllerTest {
 							.andExpect(jsonPath("id", is(eventId.intValue())))
 							.andExpect(jsonPath("summary", is(eventSummary)))
 							.andExpect(jsonPath("motive", is(eventMotive)))
-							.andExpect(jsonPath("date",
-									is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
-											eventDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+							.andExpect(jsonPath("date", is(notNullValue())))
 							.andExpect(jsonPath("suicide", is(isEventSuicide)))
 							.andExpect(jsonPath("successful", is(isEventSuccessful)))
 							.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
@@ -802,6 +807,111 @@ class EventControllerTest {
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
 					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_add_event_with_null_fields_should_return_errors() {
+
+			String summary = null;
+			String motive = null;
+			Date date = null;
+			Boolean isPartOfMultipleIncidents = null;
+			Boolean isSuccessful = null;
+			Boolean isSuicide = null;
+
+			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).build();
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors", hasItem("{event.summary.notBlank}")))
+							.andExpect(jsonPath("errors", hasItem("{event.motive.notBlank}")))
+							.andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
+							.andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
+							.andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
+							.andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+
+		@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+		@NullAndEmptySource
+		@ValueSource(strings = { " ", "\t", "\n" })
+		void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) {
+
+			String motive = "motive";
+			Date date = Calendar.getInstance().getTime();
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			EventDTO eventDTO = EventDTO.builder().date(date).summary(invalidSummary).motive(motive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).build();
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+
+		@ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+		@NullAndEmptySource
+		@ValueSource(strings = { " ", "\t", "\n" })
+		void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) {
+
+			String summary = "summary";
+			Date date = Calendar.getInstance().getTime();
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(invalidMotive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).build();
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_add_event_with_date_in_the_future_should_return_errors() {
+
+			@SuppressWarnings("deprecation")
+			Date invalidEventDate = new Date(2099, 12, 31);
+
+			String motive = "motive";
+			String summary = "summary";
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			EventDTO eventDTO = EventDTO.builder().date(invalidEventDate).summary(summary).motive(motive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).build();
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
 		}
 	}
 
