@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -91,7 +92,36 @@ public class EventController {
 		EventNode eventNode = eventService.saveNew(eventDTO);
 
 		return new ResponseEntity<>((Optional.of(eventNode)).map(eventModelAssembler::toModel)
-				.orElseThrow(() -> new TargetNotFoundException(eventNode.getId())), HttpStatus.CREATED);
+				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), HttpStatus.CREATED);
+	}
+
+	@PutMapping(path = "/{id}")
+	@ApiOperation(value = "Update Event", notes = "Update Event. If the Event id is not found for update, a new Event with the next free id will be created")
+	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
+			@ApiResponse(code = 200, message = "Successfully updated Event", response = EventModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<EventModel> updateTarget(
+			@ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
+
+		HttpStatus httpStatus;
+		EventNode eventNode;
+
+		if (id != null && eventService.findById(id).isPresent()) {
+
+			httpStatus = HttpStatus.OK;
+
+			eventNode = eventService.update(id, eventDTO);
+
+		} else {
+
+			httpStatus = HttpStatus.CREATED;
+
+			eventNode = eventService.saveNew(eventDTO);
+		}
+
+		return new ResponseEntity<>((Optional.of(eventNode)).map(eventModelAssembler::toModel)
+				.orElseThrow(() -> new TargetNotFoundException(eventNode.getId())), httpStatus);
 	}
 
 	@DeleteMapping(path = "/{id}")
