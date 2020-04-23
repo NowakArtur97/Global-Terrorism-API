@@ -6,14 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.TargetNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 
 @RestControllerAdvice(basePackageClasses = TargetController.class)
-public class TargetControllerAdvice extends ResponseEntityExceptionHandler {
+public class TargetControllerAdvice {
 
 	@ExceptionHandler(TargetNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleTargetNotFound(TargetNotFoundException exception) {
