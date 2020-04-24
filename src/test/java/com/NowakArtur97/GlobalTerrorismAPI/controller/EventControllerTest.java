@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -913,6 +914,248 @@ class EventControllerTest {
 							.andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
 					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
 		}
+	}
+
+	@Nested
+	@Tag("PutEventRequest_Tests")
+	class PutEventRequestTest {
+
+		@Test
+		void when_update_valid_event_should_return_updated_event_as_model() throws ParseException {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			String updatedEventSummary = "summary updated";
+			String updatedEventMotive = "motive updated";
+			Date updatedEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+			boolean updatedIsEventPartOfMultipleIncidents = false;
+			boolean updatedIsEventSuccessful = false;
+			boolean updatedIsEventSuicide = false;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetModel targetModel = new TargetModel(targetId, target);
+
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+
+			EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedEventDate)
+					.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(targetNode).build();
+
+			EventModel eventModelUpdated = EventModel.builder().id(eventId).date(updatedEventDate)
+					.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(targetModel).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModelUpdated.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+			when(eventService.update(eventNode, eventDTO)).thenReturn(eventNodeUpdated);
+			when(eventModelAssembler.toModel(eventNodeUpdated)).thenReturn(eventModelUpdated);
+
+			assertAll(
+					() -> mockMvc
+							.perform(put(linkWithParameter, eventId).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isOk())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(updatedEventSummary)))
+							.andExpect(jsonPath("motive", is(updatedEventMotive)))
+							.andExpect(jsonPath("date", is(notNullValue())))
+							.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
+							.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(target))),
+					() -> verify(eventService, times(1)).findById(eventId),
+					() -> verify(eventService, times(1)).update(eventNode, eventDTO),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNodeUpdated),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_update_valid_event_with_updated_target_should_return_updated_event_as_model_with_updated_target()
+				throws ParseException {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			String updatedEventSummary = "summary updated";
+			String updatedEventMotive = "motive updated";
+			Date updatedEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+			boolean updatedIsEventPartOfMultipleIncidents = false;
+			boolean updatedIsEventSuccessful = false;
+			boolean updatedIsEventSuicide = false;
+
+			Long targetId = 1L;
+			String target = "target";
+			String updatedTarget = "target updated";
+			TargetDTO targetDTO = new TargetDTO(target);
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetNode targetNodeUpdated = new TargetNode(targetId, updatedTarget);
+			TargetModel targetModel = new TargetModel(targetId, target);
+			TargetModel targetModelUpdated = new TargetModel(targetId, updatedTarget);
+
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+			targetModelUpdated.add(targetLink);
+
+			EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedEventDate)
+					.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(targetNodeUpdated).build();
+
+			EventModel eventModelUpdated = EventModel.builder().id(eventId).date(updatedEventDate)
+					.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(targetModelUpdated).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModelUpdated.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+			when(eventService.update(eventNode, eventDTO)).thenReturn(eventNodeUpdated);
+			when(eventModelAssembler.toModel(eventNodeUpdated)).thenReturn(eventModelUpdated);
+
+			assertAll(
+					() -> mockMvc
+							.perform(put(linkWithParameter, eventId).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isOk())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(updatedEventSummary)))
+							.andExpect(jsonPath("motive", is(updatedEventMotive)))
+							.andExpect(jsonPath("date", is(notNullValue())))
+							.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
+							.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(updatedTarget))),
+					() -> verify(eventService, times(1)).findById(eventId),
+					() -> verify(eventService, times(1)).update(eventNode, eventDTO),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNodeUpdated),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+
+		@Test
+		void when_update_valid_event_with_not_existing_id_should_return_new_event_as_model() throws ParseException {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetModel targetModel = new TargetModel(targetId, target);
+
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+
+			EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetModel).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModel.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			when(eventService.findById(eventId)).thenReturn(Optional.empty());
+			when(eventService.saveNew(eventDTO)).thenReturn(eventNode);
+			when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+			assertAll(
+					() -> mockMvc
+							.perform(put(linkWithParameter, eventId).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isCreated())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(eventSummary)))
+							.andExpect(jsonPath("motive", is(eventMotive)))
+							.andExpect(jsonPath("date", is(notNullValue())))
+							.andExpect(jsonPath("suicide", is(isEventSuicide)))
+							.andExpect(jsonPath("successful", is(isEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(target))),
+					() -> verify(eventService, times(1)).findById(eventId),
+					() -> verify(eventService, times(1)).saveNew(eventDTO),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
+		}
+		
+		
 	}
 
 	@Nested
