@@ -34,6 +34,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.EventServiceImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.ibm.icu.util.Calendar;
@@ -51,10 +52,13 @@ public class EventServiceImplTest {
 	@Mock
 	private DTOMapper dtoMapper;
 
+	@Mock
+	private TargetService targetService;
+
 	@BeforeEach
 	private void setUp() {
 
-		eventService = new EventServiceImpl(eventRepository, dtoMapper);
+		eventService = new EventServiceImpl(eventRepository, dtoMapper, targetService);
 	}
 
 	@Test
@@ -319,6 +323,83 @@ public class EventServiceImplTest {
 						() -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
 								+ eventNodeActual.getTarget()),
 				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
+				() -> verifyNoMoreInteractions(eventRepository),
+				() -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
+				() -> verifyNoMoreInteractions(dtoMapper));
+	}
+
+	@Test
+	void when_update_event_should_update_event_and_target() {
+
+		Long eventId = 1L;
+
+		String eventSummary = "summary";
+		String eventMotive = "motive";
+		Date eventDate = Calendar.getInstance().getTime();
+		boolean isEventPartOfMultipleIncidents = true;
+		boolean isEventSuccessful = true;
+		boolean isEventSuicide = true;
+
+		Long targetId = 1L;
+		String targetName = "target";
+		String targetNameUpdated = "target2";
+		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetNode targetNodeUpdated = new TargetNode(targetId, targetNameUpdated);
+		TargetDTO targetDTO = new TargetDTO(targetNameUpdated);
+
+		EventDTO eventDTOExpected = EventDTO.builder().date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+
+		EventNode eventNodeExpectedBeforeMethod = EventNode.builder().date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		
+		EventNode eventNodeExpectedBeforeSetIdAndTarget = EventNode.builder().date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNodeUpdated).build();
+
+		when(targetService.update(targetId, targetDTO)).thenReturn(targetNodeUpdated);
+		when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
+		when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
+
+		EventNode eventNodeActual = eventService.update(eventNodeExpectedBeforeMethod, eventDTOExpected);
+
+		assertAll(
+				() -> assertNotNull(eventNodeActual.getId(),
+						() -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+				() -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+						() -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+								+ eventNodeActual.getSummary()),
+				() -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+						() -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+								+ eventNodeActual.getMotive()),
+				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+								+ eventNodeActual.getDate()),
+				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
+						eventNodeActual.isPartOfMultipleIncidents(),
+						() -> "should return event node which was part of multiple incidents: "
+								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.isPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
+								+ ", but was: " + eventNodeActual.isSuccessful()),
+				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
+								+ ", but was: " + eventNodeActual.isSuicide()),
+				() -> assertNotNull(eventNodeExpected.getTarget(),
+						() -> "should return event node with not null target, but was: null"),
+				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+						() -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
+								+ eventNodeActual.getTarget()),
+				() -> verify(targetService, times(1)).update(targetId, targetDTO),
+				() -> verifyNoMoreInteractions(targetService),
+				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
 				() -> verifyNoMoreInteractions(eventRepository),
 				() -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
 				() -> verifyNoMoreInteractions(dtoMapper));
