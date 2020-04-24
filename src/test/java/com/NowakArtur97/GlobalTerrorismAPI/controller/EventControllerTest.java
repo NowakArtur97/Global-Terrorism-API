@@ -820,9 +820,11 @@ class EventControllerTest {
 			Boolean isSuccessful = null;
 			Boolean isSuicide = null;
 
+			TargetDTO targetDTO = new TargetDTO(null);
+
 			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).build();
+					.isSuicide(isSuicide).target(targetDTO).build();
 
 			assertAll(
 					() -> mockMvc
@@ -835,7 +837,36 @@ class EventControllerTest {
 							.andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
 							.andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
 							.andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-							.andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}"))),
+							.andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}")))
+							.andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+
+		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+		@NullAndEmptySource
+		@ValueSource(strings = { " ", "\t", "\n" })
+		void when_add_event_with_invalid_target_should_return_errors(String target) {
+
+			String summary = "summary";
+			String motive = "motive";
+			Date date = Calendar.getInstance().getTime();
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			TargetDTO targetDTO = new TargetDTO(target);
+
+			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).target(targetDTO).build();
+
+			assertAll(
+					() -> mockMvc
+							.perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
 					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
 		}
 
@@ -850,9 +881,12 @@ class EventControllerTest {
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
 
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+
 			EventDTO eventDTO = EventDTO.builder().date(date).summary(invalidSummary).motive(motive)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).build();
+					.isSuicide(isSuicide).target(targetDTO).build();
 
 			assertAll(
 					() -> mockMvc
@@ -875,9 +909,12 @@ class EventControllerTest {
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
 
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+
 			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(invalidMotive)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).build();
+					.isSuicide(isSuicide).target(targetDTO).build();
 
 			assertAll(
 					() -> mockMvc
@@ -901,9 +938,12 @@ class EventControllerTest {
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
 
+			String target = "target";
+			TargetDTO targetDTO = new TargetDTO(target);
+
 			EventDTO eventDTO = EventDTO.builder().date(invalidEventDate).summary(summary).motive(motive)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).build();
+					.isSuicide(isSuicide).target(targetDTO).build();
 
 			assertAll(
 					() -> mockMvc
@@ -1188,6 +1228,38 @@ class EventControllerTest {
 							.andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
 							.andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
 							.andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}"))),
+					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+
+		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+		@NullAndEmptySource
+		@ValueSource(strings = { " ", "\t", "\n" })
+		void when_update_event_with_invalid_target_should_return_errors(String target) {
+
+			Long eventId = 1L;
+
+			String summary = "summary";
+			String motive = "motive";
+			Date date = Calendar.getInstance().getTime();
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			TargetDTO targetDTO = new TargetDTO(target);
+
+			EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).target(targetDTO).build();
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			assertAll(
+					() -> mockMvc
+							.perform(put(linkWithParameter, eventId).content(asJsonString(eventDTO))
+									.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+							.andExpect(jsonPath("status", is(400)))
+							.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
 					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
 		}
 

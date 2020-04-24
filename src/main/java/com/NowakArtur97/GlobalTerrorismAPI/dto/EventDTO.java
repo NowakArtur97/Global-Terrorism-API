@@ -51,5 +51,5 @@ public class EventDTO implements DTONode {
 
 	@ApiModelProperty(notes = "The event's target", required = true)
 	@Valid
-	private TargetDTO target = new TargetDTO();
+	private TargetDTO target;
 }
