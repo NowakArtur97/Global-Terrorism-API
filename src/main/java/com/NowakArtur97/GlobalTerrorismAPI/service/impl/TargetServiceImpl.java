@@ -26,16 +26,22 @@ public class TargetServiceImpl implements TargetService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public Optional<TargetNode> findById(Long id) {
+
+		return id != null ? targetRepository.findById(id) : Optional.empty();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public Page<TargetNode> findAll(Pageable pageable) {
 
 		return targetRepository.findAll(pageable);
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public Optional<TargetNode> findById(Long id) {
+	public TargetNode save(TargetNode targetNode) {
 
-		return id != null ? targetRepository.findById(id) : Optional.empty();
+		return targetRepository.save(targetNode);
 	}
 	
 	@Override
@@ -58,12 +64,6 @@ public class TargetServiceImpl implements TargetService {
 		targetNode = targetRepository.save(targetNode);
 
 		return targetNode;
-	}
-
-	@Override
-	public TargetNode save(TargetNode targetNode) {
-
-		return targetRepository.save(targetNode);
 	}
 
 	@Override

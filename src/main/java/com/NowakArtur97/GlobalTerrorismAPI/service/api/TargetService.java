@@ -10,15 +10,15 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 
 public interface TargetService {
 
-	Page<TargetNode> findAll(Pageable pageable);
-
 	Optional<TargetNode> findById(Long id);
 
+	Page<TargetNode> findAll(Pageable pageable);
+
+	TargetNode save(TargetNode targetNode);
+	
 	TargetNode saveNew(TargetDTO targetDTO);
 
 	TargetNode update(Long id, TargetDTO targetDTO);
-
-	TargetNode save(TargetNode targetNode);
 
 	Optional<TargetNode> delete(Long id);
 

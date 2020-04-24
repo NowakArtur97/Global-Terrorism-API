@@ -10,13 +10,15 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 
 public interface EventService {
 
+	Optional<EventNode> findById(Long id);
+
 	Page<EventNode> findAll(Pageable pageable);
 
 	EventNode save(EventNode eventNode);
 
 	EventNode saveNew(EventDTO eventDTO);
 
-	Optional<EventNode> findById(Long id);
+	EventNode update(EventNode eventNode, EventDTO eventDTO);
 
 	Optional<EventNode> delete(Long id);
 }

@@ -107,11 +107,13 @@ public class EventController {
 		HttpStatus httpStatus;
 		EventNode eventNode;
 
-		if (id != null && eventService.findById(id).isPresent()) {
+		Optional <EventNode> eventNodeOptional = eventService.findById(id);
+		
+		if (id != null && eventNodeOptional.isPresent()) {
 
 			httpStatus = HttpStatus.OK;
 
-			eventNode = eventService.update(id, eventDTO);
+			eventNode = eventService.update(eventNodeOptional.get(), eventDTO);
 
 		} else {
 

@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,8 @@ public class EventServiceImpl implements EventService {
 	private final EventRepository eventRepository;
 
 	private final DTOMapper dtoMapper;
+
+	private final TargetService targetService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -48,6 +52,24 @@ public class EventServiceImpl implements EventService {
 	public EventNode saveNew(EventDTO eventDTO) {
 
 		EventNode eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+
+		eventNode = eventRepository.save(eventNode);
+
+		return eventNode;
+	}
+
+	@Override
+	public EventNode update(EventNode eventNode, EventDTO eventDTO) {
+
+		Long id = eventNode.getId();
+
+		TargetNode targetNode = targetService.update(eventNode.getTarget().getId(), eventDTO.getTarget());
+
+		eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+
+		eventNode.setId(id);
+
+		eventNode.setTarget(targetNode);
 
 		eventNode = eventRepository.save(eventNode);
 
