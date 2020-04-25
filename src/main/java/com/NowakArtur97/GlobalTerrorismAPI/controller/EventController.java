@@ -170,7 +170,7 @@ public class EventController {
 		EventNode eventNode = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
 		EventNode eventNodePatched = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
-
+		
 		violationHelper.violate(eventNodePatched, EventDTO.class);
 
 		eventNodePatched = eventService.save(eventNodePatched);
