@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import java.util.Optional;
 
+import javax.json.JsonPatch;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,12 +28,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
-import com.NowakArtur97.GlobalTerrorismAPI.exception.TargetNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +57,10 @@ public class EventController {
 	private final EventModelAssembler eventModelAssembler;
 
 	private final PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
+
+	private final PatchHelper patchHelper;
+
+	private final ViolationHelper violationHelper;
 
 	@GetMapping
 	@ApiOperation(value = "Find All Events", notes = "Look up all events")
@@ -100,15 +107,15 @@ public class EventController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
 			@ApiResponse(code = 200, message = "Successfully updated Event", response = EventModel.class),
 			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
-	public ResponseEntity<EventModel> updateTarget(
+	public ResponseEntity<EventModel> updateEvent(
 			@ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
 			@ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
 
 		HttpStatus httpStatus;
 		EventNode eventNode;
 
-		Optional <EventNode> eventNodeOptional = eventService.findById(id);
-		
+		Optional<EventNode> eventNodeOptional = eventService.findById(id);
+
 		if (id != null && eventNodeOptional.isPresent()) {
 
 			httpStatus = HttpStatus.OK;
@@ -123,7 +130,28 @@ public class EventController {
 		}
 
 		return new ResponseEntity<>((Optional.of(eventNode)).map(eventModelAssembler::toModel)
-				.orElseThrow(() -> new TargetNotFoundException(eventNode.getId())), httpStatus);
+				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), httpStatus);
+	}
+
+	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+	@ApiOperation(value = "Update Event fields using Json Patch", notes = "Update Event fields using Json Patch")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<EventModel> updateEventFields(
+			@ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+			@ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonPatch eventAsJsonPatch) {
+
+		EventNode eventNode = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		EventNode eventNodePatched = patchHelper.patch(eventAsJsonPatch, eventNode, EventNode.class);
+
+		violationHelper.violate(eventNodePatched, EventDTO.class);
+
+		eventNodePatched = eventService.save(eventNodePatched);
+
+		return new ResponseEntity<>((Optional.of(eventNodePatched)).map(eventModelAssembler::toModel)
+				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/{id}")
