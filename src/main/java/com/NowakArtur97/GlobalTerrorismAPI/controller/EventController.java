@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import java.util.Optional;
 
+import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
 
@@ -154,6 +155,30 @@ public class EventController {
 				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), HttpStatus.OK);
 	}
 
+	// id2 was used because Swagger does not allow two PATCH methods for the same
+	// path – even if they have different parameters (parameters have no effect on
+	// uniqueness)
+	@PatchMapping(path = "/{id2}", consumes = "application/merge-patch+json")
+	@ApiOperation(value = "Update Event fields using Json Merge Patch", notes = "Update Event fields using Json Merge Patch")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
+			@ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class) })
+	public ResponseEntity<EventModel> updateEventFields(
+			@ApiParam(value = "Id of the Event being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
+			@ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonMergePatch eventAsJsonMergePatch) {
+
+		EventNode eventNode = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		EventNode eventNodePatched = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+
+		violationHelper.violate(eventNodePatched, EventDTO.class);
+
+		eventNodePatched = eventService.save(eventNodePatched);
+
+		return new ResponseEntity<>((Optional.of(eventNodePatched)).map(eventModelAssembler::toModel)
+				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), HttpStatus.OK);
+	}
+	
 	@DeleteMapping(path = "/{id}")
 	@ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")
 	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully deleted Event", response = EventModel.class),
