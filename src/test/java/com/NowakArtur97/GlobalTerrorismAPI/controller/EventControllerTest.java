@@ -65,7 +65,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -111,12 +110,13 @@ class EventControllerTest {
 	class GetEventRequestTest {
 
 		@Test
-		void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events() {
+		void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events()
+				throws ParseException {
 
 			Long eventId1 = 1L;
 			String eventSummary1 = "summary1";
 			String eventMotive1 = "motive1";
-			Date eventDate1 = Calendar.getInstance().getTime();
+			Date eventDate1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents1 = true;
 			boolean isEventSuccessful1 = true;
 			boolean isEventSuicide1 = true;
@@ -144,7 +144,7 @@ class EventControllerTest {
 			Long eventId2 = 2L;
 			String eventSummary2 = "summary2";
 			String eventMotive2 = "motive2";
-			Date eventDate2 = Calendar.getInstance().getTime();
+			Date eventDate2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents2 = true;
 			boolean isEventSuccessful2 = true;
 			boolean isEventSuicide2 = true;
@@ -172,7 +172,7 @@ class EventControllerTest {
 			Long eventId3 = 3L;
 			String eventSummary3 = "summary3";
 			String eventMotive3 = "motive3";
-			Date eventDate3 = Calendar.getInstance().getTime();
+			Date eventDate3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents3 = true;
 			boolean isEventSuccessful3 = true;
 			boolean isEventSuicide3 = true;
@@ -200,7 +200,7 @@ class EventControllerTest {
 			Long eventId4 = 4L;
 			String eventSummary4 = "summary4";
 			String eventMotive4 = "motive4";
-			Date eventDate4 = Calendar.getInstance().getTime();
+			Date eventDate4 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents4 = true;
 			boolean isEventSuccessful4 = true;
 			boolean isEventSuicide4 = true;
@@ -339,12 +339,13 @@ class EventControllerTest {
 		}
 
 		@Test
-		void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events() {
+		void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events()
+				throws ParseException {
 
 			Long eventId1 = 1L;
 			String eventSummary1 = "summary1";
 			String eventMotive1 = "motive1";
-			Date eventDate1 = Calendar.getInstance().getTime();
+			Date eventDate1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents1 = true;
 			boolean isEventSuccessful1 = true;
 			boolean isEventSuicide1 = true;
@@ -372,7 +373,7 @@ class EventControllerTest {
 			Long eventId2 = 2L;
 			String eventSummary2 = "summary2";
 			String eventMotive2 = "motive2";
-			Date eventDate2 = Calendar.getInstance().getTime();
+			Date eventDate2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents2 = true;
 			boolean isEventSuccessful2 = true;
 			boolean isEventSuicide2 = true;
@@ -400,7 +401,7 @@ class EventControllerTest {
 			Long eventId3 = 3L;
 			String eventSummary3 = "summary3";
 			String eventMotive3 = "motive3";
-			Date eventDate3 = Calendar.getInstance().getTime();
+			Date eventDate3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents3 = true;
 			boolean isEventSuccessful3 = true;
 			boolean isEventSuicide3 = true;
@@ -428,7 +429,7 @@ class EventControllerTest {
 			Long eventId4 = 4L;
 			String eventSummary4 = "summary4";
 			String eventMotive4 = "motive4";
-			Date eventDate4 = Calendar.getInstance().getTime();
+			Date eventDate4 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents4 = true;
 			boolean isEventSuccessful4 = true;
 			boolean isEventSuicide4 = true;
@@ -619,13 +620,13 @@ class EventControllerTest {
 		}
 
 		@Test
-		void when_find_existing_event_should_return_event() {
+		void when_find_existing_event_should_return_event() throws ParseException {
 
 			Long eventId = 1L;
 
 			String eventSummary = "summary";
 			String eventMotive = "motive";
-			Date eventDate = Calendar.getInstance().getTime();
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents = true;
 			boolean isEventSuccessful = true;
 			boolean isEventSuicide = true;
@@ -678,13 +679,13 @@ class EventControllerTest {
 		}
 
 		@Test
-		void when_find_existing_event_without_target_should_return_event_withput_target() {
+		void when_find_existing_event_without_target_should_return_event_withput_target() throws ParseException {
 
 			Long eventId = 1L;
 
 			String eventSummary = "summary";
 			String eventMotive = "motive";
-			Date eventDate = Calendar.getInstance().getTime();
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents = true;
 			boolean isEventSuccessful = true;
 			boolean isEventSuicide = true;
@@ -848,11 +849,11 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_add_event_with_invalid_target_should_return_errors(String target) {
+		void when_add_event_with_invalid_target_should_return_errors(String target) throws ParseException {
 
 			String summary = "summary";
 			String motive = "motive";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -876,10 +877,10 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) {
+		void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) throws ParseException {
 
 			String motive = "motive";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -904,10 +905,10 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) {
+		void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) throws ParseException {
 
 			String summary = "summary";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -930,10 +931,9 @@ class EventControllerTest {
 		}
 
 		@Test
-		void when_add_event_with_date_in_the_future_should_return_errors() {
+		void when_add_event_with_date_in_the_future_should_return_errors() throws ParseException {
 
-			@SuppressWarnings("deprecation")
-			Date invalidEventDate = new Date(2099, 12, 31);
+			Date invalidEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2090 02:00:00:000");
 
 			String motive = "motive";
 			String summary = "summary";
@@ -1237,13 +1237,14 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_update_event_with_invalid_target_should_return_errors(String target) {
+		void when_update_event_with_invalid_target_should_return_errors(String target) throws ParseException {
 
 			Long eventId = 1L;
 
 			String summary = "summary";
 			String motive = "motive";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
+			;
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -1269,12 +1270,12 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_update_event_with_invalid_summary_should_return_errors(String invalidSummary) {
+		void when_update_event_with_invalid_summary_should_return_errors(String invalidSummary) throws ParseException {
 
 			Long eventId = 1L;
 
 			String motive = "motive";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -1301,12 +1302,12 @@ class EventControllerTest {
 		@ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " ", "\t", "\n" })
-		void when_update_event_with_invalid_motive_should_return_errors(String invalidMotive) {
+		void when_update_event_with_invalid_motive_should_return_errors(String invalidMotive) throws ParseException {
 
 			Long eventId = 1L;
 
 			String summary = "summary";
-			Date date = Calendar.getInstance().getTime();
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isPartOfMultipleIncidents = true;
 			boolean isSuccessful = true;
 			boolean isSuicide = true;
@@ -1369,13 +1370,13 @@ class EventControllerTest {
 	class DeleteEventRequestTest {
 
 		@Test
-		void when_delete_existing_event_should_return_event() {
+		void when_delete_existing_event_should_return_event() throws ParseException {
 
 			Long eventId = 1L;
 
 			String eventSummary = "summary";
 			String eventMotive = "motive";
-			Date eventDate = Calendar.getInstance().getTime();
+			Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
 			boolean isEventPartOfMultipleIncidents = true;
 			boolean isEventSuccessful = true;
 			boolean isEventSuicide = true;
