@@ -83,7 +83,11 @@ public class EventServiceImpl implements EventService {
 
 		if (eventNodeOptional.isPresent()) {
 
-			eventRepository.delete(eventNodeOptional.get());
+			EventNode eventNode = eventNodeOptional.get();
+
+			targetService.delete(eventNode.getTarget().getId());
+
+			eventRepository.delete(eventNode);
 		}
 
 		return eventNodeOptional;
