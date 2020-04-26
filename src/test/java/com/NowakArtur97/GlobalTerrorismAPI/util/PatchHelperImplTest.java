@@ -153,21 +153,15 @@ class PatchHelperImplTest {
 					.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
 					.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
 
-			JsonPatch eventAsJsonPatch = Json.createPatchBuilder()
-						.replace("/summary", updatedSummary)
-						.replace("/motive", updatedMotive)
-						.replace("/date", date.toString())
-						.replace("/isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-						.replace("/isSuccessful", updatedIsSuccessful)
-						.replace("/isSuicide", updatedIsSuicide)
-					.build();
+			JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/summary", updatedSummary)
+					.replace("/motive", updatedMotive).replace("/date", date.toString())
+					.replace("/isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
+					.replace("/isSuccessful", updatedIsSuccessful).replace("/isSuicide", updatedIsSuicide).build();
 
 			JsonStructure event = Json.createObjectBuilder().add("summary", updatedSummary).add("motive", updatedMotive)
 					.add("date", updatedDate.toString())
 					.add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-					.add("isSuccessful", updatedIsSuccessful)
-					.add("isSuicide", updatedIsSuicide)
-				.build();
+					.add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build();
 
 			JsonValue patched = eventAsJsonPatch.apply(event);
 
@@ -240,9 +234,7 @@ class PatchHelperImplTest {
 			JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/target/target", updatedTarget).build();
 
 			JsonStructure event = Json.createObjectBuilder()
-					.add("target", Json.createObjectBuilder()
-							.add("target", updatedTarget))
-					.build();
+					.add("target", Json.createObjectBuilder().add("target", updatedTarget)).build();
 
 			JsonValue patched = eventAsJsonPatch.apply(event);
 
@@ -281,6 +273,162 @@ class PatchHelperImplTest {
 							() -> "should return event node with target: " + eventNodeExpected.getTarget()
 									+ ", but was: " + eventNodeActual.getTarget()),
 					() -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
+					() -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
+					() -> verifyNoMoreInteractions(objectMapper));
+		}
+
+		@Test
+		void when_merge_patch_event_node_should_return_patched_event_node() throws ParseException {
+
+			Long eventId = 1L;
+
+			String summary = "summary";
+			String motive = "motive";
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetNode targetNode = new TargetNode(targetId, target);
+
+			String updatedSummary = "summary";
+			String updatedMotive = "motive";
+			Date updatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-02");
+			boolean updatedIsPartOfMultipleIncidents = true;
+			boolean updatedIsSuccessful = true;
+			boolean updatedIsSuicide = true;
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+
+			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+					.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+					.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
+
+			JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(Json.createObjectBuilder()
+					.add("summary", updatedSummary).add("motive", updatedMotive).add("date", date.toString())
+					.add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
+					.add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build());
+
+			JsonStructure event = Json.createObjectBuilder().add("summary", updatedSummary).add("motive", updatedMotive)
+					.add("date", updatedDate.toString())
+					.add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
+					.add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build();
+
+			JsonValue patched = eventAsJsonMergePatch.apply(event);
+
+			when(objectMapper.convertValue(eventNode, JsonValue.class)).thenReturn(event);
+			when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
+
+			EventNode eventNodeActual = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+
+			assertAll(
+					() -> assertEquals(eventNodeExpected.getId(), eventNodeActual.getId(),
+							() -> "should return event node with idd: " + eventNodeExpected.getId() + ", but was: "
+									+ eventNodeActual.getId()),
+					() -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+							() -> "should return event node with summary: " + eventNodeExpected.getSummary()
+									+ ", but was: " + eventNodeActual.getSummary()),
+					() -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+							() -> "should return event node with motive: " + eventNodeExpected.getMotive()
+									+ ", but was: " + eventNodeActual.getMotive()),
+					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+									+ eventNodeActual.getDate()),
+					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
+							eventNodeActual.isPartOfMultipleIncidents(),
+							() -> "should return event node which was part of multiple incidents: "
+									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.isPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
+							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
+									+ ", but was: " + eventNodeActual.isSuccessful()),
+					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
+									+ ", but was: " + eventNodeActual.isSuicide()),
+					() -> assertNotNull(eventNodeExpected.getTarget(),
+							() -> "should return event node with not null target, but was: null"),
+					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+							() -> "should return event node with target: " + eventNodeExpected.getTarget()
+									+ ", but was: " + eventNodeActual.getTarget()),
+					() -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
+					() -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
+					() -> verifyNoMoreInteractions(objectMapper));
+		}
+		
+		@Test
+		void when_merge_patch_event_nodes_target_should_return_event_node_with_patched_target() throws ParseException {
+
+			Long eventId = 1L;
+
+			String summary = "summary";
+			String motive = "motive";
+			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
+			boolean isPartOfMultipleIncidents = true;
+			boolean isSuccessful = true;
+			boolean isSuicide = true;
+
+			Long targetId = 1L;
+			String target = "target";
+			TargetNode targetNode = new TargetNode(targetId, target);
+
+			String updatedTarget = "updated target";
+			TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+
+			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).motive(motive).target(updatedTargetNode).build();
+
+			JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(
+					Json.createObjectBuilder().add("/target/target", updatedTarget).build());
+
+			JsonStructure event = Json.createObjectBuilder()
+					.add("target", Json.createObjectBuilder().add("target", updatedTarget)).build();
+
+			JsonValue patched = eventAsJsonMergePatch.apply(event);
+
+			when(objectMapper.convertValue(eventNode, JsonValue.class)).thenReturn(event);
+			when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
+
+			EventNode eventNodeActual = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+
+			assertAll(
+					() -> assertEquals(eventNodeExpected.getId(), eventNodeActual.getId(),
+							() -> "should return event node with idd: " + eventNodeExpected.getId() + ", but was: "
+									+ eventNodeActual.getId()),
+					() -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+							() -> "should return event node with summary: " + eventNodeExpected.getSummary()
+									+ ", but was: " + eventNodeActual.getSummary()),
+					() -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+							() -> "should return event node with motive: " + eventNodeExpected.getMotive()
+									+ ", but was: " + eventNodeActual.getMotive()),
+					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+									+ eventNodeActual.getDate()),
+					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
+							eventNodeActual.isPartOfMultipleIncidents(),
+							() -> "should return event node which was part of multiple incidents: "
+									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.isPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
+							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
+									+ ", but was: " + eventNodeActual.isSuccessful()),
+					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
+									+ ", but was: " + eventNodeActual.isSuicide()),
+					() -> assertNotNull(eventNodeExpected.getTarget(),
+							() -> "should return event node with not null target, but was: null"),
+					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+							() -> "should return event node with target: " + eventNodeExpected.getTarget()
+									+ ", but was: " + eventNodeActual.getTarget()),
+					() -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
 					() -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
 					() -> verifyNoMoreInteractions(objectMapper));
 		}
