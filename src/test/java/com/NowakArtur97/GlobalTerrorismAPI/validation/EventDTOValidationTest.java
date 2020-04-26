@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.ibm.icu.util.Calendar;
 
@@ -41,16 +42,19 @@ public class EventDTOValidationTest {
 	@Test
 	void when_event_dto_is_valid_should_not_have_violations() {
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		Date eventDate = Calendar.getInstance().getTime();
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		Date date = Calendar.getInstance().getTime();
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
-		EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary).motive(eventMotive)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).build();
+		String target = "target";
+		TargetDTO targetDTO = new TargetDTO(target);
+
+		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.target(targetDTO).build();
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -61,6 +65,8 @@ public class EventDTOValidationTest {
 	@Test
 	void when_event_dto_has_null_fields_should_have_violations() {
 
+		int expectedNumberOfViolations = 7;
+
 		String summary = null;
 		String motive = null;
 		Date date = null;
@@ -68,15 +74,44 @@ public class EventDTOValidationTest {
 		Boolean isSuccessful = null;
 		Boolean isSuicide = null;
 
+		TargetDTO targetDTO = null;
+
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.build();
+				.target(targetDTO).build();
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
-		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violations, but haven't"),
-				() -> assertEquals(6, violations.size(),
-						() -> "should have six violations, but have: " + violations.size()));
+		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"),
+				() -> assertEquals(expectedNumberOfViolations, violations.size(), () -> "should have: "
+						+ expectedNumberOfViolations + " violation, but have: " + violations.size()));
+	}
+
+	@ParameterizedTest(name = "{index}: For Event target: {0} should have violation")
+	@NullAndEmptySource
+	@ValueSource(strings = { " ", "\t", "\n" })
+	void when_event_dto_has_invalid_target_should_have_violations(String invalidTarget) {
+
+		int expectedNumberOfViolations = 1;
+
+		String motive = "motive";
+		String summary = "sumamry";
+		Date date = Calendar.getInstance().getTime();
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		TargetDTO targetDTO = new TargetDTO(invalidTarget);
+
+		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.target(targetDTO).build();
+
+		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
+
+		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"),
+				() -> assertEquals(expectedNumberOfViolations, violations.size(), () -> "should have: "
+						+ expectedNumberOfViolations + " violation, but have: " + violations.size()));
 	}
 
 	@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
@@ -84,21 +119,26 @@ public class EventDTOValidationTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	void when_event_dto_has_invalid_summary_should_have_violations(String invalidSummary) {
 
+		int expectedNumberOfViolations = 1;
+
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
 		boolean isPartOfMultipleIncidents = true;
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
 
+		String target = "target";
+		TargetDTO targetDTO = new TargetDTO(target);
+
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(invalidSummary).motive(motive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.build();
+				.target(targetDTO).build();
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
 		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"),
-				() -> assertEquals(1, violations.size(),
-						() -> "should have one violation, but have: " + violations.size()));
+				() -> assertEquals(expectedNumberOfViolations, violations.size(), () -> "should have: "
+						+ expectedNumberOfViolations + " violation, but have: " + violations.size()));
 	}
 
 	@ParameterizedTest(name = "{index}: For motive: {0} should have violation")
@@ -106,25 +146,32 @@ public class EventDTOValidationTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	void when_event_dto_has_invalid_motive_should_have_violations(String invalidMotive) {
 
+		int expectedNumberOfViolations = 1;
+
 		String summary = "summary";
 		Date date = Calendar.getInstance().getTime();
 		boolean isPartOfMultipleIncidents = true;
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
 
+		String target = "target";
+		TargetDTO targetDTO = new TargetDTO(target);
+
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(invalidMotive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.build();
+				.target(targetDTO).build();
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
 		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"),
-				() -> assertEquals(1, violations.size(),
-						() -> "should have one violation, but have: " + violations.size()));
+				() -> assertEquals(expectedNumberOfViolations, violations.size(), () -> "should have: "
+						+ expectedNumberOfViolations + " violation, but have: " + violations.size()));
 	}
 
 	@Test
 	void when_event_dto_has_date_in_the_future_should_have_violation() {
+
+		int expectedNumberOfViolations = 1;
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(2090, 1, 1);
@@ -136,14 +183,17 @@ public class EventDTOValidationTest {
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
 
+		String target = "target";
+		TargetDTO targetDTO = new TargetDTO(target);
+
 		EventDTO eventDTO = EventDTO.builder().date(invalidDate).summary(summary).motive(motive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.build();
+				.target(targetDTO).build();
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
 		assertAll(() -> assertFalse(violations.isEmpty(), () -> "should have violation, but haven't"),
-				() -> assertEquals(1, violations.size(),
-						() -> "should have one violation, but have: " + violations.size()));
+				() -> assertEquals(expectedNumberOfViolations, violations.size(), () -> "should have: "
+						+ expectedNumberOfViolations + " violation, but have: " + violations.size()));
 	}
 }
