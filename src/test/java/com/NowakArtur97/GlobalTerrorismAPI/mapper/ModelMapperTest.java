@@ -60,7 +60,7 @@ class ModelMapperTest {
 		TargetDTO targetDTOActual = modelMapper.map(targetNodeExpected, TargetDTO.class);
 
 		assertAll(() -> assertEquals(targetNodeExpected.getTarget(), targetDTOActual.getTarget(),
-				() -> "should return target node with target: " + targetDTOActual.getTarget() + ", but was: "
+				() -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
 						+ targetNodeExpected.getTarget()));
 	}
 
@@ -136,30 +136,30 @@ class ModelMapperTest {
 
 		assertAll(
 				() -> assertNull(eventNodeActual.getId(),
-						() -> "should return event node with id as null, but was: " + eventNodeActual.getId()),
+						() -> "should return event dto with id as null, but was: " + eventNodeActual.getId()),
 				() -> assertEquals(eventDTO.getSummary(), eventNodeActual.getSummary(),
-						() -> "should return event node with summary: " + eventDTO.getSummary() + ", but was: "
+						() -> "should return event dto with summary: " + eventDTO.getSummary() + ", but was: "
 								+ eventNodeActual.getSummary()),
 				() -> assertEquals(eventDTO.getMotive(), eventNodeActual.getMotive(),
-						() -> "should return event node with motive: " + eventDTO.getMotive() + ", but was: "
+						() -> "should return event dto with motive: " + eventDTO.getMotive() + ", but was: "
 								+ eventNodeActual.getMotive()),
 				() -> assertEquals(eventDTO.getDate(), eventNodeActual.getDate(),
-						() -> "should return event node with date: " + eventDTO.getDate() + ", but was: "
+						() -> "should return event dto with date: " + eventDTO.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
 				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.isPartOfMultipleIncidents(),
-						() -> "should return event node which was part of multiple incidents: "
+						() -> "should return event dto which was part of multiple incidents: "
 								+ eventDTO.getIsPartOfMultipleIncidents() + ", but was: "
 								+ eventNodeActual.isPartOfMultipleIncidents()),
 				() -> assertEquals(eventDTO.getIsSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventDTO.getIsSuccessful()
+						() -> "should return event dto which was successful: " + eventDTO.getIsSuccessful()
 								+ ", but was: " + eventNodeActual.isSuccessful()),
 				() -> assertEquals(eventDTO.getIsSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventDTO.getIsSuicide() + ", but was: "
+						() -> "should return event dto which was suicide: " + eventDTO.getIsSuicide() + ", but was: "
 								+ eventNodeActual.isSuicide()),
 				() -> assertNotNull(eventDTO.getTarget(),
-						() -> "should return event node with not null target, but was: null"),
+						() -> "should return event dto with not null target, but was: null"),
 				() -> assertEquals(eventDTO.getTarget().getTarget(), eventNodeActual.getTarget().getTarget(),
-						() -> "should return event node with target: " + eventDTO.getTarget().getTarget()
-								+ ", but was: " + eventNodeActual.getTarget().getTarget()));
+						() -> "should return event dto with target: " + eventDTO.getTarget().getTarget() + ", but was: "
+								+ eventNodeActual.getTarget().getTarget()));
 	}
 }
