@@ -4,6 +4,9 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -11,6 +14,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.json.JsonPatch;
+
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -38,6 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -50,6 +57,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -58,12 +66,17 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExcept
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -90,18 +103,25 @@ class EventControllerTest {
 	@Mock
 	private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
 
+	@Mock
+	private PatchHelper patchHelper;
+
+	@Mock
+	private ViolationHelper violationHelper;
+
 	@BeforeEach
 	private void setUp() {
 
-		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler);
+		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler, patchHelper,
+				violationHelper);
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
 		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler)
 				.setControllerAdvice(new EventControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-//				.setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
-//						new MappingJackson2HttpMessageConverter())
+				.setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
+						new MappingJackson2HttpMessageConverter())
 				.build();
 	}
 
@@ -1362,6 +1382,111 @@ class EventControllerTest {
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
 					() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler));
+		}
+	}
+
+	@Nested
+	@Tag("PatchEventRequest_Tests")
+	class PatchEventRequestTest {
+
+		@Test
+		void when_partial_update_valid_event_using_json_patch_should_return_partially_updated_node()
+				throws ParseException {
+
+			Long eventId = 1L;
+
+			String eventSummary = "summary";
+			String eventMotive = "motive";
+			String eventDateString = "2000-08-05";
+			Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateString);
+			boolean isEventPartOfMultipleIncidents = true;
+			boolean isEventSuccessful = true;
+			boolean isEventSuicide = true;
+
+			String updatedEventSummary = "summary updated";
+			String updatedEventMotive = "motive updated";
+			String updatedEventDateString = "2001-08-05";
+			Date updatedEventDate = new SimpleDateFormat("yyyy-MM-dd").parse(updatedEventDateString);
+			boolean updatedIsEventPartOfMultipleIncidents = false;
+			boolean updatedIsEventSuccessful = false;
+			boolean updatedIsEventSuicide = false;
+
+			Long targetId = 1L;
+			String target = "target";
+			String updatedTarget = "updated target";
+			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
+			TargetModel targetModel = new TargetModel(targetId, updatedTarget);
+
+			String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+			Link targetLink = new Link(pathToTargetLink);
+			targetModel.add(targetLink);
+
+			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
+					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
+					.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+
+			EventNode updatedEventNode = EventNode.builder().id(eventId).date(updatedEventDate)
+					.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(updatedTargetNode).build();
+
+			EventModel eventModel = EventModel.builder().id(eventId).date(updatedEventDate).summary(updatedEventSummary)
+					.isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
+					.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+					.target(targetModel).build();
+
+			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+			Link eventLink = new Link(pathToEventLink);
+			eventModel.add(eventLink);
+
+			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+			when(patchHelper.patch(any(JsonPatch.class), eq(eventNode), ArgumentMatchers.<Class<EventNode>>any()))
+					.thenReturn(updatedEventNode);
+			doNothing().when(violationHelper).violate(updatedEventNode, EventDTO.class);
+			when(eventService.save(updatedEventNode)).thenReturn(updatedEventNode);
+			when(eventModelAssembler.toModel(updatedEventNode)).thenReturn(eventModel);
+
+			String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \""
+					+ updatedEventSummary + "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \""
+					+ updatedEventMotive + "\" }," + "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \""
+					+ updatedEventDateString + "\" },"
+					+ "{ \"op\": \"replace\", \"path\": \"/partOfMultipleIncidents\", \"value\": \""
+					+ updatedIsEventPartOfMultipleIncidents + "\" },"
+					+ "{ \"op\": \"replace\", \"path\": \"/successful\", \"value\": \"" + updatedIsEventSuccessful
+					+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/suicide\", \"value\": \"" + updatedIsEventSuicide
+					+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget
+					+ "\" }" + "]";
+
+			assertAll(
+					() -> mockMvc
+							.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+									.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+							.andExpect(status().isOk())
+							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+							.andExpect(jsonPath("id", is(eventId.intValue())))
+							.andExpect(jsonPath("summary", is(updatedEventSummary)))
+							.andExpect(jsonPath("motive", is(updatedEventMotive)))
+							.andExpect(jsonPath("date", is(notNullValue())))
+							.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
+							.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
+							.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+							.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+							.andExpect(jsonPath("target.id", is(targetId.intValue())))
+							.andExpect(jsonPath("target.target", is(updatedTarget))),
+					() -> verify(eventService, times(1)).findById(eventId),
+					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(eventNode),
+							ArgumentMatchers.<Class<EventNode>>any()),
+					() -> verifyNoMoreInteractions(patchHelper),
+					() -> verify(violationHelper, times(1)).violate(updatedEventNode, EventDTO.class),
+					() -> verifyNoMoreInteractions(violationHelper),
+					() -> verify(eventService, times(1)).save(updatedEventNode),
+					() -> verifyNoMoreInteractions(eventService),
+					() -> verify(eventModelAssembler, times(1)).toModel(updatedEventNode),
+					() -> verifyNoMoreInteractions(eventModelAssembler));
 		}
 	}
 
