@@ -29,14 +29,12 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
@@ -89,9 +87,7 @@ public class EventControllerPutMethodTest {
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
-		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler)
-				.setControllerAdvice(new EventControllerAdvice())
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler).build();
 	}
 
 	@Test
