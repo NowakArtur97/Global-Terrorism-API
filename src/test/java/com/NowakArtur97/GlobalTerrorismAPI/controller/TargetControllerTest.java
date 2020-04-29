@@ -634,7 +634,7 @@ class TargetControllerTest {
 		}
 
 		@Test
-		void when_partial_update_valid_target_usingjson_merge_patch_should_return_partially_updated_node() {
+		void when_partial_update_valid_target_using_json_merge_patch_should_return_partially_updated_node() {
 
 			Long targetId = 1L;
 			String oldTargetName = "target";
