@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
@@ -34,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
@@ -58,8 +56,6 @@ public class EventControllerDeleteMethodTest {
 
 	private EventController eventController;
 
-	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
 	@Mock
 	private EventService eventService;
 
@@ -81,11 +77,8 @@ public class EventControllerDeleteMethodTest {
 		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler, patchHelper,
 				violationHelper);
 
-		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
-
-		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler)
-				.setControllerAdvice(new EventControllerAdvice())
-				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
+				.build();
 	}
 
 	@Test
