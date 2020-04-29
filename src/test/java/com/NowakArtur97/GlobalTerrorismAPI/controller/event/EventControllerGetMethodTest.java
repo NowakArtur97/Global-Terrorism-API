@@ -43,7 +43,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
@@ -67,8 +66,6 @@ public class EventControllerGetMethodTest {
 
 	private EventController eventController;
 
-	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
 	@Mock
 	private EventService eventService;
 
@@ -90,10 +87,7 @@ public class EventControllerGetMethodTest {
 		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler, patchHelper,
 				violationHelper);
 
-		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
-
-		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler)
-				.setControllerAdvice(new EventControllerAdvice())
+		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 	}
 
