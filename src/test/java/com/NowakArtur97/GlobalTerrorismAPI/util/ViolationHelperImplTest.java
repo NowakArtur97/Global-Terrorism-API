@@ -129,7 +129,7 @@ class ViolationHelperImplTest {
 		when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
 		assertAll(
-				() -> assertDoesNotThrow(() -> violationHelper.violate(eventDTO, EventDTO.class),
+				() -> assertDoesNotThrow(() -> violationHelper.violate(eventNode, EventDTO.class),
 						() -> "should not throw Constraint Violation Exception, but was thrown"),
 				() -> verify(dtoMapper, times(1)).mapToDTO(eventNode, EventDTO.class),
 				() -> verifyNoMoreInteractions(dtoMapper), () -> verify(validator, times(1)).validate(eventDTO),
@@ -168,7 +168,7 @@ class ViolationHelperImplTest {
 		when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
 		assertAll(
-				() -> assertThrows(expectedException, () -> violationHelper.violate(eventDTO, EventDTO.class),
+				() -> assertThrows(expectedException, () -> violationHelper.violate(eventNode, EventDTO.class),
 						() -> "should throw Constraint Violation Exception, but nothing was thrown"),
 				() -> verify(dtoMapper, times(1)).mapToDTO(eventNode, EventDTO.class),
 				() -> verifyNoMoreInteractions(dtoMapper), () -> verify(validator, times(1)).validate(eventDTO),
