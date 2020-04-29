@@ -35,12 +35,11 @@ The demo will be available soon...
 
 ## Features
 - Target (GET, POST, PUT, PATCH, DELETE)
-- Event (GET, POST, PUT, DELETE)
+- Event (GET, POST, PUT, PATCH, DELETE)
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 
 ## To Do
-- Target (PATCH)
 - JWT support
 
 ## Status
