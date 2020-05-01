@@ -189,7 +189,8 @@ class EventControllerPatchMethodTest {
 				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
 				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler));
+				() -> verifyNoMoreInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
@@ -319,6 +320,7 @@ class EventControllerPatchMethodTest {
 				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
 				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler));
+				() -> verifyNoMoreInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 }

@@ -135,7 +135,8 @@ public class EventControllerDeleteMethodTest {
 						.andExpect(jsonPath("target.target", is(target))),
 				() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
-				() -> verifyNoMoreInteractions(eventModelAssembler));
+				() -> verifyNoMoreInteractions(eventModelAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
 	@Test
@@ -153,6 +154,7 @@ public class EventControllerDeleteMethodTest {
 						.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
 						.andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
 				() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
-				() -> verifyNoInteractions(eventModelAssembler));
+				() -> verifyNoInteractions(eventModelAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 }
