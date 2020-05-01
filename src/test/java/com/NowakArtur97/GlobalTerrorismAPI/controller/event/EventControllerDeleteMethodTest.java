@@ -24,6 +24,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -116,7 +117,7 @@ public class EventControllerDeleteMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
-		when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isOk())

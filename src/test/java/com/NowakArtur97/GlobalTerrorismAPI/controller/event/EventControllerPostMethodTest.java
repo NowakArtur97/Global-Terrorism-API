@@ -147,7 +147,7 @@ public class EventControllerPostMethodTest {
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
-				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
+				() -> verify(eventService, times(1)).saveNew(eventDTO),
 				() -> verifyNoMoreInteractions(eventService),
 				() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
 				() -> verifyNoMoreInteractions(eventModelAssembler));

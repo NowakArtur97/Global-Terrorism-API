@@ -153,10 +153,10 @@ class EventControllerPatchMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(patchHelper.patch(any(JsonPatch.class), eq(eventNode), ArgumentMatchers.<Class<EventNode>>any()))
-				.thenReturn(updatedEventNode);
-		when(eventService.save(updatedEventNode)).thenReturn(updatedEventNode);
-		when(eventModelAssembler.toModel(updatedEventNode)).thenReturn(eventModel);
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+		when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedEventSummary
 				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedEventMotive + "\" },"
@@ -225,8 +225,8 @@ class EventControllerPatchMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(patchHelper.patch(any(JsonPatch.class), eq(eventNode), ArgumentMatchers.<Class<EventNode>>any()))
-				.thenReturn(updatedEventNode);
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
 
 		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget
 				+ "\" }]";
@@ -289,10 +289,10 @@ class EventControllerPatchMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(patchHelper.patch(any(JsonPatch.class), eq(eventNode), ArgumentMatchers.<Class<EventNode>>any()))
-				.thenReturn(updatedEventNode);
-		when(eventService.save(updatedEventNode)).thenReturn(updatedEventNode);
-		when(eventModelAssembler.toModel(updatedEventNode)).thenReturn(eventModel);
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+		when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget
 				+ "\" }]";
