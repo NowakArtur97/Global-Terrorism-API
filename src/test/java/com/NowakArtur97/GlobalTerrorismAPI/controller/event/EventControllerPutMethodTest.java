@@ -69,7 +69,7 @@ public class EventControllerPutMethodTest {
 	private EventService eventService;
 
 	@Mock
-	private EventModelAssembler eventModelAssembler;
+	private EventModelAssembler modelAssembler;
 
 	@Mock
 	private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
@@ -83,7 +83,7 @@ public class EventControllerPutMethodTest {
 	@BeforeEach
 	private void setUp() {
 
-		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler, patchHelper,
+		eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
 				violationHelper);
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
@@ -96,19 +96,19 @@ public class EventControllerPutMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
-		String updatedEventSummary = "summary updated";
-		String updatedEventMotive = "motive updated";
-		Date updatedEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
-		boolean updatedIsEventPartOfMultipleIncidents = false;
-		boolean updatedIsEventSuccessful = false;
-		boolean updatedIsEventSuicide = false;
+		String updatedSummary = "summary updated";
+		String updatedMotive = "motive updated";
+		Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+		boolean updatedIsPartOfMultipleIncidents = false;
+		boolean updatedIsSuccessful = false;
+		boolean updatedIsSuicide = false;
 
 		Long targetId = 1L;
 		String target = "target";
@@ -120,33 +120,33 @@ public class EventControllerPutMethodTest {
 		Link targetLink = new Link(pathToTargetLink);
 		targetModel.add(targetLink);
 
-		EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
 
-		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedEventDate).summary(updatedEventSummary)
-				.isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents).isSuccessful(updatedIsEventSuccessful)
-				.isSuicide(updatedIsEventSuicide).motive(updatedEventMotive).target(targetNode).build();
+		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
 
-		EventModel eventModelUpdated = EventModel.builder().id(eventId).date(updatedEventDate)
-				.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
-				.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate)
+				.summary(updatedSummary).isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
+				.isSuccessful(updatedIsSuccessful).isSuicide(updatedIsSuicide).motive(updatedMotive)
 				.target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		eventModelUpdated.add(eventLink);
+		modelUpdated.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
 				.thenReturn(eventNodeUpdated);
-		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(modelUpdated);
 
 		assertAll(
 				() -> mockMvc
@@ -156,12 +156,12 @@ public class EventControllerPutMethodTest {
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(updatedEventSummary)))
-						.andExpect(jsonPath("motive", is(updatedEventMotive)))
+						.andExpect(jsonPath("summary", is(updatedSummary)))
+						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
@@ -169,8 +169,8 @@ public class EventControllerPutMethodTest {
 				() -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
@@ -180,19 +180,19 @@ public class EventControllerPutMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
-		String updatedEventSummary = "summary updated";
-		String updatedEventMotive = "motive updated";
-		Date updatedEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
-		boolean updatedIsEventPartOfMultipleIncidents = false;
-		boolean updatedIsEventSuccessful = false;
-		boolean updatedIsEventSuicide = false;
+		String updatedSummary = "summary updated";
+		String updatedMotive = "motive updated";
+		Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+		boolean updatedIsPartOfMultipleIncidents = false;
+		boolean updatedIsSuccessful = false;
+		boolean updatedIsSuicide = false;
 
 		Long targetId = 1L;
 		String target = "target";
@@ -208,33 +208,33 @@ public class EventControllerPutMethodTest {
 		targetModel.add(targetLink);
 		targetModelUpdated.add(targetLink);
 
-		EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
 
-		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedEventDate).summary(updatedEventSummary)
-				.isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents).isSuccessful(updatedIsEventSuccessful)
-				.isSuicide(updatedIsEventSuicide).motive(updatedEventMotive).target(targetNodeUpdated).build();
+		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNodeUpdated).build();
 
-		EventModel eventModelUpdated = EventModel.builder().id(eventId).date(updatedEventDate)
-				.summary(updatedEventSummary).isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents)
-				.isSuccessful(updatedIsEventSuccessful).isSuicide(updatedIsEventSuicide).motive(updatedEventMotive)
+		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate)
+				.summary(updatedSummary).isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
+				.isSuccessful(updatedIsSuccessful).isSuicide(updatedIsSuicide).motive(updatedMotive)
 				.target(targetModelUpdated).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		eventModelUpdated.add(eventLink);
+		modelUpdated.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
 				.thenReturn(eventNodeUpdated);
-		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(modelUpdated);
 
 		assertAll(
 				() -> mockMvc
@@ -244,12 +244,12 @@ public class EventControllerPutMethodTest {
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(updatedEventSummary)))
-						.andExpect(jsonPath("motive", is(updatedEventMotive)))
+						.andExpect(jsonPath("summary", is(updatedSummary)))
+						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
@@ -257,8 +257,8 @@ public class EventControllerPutMethodTest {
 				() -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
@@ -267,12 +267,12 @@ public class EventControllerPutMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		Date eventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
 		Long targetId = 1L;
 		String target = "target";
@@ -284,27 +284,27 @@ public class EventControllerPutMethodTest {
 		Link targetLink = new Link(pathToTargetLink);
 		targetModel.add(targetLink);
 
-		EventDTO eventDTO = EventDTO.builder().date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetDTO).build();
+		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
 
-		EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetModel).build();
+		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+				.isSuicide(isSuicide).motive(motive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		eventModel.add(eventLink);
+		model.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.empty());
 		when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
-		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(model);
 
 		assertAll(
 				() -> mockMvc
@@ -314,19 +314,19 @@ public class EventControllerPutMethodTest {
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(eventSummary))).andExpect(jsonPath("motive", is(eventMotive)))
+						.andExpect(jsonPath("summary", is(summary))).andExpect(jsonPath("motive", is(motive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(isEventSuicide)))
-						.andExpect(jsonPath("successful", is(isEventSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+						.andExpect(jsonPath("suicide", is(isSuicide)))
+						.andExpect(jsonPath("successful", is(isSuccessful)))
+						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
 				() -> verify(eventService, times(1)).findById(eventId),
 				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
@@ -363,7 +363,7 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
 						.andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
 						.andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}"))),
-				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
@@ -397,7 +397,7 @@ public class EventControllerPutMethodTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
@@ -431,7 +431,7 @@ public class EventControllerPutMethodTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
-				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
@@ -465,7 +465,7 @@ public class EventControllerPutMethodTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
-				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
@@ -500,7 +500,7 @@ public class EventControllerPutMethodTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
-				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}

@@ -78,7 +78,7 @@ class EventControllerPatchMethodTest {
 	private EventService eventService;
 
 	@Mock
-	private EventModelAssembler eventModelAssembler;
+	private EventModelAssembler modelAssembler;
 
 	@Mock
 	private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
@@ -92,7 +92,7 @@ class EventControllerPatchMethodTest {
 	@BeforeEach
 	private void setUp() {
 
-		eventController = new EventController(eventService, eventModelAssembler, pagedResourcesAssembler, patchHelper,
+		eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
 				violationHelper);
 
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
@@ -108,21 +108,21 @@ class EventControllerPatchMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		String eventDateString = "2000-08-05";
-		Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateString);
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
-		String updatedEventSummary = "summary updated";
-		String updatedEventMotive = "motive updated";
+		String updatedSummary = "summary updated";
+		String updatedMotive = "motive updated";
 		String updatedEventDateString = "2001-08-05";
 		Date updatedEventDate = new SimpleDateFormat("yyyy-MM-dd").parse(updatedEventDateString);
-		boolean updatedIsEventPartOfMultipleIncidents = false;
-		boolean updatedIsEventSuccessful = false;
-		boolean updatedIsEventSuicide = false;
+		boolean updatedIsPartOfMultipleIncidents = false;
+		boolean updatedIsSuccessful = false;
+		boolean updatedIsSuicide = false;
 
 		Long targetId = 1L;
 		String target = "target";
@@ -133,21 +133,21 @@ class EventControllerPatchMethodTest {
 		Link targetLink = new Link(pathToTargetLink);
 		targetModel.add(targetLink);
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
-		EventNode updatedEventNode = EventNode.builder().id(eventId).date(updatedEventDate).summary(updatedEventSummary)
-				.isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents).isSuccessful(updatedIsEventSuccessful)
-				.isSuicide(updatedIsEventSuicide).motive(updatedEventMotive).target(targetNode).build();
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(updatedEventDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
 
-		EventModel eventModel = EventModel.builder().id(eventId).date(updatedEventDate).summary(updatedEventSummary)
-				.isPartOfMultipleIncidents(updatedIsEventPartOfMultipleIncidents).isSuccessful(updatedIsEventSuccessful)
-				.isSuicide(updatedIsEventSuicide).motive(updatedEventMotive).target(targetModel).build();
+		EventModel model = EventModel.builder().id(eventId).date(updatedEventDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		eventModel.add(eventLink);
+		model.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -155,15 +155,15 @@ class EventControllerPatchMethodTest {
 		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
 		when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
-		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(model);
 
-		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedEventSummary
-				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedEventMotive + "\" },"
+		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
+				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
 				+ "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedEventDateString + "\" },"
 				+ "{ \"op\": \"replace\", \"path\": \"/partOfMultipleIncidents\", \"value\": \""
-				+ updatedIsEventPartOfMultipleIncidents + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/successful\", \"value\": \"" + updatedIsEventSuccessful + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/suicide\", \"value\": \"" + updatedIsEventSuicide + "\" }" + "]";
+				+ updatedIsPartOfMultipleIncidents + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/successful\", \"value\": \"" + updatedIsSuccessful + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/suicide\", \"value\": \"" + updatedIsSuicide + "\" }" + "]";
 
 		assertAll(
 				() -> mockMvc
@@ -173,12 +173,12 @@ class EventControllerPatchMethodTest {
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(updatedEventSummary)))
-						.andExpect(jsonPath("motive", is(updatedEventMotive)))
+						.andExpect(jsonPath("summary", is(updatedSummary)))
+						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsEventSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsEventSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsEventPartOfMultipleIncidents)))
+						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
@@ -188,9 +188,8 @@ class EventControllerPatchMethodTest {
 				() -> verifyNoMoreInteractions(patchHelper),
 				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler));
+				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
@@ -201,26 +200,26 @@ class EventControllerPatchMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		String eventDateString = "2000-08-05";
-		Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateString);
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
 		Long targetId = 1L;
 		String target = "target";
 		TargetNode targetNode = new TargetNode(targetId, target);
 		TargetNode updatedTargetNode = new TargetNode(targetId, invalidTarget);
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
-		EventNode updatedEventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(updatedTargetNode).build();
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(updatedTargetNode).build();
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -241,7 +240,7 @@ class EventControllerPatchMethodTest {
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.<Class<EventNode>>any()),
-				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoInteractions(eventModelAssembler),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoInteractions(modelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
@@ -251,13 +250,13 @@ class EventControllerPatchMethodTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		String eventDateString = "2000-08-05";
-		Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateString);
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
 		Long targetId = 1L;
 		String target = "target";
@@ -270,21 +269,21 @@ class EventControllerPatchMethodTest {
 		Link targetLink = new Link(pathToTargetLink);
 		targetModel.add(targetLink);
 
-		EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetNode).build();
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
-		EventNode updatedEventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(updatedTargetNode).build();
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(updatedTargetNode).build();
 
-		EventModel eventModel = EventModel.builder().id(eventId).date(eventDate).summary(eventSummary)
-				.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-				.isSuicide(isEventSuicide).motive(eventMotive).target(targetModel).build();
+		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		eventModel.add(eventLink);
+		model.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -292,7 +291,7 @@ class EventControllerPatchMethodTest {
 		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
 		when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
-		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(model);
 
 		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget
 				+ "\" }]";
@@ -304,12 +303,11 @@ class EventControllerPatchMethodTest {
 						.andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(eventSummary))).andExpect(jsonPath("motive", is(eventMotive)))
-						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(isEventSuicide)))
-						.andExpect(jsonPath("successful", is(isEventSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isEventPartOfMultipleIncidents)))
+						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
+						.andExpect(jsonPath("motive", is(motive))).andExpect(jsonPath("date", is(notNullValue())))
+						.andExpect(jsonPath("suicide", is(isSuicide)))
+						.andExpect(jsonPath("successful", is(isSuccessful)))
+						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
@@ -319,8 +317,59 @@ class EventControllerPatchMethodTest {
 				() -> verifyNoMoreInteractions(patchHelper),
 				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-				() -> verifyNoMoreInteractions(eventModelAssembler),
+				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler));
+	}
+
+	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+	@NullAndEmptySource
+	@ValueSource(strings = { " " })
+	void when_partial_update_invalid_events_target_using_json_patch_should_should_return_errors(String invalidTarget)
+			throws ParseException {
+
+		Long eventId = 1L;
+
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		Long targetId = 1L;
+		String target = "target";
+		TargetNode targetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, invalidTarget);
+
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
+
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(updatedTargetNode).build();
+
+		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+
+		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget
+				+ "\" }]";
+
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.<Class<EventNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 }

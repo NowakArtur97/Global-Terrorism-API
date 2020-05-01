@@ -257,12 +257,12 @@ class EventPagedResourcesAssemblerTest {
 
 		Long eventId = 1L;
 
-		String eventSummary = "summary";
-		String eventMotive = "motive";
-		Date eventDate = Calendar.getInstance().getTime();
-		boolean isEventPartOfMultipleIncidents = true;
-		boolean isEventSuccessful = true;
-		boolean isEventSuicide = true;
+		String summary = "summary";
+		String motive = "motive";
+		Date date = Calendar.getInstance().getTime();
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
 
 		List<EventNode> eventsListExpected = new ArrayList<>();
 
@@ -272,9 +272,9 @@ class EventPagedResourcesAssemblerTest {
 
 			TargetNode target = new TargetNode(eventId, "target" + eventId);
 
-			EventNode eventNode = EventNode.builder().id(eventId).date(eventDate).summary(eventSummary)
-					.isPartOfMultipleIncidents(isEventPartOfMultipleIncidents).isSuccessful(isEventSuccessful)
-					.isSuicide(isEventSuicide).motive(eventMotive).target(target).build();
+			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+					.isSuicide(isSuicide).motive(motive).target(target).build();
 
 			eventsListExpected.add(eventNode);
 
