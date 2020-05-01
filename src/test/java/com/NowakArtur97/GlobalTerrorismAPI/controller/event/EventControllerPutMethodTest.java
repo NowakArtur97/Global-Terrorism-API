@@ -23,8 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -56,7 +54,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-@DisabledOnOs(OS.LINUX)
 public class EventControllerPutMethodTest {
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
@@ -147,7 +144,8 @@ public class EventControllerPutMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNodeUpdated);
+		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
+				.thenReturn(eventNodeUpdated);
 		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
 
 		assertAll(
@@ -168,9 +166,10 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
 				() -> verify(eventService, times(1)).findById(eventId),
-				() -> verify(eventService, times(1)).update(eventNode, eventDTO),
+				() -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(eventNodeUpdated),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 
@@ -232,7 +231,8 @@ public class EventControllerPutMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNodeUpdated);
+		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
+				.thenReturn(eventNodeUpdated);
 		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
 
 		assertAll(
@@ -253,9 +253,10 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
 				() -> verify(eventService, times(1)).findById(eventId),
-				() -> verify(eventService, times(1)).update(eventNode, eventDTO),
+				() -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(eventNodeUpdated),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 
@@ -320,8 +321,9 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
 				() -> verify(eventService, times(1)).findById(eventId),
-				() -> verify(eventService, times(1)).saveNew(eventDTO), () -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
+				() -> verifyNoMoreInteractions(eventService),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 

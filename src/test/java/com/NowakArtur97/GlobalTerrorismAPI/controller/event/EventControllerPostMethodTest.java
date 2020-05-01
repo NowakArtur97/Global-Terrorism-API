@@ -129,7 +129,7 @@ public class EventControllerPostMethodTest {
 		eventModel.add(eventLink);
 
 		when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
-		when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc
@@ -147,9 +147,9 @@ public class EventControllerPostMethodTest {
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
-				() -> verify(eventService, times(1)).saveNew(eventDTO),
+				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 

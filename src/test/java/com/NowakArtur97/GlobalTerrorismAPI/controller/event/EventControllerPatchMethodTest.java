@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -26,8 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -63,7 +60,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-@DisabledOnOs(OS.LINUX)
 class EventControllerPatchMethodTest {
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
@@ -184,12 +180,12 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
 				() -> verify(eventService, times(1)).findById(eventId),
-				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(eventNode),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.<Class<EventNode>>any()),
 				() -> verifyNoMoreInteractions(patchHelper),
-				() -> verify(eventService, times(1)).save(updatedEventNode),
+				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(updatedEventNode),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 
@@ -239,7 +235,7 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
-				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(eventNode),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.<Class<EventNode>>any()),
 				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoInteractions(eventModelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
@@ -314,12 +310,12 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
 				() -> verify(eventService, times(1)).findById(eventId),
-				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(eventNode),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.<Class<EventNode>>any()),
 				() -> verifyNoMoreInteractions(patchHelper),
-				() -> verify(eventService, times(1)).save(updatedEventNode),
+				() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventService),
-				() -> verify(eventModelAssembler, times(1)).toModel(updatedEventNode),
+				() -> verify(eventModelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
 }
