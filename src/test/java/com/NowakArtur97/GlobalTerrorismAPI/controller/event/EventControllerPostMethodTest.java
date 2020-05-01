@@ -26,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -127,7 +128,7 @@ public class EventControllerPostMethodTest {
 		Link eventLink = new Link(pathToEventLink);
 		eventModel.add(eventLink);
 
-		when(eventService.saveNew(eventDTO)).thenReturn(eventNode);
+		when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
 		when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
 		assertAll(
@@ -146,7 +147,8 @@ public class EventControllerPostMethodTest {
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
-				() -> verify(eventService, times(1)).saveNew(eventDTO), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
+				() -> verifyNoMoreInteractions(eventService),
 				() -> verify(eventModelAssembler, times(1)).toModel(eventNode),
 				() -> verifyNoMoreInteractions(eventModelAssembler));
 	}
