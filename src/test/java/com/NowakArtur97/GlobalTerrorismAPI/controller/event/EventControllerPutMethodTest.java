@@ -29,6 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -146,8 +147,8 @@ public class EventControllerPutMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(eventService.update(eventNode, eventDTO)).thenReturn(eventNodeUpdated);
-		when(eventModelAssembler.toModel(eventNodeUpdated)).thenReturn(eventModelUpdated);
+		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNodeUpdated);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
 
 		assertAll(
 				() -> mockMvc
@@ -231,8 +232,8 @@ public class EventControllerPutMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(eventService.update(eventNode, eventDTO)).thenReturn(eventNodeUpdated);
-		when(eventModelAssembler.toModel(eventNodeUpdated)).thenReturn(eventModelUpdated);
+		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNodeUpdated);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
 
 		assertAll(
 				() -> mockMvc
@@ -299,8 +300,8 @@ public class EventControllerPutMethodTest {
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.empty());
-		when(eventService.saveNew(eventDTO)).thenReturn(eventNode);
-		when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
+		when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
+		when(eventModelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc
@@ -370,7 +371,6 @@ public class EventControllerPutMethodTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		;
 		boolean isPartOfMultipleIncidents = true;
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
