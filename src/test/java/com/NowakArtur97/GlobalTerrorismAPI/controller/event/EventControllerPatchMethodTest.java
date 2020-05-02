@@ -161,10 +161,10 @@ class EventControllerPatchMethodTest {
 		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
 				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
 				+ "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedEventDateString + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/partOfMultipleIncidents\", \"value\": \""
+				+ "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \""
 				+ updatedIsPartOfMultipleIncidents + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/successful\", \"value\": \"" + updatedIsSuccessful + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/suicide\", \"value\": \"" + updatedIsSuicide + "\" }" + "]";
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + updatedIsSuccessful + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuicide\", \"value\": \"" + updatedIsSuicide + "\" }" + "]";
 
 		assertAll(
 				() -> mockMvc
@@ -177,9 +177,9 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("summary", is(updatedSummary)))
 						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
@@ -306,9 +306,9 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
 						.andExpect(jsonPath("motive", is(motive))).andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
@@ -324,8 +324,8 @@ class EventControllerPatchMethodTest {
 
 	@Test
 	@SuppressWarnings("null")
-	void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors() throws ParseException
-			 {
+	void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors()
+			throws ParseException {
 
 		Long eventId = 1L;
 
@@ -368,13 +368,12 @@ class EventControllerPatchMethodTest {
 
 		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
 				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedDate+ "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedDate + "\" },"
 				+ "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \""
-				+ null + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + null + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/isSuicide\", \"value\": \"" + null + "\" },"
-				+ "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget + "\" }"
-						+ "]";
+				+ updatedIsPartOfMultipleIncidents + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + updatedIsSuccessful + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuicide\", \"value\": \"" + updatedIsSuicide + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget + "\" }" + "]";
 
 		assertAll(
 				() -> mockMvc
@@ -385,9 +384,12 @@ class EventControllerPatchMethodTest {
 						.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
 						.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
 						.andExpect(jsonPath("errors", hasItem("Event date cannot be null")))
-						.andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents")))
-						.andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful")))
-						.andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicide attack")))
+						.andExpect(jsonPath("errors",
+								hasItem("Event must have information on whether it has been part of many incidents")))
+						.andExpect(jsonPath("errors",
+								hasItem("Event must have information about whether it was successful")))
+						.andExpect(jsonPath("errors",
+								hasItem("Event must have information about whether it was a suicide attack")))
 						.andExpect(jsonPath("errors", hasItem("Target name cannot be empty"))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
@@ -395,7 +397,7 @@ class EventControllerPatchMethodTest {
 				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler));
 	}
-	
+
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 	@NullAndEmptySource
 	@ValueSource(strings = { " " })

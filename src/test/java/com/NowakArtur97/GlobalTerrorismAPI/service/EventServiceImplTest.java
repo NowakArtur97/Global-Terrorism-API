@@ -71,23 +71,23 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		TargetNode target = new TargetNode(1L, "target");
 
 		EventNode event1 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		EventNode event2 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		EventNode event3 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		eventsListExpected.add(event1);
 		eventsListExpected.add(event2);
@@ -145,15 +145,15 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		TargetNode target = new TargetNode(1L, "target");
 
 		EventNode eventExpected = EventNode.builder().id(expectedEventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		when(eventRepository.findById(expectedEventId)).thenReturn(Optional.of(eventExpected));
 
@@ -173,16 +173,17 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventExpected.getDate(), eventActual.getDate(),
 						() -> "should return event node with date: " + eventExpected.getDate() + ", but was: "
 								+ eventActual.getDate()),
-				() -> assertEquals(eventExpected.isPartOfMultipleIncidents(), eventActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventExpected.getIsPartOfMultipleIncidents(),
+						eventActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventExpected.isPartOfMultipleIncidents() + ", but was: "
-								+ eventActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventExpected.isSuccessful(), eventActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventExpected.isSuccessful()
-								+ ", but was: " + eventActual.isSuccessful()),
-				() -> assertEquals(eventExpected.isSuicide(), eventActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventExpected.isSuicide() + ", but was: "
-								+ eventActual.isSuicide()),
+								+ eventExpected.getIsPartOfMultipleIncidents() + ", but was: "
+								+ eventActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventExpected.getIsSuccessful(), eventActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventExpected.getIsSuccessful()
+								+ ", but was: " + eventActual.getIsSuccessful()),
+				() -> assertEquals(eventExpected.getIsSuicide(), eventActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventExpected.getIsSuicide()
+								+ ", but was: " + eventActual.getIsSuicide()),
 				() -> assertNotNull(eventExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventExpected.getTarget(), eventActual.getTarget(),
@@ -216,19 +217,19 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		TargetNode target = new TargetNode(1L, "target");
 
 		EventNode eventNodeExpectedBeforeSave = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
@@ -246,17 +247,17 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-						eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but was: " + eventNodeActual.isSuicide()),
+								+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+								+ ", but was: " + eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -275,24 +276,24 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		TargetNode targetNode = new TargetNode(1L, "target");
 		TargetDTO targetDTO = new TargetDTO("target");
 
 		EventDTO dTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetDTO).build();
 
 		EventNode eventNodeExpectedBeforeSave = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		when(dtoMapper.mapToNode(dTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
 		when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
@@ -311,17 +312,17 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-						eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but was: " + eventNodeActual.isSuicide()),
+								+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+								+ ", but was: " + eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -341,9 +342,9 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		Long targetId = 1L;
 		String targetName = "target";
@@ -353,20 +354,20 @@ public class EventServiceImplTest {
 		TargetDTO targetDTO = new TargetDTO(targetNameUpdated);
 
 		EventDTO dTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetDTO).build();
 
 		EventNode eventNodeExpectedBeforeMethod = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventNode eventNodeExpectedBeforeSetIdAndTarget = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNodeUpdated).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNodeUpdated).build();
 
 		when(targetService.update(targetId, targetDTO)).thenReturn(targetNodeUpdated);
 		when(dtoMapper.mapToNode(dTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
@@ -386,17 +387,17 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-						eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but was: " + eventNodeActual.isSuicide()),
+								+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+								+ ", but was: " + eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -418,16 +419,16 @@ public class EventServiceImplTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		Long targetId = 1L;
 		TargetNode target = new TargetNode(targetId, "target");
 
 		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(target).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(target).build();
 
 		when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
 		when(targetService.delete(targetId)).thenReturn(Optional.of(target));
@@ -448,17 +449,17 @@ public class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-						eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but was: " + eventNodeActual.isSuicide()),
+								+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+								+ ", but was: " + eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeExpected.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),

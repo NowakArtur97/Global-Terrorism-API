@@ -49,7 +49,7 @@ class DTOMapperTest {
 		String targetName = "Target";
 
 		TargetNode targetNodeExpected = new TargetNode(targetName);
-		
+
 		TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
 		when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
@@ -91,9 +91,9 @@ class DTOMapperTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		String target = "target";
 		TargetDTO targetDTO = new TargetDTO(target);
@@ -123,17 +123,17 @@ class DTOMapperTest {
 				() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-						eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
-								+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-						() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-						() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-								+ ", but was: " + eventNodeActual.isSuicide()),
+								+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+						() -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+						() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+								+ ", but was: " + eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeActual.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertNull(eventNodeActual.getTarget().getId(),
@@ -143,17 +143,17 @@ class DTOMapperTest {
 						() -> "should return event node with target: " + eventNodeExpected.getTarget().getTarget()
 								+ ", but was: " + eventNodeActual.getTarget().getTarget()),
 				() -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class));
-		}
-	
+	}
+
 	@Test
 	void when_map_event_node_to_dto_should_return_dto() throws ParseException {
 
 		String summary = "summary";
 		String motive = "motive";
 		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		String target = "target";
 		TargetDTO targetDTO = new TargetDTO(target);
@@ -162,7 +162,7 @@ class DTOMapperTest {
 		EventNode eventNodeExpected = EventNode.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
 				.motive(motive).target(targetNode).build();
-		
+
 		EventDTO eventDTOExpected = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
 				.motive(motive).target(targetDTO).build();

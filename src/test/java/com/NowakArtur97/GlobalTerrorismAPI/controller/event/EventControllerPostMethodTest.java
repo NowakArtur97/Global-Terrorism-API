@@ -140,9 +140,9 @@ public class EventControllerPostMethodTest {
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
 						.andExpect(jsonPath("motive", is(motive))).andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),

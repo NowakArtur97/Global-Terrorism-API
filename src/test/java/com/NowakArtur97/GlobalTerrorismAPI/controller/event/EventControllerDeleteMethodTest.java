@@ -127,9 +127,9 @@ public class EventControllerDeleteMethodTest {
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),

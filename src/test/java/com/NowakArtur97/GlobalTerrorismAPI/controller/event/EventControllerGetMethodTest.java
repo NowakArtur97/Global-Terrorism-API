@@ -112,12 +112,12 @@ public class EventControllerGetMethodTest {
 		targetModel1.add(targetLink1);
 
 		EventNode eventNode1 = EventNode.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1)
-				.isSuicide(isSuicide1).motive(motive1).target(targetNode1).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
+				.motive(motive1).target(targetNode1).build();
 
 		EventModel model1 = EventModel.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1)
-				.isSuicide(isSuicide1).motive(motive1).target(targetModel1).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
+				.motive(motive1).target(targetModel1).build();
 
 		String pathToLink1 = EVENT_BASE_PATH + eventId1.intValue();
 		Link link1 = new Link(pathToLink1);
@@ -140,12 +140,12 @@ public class EventControllerGetMethodTest {
 		targetModel2.add(targetLink2);
 
 		EventNode eventNode2 = EventNode.builder().id(eventId2).date(date2).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2)
-				.isSuicide(isSuicide2).motive(motive2).target(targetNode2).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
+				.motive(motive2).target(targetNode2).build();
 
 		EventModel model2 = EventModel.builder().id(eventId2).date(date2).summary(summary2)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2)
-				.isSuicide(isSuicide2).motive(motive2).target(targetModel2).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
+				.motive(motive2).target(targetModel2).build();
 
 		String pathToLink2 = EVENT_BASE_PATH + eventId2.intValue();
 		Link link2 = new Link(pathToLink2);
@@ -168,12 +168,12 @@ public class EventControllerGetMethodTest {
 		targetModel3.add(targetLink3);
 
 		EventNode eventNode3 = EventNode.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3)
-				.isSuicide(isSuicide3).motive(motive3).target(targetNode3).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
+				.motive(motive3).target(targetNode3).build();
 
 		EventModel model3 = EventModel.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3)
-				.isSuicide(isSuicide3).motive(motive3).target(targetModel3).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
+				.motive(motive3).target(targetModel3).build();
 
 		String pathToLink3 = EVENT_BASE_PATH + eventId3.intValue();
 		Link link3 = new Link(pathToLink3);
@@ -196,12 +196,12 @@ public class EventControllerGetMethodTest {
 		targetModel4.add(targetLink4);
 
 		EventNode eventNode4 = EventNode.builder().id(eventId4).date(date4).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4)
-				.isSuicide(isSuicide4).motive(motive4).target(targetNode4).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
+				.motive(motive4).target(targetNode4).build();
 
 		EventModel model4 = EventModel.builder().id(eventId4).date(date4).summary(summary4)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4)
-				.isSuicide(isSuicide4).motive(motive4).target(targetModel4).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
+				.motive(motive4).target(targetModel4).build();
 
 		String pathToLink4 = EVENT_BASE_PATH + eventId4.intValue();
 		Link link4 = new Link(pathToLink4);
@@ -261,9 +261,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[0].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[0].suicide", is(isSuicide1)))
-						.andExpect(jsonPath("content[0].successful", is(isSuccessful1)))
-						.andExpect(jsonPath("content[0].partOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
+						.andExpect(jsonPath("content[0].isSuicide", is(isSuicide1)))
+						.andExpect(jsonPath("content[0].isSuccessful", is(isSuccessful1)))
+						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
 						.andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
 						.andExpect(jsonPath("content[0].target.id", is(targetId1.intValue())))
 						.andExpect(jsonPath("content[0].target.target", is(target1)))
@@ -274,9 +274,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[1].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[1].suicide", is(isSuicide2)))
-						.andExpect(jsonPath("content[1].successful", is(isSuccessful2)))
-						.andExpect(jsonPath("content[1].partOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
+						.andExpect(jsonPath("content[1].isSuicide", is(isSuicide2)))
+						.andExpect(jsonPath("content[1].isSuccessful", is(isSuccessful2)))
+						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
 						.andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
 						.andExpect(jsonPath("content[1].target.id", is(targetId2.intValue())))
 						.andExpect(jsonPath("content[1].target.target", is(target2)))
@@ -287,9 +287,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[2].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date3.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[2].suicide", is(isSuicide3)))
-						.andExpect(jsonPath("content[2].successful", is(isSuccessful3)))
-						.andExpect(jsonPath("content[2].partOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
+						.andExpect(jsonPath("content[2].isSuicide", is(isSuicide3)))
+						.andExpect(jsonPath("content[2].isSuccessful", is(isSuccessful3)))
+						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
 						.andExpect(jsonPath("content[2].target.links[0].href", is(pathToTargetLink3)))
 						.andExpect(jsonPath("content[2].target.id", is(targetId3.intValue())))
 						.andExpect(jsonPath("content[2].target.target", is(target3)))
@@ -300,9 +300,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[3].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date4.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[3].suicide", is(isSuicide4)))
-						.andExpect(jsonPath("content[3].successful", is(isSuccessful4)))
-						.andExpect(jsonPath("content[3].partOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
+						.andExpect(jsonPath("content[3].isSuicide", is(isSuicide4)))
+						.andExpect(jsonPath("content[3].isSuccessful", is(isSuccessful4)))
+						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
 						.andExpect(jsonPath("content[3].target.links[0].href", is(pathToTargetLink4)))
 						.andExpect(jsonPath("content[3].target.id", is(targetId4.intValue())))
 						.andExpect(jsonPath("content[3].target.target", is(target4)))
@@ -337,12 +337,12 @@ public class EventControllerGetMethodTest {
 		targetModel1.add(targetLink1);
 
 		EventNode eventNode1 = EventNode.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1)
-				.isSuicide(isSuicide1).motive(motive1).target(targetNode1).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
+				.motive(motive1).target(targetNode1).build();
 
 		EventModel model1 = EventModel.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1)
-				.isSuicide(isSuicide1).motive(motive1).target(targetModel1).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
+				.motive(motive1).target(targetModel1).build();
 
 		String pathToLink1 = EVENT_BASE_PATH + eventId1.intValue();
 		Link link1 = new Link(pathToLink1);
@@ -365,12 +365,12 @@ public class EventControllerGetMethodTest {
 		targetModel2.add(targetLink2);
 
 		EventNode eventNode2 = EventNode.builder().id(eventId2).date(date2).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2)
-				.isSuicide(isSuicide2).motive(motive2).target(targetNode2).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
+				.motive(motive2).target(targetNode2).build();
 
 		EventModel model2 = EventModel.builder().id(eventId2).date(date2).summary(summary2)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2)
-				.isSuicide(isSuicide2).motive(motive2).target(targetModel2).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
+				.motive(motive2).target(targetModel2).build();
 
 		String pathToLink2 = EVENT_BASE_PATH + eventId2.intValue();
 		Link link2 = new Link(pathToLink2);
@@ -393,12 +393,12 @@ public class EventControllerGetMethodTest {
 		targetModel3.add(targetLink3);
 
 		EventNode eventNode3 = EventNode.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3)
-				.isSuicide(isSuicide3).motive(motive3).target(targetNode3).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
+				.motive(motive3).target(targetNode3).build();
 
 		EventModel model3 = EventModel.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3)
-				.isSuicide(isSuicide3).motive(motive3).target(targetModel3).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
+				.motive(motive3).target(targetModel3).build();
 
 		String pathToLink3 = EVENT_BASE_PATH + eventId3.intValue();
 		Link link3 = new Link(pathToLink3);
@@ -421,12 +421,12 @@ public class EventControllerGetMethodTest {
 		targetModel4.add(targetLink4);
 
 		EventNode eventNode4 = EventNode.builder().id(eventId4).date(date4).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4)
-				.isSuicide(isSuicide4).motive(motive4).target(targetNode4).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
+				.motive(motive4).target(targetNode4).build();
 
 		EventModel model4 = EventModel.builder().id(eventId4).date(date4).summary(summary4)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4)
-				.isSuicide(isSuicide4).motive(motive4).target(targetModel4).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
+				.motive(motive4).target(targetModel4).build();
 
 		String pathToLink4 = EVENT_BASE_PATH + eventId4.intValue();
 		Link link4 = new Link(pathToLink4);
@@ -486,9 +486,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[0].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[0].suicide", is(isSuicide1)))
-						.andExpect(jsonPath("content[0].successful", is(isSuccessful1)))
-						.andExpect(jsonPath("content[0].partOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
+						.andExpect(jsonPath("content[0].isSuicide", is(isSuicide1)))
+						.andExpect(jsonPath("content[0].isSuccessful", is(isSuccessful1)))
+						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
 						.andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
 						.andExpect(jsonPath("content[0].target.id", is(targetId1.intValue())))
 						.andExpect(jsonPath("content[0].target.target", is(target1)))
@@ -499,9 +499,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[1].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[1].suicide", is(isSuicide2)))
-						.andExpect(jsonPath("content[1].successful", is(isSuccessful2)))
-						.andExpect(jsonPath("content[1].partOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
+						.andExpect(jsonPath("content[1].isSuicide", is(isSuicide2)))
+						.andExpect(jsonPath("content[1].isSuccessful", is(isSuccessful2)))
+						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
 						.andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
 						.andExpect(jsonPath("content[1].target.id", is(targetId2.intValue())))
 						.andExpect(jsonPath("content[1].target.target", is(target2)))
@@ -512,9 +512,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[2].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date3.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[2].suicide", is(isSuicide3)))
-						.andExpect(jsonPath("content[2].successful", is(isSuccessful3)))
-						.andExpect(jsonPath("content[2].partOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
+						.andExpect(jsonPath("content[2].isSuicide", is(isSuicide3)))
+						.andExpect(jsonPath("content[2].isSuccessful", is(isSuccessful3)))
+						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
 						.andExpect(jsonPath("content[2].target.links[0].href", is(pathToTargetLink3)))
 						.andExpect(jsonPath("content[2].target.id", is(targetId3.intValue())))
 						.andExpect(jsonPath("content[2].target.target", is(target3)))
@@ -525,9 +525,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("content[3].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date4.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[3].suicide", is(isSuicide4)))
-						.andExpect(jsonPath("content[3].successful", is(isSuccessful4)))
-						.andExpect(jsonPath("content[3].partOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
+						.andExpect(jsonPath("content[3].isSuicide", is(isSuicide4)))
+						.andExpect(jsonPath("content[3].isSuccessful", is(isSuccessful4)))
+						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
 						.andExpect(jsonPath("content[3].target.links[0].href", is(pathToTargetLink4)))
 						.andExpect(jsonPath("content[3].target.id", is(targetId4.intValue())))
 						.andExpect(jsonPath("content[3].target.target", is(target4)))
@@ -614,12 +614,12 @@ public class EventControllerGetMethodTest {
 		targetModel.add(targetLink);
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetModel).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
@@ -634,8 +634,8 @@ public class EventControllerGetMethodTest {
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(summary))).andExpect(jsonPath("motive", is(motive)))
+						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
+						.andExpect(jsonPath("motive", is(motive)))
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
@@ -664,12 +664,12 @@ public class EventControllerGetMethodTest {
 		boolean isSuicide = true;
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).build();
 
 		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
@@ -684,8 +684,8 @@ public class EventControllerGetMethodTest {
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(summary))).andExpect(jsonPath("motive", is(motive)))
+						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
+						.andExpect(jsonPath("motive", is(motive)))
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))

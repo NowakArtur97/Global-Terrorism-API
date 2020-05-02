@@ -70,9 +70,9 @@ class ModelMapperTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		String target = "target";
 		TargetDTO targetDTO = new TargetDTO(target);
@@ -95,16 +95,16 @@ class ModelMapperTest {
 				() -> assertEquals(eventDTO.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventDTO.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
 								+ eventDTO.getIsPartOfMultipleIncidents() + ", but was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventDTO.getIsSuccessful(), eventNodeActual.isSuccessful(),
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventDTO.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
 						() -> "should return event node which was successful: " + eventDTO.getIsSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventDTO.getIsSuicide(), eventNodeActual.isSuicide(),
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventDTO.getIsSuicide(), eventNodeActual.getIsSuicide(),
 						() -> "should return event node which was suicide: " + eventDTO.getIsSuicide() + ", but was: "
-								+ eventNodeActual.isSuicide()),
+								+ eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventNodeActual.getTarget(),
 						() -> "should return event node with not null target, but was: null"),
 				() -> assertNull(eventNodeActual.getTarget().getId(),
@@ -121,9 +121,9 @@ class ModelMapperTest {
 		String summary = "summary";
 		String motive = "motive";
 		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		Boolean isPartOfMultipleIncidents = true;
+		Boolean isSuccessful = true;
+		Boolean isSuicide = true;
 
 		String target = "target";
 		TargetDTO targetDTO = new TargetDTO(target);
@@ -146,16 +146,16 @@ class ModelMapperTest {
 				() -> assertEquals(eventDTO.getDate(), eventNodeActual.getDate(),
 						() -> "should return event dto with date: " + eventDTO.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.isPartOfMultipleIncidents(),
+				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event dto which was part of multiple incidents: "
 								+ eventDTO.getIsPartOfMultipleIncidents() + ", but was: "
-								+ eventNodeActual.isPartOfMultipleIncidents()),
-				() -> assertEquals(eventDTO.getIsSuccessful(), eventNodeActual.isSuccessful(),
+								+ eventNodeActual.getIsPartOfMultipleIncidents()),
+				() -> assertEquals(eventDTO.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
 						() -> "should return event dto which was successful: " + eventDTO.getIsSuccessful()
-								+ ", but was: " + eventNodeActual.isSuccessful()),
-				() -> assertEquals(eventDTO.getIsSuicide(), eventNodeActual.isSuicide(),
+								+ ", but was: " + eventNodeActual.getIsSuccessful()),
+				() -> assertEquals(eventDTO.getIsSuicide(), eventNodeActual.getIsSuicide(),
 						() -> "should return event dto which was suicide: " + eventDTO.getIsSuicide() + ", but was: "
-								+ eventNodeActual.isSuicide()),
+								+ eventNodeActual.getIsSuicide()),
 				() -> assertNotNull(eventDTO.getTarget(),
 						() -> "should return event dto with not null target, but was: null"),
 				() -> assertEquals(eventDTO.getTarget().getTarget(), eventNodeActual.getTarget().getTarget(),

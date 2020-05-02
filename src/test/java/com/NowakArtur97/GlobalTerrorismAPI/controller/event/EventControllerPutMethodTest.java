@@ -121,21 +121,20 @@ public class EventControllerPutMethodTest {
 		targetModel.add(targetLink);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetDTO).build();
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
 				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
 				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
 
-		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate)
-				.summary(updatedSummary).isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-				.isSuccessful(updatedIsSuccessful).isSuicide(updatedIsSuicide).motive(updatedMotive)
-				.target(targetModel).build();
+		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
@@ -159,9 +158,9 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("summary", is(updatedSummary)))
 						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
@@ -209,21 +208,20 @@ public class EventControllerPutMethodTest {
 		targetModelUpdated.add(targetLink);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetDTO).build();
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventNode eventNodeUpdated = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
 				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
 				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNodeUpdated).build();
 
-		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate)
-				.summary(updatedSummary).isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-				.isSuccessful(updatedIsSuccessful).isSuicide(updatedIsSuicide).motive(updatedMotive)
-				.target(targetModelUpdated).build();
+		EventModel modelUpdated = EventModel.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetModelUpdated).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
@@ -247,9 +245,9 @@ public class EventControllerPutMethodTest {
 						.andExpect(jsonPath("summary", is(updatedSummary)))
 						.andExpect(jsonPath("motive", is(updatedMotive)))
 						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(updatedIsSuicide)))
-						.andExpect(jsonPath("successful", is(updatedIsSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(updatedIsSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(updatedTarget))),
@@ -285,16 +283,16 @@ public class EventControllerPutMethodTest {
 		targetModel.add(targetLink);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetDTO).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetDTO).build();
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
 
 		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-				.isSuicide(isSuicide).motive(motive).target(targetModel).build();
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetModel).build();
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
@@ -313,12 +311,11 @@ public class EventControllerPutMethodTest {
 						.andExpect(status().isCreated())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(summary))).andExpect(jsonPath("motive", is(motive)))
-						.andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
+						.andExpect(jsonPath("motive", is(motive))).andExpect(jsonPath("date", is(notNullValue())))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),

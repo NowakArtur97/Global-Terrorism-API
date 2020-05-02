@@ -130,9 +130,9 @@ class PatchHelperImplTest {
 			String summary = "summary";
 			String motive = "motive";
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-			boolean isPartOfMultipleIncidents = true;
-			boolean isSuccessful = true;
-			boolean isSuicide = true;
+			Boolean isPartOfMultipleIncidents = true;
+			Boolean isSuccessful = true;
+			Boolean isSuicide = true;
 
 			Long targetId = 1L;
 			String target = "target";
@@ -141,9 +141,9 @@ class PatchHelperImplTest {
 			String updatedSummary = "summary";
 			String updatedMotive = "motive";
 			Date updatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-02");
-			boolean updatedIsPartOfMultipleIncidents = true;
-			boolean updatedIsSuccessful = true;
-			boolean updatedIsSuicide = true;
+			Boolean updatedIsPartOfMultipleIncidents = true;
+			Boolean updatedIsSuccessful = true;
+			Boolean updatedIsSuicide = true;
 
 			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
@@ -183,17 +183,18 @@ class PatchHelperImplTest {
 					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 									+ eventNodeActual.getDate()),
-					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-							eventNodeActual.isPartOfMultipleIncidents(),
+					() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+							eventNodeActual.getIsPartOfMultipleIncidents(),
 							() -> "should return event node which was part of multiple incidents: "
-									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
-									+ eventNodeActual.isPartOfMultipleIncidents()),
-					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-									+ ", but was: " + eventNodeActual.isSuccessful()),
-					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-									+ ", but was: " + eventNodeActual.isSuicide()),
+									+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.getIsPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+							() -> "should return event node which was successful: "
+									+ eventNodeExpected.getIsSuccessful() + ", but was: "
+									+ eventNodeActual.getIsSuccessful()),
+					() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+									+ ", but was: " + eventNodeActual.getIsSuicide()),
 					() -> assertNotNull(eventNodeExpected.getTarget(),
 							() -> "should return event node with not null target, but was: null"),
 					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -212,9 +213,9 @@ class PatchHelperImplTest {
 			String summary = "summary";
 			String motive = "motive";
 			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-			boolean isPartOfMultipleIncidents = true;
-			boolean isSuccessful = true;
-			boolean isSuicide = true;
+			Boolean isPartOfMultipleIncidents = true;
+			Boolean isSuccessful = true;
+			Boolean isSuicide = true;
 
 			Long targetId = 1L;
 			String target = "target";
@@ -256,17 +257,18 @@ class PatchHelperImplTest {
 					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 									+ eventNodeActual.getDate()),
-					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-							eventNodeActual.isPartOfMultipleIncidents(),
+					() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+							eventNodeActual.getIsPartOfMultipleIncidents(),
 							() -> "should return event node which was part of multiple incidents: "
-									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
-									+ eventNodeActual.isPartOfMultipleIncidents()),
-					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-									+ ", but was: " + eventNodeActual.isSuccessful()),
-					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-									+ ", but was: " + eventNodeActual.isSuicide()),
+									+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.getIsPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+							() -> "should return event node which was successful: "
+									+ eventNodeExpected.getIsSuccessful() + ", but was: "
+									+ eventNodeActual.getIsSuccessful()),
+					() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+									+ ", but was: " + eventNodeActual.getIsSuicide()),
 					() -> assertNotNull(eventNodeExpected.getTarget(),
 							() -> "should return event node with not null target, but was: null"),
 					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -285,9 +287,9 @@ class PatchHelperImplTest {
 			String summary = "summary";
 			String motive = "motive";
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-			boolean isPartOfMultipleIncidents = true;
-			boolean isSuccessful = true;
-			boolean isSuicide = true;
+			Boolean isPartOfMultipleIncidents = true;
+			Boolean isSuccessful = true;
+			Boolean isSuicide = true;
 
 			Long targetId = 1L;
 			String target = "target";
@@ -296,9 +298,9 @@ class PatchHelperImplTest {
 			String updatedSummary = "summary";
 			String updatedMotive = "motive";
 			Date updatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-02");
-			boolean updatedIsPartOfMultipleIncidents = true;
-			boolean updatedIsSuccessful = true;
-			boolean updatedIsSuicide = true;
+			Boolean updatedIsPartOfMultipleIncidents = true;
+			Boolean updatedIsSuccessful = true;
+			Boolean updatedIsSuicide = true;
 
 			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
@@ -338,17 +340,18 @@ class PatchHelperImplTest {
 					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 									+ eventNodeActual.getDate()),
-					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-							eventNodeActual.isPartOfMultipleIncidents(),
+					() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+							eventNodeActual.getIsPartOfMultipleIncidents(),
 							() -> "should return event node which was part of multiple incidents: "
-									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
-									+ eventNodeActual.isPartOfMultipleIncidents()),
-					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-									+ ", but was: " + eventNodeActual.isSuccessful()),
-					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-									+ ", but was: " + eventNodeActual.isSuicide()),
+									+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.getIsPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+							() -> "should return event node which was successful: "
+									+ eventNodeExpected.getIsSuccessful() + ", but was: "
+									+ eventNodeActual.getIsSuccessful()),
+					() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+									+ ", but was: " + eventNodeActual.getIsSuicide()),
 					() -> assertNotNull(eventNodeExpected.getTarget(),
 							() -> "should return event node with not null target, but was: null"),
 					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -358,7 +361,7 @@ class PatchHelperImplTest {
 					() -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
 					() -> verifyNoMoreInteractions(objectMapper));
 		}
-		
+
 		@Test
 		void when_merge_patch_event_nodes_target_should_return_event_node_with_patched_target() throws ParseException {
 
@@ -367,9 +370,9 @@ class PatchHelperImplTest {
 			String summary = "summary";
 			String motive = "motive";
 			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-			boolean isPartOfMultipleIncidents = true;
-			boolean isSuccessful = true;
-			boolean isSuicide = true;
+			Boolean isPartOfMultipleIncidents = true;
+			Boolean isSuccessful = true;
+			Boolean isSuicide = true;
 
 			Long targetId = 1L;
 			String target = "target";
@@ -386,8 +389,8 @@ class PatchHelperImplTest {
 					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
 					.isSuicide(isSuicide).motive(motive).target(updatedTargetNode).build();
 
-			JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(
-					Json.createObjectBuilder().add("/target/target", updatedTarget).build());
+			JsonMergePatch eventAsJsonMergePatch = Json
+					.createMergePatch(Json.createObjectBuilder().add("/target/target", updatedTarget).build());
 
 			JsonStructure event = Json.createObjectBuilder()
 					.add("target", Json.createObjectBuilder().add("target", updatedTarget)).build();
@@ -412,17 +415,18 @@ class PatchHelperImplTest {
 					() -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
 							() -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
 									+ eventNodeActual.getDate()),
-					() -> assertEquals(eventNodeExpected.isPartOfMultipleIncidents(),
-							eventNodeActual.isPartOfMultipleIncidents(),
+					() -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+							eventNodeActual.getIsPartOfMultipleIncidents(),
 							() -> "should return event node which was part of multiple incidents: "
-									+ eventNodeExpected.isPartOfMultipleIncidents() + ", but was: "
-									+ eventNodeActual.isPartOfMultipleIncidents()),
-					() -> assertEquals(eventNodeExpected.isSuccessful(), eventNodeActual.isSuccessful(),
-							() -> "should return event node which was successful: " + eventNodeExpected.isSuccessful()
-									+ ", but was: " + eventNodeActual.isSuccessful()),
-					() -> assertEquals(eventNodeExpected.isSuicide(), eventNodeActual.isSuicide(),
-							() -> "should return event node which was suicide: " + eventNodeExpected.isSuicide()
-									+ ", but was: " + eventNodeActual.isSuicide()),
+									+ eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+									+ eventNodeActual.getIsPartOfMultipleIncidents()),
+					() -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+							() -> "should return event node which was successful: "
+									+ eventNodeExpected.getIsSuccessful() + ", but was: "
+									+ eventNodeActual.getIsSuccessful()),
+					() -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
+							() -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
+									+ ", but was: " + eventNodeActual.getIsSuicide()),
 					() -> assertNotNull(eventNodeExpected.getTarget(),
 							() -> "should return event node with not null target, but was: null"),
 					() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
