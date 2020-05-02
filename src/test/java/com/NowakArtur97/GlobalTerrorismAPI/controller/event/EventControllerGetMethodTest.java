@@ -639,9 +639,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
 						.andExpect(jsonPath("target.id", is(targetId.intValue())))
 						.andExpect(jsonPath("target.target", is(target))),
@@ -689,9 +689,9 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
 										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("suicide", is(isSuicide)))
-						.andExpect(jsonPath("successful", is(isSuccessful)))
-						.andExpect(jsonPath("partOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("isSuicide", is(isSuicide)))
+						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
 						.andExpect(jsonPath("target").value(IsNull.nullValue())),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(eventNode),
