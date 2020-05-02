@@ -323,7 +323,6 @@ class EventControllerPatchMethodTest {
 	}
 
 	@Test
-	@SuppressWarnings("null")
 	void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors()
 			throws ParseException {
 
@@ -348,17 +347,15 @@ class EventControllerPatchMethodTest {
 		String target = "target";
 		String updatedTarget = null;
 		TargetNode targetNode = new TargetNode(targetId, target);
-		TargetNode updatedTargetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
 
 		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
 				.motive(motive).target(targetNode).build();
 
 		EventNode updatedEventNode = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
-//				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-//				.isSuccessful(updatedIsSuccessful)
-//				.isSuicide(updatedIsSuicide)
-				.motive(updatedMotive).target(updatedTargetNode).build();
+				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
+				.isSuicide(updatedIsSuicide).motive(updatedMotive).target(updatedTargetNode).build();
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -379,8 +376,7 @@ class EventControllerPatchMethodTest {
 				() -> mockMvc
 						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
 								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
-						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
 						.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
 						.andExpect(jsonPath("errors", hasItem("Event date cannot be null")))
@@ -443,6 +439,160 @@ class EventControllerPatchMethodTest {
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
 						.andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.<Class<EventNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
+	}
+
+	@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+	@NullAndEmptySource
+	@ValueSource(strings = { " " })
+	void when_partial_update_event_with_invalid_summary_using_json_patch_should_return_errors(String invalidSummary)
+			throws ParseException {
+
+		Long eventId = 1L;
+
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		Long targetId = 1L;
+		String target = "target";
+		String updatedTarget = "update target";
+		TargetNode targetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
+
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
+
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(invalidSummary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(updatedTargetNode).build();
+
+		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+
+		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + invalidSummary + "\" }]";
+
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("Event summary cannot be empty"))),
+				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.<Class<EventNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
+	}
+
+	@ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+	@NullAndEmptySource
+	@ValueSource(strings = { " " })
+	void when_partial_update_event_with_invalid_motive_using_json_patch_should_return_errors(String invalidMotive)
+			throws ParseException {
+
+		Long eventId = 1L;
+
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		Long targetId = 1L;
+		String target = "target";
+		String updatedTarget = "update target";
+		TargetNode targetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
+
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
+
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(invalidMotive).target(updatedTargetNode).build();
+
+		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+
+		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + invalidMotive + "\" }]";
+
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("Event motive cannot be empty"))),
+				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.<Class<EventNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
+	}
+
+	@Test
+	void when_partial_update_event_with_date_in_the_future_using_json_patch_should_return_errors()
+			throws ParseException {
+
+		Long eventId = 1L;
+
+		String summary = "summary";
+		String motive = "motive";
+		String invalidDate = "2090-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(invalidDate);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		Long targetId = 1L;
+		String target = "target";
+		String updatedTarget = "update target";
+		TargetNode targetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
+
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
+
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(updatedTargetNode).build();
+
+		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+
+		String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + invalidDate + "\" }]";
+
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors[0]", is("Event date cannot be in the future"))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
 						ArgumentMatchers.<Class<EventNode>>any()),

@@ -190,7 +190,7 @@ public class EventControllerPostMethodTest {
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 	@NullAndEmptySource
 	@ValueSource(strings = { " ", "\t", "\n" })
-	void when_add_event_with_invalid_target_should_return_errors(String target) throws ParseException {
+	void when_add_event_with_invalid_target_should_return_errors(String invalidTarget) throws ParseException {
 
 		String summary = "summary";
 		String motive = "motive";
@@ -199,7 +199,7 @@ public class EventControllerPostMethodTest {
 		boolean isSuccessful = true;
 		boolean isSuicide = true;
 
-		TargetDTO targetDTO = new TargetDTO(target);
+		TargetDTO targetDTO = new TargetDTO(invalidTarget);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
