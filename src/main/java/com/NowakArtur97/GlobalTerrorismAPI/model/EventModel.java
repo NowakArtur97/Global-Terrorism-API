@@ -38,13 +38,13 @@ public class EventModel extends RepresentationModel<EventModel> {
 	private Date date;
 
 	@ApiModelProperty(notes = "Was the event part of multiple incidents?", required = true)
-	private boolean isPartOfMultipleIncidents;
+	private Boolean isPartOfMultipleIncidents;
 
 	@ApiModelProperty(notes = "Was the event successful?", required = true)
-	private boolean isSuccessful;
+	private Boolean isSuccessful;
 
 	@ApiModelProperty(notes = "Was the event suicide?", required = true)
-	private boolean isSuicide;
+	private Boolean isSuicide;
 
 	@ApiModelProperty(notes = "The event's target", required = true)
 	@JsonInclude(Include.ALWAYS)

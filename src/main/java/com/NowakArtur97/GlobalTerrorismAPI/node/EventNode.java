@@ -29,17 +29,17 @@ public class EventNode {
 
 	private Date date;
 
-	private boolean isPartOfMultipleIncidents;
+	private Boolean isPartOfMultipleIncidents;
 
-	private boolean isSuccessful;
+	private Boolean isSuccessful;
 
-	private boolean isSuicide;
+	private Boolean isSuicide;
 
 	@Relationship("TARGETS")
 	private TargetNode target;
 
-	public EventNode(String summary, String motive, Date date, boolean isPartOfMultipleIncidents,
-			boolean isSuccessful, boolean isSuicide) {
+	public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents,
+			Boolean isSuccessful, Boolean isSuicide) {
 
 		this.summary = summary;
 		this.motive = motive;
@@ -49,8 +49,8 @@ public class EventNode {
 		this.isSuicide = isSuicide;
 	}
 
-	public EventNode(String summary, String motive, Date date, boolean isPartOfMultipleIncidents,
-			boolean isSuccessful, boolean isSuicide, TargetNode target) {
+	public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents,
+			Boolean isSuccessful, Boolean isSuicide, TargetNode target) {
 
 		this(summary, motive, date, isPartOfMultipleIncidents, isSuccessful, isSuicide);
 		

@@ -31,9 +31,9 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 		eventModel.setSummary((eventNode.getSummary()));
 		eventModel.setMotive((eventNode.getMotive()));
 		eventModel.setDate((eventNode.getDate()));
-		eventModel.setPartOfMultipleIncidents((eventNode.isPartOfMultipleIncidents()));
-		eventModel.setSuccessful((eventNode.isSuccessful()));
-		eventModel.setSuicide((eventNode.isSuicide()));
+		eventModel.setIsPartOfMultipleIncidents((eventNode.getIsPartOfMultipleIncidents()));
+		eventModel.setIsSuccessful((eventNode.getIsSuccessful()));
+		eventModel.setIsSuicide((eventNode.getIsSuicide()));
 
 		eventModel
 				.setTarget(eventNode.getTarget() != null ? targetModelAssembler.toModel(eventNode.getTarget()) : null);

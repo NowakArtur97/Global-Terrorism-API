@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -321,10 +322,84 @@ class EventControllerPatchMethodTest {
 				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler));
 	}
 
+	@Test
+	@SuppressWarnings("null")
+	void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors() throws ParseException
+			 {
+
+		Long eventId = 1L;
+
+		String summary = "summary";
+		String motive = "motive";
+		String dateString = "2000-08-05";
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		String updatedSummary = null;
+		String updatedMotive = null;
+		Date updatedDate = null;
+		Boolean updatedIsPartOfMultipleIncidents = null;
+		Boolean updatedIsSuccessful = null;
+		Boolean updatedIsSuicide = null;
+
+		Long targetId = 1L;
+		String target = "target";
+		String updatedTarget = null;
+		TargetNode targetNode = new TargetNode(targetId, target);
+		TargetNode updatedTargetNode = new TargetNode(targetId, target);
+
+		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
+				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
+				.motive(motive).target(targetNode).build();
+
+		EventNode updatedEventNode = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
+//				.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
+//				.isSuccessful(updatedIsSuccessful)
+//				.isSuicide(updatedIsSuicide)
+				.motive(updatedMotive).target(updatedTargetNode).build();
+
+		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+		when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+				ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+
+		String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
+				+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedDate+ "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \""
+				+ null + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + null + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/isSuicide\", \"value\": \"" + null + "\" },"
+				+ "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTarget + "\" }"
+						+ "]";
+
+		assertAll(
+				() -> mockMvc
+						.perform(patch(linkWithParameter, eventId).content(jsonPatch)
+								.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+						.andExpect(jsonPath("status", is(400)))
+						.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
+						.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
+						.andExpect(jsonPath("errors", hasItem("Event date cannot be null")))
+						.andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents")))
+						.andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful")))
+						.andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicide attack")))
+						.andExpect(jsonPath("errors", hasItem("Target name cannot be empty"))),
+				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
+				() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
+						ArgumentMatchers.<Class<EventNode>>any()),
+				() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
+				() -> verifyNoInteractions(pagedResourcesAssembler));
+	}
+	
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 	@NullAndEmptySource
 	@ValueSource(strings = { " " })
-	void when_partial_update_invalid_events_target_using_json_patch_should_should_return_errors(String invalidTarget)
+	void when_partial_update_invalid_events_target_using_json_patch_should_return_errors(String invalidTarget)
 			throws ParseException {
 
 		Long eventId = 1L;
