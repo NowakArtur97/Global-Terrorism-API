@@ -60,10 +60,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -659,7 +659,7 @@ class TargetControllerTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, targetId).content("{ \"target\": \"updated target\" }")
-									.contentType(PatchMediaType.APPLICATION_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(pathToLink)))

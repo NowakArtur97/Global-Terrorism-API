@@ -29,6 +29,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -134,7 +135,7 @@ public class EventController {
 				.orElseThrow(() -> new EventNotFoundException(eventNode.getId())), httpStatus);
 	}
 
-	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+	@PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
 	@ApiOperation(value = "Update Event fields using Json Patch", notes = "Update Event fields using Json Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
@@ -158,7 +159,7 @@ public class EventController {
 	// id2 was used because Swagger does not allow two PATCH methods for the same
 	// path – even if they have different parameters (parameters have no effect on
 	// uniqueness)
-	@PatchMapping(path = "/{id2}", consumes = "application/merge-patch+json")
+	@PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
 	@ApiOperation(value = "Update Event fields using Json Merge Patch", notes = "Update Event fields using Json Merge Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),

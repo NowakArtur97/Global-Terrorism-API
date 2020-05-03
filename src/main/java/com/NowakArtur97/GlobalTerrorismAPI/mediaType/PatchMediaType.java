@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.testUtil.mediaType;
+package com.NowakArtur97.GlobalTerrorismAPI.mediaType;
 
 import org.springframework.http.MediaType;
 
@@ -6,17 +6,17 @@ public final class PatchMediaType {
 
 	public static final String APPLICATION_JSON_PATCH_VALUE = "application/json-patch+json";
 
-	public static final String APPLICATION_MERGE_PATCH_VALUE = "application/merge-patch+json";
+	public static final String APPLICATION_JSON_MERGE_PATCH_VALUE = "application/merge-patch+json";
 
 	public static final MediaType APPLICATION_JSON_PATCH;
 
-	public static final MediaType APPLICATION_MERGE_PATCH;
+	public static final MediaType APPLICATION_JSON_MERGE_PATCH;
 
 	static {
 
 		APPLICATION_JSON_PATCH = MediaType.valueOf(APPLICATION_JSON_PATCH_VALUE);
 
-		APPLICATION_MERGE_PATCH = MediaType.valueOf(APPLICATION_MERGE_PATCH_VALUE);
+		APPLICATION_JSON_MERGE_PATCH = MediaType.valueOf(APPLICATION_JSON_MERGE_PATCH_VALUE);
 	}
 
 	private PatchMediaType() {

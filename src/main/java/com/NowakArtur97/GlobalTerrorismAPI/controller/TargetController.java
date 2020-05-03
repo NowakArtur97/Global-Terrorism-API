@@ -29,6 +29,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.TargetNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -132,7 +133,7 @@ public class TargetController {
 				.orElseThrow(() -> new TargetNotFoundException(targetNode.getId())), httpStatus);
 	}
 
-	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+	@PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
 	@ApiOperation(value = "Update Target fields using Json Patch", notes = "Update Target fields using Json Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
@@ -156,7 +157,7 @@ public class TargetController {
 	// id2 was used because Swagger does not allow two PATCH methods for the same
 	// path – even if they have different parameters (parameters have no effect on
 	// uniqueness)
-	@PatchMapping(path = "/{id2}", consumes = "application/merge-patch+json")
+	@PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
 	@ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
