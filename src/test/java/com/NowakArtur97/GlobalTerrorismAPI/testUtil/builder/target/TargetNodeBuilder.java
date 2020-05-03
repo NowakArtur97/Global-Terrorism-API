@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
+package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 
