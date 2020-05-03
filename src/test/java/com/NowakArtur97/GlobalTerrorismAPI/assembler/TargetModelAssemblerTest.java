@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.targets.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -19,6 +22,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 class TargetModelAssemblerTest {
 
 	private TargetModelAssembler targetModelAssembler;
+
+	private static TargetBuilder targetBuilder;
+
+	@BeforeAll
+	private static void init() {
+
+		targetBuilder = new TargetBuilder();
+	}
 
 	@BeforeEach
 	private void setUp() {
@@ -29,9 +40,7 @@ class TargetModelAssemblerTest {
 	@Test
 	void when_map_target_node_to_model_should_return_target_model() {
 
-		Long targetId = 1L;
-		String targetName = "target1";
-		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(TargetType.NODE);
 
 		TargetModel targetModel = targetModelAssembler.toModel(targetNode);
 
