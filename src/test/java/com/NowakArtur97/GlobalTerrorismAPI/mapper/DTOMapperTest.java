@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -25,6 +26,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.targets.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +40,14 @@ class DTOMapperTest {
 	@Mock
 	private ModelMapper modelMapper;
 
+	private static TargetBuilder targetBuilder;
+
+	@BeforeAll
+	private static void init() {
+
+		targetBuilder = new TargetBuilder();
+	}
+
 	@BeforeEach
 	private void setUp() {
 
@@ -46,11 +57,8 @@ class DTOMapperTest {
 	@Test
 	void when_map_target_dto_to_node_should_return_target_node() {
 
-		String targetName = "Target";
-
-		TargetNode targetNodeExpected = new TargetNode(targetName);
-
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+		TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.build(TargetType.DTO);
+		TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(null).build(TargetType.NODE);
 
 		when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
 
@@ -68,11 +76,8 @@ class DTOMapperTest {
 	@Test
 	void when_map_target_node_to_dto_should_return_target_dto() {
 
-		String targetName = "Target";
-
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
-
-		TargetNode targetNodeExpected = new TargetNode(targetName);
+		TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(TargetType.NODE);
+		TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.build(TargetType.DTO);
 
 		when(modelMapper.map(targetNodeExpected, TargetDTO.class)).thenReturn(targetDTOExpected);
 
@@ -95,9 +100,8 @@ class DTOMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-		TargetNode targetNode = new TargetNode(target);
+		TargetDTO targetDTO= (TargetDTO) targetBuilder.build(TargetType.DTO);
+		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(TargetType.NODE);
 
 		EventDTO eventDTOExpected = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
@@ -155,9 +159,8 @@ class DTOMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-		TargetNode targetNode = new TargetNode(target);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(TargetType.NODE);
+		TargetDTO targetDTO= (TargetDTO) targetBuilder.build(TargetType.DTO);
 
 		EventNode eventNodeExpected = EventNode.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
