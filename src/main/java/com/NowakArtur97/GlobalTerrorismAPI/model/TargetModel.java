@@ -2,6 +2,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class TargetModel extends RepresentationModel<TargetModel> {
+public class TargetModel extends RepresentationModel<TargetModel> implements Target {
 
 	@ApiModelProperty(notes = "The unique id of the Target")
 	private Long id;
