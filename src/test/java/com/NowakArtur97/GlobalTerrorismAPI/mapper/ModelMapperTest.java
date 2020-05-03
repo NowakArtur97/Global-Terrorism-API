@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -19,6 +20,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.targets.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -26,6 +29,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 class ModelMapperTest {
 
 	private ModelMapper modelMapper;
+
+	private static TargetBuilder targetBuilder;
+
+	@BeforeAll
+	private static void init() {
+
+		targetBuilder = new TargetBuilder();
+	}
 
 	@BeforeEach
 	private void setUp() {
@@ -36,9 +47,7 @@ class ModelMapperTest {
 	@Test
 	void when_map_target_dto_to_node_should_return_valid_node() {
 
-		String targetName = "Target";
-
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+		TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.build(TargetType.DTO);
 
 		TargetNode targetNodeActual = modelMapper.map(targetDTOExpected, TargetNode.class);
 
@@ -53,9 +62,7 @@ class ModelMapperTest {
 	@Test
 	void when_map_target_node_to_dto_should_return_valid_dto() {
 
-		String targetName = "Target";
-
-		TargetNode targetNodeExpected = new TargetNode(targetName);
+		TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(TargetType.NODE);
 
 		TargetDTO targetDTOActual = modelMapper.map(targetNodeExpected, TargetDTO.class);
 
@@ -74,8 +81,7 @@ class ModelMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(TargetType.DTO);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
@@ -95,7 +101,8 @@ class ModelMapperTest {
 				() -> assertEquals(eventDTO.getDate(), eventNodeActual.getDate(),
 						() -> "should return event node with date: " + eventDTO.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.getIsPartOfMultipleIncidents(),
+				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event node which was part of multiple incidents: "
 								+ eventDTO.getIsPartOfMultipleIncidents() + ", but was: "
 								+ eventNodeActual.getIsPartOfMultipleIncidents()),
@@ -125,8 +132,7 @@ class ModelMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(TargetType.DTO);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
@@ -146,7 +152,8 @@ class ModelMapperTest {
 				() -> assertEquals(eventDTO.getDate(), eventNodeActual.getDate(),
 						() -> "should return event dto with date: " + eventDTO.getDate() + ", but was: "
 								+ eventNodeActual.getDate()),
-				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(), eventNodeActual.getIsPartOfMultipleIncidents(),
+				() -> assertEquals(eventDTO.getIsPartOfMultipleIncidents(),
+						eventNodeActual.getIsPartOfMultipleIncidents(),
 						() -> "should return event dto which was part of multiple incidents: "
 								+ eventDTO.getIsPartOfMultipleIncidents() + ", but was: "
 								+ eventNodeActual.getIsPartOfMultipleIncidents()),

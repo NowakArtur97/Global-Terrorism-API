@@ -40,6 +40,6 @@ final public class TargetBuilder {
 			return new TargetModel(id, target);
 		}
 
-		throw new RuntimeException("The specified target type does not exist");
+		throw new RuntimeException("The specified type does not exist");
 	}
 }
