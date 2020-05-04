@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
 public final class TargetBuilder {
 
@@ -26,7 +26,7 @@ public final class TargetBuilder {
 		return this;
 	}
 
-	public Target build(TargetType type) {
+	public Target build(ObjectType type) {
 
 		switch (type) {
 

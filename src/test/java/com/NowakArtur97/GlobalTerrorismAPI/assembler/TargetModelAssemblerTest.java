@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -40,7 +40,7 @@ class TargetModelAssemblerTest {
 	@Test
 	void when_map_target_node_to_model_should_return_target_model() {
 
-		TargetNode targetNode = (TargetNode) targetBuilder.build(TargetType.NODE);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
 		TargetModel targetModel = targetModelAssembler.toModel(targetNode);
 

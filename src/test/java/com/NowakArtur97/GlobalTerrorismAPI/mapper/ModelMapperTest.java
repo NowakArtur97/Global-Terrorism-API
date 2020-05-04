@@ -21,7 +21,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -47,7 +47,7 @@ class ModelMapperTest {
 	@Test
 	void when_map_target_dto_to_node_should_return_valid_node() {
 
-		TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.build(TargetType.DTO);
+		TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 
 		TargetNode targetNodeActual = modelMapper.map(targetDTOExpected, TargetNode.class);
 
@@ -62,7 +62,7 @@ class ModelMapperTest {
 	@Test
 	void when_map_target_node_to_dto_should_return_valid_dto() {
 
-		TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(TargetType.NODE);
+		TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
 		TargetDTO targetDTOActual = modelMapper.map(targetNodeExpected, TargetDTO.class);
 
@@ -81,7 +81,7 @@ class ModelMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(TargetType.DTO);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
@@ -132,7 +132,7 @@ class ModelMapperTest {
 		Boolean isSuccessful = true;
 		Boolean isSuicide = true;
 
-		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(TargetType.DTO);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 
 		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
 				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)

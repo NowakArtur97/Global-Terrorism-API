@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums;
 
-public enum TargetType {
+public enum ObjectType {
 
 	DTO, MODEL, NODE;
 }
