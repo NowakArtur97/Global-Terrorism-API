@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.targets;
+package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
@@ -6,7 +6,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.TargetType;
 
-final public class TargetBuilder {
+public final class TargetBuilder {
 
 	private Long id = 1L;
 
