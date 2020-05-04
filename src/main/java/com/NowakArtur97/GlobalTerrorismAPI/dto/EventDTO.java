@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventDTO implements DTONode {
+public class EventDTO implements DTONode, Event {
 
 	@ApiModelProperty(notes = "The events's summary", required = true)
 	@NotBlank(message = "{event.summary.notBlank}")

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class EventModel extends RepresentationModel<EventModel> {
+public class EventModel extends RepresentationModel<EventModel> implements Event {
 
 	@ApiModelProperty(notes = "The unique id of the Event")
 	private Long id;

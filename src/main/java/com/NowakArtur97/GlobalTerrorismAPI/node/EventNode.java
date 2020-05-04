@@ -7,6 +7,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventNode {
+public class EventNode implements Event {
 
 	@Id
 	@GeneratedValue
