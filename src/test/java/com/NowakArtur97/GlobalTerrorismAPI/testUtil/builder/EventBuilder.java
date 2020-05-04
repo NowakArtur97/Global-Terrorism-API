@@ -59,21 +59,21 @@ public final class EventBuilder {
 		return this;
 	}
 
-	public EventBuilder isPartOfMultipleIncidents(Boolean isPartOfMultipleIncidents) {
+	public EventBuilder withIsPartOfMultipleIncidents(Boolean isPartOfMultipleIncidents) {
 
 		this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
 
 		return this;
 	}
 
-	public EventBuilder isSuccessful(Boolean isSuccessful) {
+	public EventBuilder withIsSuccessful(Boolean isSuccessful) {
 
 		this.isSuccessful = isSuccessful;
 
 		return this;
 	}
 
-	public EventBuilder isSuicide(Boolean isSuicide) {
+	public EventBuilder withIsSuicide(Boolean isSuicide) {
 
 		this.isSuicide = isSuicide;
 

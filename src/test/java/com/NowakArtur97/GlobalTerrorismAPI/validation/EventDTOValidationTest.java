@@ -23,6 +23,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.ibm.icu.util.Calendar;
 
@@ -32,29 +35,24 @@ public class EventDTOValidationTest {
 
 	private Validator validator;
 
+	private static TargetBuilder targetBuilder;
+	private static EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
 	void when_event_dto_is_valid_should_not_have_violations() {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -67,18 +65,9 @@ public class EventDTOValidationTest {
 
 		int expectedNumberOfViolations = 7;
 
-		String summary = null;
-		String motive = null;
-		Date date = null;
-		Boolean isPartOfMultipleIncidents = null;
-		Boolean isSuccessful = null;
-		Boolean isSuicide = null;
-
-		TargetDTO targetDTO = null;
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
+				.withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null).withTarget(null)
+				.build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -94,18 +83,8 @@ public class EventDTOValidationTest {
 
 		int expectedNumberOfViolations = 1;
 
-		String motive = "motive";
-		String summary = "sumamry";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		TargetDTO targetDTO = new TargetDTO(invalidTarget);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -121,18 +100,9 @@ public class EventDTOValidationTest {
 
 		int expectedNumberOfViolations = 1;
 
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(invalidSummary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO)
+				.build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -148,18 +118,9 @@ public class EventDTOValidationTest {
 
 		int expectedNumberOfViolations = 1;
 
-		String summary = "summary";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(invalidMotive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO)
+				.build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
@@ -176,19 +137,8 @@ public class EventDTOValidationTest {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(2090, 1, 1);
 		Date invalidDate = calendar.getTime();
-
-		String motive = "motive";
-		String summary = "summary";
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(invalidDate).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);
 
 		Set<ConstraintViolation<EventDTO>> violations = validator.validate(eventDTO);
 
