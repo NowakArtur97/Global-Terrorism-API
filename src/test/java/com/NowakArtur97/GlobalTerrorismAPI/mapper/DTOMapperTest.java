@@ -9,8 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +24,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -41,11 +40,13 @@ class DTOMapperTest {
 	private ModelMapper modelMapper;
 
 	private static TargetBuilder targetBuilder;
+	private static EventBuilder eventBuilder;
 
 	@BeforeAll
 	private static void init() {
 
 		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@BeforeEach
@@ -93,23 +94,11 @@ class DTOMapperTest {
 	@Test
 	void when_map_event_dto_to_node_should_return_node() throws ParseException {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		TargetDTO targetDTO= (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
-
-		EventDTO eventDTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNodeExpected = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
+		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withId(null).withTarget(targetNode)
+				.build(ObjectType.NODE);
 
 		when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpected);
 
@@ -152,23 +141,10 @@ class DTOMapperTest {
 	@Test
 	void when_map_event_node_to_dto_should_return_dto() throws ParseException {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
 		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-		TargetDTO targetDTO= (TargetDTO) targetBuilder.build(ObjectType.DTO);
-
-		EventNode eventNodeExpected = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventDTO eventDTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
 		when(modelMapper.map(eventNodeExpected, EventDTO.class)).thenReturn(eventDTOExpected);
 
