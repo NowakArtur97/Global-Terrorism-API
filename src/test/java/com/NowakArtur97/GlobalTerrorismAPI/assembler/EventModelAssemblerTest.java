@@ -11,8 +11,6 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -26,8 +24,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -41,36 +41,28 @@ class EventModelAssemblerTest {
 	@Mock
 	private TargetModelAssembler targetModelAssembler;
 
+	private TargetBuilder targetBuilder;
+	private EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
 		modelAssembler = new EventModelAssembler(targetModelAssembler);
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
 	void when_map_event_node_to_model_should_return_event_model() {
 
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		Long targetId1 = 1L;
-		String targetName1 = "target1";
-		TargetNode targetNode = new TargetNode(targetId1, targetName1);
-		TargetModel targetModel = new TargetModel(targetId1, targetName1);
-
-		String pathToLink = BASE_PATH + targetId1.intValue();
+		Long targetId = 1L;
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+		String pathToLink = BASE_PATH + targetId.intValue();
 		Link link = new Link(pathToLink);
 		targetModel.add(link);
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
 
 		when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
 
@@ -113,18 +105,7 @@ class EventModelAssemblerTest {
 	@Test
 	void when_map_event_node_to_model_without_target_should_return_event_model_without_target() {
 
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).build();
+		EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
 
 		EventModel model = modelAssembler.toModel(eventNode);
 
