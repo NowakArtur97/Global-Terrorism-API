@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +35,15 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.EventServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventServiceImpl_Tests")
-public class EventServiceImplTest {
+class EventServiceImplTest {
 
 	private EventService eventService;
 
@@ -55,43 +56,22 @@ public class EventServiceImplTest {
 	@Mock
 	private TargetService targetService;
 
+	private TargetBuilder targetBuilder;
+	private EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
 		eventService = new EventServiceImpl(eventRepository, dtoMapper, targetService);
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
 	void when_events_exist_and_return_all_events_should_return_events() {
 
-		List<EventNode> eventsListExpected = new ArrayList<>();
-
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		TargetNode target = new TargetNode(1L, "target");
-
-		EventNode event1 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
-
-		EventNode event2 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
-
-		EventNode event3 = EventNode.builder().id(eventId++).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
-
-		eventsListExpected.add(event1);
-		eventsListExpected.add(event2);
-		eventsListExpected.add(event3);
+		List<EventNode> eventsListExpected = createEventNodeList(3);
 
 		Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
 
@@ -141,19 +121,8 @@ public class EventServiceImplTest {
 	void when_event_exists_and_return_one_event_should_return_one_event() {
 
 		Long expectedEventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		TargetNode target = new TargetNode(1L, "target");
-
-		EventNode eventExpected = EventNode.builder().id(expectedEventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		EventNode eventExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 		when(eventRepository.findById(expectedEventId)).thenReturn(Optional.of(eventExpected));
 
@@ -212,24 +181,9 @@ public class EventServiceImplTest {
 	@Test
 	void when_save_event_should_save_and_return_event() {
 
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		TargetNode target = new TargetNode(1L, "target");
-
-		EventNode eventNodeExpectedBeforeSave = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
-
-		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 		when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
@@ -271,34 +225,16 @@ public class EventServiceImplTest {
 	@Test
 	void when_save_new_event_should_save_and_return_new_event() {
 
-		Long eventId = 1L;
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
-		TargetNode targetNode = new TargetNode(1L, "target");
-		TargetDTO targetDTO = new TargetDTO("target");
-
-		EventDTO dTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNodeExpectedBeforeSave = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		when(dtoMapper.mapToNode(dTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
+		when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
 		when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
-		EventNode eventNodeActual = eventService.saveNew(dTOExpected);
+		EventNode eventNodeActual = eventService.saveNew(eventDTOExpected);
 
 		assertAll(
 				() -> assertNotNull(eventNodeActual.getId(),
@@ -330,50 +266,32 @@ public class EventServiceImplTest {
 								+ eventNodeActual.getTarget()),
 				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
 				() -> verifyNoMoreInteractions(eventRepository),
-				() -> verify(dtoMapper, times(1)).mapToNode(dTOExpected, EventNode.class),
+				() -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
 				() -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(targetService));
 	}
 
 	@Test
 	void when_update_event_should_update_event_and_target() {
 
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
 		Long targetId = 1L;
-		String targetName = "target";
+
 		String targetNameUpdated = "target2";
-		TargetNode targetNode = new TargetNode(targetId, targetName);
-		TargetNode targetNodeUpdated = new TargetNode(targetId, targetNameUpdated);
-		TargetDTO targetDTO = new TargetDTO(targetNameUpdated);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.NODE);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.DTO);
 
-		EventDTO dTOExpected = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNodeExpectedBeforeMethod = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventNode eventNodeExpectedBeforeSetIdAndTarget = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNodeUpdated).build();
+		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		EventNode eventNodeExpectedBeforeMethod = (EventNode) eventBuilder.withTarget(targetNode)
+				.build(ObjectType.NODE);
+		EventNode eventNodeExpectedBeforeSetIdAndTarget = (EventNode) eventBuilder.withTarget(targetNode)
+				.build(ObjectType.NODE);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeUpdated).build(ObjectType.NODE);
 
 		when(targetService.update(targetId, targetDTO)).thenReturn(targetNodeUpdated);
-		when(dtoMapper.mapToNode(dTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
+		when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
 		when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
-		EventNode eventNodeActual = eventService.update(eventNodeExpectedBeforeMethod, dTOExpected);
+		EventNode eventNodeActual = eventService.update(eventNodeExpectedBeforeMethod, eventDTOExpected);
 
 		assertAll(
 				() -> assertNotNull(eventNodeActual.getId(),
@@ -407,7 +325,7 @@ public class EventServiceImplTest {
 				() -> verifyNoMoreInteractions(targetService),
 				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
 				() -> verifyNoMoreInteractions(eventRepository),
-				() -> verify(dtoMapper, times(1)).mapToNode(dTOExpected, EventNode.class),
+				() -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
 				() -> verifyNoMoreInteractions(dtoMapper));
 	}
 
@@ -415,23 +333,13 @@ public class EventServiceImplTest {
 	void when_delete_event_should_delete_eventand_target() {
 
 		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		Boolean isPartOfMultipleIncidents = true;
-		Boolean isSuccessful = true;
-		Boolean isSuicide = true;
-
 		Long targetId = 1L;
-		TargetNode target = new TargetNode(targetId, "target");
 
-		EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(target).build();
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 		when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
-		when(targetService.delete(targetId)).thenReturn(Optional.of(target));
+		when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
 
 		Optional<EventNode> eventNodeOptionalActual = eventService.delete(eventId);
 
@@ -486,5 +394,27 @@ public class EventServiceImplTest {
 				() -> verify(eventRepository, times(1)).findById(eventId),
 				() -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
 				() -> verifyNoInteractions(targetService));
+	}
+
+	private List<EventNode> createEventNodeList(int listSize) {
+
+		EventBuilder eventBuilder = new EventBuilder();
+
+		List<EventNode> eventsListExpected = new ArrayList<>();
+
+		int count = 0;
+
+		while (count < listSize) {
+
+			TargetNode targetNode = new TargetNode((long) count, "target" + count);
+
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+
+			eventsListExpected.add(eventNode);
+
+			count++;
+		}
+
+		return eventsListExpected;
 	}
 }

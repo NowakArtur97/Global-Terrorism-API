@@ -31,7 +31,7 @@ import com.ibm.icu.util.Calendar;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventDTOValidation_Tests")
-public class EventDTOValidationTest {
+class EventDTOValidationTest {
 
 	private Validator validator;
 

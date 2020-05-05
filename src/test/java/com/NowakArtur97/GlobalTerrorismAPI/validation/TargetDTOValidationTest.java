@@ -25,7 +25,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetDTOValidation_Tests")
-public class TargetDTOValidationTest {
+class TargetDTOValidationTest {
 
 	private Validator validator;
 
