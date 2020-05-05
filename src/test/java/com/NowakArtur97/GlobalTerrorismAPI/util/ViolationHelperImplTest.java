@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,8 +28,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -49,19 +50,25 @@ class ViolationHelperImplTest {
 	@SuppressWarnings("rawtypes")
 	private ConstraintViolation constraintViolation;
 
+	private TargetBuilder targetBuilder;
+	private EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
 		violationHelper = new ViolationHelperImpl(validator, dtoMapper);
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
 	void when_violate_valid_target_should_not_have_violations() {
 
 		Long targetId = 1L;
-		String targetName = "some invalid target name";
-		TargetDTO targetDTO = new TargetDTO(targetName);
-		TargetNode targetNode = new TargetNode(targetId, targetName);
+		String invalidTargetName = "some invalid target name";
+		TargetDTO targetDTO = new TargetDTO(invalidTargetName);
+		TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
 
 		Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<ConstraintViolation<TargetDTO>>();
 
@@ -81,9 +88,9 @@ class ViolationHelperImplTest {
 	void when_violate_invalid_target_should_have_violations() {
 
 		Long targetId = 1L;
-		String targetName = "some invalid target name";
-		TargetDTO targetDTO = new TargetDTO(targetName);
-		TargetNode targetNode = new TargetNode(targetId, targetName);
+		String invalidTargetName = "some invalid target name";
+		TargetDTO targetDTO = new TargetDTO(invalidTargetName);
+		TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
 
 		Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<ConstraintViolation<TargetDTO>>();
 
@@ -105,23 +112,10 @@ class ViolationHelperImplTest {
 	@Test
 	void when_violate_valid_event_should_not_have_violations() {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		TargetNode targetNode = new TargetNode(1L, "target");
-		TargetDTO targetDTO = new TargetDTO("target");
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNode = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
+		EventNode eventNode = (EventNode) eventBuilder.withId(null).withTarget(targetNode).build(ObjectType.NODE);
 
 		Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<ConstraintViolation<EventDTO>>();
 
@@ -140,23 +134,10 @@ class ViolationHelperImplTest {
 	@SuppressWarnings("unchecked")
 	void when_violate_invalid_event_should_have_violations() {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		TargetNode targetNode = new TargetNode(1L, "target");
-		TargetDTO targetDTO = new TargetDTO("target");
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNode = EventNode.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
+		EventNode eventNode = (EventNode) eventBuilder.withId(null).withTarget(targetNode).build(ObjectType.NODE);
 
 		Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<ConstraintViolation<EventDTO>>();
 

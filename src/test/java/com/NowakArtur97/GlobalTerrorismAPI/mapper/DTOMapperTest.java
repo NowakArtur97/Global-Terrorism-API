@@ -95,8 +95,8 @@ class DTOMapperTest {
 	void when_map_event_dto_to_node_should_return_node() throws ParseException {
 
 		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
 		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
 		EventNode eventNodeExpected = (EventNode) eventBuilder.withId(null).withTarget(targetNode)
 				.build(ObjectType.NODE);
 
@@ -142,8 +142,8 @@ class DTOMapperTest {
 	void when_map_event_node_to_dto_should_return_dto() throws ParseException {
 
 		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 		EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
 		when(modelMapper.map(eventNodeExpected, EventDTO.class)).thenReturn(eventDTOExpected);
