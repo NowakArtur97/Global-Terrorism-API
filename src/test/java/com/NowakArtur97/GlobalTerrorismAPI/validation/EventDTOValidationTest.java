@@ -35,8 +35,8 @@ public class EventDTOValidationTest {
 
 	private Validator validator;
 
-	private static TargetBuilder targetBuilder;
-	private static EventBuilder eventBuilder;
+	private TargetBuilder targetBuilder;
+	private EventBuilder eventBuilder;
 
 	@BeforeEach
 	private void setUp() {

@@ -29,6 +29,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -42,8 +45,14 @@ class PatchHelperImplTest {
 	@Mock
 	private ObjectMapper objectMapper;
 
+	private TargetBuilder targetBuilder;
+	private EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 
 		patchHelper = new PatchHelperImpl(objectMapper);
 	}
@@ -55,11 +64,10 @@ class PatchHelperImplTest {
 		@Test
 		void when_patch_target_node_should_return_patched_target_node() {
 
-			Long targetId = 1L;
-			String oldTargetName = "target";
 			String updatedTargetName = "updated target";
-			TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-			TargetNode targetNodeExpected = new TargetNode(targetId, updatedTargetName);
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+			TargetNode targetNodeExpected = (TargetNode) targetBuilder.withTarget("updated target")
+					.build(ObjectType.NODE);
 
 			JsonPatch targetAsJsonPatch = Json.createPatchBuilder().replace("/target", updatedTargetName).build();
 
@@ -73,8 +81,8 @@ class PatchHelperImplTest {
 			TargetNode targetNodeActual = patchHelper.patch(targetAsJsonPatch, targetNode, TargetNode.class);
 
 			assertAll(
-					() -> assertEquals(targetId, targetNodeActual.getId(),
-							() -> "should return target node with id: " + targetId + ", but was: "
+					() -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
+							() -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
 									+ targetNodeActual.getId()),
 					() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
 							() -> "should return target node with target: " + targetNodeExpected.getTarget()
@@ -87,11 +95,10 @@ class PatchHelperImplTest {
 		@Test
 		void when_merge_patch_target_node_should_return_patched_target_node() {
 
-			Long targetId = 1L;
-			String targetName = "target";
 			String updatedTargetName = "updated target";
-			TargetNode targetNode = new TargetNode(targetId, targetName);
-			TargetNode targetNodeExpected = new TargetNode(targetId, updatedTargetName);
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+			TargetNode targetNodeExpected = (TargetNode) targetBuilder.withTarget("updated target")
+					.build(ObjectType.NODE);
 
 			JsonMergePatch targetAsJsonMergePatch = Json
 					.createMergePatch(Json.createObjectBuilder().add("target", updatedTargetName).build());
@@ -106,8 +113,8 @@ class PatchHelperImplTest {
 			TargetNode targetNodeActual = patchHelper.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
 
 			assertAll(
-					() -> assertEquals(targetId, targetNodeActual.getId(),
-							() -> "should return target node with id: " + targetId + ", but was: "
+					() -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
+							() -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
 									+ targetNodeActual.getId()),
 					() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
 							() -> "should return target node with target: " + targetNodeExpected.getTarget()
@@ -124,34 +131,23 @@ class PatchHelperImplTest {
 
 		@Test
 		void when_patch_event_node_should_return_patched_event_node() throws ParseException {
-
-			Long eventId = 1L;
-
-			String summary = "summary";
-			String motive = "motive";
+		
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-			Boolean isPartOfMultipleIncidents = true;
-			Boolean isSuccessful = true;
-			Boolean isSuicide = true;
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
-			Long targetId = 1L;
-			String target = "target";
-			TargetNode targetNode = new TargetNode(targetId, target);
-
-			String updatedSummary = "summary";
-			String updatedMotive = "motive";
+			String updatedSummary = "updated summary";
+			String updatedMotive = "updated motive";
 			Date updatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-02");
-			Boolean updatedIsPartOfMultipleIncidents = true;
-			Boolean updatedIsSuccessful = true;
-			Boolean updatedIsSuicide = true;
+			Boolean updatedIsPartOfMultipleIncidents = false;
+			Boolean updatedIsSuccessful = false;
+			Boolean updatedIsSuicide = false;
 
-			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
-			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
-					.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
-					.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
+			EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
+					.withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
+					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(targetNode)
+					.build(ObjectType.NODE);
 
 			JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/summary", updatedSummary)
 					.replace("/motive", updatedMotive).replace("/date", date.toString())
@@ -208,29 +204,12 @@ class PatchHelperImplTest {
 		@Test
 		void when_patch_event_nodes_target_should_return_event_node_with_patched_target() throws ParseException {
 
-			Long eventId = 1L;
-
-			String summary = "summary";
-			String motive = "motive";
-			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-			Boolean isPartOfMultipleIncidents = true;
-			Boolean isSuccessful = true;
-			Boolean isSuicide = true;
-
-			Long targetId = 1L;
-			String target = "target";
-			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 			String updatedTarget = "updated target";
-			TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
-
-			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
-
-			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(updatedTargetNode).build();
+			TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).build(ObjectType.NODE);
+			EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
 
 			JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/target/target", updatedTarget).build();
 
@@ -282,33 +261,22 @@ class PatchHelperImplTest {
 		@Test
 		void when_merge_patch_event_node_should_return_patched_event_node() throws ParseException {
 
-			Long eventId = 1L;
-
-			String summary = "summary";
-			String motive = "motive";
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
-			Boolean isPartOfMultipleIncidents = true;
-			Boolean isSuccessful = true;
-			Boolean isSuicide = true;
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
-			Long targetId = 1L;
-			String target = "target";
-			TargetNode targetNode = new TargetNode(targetId, target);
-
-			String updatedSummary = "summary";
-			String updatedMotive = "motive";
+			String updatedSummary = "updated summary";
+			String updatedMotive = "updated motive";
 			Date updatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-02");
-			Boolean updatedIsPartOfMultipleIncidents = true;
-			Boolean updatedIsSuccessful = true;
-			Boolean updatedIsSuicide = true;
+			Boolean updatedIsPartOfMultipleIncidents = false;
+			Boolean updatedIsSuccessful = false;
+			Boolean updatedIsSuicide = false;
 
-			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
-			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(updatedDate).summary(updatedSummary)
-					.isPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).isSuccessful(updatedIsSuccessful)
-					.isSuicide(updatedIsSuicide).motive(updatedMotive).target(targetNode).build();
+			EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
+					.withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
+					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(targetNode)
+					.build(ObjectType.NODE);
 
 			JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(Json.createObjectBuilder()
 					.add("summary", updatedSummary).add("motive", updatedMotive).add("date", date.toString())
@@ -365,29 +333,12 @@ class PatchHelperImplTest {
 		@Test
 		void when_merge_patch_event_nodes_target_should_return_event_node_with_patched_target() throws ParseException {
 
-			Long eventId = 1L;
-
-			String summary = "summary";
-			String motive = "motive";
-			Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-			Boolean isPartOfMultipleIncidents = true;
-			Boolean isSuccessful = true;
-			Boolean isSuicide = true;
-
-			Long targetId = 1L;
-			String target = "target";
-			TargetNode targetNode = new TargetNode(targetId, target);
+			TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 			String updatedTarget = "updated target";
-			TargetNode updatedTargetNode = new TargetNode(targetId, updatedTarget);
-
-			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(targetNode).build();
-
-			EventNode eventNodeExpected = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(updatedTargetNode).build();
+			TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).build(ObjectType.NODE);
+			EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
 
 			JsonMergePatch eventAsJsonMergePatch = Json
 					.createMergePatch(Json.createObjectBuilder().add("/target/target", updatedTarget).build());
