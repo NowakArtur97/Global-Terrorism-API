@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -30,8 +28,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -64,12 +63,6 @@ class EventPagedResourcesAssemblerTest {
 		eventModelAssembler = new EventModelAssembler(targetModelAssembler);
 
 		pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
-	}
-
-	@AfterAll
-	static void tearDown() {
-
-		RequestContextHolder.resetRequestAttributes();
 	}
 
 	@Test
@@ -255,14 +248,7 @@ class EventPagedResourcesAssemblerTest {
 
 	private List<EventNode> createEventNodesList(int listSize) {
 
-		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = Calendar.getInstance().getTime();
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
+		EventBuilder eventBuilder = new EventBuilder();
 
 		List<EventNode> eventsListExpected = new ArrayList<>();
 
@@ -270,15 +256,12 @@ class EventPagedResourcesAssemblerTest {
 
 		while (count < listSize) {
 
-			TargetNode target = new TargetNode(eventId, "target" + eventId);
+			TargetNode targetNode = new TargetNode((long) count, "target" + count);
 
-			EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).motive(motive).target(target).build();
+			EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
 			eventsListExpected.add(eventNode);
 
-			eventId++;
 			count++;
 		}
 

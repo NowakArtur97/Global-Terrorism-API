@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -54,12 +53,6 @@ class TargetPagedResourcesAssemblerTest {
 		targetModelAssembler = new TargetModelAssembler();
 
 		pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
-	}
-
-	@AfterAll
-	static void tearDown() {
-
-		RequestContextHolder.resetRequestAttributes();
 	}
 
 	@Test
@@ -245,7 +238,6 @@ class TargetPagedResourcesAssemblerTest {
 
 	private List<TargetNode> createTargetNodesList(int listSize) {
 
-		Long targetId = 1L;
 		String targetName = "target";
 
 		List<TargetNode> targetsListExpected = new ArrayList<>();
@@ -254,11 +246,10 @@ class TargetPagedResourcesAssemblerTest {
 
 		while (count < listSize) {
 
-			TargetNode targetNode = new TargetNode(targetId, targetName + targetId);
+			TargetNode targetNode = new TargetNode((long) count, targetName + count);
 
 			targetsListExpected.add(targetNode);
 
-			targetId++;
 			count++;
 		}
 
