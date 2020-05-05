@@ -12,11 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +37,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -71,6 +71,9 @@ public class EventControllerDeleteMethodTest {
 	@Mock
 	private ViolationHelper violationHelper;
 
+	private static TargetBuilder targetBuilder;
+	private static EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
@@ -79,60 +82,46 @@ public class EventControllerDeleteMethodTest {
 
 		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
 				.build();
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
-	void when_delete_existing_event_should_return_event() throws ParseException {
+	void when_delete_existing_event_should_return_event() {
 
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
+		targetModel.add(new Link(pathToTargetLink));
+		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
 		Long eventId = 1L;
-
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		Long targetId = 1L;
-		String target = "target";
-		TargetNode targetNode = new TargetNode(targetId, target);
-		TargetModel targetModel = new TargetModel(targetId, target);
-		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
-		Link targetLink = new Link(pathToTargetLink);
-		targetModel.add(targetLink);
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetModel).build();
-
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		model.add(eventLink);
+		eventModel.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
-		when(modelAssembler.toModel(eventNode)).thenReturn(model);
+		when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
-						.andExpect(jsonPath("motive", is(motive)))
+						.andExpect(jsonPath("id", is(eventId.intValue())))
+						.andExpect(jsonPath("summary", is(eventNode.getSummary())))
+						.andExpect(jsonPath("motive", is(eventNode.getMotive())))
 						.andExpect(jsonPath("date",
-								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("isSuicide", is(isSuicide)))
-						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
-						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+								is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
+										eventNode.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+						.andExpect(jsonPath("isSuicide", is(eventNode.getIsSuicide())))
+						.andExpect(jsonPath("isSuccessful", is(eventNode.getIsSuccessful())))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventNode.getIsPartOfMultipleIncidents())))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-						.andExpect(jsonPath("target.id", is(targetId.intValue())))
-						.andExpect(jsonPath("target.target", is(target))),
+						.andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
+						.andExpect(jsonPath("target.target", is(targetNode.getTarget()))),
 				() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(eventNode),
 				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
