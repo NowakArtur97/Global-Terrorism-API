@@ -50,6 +50,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -81,6 +84,9 @@ public class EventControllerGetMethodTest {
 	@Mock
 	private ViolationHelper violationHelper;
 
+	private static TargetBuilder targetBuilder;
+	private static EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
@@ -89,6 +95,9 @@ public class EventControllerGetMethodTest {
 
 		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
@@ -594,57 +603,38 @@ public class EventControllerGetMethodTest {
 	}
 
 	@Test
-	void when_find_existing_event_should_return_event() throws ParseException {
+	void when_find_existing_event_should_return_event() {
 
 		Long eventId = 1L;
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		Long targetId = 1L;
-		String target = "target";
-		TargetNode targetNode = new TargetNode(targetId, target);
-		TargetModel targetModel = new TargetModel(targetId, target);
-		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
-		Link targetLink = new Link(pathToTargetLink);
-		targetModel.add(targetLink);
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetModel).build();
-
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-		Link eventLink = new Link(pathToEventLink);
-		model.add(eventLink);
+		eventModel.add(new Link(pathToEventLink));
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(modelAssembler.toModel(eventNode)).thenReturn(model);
+		when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
-						.andExpect(jsonPath("motive", is(motive)))
+						.andExpect(jsonPath("id", is(eventId.intValue())))
+						.andExpect(jsonPath("summary", is(eventModel.getSummary())))
+						.andExpect(jsonPath("motive", is(eventModel.getMotive())))
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("isSuicide", is(isSuicide)))
-						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
-						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
-						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-						.andExpect(jsonPath("target.id", is(targetId.intValue())))
-						.andExpect(jsonPath("target.target", is(target))),
+										.format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
+						.andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
+						.andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
+						.andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(eventNode),
 				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
@@ -652,46 +642,36 @@ public class EventControllerGetMethodTest {
 	}
 
 	@Test
-	void when_find_existing_event_without_target_should_return_event_withput_target() throws ParseException {
+	void when_find_existing_event_without_target_should_return_event_without_target() {
 
 		Long eventId = 1L;
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).build();
-
-		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).build();
+		EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
+		EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		model.add(eventLink);
+		eventModel.add(eventLink);
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-		when(modelAssembler.toModel(eventNode)).thenReturn(model);
+		when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
-						.andExpect(jsonPath("motive", is(motive)))
+						.andExpect(jsonPath("id", is(eventId.intValue())))
+						.andExpect(jsonPath("summary", is(eventModel.getSummary())))
+						.andExpect(jsonPath("motive", is(eventModel.getMotive())))
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("isSuicide", is(isSuicide)))
-						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
-						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+										.format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
+						.andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
 						.andExpect(jsonPath("target").value(IsNull.nullValue())),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(eventNode),
