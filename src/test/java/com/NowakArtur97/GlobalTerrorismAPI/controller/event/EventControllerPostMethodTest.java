@@ -15,7 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +46,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.icu.util.Calendar;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -79,6 +84,9 @@ public class EventControllerPostMethodTest {
 	@Mock
 	private ViolationHelper violationHelper;
 
+	private static TargetBuilder targetBuilder;
+	private static EventBuilder eventBuilder;
+
 	@BeforeEach
 	private void setUp() {
 
@@ -88,48 +96,31 @@ public class EventControllerPostMethodTest {
 		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
 		mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler).build();
+
+		targetBuilder = new TargetBuilder();
+		eventBuilder = new EventBuilder();
 	}
 
 	@Test
-	void when_add_valid_event_should_return_new_event_as_model() throws ParseException {
+	void when_add_valid_event_should_return_new_event_as_model() {
 
 		Long eventId = 1L;
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		Long targetId = 1L;
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-		TargetNode targetNode = new TargetNode(targetId, target);
-		TargetModel targetModel = new TargetModel(targetId, target);
-
-		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
-		Link targetLink = new Link(pathToTargetLink);
-		targetModel.add(targetLink);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetDTO).build();
-
-		EventNode eventNode = EventNode.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetNode).build();
-
-		EventModel model = EventModel.builder().id(eventId).date(date).summary(summary)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.motive(motive).target(targetModel).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
+		targetModel.add(new Link(pathToTargetLink));
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		Link eventLink = new Link(pathToEventLink);
-		model.add(eventLink);
+		eventModel.add(eventLink);
 
 		when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
-		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(model);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
 
 		assertAll(
 				() -> mockMvc
@@ -138,14 +129,19 @@ public class EventControllerPostMethodTest {
 						.andExpect(status().isCreated())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-						.andExpect(jsonPath("id", is(eventId.intValue()))).andExpect(jsonPath("summary", is(summary)))
-						.andExpect(jsonPath("motive", is(motive))).andExpect(jsonPath("date", is(notNullValue())))
-						.andExpect(jsonPath("isSuicide", is(isSuicide)))
-						.andExpect(jsonPath("isSuccessful", is(isSuccessful)))
-						.andExpect(jsonPath("isPartOfMultipleIncidents", is(isPartOfMultipleIncidents)))
+						.andExpect(jsonPath("id", is(eventId.intValue())))
+						.andExpect(jsonPath("summary", is(eventModel.getSummary())))
+						.andExpect(jsonPath("motive", is(eventModel.getMotive())))
+						.andExpect(jsonPath("date",
+								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+										.format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
+						.andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-						.andExpect(jsonPath("target.id", is(targetId.intValue())))
-						.andExpect(jsonPath("target.target", is(target))),
+						.andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
+						.andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
 				() -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
 				() -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
@@ -156,18 +152,9 @@ public class EventControllerPostMethodTest {
 	@Test
 	void when_add_event_with_null_fields_should_return_errors() {
 
-		String summary = null;
-		String motive = null;
-		Date date = null;
-		Boolean isPartOfMultipleIncidents = null;
-		Boolean isSuccessful = null;
-		Boolean isSuicide = null;
-
-		TargetDTO targetDTO = new TargetDTO(null);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
+				.withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null).withTarget(null)
+				.build(ObjectType.DTO);
 
 		assertAll(
 				() -> mockMvc
@@ -190,20 +177,10 @@ public class EventControllerPostMethodTest {
 	@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 	@NullAndEmptySource
 	@ValueSource(strings = { " ", "\t", "\n" })
-	void when_add_event_with_invalid_target_should_return_errors(String invalidTarget) throws ParseException {
+	void when_add_event_with_invalid_target_should_return_errors(String invalidTarget) {
 
-		String summary = "summary";
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		TargetDTO targetDTO = new TargetDTO(invalidTarget);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
 		assertAll(
 				() -> mockMvc
@@ -222,18 +199,9 @@ public class EventControllerPostMethodTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) throws ParseException {
 
-		String motive = "motive";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(invalidSummary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO)
+				.build(ObjectType.DTO);
 
 		assertAll(
 				() -> mockMvc
@@ -252,18 +220,9 @@ public class EventControllerPostMethodTest {
 	@ValueSource(strings = { " ", "\t", "\n" })
 	void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) throws ParseException {
 
-		String summary = "summary";
-		Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(date).summary(summary).motive(invalidMotive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO)
+				.build(ObjectType.DTO);
 
 		assertAll(
 				() -> mockMvc
@@ -278,22 +237,13 @@ public class EventControllerPostMethodTest {
 	}
 
 	@Test
-	void when_add_event_with_date_in_the_future_should_return_errors() throws ParseException {
+	void when_add_event_with_date_in_the_future_should_return_errors() {
 
-		Date invalidEventDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2090 02:00:00:000");
-
-		String motive = "motive";
-		String summary = "summary";
-		boolean isPartOfMultipleIncidents = true;
-		boolean isSuccessful = true;
-		boolean isSuicide = true;
-
-		String target = "target";
-		TargetDTO targetDTO = new TargetDTO(target);
-
-		EventDTO eventDTO = EventDTO.builder().date(invalidEventDate).summary(summary).motive(motive)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful).isSuicide(isSuicide)
-				.target(targetDTO).build();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2090, 1, 1);
+		Date invalidDate = calendar.getTime();
+		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+		EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);
 
 		assertAll(
 				() -> mockMvc
