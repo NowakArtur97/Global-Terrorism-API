@@ -125,7 +125,7 @@ public class EventControllerPutMethodTest {
 
 		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
-		EventNode eventNodeUpdated = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+		EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
 				.withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
 				.withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(targetNode)
 				.build(ObjectType.NODE);
@@ -142,7 +142,7 @@ public class EventControllerPutMethodTest {
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
-				.thenReturn(eventNodeUpdated);
+				.thenReturn(updatedEventNode);
 		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
 
 		assertAll(
@@ -198,25 +198,25 @@ public class EventControllerPutMethodTest {
 
 		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
-		EventNode eventNodeUpdated = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+		EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
 				.withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
 				.withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(updatedTargetNode)
 				.build(ObjectType.NODE);
 
-		EventModel eventModelUpdated = (EventModel) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+		EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
 				.withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
 				.withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(updatedTargetModel)
 				.build(ObjectType.MODEL);
 
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-		eventModelUpdated.add(new Link(pathToEventLink));
+		updatedEventModel.add(new Link(pathToEventLink));
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 		when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 		when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
-				.thenReturn(eventNodeUpdated);
-		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
+				.thenReturn(updatedEventNode);
+		when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
 
 		assertAll(
 				() -> mockMvc
