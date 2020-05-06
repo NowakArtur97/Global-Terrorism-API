@@ -305,8 +305,7 @@ class EventControllerPatchMethodTest {
 		}
 
 		@Test
-		void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors()
-				throws ParseException {
+		void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors() {
 
 			Long eventId = 1L;
 
@@ -394,8 +393,8 @@ class EventControllerPatchMethodTest {
 		@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " " })
-		void when_partial_update_event_with_invalid_summary_using_json_patch_should_return_errors(String invalidSummary)
-				throws ParseException {
+		void when_partial_update_event_with_invalid_summary_using_json_patch_should_return_errors(
+				String invalidSummary) {
 
 			Long eventId = 1L;
 
@@ -845,8 +844,7 @@ class EventControllerPatchMethodTest {
 		}
 
 		@Test
-		void when_partial_update_event_with_date_in_the_future_using_merge_json_patch_should_return_errors()
-				throws ParseException {
+		void when_partial_update_event_with_date_in_the_future_using_merge_json_patch_should_return_errors() {
 
 			Long eventId = 1L;
 
