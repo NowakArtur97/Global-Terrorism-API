@@ -13,11 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +42,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
@@ -61,6 +60,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
 public class EventControllerGetMethodTest {
+
+	private static int counterForUtilMethods = 0;
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
 	private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";
@@ -104,131 +105,19 @@ public class EventControllerGetMethodTest {
 	void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events()
 			throws ParseException {
 
-		Long eventId1 = 1L;
-		String summary1 = "summary1";
-		String motive1 = "motive1";
-		Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents1 = true;
-		boolean isSuccessful1 = true;
-		boolean isSuicide1 = true;
+		EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode3 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode4 = (EventNode) createEvent(ObjectType.NODE);
 
-		Long targetId1 = 1L;
-		String target1 = "target1";
-		TargetNode targetNode1 = new TargetNode(targetId1, target1);
-		TargetModel targetModel1 = new TargetModel(targetId1, target1);
-		String pathToTargetLink1 = TARGET_BASE_PATH + "/" + targetId1.intValue();
-		Link targetLink1 = new Link(pathToTargetLink1);
-		targetModel1.add(targetLink1);
+		EventModel eventModel1 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel2 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel3 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel4 = (EventModel) createEvent(ObjectType.MODEL);
 
-		EventNode eventNode1 = EventNode.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
-				.motive(motive1).target(targetNode1).build();
-
-		EventModel model1 = EventModel.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
-				.motive(motive1).target(targetModel1).build();
-
-		String pathToLink1 = EVENT_BASE_PATH + eventId1.intValue();
-		Link link1 = new Link(pathToLink1);
-		model1.add(link1);
-
-		Long eventId2 = 2L;
-		String summary2 = "summary2";
-		String motive2 = "motive2";
-		Date date2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents2 = true;
-		boolean isSuccessful2 = true;
-		boolean isSuicide2 = true;
-
-		Long targetId2 = 2L;
-		String target2 = "target2";
-		TargetNode targetNode2 = new TargetNode(targetId2, target2);
-		TargetModel targetModel2 = new TargetModel(targetId2, target2);
-		String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetId2.intValue();
-		Link targetLink2 = new Link(pathToTargetLink2);
-		targetModel2.add(targetLink2);
-
-		EventNode eventNode2 = EventNode.builder().id(eventId2).date(date2).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
-				.motive(motive2).target(targetNode2).build();
-
-		EventModel model2 = EventModel.builder().id(eventId2).date(date2).summary(summary2)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
-				.motive(motive2).target(targetModel2).build();
-
-		String pathToLink2 = EVENT_BASE_PATH + eventId2.intValue();
-		Link link2 = new Link(pathToLink2);
-		model2.add(link2);
-
-		Long eventId3 = 3L;
-		String summary3 = "summary3";
-		String motive3 = "motive3";
-		Date date3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents3 = true;
-		boolean isSuccessful3 = true;
-		boolean isSuicide3 = true;
-
-		Long targetId3 = 3L;
-		String target3 = "target3";
-		TargetNode targetNode3 = new TargetNode(targetId3, target3);
-		TargetModel targetModel3 = new TargetModel(targetId3, target3);
-		String pathToTargetLink3 = TARGET_BASE_PATH + "/" + targetId3.intValue();
-		Link targetLink3 = new Link(pathToTargetLink3);
-		targetModel3.add(targetLink3);
-
-		EventNode eventNode3 = EventNode.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
-				.motive(motive3).target(targetNode3).build();
-
-		EventModel model3 = EventModel.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
-				.motive(motive3).target(targetModel3).build();
-
-		String pathToLink3 = EVENT_BASE_PATH + eventId3.intValue();
-		Link link3 = new Link(pathToLink3);
-		model3.add(link3);
-
-		Long eventId4 = 4L;
-		String summary4 = "summary4";
-		String motive4 = "motive4";
-		Date date4 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents4 = true;
-		boolean isSuccessful4 = true;
-		boolean isSuicide4 = true;
-
-		Long targetId4 = 4L;
-		String target4 = "target4";
-		TargetNode targetNode4 = new TargetNode(targetId4, target4);
-		TargetModel targetModel4 = new TargetModel(targetId4, target4);
-		String pathToTargetLink4 = TARGET_BASE_PATH + "/" + targetId4.intValue();
-		Link targetLink4 = new Link(pathToTargetLink4);
-		targetModel4.add(targetLink4);
-
-		EventNode eventNode4 = EventNode.builder().id(eventId4).date(date4).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
-				.motive(motive4).target(targetNode4).build();
-
-		EventModel model4 = EventModel.builder().id(eventId4).date(date4).summary(summary4)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
-				.motive(motive4).target(targetModel4).build();
-
-		String pathToLink4 = EVENT_BASE_PATH + eventId4.intValue();
-		Link link4 = new Link(pathToLink4);
-		model4.add(link4);
-
-		List<EventNode> eventsListExpected = new ArrayList<>();
-		eventsListExpected.add(eventNode1);
-		eventsListExpected.add(eventNode2);
-		eventsListExpected.add(eventNode3);
-		eventsListExpected.add(eventNode4);
-
-		List<EventModel> modelsListExpected = new ArrayList<>();
-		modelsListExpected.add(model1);
-		modelsListExpected.add(model2);
-		modelsListExpected.add(model3);
-		modelsListExpected.add(model4);
-
-		Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+		List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+		List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
+		Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
 
 		int sizeExpected = 3;
 		int totalElementsExpected = 4;
@@ -250,7 +139,7 @@ public class EventControllerGetMethodTest {
 		Link pageLink4 = new Link(lastPageLink, "last");
 
 		PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
-		PagedModel<EventModel> resources = new PagedModel<>(modelsListExpected, metadata, pageLink1, pageLink2,
+		PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
 				pageLink3, pageLink4);
 
 		when(eventService.findAll(pageable)).thenReturn(eventsExpected);
@@ -263,58 +152,74 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
 						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
 						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
-						.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
-						.andExpect(jsonPath("content[0].id", is(eventId1.intValue())))
-						.andExpect(jsonPath("content[0].summary", is(summary1)))
-						.andExpect(jsonPath("content[0].motive", is(motive1)))
+						.andExpect(jsonPath("content[0].id", is(eventModel1.getId().intValue())))
+						.andExpect(jsonPath("content[0].summary", is(eventModel1.getSummary())))
+						.andExpect(jsonPath("content[0].motive", is(eventModel1.getMotive())))
 						.andExpect(jsonPath("content[0].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[0].isSuicide", is(isSuicide1)))
-						.andExpect(jsonPath("content[0].isSuccessful", is(isSuccessful1)))
-						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
-						.andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
-						.andExpect(jsonPath("content[0].target.id", is(targetId1.intValue())))
-						.andExpect(jsonPath("content[0].target.target", is(target1)))
-						.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
-						.andExpect(jsonPath("content[1].id", is(eventId2.intValue())))
-						.andExpect(jsonPath("content[1].summary", is(summary2)))
-						.andExpect(jsonPath("content[1].motive", is(motive2)))
+										.format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[0].isSuicide", is(eventModel1.getIsSuicide())))
+						.andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
+						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
+								is(eventModel1.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[0].target.links[0].href",
+								is(eventModel1.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
+						.andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
+						.andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
+						.andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
 						.andExpect(jsonPath("content[1].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[1].isSuicide", is(isSuicide2)))
-						.andExpect(jsonPath("content[1].isSuccessful", is(isSuccessful2)))
-						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
-						.andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
-						.andExpect(jsonPath("content[1].target.id", is(targetId2.intValue())))
-						.andExpect(jsonPath("content[1].target.target", is(target2)))
-						.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
-						.andExpect(jsonPath("content[2].id", is(eventId3.intValue())))
-						.andExpect(jsonPath("content[2].summary", is(summary3)))
-						.andExpect(jsonPath("content[2].motive", is(motive3)))
+										.format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[1].isSuicide", is(eventModel2.getIsSuicide())))
+						.andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
+						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
+								is(eventModel2.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[1].target.links[0].href",
+								is(eventModel2.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
+						.andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
+						.andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
+						.andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
 						.andExpect(jsonPath("content[2].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date3.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[2].isSuicide", is(isSuicide3)))
-						.andExpect(jsonPath("content[2].isSuccessful", is(isSuccessful3)))
-						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
-						.andExpect(jsonPath("content[2].target.links[0].href", is(pathToTargetLink3)))
-						.andExpect(jsonPath("content[2].target.id", is(targetId3.intValue())))
-						.andExpect(jsonPath("content[2].target.target", is(target3)))
-						.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
-						.andExpect(jsonPath("content[3].id", is(eventId4.intValue())))
-						.andExpect(jsonPath("content[3].summary", is(summary4)))
-						.andExpect(jsonPath("content[3].motive", is(motive4)))
+										.format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[2].isSuicide", is(eventModel3.getIsSuicide())))
+						.andExpect(jsonPath("content[2].isSuccessful", is(eventModel3.getIsSuccessful())))
+						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents",
+								is(eventModel3.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[2].target.links[0].href",
+								is(eventModel3.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
+						.andExpect(jsonPath("content[3].id", is(eventModel4.getId().intValue())))
+						.andExpect(jsonPath("content[3].summary", is(eventModel4.getSummary())))
+						.andExpect(jsonPath("content[3].motive", is(eventModel4.getMotive())))
 						.andExpect(jsonPath("content[3].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date4.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[3].isSuicide", is(isSuicide4)))
-						.andExpect(jsonPath("content[3].isSuccessful", is(isSuccessful4)))
-						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
-						.andExpect(jsonPath("content[3].target.links[0].href", is(pathToTargetLink4)))
-						.andExpect(jsonPath("content[3].target.id", is(targetId4.intValue())))
-						.andExpect(jsonPath("content[3].target.target", is(target4)))
+										.format(eventModel4.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[3].isSuicide", is(eventModel4.getIsSuicide())))
+						.andExpect(jsonPath("content[3].isSuccessful", is(eventModel4.getIsSuccessful())))
+						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents",
+								is(eventModel4.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[3].links[0].href", is(eventModel4.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[3].target.links[0].href",
+								is(eventModel4.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[3].target.id", is(eventModel4.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[3].target.target", is(eventModel4.getTarget().getTarget())))
 						.andExpect(jsonPath("page.size", is(sizeExpected)))
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -329,131 +234,19 @@ public class EventControllerGetMethodTest {
 	void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events()
 			throws ParseException {
 
-		Long eventId1 = 1L;
-		String summary1 = "summary1";
-		String motive1 = "motive1";
-		Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents1 = true;
-		boolean isSuccessful1 = true;
-		boolean isSuicide1 = true;
+		EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode3 = (EventNode) createEvent(ObjectType.NODE);
+		EventNode eventNode4 = (EventNode) createEvent(ObjectType.NODE);
 
-		Long targetId1 = 1L;
-		String target1 = "target1";
-		TargetNode targetNode1 = new TargetNode(targetId1, target1);
-		TargetModel targetModel1 = new TargetModel(targetId1, target1);
-		String pathToTargetLink1 = TARGET_BASE_PATH + "/" + targetId1.intValue();
-		Link targetLink1 = new Link(pathToTargetLink1);
-		targetModel1.add(targetLink1);
+		EventModel eventModel1 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel2 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel3 = (EventModel) createEvent(ObjectType.MODEL);
+		EventModel eventModel4 = (EventModel) createEvent(ObjectType.MODEL);
 
-		EventNode eventNode1 = EventNode.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
-				.motive(motive1).target(targetNode1).build();
-
-		EventModel model1 = EventModel.builder().id(eventId1).date(date1).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents1).isSuccessful(isSuccessful1).isSuicide(isSuicide1)
-				.motive(motive1).target(targetModel1).build();
-
-		String pathToLink1 = EVENT_BASE_PATH + eventId1.intValue();
-		Link link1 = new Link(pathToLink1);
-		model1.add(link1);
-
-		Long eventId2 = 2L;
-		String summary2 = "summary2";
-		String motive2 = "motive2";
-		Date date2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents2 = true;
-		boolean isSuccessful2 = true;
-		boolean isSuicide2 = true;
-
-		Long targetId2 = 2L;
-		String target2 = "target2";
-		TargetNode targetNode2 = new TargetNode(targetId2, target2);
-		TargetModel targetModel2 = new TargetModel(targetId2, target2);
-		String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetId2.intValue();
-		Link targetLink2 = new Link(pathToTargetLink2);
-		targetModel2.add(targetLink2);
-
-		EventNode eventNode2 = EventNode.builder().id(eventId2).date(date2).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
-				.motive(motive2).target(targetNode2).build();
-
-		EventModel model2 = EventModel.builder().id(eventId2).date(date2).summary(summary2)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents2).isSuccessful(isSuccessful2).isSuicide(isSuicide2)
-				.motive(motive2).target(targetModel2).build();
-
-		String pathToLink2 = EVENT_BASE_PATH + eventId2.intValue();
-		Link link2 = new Link(pathToLink2);
-		model2.add(link2);
-
-		Long eventId3 = 3L;
-		String summary3 = "summary3";
-		String motive3 = "motive3";
-		Date date3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents3 = true;
-		boolean isSuccessful3 = true;
-		boolean isSuicide3 = true;
-
-		Long targetId3 = 3L;
-		String target3 = "target3";
-		TargetNode targetNode3 = new TargetNode(targetId3, target3);
-		TargetModel targetModel3 = new TargetModel(targetId3, target3);
-		String pathToTargetLink3 = TARGET_BASE_PATH + "/" + targetId3.intValue();
-		Link targetLink3 = new Link(pathToTargetLink3);
-		targetModel3.add(targetLink3);
-
-		EventNode eventNode3 = EventNode.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
-				.motive(motive3).target(targetNode3).build();
-
-		EventModel model3 = EventModel.builder().id(eventId3).date(date3).summary(summary3)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents3).isSuccessful(isSuccessful3).isSuicide(isSuicide3)
-				.motive(motive3).target(targetModel3).build();
-
-		String pathToLink3 = EVENT_BASE_PATH + eventId3.intValue();
-		Link link3 = new Link(pathToLink3);
-		model3.add(link3);
-
-		Long eventId4 = 4L;
-		String summary4 = "summary4";
-		String motive4 = "motive4";
-		Date date4 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("03/07/2000 02:00:00:000");
-		boolean isPartOfMultipleIncidents4 = true;
-		boolean isSuccessful4 = true;
-		boolean isSuicide4 = true;
-
-		Long targetId4 = 4L;
-		String target4 = "target4";
-		TargetNode targetNode4 = new TargetNode(targetId4, target4);
-		TargetModel targetModel4 = new TargetModel(targetId4, target4);
-		String pathToTargetLink4 = TARGET_BASE_PATH + "/" + targetId4.intValue();
-		Link targetLink4 = new Link(pathToTargetLink4);
-		targetModel4.add(targetLink4);
-
-		EventNode eventNode4 = EventNode.builder().id(eventId4).date(date4).summary(summary1)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
-				.motive(motive4).target(targetNode4).build();
-
-		EventModel model4 = EventModel.builder().id(eventId4).date(date4).summary(summary4)
-				.isPartOfMultipleIncidents(isPartOfMultipleIncidents4).isSuccessful(isSuccessful4).isSuicide(isSuicide4)
-				.motive(motive4).target(targetModel4).build();
-
-		String pathToLink4 = EVENT_BASE_PATH + eventId4.intValue();
-		Link link4 = new Link(pathToLink4);
-		model4.add(link4);
-
-		List<EventNode> eventsListExpected = new ArrayList<>();
-		eventsListExpected.add(eventNode1);
-		eventsListExpected.add(eventNode2);
-		eventsListExpected.add(eventNode3);
-		eventsListExpected.add(eventNode4);
-
-		List<EventModel> modelsListExpected = new ArrayList<>();
-		modelsListExpected.add(model1);
-		modelsListExpected.add(model2);
-		modelsListExpected.add(model3);
-		modelsListExpected.add(model4);
-
-		Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+		List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+		List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
+		Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
 
 		int sizeExpected = 100;
 		int totalElementsExpected = 4;
@@ -475,7 +268,7 @@ public class EventControllerGetMethodTest {
 		Link pageLink4 = new Link(lastPageLink, "last");
 
 		PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
-		PagedModel<EventModel> resources = new PagedModel<>(modelsListExpected, metadata, pageLink1, pageLink2,
+		PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
 				pageLink3, pageLink4);
 
 		when(eventService.findAll(pageable)).thenReturn(eventsExpected);
@@ -488,58 +281,74 @@ public class EventControllerGetMethodTest {
 						.andExpect(jsonPath("links[1].href", is(firstPageLink)))
 						.andExpect(jsonPath("links[2].href", is(lastPageLink)))
 						.andExpect(jsonPath("links[3].href", is(lastPageLink)))
-						.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
-						.andExpect(jsonPath("content[0].id", is(eventId1.intValue())))
-						.andExpect(jsonPath("content[0].summary", is(summary1)))
-						.andExpect(jsonPath("content[0].motive", is(motive1)))
+						.andExpect(jsonPath("content[0].id", is(eventModel1.getId().intValue())))
+						.andExpect(jsonPath("content[0].summary", is(eventModel1.getSummary())))
+						.andExpect(jsonPath("content[0].motive", is(eventModel1.getMotive())))
 						.andExpect(jsonPath("content[0].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[0].isSuicide", is(isSuicide1)))
-						.andExpect(jsonPath("content[0].isSuccessful", is(isSuccessful1)))
-						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents1)))
-						.andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
-						.andExpect(jsonPath("content[0].target.id", is(targetId1.intValue())))
-						.andExpect(jsonPath("content[0].target.target", is(target1)))
-						.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
-						.andExpect(jsonPath("content[1].id", is(eventId2.intValue())))
-						.andExpect(jsonPath("content[1].summary", is(summary2)))
-						.andExpect(jsonPath("content[1].motive", is(motive2)))
+										.format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[0].isSuicide", is(eventModel1.getIsSuicide())))
+						.andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
+						.andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
+								is(eventModel1.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[0].target.links[0].href",
+								is(eventModel1.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
+						.andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
+						.andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
+						.andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
 						.andExpect(jsonPath("content[1].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[1].isSuicide", is(isSuicide2)))
-						.andExpect(jsonPath("content[1].isSuccessful", is(isSuccessful2)))
-						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents2)))
-						.andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
-						.andExpect(jsonPath("content[1].target.id", is(targetId2.intValue())))
-						.andExpect(jsonPath("content[1].target.target", is(target2)))
-						.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
-						.andExpect(jsonPath("content[2].id", is(eventId3.intValue())))
-						.andExpect(jsonPath("content[2].summary", is(summary3)))
-						.andExpect(jsonPath("content[2].motive", is(motive3)))
+										.format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[1].isSuicide", is(eventModel2.getIsSuicide())))
+						.andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
+						.andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
+								is(eventModel2.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[1].target.links[0].href",
+								is(eventModel2.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
+						.andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
+						.andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
+						.andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
 						.andExpect(jsonPath("content[2].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date3.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[2].isSuicide", is(isSuicide3)))
-						.andExpect(jsonPath("content[2].isSuccessful", is(isSuccessful3)))
-						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents3)))
-						.andExpect(jsonPath("content[2].target.links[0].href", is(pathToTargetLink3)))
-						.andExpect(jsonPath("content[2].target.id", is(targetId3.intValue())))
-						.andExpect(jsonPath("content[2].target.target", is(target3)))
-						.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
-						.andExpect(jsonPath("content[3].id", is(eventId4.intValue())))
-						.andExpect(jsonPath("content[3].summary", is(summary4)))
-						.andExpect(jsonPath("content[3].motive", is(motive4)))
+										.format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[2].isSuicide", is(eventModel3.getIsSuicide())))
+						.andExpect(jsonPath("content[2].isSuccessful", is(eventModel3.getIsSuccessful())))
+						.andExpect(jsonPath("content[2].isPartOfMultipleIncidents",
+								is(eventModel3.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[2].target.links[0].href",
+								is(eventModel3.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
+						.andExpect(jsonPath("content[3].id", is(eventModel4.getId().intValue())))
+						.andExpect(jsonPath("content[3].summary", is(eventModel4.getSummary())))
+						.andExpect(jsonPath("content[3].motive", is(eventModel4.getMotive())))
 						.andExpect(jsonPath("content[3].date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-										.format(date4.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("content[3].isSuicide", is(isSuicide4)))
-						.andExpect(jsonPath("content[3].isSuccessful", is(isSuccessful4)))
-						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents", is(isPartOfMultipleIncidents4)))
-						.andExpect(jsonPath("content[3].target.links[0].href", is(pathToTargetLink4)))
-						.andExpect(jsonPath("content[3].target.id", is(targetId4.intValue())))
-						.andExpect(jsonPath("content[3].target.target", is(target4)))
+										.format(eventModel4.getDate().toInstant().atZone(ZoneId.systemDefault())
+												.toLocalDate()))))
+						.andExpect(jsonPath("content[3].isSuicide", is(eventModel4.getIsSuicide())))
+						.andExpect(jsonPath("content[3].isSuccessful", is(eventModel4.getIsSuccessful())))
+						.andExpect(jsonPath("content[3].isPartOfMultipleIncidents",
+								is(eventModel4.getIsPartOfMultipleIncidents())))
+						.andExpect(
+								jsonPath("content[3].links[0].href", is(eventModel4.getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[3].target.links[0].href",
+								is(eventModel4.getTarget().getLink("self").get().getHref())))
+						.andExpect(jsonPath("content[3].target.id", is(eventModel4.getTarget().getId().intValue())))
+						.andExpect(jsonPath("content[3].target.target", is(eventModel4.getTarget().getTarget())))
 						.andExpect(jsonPath("page.size", is(sizeExpected)))
 						.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 						.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -696,5 +505,45 @@ public class EventControllerGetMethodTest {
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));
+	}
+
+	private Event createEvent(ObjectType type) {
+
+		String summary = "summary";
+		String motive = "motive";
+		boolean isPartOfMultipleIncidents = true;
+		boolean isSuccessful = true;
+		boolean isSuicide = true;
+
+		switch (type) {
+
+		case NODE:
+
+			TargetNode targetNode = new TargetNode((long) counterForUtilMethods, "target" + counterForUtilMethods);
+			EventNode eventNode = (EventNode) eventBuilder.withSummary(summary + counterForUtilMethods)
+					.withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+					.withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode)
+					.build(ObjectType.NODE);
+
+			return eventNode;
+
+		case MODEL:
+
+			TargetModel targetModel = new TargetModel((long) counterForUtilMethods, "target" + counterForUtilMethods);
+			String pathToTargetLink = TARGET_BASE_PATH + counterForUtilMethods;
+			targetModel.add(new Link(pathToTargetLink));
+
+			EventModel eventModel = (EventModel) eventBuilder.withSummary(summary + counterForUtilMethods)
+					.withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+					.withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetModel)
+					.build(ObjectType.MODEL);
+			String pathToEventLink = EVENT_BASE_PATH + counterForUtilMethods;
+			eventModel.add(new Link(pathToEventLink));
+
+			return eventModel;
+
+		default:
+			throw new RuntimeException("Invalid type");
+		}
 	}
 }

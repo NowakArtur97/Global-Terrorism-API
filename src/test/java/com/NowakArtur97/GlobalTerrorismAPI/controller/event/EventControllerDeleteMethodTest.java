@@ -90,13 +90,14 @@ public class EventControllerDeleteMethodTest {
 	@Test
 	void when_delete_existing_event_should_return_event() {
 
+		Long eventId = 1L;
+
 		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
 		String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
 		targetModel.add(new Link(pathToTargetLink));
 		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-		Long eventId = 1L;
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 		eventModel.add(new Link(pathToEventLink));
 
