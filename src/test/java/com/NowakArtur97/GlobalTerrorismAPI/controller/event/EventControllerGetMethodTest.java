@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -102,8 +101,7 @@ public class EventControllerGetMethodTest {
 	}
 
 	@Test
-	void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events()
-			throws ParseException {
+	void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events() {
 
 		EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
 		EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
@@ -231,8 +229,7 @@ public class EventControllerGetMethodTest {
 	}
 
 	@Test
-	void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events()
-			throws ParseException {
+	void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events() {
 
 		EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
 		EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
