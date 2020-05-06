@@ -98,8 +98,7 @@ public class EventControllerDeleteMethodTest {
 		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
 		Long eventId = 1L;
 		String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-		Link eventLink = new Link(pathToEventLink);
-		eventModel.add(eventLink);
+		eventModel.add(new Link(pathToEventLink));
 
 		String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -111,17 +110,17 @@ public class EventControllerDeleteMethodTest {
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
 						.andExpect(jsonPath("id", is(eventId.intValue())))
-						.andExpect(jsonPath("summary", is(eventNode.getSummary())))
-						.andExpect(jsonPath("motive", is(eventNode.getMotive())))
+						.andExpect(jsonPath("summary", is(eventModel.getSummary())))
+						.andExpect(jsonPath("motive", is(eventModel.getMotive())))
 						.andExpect(jsonPath("date",
 								is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(
-										eventNode.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-						.andExpect(jsonPath("isSuicide", is(eventNode.getIsSuicide())))
-						.andExpect(jsonPath("isSuccessful", is(eventNode.getIsSuccessful())))
-						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventNode.getIsPartOfMultipleIncidents())))
+										eventModel.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+						.andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
+						.andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+						.andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
 						.andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-						.andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
-						.andExpect(jsonPath("target.target", is(targetNode.getTarget()))),
+						.andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
+						.andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
 				() -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verify(modelAssembler, times(1)).toModel(eventNode),
 				() -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
