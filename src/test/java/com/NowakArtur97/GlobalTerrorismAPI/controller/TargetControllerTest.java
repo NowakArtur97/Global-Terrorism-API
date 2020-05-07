@@ -57,6 +57,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
@@ -64,6 +65,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -73,6 +75,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
 class TargetControllerTest {
+
+	private static int counterForUtilMethods = 0;
 
 	private final String BASE_PATH = "http://localhost:8080/api/targets";
 
@@ -120,54 +124,21 @@ class TargetControllerTest {
 		@Test
 		void when_find_all_targets_with_default_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
-			Long targetId1 = 1L;
-			String targetName1 = "target1";
-			TargetNode targetNode1 = new TargetNode(targetId1, targetName1);
-			TargetModel targetModel1 = new TargetModel(targetId1, targetName1);
+			TargetNode targetNode1 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel1 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			String pathToLink1 = BASE_PATH + targetId1.intValue();
-			Link link1 = new Link(pathToLink1);
-			targetModel1.add(link1);
+			TargetNode targetNode2 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel2 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			Long targetId2 = 2L;
-			String targetName2 = "target2";
-			TargetNode targetNode2 = new TargetNode(targetId2, targetName2);
-			TargetModel targetModel2 = new TargetModel(targetId2, targetName2);
+			TargetNode targetNode3 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel3 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			String pathToLink2 = BASE_PATH + targetId2.intValue();
-			Link link2 = new Link(pathToLink2);
-			targetModel2.add(link2);
+			TargetNode targetNode4 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel4 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			Long targetId3 = 3L;
-			String targetName3 = "target3";
-			TargetNode targetNode3 = new TargetNode(targetId3, targetName3);
-			TargetModel targetModel3 = new TargetModel(targetId3, targetName3);
-
-			String pathToLink3 = BASE_PATH + targetId3.intValue();
-			Link link3 = new Link(pathToLink3);
-			targetModel3.add(link3);
-
-			Long targetId4 = 4L;
-			String targetName4 = "target4";
-			TargetNode targetNode4 = new TargetNode(targetId4, targetName4);
-			TargetModel targetModel4 = new TargetModel(targetId4, targetName4);
-
-			String pathToLink4 = BASE_PATH + targetId4.intValue();
-			Link link4 = new Link(pathToLink4);
-			targetModel4.add(link4);
-
-			List<TargetNode> targetsListExpected = new ArrayList<>();
-			targetsListExpected.add(targetNode1);
-			targetsListExpected.add(targetNode2);
-			targetsListExpected.add(targetNode3);
-			targetsListExpected.add(targetNode4);
-
-			List<TargetModel> targetModelsListExpected = new ArrayList<>();
-			targetModelsListExpected.add(targetModel1);
-			targetModelsListExpected.add(targetModel2);
-			targetModelsListExpected.add(targetModel3);
-			targetModelsListExpected.add(targetModel4);
-
+			List<TargetNode> targetsListExpected = List.of(targetNode1, targetNode2, targetNode3, targetNode4);
+			List<TargetModel> targetModelsListExpected = List.of(targetModel1, targetModel2, targetModel3,
+					targetModel4);
 			Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
 			int sizeExpected = 100;
@@ -203,18 +174,22 @@ class TargetControllerTest {
 							.andExpect(jsonPath("links[1].href", is(firstPageLink)))
 							.andExpect(jsonPath("links[2].href", is(lastPageLink)))
 							.andExpect(jsonPath("links[3].href", is(lastPageLink)))
-							.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
-							.andExpect(jsonPath("content[0].target", is(targetName1)))
-							.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
-							.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
-							.andExpect(jsonPath("content[1].target", is(targetName2)))
-							.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
-							.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
-							.andExpect(jsonPath("content[2].target", is(targetName3)))
-							.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
-							.andExpect(jsonPath("content[3].id", is(targetId4.intValue())))
-							.andExpect(jsonPath("content[3].target", is(targetName4)))
-							.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
+							.andExpect(jsonPath("content[0].id", is(targetModel1.getId().intValue())))
+							.andExpect(jsonPath("content[0].target", is(targetModel1.getTarget())))
+							.andExpect(jsonPath("content[0].links[0].href",
+									is(targetModel1.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
+							.andExpect(jsonPath("content[1].target", is(targetModel2.getTarget())))
+							.andExpect(jsonPath("content[1].links[0].href",
+									is(targetModel2.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
+							.andExpect(jsonPath("content[2].target", is(targetModel3.getTarget())))
+							.andExpect(jsonPath("content[2].links[0].href",
+									is(targetModel3.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[3].id", is(targetModel4.getId().intValue())))
+							.andExpect(jsonPath("content[3].target", is(targetModel4.getTarget())))
+							.andExpect(jsonPath("content[3].links[0].href",
+									is(targetModel4.getLink("self").get().getHref())))
 							.andExpect(jsonPath("page.size", is(sizeExpected)))
 							.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 							.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -228,53 +203,21 @@ class TargetControllerTest {
 		@Test
 		void when_find_all_targets_with_changed_parameters_in_link_and_targets_exist_should_return_all_targets() {
 
-			Long targetId1 = 1L;
-			String targetName1 = "target1";
-			TargetNode targetNode1 = new TargetNode(targetId1, targetName1);
-			TargetModel targetModel1 = new TargetModel(targetId1, targetName1);
+			TargetNode targetNode1 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel1 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			String pathToLink1 = BASE_PATH + targetId1.intValue();
-			Link link1 = new Link(pathToLink1);
-			targetModel1.add(link1);
+			TargetNode targetNode2 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel2 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			Long targetId2 = 2L;
-			String targetName2 = "target2";
-			TargetNode targetNode2 = new TargetNode(targetId2, targetName2);
-			TargetModel targetModel2 = new TargetModel(targetId2, targetName2);
+			TargetNode targetNode3 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel3 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			String pathToLink2 = BASE_PATH + targetId2.intValue();
-			Link link2 = new Link(pathToLink2);
-			targetModel2.add(link2);
+			TargetNode targetNode4 = (TargetNode) createTarget(ObjectType.NODE);
+			TargetModel targetModel4 = (TargetModel) createTarget(ObjectType.MODEL);
 
-			Long targetId3 = 3L;
-			String targetName3 = "target3";
-			TargetNode targetNode3 = new TargetNode(targetId3, targetName3);
-			TargetModel targetModel3 = new TargetModel(targetId3, targetName3);
-
-			String pathToLink3 = BASE_PATH + targetId3.intValue();
-			Link link3 = new Link(pathToLink3);
-			targetModel3.add(link3);
-
-			Long targetId4 = 4L;
-			String targetName4 = "target4";
-			TargetNode targetNode4 = new TargetNode(targetId4, targetName4);
-			TargetModel targetModel4 = new TargetModel(targetId4, targetName4);
-
-			String pathToLink4 = BASE_PATH + targetId4.intValue();
-			Link link4 = new Link(pathToLink4);
-			targetModel4.add(link4);
-
-			List<TargetNode> targetsListExpected = new ArrayList<>();
-			targetsListExpected.add(targetNode1);
-			targetsListExpected.add(targetNode2);
-			targetsListExpected.add(targetNode3);
-			targetsListExpected.add(targetNode4);
-
-			List<TargetModel> targetModelsListExpected = new ArrayList<>();
-			targetModelsListExpected.add(targetModel1);
-			targetModelsListExpected.add(targetModel2);
-			targetModelsListExpected.add(targetModel3);
-			targetModelsListExpected.add(targetModel4);
+			List<TargetNode> targetsListExpected = List.of(targetNode1, targetNode2, targetNode3, targetNode4);
+			List<TargetModel> targetModelsListExpected = List.of(targetModel1, targetModel2, targetModel3,
+					targetModel4);
 
 			Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
@@ -311,18 +254,22 @@ class TargetControllerTest {
 							.andExpect(jsonPath("links[1].href", is(firstPageLink)))
 							.andExpect(jsonPath("links[2].href", is(lastPageLink)))
 							.andExpect(jsonPath("links[3].href", is(lastPageLink)))
-							.andExpect(jsonPath("content[0].id", is(targetId1.intValue())))
-							.andExpect(jsonPath("content[0].target", is(targetName1)))
-							.andExpect(jsonPath("content[0].links[0].href", is(pathToLink1)))
-							.andExpect(jsonPath("content[1].id", is(targetId2.intValue())))
-							.andExpect(jsonPath("content[1].target", is(targetName2)))
-							.andExpect(jsonPath("content[1].links[0].href", is(pathToLink2)))
-							.andExpect(jsonPath("content[2].id", is(targetId3.intValue())))
-							.andExpect(jsonPath("content[2].target", is(targetName3)))
-							.andExpect(jsonPath("content[2].links[0].href", is(pathToLink3)))
-							.andExpect(jsonPath("content[3].id", is(targetId4.intValue())))
-							.andExpect(jsonPath("content[3].target", is(targetName4)))
-							.andExpect(jsonPath("content[3].links[0].href", is(pathToLink4)))
+							.andExpect(jsonPath("content[0].id", is(targetModel1.getId().intValue())))
+							.andExpect(jsonPath("content[0].target", is(targetModel1.getTarget())))
+							.andExpect(jsonPath("content[0].links[0].href",
+									is(targetModel1.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
+							.andExpect(jsonPath("content[1].target", is(targetModel2.getTarget())))
+							.andExpect(jsonPath("content[1].links[0].href",
+									is(targetModel2.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
+							.andExpect(jsonPath("content[2].target", is(targetModel3.getTarget())))
+							.andExpect(jsonPath("content[2].links[0].href",
+									is(targetModel3.getLink("self").get().getHref())))
+							.andExpect(jsonPath("content[3].id", is(targetModel4.getId().intValue())))
+							.andExpect(jsonPath("content[3].target", is(targetModel4.getTarget())))
+							.andExpect(jsonPath("content[3].links[0].href",
+									is(targetModel4.getLink("self").get().getHref())))
 							.andExpect(jsonPath("page.size", is(sizeExpected)))
 							.andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
 							.andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -330,7 +277,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).findAll(pageable),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
-					() -> verifyNoMoreInteractions(pagedResourcesAssembler));
+					() -> verifyNoMoreInteractions(pagedResourcesAssembler),
+					() -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@Test
@@ -382,7 +331,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).findAll(pageable),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
-					() -> verifyNoMoreInteractions(pagedResourcesAssembler));
+					() -> verifyNoMoreInteractions(pagedResourcesAssembler),
+					() -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@Test
@@ -398,7 +349,7 @@ class TargetControllerTest {
 			targetModel.add(link);
 
 			String linkWithParameter = BASE_PATH + "/" + "{id}";
-			
+
 			when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
 			when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
@@ -409,7 +360,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).findById(targetId),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@Test
@@ -427,14 +380,16 @@ class TargetControllerTest {
 							.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
 							.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 					() -> verify(targetService, times(1)).findById(targetId),
-					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 	}
 
 	@Nested
 	@Tag("PostTargetRequest_Tests")
 	class PostTargetRequestTest {
-		
+
 		@Test
 		void when_add_valid_target_should_return_new_target_as_model() {
 
@@ -464,7 +419,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).saveNew(targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@ParameterizedTest(name = "{index}: Target Name: {0}")
@@ -481,7 +438,9 @@ class TargetControllerTest {
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-					() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+					() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 	}
 
@@ -523,7 +482,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).update(targetId, targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@Test
@@ -558,7 +519,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).saveNew(targetDTO),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@ParameterizedTest(name = "{index}: Target Name: {0}")
@@ -579,7 +542,9 @@ class TargetControllerTest {
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-					() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+					() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 	}
 
@@ -630,7 +595,8 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).save(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
 
 		@Test
@@ -675,7 +641,8 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).save(targetNodeUpdated),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNodeUpdated),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
 	}
 
@@ -707,7 +674,9 @@ class TargetControllerTest {
 					() -> verify(targetService, times(1)).delete(targetId),
 					() -> verifyNoMoreInteractions(targetService),
 					() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-					() -> verifyNoMoreInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
 		}
 
 		@Test
@@ -725,7 +694,32 @@ class TargetControllerTest {
 							.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
 							.andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
 					() -> verify(targetService, times(1)).delete(targetId),
-					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler));
+					() -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+					() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+					() -> verifyNoInteractions(violationHelper));
+		}
+	}
+
+	private Target createTarget(ObjectType type) {
+
+		switch (type) {
+
+		case NODE:
+
+			TargetNode targetNode = new TargetNode((long) counterForUtilMethods, "target" + counterForUtilMethods);
+
+			return targetNode;
+
+		case MODEL:
+
+			TargetModel targetModel = new TargetModel((long) counterForUtilMethods, "target" + counterForUtilMethods);
+			String pathToTargetLink = BASE_PATH + counterForUtilMethods;
+			targetModel.add(new Link(pathToTargetLink));
+
+			return targetModel;
+
+		default:
+			throw new RuntimeException("Invalid type");
 		}
 	}
 
