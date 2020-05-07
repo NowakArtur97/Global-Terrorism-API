@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -58,6 +58,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExcept
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
@@ -74,7 +75,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
-class TargetControllerTest {
+class TargetControllerGetMethodTest {
 
 	private static int counterForUtilMethods = 0;
 
