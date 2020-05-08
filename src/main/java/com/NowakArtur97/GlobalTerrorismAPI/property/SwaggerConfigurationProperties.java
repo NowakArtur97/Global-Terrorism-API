@@ -1,44 +1,36 @@
 package com.NowakArtur97.GlobalTerrorismAPI.property;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@ConfigurationProperties
-@Data
+@ConfigurationProperties(prefix = "swagger")
+@ConstructorBinding
+@Getter
+@AllArgsConstructor
 public class SwaggerConfigurationProperties {
 
-	@Value("${swagger.api.version}")
-	private String apiVersion;
+	private final String version;
 
-	@Value("${swagger.title}")
-	private String title;
+	private final String title;
 
-	@Value("${swagger.description}")
-	private String description;
+	private final String description;
 
-	@Value("${swagger.termsOfServiceUrl}")
-	private String termsOfServiceUrl;
+	private final String termsOfServiceUrl;
 
-	@Value("${swagger.license}")
-	private String license;
+	private final String license;
 
-	@Value("${swagger.licenseUrl}")
-	private String licenseUrl;
+	private final String licenseUrl;
 
-	@Value("${swagger.contact.name}")
-	private String contactName;
+	private final String contactName;
 
-	@Value("${swagger.contact.email}")
-	private String contactEmail;
+	private final String contactEmail;
 
-	@Value("${swagger.contact.url}")
-	private String contactUrl;
+	private final String contactUrl;
 
-	@Value("${swagger.basePackage}")
-	private String basePackage;
+	private final String basePackage;
 
-	@Value("${swagger.pathSelectors}")
-	private String pathSelectors;
+	private final String pathSelectors;
 }

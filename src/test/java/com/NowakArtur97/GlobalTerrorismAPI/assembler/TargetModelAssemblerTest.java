@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -12,26 +13,34 @@ import org.junit.jupiter.api.Test;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtils.ReplaceUnderscoresGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 
-@DisplayNameGeneration(ReplaceUnderscoresGenerator.class)
+@DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetModelAssembler_Tests")
-public class TargetModelAssemblerTest {
+class TargetModelAssemblerTest {
 
 	private TargetModelAssembler targetModelAssembler;
 
+	private static TargetBuilder targetBuilder;
+
+	@BeforeAll
+	private static void init() {
+
+		targetBuilder = new TargetBuilder();
+	}
+
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 
 		targetModelAssembler = new TargetModelAssembler();
 	}
 
 	@Test
-	public void when_map_target_node_to_model_should_return_target_model() {
+	void when_map_target_node_to_model_should_return_target_model() {
 
-		Long targetId = 1L;
-		String targetName = "target1";
-		TargetNode targetNode = new TargetNode(targetId, targetName);
+		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
 		TargetModel targetModel = targetModelAssembler.toModel(targetNode);
 

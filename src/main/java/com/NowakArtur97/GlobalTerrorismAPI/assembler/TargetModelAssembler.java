@@ -22,10 +22,10 @@ public class TargetModelAssembler extends RepresentationModelAssemblerSupport<Ta
 
 		TargetModel targetModel = instantiateModel(targetNode);
 
-		targetModel.add(linkTo(methodOn(TargetController.class).findTargetById(targetNode.getId())).withSelfRel());
-
 		targetModel.setId(targetNode.getId());
 		targetModel.setTarget(targetNode.getTarget());
+
+		targetModel.add(linkTo(methodOn(TargetController.class).findTargetById(targetModel.getId())).withSelfRel());
 
 		return targetModel;
 	}

@@ -11,8 +11,8 @@ import io.swagger.annotations.ApiImplicitParams;
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @ApiImplicitParams({
-		@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "Results page you want to retrieve (0..N)"),
-		@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "100", value = "Number of records per page.") })
+		@ApiImplicitParam(value = "Results page to retrieve (0..N)", name = "page", dataType = "integer", paramType = "query", defaultValue = "0"),
+		@ApiImplicitParam(value = "Number of records per page", name = "size", dataType = "integer", paramType = "query", defaultValue = "100") })
 public @interface ApiPageable {
 
 }

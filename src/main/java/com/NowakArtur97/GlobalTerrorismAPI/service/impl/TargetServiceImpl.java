@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -20,6 +22,15 @@ public class TargetServiceImpl implements TargetService {
 
 	private final TargetRepository targetRepository;
 
+	private final DTOMapper dtoMapper;
+
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<TargetNode> findById(Long id) {
+
+		return id != null ? targetRepository.findById(id) : Optional.empty();
+	}
+	
 	@Override
 	@Transactional(readOnly = true)
 	public Page<TargetNode> findAll(Pageable pageable) {
@@ -28,9 +39,49 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public Optional<TargetNode> findById(Long id) {
+	public TargetNode save(TargetNode targetNode) {
 
-		return targetRepository.findById(id);
+		return targetRepository.save(targetNode);
+	}
+	
+	@Override
+	public TargetNode saveNew(TargetDTO targetDTO) {
+
+		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
+
+		targetNode = targetRepository.save(targetNode);
+
+		return targetNode;
+	}
+	
+	@Override
+	public TargetNode update(Long id, TargetDTO targetDTO) {
+
+		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
+
+		targetNode.setId(id);
+
+		targetNode = targetRepository.save(targetNode);
+
+		return targetNode;
+	}
+
+	@Override
+	public Optional<TargetNode> delete(Long id) {
+
+		Optional<TargetNode> targetNodeOptional = findById(id);
+
+		if (targetNodeOptional.isPresent()) {
+
+			targetRepository.delete(targetNodeOptional.get());
+		}
+
+		return targetNodeOptional;
+	}
+
+	@Override
+	public boolean isDatabaseEmpty() {
+
+		return targetRepository.count() == 0;
 	}
 }
