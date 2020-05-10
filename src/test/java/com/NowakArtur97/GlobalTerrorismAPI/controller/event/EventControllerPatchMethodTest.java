@@ -30,8 +30,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -71,7 +69,6 @@ import com.ibm.icu.util.Calendar;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-//@DisabledOnOs(OS.LINUX)
 class EventControllerPatchMethodTest {
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
