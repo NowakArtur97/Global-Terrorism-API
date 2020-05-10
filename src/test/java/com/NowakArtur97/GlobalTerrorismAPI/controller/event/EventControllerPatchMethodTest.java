@@ -71,7 +71,7 @@ import com.ibm.icu.util.Calendar;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-@DisabledOnOs(OS.LINUX)
+//@DisabledOnOs(OS.LINUX)
 class EventControllerPatchMethodTest {
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";

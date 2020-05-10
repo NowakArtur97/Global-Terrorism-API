@@ -1,4 +1,5 @@
 FROM openjdk:11-jdk-slim
-ADD target/GlobalTerrorismAPI-0.0.1-SNAPSHOT.jar .
+ARG JAR_FILE=target/GlobalTerrorismAPI-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} global_terrorismAPI.jar
 EXPOSE 8080
-CMD java -jar GlobalTerrorismAPI-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/global_terrorismAPI.jar"]
