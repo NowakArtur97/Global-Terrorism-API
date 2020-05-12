@@ -16,6 +16,15 @@ The data was downloaded from the Global Terrorism Database site - https://www.st
 
 ## Demo
 The demo will be available soon...
+To start the application, enter the following commands:
+Run Neo4j container:
+    - `docker run -d -p 7687:7687 -p 7474:7474 --env NEO4J_AUTH=neo4j/secret --env NEO4_dbms_connector_https_advertised__address="localhost:7473" --env NEO4J_dbms_connector_http_advertised__address="localhost:7474" --env NEO4J_dbms_connector_bolt_advertised__address="localhost:7687" neo4j:latest`
+Run Prometheus container:
+    - `docker run -d -p 9090:9090 prom/prometheus`
+Change spring.data.neo4j.uri property in application-dev.properties to your Docker IP address.
+Run app using:
+    - `mvnw spring-boot:run`
+Go to: `http://localhost:8080/swagger-ui.html`
 
 ## Built With 
 - Java 11
@@ -30,6 +39,7 @@ The demo will be available soon...
 - Apache Johnzon (johnzon-core) - 1.2.3
 - Jackson (jackson-datatype-jsr353) - 2.10.2
 - Maven
+- Docker
 - Neo4j
 - CircleCI
 
