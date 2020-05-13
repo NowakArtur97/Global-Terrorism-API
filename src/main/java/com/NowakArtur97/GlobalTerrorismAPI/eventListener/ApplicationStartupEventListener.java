@@ -1,12 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
-
+import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.monitorjbl.xlsx.StreamingReader;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,17 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.monitorjbl.xlsx.StreamingReader;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 @Component
 @Slf4j

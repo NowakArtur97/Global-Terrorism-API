@@ -161,4 +161,3 @@ $RECYCLE.BIN/
 
 **/test/resources/screenshots/**
 GlobalTerrorismAPI.iml
-src/main/resources/config/application-docker.properties
