@@ -17,6 +17,7 @@ The data was downloaded from the Global Terrorism Database site - https://www.st
 ## Setup
 To start the application, enter the following commands in command line:
     - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
+and:
     - `docker-compose up`
 Go to: `http://YOUR_DOCKER_IP:8080/swagger-ui.html`,
 where YOUR_DOCKER_IP is your docker machine IP address.
