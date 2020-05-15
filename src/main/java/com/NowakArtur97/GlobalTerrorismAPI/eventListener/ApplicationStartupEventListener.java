@@ -2,7 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -33,6 +37,8 @@ class ApplicationStartupEventListener {
     private final TargetService targetService;
 
     private final EventService eventService;
+
+    private final GroupRepository groupRepository;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -56,6 +62,8 @@ class ApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
+        Map<String, EventNode> groupsWithTargets = new HashMap<>();
+
         for (Row row : sheet) {
 
             String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
@@ -63,6 +71,26 @@ class ApplicationStartupEventListener {
             TargetNode target = saveTarget(targetName);
 
             EventNode eventNode = createEvent(row, target);
+
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+
+            if (groupsWithTargets.containsKey(groupName)) {
+                groupsWithTargets.put(groupName, eventNode);
+            }
+        }
+
+        saveGroupsWitTagets(groupsWithTargets);
+    }
+
+    private void saveGroupsWitTagets(Map<String,EventNode> groupsWithTargets) {
+
+        for (Map.Entry<String, EventNode> entry : groupsWithTargets.entrySet()) {
+            String groupName = entry.getKey();
+            EventNode event = entry.getValue();
+
+            GroupNode groupNode = new GroupNode(groupName);
+
+            groupRepository.save(groupNode);
         }
     }
 

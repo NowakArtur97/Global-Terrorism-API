@@ -18,4 +18,9 @@ public class GroupNode {
     private Long id;
 
     private String name;
+
+    public GroupNode(String name) {
+
+        this.name = name;
+    }
 }
