@@ -14,19 +14,17 @@ REST API providing information on terrorist attacks
 
 The data was downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
 
-## Demo
-The demo will be available soon...
-To start the application, enter the following commands:
-Run Neo4j container:
-    - `docker run -d -p 7687:7687 -p 7474:7474 --env NEO4J_AUTH=neo4j/secret --env NEO4_dbms_connector_https_advertised__address="localhost:7473" --env NEO4J_dbms_connector_http_advertised__address="localhost:7474" --env NEO4J_dbms_connector_bolt_advertised__address="localhost:7687" neo4j:latest`
-Run Prometheus container:
-    - `docker run -d -p 9090:9090 prom/prometheus`
-Change spring.data.neo4j.uri property in application-dev.properties to your Docker IP address.
-Run app using:
-    - `mvnw spring-boot:run`
-Go to: `http://localhost:8080/swagger-ui.html`
+## Setup
+To start the application, enter the following commands in command line:
+    - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
+    - `docker-compose up`
+Go to: `http://YOUR_DOCKER_IP:8080/swagger-ui.html`,
+where YOUR_DOCKER_IP is your docker machine IP address.
+To stop the application, enter the following key combination on the command line: `Ctrl + C`
+To shut down the containers enter:
+    - `docker-compose down`
 
-## Built With 
+## Built With
 - Java 11
 - Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
 - Swagger (Core, Ben Valdiation, UI) - 2.92
