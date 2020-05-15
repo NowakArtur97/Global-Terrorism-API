@@ -26,7 +26,7 @@ import java.util.Date;
 @Component
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ApplicationStartupEventListener {
+class ApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
@@ -51,102 +51,53 @@ public class ApplicationStartupEventListener {
 
         Workbook workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
 
-        Sheet sheet = workbook.getSheetAt(0);
-
-        return sheet;
+        return workbook.getSheetAt(0);
     }
 
     private void insertDataToDatabase(Sheet sheet) {
 
         for (Row row : sheet) {
 
-            int columnIndex = 0;
+            String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
 
-            int yearOfEvent = 1900;
-            int monthOfEvent = 1;
-            int dayOfEvent = 1;
-            String eventSummary = "";
-            boolean isPartOfMultipleIncidents = false;
-            boolean isSuccessful = false;
-            boolean isSuicide = false;
-            String motive = "";
-            TargetNode target = new TargetNode();
+            TargetNode target = saveTarget(targetName);
 
-            for (int i = 0; i < row.getLastCellNum(); i++) {
-
-                Cell cell = row.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
-
-                if (cell != null) {
-
-                    String cellVal = getCellValue(cell);
-
-                    if (columnIndex == XlsxColumnType.TARGET.getIndex()) {
-
-                        target = saveTarget(cellVal);
-
-                    } else if (columnIndex == XlsxColumnType.YEAR_OF_EVENT.getIndex()) {
-
-                        if (isNumeric(cellVal)) {
-
-                            yearOfEvent = parseInt(cellVal);
-
-//							log.info("YEAR_OF_EVENT: " + yearOfEvent);
-                        }
-
-                    } else if (columnIndex == XlsxColumnType.MONTH_OF_EVENT.getIndex()) {
-
-                        if (isNumeric(cellVal)) {
-
-                            monthOfEvent = parseInt(cellVal);
-
-//							log.info("MONTH_OF_EVENT: " + monthOfEvent);
-                        }
-
-                    } else if (columnIndex == XlsxColumnType.DAY_OF_EVENT.getIndex()) {
-
-                        if (isNumeric(cellVal)) {
-
-                            dayOfEvent = parseInt(cellVal);
-
-//							log.info("DAY_OF_EVENT: " + dayOfEvent);
-                        }
-
-                    } else if (columnIndex == XlsxColumnType.EVENT_SUMMARY.getIndex()) {
-
-                        eventSummary = cellVal;
-
-                    } else if (columnIndex == XlsxColumnType.WAS_PART_OF_MULTIPLE_INCIDENTS.getIndex()) {
-
-                        isPartOfMultipleIncidents = parseBoolean(cellVal);
-
-//						log.info(cellVal + " WAS_PART_OF_MULTIPLE_INCIDENTS: " + isPartOfMultipleIncidents);
-
-                    } else if (columnIndex == XlsxColumnType.WAS_SUCCESS.getIndex()) {
-
-                        isSuccessful = "1".equals(cellVal) || "1.0".equals(cellVal);
-
-//						log.info(cellVal + " WAS_SUCCESS: " + isSuccessful);
-
-                    } else if (columnIndex == XlsxColumnType.WAS_SUICIDE.getIndex()) {
-
-                        isSuicide = "1".equals(cellVal) || "1.0".equals(cellVal);
-
-//						log.info(cellVal + " WAS_SUICIDE: " + isSuicide);
-
-                    } else if (columnIndex == XlsxColumnType.MOTIVE.getIndex()) {
-
-                        motive = cellVal;
-
-//						log.info("MOTIVE: " + motive);
-                    }
-                }
-
-                columnIndex++;
-            }
-
-            saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, isPartOfMultipleIncidents, isSuccessful,
-                    isSuicide, motive, target);
+            EventNode eventNode = createEvent(row, target);
         }
+    }
+
+    private EventNode createEvent(Row row, TargetNode target) {
+
+        String cellValue;
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
+        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1900;
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MONTH_OF_EVENT.getIndex());
+        int monthOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1;
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.DAY_OF_EVENT.getIndex());
+        int dayOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1;
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_SUMMARY.getIndex());
+        String eventSummary = !cellValue.isEmpty() ? cellValue : "";
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MOTIVE.getIndex());
+        String motive = !cellValue.isEmpty() ? cellValue : "";
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS.getIndex());
+        boolean isPartOfMultipleIncidents = parseBoolean(cellValue);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUCCESS.getIndex());
+        boolean isSuccessful = parseBoolean(cellValue);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUICIDE.getIndex());
+        boolean isSuicide = parseBoolean(cellValue);
+
+        EventNode eventNode = saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, isPartOfMultipleIncidents, isSuccessful,
+                isSuicide, motive, target);
+
+        return eventNode;
     }
 
     private TargetNode saveTarget(String targetName) {
@@ -156,9 +107,9 @@ public class ApplicationStartupEventListener {
         return targetService.save(target);
     }
 
-    private void saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
-                           boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicide, String motive,
-                           TargetNode target) {
+    private EventNode saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
+                                boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicide, String motive,
+                                TargetNode target) {
 
         Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
 
@@ -166,7 +117,7 @@ public class ApplicationStartupEventListener {
                 .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
                 .isSuicide(isSuicide).motive(motive).target(target).build();
 
-        eventService.save(eventNode);
+        return eventService.save(eventNode);
     }
 
     private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
@@ -183,7 +134,9 @@ public class ApplicationStartupEventListener {
         return cal.getTime();
     }
 
-    private String getCellValue(Cell cell) {
+    private String getCellValueFromRowOnIndex(Row row, int index) {
+
+        Cell cell = row.getCell(index, MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
         String value = "";
 
