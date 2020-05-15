@@ -6,6 +6,9 @@ networks:
     external: false
     name: neo4j-network
 
+volumes:
+    prometheus_data: {}
+
 services:
   global_terrorism_api:
     restart: on-failure
@@ -19,32 +22,38 @@ services:
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=secret
       - NEO4J_BOLT=bolt://neo4j:7687
-    volumes:
-      - ..:/global_terrorism_api
+#    volumes:
+#      - ..:/global_terrorism_api
     depends_on:
       - neo4j
 
-#  prometheus:
-#    restart: always
-#    image: prom/prometheus
-#    user: root
-#    container_name: prometheus
-#    ports:
-#     - "9090:9090"
+  prometheus:
+    restart: always
+    image: prom/prometheus
+    user: root
+    networks:
+      - neo4j-network
+    container_name: prometheus
+    ports:
+     - "9090:9090"
 #    volumes:
-##      - ./src/main/resources/prometheus:/prometheus
+    volumes:
+      - ./src/main/resources/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+#      - ./src/main/resources/prometheus:/prometheus
+#      - ./prom.yml:/prometheus/prometheus.yml
 #      - ./prom.yml:/prometheus/prometheus.yml
 #      - ./data/prometheus:/data
+#      - ./src/main/resources/prometheus:/etc/prometheus
+#      - ./src/main/resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 #    command:
-#      - '--config.file=/prometheus/prometheus.yml'
+#      - '--config.file=/etc/prometheus/prometheus.yml'
 #      - '--storage.tsdb.path=/data'
-#    depends_on:
-#      - global_terrorism_api
-#    volumes:
-#     - ./src/main/resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-#    command:
-#     - '-config.file=/etc/prometheus/prometheus.yml'
-
+    depends_on:
+      - global_terrorism_api
 
   neo4j:
     restart: always

@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.node;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,20 +7,15 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-@NodeEntity(label = "Target")
+@NodeEntity(label = "Group")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetNode implements Target {
+public class GroupNode {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	private String target;
-	
-	public TargetNode(String target) {
-
-		this.target = target;
-	}
+    private String name;
 }
