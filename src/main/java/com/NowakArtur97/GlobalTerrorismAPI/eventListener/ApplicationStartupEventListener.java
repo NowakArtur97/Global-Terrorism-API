@@ -2,7 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -30,9 +34,13 @@ class ApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
+    private Map<String, GroupNode> groupsWithTargets = new HashMap<>();
+
     private final TargetService targetService;
 
     private final EventService eventService;
+
+    private final GroupRepository groupRepository;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -63,7 +71,17 @@ class ApplicationStartupEventListener {
             TargetNode target = saveTarget(targetName);
 
             EventNode eventNode = createEvent(row, target);
+
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+
+            manageGroup(groupName, eventNode);
         }
+    }
+
+    private void manageGroup(String groupName, EventNode eventNode) {
+
+//        log.info("GROUP: " + groupName);
+        groupRepository.save(new GroupNode(groupName));
     }
 
     private EventNode createEvent(Row row, TargetNode target) {
