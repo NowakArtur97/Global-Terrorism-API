@@ -28,7 +28,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/targets")
@@ -167,16 +166,15 @@ public class TargetController {
     }
 
     @DeleteMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Delete Target by id", notes = "Provide an id to delete specific Target")
-    @ApiResponses({@ApiResponse(code = 200, message = "Successfully deleted Target", response = TargetModel.class),
+    @ApiResponses({@ApiResponse(code = 204, message = "Successfully deleted Target"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> deleteTarget(
+    public ResponseEntity<Void> deleteTarget(
             @ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
-        Optional<TargetNode> targetNode = targetService.delete(id);
+        targetService.delete(id).orElseThrow(() -> new TargetNotFoundException(id));
 
-        return new ResponseEntity<>(
-                targetNode.map(targetModelAssembler::toModel).orElseThrow(() -> new TargetNotFoundException(id)),
-                HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
