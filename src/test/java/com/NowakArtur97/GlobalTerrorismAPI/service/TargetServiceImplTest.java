@@ -1,20 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -27,13 +19,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -189,9 +180,9 @@ class TargetServiceImplTest {
 		TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
 
 		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
-		when(targetRepository.save(targetNodeExpectedAfterUpdate)).thenReturn(targetNodeExpectedAfterUpdate);
+		when(targetRepository.save(targetNodeExpectedAfterMapping)).thenReturn(targetNodeExpectedAfterUpdate);
 
-		TargetNode targetNodeActual = targetService.update(targetId, targetDTOExpected);
+		TargetNode targetNodeActual = targetService.update(targetNodeExpectedAfterMapping, targetDTOExpected);
 
 		assertAll(
 				() -> assertEquals(targetNodeExpectedAfterUpdate.getId(), targetNodeActual.getId(),
@@ -202,7 +193,7 @@ class TargetServiceImplTest {
 								+ targetNodeActual.getTarget()),
 				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
 				() -> verifyNoMoreInteractions(dtoMapper),
-				() -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterUpdate),
+				() -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterMapping),
 				() -> verifyNoMoreInteractions(targetRepository));
 	}
 	

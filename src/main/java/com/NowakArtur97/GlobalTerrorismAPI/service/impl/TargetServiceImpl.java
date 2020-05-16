@@ -53,9 +53,11 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode update(Long id, TargetDTO targetDTO) {
+	public TargetNode update(TargetNode targetNode, TargetDTO targetDTO) {
 
-		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
+		Long id = targetNode.getId();
+
+		targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
 
 		targetNode.setId(id);
 

@@ -28,6 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/targets")
@@ -100,11 +101,13 @@ public class TargetController {
         HttpStatus httpStatus;
         TargetNode targetNode;
 
-        if (id != null && targetService.findById(id).isPresent()) {
+        Optional<TargetNode> targetNodeOptional = targetService.findById(id);
+
+        if (id != null && targetNodeOptional.isPresent()) {
 
             httpStatus = HttpStatus.OK;
 
-            targetNode = targetService.update(id, targetDTO);
+            targetNode = targetService.update(targetNodeOptional.get(), targetDTO);
 
         } else {
 

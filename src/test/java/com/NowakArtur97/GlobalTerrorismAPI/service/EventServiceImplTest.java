@@ -1,31 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
@@ -39,6 +13,24 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -273,8 +265,6 @@ class EventServiceImplTest {
 	@Test
 	void when_update_event_should_update_event_and_target() {
 
-		Long targetId = 1L;
-
 		String targetNameUpdated = "target2";
 		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 		TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.NODE);
@@ -287,7 +277,7 @@ class EventServiceImplTest {
 				.build(ObjectType.NODE);
 		EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeUpdated).build(ObjectType.NODE);
 
-		when(targetService.update(targetId, targetDTO)).thenReturn(targetNodeUpdated);
+		when(targetService.update(targetNode, targetDTO)).thenReturn(targetNodeUpdated);
 		when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
 		when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
@@ -321,7 +311,7 @@ class EventServiceImplTest {
 				() -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
 						() -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
 								+ eventNodeActual.getTarget()),
-				() -> verify(targetService, times(1)).update(targetId, targetDTO),
+				() -> verify(targetService, times(1)).update(targetNode, targetDTO),
 				() -> verifyNoMoreInteractions(targetService),
 				() -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
 				() -> verifyNoMoreInteractions(eventRepository),
