@@ -1,12 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.api;
 
-import java.util.Optional;
-
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import java.util.Optional;
 
 public interface TargetService {
 
@@ -15,7 +14,7 @@ public interface TargetService {
 	Page<TargetNode> findAll(Pageable pageable);
 
 	TargetNode save(TargetNode targetNode);
-	
+
 	TargetNode saveNew(TargetDTO targetDTO);
 
 	TargetNode update(Long id, TargetDTO targetDTO);

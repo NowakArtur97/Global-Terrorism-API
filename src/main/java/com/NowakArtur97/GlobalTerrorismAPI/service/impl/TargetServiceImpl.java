@@ -1,20 +1,18 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import java.util.Optional;
-
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -30,7 +28,7 @@ public class TargetServiceImpl implements TargetService {
 
 		return id != null ? targetRepository.findById(id) : Optional.empty();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<TargetNode> findAll(Pageable pageable) {
@@ -43,7 +41,7 @@ public class TargetServiceImpl implements TargetService {
 
 		return targetRepository.save(targetNode);
 	}
-	
+
 	@Override
 	public TargetNode saveNew(TargetDTO targetDTO) {
 
@@ -53,7 +51,7 @@ public class TargetServiceImpl implements TargetService {
 
 		return targetNode;
 	}
-	
+
 	@Override
 	public TargetNode update(Long id, TargetDTO targetDTO) {
 
