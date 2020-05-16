@@ -16,5 +16,7 @@ public interface GenericService<T> {
 
     T saveNew(DTONode dto);
 
+    T update(T node, DTONode dto);
+
     Optional<T> delete(Long id);
 }
