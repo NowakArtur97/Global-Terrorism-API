@@ -76,12 +76,32 @@ class ApplicationStartupEventListener {
 
             manageGroup(groupName, eventNode);
         }
+
+        saveAllGroups();
+    }
+
+    private void saveAllGroups() {
+
+        for (GroupNode groupNode : groupsWithTargets.values()) {
+
+            groupRepository.save(groupNode);
+        }
     }
 
     private void manageGroup(String groupName, EventNode eventNode) {
 
-//        log.info("GROUP: " + groupName);
-        groupRepository.save(new GroupNode(groupName));
+        if (groupsWithTargets.containsKey(groupName)) {
+
+            groupsWithTargets.get(groupName).addEvent(eventNode);
+
+        } else {
+
+            GroupNode newGroup = new GroupNode(groupName);
+
+            newGroup.addEvent(eventNode);
+
+            groupsWithTargets.put(groupName, newGroup);
+        }
     }
 
     private EventNode createEvent(Row row, TargetNode target) {
