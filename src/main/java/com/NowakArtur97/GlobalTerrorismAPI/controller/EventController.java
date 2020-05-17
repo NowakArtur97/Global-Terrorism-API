@@ -4,7 +4,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
-import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -36,7 +35,7 @@ import java.util.Optional;
 @Api(tags = {EventTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class EventController {
+public class EventController implements GenericRestController<EventModel, EventDTO> {
 
     private final EventService eventService;
 
@@ -48,12 +47,12 @@ public class EventController {
 
     private final ViolationHelper violationHelper;
 
-    @GetMapping
+    @Override
     @ApiOperation(value = "Find All Events", notes = "Look up all events")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Displayed list of all Events", response = PagedModel.class)})
     @ApiPageable
-    public ResponseEntity<PagedModel<EventModel>> findAllEvents(
+    public ResponseEntity<PagedModel<EventModel>> findAll(
             @ApiIgnore @PageableDefault(size = 100) Pageable pageable) {
 
         Page<EventNode> events = eventService.findAll(pageable);
@@ -62,24 +61,24 @@ public class EventController {
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
+    @Override
     @ApiOperation(value = "Find Event by id", notes = "Provide an id to look up specific Event from all terrorism attacks events")
     @ApiResponses({@ApiResponse(code = 200, message = "Event found by provided id", response = EventModel.class),
             @ApiResponse(code = 400, message = "Invalid Event id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<EventModel> findEventById(
+    public ResponseEntity<EventModel> findById(
             @ApiParam(value = "Event id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         return eventService.findById(id).map(eventModelAssembler::toModel).map(ResponseEntity::ok)
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
 
-    @PostMapping
+    @Override
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Add Event", notes = "Add new Event")
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<EventModel> addEvent(
+    public ResponseEntity<EventModel> add(
             @ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
 
         EventNode eventNode = eventService.saveNew(eventDTO);
@@ -89,12 +88,12 @@ public class EventController {
         return new ResponseEntity<>(eventModel, HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "/{id}")
+    @Override
     @ApiOperation(value = "Update Event", notes = "Update Event. If the Event id is not found for update, a new Event with the next free id will be created")
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
             @ApiResponse(code = 200, message = "Successfully updated Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<EventModel> updateEvent(
+    public ResponseEntity<EventModel> update(
             @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
             @ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
 
@@ -121,12 +120,12 @@ public class EventController {
         return new ResponseEntity<>(eventModel, httpStatus);
     }
 
-    @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @Override
     @ApiOperation(value = "Update Event fields using Json Patch", notes = "Update Event fields using Json Patch")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<EventModel> updateEventFields(
+    public ResponseEntity<EventModel> updateFields(
             @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
             @ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonPatch eventAsJsonPatch) {
 
@@ -146,12 +145,12 @@ public class EventController {
     // id2 was used because Swagger does not allow two PATCH methods for the same
     // path – even if they have different parameters (parameters have no effect on
     // uniqueness)
-    @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @Override
     @ApiOperation(value = "Update Event fields using Json Merge Patch", notes = "Update Event fields using Json Merge Patch")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<EventModel> updateEventFields(
+    public ResponseEntity<EventModel> updateFields(
             @ApiParam(value = "Id of the Event being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
             @ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonMergePatch eventAsJsonMergePatch) {
 
@@ -168,12 +167,11 @@ public class EventController {
         return new ResponseEntity<>(eventModel, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
+    @Override
     @ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")
     @ApiResponses({@ApiResponse(code = 204, message = "Successfully deleted Event"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<Void> deleteEvent(
+    public ResponseEntity<Void> delete(
             @ApiParam(value = "Event id value needed to delete Event", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         eventService.delete(id).orElseThrow(() -> new EventNotFoundException(id));
