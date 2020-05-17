@@ -1,12 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.api;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface GenericService<T> {
+public interface GenericService<T, D> {
 
     Optional<T> findById(Long id);
 
@@ -14,9 +13,9 @@ public interface GenericService<T> {
 
     T save(T node);
 
-    T saveNew(DTONode dto);
+    T saveNew(D dto);
 
-    T update(T node, DTONode dto);
+    T update(T node, D dto);
 
     Optional<T> delete(Long id);
 }

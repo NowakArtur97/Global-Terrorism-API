@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
@@ -43,7 +43,7 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode saveNew(DTONode targetDTO) {
+	public TargetNode saveNew(TargetDTO targetDTO) {
 
 		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
 
@@ -53,7 +53,7 @@ public class TargetServiceImpl implements TargetService {
 	}
 
 	@Override
-	public TargetNode update(TargetNode targetNode, DTONode targetDTO) {
+	public TargetNode update(TargetNode targetNode, TargetDTO targetDTO) {
 
 		Long id = targetNode.getId();
 
@@ -71,10 +71,7 @@ public class TargetServiceImpl implements TargetService {
 
 		Optional<TargetNode> targetNodeOptional = findById(id);
 
-		if (targetNodeOptional.isPresent()) {
-
-			targetRepository.delete(targetNodeOptional.get());
-		}
+		targetNodeOptional.ifPresent(targetRepository::delete);
 
 		return targetNodeOptional;
 	}

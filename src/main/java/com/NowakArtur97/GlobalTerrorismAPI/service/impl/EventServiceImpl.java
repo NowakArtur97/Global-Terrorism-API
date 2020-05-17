@@ -20,74 +20,74 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EventServiceImpl implements EventService {
 
-	private final EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
-	private final DTOMapper dtoMapper;
+    private final DTOMapper dtoMapper;
 
-	private final TargetService targetService;
+    private final TargetService targetService;
 
-	@Override
-	@Transactional(readOnly = true)
-	public Page<EventNode> findAll(Pageable pageable) {
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EventNode> findAll(Pageable pageable) {
 
-		return eventRepository.findAll(pageable);
-	}
+        return eventRepository.findAll(pageable);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Optional<EventNode> findById(Long id) {
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<EventNode> findById(Long id) {
 
-		return id != null ? eventRepository.findById(id) : Optional.empty();
-	}
+        return id != null ? eventRepository.findById(id) : Optional.empty();
+    }
 
-	@Override
-	public EventNode save(EventNode eventNode) {
+    @Override
+    public EventNode save(EventNode eventNode) {
 
-		return eventRepository.save(eventNode);
-	}
+        return eventRepository.save(eventNode);
+    }
 
-	@Override
-	public EventNode saveNew(EventDTO eventDTO) {
+    @Override
+    public EventNode saveNew(EventDTO eventDTO) {
 
-		EventNode eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+        EventNode eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
 
-		eventNode = eventRepository.save(eventNode);
+        eventNode = eventRepository.save(eventNode);
 
-		return eventNode;
-	}
+        return eventNode;
+    }
 
-	@Override
-	public EventNode update(EventNode eventNode, EventDTO eventDTO) {
+    @Override
+    public EventNode update(EventNode eventNode, EventDTO eventDTO) {
 
-		Long id = eventNode.getId();
+        Long id = eventNode.getId();
 
-		TargetNode targetNode = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
+        TargetNode targetNode = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
-		eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+        eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
 
-		eventNode.setId(id);
+        eventNode.setId(id);
 
-		eventNode.setTarget(targetNode);
+        eventNode.setTarget(targetNode);
 
-		eventNode = eventRepository.save(eventNode);
+        eventNode = eventRepository.save(eventNode);
 
-		return eventNode;
-	}
+        return eventNode;
+    }
 
-	@Override
-	public Optional<EventNode> delete(Long id) {
+    @Override
+    public Optional<EventNode> delete(Long id) {
 
-		Optional<EventNode> eventNodeOptional = findById(id);
+        Optional<EventNode> eventNodeOptional = findById(id);
 
-		if (eventNodeOptional.isPresent()) {
+        if (eventNodeOptional.isPresent()) {
 
-			EventNode eventNode = eventNodeOptional.get();
+            EventNode eventNode = eventNodeOptional.get();
 
-			targetService.delete(eventNode.getTarget().getId());
+            targetService.delete(eventNode.getTarget().getId());
 
-			eventRepository.delete(eventNode);
-		}
+            eventRepository.delete(eventNode);
+        }
 
-		return eventNodeOptional;
-	}
+        return eventNodeOptional;
+    }
 }
