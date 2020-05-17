@@ -36,7 +36,7 @@ import java.util.Optional;
 @Api(tags = {TargetTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class TargetController {
+public class TargetController implements GenericRestController<TargetModel, TargetDTO> {
 
     private final TargetService targetService;
 
@@ -49,11 +49,12 @@ public class TargetController {
     private final ViolationHelper violationHelper;
 
     @GetMapping
+    @Override
     @ApiOperation(value = "Find All Targets", notes = "Look up all targets")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Displayed list of all Targets", response = PagedModel.class)})
     @ApiPageable
-    public ResponseEntity<PagedModel<TargetModel>> findAllTargets(
+    public ResponseEntity<PagedModel<TargetModel>> findAll(
             @ApiIgnore @PageableDefault(size = 100) Pageable pageable) {
 
         Page<TargetNode> targets = targetService.findAll(pageable);
@@ -63,11 +64,12 @@ public class TargetController {
     }
 
     @GetMapping(path = "/{id}")
+    @Override
     @ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific Target from all terrorism attacks targets")
     @ApiResponses({@ApiResponse(code = 200, message = "Target found by provided id", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Invalid Target id supplied"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> findTargetById(
+    public ResponseEntity<TargetModel> findById(
             @ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         return targetService.findById(id).map(targetModelAssembler::toModel).map(ResponseEntity::ok)
@@ -75,11 +77,12 @@ public class TargetController {
     }
 
     @PostMapping
+    @Override
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Add Target", notes = "Add new Target")
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> addTarget(
+    public ResponseEntity<TargetModel> add(
             @ApiParam(value = "New Target", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
         TargetNode targetNode = targetService.saveNew(targetDTO);
@@ -90,11 +93,12 @@ public class TargetController {
     }
 
     @PutMapping(path = "/{id}")
+    @Override
     @ApiOperation(value = "Update Target", notes = "Update Target. If the Target id is not found for update, a new Target with the next free id will be created")
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
             @ApiResponse(code = 200, message = "Successfully updated Target", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> updateTarget(
+    public ResponseEntity<TargetModel> update(
             @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
             @ApiParam(value = "Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
@@ -122,11 +126,12 @@ public class TargetController {
     }
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @Override
     @ApiOperation(value = "Update Target fields using Json Patch", notes = "Update Target fields using Json Patch")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> updateTargetFields(
+    public ResponseEntity<TargetModel> updateFields(
             @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
             @ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch targetAsJsonPatch) {
 
@@ -147,11 +152,12 @@ public class TargetController {
     // path – even if they have different parameters (parameters have no effect on
     // uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @Override
     @ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> updateTargetFields(
+    public ResponseEntity<TargetModel> updateFields(
             @ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
             @ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch targetAsJsonMergePatch) {
 
@@ -169,11 +175,12 @@ public class TargetController {
     }
 
     @DeleteMapping(path = "/{id}")
+    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Delete Target by id", notes = "Provide an id to delete specific Target")
     @ApiResponses({@ApiResponse(code = 204, message = "Successfully deleted Target"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<Void> deleteTarget(
+    public ResponseEntity<Void> delete(
             @ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         targetService.delete(id).orElseThrow(() -> new TargetNotFoundException(id));

@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -47,6 +48,7 @@ public class EventController implements GenericRestController<EventModel, EventD
 
     private final ViolationHelper violationHelper;
 
+    @GetMapping
     @Override
     @ApiOperation(value = "Find All Events", notes = "Look up all events")
     @ApiResponses(value = {
@@ -61,6 +63,7 @@ public class EventController implements GenericRestController<EventModel, EventD
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}")
     @Override
     @ApiOperation(value = "Find Event by id", notes = "Provide an id to look up specific Event from all terrorism attacks events")
     @ApiResponses({@ApiResponse(code = 200, message = "Event found by provided id", response = EventModel.class),
@@ -73,6 +76,7 @@ public class EventController implements GenericRestController<EventModel, EventD
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
 
+    @PostMapping
     @Override
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Add Event", notes = "Add new Event")
@@ -88,6 +92,7 @@ public class EventController implements GenericRestController<EventModel, EventD
         return new ResponseEntity<>(eventModel, HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/{id}")
     @Override
     @ApiOperation(value = "Update Event", notes = "Update Event. If the Event id is not found for update, a new Event with the next free id will be created")
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
@@ -120,6 +125,7 @@ public class EventController implements GenericRestController<EventModel, EventD
         return new ResponseEntity<>(eventModel, httpStatus);
     }
 
+    @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
     @ApiOperation(value = "Update Event fields using Json Patch", notes = "Update Event fields using Json Patch")
     @ApiResponses({
@@ -145,6 +151,7 @@ public class EventController implements GenericRestController<EventModel, EventD
     // id2 was used because Swagger does not allow two PATCH methods for the same
     // path – even if they have different parameters (parameters have no effect on
     // uniqueness)
+    @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
     @ApiOperation(value = "Update Event fields using Json Merge Patch", notes = "Update Event fields using Json Merge Patch")
     @ApiResponses({
@@ -167,6 +174,7 @@ public class EventController implements GenericRestController<EventModel, EventD
         return new ResponseEntity<>(eventModel, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{id}")
     @Override
     @ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")
     @ApiResponses({@ApiResponse(code = 204, message = "Successfully deleted Event"),

@@ -33,7 +33,7 @@ public interface GenericRestController<T, D> {
     ResponseEntity<T> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch);
 
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
-    ResponseEntity<EventModel> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch);
+    ResponseEntity<T> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch);
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
