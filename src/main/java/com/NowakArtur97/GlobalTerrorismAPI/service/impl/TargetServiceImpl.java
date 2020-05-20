@@ -8,8 +8,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class TargetServiceImpl extends GenericServiceImpl<TargetNode> {
 
@@ -32,16 +30,6 @@ public class TargetServiceImpl extends GenericServiceImpl<TargetNode> {
         targetNode = repository.save(targetNode);
 
         return targetNode;
-    }
-
-    @Override
-    public Optional<TargetNode> delete(Long id) {
-
-        Optional<TargetNode> targetNodeOptional = findById(id);
-
-        targetNodeOptional.ifPresent(repository::delete);
-
-        return targetNodeOptional;
     }
 
     //    @Override

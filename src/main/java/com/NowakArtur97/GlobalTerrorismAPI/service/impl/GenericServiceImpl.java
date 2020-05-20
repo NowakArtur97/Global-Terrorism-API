@@ -58,4 +58,14 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
 
         return node;
     }
+
+    @Override
+    public Optional<T> delete(Long id) {
+
+        Optional<T> nodeOptional = findById(id);
+
+        nodeOptional.ifPresent(repository::delete);
+
+        return nodeOptional;
+    }
 }
