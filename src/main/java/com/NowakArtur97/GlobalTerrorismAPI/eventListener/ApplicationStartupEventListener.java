@@ -5,8 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,21 +35,21 @@ class ApplicationStartupEventListener {
 
     private Map<String, GroupNode> groupsWithTargets = new HashMap<>();
 
-    private final TargetService targetService;
+    private final GenericService<TargetNode> targetService;
 
-    private final EventService eventService;
+    private final GenericService<EventNode> eventService;
 
     private final GroupRepository groupRepository;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
 
-        if (targetService.isDatabaseEmpty()) {
+//        if (targetService.isDatabaseEmpty()) {
 
             Sheet sheet = loadSheetFromFile();
 
             insertDataToDatabase(sheet);
-        }
+//        }
     }
 
     private Sheet loadSheetFromFile() {

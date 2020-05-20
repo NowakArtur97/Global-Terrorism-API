@@ -8,7 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -38,7 +38,7 @@ import java.util.Optional;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController implements GenericRestController<TargetModel, TargetDTO> {
 
-    private final TargetService targetService;
+    private final GenericService<TargetNode> targetService;
 
     private final TargetModelAssembler targetModelAssembler;
 

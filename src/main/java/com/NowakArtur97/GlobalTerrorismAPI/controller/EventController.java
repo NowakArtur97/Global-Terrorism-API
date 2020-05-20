@@ -8,7 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -38,7 +38,7 @@ import java.util.Optional;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController implements GenericRestController<EventModel, EventDTO> {
 
-    private final EventService eventService;
+    private final GenericService<EventNode> eventService;
 
     private final EventModelAssembler eventModelAssembler;
 
