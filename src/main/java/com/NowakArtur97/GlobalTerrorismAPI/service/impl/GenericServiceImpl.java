@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
 
     protected final DTOMapper dtoMapper;
 
+    @Autowired
     public GenericServiceImpl(BaseRepository<T> repository, DTOMapper dtoMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), GenericServiceImpl.class);
         this.repository = repository;

@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class TargetServiceImpl extends GenericServiceImpl<TargetNode> {
 
     @Autowired
-    public TargetServiceImpl(TargetRepository repository, DTOMapper dtoMapper) {
+    public TargetServiceImpl(BaseRepository<TargetNode> repository, DTOMapper dtoMapper) {
         super(repository, dtoMapper);
     }
 

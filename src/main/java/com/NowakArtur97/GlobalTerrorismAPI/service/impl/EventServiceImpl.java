@@ -5,7 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class EventServiceImpl extends GenericServiceImpl<EventNode> {
     private final GenericService<TargetNode> targetService;
 
     @Autowired
-    public EventServiceImpl(EventRepository repository, DTOMapper dtoMapper, TargetServiceImpl targetService) {
+    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper dtoMapper, GenericService<TargetNode> targetService) {
 
         super(repository, dtoMapper);
 

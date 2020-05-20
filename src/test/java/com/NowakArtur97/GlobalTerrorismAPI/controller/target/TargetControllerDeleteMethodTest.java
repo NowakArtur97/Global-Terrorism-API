@@ -2,10 +2,12 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
@@ -39,10 +41,10 @@ class TargetControllerDeleteMethodTest {
 
     private MockMvc mockMvc;
 
-    private TargetController targetController;
+    private GenericRestController<TargetModel, TargetDTO> targetController;
 
     @Mock
-    private TargetService targetService;
+    private GenericService<TargetNode> targetService;
 
     @Mock
     private TargetModelAssembler targetModelAssembler;

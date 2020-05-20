@@ -3,11 +3,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -45,10 +47,10 @@ public class EventControllerDeleteMethodTest {
 
     private MockMvc mockMvc;
 
-    private EventController eventController;
+    private GenericRestController<EventModel, EventDTO> eventController;
 
     @Mock
-    private EventService eventService;
+    private GenericService<EventNode> eventService;
 
     @Mock
     private EventModelAssembler modelAssembler;
