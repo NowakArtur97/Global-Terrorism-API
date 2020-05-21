@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
@@ -38,7 +39,7 @@ class ApplicationStartupEventListener {
 
     private final TargetService targetService;
 
-    private final GenericService<EventNode> eventService;
+    private final GenericService<EventNode, EventDTO> eventService;
 
     private final GroupRepository groupRepository;
 

@@ -38,7 +38,7 @@ import java.util.Optional;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController implements GenericRestController<EventModel, EventDTO> {
 
-    private final GenericService<EventNode> eventService;
+    private final GenericService<EventNode, EventDTO> eventService;
 
     private final EventModelAssembler eventModelAssembler;
 

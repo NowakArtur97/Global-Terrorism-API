@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class EventServiceImpl extends GenericServiceImpl<EventNode> {
+public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
-    private final GenericService<TargetNode> targetService;
+    private final GenericService<TargetNode, TargetDTO> targetService;
 
     @Autowired
-    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper dtoMapper, GenericService<TargetNode> targetService) {
+    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
 
         super(repository, dtoMapper);
 

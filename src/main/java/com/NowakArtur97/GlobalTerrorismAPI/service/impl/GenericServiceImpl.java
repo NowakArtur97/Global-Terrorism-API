@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public abstract class GenericServiceImpl<T extends Node> implements GenericService<T> {
+public abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
 
     protected final Class<T> typeParameterClass;
 
@@ -25,7 +25,7 @@ public abstract class GenericServiceImpl<T extends Node> implements GenericServi
 
     @Autowired
     public GenericServiceImpl(BaseRepository<T> repository, DTOMapper dtoMapper) {
-        this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), GenericServiceImpl.class);
+        this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;
         this.dtoMapper = dtoMapper;
     }
@@ -54,6 +54,20 @@ public abstract class GenericServiceImpl<T extends Node> implements GenericServi
     public T saveNew(DTONode dto) {
 
         T node = dtoMapper.mapToNode(dto, typeParameterClass);
+
+        node = repository.save(node);
+
+        return node;
+    }
+
+    @Override
+    public T update(T node, DTONode dto) {
+
+        Long id = node.getId();
+
+        node = dtoMapper.mapToNode(dto, typeParameterClass);
+
+        node.setId(id);
 
         node = repository.save(node);
 
