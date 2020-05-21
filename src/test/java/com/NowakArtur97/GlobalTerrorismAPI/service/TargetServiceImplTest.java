@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @Tag("TargetServiceImpl_Tests")
 class TargetServiceImplTest {
 
-    private GenericService<TargetNode> targetService;
+    private TargetService targetService;
 
     @Mock
     private TargetRepository targetRepository;
@@ -261,33 +261,33 @@ class TargetServiceImplTest {
                 () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
     }
 
-//    @Test
-//    void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
-//
-//        Long databaseSize = 0L;
-//
-//        when(targetRepository.count()).thenReturn(databaseSize);
-//
-//        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
-//
-//        assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
-//                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-//                () -> verifyNoInteractions(dtoMapper));
-//    }
-//
-//    @Test
-//    void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
-//
-//        Long databaseSize = 10L;
-//
-//        when(targetRepository.count()).thenReturn(databaseSize);
-//
-//        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
-//
-//        assertAll(
-//                () -> assertFalse(isDatabaseEmpty,
-//                        () -> "should not database be empty, but that was: " + isDatabaseEmpty),
-//                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-//                () -> verifyNoInteractions(dtoMapper));
-//    }
+    @Test
+    void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
+
+        Long databaseSize = 0L;
+
+        when(targetRepository.count()).thenReturn(databaseSize);
+
+        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+
+        assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
+                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(dtoMapper));
+    }
+
+    @Test
+    void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
+
+        Long databaseSize = 10L;
+
+        when(targetRepository.count()).thenReturn(databaseSize);
+
+        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+
+        assertAll(
+                () -> assertFalse(isDatabaseEmpty,
+                        () -> "should not database be empty, but that was: " + isDatabaseEmpty),
+                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(dtoMapper));
+    }
 }
