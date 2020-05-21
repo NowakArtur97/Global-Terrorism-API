@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface GenericService<T extends Node, D extends DTONode> {
+public interface GenericService<T extends Node> {
 
     Optional<T> findById(Long id);
 

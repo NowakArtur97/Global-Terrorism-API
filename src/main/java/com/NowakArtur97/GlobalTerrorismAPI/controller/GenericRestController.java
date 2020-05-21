@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,7 +13,7 @@ import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
 
-public interface GenericRestController<M, D> {
+public interface GenericRestController<M, D extends DTONode> {
 
     @GetMapping
     ResponseEntity<PagedModel<M>> findAll(@PageableDefault(size = 100) Pageable pageable);

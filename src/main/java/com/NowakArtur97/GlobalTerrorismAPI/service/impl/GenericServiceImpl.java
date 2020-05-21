@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
+public abstract class GenericServiceImpl<T extends Node> implements GenericService<T> {
 
     protected final Class<T> typeParameterClass;
 

@@ -38,7 +38,7 @@ import java.util.Optional;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController implements GenericRestController<TargetModel, TargetDTO> {
 
-    private final GenericService<TargetNode, TargetDTO> targetService;
+    private final GenericService<TargetNode> targetService;
 
     private final TargetModelAssembler targetModelAssembler;
 
