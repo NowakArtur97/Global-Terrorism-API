@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {TargetTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class TargetController extends GenericRestControllerImpl<TargetModel, TargetNode> {
+public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
     public TargetController(GenericService<TargetNode> service, RepresentationModelAssembler<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetModel> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
@@ -46,8 +47,8 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
 //    public ResponseEntity<PagedModel<TargetModel>> findAll(
 //            @ApiIgnore @PageableDefault(size = 100) Pageable pageable) {
 //
-//        Page<TargetNode> targets = targetService.findAll(pageable);
-//        PagedModel<TargetModel> pagedModel = pagedResourcesAssembler.toModel(targets, targetModelAssembler);
+//        Page<TargetNode> targets = service.findAll(pageable);
+//        PagedModel<TargetModel> pagedModel = pagedResourcesAssembler.toModel(targets, modelAssembler);
 //
 //        return new ResponseEntity<>(pagedModel, HttpStatus.OK);
 //    }

@@ -5,6 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
 
-public interface GenericRestController<R> {
+public interface GenericRestController<R extends RepresentationModel<R>, D extends DTONode> {
 
     @GetMapping
     ResponseEntity<PagedModel<R>> findAll(@PageableDefault(size = 100) Pageable pageable);
@@ -24,10 +25,10 @@ public interface GenericRestController<R> {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
         // Added to remove the default 200 status added by Swagger
-    ResponseEntity<R> add(DTONode dto);
+    ResponseEntity<R> add(D dto);
 
     @PutMapping(path = "/{id}")
-    ResponseEntity<R> update(@PathVariable("id") Long id, @RequestBody @Valid DTONode dto);
+    ResponseEntity<R> update(@PathVariable("id") Long id, @RequestBody @Valid D dto);
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     ResponseEntity<R> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch);
