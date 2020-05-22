@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.EventNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
@@ -36,9 +37,9 @@ import java.util.Optional;
 @Api(tags = {EventTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class EventController implements GenericRestController<EventModel, EventDTO> {
+public class EventController implements GenericRestController<EventModel> {
 
-    private final GenericService<EventNode, EventDTO> eventService;
+    private final GenericService<EventNode> eventService;
 
     private final EventModelAssembler eventModelAssembler;
 
@@ -83,7 +84,7 @@ public class EventController implements GenericRestController<EventModel, EventD
     @ApiResponses({@ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> add(
-            @ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
+            @ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid DTONode eventDTO) {
 
         EventNode eventNode = eventService.saveNew(eventDTO);
 
@@ -100,7 +101,7 @@ public class EventController implements GenericRestController<EventModel, EventD
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> update(
             @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-            @ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid EventDTO eventDTO) {
+            @ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid DTONode eventDTO) {
 
         HttpStatus httpStatus;
         EventNode eventNode;

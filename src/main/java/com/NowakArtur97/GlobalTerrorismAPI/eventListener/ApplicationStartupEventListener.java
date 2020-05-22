@@ -39,7 +39,7 @@ class ApplicationStartupEventListener {
 
     private final TargetService targetService;
 
-    private final GenericService<EventNode, EventDTO> eventService;
+    private final GenericService<EventNode> eventService;
 
     private final GroupRepository groupRepository;
 
