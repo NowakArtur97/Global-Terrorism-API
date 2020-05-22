@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
-    public TargetController(GenericService<TargetNode> service, RepresentationModelAssembler<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetModel> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public TargetController(GenericService<TargetNode> service, RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

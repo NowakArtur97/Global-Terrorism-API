@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController extends GenericRestControllerImpl<EventModel, EventDTO, EventNode> {
 
-    public EventController(GenericService<EventNode> service, RepresentationModelAssembler<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventModel> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public EventController(GenericService<EventNode> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

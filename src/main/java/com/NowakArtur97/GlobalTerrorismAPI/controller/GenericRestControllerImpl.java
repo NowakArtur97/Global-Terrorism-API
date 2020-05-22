@@ -7,11 +7,12 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,15 +32,16 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
 
     protected final GenericService<T> service;
 
-    protected final RepresentationModelAssembler<T, R> modelAssembler;
+    protected final RepresentationModelAssemblerSupport<T, R> modelAssembler;
 
-    protected final PagedResourcesAssembler<R> pagedResourcesAssembler;
+    protected final PagedResourcesAssembler<T> pagedResourcesAssembler;
 
     protected final PatchHelper patchHelper;
 
     protected final ViolationHelper violationHelper;
 
-    public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssembler<T, R> modelAssembler, PagedResourcesAssembler<R> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssemblerSupport<T, R> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
         this.nodeType = this.typeParameterClass.getSimpleName();
         this.service = service;
@@ -52,7 +54,10 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
     @Override
     public ResponseEntity<PagedModel<R>> findAll(Pageable pageable) {
 
-        return null;
+        Page<T> resources = service.findAll(pageable);
+        PagedModel<R> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
+
+        return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
     @Override
