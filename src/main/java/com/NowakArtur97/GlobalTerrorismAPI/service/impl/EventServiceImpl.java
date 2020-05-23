@@ -18,7 +18,7 @@ public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
     private final GenericService<TargetNode, TargetDTO> targetService;
 
     @Autowired
-    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
+    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper<EventNode, EventDTO> dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
 
         super(repository, dtoMapper);
 

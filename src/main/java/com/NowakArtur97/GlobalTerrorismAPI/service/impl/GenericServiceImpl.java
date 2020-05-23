@@ -21,10 +21,10 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> impl
 
     protected final BaseRepository<T> repository;
 
-    final DTOMapper dtoMapper;
+    final DTOMapper<T, D> dtoMapper;
 
     @Autowired
-    GenericServiceImpl(BaseRepository<T> repository, DTOMapper dtoMapper) {
+    GenericServiceImpl(BaseRepository<T> repository, DTOMapper<T, D> dtoMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;
         this.dtoMapper = dtoMapper;

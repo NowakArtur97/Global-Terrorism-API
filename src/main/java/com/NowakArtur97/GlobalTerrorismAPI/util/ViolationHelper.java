@@ -1,6 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.util;
 
-public interface ViolationHelper {
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 
-	<T> void violate(Object entity, Class<T> dtoType);
+public interface ViolationHelper<T extends Node, D extends DTONode> {
+
+    void violate(T entity, Class<D> dtoType);
 }

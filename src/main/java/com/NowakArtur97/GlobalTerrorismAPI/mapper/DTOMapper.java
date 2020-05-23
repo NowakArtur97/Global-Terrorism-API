@@ -1,10 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 
-public interface DTOMapper {
+public interface DTOMapper<T extends Node, D extends DTONode> {
 
-	<T> T mapToNode(DTONode dto, Class<T> destinationType);
+    T mapToNode(D dto, Class<T> destinationType);
 
-	<T> T mapToDTO(Object node, Class<T> destinationType);
+    D mapToDTO(T node, Class<D> destinationType);
 }
