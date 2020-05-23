@@ -493,7 +493,7 @@ public class EventControllerGetMethodTest {
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isNotFound())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-						.andExpect(jsonPath("errors[0]", is("Could not find EventNode with id: " + eventId))),
+						.andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));

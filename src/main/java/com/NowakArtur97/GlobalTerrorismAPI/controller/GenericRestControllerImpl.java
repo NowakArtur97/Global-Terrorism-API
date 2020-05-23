@@ -25,17 +25,19 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>, D extends DTONode, T extends Node> implements GenericRestController<R, D> {
+public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node> implements GenericRestController<M, D> {
 
-    protected final String nodeType;
+    protected final String modelType;
 
-    protected final Class<T> typeParameterClass;
+    protected final Class<M> modelTypeParameterClass;
+
+    protected final Class<T> nodeTypeParameterClass;
 
     protected final Class<D> dtoTypeParameterClass;
 
     protected final GenericService<T> service;
 
-    protected final RepresentationModelAssemblerSupport<T, R> modelAssembler;
+    protected final RepresentationModelAssemblerSupport<T, M> modelAssembler;
 
     protected final PagedResourcesAssembler<T> pagedResourcesAssembler;
 
@@ -43,11 +45,12 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
 
     protected final ViolationHelper violationHelper;
 
-    public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssemblerSupport<T, R> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
 
-        this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];
+        this.modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
+        this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];
         this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[1];
-        this.nodeType = this.typeParameterClass.getSimpleName();
+        this.modelType = this.modelTypeParameterClass.getSimpleName();
         this.service = service;
         this.modelAssembler = modelAssembler;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
@@ -57,36 +60,36 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
 
     @GetMapping
     @Override
-    public ResponseEntity<PagedModel<R>> findAll(Pageable pageable) {
+    public ResponseEntity<PagedModel<M>> findAll(Pageable pageable) {
 
         Page<T> resources = service.findAll(pageable);
-        PagedModel<R> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
+        PagedModel<M> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
 
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     @Override
-    public ResponseEntity<R> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<M> findById(@PathVariable("id") Long id) {
 
         return service.findById(id).map(modelAssembler::toModel).map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
+                .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
     }
 
     @PostMapping
     @Override
-    public ResponseEntity<R> add(@RequestBody @Valid D dto) {
+    public ResponseEntity<M> add(@RequestBody @Valid D dto) {
 
         T node = service.saveNew(dto);
 
-        R resource = modelAssembler.toModel(node);
+        M resource = modelAssembler.toModel(node);
 
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}")
     @Override
-    public ResponseEntity<R> update(@PathVariable("id") Long id, @RequestBody @Valid D dto) {
+    public ResponseEntity<M> update(@PathVariable("id") Long id, @RequestBody @Valid D dto) {
 
         HttpStatus httpStatus;
         T node;
@@ -106,41 +109,41 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
             node = service.saveNew(dto);
         }
 
-        R resource = modelAssembler.toModel(node);
+        M resource = modelAssembler.toModel(node);
 
         return new ResponseEntity<>(resource, httpStatus);
     }
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    public ResponseEntity<R> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch) {
+    public ResponseEntity<M> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch) {
 
-        T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
+        T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
-        T nodePatched = patchHelper.patch(objectAsJsonPatch, node, typeParameterClass);
+        T nodePatched = patchHelper.patch(objectAsJsonPatch, node, nodeTypeParameterClass);
 
         violationHelper.violate(nodePatched, dtoTypeParameterClass);
 
         nodePatched = service.save(nodePatched);
 
-        R resource = modelAssembler.toModel(nodePatched);
+        M resource = modelAssembler.toModel(nodePatched);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    public ResponseEntity<R> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch) {
+    public ResponseEntity<M> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch) {
 
-        T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
+        T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
-        T nodePatched = patchHelper.mergePatch(objectAsJsonMergePatch, node, typeParameterClass);
+        T nodePatched = patchHelper.mergePatch(objectAsJsonMergePatch, node, nodeTypeParameterClass);
 
         violationHelper.violate(nodePatched, dtoTypeParameterClass);
 
         nodePatched = service.save(nodePatched);
 
-        R resource = modelAssembler.toModel(nodePatched);
+        M resource = modelAssembler.toModel(nodePatched);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
@@ -149,7 +152,7 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
     @Override
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 
-        service.delete(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
+        service.delete(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

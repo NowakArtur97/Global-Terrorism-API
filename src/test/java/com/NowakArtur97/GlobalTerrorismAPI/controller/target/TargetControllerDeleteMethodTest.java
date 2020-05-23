@@ -106,7 +106,7 @@ class TargetControllerDeleteMethodTest {
                 () -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetNode with id: " + targetId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId))),
                 () -> verify(targetService, times(1)).delete(targetId), () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));

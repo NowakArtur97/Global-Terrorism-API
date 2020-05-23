@@ -26,17 +26,6 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 
-
-    //    private final GenericService<TargetNode> targetService;
-//
-//    private final TargetModelAssembler targetModelAssembler;
-//
-//    private final PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
-//
-//    private final PatchHelper patchHelper;
-//
-//    private final ViolationHelper violationHelper;
-//
 //    @GetMapping
 //    @Override
 //    @ApiOperation(value = "Find All Targets", notes = "Look up all targets")

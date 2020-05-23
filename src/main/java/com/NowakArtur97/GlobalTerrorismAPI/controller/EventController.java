@@ -26,17 +26,7 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 
-    //    private final GenericService<EventNode> eventService;
-//
-//    private final EventModelAssembler eventModelAssembler;
-//
-//    private final PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
-//
-//    private final PatchHelper patchHelper;
-//
-//    private final ViolationHelper violationHelper;
-//
-//    @GetMapping
+    //    @GetMapping
 //    @Override
 //    @ApiOperation(value = "Find All Events", notes = "Look up all events")
 //    @ApiResponses(value = {
