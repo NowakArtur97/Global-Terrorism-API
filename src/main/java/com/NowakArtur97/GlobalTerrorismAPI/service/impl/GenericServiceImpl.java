@@ -17,14 +17,14 @@ import java.util.Optional;
 @Service
 public abstract class GenericServiceImpl<T extends Node> implements GenericService<T> {
 
-    protected final Class<T> typeParameterClass;
+    private final Class<T> typeParameterClass;
 
     protected final BaseRepository<T> repository;
 
-    protected final DTOMapper dtoMapper;
+    final DTOMapper dtoMapper;
 
     @Autowired
-    public GenericServiceImpl(BaseRepository<T> repository, DTOMapper dtoMapper) {
+    GenericServiceImpl(BaseRepository<T> repository, DTOMapper dtoMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;
         this.dtoMapper = dtoMapper;

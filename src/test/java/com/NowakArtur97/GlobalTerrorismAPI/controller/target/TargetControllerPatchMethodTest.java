@@ -157,7 +157,7 @@ class TargetControllerPatchMethodTest {
 		assertAll(
 				() -> mockMvc
 						.perform(patch(linkWithParameter, targetId).content("{ \"target\": \"updated target\" }")
-								.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+								.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 						.andExpect(status().isOk())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("links[0].href", is(pathToLink)))

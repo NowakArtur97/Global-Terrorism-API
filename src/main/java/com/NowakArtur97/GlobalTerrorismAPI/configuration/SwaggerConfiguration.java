@@ -1,13 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
+import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
-
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -35,7 +34,8 @@ public class SwaggerConfiguration {
 					.paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
 				.build()
 					.apiInfo(apiDetails(swaggerConfigurationProperties))
-					.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION));
+					.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION),
+							new Tag(EventTag.RESOURCE, TargetTag.DESCRIPTION));
 	}
 
 	private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {

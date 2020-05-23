@@ -27,17 +27,17 @@ import java.util.Optional;
 @RestController
 public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node> implements GenericRestController<M, D> {
 
-    protected final String modelType;
+    private final String modelType;
 
-    protected final Class<M> modelTypeParameterClass;
+    private final Class<M> modelTypeParameterClass;
 
-    protected final Class<T> nodeTypeParameterClass;
+    private final Class<T> nodeTypeParameterClass;
 
-    protected final Class<D> dtoTypeParameterClass;
+    private final Class<D> dtoTypeParameterClass;
 
     protected final GenericService<T> service;
 
-    protected final RepresentationModelAssemblerSupport<T, M> modelAssembler;
+    private final RepresentationModelAssemblerSupport<T, M> modelAssembler;
 
     protected final PagedResourcesAssembler<T> pagedResourcesAssembler;
 

@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
@@ -195,8 +194,8 @@ class ApplicationStartupEventListener {
         switch (cell.getCellType()) {
 
             case NUMERIC:
-                Double doubleValue = cell.getNumericCellValue();
-                value = doubleValue.toString();
+                double doubleValue = cell.getNumericCellValue();
+                value = Double.toString(doubleValue);
                 break;
 
             case STRING:

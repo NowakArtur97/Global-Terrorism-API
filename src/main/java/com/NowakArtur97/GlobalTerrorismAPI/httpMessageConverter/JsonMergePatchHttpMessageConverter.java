@@ -1,12 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter;
 
-import java.io.IOException;
-
-import javax.json.Json;
-import javax.json.JsonMergePatch;
-import javax.json.JsonReader;
-import javax.json.JsonWriter;
-
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -15,46 +9,49 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Component;
 
+import javax.json.Json;
+import javax.json.JsonMergePatch;
+import javax.json.JsonReader;
+import javax.json.JsonWriter;
+
 @Component
 public class JsonMergePatchHttpMessageConverter extends AbstractHttpMessageConverter<JsonMergePatch> {
 
-	private final static String MEDIA_TYPE = "application/merge-patch+json";
+    public JsonMergePatchHttpMessageConverter() {
+        super(MediaType.valueOf(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE));
+    }
 
-	public JsonMergePatchHttpMessageConverter() {
-		super(MediaType.valueOf(MEDIA_TYPE));
-	}
+    @Override
+    protected boolean supports(Class<?> clazz) {
 
-	@Override
-	protected boolean supports(Class<?> clazz) {
+        return JsonMergePatch.class.isAssignableFrom(clazz);
+    }
 
-		return JsonMergePatch.class.isAssignableFrom(clazz);
-	}
+    @Override
+    protected JsonMergePatch readInternal(Class<? extends JsonMergePatch> clazz, HttpInputMessage inputMessage)
+            throws HttpMessageNotReadableException {
 
-	@Override
-	protected JsonMergePatch readInternal(Class<? extends JsonMergePatch> clazz, HttpInputMessage inputMessage)
-			throws IOException, HttpMessageNotReadableException {
+        try (JsonReader jsonReader = Json.createReader(inputMessage.getBody())) {
 
-		try (JsonReader jsonReader = Json.createReader(inputMessage.getBody())) {
+            return Json.createMergePatch(jsonReader.readValue());
 
-			return Json.createMergePatch(jsonReader.readValue());
+        } catch (Exception ex) {
 
-		} catch (Exception ex) {
+            throw new HttpMessageNotReadableException(ex.getMessage(), inputMessage);
+        }
+    }
 
-			throw new HttpMessageNotReadableException(ex.getMessage(), inputMessage);
-		}
-	}
+    @Override
+    protected void writeInternal(JsonMergePatch jsonMergePatch, HttpOutputMessage outputMessage)
+            throws HttpMessageNotWritableException {
 
-	@Override
-	protected void writeInternal(JsonMergePatch jsonMergePatch, HttpOutputMessage outputMessage)
-			throws IOException, HttpMessageNotWritableException {
+        try (JsonWriter jsonWriter = Json.createWriter(outputMessage.getBody())) {
 
-		try (JsonWriter jsonWriter = Json.createWriter(outputMessage.getBody())) {
+            jsonWriter.write(jsonMergePatch.toJsonValue());
 
-			jsonWriter.write(jsonMergePatch.toJsonValue());
+        } catch (Exception ex) {
 
-		} catch (Exception ex) {
-
-			throw new HttpMessageNotWritableException(ex.getMessage(), ex);
-		}
-	}
+            throw new HttpMessageNotWritableException(ex.getMessage(), ex);
+        }
+    }
 }

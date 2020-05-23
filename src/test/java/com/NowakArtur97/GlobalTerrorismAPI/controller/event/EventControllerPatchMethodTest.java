@@ -542,7 +542,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
@@ -604,7 +604,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
@@ -657,7 +657,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
 									.accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
@@ -696,7 +696,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
 							.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
@@ -740,7 +740,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
@@ -778,7 +778,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event summary cannot be empty"))),
@@ -816,7 +816,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event motive cannot be empty"))),
@@ -855,7 +855,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event date cannot be in the future"))),
