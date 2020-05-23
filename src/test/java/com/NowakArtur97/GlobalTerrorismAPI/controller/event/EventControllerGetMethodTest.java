@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
@@ -88,7 +88,7 @@ public class EventControllerGetMethodTest {
 		eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
 				violationHelper);
 
-		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
+		mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
 				.setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 
 		targetBuilder = new TargetBuilder();
@@ -493,7 +493,7 @@ public class EventControllerGetMethodTest {
 				() -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isNotFound())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 						.andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-						.andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
+						.andExpect(jsonPath("errors[0]", is("Could not find EventNode with id: " + eventId))),
 				() -> verify(eventService, times(1)).findById(eventId), () -> verifyNoMoreInteractions(eventService),
 				() -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));

@@ -1,7 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
+
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
@@ -15,8 +17,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
@@ -30,6 +31,8 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
 
     protected final Class<T> typeParameterClass;
 
+    protected final Class<D> dtoTypeParameterClass;
+
     protected final GenericService<T> service;
 
     protected final RepresentationModelAssemblerSupport<T, R> modelAssembler;
@@ -42,7 +45,8 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
 
     public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssemblerSupport<T, R> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
 
-        this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
+        this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];
+        this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[1];
         this.nodeType = this.typeParameterClass.getSimpleName();
         this.service = service;
         this.modelAssembler = modelAssembler;
@@ -51,6 +55,7 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         this.violationHelper = violationHelper;
     }
 
+    @GetMapping
     @Override
     public ResponseEntity<PagedModel<R>> findAll(Pageable pageable) {
 
@@ -60,6 +65,7 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}")
     @Override
     public ResponseEntity<R> findById(@PathVariable("id") Long id) {
 
@@ -67,8 +73,9 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
                 .orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
     }
 
+    @PostMapping
     @Override
-    public ResponseEntity<R> add(D dto) {
+    public ResponseEntity<R> add(@RequestBody @Valid D dto) {
 
         T node = service.saveNew(dto);
 
@@ -77,8 +84,9 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/{id}")
     @Override
-    public ResponseEntity<R> update(Long id, @Valid D dto) {
+    public ResponseEntity<R> update(@PathVariable("id") Long id, @RequestBody @Valid D dto) {
 
         HttpStatus httpStatus;
         T node;
@@ -103,14 +111,15 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         return new ResponseEntity<>(resource, httpStatus);
     }
 
+    @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    public ResponseEntity<R> updateFields(Long id, JsonPatch objectAsJsonPatch) {
+    public ResponseEntity<R> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch) {
 
         T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
 
         T nodePatched = patchHelper.patch(objectAsJsonPatch, node, typeParameterClass);
 
-        violationHelper.violate(nodePatched, DTONode.class);
+        violationHelper.violate(nodePatched, dtoTypeParameterClass);
 
         nodePatched = service.save(nodePatched);
 
@@ -119,14 +128,15 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
+    @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    public ResponseEntity<R> updateFields(Long id, JsonMergePatch objectAsJsonMergePatch) {
+    public ResponseEntity<R> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch) {
 
         T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
 
         T nodePatched = patchHelper.mergePatch(objectAsJsonMergePatch, node, typeParameterClass);
 
-        violationHelper.violate(nodePatched, DTONode.class);
+        violationHelper.violate(nodePatched, dtoTypeParameterClass);
 
         nodePatched = service.save(nodePatched);
 
@@ -135,8 +145,9 @@ public abstract class GenericRestControllerImpl<R extends RepresentationModel<R>
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{id}")
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 
         service.delete(id).orElseThrow(() -> new ResourceNotFoundException(nodeType, id));
 

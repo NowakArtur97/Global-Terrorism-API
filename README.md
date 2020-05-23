@@ -16,13 +16,13 @@ The data was downloaded from the Global Terrorism Database site - https://www.st
 
 ## Setup
 To start the application, enter the following commands in command line:
-    - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
-    - `docker-compose up`
+- `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
+- `docker-compose up`
 Go to: `http://YOUR_DOCKER_IP:8080/swagger-ui.html`,
 where YOUR_DOCKER_IP is your docker machine IP address.
 To stop the application, enter the following key combination on the command line: `Ctrl + C`
 To shut down the containers enter:
-    - `docker-compose down`
+- `docker-compose down`
 
 ## Built With
 - Java 11

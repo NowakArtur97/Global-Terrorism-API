@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/targets")
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(tags = {TargetTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})

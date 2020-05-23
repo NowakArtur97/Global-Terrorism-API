@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.TargetControllerAdvice;
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
@@ -64,7 +64,7 @@ class TargetControllerDeleteMethodTest {
         targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
                 patchHelper, violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new TargetControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
     }
 
@@ -106,7 +106,7 @@ class TargetControllerDeleteMethodTest {
                 () -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find target with id: " + targetId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetNode with id: " + targetId))),
                 () -> verify(targetService, times(1)).delete(targetId), () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));

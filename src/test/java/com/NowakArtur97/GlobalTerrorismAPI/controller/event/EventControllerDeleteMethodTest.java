@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.EventControllerAdvice;
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
@@ -73,7 +73,7 @@ public class EventControllerDeleteMethodTest {
         eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new EventControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
         targetBuilder = new TargetBuilder();
@@ -119,7 +119,7 @@ public class EventControllerDeleteMethodTest {
                 () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find event with id: " + eventId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find EventNode with id: " + eventId))),
                 () -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
