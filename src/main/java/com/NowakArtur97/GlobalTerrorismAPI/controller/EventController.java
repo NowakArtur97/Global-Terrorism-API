@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController extends GenericRestControllerImpl<EventModel, EventDTO, EventNode> {
 
-    public EventController(GenericService<EventNode> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public EventController(GenericService<EventNode, EventDTO> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

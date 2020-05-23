@@ -7,8 +7,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.EventServiceImpl;
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 @Tag("EventServiceImpl_Tests")
 class EventServiceImplTest {
 
-    private GenericService<EventNode> eventService;
+    private GenericService<EventNode, EventDTO> eventService;
 
     @Mock
     private EventRepository eventRepository;
@@ -46,7 +46,7 @@ class EventServiceImplTest {
     private DTOMapper dtoMapper;
 
     @Mock
-    private TargetServiceImpl targetService;
+    private TargetService targetService;
 
     private TargetBuilder targetBuilder;
     private EventBuilder eventBuilder;

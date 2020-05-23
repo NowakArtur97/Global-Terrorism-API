@@ -57,7 +57,7 @@ class TargetControllerGetMethodTest {
     private GenericRestController<TargetModel, TargetDTO> targetController;
 
     @Mock
-    private GenericService<TargetNode> targetService;
+    private GenericService<TargetNode, TargetDTO> targetService;
 
     @Mock
     private TargetModelAssembler targetModelAssembler;

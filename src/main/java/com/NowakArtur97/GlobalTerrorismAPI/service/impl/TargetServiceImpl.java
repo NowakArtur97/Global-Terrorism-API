@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TargetServiceImpl extends GenericServiceImpl<TargetNode> implements TargetService {
+public class TargetServiceImpl extends GenericServiceImpl<TargetNode , TargetDTO> implements TargetService {
 
     @Autowired
     public TargetServiceImpl(BaseRepository<TargetNode> repository, DTOMapper dtoMapper) {

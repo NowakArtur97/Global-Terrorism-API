@@ -35,7 +35,7 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     private final Class<D> dtoTypeParameterClass;
 
-    protected final GenericService<T> service;
+    protected final GenericService<T, D> service;
 
     private final RepresentationModelAssemblerSupport<T, M> modelAssembler;
 
@@ -45,7 +45,7 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     protected final ViolationHelper violationHelper;
 
-    public GenericRestControllerImpl(GenericService<T> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    GenericRestControllerImpl(GenericService<T, D> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
 
         this.modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
         this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];

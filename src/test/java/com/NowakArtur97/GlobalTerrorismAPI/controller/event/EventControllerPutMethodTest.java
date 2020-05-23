@@ -64,7 +64,7 @@ public class EventControllerPutMethodTest {
 	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
 	@Mock
-	private GenericService<EventNode> eventService;
+	private GenericService<EventNode, EventDTO> eventService;
 
 	@Mock
 	private EventModelAssembler modelAssembler;

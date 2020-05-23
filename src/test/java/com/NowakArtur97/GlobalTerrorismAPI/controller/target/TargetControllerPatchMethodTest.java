@@ -56,7 +56,7 @@ class TargetControllerPatchMethodTest {
 	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
 	@Mock
-	private GenericService<TargetNode> targetService;
+	private GenericService<TargetNode, TargetDTO> targetService;
 
 	@Mock
 	private TargetModelAssembler targetModelAssembler;

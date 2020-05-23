@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public abstract class GenericServiceImpl<T extends Node> implements GenericService<T> {
+public abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
 
     private final Class<T> typeParameterClass;
 
@@ -51,7 +51,7 @@ public abstract class GenericServiceImpl<T extends Node> implements GenericServi
     }
 
     @Override
-    public T saveNew(DTONode dto) {
+    public T saveNew(D dto) {
 
         T node = dtoMapper.mapToNode(dto, typeParameterClass);
 
@@ -61,7 +61,7 @@ public abstract class GenericServiceImpl<T extends Node> implements GenericServi
     }
 
     @Override
-    public T update(T node, DTONode dto) {
+    public T update(T node, D dto) {
 
         Long id = node.getId();
 

@@ -65,7 +65,7 @@ public class EventControllerGetMethodTest {
 	private GenericRestController<EventModel, EventDTO> eventController;
 
 	@Mock
-	private GenericService<EventNode> eventService;
+	private GenericService<EventNode, EventDTO> eventService;
 
 	@Mock
 	private EventModelAssembler modelAssembler;

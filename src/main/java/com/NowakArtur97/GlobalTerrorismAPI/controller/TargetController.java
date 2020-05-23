@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
-    public TargetController(GenericService<TargetNode> service, RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public TargetController(GenericService<TargetNode, TargetDTO> service, RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 
