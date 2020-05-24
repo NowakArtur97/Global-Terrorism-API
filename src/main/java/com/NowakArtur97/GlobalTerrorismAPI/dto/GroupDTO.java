@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupDTO implements DTONode {
 
-    @ApiModelProperty(notes = "The group's name")
+    @ApiModelProperty(notes = "The group's name", required = true)
     @NotBlank(message = "{group.name.notBlank}")
     private String name;
 
