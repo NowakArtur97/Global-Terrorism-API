@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class GroupModel extends RepresentationModel<TargetModel> implements Group {
+public class GroupModel extends RepresentationModel<GroupModel> implements Group {
 
     @ApiModelProperty(notes = "The unique id of the Group")
     private Long id;

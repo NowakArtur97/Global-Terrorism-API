@@ -1,11 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -41,7 +41,7 @@ class ApplicationStartupEventListener {
 
     private final GenericService<EventNode, EventDTO> eventService;
 
-    private final GroupRepository groupRepository;
+    private final GenericService<GroupNode, GroupDTO> groupService;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -85,7 +85,7 @@ class ApplicationStartupEventListener {
 
         for (GroupNode groupNode : groupsWithTargets.values()) {
 
-            groupRepository.save(groupNode);
+            groupService.save(groupNode);
         }
     }
 
@@ -104,7 +104,7 @@ class ApplicationStartupEventListener {
 
             if (isGroupUnknown(groupName)) {
 
-                groupRepository.save(newGroup);
+                groupService.save(newGroup);
 
             } else {
 
