@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -24,5 +23,10 @@ public class GroupModel extends RepresentationModel<GroupModel> implements Group
     private String name;
 
     @ApiModelProperty(notes = "The event's caused by the group")
-    private List<EventDTO> eventsCaused;
+    private List<EventModel> eventsCaused;
+
+    public void addEvent(EventModel eventModel) {
+
+        eventsCaused.add(eventModel);
+    }
 }
