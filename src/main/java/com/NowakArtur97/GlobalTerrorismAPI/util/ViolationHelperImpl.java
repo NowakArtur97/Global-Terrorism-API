@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ public class ViolationHelperImpl<T extends Node, D extends DTONode> implements V
 
     private final Validator validator;
 
-    private final DTOMapper<T, D> dtoMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void violate(T entity, Class<D> dtoType) {
 
-        D dto = dtoMapper.mapToDTO(entity, dtoType);
+        D dto = objectMapper.map(entity, dtoType);
 
         Set<ConstraintViolation<D>> violations = validator.validate(dto);
 

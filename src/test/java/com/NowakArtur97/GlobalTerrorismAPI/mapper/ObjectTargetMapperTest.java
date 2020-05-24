@@ -16,10 +16,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("DTOMapper_Tests")
-class DTOTargetMapperTest {
+@Tag("ObjectMapper_Tests")
+class ObjectTargetMapperTest {
 
-    private DTOMapper<TargetNode, TargetDTO> dtoMapper;
+    private ObjectMapper dtoMapper;
 
     @Mock
     private ModelMapper modelMapper;
@@ -35,7 +35,7 @@ class DTOTargetMapperTest {
     @BeforeEach
     private void setUp() {
 
-        dtoMapper = new DTOMapperImpl<>(modelMapper);
+        dtoMapper = new ObjectMapperImpl(modelMapper);
     }
 
     @Test
@@ -46,7 +46,7 @@ class DTOTargetMapperTest {
 
         when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
 
-        TargetNode targetNodeActual = dtoMapper.mapToNode(targetDTOExpected, TargetNode.class);
+        TargetNode targetNodeActual = dtoMapper.map(targetDTOExpected, TargetNode.class);
 
         assertAll(
                 () -> assertNull(targetNodeActual.getId(),
@@ -65,7 +65,7 @@ class DTOTargetMapperTest {
 
         when(modelMapper.map(targetNodeExpected, TargetDTO.class)).thenReturn(targetDTOExpected);
 
-        TargetDTO targetDTOActual = dtoMapper.mapToDTO(targetNodeExpected, TargetDTO.class);
+        TargetDTO targetDTOActual = dtoMapper.map(targetNodeExpected, TargetDTO.class);
 
         assertAll(
                 () -> assertEquals(targetDTOExpected.getTarget(), targetDTOActual.getTarget(),

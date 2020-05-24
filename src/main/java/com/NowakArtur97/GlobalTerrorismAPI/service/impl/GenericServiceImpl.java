@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
@@ -21,10 +21,10 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> impl
 
     protected final BaseRepository<T> repository;
 
-    final DTOMapper<T, D> dtoMapper;
+    final ObjectMapper dtoMapper;
 
     @Autowired
-    GenericServiceImpl(BaseRepository<T> repository, DTOMapper<T, D> dtoMapper) {
+    GenericServiceImpl(BaseRepository<T> repository, ObjectMapper dtoMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;
         this.dtoMapper = dtoMapper;
@@ -53,7 +53,7 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> impl
     @Override
     public T saveNew(D dto) {
 
-        T node = dtoMapper.mapToNode(dto, typeParameterClass);
+        T node = dtoMapper.map(dto, typeParameterClass);
 
         node = repository.save(node);
 
@@ -65,7 +65,7 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> impl
 
         Long id = node.getId();
 
-        node = dtoMapper.mapToNode(dto, typeParameterClass);
+        node = dtoMapper.map(dto, typeParameterClass);
 
         node.setId(id);
 

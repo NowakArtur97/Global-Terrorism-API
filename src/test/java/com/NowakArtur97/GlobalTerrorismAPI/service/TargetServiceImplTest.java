@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -37,7 +37,7 @@ class TargetServiceImplTest {
     private TargetRepository targetRepository;
 
     @Mock
-    private DTOMapper dtoMapper;
+    private ObjectMapper dtoMapper;
 
     @BeforeEach
     private void setUp() {
@@ -149,7 +149,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
         TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-        when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
+        when(dtoMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
         when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
         TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
@@ -160,7 +160,7 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-                () -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
+                () -> verify(dtoMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(dtoMapper),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository));
@@ -179,7 +179,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedAfterMapping = new TargetNode(null, targetName);
         TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
 
-        when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
+        when(dtoMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
         when(targetRepository.save(targetNodeExpectedAfterMapping)).thenReturn(targetNodeExpectedAfterUpdate);
 
         TargetNode targetNodeActual = targetService.update(targetNodeExpectedAfterMapping, targetDTOExpected);
@@ -191,7 +191,7 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
-                () -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
+                () -> verify(dtoMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(dtoMapper),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterMapping),
                 () -> verifyNoMoreInteractions(targetRepository));

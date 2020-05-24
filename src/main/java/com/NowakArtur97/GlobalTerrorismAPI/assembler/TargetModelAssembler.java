@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -12,20 +13,21 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class TargetModelAssembler extends RepresentationModelAssemblerSupport<TargetNode, TargetModel> {
 
-	public TargetModelAssembler() {
-		super(TargetController.class, TargetModel.class);
-	}
+    private final ObjectMapper objectMapper;
 
-	@Override
-	public TargetModel toModel(TargetNode targetNode) {
+    public TargetModelAssembler(ObjectMapper objectMapper) {
 
-		TargetModel targetModel = instantiateModel(targetNode);
+        super(TargetController.class, TargetModel.class);
+        this.objectMapper = objectMapper;
+    }
 
-		targetModel.setId(targetNode.getId());
-		targetModel.setTarget(targetNode.getTarget());
+    @Override
+    public TargetModel toModel(TargetNode targetNode) {
 
-		targetModel.add(linkTo(methodOn(TargetController.class).findById(targetModel.getId())).withSelfRel());
+        TargetModel targetModel = objectMapper.map(targetNode, TargetModel.class);
 
-		return targetModel;
-	}
+        targetModel.add(linkTo(methodOn(TargetController.class).findById(targetModel.getId())).withSelfRel());
+
+        return targetModel;
+    }
 }

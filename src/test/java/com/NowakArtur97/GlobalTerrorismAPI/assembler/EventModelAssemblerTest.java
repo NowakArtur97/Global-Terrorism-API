@@ -1,16 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -20,14 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.hateoas.Link;
 
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -41,13 +33,16 @@ class EventModelAssemblerTest {
 	@Mock
 	private TargetModelAssembler targetModelAssembler;
 
+	@Mock
+	private ObjectMapper objectMapper;
+
 	private TargetBuilder targetBuilder;
 	private EventBuilder eventBuilder;
 
 	@BeforeEach
 	private void setUp() {
 
-		modelAssembler = new EventModelAssembler(targetModelAssembler);
+		modelAssembler = new EventModelAssembler(targetModelAssembler, objectMapper);
 
 		targetBuilder = new TargetBuilder();
 		eventBuilder = new EventBuilder();
@@ -60,10 +55,12 @@ class EventModelAssemblerTest {
 		TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 		EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 		TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+		EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
 		String pathToLink = BASE_PATH + targetId.intValue();
 		Link link = new Link(pathToLink);
 		targetModel.add(link);
 
+		when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
 		when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
 
 		EventModel model = modelAssembler.toModel(eventNode);
@@ -98,6 +95,8 @@ class EventModelAssemblerTest {
 				() -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
 				() -> assertFalse(model.getLinks().isEmpty(),
 						() -> "should return model with links, but was: " + model),
+				() -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
+				() -> verifyNoMoreInteractions(objectMapper),
 				() -> verify(targetModelAssembler, times(1)).toModel(eventNode.getTarget()),
 				() -> verifyNoMoreInteractions(targetModelAssembler));
 	}
@@ -106,6 +105,10 @@ class EventModelAssemblerTest {
 	void when_map_event_node_to_model_without_target_should_return_event_model_without_target() {
 
 		EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
+
+		EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
+
+		when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
 
 		EventModel model = modelAssembler.toModel(eventNode);
 
@@ -136,6 +139,8 @@ class EventModelAssemblerTest {
 				() -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
 				() -> assertFalse(model.getLinks().isEmpty(),
 						() -> "should return model with links, but was: " + model),
+				() -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
+				() -> verifyNoMoreInteractions(objectMapper),
 				() -> verifyNoInteractions(targetModelAssembler));
 	}
 }

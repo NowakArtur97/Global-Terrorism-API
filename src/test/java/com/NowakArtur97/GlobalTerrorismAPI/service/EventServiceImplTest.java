@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
@@ -43,7 +43,7 @@ class EventServiceImplTest {
     private EventRepository eventRepository;
 
     @Mock
-    private DTOMapper dtoMapper;
+    private ObjectMapper dtoMapper;
 
     @Mock
     private TargetService targetService;
@@ -223,7 +223,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
-        when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
+        when(dtoMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.saveNew(eventDTOExpected);
@@ -258,7 +258,7 @@ class EventServiceImplTest {
                                 + eventNodeActual.getTarget()),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
+                () -> verify(dtoMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(targetService));
     }
 
@@ -278,7 +278,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeUpdated).build(ObjectType.NODE);
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(targetNodeUpdated);
-        when(dtoMapper.mapToNode(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
+        when(dtoMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
         when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.update(eventNodeExpectedBeforeMethod, eventDTOExpected);
@@ -315,7 +315,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verify(dtoMapper, times(1)).mapToNode(eventDTOExpected, EventNode.class),
+                () -> verify(dtoMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(dtoMapper));
     }
 

@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
@@ -18,7 +18,7 @@ public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
     private final GenericService<TargetNode, TargetDTO> targetService;
 
     @Autowired
-    public EventServiceImpl(BaseRepository<EventNode> repository, DTOMapper<EventNode, EventDTO> dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
+    public EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
 
         super(repository, dtoMapper);
 
@@ -32,7 +32,7 @@ public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
         TargetNode targetNode = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
-        eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+        eventNode = dtoMapper.map(eventDTO, EventNode.class);
 
         eventNode.setId(id);
 
