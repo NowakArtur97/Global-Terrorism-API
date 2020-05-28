@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDTO implements DTONode {
+public class GroupDTO implements DTONode, Group {
 
     @ApiModelProperty(notes = "The group's name", required = true)
     @NotBlank(message = "{group.name.notBlank}")

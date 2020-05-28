@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("ObjectMapper_Tests")
-class ObjectTargetMapperTest {
+class TargetMapperTest {
 
     private ObjectMapper objectMapper;
 

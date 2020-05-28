@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("ObjectMapper_Tests")
-class ObjectEventMapperTest {
+class EventMapperTest {
 
     private ObjectMapper objectMapper;
 
