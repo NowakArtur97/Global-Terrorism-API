@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, GroupNode> {
 
-    public GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    public GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 }

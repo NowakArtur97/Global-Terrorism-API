@@ -1,21 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model;
 
-import java.util.Date;
-
-import org.springframework.hateoas.RepresentationModel;
-
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.util.Date;
 
 @ApiModel(description = "Details about the Target")
 @Data
@@ -48,6 +40,5 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 	private Boolean isSuicide;
 
 	@ApiModelProperty(notes = "The event's target", required = true)
-	@JsonInclude(Include.ALWAYS)
 	private TargetModel target;
 }
