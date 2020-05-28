@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @Tag("ObjectMapper_Tests")
 class ObjectTargetMapperTest {
 
-    private ObjectMapper dtoMapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private ModelMapper modelMapper;
@@ -36,7 +36,7 @@ class ObjectTargetMapperTest {
     @BeforeEach
     private void setUp() {
 
-        dtoMapper = new ObjectMapperImpl(modelMapper);
+        objectMapper = new ObjectMapperImpl(modelMapper);
     }
 
     @Test
@@ -47,7 +47,7 @@ class ObjectTargetMapperTest {
 
         when(modelMapper.map(targetDTO, TargetNode.class)).thenReturn(targetNodeExpected);
 
-        TargetNode targetNodeActual = dtoMapper.map(targetDTO, TargetNode.class);
+        TargetNode targetNodeActual = objectMapper.map(targetDTO, TargetNode.class);
 
         assertAll(
                 () -> assertNull(targetNodeActual.getId(),
@@ -67,7 +67,7 @@ class ObjectTargetMapperTest {
 
         when(modelMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTOExpected);
 
-        TargetDTO targetDTOActual = dtoMapper.map(targetNode, TargetDTO.class);
+        TargetDTO targetDTOActual = objectMapper.map(targetNode, TargetDTO.class);
 
         assertAll(
                 () -> assertEquals(targetDTOExpected.getTarget(), targetDTOActual.getTarget(),
@@ -85,7 +85,7 @@ class ObjectTargetMapperTest {
 
         when(modelMapper.map(targetNode, TargetModel.class)).thenReturn(targetModelExpected);
 
-        TargetModel targetModelActual = dtoMapper.map(targetNode, TargetModel.class);
+        TargetModel targetModelActual = objectMapper.map(targetNode, TargetModel.class);
 
         assertAll(
                 () -> assertEquals(targetModelExpected.getTarget(), targetModelActual.getTarget(),

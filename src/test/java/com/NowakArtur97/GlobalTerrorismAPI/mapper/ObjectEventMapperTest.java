@@ -89,7 +89,8 @@ class ObjectEventMapperTest {
                 () -> assertEquals(eventNodeExpected.getTarget().getTarget(), eventNodeActual.getTarget().getTarget(),
                         () -> "should return event node with target: " + eventNodeExpected.getTarget().getTarget()
                                 + ", but was: " + eventNodeActual.getTarget().getTarget()),
-                () -> verify(modelMapper, times(1)).map(eventDTO, EventNode.class));
+                () -> verify(modelMapper, times(1)).map(eventDTO, EventNode.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -130,7 +131,8 @@ class ObjectEventMapperTest {
                 () -> assertEquals(eventDTOExpected.getTarget().getTarget(), eventDTOActual.getTarget().getTarget(),
                         () -> "should return event dto with target: " + eventDTOExpected.getTarget().getTarget()
                                 + ", but was: " + eventDTOActual.getTarget().getTarget()),
-                () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class));
+                () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -178,6 +180,7 @@ class ObjectEventMapperTest {
                 () -> assertEquals(eventModelExpected.getTarget().getTarget(), eventModelActual.getTarget().getTarget(),
                         () -> "should return event model with target: " + eventModelExpected.getTarget().getTarget()
                                 + ", but was: " + eventModelActual.getTarget().getTarget()),
-                () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class));
+                () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 }
