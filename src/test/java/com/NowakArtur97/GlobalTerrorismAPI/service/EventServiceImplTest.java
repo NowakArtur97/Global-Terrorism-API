@@ -45,7 +45,7 @@ class EventServiceImplTest {
     private EventRepository eventRepository;
 
     @Mock
-    private ObjectMapper dtoMapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private TargetService targetService;
@@ -56,7 +56,7 @@ class EventServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        eventService = new EventServiceImpl(eventRepository, dtoMapper, targetService);
+        eventService = new EventServiceImpl(eventRepository, objectMapper, targetService);
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
@@ -82,7 +82,7 @@ class EventServiceImplTest {
                         () -> "should return page with: " + eventsExpected.getNumberOfElements()
                                 + " elements, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -107,7 +107,7 @@ class EventServiceImplTest {
                 () -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
                         () -> "should return empty page, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -153,7 +153,7 @@ class EventServiceImplTest {
                         () -> "should return event node with target: " + eventExpected.getTarget() + ", but was: "
                                 + eventActual.getTarget()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -168,7 +168,7 @@ class EventServiceImplTest {
 
         assertAll(() -> assertTrue(eventActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -212,7 +212,7 @@ class EventServiceImplTest {
                         () -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
                                 + eventNodeActual.getTarget()),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -225,7 +225,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
-        when(dtoMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
+        when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.saveNew(eventDTOExpected);
@@ -260,8 +260,8 @@ class EventServiceImplTest {
                                 + eventNodeActual.getTarget()),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verify(dtoMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(targetService));
+                () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verifyNoInteractions(targetService));
     }
 
     @Test
@@ -280,7 +280,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeUpdated).build(ObjectType.NODE);
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(targetNodeUpdated);
-        when(dtoMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
+        when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
         when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.update(eventNodeExpectedBeforeMethod, eventDTOExpected);
@@ -317,8 +317,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verify(dtoMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(dtoMapper));
+                () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
+                () -> verifyNoMoreInteractions(objectMapper));
     }
 
     @Test
@@ -368,7 +368,7 @@ class EventServiceImplTest {
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository), () -> verify(targetService, times(1)).delete(targetId),
-                () -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -384,7 +384,7 @@ class EventServiceImplTest {
                 () -> assertTrue(eventNodeOptional.isEmpty(),
                         () -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
+                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 

@@ -39,12 +39,12 @@ class TargetServiceImplTest {
     private TargetRepository targetRepository;
 
     @Mock
-    private ObjectMapper dtoMapper;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     private void setUp() {
 
-        targetService = new TargetServiceImpl(targetRepository, dtoMapper);
+        targetService = new TargetServiceImpl(targetRepository, objectMapper);
     }
 
     @Test
@@ -75,7 +75,7 @@ class TargetServiceImplTest {
                         () -> "should return page with: " + targetsExpected.getNumberOfElements()
                                 + " elements, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -99,7 +99,7 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
                         () -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -122,7 +122,7 @@ class TargetServiceImplTest {
                         () -> "should return target with target: " + targetExpected.getTarget() + ", but was"
                                 + targetActual.getTarget()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
-                () -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(objectMapper), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -136,7 +136,7 @@ class TargetServiceImplTest {
 
         assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -151,7 +151,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
         TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-        when(dtoMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
         when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
         TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
@@ -162,8 +162,8 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-                () -> verify(dtoMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(dtoMapper),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository));
     }
@@ -181,7 +181,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedAfterMapping = new TargetNode(null, targetName);
         TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
 
-        when(dtoMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
         when(targetRepository.save(targetNodeExpectedAfterMapping)).thenReturn(targetNodeExpectedAfterUpdate);
 
         TargetNode targetNodeActual = targetService.update(targetNodeExpectedAfterMapping, targetDTOExpected);
@@ -193,8 +193,8 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
-                () -> verify(dtoMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(dtoMapper),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterMapping),
                 () -> verifyNoMoreInteractions(targetRepository));
     }
@@ -220,7 +220,7 @@ class TargetServiceImplTest {
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -244,7 +244,7 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> verify(targetRepository, times(1)).findById(targetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -260,7 +260,7 @@ class TargetServiceImplTest {
                 () -> assertTrue(targetNodeOptional.isEmpty(),
                         () -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
                 () -> verify(targetRepository, times(1)).findById(targetId),
-                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -274,7 +274,7 @@ class TargetServiceImplTest {
 
         assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
                 () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -290,6 +290,6 @@ class TargetServiceImplTest {
                 () -> assertFalse(isDatabaseEmpty,
                         () -> "should not database be empty, but that was: " + isDatabaseEmpty),
                 () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(dtoMapper));
+                () -> verifyNoInteractions(objectMapper));
     }
 }
