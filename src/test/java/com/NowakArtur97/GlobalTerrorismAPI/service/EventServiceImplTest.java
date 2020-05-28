@@ -37,6 +37,8 @@ import static org.mockito.Mockito.*;
 @Tag("EventServiceImpl_Tests")
 class EventServiceImplTest {
 
+    private static final int DEFAULT_SEARCHING_DEPTH = 1;
+
     private GenericService<EventNode, EventDTO> eventService;
 
     @Mock
@@ -69,7 +71,7 @@ class EventServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 100);
 
-        when(eventRepository.findAll(pageable)).thenReturn(eventsExpected);
+        when(eventRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(eventsExpected);
 
         Page<EventNode> eventsActual = eventService.findAll(pageable);
 
@@ -79,7 +81,7 @@ class EventServiceImplTest {
                 () -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
                         () -> "should return page with: " + eventsExpected.getNumberOfElements()
                                 + " elements, but was: " + eventsActual.getNumberOfElements()),
-                () -> verify(eventRepository, times(1)).findAll(pageable),
+                () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
                 () -> verifyNoInteractions(targetService));
     }
@@ -93,7 +95,7 @@ class EventServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 100);
 
-        when(eventRepository.findAll(pageable)).thenReturn(eventsExpected);
+        when(eventRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(eventsExpected);
 
         Page<EventNode> eventsActual = eventService.findAll(pageable);
 
@@ -104,7 +106,7 @@ class EventServiceImplTest {
                         () -> "should contain: " + eventsListExpected + ", but was: " + eventsActual.getContent()),
                 () -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
                         () -> "should return empty page, but was: " + eventsActual.getNumberOfElements()),
-                () -> verify(eventRepository, times(1)).findAll(pageable),
+                () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(dtoMapper),
                 () -> verifyNoInteractions(targetService));
     }

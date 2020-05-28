@@ -31,6 +31,8 @@ import static org.mockito.Mockito.*;
 @Tag("TargetServiceImpl_Tests")
 class TargetServiceImplTest {
 
+    private static final int DEFAULT_SEARCHING_DEPTH = 1;
+
     private TargetService targetService;
 
     @Mock
@@ -62,7 +64,7 @@ class TargetServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 100);
 
-        when(targetRepository.findAll(pageable)).thenReturn(targetsExpected);
+        when(targetRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(targetsExpected);
 
         Page<TargetNode> targetsActual = targetService.findAll(pageable);
 
@@ -72,7 +74,7 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
                         () -> "should return page with: " + targetsExpected.getNumberOfElements()
                                 + " elements, but was: " + targetsActual.getNumberOfElements()),
-                () -> verify(targetRepository, times(1)).findAll(pageable),
+                () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
     }
 
@@ -85,7 +87,7 @@ class TargetServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 100);
 
-        when(targetRepository.findAll(pageable)).thenReturn(targetsExpected);
+        when(targetRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(targetsExpected);
 
         Page<TargetNode> targetsActual = targetService.findAll(pageable);
 
@@ -96,7 +98,7 @@ class TargetServiceImplTest {
                         () -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
                 () -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
                         () -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
-                () -> verify(targetRepository, times(1)).findAll(pageable),
+                () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
     }
 
