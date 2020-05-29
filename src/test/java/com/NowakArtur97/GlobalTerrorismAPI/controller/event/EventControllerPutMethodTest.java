@@ -76,7 +76,7 @@ public class EventControllerPutMethodTest {
 	private PatchHelper patchHelper;
 
 	@Mock
-	private ViolationHelper violationHelper;
+	private ViolationHelper<EventNode, EventDTO> violationHelper;
 
 	private static TargetBuilder targetBuilder;
 	private static EventBuilder eventBuilder;

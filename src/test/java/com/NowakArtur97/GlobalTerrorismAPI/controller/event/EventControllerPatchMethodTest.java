@@ -81,7 +81,7 @@ class EventControllerPatchMethodTest {
 	private PatchHelper patchHelper;
 
 	@Autowired
-	private ViolationHelper violationHelper;
+	private ViolationHelper<EventNode, EventDTO> violationHelper;
 
 	private static TargetBuilder targetBuilder;
 	private static EventBuilder eventBuilder;

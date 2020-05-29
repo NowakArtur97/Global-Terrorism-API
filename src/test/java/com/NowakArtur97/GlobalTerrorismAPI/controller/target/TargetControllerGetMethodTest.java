@@ -155,7 +155,8 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(targetService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(targetService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler), () -> verifyNoMoreInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
     }
 
     @Test
