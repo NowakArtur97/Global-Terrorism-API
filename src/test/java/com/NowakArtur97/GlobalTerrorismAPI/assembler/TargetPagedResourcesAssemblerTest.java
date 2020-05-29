@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("TargetPagedResourcesAssembler_Tests")
+@Tag("PagedResourcesAssembler_Tests")
 class TargetPagedResourcesAssemblerTest {
 
     private final String BASE_URL = "http://localhost";

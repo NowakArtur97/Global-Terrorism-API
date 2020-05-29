@@ -50,15 +50,15 @@ class TargetModelAssemblerTest {
 
 		assertAll(
 				() -> assertEquals(targetNode.getId(), targetModelActual.getId(),
-						() -> "should return model with id: " + targetNode.getId() + ", but was: "
+						() -> "should return target model with id: " + targetNode.getId() + ", but was: "
 								+ targetModelActual.getId()),
 				() -> assertEquals(targetNode.getTarget(), targetModelActual.getTarget(),
-						() -> "should return model with target: " + targetNode.getTarget() + ", but was: "
+						() -> "should return target model with target: " + targetNode.getTarget() + ", but was: "
 								+ targetModelActual.getTarget()),
 				() -> assertNotNull(targetModelActual.getLinks(),
-						() -> "should return model with links, but was: " + targetModelActual),
+						() -> "should return target model with links, but was: " + targetModelActual),
 				() -> assertFalse(targetModelActual.getLinks().isEmpty(),
-						() -> "should return model with links, but was: " + targetModelActual),
+						() -> "should return target model with links, but was: " + targetModelActual),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetModel.class),
                 () -> verifyNoMoreInteractions(objectMapper));
 	}

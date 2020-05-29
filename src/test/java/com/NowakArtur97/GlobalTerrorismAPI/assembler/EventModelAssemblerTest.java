@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 @Tag("EventModelAssembler_Tests")
 class EventModelAssemblerTest {
 
-	private final String BASE_PATH = "http://localhost:8080/api/targets";
+	private final String BASE_PATH = "http://localhost:8080/api/events";
 
 	private EventModelAssembler modelAssembler;
 
@@ -67,30 +67,30 @@ class EventModelAssemblerTest {
 
 		assertAll(
 				() -> assertNotNull(model.getId(),
-						() -> "should return event node with new id, but was: " + model.getId()),
+						() -> "should return event model with new id, but was: " + model.getId()),
 				() -> assertEquals(eventNode.getSummary(), model.getSummary(),
-						() -> "should return event node with summary: " + eventNode.getSummary() + ", but was: "
+						() -> "should return event model with summary: " + eventNode.getSummary() + ", but was: "
 								+ model.getSummary()),
 				() -> assertEquals(eventNode.getMotive(), model.getMotive(),
-						() -> "should return event node with motive: " + eventNode.getMotive() + ", but was: "
+						() -> "should return event model with motive: " + eventNode.getMotive() + ", but was: "
 								+ model.getMotive()),
 				() -> assertEquals(eventNode.getDate(), model.getDate(),
-						() -> "should return event node with date: " + eventNode.getDate() + ", but was: "
+						() -> "should return event model with date: " + eventNode.getDate() + ", but was: "
 								+ model.getDate()),
 				() -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), model.getIsPartOfMultipleIncidents(),
-						() -> "should return event node which was part of multiple incidents: "
+						() -> "should return event model which was part of multiple incidents: "
 								+ eventNode.getIsPartOfMultipleIncidents() + ", but was: "
 								+ model.getIsPartOfMultipleIncidents()),
 				() -> assertEquals(eventNode.getIsSuccessful(), model.getIsSuccessful(),
-						() -> "should return event node which was successful: " + eventNode.getIsSuccessful()
+						() -> "should return event model which was successful: " + eventNode.getIsSuccessful()
 								+ ", but was: " + model.getIsSuccessful()),
 				() -> assertEquals(eventNode.getIsSuicide(), model.getIsSuicide(),
-						() -> "should return event node which was suicide: " + eventNode.getIsSuicide() + ", but was: "
+						() -> "should return event model which was suicide: " + eventNode.getIsSuicide() + ", but was: "
 								+ model.getIsSuicide()),
 				() -> assertNotNull(eventNode.getTarget(),
-						() -> "should return event node with not null target, but was: null"),
+						() -> "should return event model with not null target, but was: null"),
 				() -> assertEquals(targetModel, model.getTarget(),
-						() -> "should return event node with target model: " + targetModel + ", but was: "
+						() -> "should return event model with target model: " + targetModel + ", but was: "
 								+ model.getTarget()),
 				() -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
 				() -> assertFalse(model.getLinks().isEmpty(),
@@ -114,28 +114,28 @@ class EventModelAssemblerTest {
 
 		assertAll(
 				() -> assertNotNull(model.getId(),
-						() -> "should return event node with new id, but was: " + model.getId()),
+						() -> "should return event model with new id, but was: " + model.getId()),
 				() -> assertEquals(eventNode.getSummary(), model.getSummary(),
-						() -> "should return event node with summary: " + eventNode.getSummary() + ", but was: "
+						() -> "should return event model with summary: " + eventNode.getSummary() + ", but was: "
 								+ model.getSummary()),
 				() -> assertEquals(eventNode.getMotive(), model.getMotive(),
-						() -> "should return event node with motive: " + eventNode.getMotive() + ", but was: "
+						() -> "should return event model with motive: " + eventNode.getMotive() + ", but was: "
 								+ model.getMotive()),
 				() -> assertEquals(eventNode.getDate(), model.getDate(),
-						() -> "should return event node with date: " + eventNode.getDate() + ", but was: "
+						() -> "should return event model with date: " + eventNode.getDate() + ", but was: "
 								+ model.getDate()),
 				() -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), model.getIsPartOfMultipleIncidents(),
-						() -> "should return event node which was part of multiple incidents: "
+						() -> "should return event model which was part of multiple incidents: "
 								+ eventNode.getIsPartOfMultipleIncidents() + ", but was: "
 								+ model.getIsPartOfMultipleIncidents()),
 				() -> assertEquals(eventNode.getIsSuccessful(), model.getIsSuccessful(),
-						() -> "should return event node which was successful: " + eventNode.getIsSuccessful()
+						() -> "should return event model which was successful: " + eventNode.getIsSuccessful()
 								+ ", but was: " + model.getIsSuccessful()),
 				() -> assertEquals(eventNode.getIsSuicide(), model.getIsSuicide(),
-						() -> "should return event node which was suicide: " + eventNode.getIsSuicide() + ", but was: "
+						() -> "should return event model which was suicide: " + eventNode.getIsSuicide() + ", but was: "
 								+ model.getIsSuicide()),
 				() -> assertNull(eventNode.getTarget(),
-						() -> "should return event node with null target, but wasn't: null"),
+						() -> "should return event model with null target, but wasn't: null"),
 				() -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
 				() -> assertFalse(model.getLinks().isEmpty(),
 						() -> "should return model with links, but was: " + model),
