@@ -8,7 +8,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -29,8 +28,9 @@ class GroupMapperTest {
 
     private static GroupBuilder groupBuilder;
     private static EventBuilder eventBuilder;
-    private static TargetBuilder targetBuilder;
+
     private ObjectMapper objectMapper;
+
     @Mock
     private ModelMapper modelMapper;
 
@@ -39,7 +39,6 @@ class GroupMapperTest {
 
         groupBuilder = new GroupBuilder();
         eventBuilder = new EventBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @BeforeEach

@@ -3,10 +3,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 
 import java.text.ParseException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,12 +29,14 @@ class ModelMapperTest {
 
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
 
     @BeforeAll
     private static void init() {
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
     }
 
     @BeforeEach
@@ -196,5 +202,111 @@ class ModelMapperTest {
                 () -> assertEquals(eventNodeExpected.getTarget().getTarget(), eventModelActual.getTarget().getTarget(),
                         () -> "should return event model with target: " + eventNodeExpected.getTarget().getTarget()
                                 + ", but was: " + eventModelActual.getTarget().getTarget()));
+    }
+
+    @Test
+    void when_map_group_node_to_model_should_return_valid_model() {
+
+        Long targetId = 1L;
+        Long eventId = 1L;
+        Long groupId = 1L;
+
+        String group = "group";
+
+        String summary = "summary";
+        String motive = "motive";
+        boolean isPartOfMultipleIncidents = true;
+        boolean isSuccessful = true;
+        boolean isSuicide = true;
+
+        TargetNode targetNode1 = new TargetNode(targetId, "target" + targetId);
+
+        EventNode eventNode1 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
+                .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode1)
+                .build(ObjectType.NODE);
+
+        targetId++;
+        eventId++;
+        isPartOfMultipleIncidents = false;
+        isSuccessful = false;
+        isSuicide = false;
+
+        TargetNode targetNode2 = new TargetNode(targetId, "target" + targetId);
+
+        EventNode eventNode2 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
+                .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode2)
+                .build(ObjectType.NODE);
+
+        GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withName(group).withEventsCaused(List.of(eventNode1, eventNode2)).build(ObjectType.NODE);
+
+        GroupModel groupModelActual = modelMapper.map(groupNodeExpected, GroupModel.class);
+
+        assertAll(
+                () -> assertEquals(groupNodeExpected.getId(), groupModelActual.getId(),
+                        () -> "should return group model with id: " + groupNodeExpected.getId() + ", but was: "
+                                + groupModelActual.getId()),
+                () -> assertEquals(groupNodeExpected.getName(), groupModelActual.getName(),
+                        () -> "should return group model with name: " + groupNodeExpected.getName() + ", but was: "
+                                + groupModelActual.getName()),
+
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getSummary(), groupModelActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group's event model with summary: " + groupNodeExpected.getEventsCaused().get(0).getSummary() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getMotive(), groupModelActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group's event model with motive: " + groupNodeExpected.getEventsCaused().get(0).getMotive() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getDate(), groupModelActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group's event model with date: " + groupNodeExpected.getEventsCaused().get(0).getDate() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        groupModelActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group's event model which was part of multiple incidents: "
+                                + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupModelActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group's event model which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupModelActual.getEventsCaused().get(0).getIsSuicide(),
+                        () -> "should return group's event model which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuicide()),
+                () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getTarget(),
+                        () -> "should return group's event model with not null target, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getId(), groupModelActual.getEventsCaused().get(0).getTarget().getId(),
+                        () -> "should return group's event model target with id: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(0).getTarget().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getTarget(), groupModelActual.getEventsCaused().get(0).getTarget().getTarget(),
+                        () -> "should return group's event model with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getTarget()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(0).getTarget().getTarget()),
+
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupModelActual.getEventsCaused().get(1).getSummary(),
+                        () -> "should return group's event model with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getMotive(), groupModelActual.getEventsCaused().get(1).getMotive(),
+                        () -> "should return group's event model with motive: " + groupNodeExpected.getEventsCaused().get(1).getMotive() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getDate(), groupModelActual.getEventsCaused().get(1).getDate(),
+                        () -> "should return group's event model with date: " + groupNodeExpected.getEventsCaused().get(1).getDate() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(1).getDate()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        groupModelActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        () -> "should return group's event model which was part of multiple incidents: "
+                                + groupNodeExpected.getEventsCaused().get(1).getIsPartOfMultipleIncidents() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsSuccessful(), groupModelActual.getEventsCaused().get(1).getIsSuccessful(),
+                        () -> "should return group's event model which was successful: " + groupNodeExpected.getEventsCaused().get(1).getIsSuccessful()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsSuicide(), groupModelActual.getEventsCaused().get(1).getIsSuicide(),
+                        () -> "should return group's event model which was suicide: " + groupNodeExpected.getEventsCaused().get(1).getIsSuicide()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(1).getIsSuicide()),
+                () -> assertNotNull(groupModelActual.getEventsCaused().get(1).getTarget(),
+                        () -> "should return group's event model with not null target, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getId(), groupModelActual.getEventsCaused().get(1).getTarget().getId(),
+                        () -> "should return group's event model target with id: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getId() + ", but was: "
+                                + groupModelActual.getEventsCaused().get(1).getTarget().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getTarget(), groupModelActual.getEventsCaused().get(1).getTarget().getTarget(),
+                        () -> "should return group's event model with target: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getTarget()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(1).getTarget().getTarget()));
     }
 }
