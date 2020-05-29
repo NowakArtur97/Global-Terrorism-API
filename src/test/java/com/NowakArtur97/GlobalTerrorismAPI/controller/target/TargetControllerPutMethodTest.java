@@ -1,21 +1,17 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Optional;
-
+import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -32,17 +28,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -53,12 +45,12 @@ class TargetControllerPutMethodTest {
 
 	private MockMvc mockMvc;
 
-	private TargetController targetController;
+	private GenericRestController<TargetModel, TargetDTO> targetController;
 
 	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
 	@Mock
-	private TargetService targetService;
+	private GenericService<TargetNode, TargetDTO> targetService;
 
 	@Mock
 	private TargetModelAssembler targetModelAssembler;
@@ -100,7 +92,7 @@ class TargetControllerPutMethodTest {
 		String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-		when(targetService.update(targetId, targetDTO)).thenReturn(targetNode);
+		when(targetService.update(targetNode, targetDTO)).thenReturn(targetNode);
 		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
 		assertAll(
@@ -114,7 +106,7 @@ class TargetControllerPutMethodTest {
 						.andExpect(jsonPath("target", is(updatedTargetName)))
 						.andExpect(jsonPath("target", not(oldTargetName))),
 				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetService, times(1)).update(targetId, targetDTO),
+				() -> verify(targetService, times(1)).update(targetNode, targetDTO),
 				() -> verifyNoMoreInteractions(targetService),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
 				() -> verifyNoMoreInteractions(targetModelAssembler),

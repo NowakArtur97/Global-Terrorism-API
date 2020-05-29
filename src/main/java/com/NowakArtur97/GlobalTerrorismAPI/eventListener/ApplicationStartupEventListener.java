@@ -1,11 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,13 @@ class ApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
+    private Map<String, GroupNode> groupsWithTargets = new HashMap<>();
+
     private final TargetService targetService;
 
-    private final EventService eventService;
+    private final GenericService<EventNode, EventDTO> eventService;
 
-    private final GroupRepository groupRepository;
+    private final GenericService<GroupNode, GroupDTO> groupService;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -62,8 +65,6 @@ class ApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
-        Map<String, EventNode> groupsWithTargets = new HashMap<>();
-
         for (Row row : sheet) {
 
             String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
@@ -74,24 +75,47 @@ class ApplicationStartupEventListener {
 
             String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
 
-            if (groupsWithTargets.containsKey(groupName)) {
-                groupsWithTargets.put(groupName, eventNode);
-            }
+            manageGroup(groupName, eventNode);
         }
 
-        saveGroupsWitTagets(groupsWithTargets);
+        saveAllGroups();
     }
 
-    private void saveGroupsWitTagets(Map<String,EventNode> groupsWithTargets) {
+    private void saveAllGroups() {
 
-        for (Map.Entry<String, EventNode> entry : groupsWithTargets.entrySet()) {
-            String groupName = entry.getKey();
-            EventNode event = entry.getValue();
+        for (GroupNode groupNode : groupsWithTargets.values()) {
 
-            GroupNode groupNode = new GroupNode(groupName);
-
-            groupRepository.save(groupNode);
+            groupService.save(groupNode);
         }
+    }
+
+    private void manageGroup(String groupName, EventNode eventNode) {
+
+        if (groupsWithTargets.containsKey(groupName)) {
+
+            groupsWithTargets.get(groupName).addEvent(eventNode);
+
+        } else {
+
+            GroupNode newGroup = new GroupNode(groupName);
+
+            newGroup.addEvent(eventNode);
+
+
+            if (isGroupUnknown(groupName)) {
+
+                groupService.save(newGroup);
+
+            } else {
+
+                groupsWithTargets.put(groupName, newGroup);
+            }
+        }
+    }
+
+    private boolean isGroupUnknown(String groupName) {
+
+        return groupName.equalsIgnoreCase("unknown");
     }
 
     private EventNode createEvent(Row row, TargetNode target) {
@@ -171,8 +195,8 @@ class ApplicationStartupEventListener {
         switch (cell.getCellType()) {
 
             case NUMERIC:
-                Double doubleValue = cell.getNumericCellValue();
-                value = doubleValue.toString();
+                double doubleValue = cell.getNumericCellValue();
+                value = Double.toString(doubleValue);
                 break;
 
             case STRING:

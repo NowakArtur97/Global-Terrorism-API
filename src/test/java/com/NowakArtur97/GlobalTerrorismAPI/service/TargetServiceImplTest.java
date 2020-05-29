@@ -1,20 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -27,276 +19,277 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.TargetServiceImpl;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetServiceImpl_Tests")
 class TargetServiceImplTest {
 
-	private TargetService targetService;
+    private static final int DEFAULT_SEARCHING_DEPTH = 1;
 
-	@Mock
-	private TargetRepository targetRepository;
+    private TargetService targetService;
 
-	@Mock
-	private DTOMapper dtoMapper;
+    @Mock
+    private TargetRepository targetRepository;
 
-	@BeforeEach
-	private void setUp() {
+    @Mock
+    private ObjectMapper objectMapper;
 
-		targetService = new TargetServiceImpl(targetRepository, dtoMapper);
-	}
+    @BeforeEach
+    private void setUp() {
 
-	@Test
-	void when_targets_exist_and_return_all_targets_should_return_targets() {
+        targetService = new TargetServiceImpl(targetRepository, objectMapper);
+    }
 
-		List<TargetNode> targetsListExpected = new ArrayList<>();
+    @Test
+    void when_targets_exist_and_return_all_targets_should_return_targets() {
 
-		TargetNode target1 = new TargetNode("target1");
-		TargetNode target2 = new TargetNode("target2");
-		TargetNode target3 = new TargetNode("target3");
+        List<TargetNode> targetsListExpected = new ArrayList<>();
 
-		targetsListExpected.add(target1);
-		targetsListExpected.add(target2);
-		targetsListExpected.add(target3);
+        TargetNode target1 = new TargetNode("target1");
+        TargetNode target2 = new TargetNode("target2");
+        TargetNode target3 = new TargetNode("target3");
 
-		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
+        targetsListExpected.add(target1);
+        targetsListExpected.add(target2);
+        targetsListExpected.add(target3);
 
-		Pageable pageable = PageRequest.of(0, 100);
+        Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
-		when(targetRepository.findAll(pageable)).thenReturn(targetsExpected);
+        Pageable pageable = PageRequest.of(0, 100);
 
-		Page<TargetNode> targetsActual = targetService.findAll(pageable);
+        when(targetRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(targetsExpected);
 
-		assertAll(() -> assertNotNull(targetsActual, () -> "shouldn`t return null"),
-				() -> assertEquals(targetsListExpected, targetsActual.getContent(),
-						() -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
-				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
-						() -> "should return page with: " + targetsExpected.getNumberOfElements()
-								+ " elements, but was: " + targetsActual.getNumberOfElements()),
-				() -> verify(targetRepository, times(1)).findAll(pageable),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        Page<TargetNode> targetsActual = targetService.findAll(pageable);
 
-	@Test
-	void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
+        assertAll(() -> assertNotNull(targetsActual, () -> "shouldn`t return null"),
+                () -> assertEquals(targetsListExpected, targetsActual.getContent(),
+                        () -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
+                () -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
+                        () -> "should return page with: " + targetsExpected.getNumberOfElements()
+                                + " elements, but was: " + targetsActual.getNumberOfElements()),
+                () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		List<TargetNode> targetsListExpected = new ArrayList<>();
+    @Test
+    void when_targets_not_exist_and_return_all_targets_should_not_return_any_targets() {
 
-		Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
+        List<TargetNode> targetsListExpected = new ArrayList<>();
 
-		Pageable pageable = PageRequest.of(0, 100);
+        Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
-		when(targetRepository.findAll(pageable)).thenReturn(targetsExpected);
+        Pageable pageable = PageRequest.of(0, 100);
 
-		Page<TargetNode> targetsActual = targetService.findAll(pageable);
+        when(targetRepository.findAll(pageable, DEFAULT_SEARCHING_DEPTH)).thenReturn(targetsExpected);
 
-		assertAll(() -> assertNotNull(targetsActual, () -> "shouldn`t return null"),
-				() -> assertEquals(targetsListExpected, targetsActual.getContent(),
-						() -> "should contain empty list, but was: " + targetsActual.getContent()),
-				() -> assertEquals(targetsListExpected, targetsActual.getContent(),
-						() -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
-				() -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
-						() -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
-				() -> verify(targetRepository, times(1)).findAll(pageable),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        Page<TargetNode> targetsActual = targetService.findAll(pageable);
 
-	@Test
-	void when_target_exists_and_return_one_target_should_return_one_target() {
+        assertAll(() -> assertNotNull(targetsActual, () -> "shouldn`t return null"),
+                () -> assertEquals(targetsListExpected, targetsActual.getContent(),
+                        () -> "should contain empty list, but was: " + targetsActual.getContent()),
+                () -> assertEquals(targetsListExpected, targetsActual.getContent(),
+                        () -> "should contain: " + targetsListExpected + ", but was: " + targetsActual.getContent()),
+                () -> assertEquals(targetsExpected.getNumberOfElements(), targetsActual.getNumberOfElements(),
+                        () -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
+                () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		Long expectedTargetId = 1L;
+    @Test
+    void when_target_exists_and_return_one_target_should_return_one_target() {
 
-		TargetNode targetExpected = new TargetNode("target");
+        Long expectedTargetId = 1L;
 
-		when(targetRepository.findById(expectedTargetId)).thenReturn(Optional.of(targetExpected));
+        TargetNode targetExpected = new TargetNode("target");
 
-		Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
+        when(targetRepository.findById(expectedTargetId)).thenReturn(Optional.of(targetExpected));
 
-		TargetNode targetActual = targetActualOptional.get();
+        Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
 
-		assertAll(() -> assertTrue(targetActualOptional.isPresent(), () -> "shouldn`t return empty optional"),
-				() -> assertEquals(targetExpected.getId(), targetActual.getId(),
-						() -> "should return target with id: " + expectedTargetId + ", but was" + targetActual.getId()),
-				() -> assertEquals(targetExpected.getTarget(), targetActual.getTarget(),
-						() -> "should return target with target: " + targetExpected.getTarget() + ", but was"
-								+ targetActual.getTarget()),
-				() -> verify(targetRepository, times(1)).findById(expectedTargetId),
-				() -> verifyNoMoreInteractions(dtoMapper), () -> verifyNoInteractions(dtoMapper));
-	}
+        TargetNode targetActual = targetActualOptional.get();
 
-	@Test
-	void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
+        assertAll(() -> assertTrue(targetActualOptional.isPresent(), () -> "shouldn`t return empty optional"),
+                () -> assertEquals(targetExpected.getId(), targetActual.getId(),
+                        () -> "should return target with id: " + expectedTargetId + ", but was" + targetActual.getId()),
+                () -> assertEquals(targetExpected.getTarget(), targetActual.getTarget(),
+                        () -> "should return target with target: " + targetExpected.getTarget() + ", but was"
+                                + targetActual.getTarget()),
+                () -> verify(targetRepository, times(1)).findById(expectedTargetId),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verifyNoInteractions(objectMapper));
+    }
 
-		Long expectedTargetId = 1L;
+    @Test
+    void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
 
-		when(targetRepository.findById(expectedTargetId)).thenReturn(Optional.empty());
+        Long expectedTargetId = 1L;
 
-		Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
+        when(targetRepository.findById(expectedTargetId)).thenReturn(Optional.empty());
 
-		assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
-				() -> verify(targetRepository, times(1)).findById(expectedTargetId),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId);
 
-	@Test
-	void when_save_new_target_should_save_target() {
+        assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
+                () -> verify(targetRepository, times(1)).findById(expectedTargetId),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		Long targetId = 1L;
+    @Test
+    void when_save_new_target_should_save_target() {
 
-		String targetName = "Target";
+        Long targetId = 1L;
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+        String targetName = "Target";
 
-		TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
-		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
+        TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
-		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
-		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
+        TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
+        TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-		TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
+        when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
-		assertAll(
-				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
-								+ targetNodeActual.getTarget()),
-				() -> assertNotNull(targetNodeActual.getId(),
-						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
-				() -> verifyNoMoreInteractions(dtoMapper),
-				() -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
-				() -> verifyNoMoreInteractions(targetRepository));
-	}
+        TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
 
-	@Test
-	void when_update_target_should_update_target() {
+        assertAll(
+                () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+                        () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + targetNodeActual.getTarget()),
+                () -> assertNotNull(targetNodeActual.getId(),
+                        () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
+                () -> verifyNoMoreInteractions(targetRepository));
+    }
 
-		Long targetId = 1L;
+    @Test
+    void when_update_target_should_update_target() {
 
-		String targetName = "Target";
-		String targetNameUpdated = "Target";
+        Long targetId = 1L;
 
-		TargetDTO targetDTOExpected = new TargetDTO(targetName);
+        String targetName = "Target";
+        String targetNameUpdated = "Target";
 
-		TargetNode targetNodeExpectedAfterMapping = new TargetNode(null, targetName);
-		TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
+        TargetDTO targetDTOExpected = new TargetDTO(targetName);
 
-		when(dtoMapper.mapToNode(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
-		when(targetRepository.save(targetNodeExpectedAfterUpdate)).thenReturn(targetNodeExpectedAfterUpdate);
+        TargetNode targetNodeExpectedAfterMapping = new TargetNode(null, targetName);
+        TargetNode targetNodeExpectedAfterUpdate = new TargetNode(targetId, targetNameUpdated);
 
-		TargetNode targetNodeActual = targetService.update(targetId, targetDTOExpected);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
+        when(targetRepository.save(targetNodeExpectedAfterMapping)).thenReturn(targetNodeExpectedAfterUpdate);
 
-		assertAll(
-				() -> assertEquals(targetNodeExpectedAfterUpdate.getId(), targetNodeActual.getId(),
-						() -> "should return target node with id: " + targetNodeExpectedAfterUpdate.getId() + ", but was: "
-								+ targetNodeActual.getId()),
-				() -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: "
-								+ targetNodeActual.getTarget()),
-				() -> verify(dtoMapper, times(1)).mapToNode(targetDTOExpected, TargetNode.class),
-				() -> verifyNoMoreInteractions(dtoMapper),
-				() -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterUpdate),
-				() -> verifyNoMoreInteractions(targetRepository));
-	}
-	
-	@Test
-	void when_save_target_should_save_target() {
+        TargetNode targetNodeActual = targetService.update(targetNodeExpectedAfterMapping, targetDTOExpected);
 
-		Long targetId = 1L;
+        assertAll(
+                () -> assertEquals(targetNodeExpectedAfterUpdate.getId(), targetNodeActual.getId(),
+                        () -> "should return target node with id: " + targetNodeExpectedAfterUpdate.getId() + ", but was: "
+                                + targetNodeActual.getId()),
+                () -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
+                        () -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: "
+                                + targetNodeActual.getTarget()),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterMapping),
+                () -> verifyNoMoreInteractions(targetRepository));
+    }
 
-		String targetName = "Target";
+    @Test
+    void when_save_target_should_save_target() {
 
-		TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
-		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
+        Long targetId = 1L;
 
-		when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
+        String targetName = "Target";
 
-		TargetNode targetNodeActual = targetService.save(targetNodeExpectedBeforeSave);
+        TargetNode targetNodeExpectedBeforeSave = new TargetNode(null, targetName);
+        TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-		assertAll(
-				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
-								+ targetNodeActual.getTarget()),
-				() -> assertNotNull(targetNodeActual.getId(),
-						() -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-				() -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
-	@Test
-	void when_delete_target_by_id_target_should_delete_and_return_target() {
+        TargetNode targetNodeActual = targetService.save(targetNodeExpectedBeforeSave);
 
-		String targetName = "Target";
+        assertAll(
+                () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+                        () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + targetNodeActual.getTarget()),
+                () -> assertNotNull(targetNodeActual.getId(),
+                        () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
+                () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		Long targetId = 1L;
+    @Test
+    void when_delete_target_by_id_target_should_delete_and_return_target() {
 
-		TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
+        String targetName = "Target";
 
-		when(targetRepository.findById(targetId)).thenReturn(Optional.of(targetNodeExpected));
+        Long targetId = 1L;
 
-		Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
+        TargetNode targetNodeExpected = new TargetNode(targetId, targetName);
 
-		TargetNode targetNodeActual = targetNodeOptional.get();
+        when(targetRepository.findById(targetId)).thenReturn(Optional.of(targetNodeExpected));
 
-		assertAll(
-				() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
-						() -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
-								+ targetNodeActual.getTarget()),
-				() -> verify(targetRepository, times(1)).findById(targetId),
-				() -> verify(targetRepository, times(1)).delete(targetNodeActual),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
 
-	@Test
-	void when_delete_target_by_id_not_existing_target_should_return_empty_optional() {
+        TargetNode targetNodeActual = targetNodeOptional.get();
 
-		Long targetId = 1L;
+        assertAll(
+                () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+                        () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + targetNodeActual.getTarget()),
+                () -> verify(targetRepository, times(1)).findById(targetId),
+                () -> verify(targetRepository, times(1)).delete(targetNodeActual),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		when(targetRepository.findById(targetId)).thenReturn(Optional.empty());
+    @Test
+    void when_delete_target_by_id_not_existing_target_should_return_empty_optional() {
 
-		Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
+        Long targetId = 1L;
 
-		assertAll(
-				() -> assertTrue(targetNodeOptional.isEmpty(),
-						() -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
-				() -> verify(targetRepository, times(1)).findById(targetId),
-				() -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(dtoMapper));
-	}
+        when(targetRepository.findById(targetId)).thenReturn(Optional.empty());
 
-	@Test
-	void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
+        Optional<TargetNode> targetNodeOptional = targetService.delete(targetId);
 
-		Long databaseSize = 0L;
+        assertAll(
+                () -> assertTrue(targetNodeOptional.isEmpty(),
+                        () -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
+                () -> verify(targetRepository, times(1)).findById(targetId),
+                () -> verifyNoMoreInteractions(targetRepository), () -> verifyNoInteractions(objectMapper));
+    }
 
-		when(targetRepository.count()).thenReturn(databaseSize);
+    @Test
+    void when_checking_if_database_is_empty_and_it_is_empty_should_return_true() {
 
-		boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+        Long databaseSize = 0L;
 
-		assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
-				() -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-				() -> verifyNoInteractions(dtoMapper));
-	}
+        when(targetRepository.count()).thenReturn(databaseSize);
 
-	@Test
-	void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
+        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
 
-		Long databaseSize = 10L;
+        assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
+                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(objectMapper));
+    }
 
-		when(targetRepository.count()).thenReturn(databaseSize);
+    @Test
+    void when_checking_if_database_is_empty_and_it_is_not_empty_should_return_false() {
 
-		boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+        Long databaseSize = 10L;
 
-		assertAll(
-				() -> assertFalse(isDatabaseEmpty,
-						() -> "should not database be empty, but that was: " + isDatabaseEmpty),
-				() -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-				() -> verifyNoInteractions(dtoMapper));
-	}
+        when(targetRepository.count()).thenReturn(databaseSize);
+
+        boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
+
+        assertAll(
+                () -> assertFalse(isDatabaseEmpty,
+                        () -> "should not database be empty, but that was: " + isDatabaseEmpty),
+                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(objectMapper));
+    }
 }

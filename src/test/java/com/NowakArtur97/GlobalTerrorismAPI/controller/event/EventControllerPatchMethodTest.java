@@ -1,35 +1,26 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Optional;
-
-import javax.json.JsonMergePatch;
-import javax.json.JsonPatch;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
+import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
+import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
+import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
+import com.ibm.icu.util.Calendar;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -46,24 +37,21 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
-import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
-import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
-import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
-import com.ibm.icu.util.Calendar;
+import javax.json.JsonMergePatch;
+import javax.json.JsonPatch;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -76,12 +64,12 @@ class EventControllerPatchMethodTest {
 
 	private MockMvc mockMvc;
 
-	private EventController eventController;
+	private GenericRestController<EventModel, EventDTO> eventController;
 
 	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
 	@Mock
-	private EventService eventService;
+	private GenericService<EventNode, EventDTO> eventService;
 
 	@Mock
 	private EventModelAssembler modelAssembler;
@@ -93,7 +81,7 @@ class EventControllerPatchMethodTest {
 	private PatchHelper patchHelper;
 
 	@Autowired
-	private ViolationHelper violationHelper;
+	private ViolationHelper<EventNode, EventDTO> violationHelper;
 
 	private static TargetBuilder targetBuilder;
 	private static EventBuilder eventBuilder;
@@ -554,7 +542,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
@@ -616,7 +604,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isOk())
 							.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 							.andExpect(jsonPath("links[0].href", is(pathToEventLink)))
@@ -669,7 +657,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
 									.accept(MediaType.APPLICATION_JSON))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
@@ -708,7 +696,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
 							.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
@@ -752,7 +740,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
@@ -790,7 +778,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event summary cannot be empty"))),
@@ -828,7 +816,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event motive cannot be empty"))),
@@ -867,7 +855,7 @@ class EventControllerPatchMethodTest {
 			assertAll(
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
-									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE))
+									.contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
 							.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 							.andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors[0]", is("Event date cannot be in the future"))),

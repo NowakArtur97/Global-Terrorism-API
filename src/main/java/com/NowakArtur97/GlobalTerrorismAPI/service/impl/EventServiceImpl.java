@@ -1,95 +1,62 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
-	private final EventRepository eventRepository;
+    private final GenericService<TargetNode, TargetDTO> targetService;
 
-	private final DTOMapper dtoMapper;
+    @Autowired
+    public EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper dtoMapper, GenericService<TargetNode, TargetDTO> targetService) {
 
-	private final TargetService targetService;
+        super(repository, dtoMapper);
 
-	@Override
-	@Transactional(readOnly = true)
-	public Page<EventNode> findAll(Pageable pageable) {
+        this.targetService = targetService;
+    }
 
-		return eventRepository.findAll(pageable);
-	}
+    @Override
+    public EventNode update(EventNode eventNode, EventDTO eventDTO) {
 
-	@Override
-	@Transactional(readOnly = true)
-	public Optional<EventNode> findById(Long id) {
+        Long id = eventNode.getId();
 
-		return id != null ? eventRepository.findById(id) : Optional.empty();
-	}
+        TargetNode targetNode = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
-	@Override
-	public EventNode save(EventNode eventNode) {
+        eventNode = dtoMapper.map(eventDTO, EventNode.class);
 
-		return eventRepository.save(eventNode);
-	}
+        eventNode.setId(id);
 
-	@Override
-	public EventNode saveNew(EventDTO eventDTO) {
+        eventNode.setTarget(targetNode);
 
-		EventNode eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+        eventNode = repository.save(eventNode);
 
-		eventNode = eventRepository.save(eventNode);
+        return eventNode;
+    }
 
-		return eventNode;
-	}
+    @Override
+    public Optional<EventNode> delete(Long id) {
 
-	@Override
-	public EventNode update(EventNode eventNode, EventDTO eventDTO) {
+        Optional<EventNode> eventNodeOptional = findById(id);
 
-		Long id = eventNode.getId();
+        if (eventNodeOptional.isPresent()) {
 
-		TargetNode targetNode = targetService.update(eventNode.getTarget().getId(), eventDTO.getTarget());
+            EventNode eventNode = eventNodeOptional.get();
 
-		eventNode = dtoMapper.mapToNode(eventDTO, EventNode.class);
+            targetService.delete(eventNode.getTarget().getId());
 
-		eventNode.setId(id);
+            repository.delete(eventNode);
+        }
 
-		eventNode.setTarget(targetNode);
-
-		eventNode = eventRepository.save(eventNode);
-
-		return eventNode;
-	}
-
-	@Override
-	public Optional<EventNode> delete(Long id) {
-
-		Optional<EventNode> eventNodeOptional = findById(id);
-
-		if (eventNodeOptional.isPresent()) {
-
-			EventNode eventNode = eventNodeOptional.get();
-
-			targetService.delete(eventNode.getTarget().getId());
-
-			eventRepository.delete(eventNode);
-		}
-
-		return eventNodeOptional;
-	}
+        return eventNodeOptional;
+    }
 }

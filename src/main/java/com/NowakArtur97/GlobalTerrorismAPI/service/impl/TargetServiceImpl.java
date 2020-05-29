@@ -1,87 +1,24 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.DTOMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class TargetServiceImpl implements TargetService {
+public class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implements TargetService {
 
-	private final TargetRepository targetRepository;
+    @Autowired
+    public TargetServiceImpl(BaseRepository<TargetNode> repository, ObjectMapper dtoMapper) {
+        super(repository, dtoMapper);
+    }
 
-	private final DTOMapper dtoMapper;
+    @Override
+    public boolean isDatabaseEmpty() {
 
-	@Override
-	@Transactional(readOnly = true)
-	public Optional<TargetNode> findById(Long id) {
-
-		return id != null ? targetRepository.findById(id) : Optional.empty();
-	}
-	
-	@Override
-	@Transactional(readOnly = true)
-	public Page<TargetNode> findAll(Pageable pageable) {
-
-		return targetRepository.findAll(pageable);
-	}
-
-	@Override
-	public TargetNode save(TargetNode targetNode) {
-
-		return targetRepository.save(targetNode);
-	}
-	
-	@Override
-	public TargetNode saveNew(TargetDTO targetDTO) {
-
-		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
-
-		targetNode = targetRepository.save(targetNode);
-
-		return targetNode;
-	}
-	
-	@Override
-	public TargetNode update(Long id, TargetDTO targetDTO) {
-
-		TargetNode targetNode = dtoMapper.mapToNode(targetDTO, TargetNode.class);
-
-		targetNode.setId(id);
-
-		targetNode = targetRepository.save(targetNode);
-
-		return targetNode;
-	}
-
-	@Override
-	public Optional<TargetNode> delete(Long id) {
-
-		Optional<TargetNode> targetNodeOptional = findById(id);
-
-		if (targetNodeOptional.isPresent()) {
-
-			targetRepository.delete(targetNodeOptional.get());
-		}
-
-		return targetNodeOptional;
-	}
-
-	@Override
-	public boolean isDatabaseEmpty() {
-
-		return targetRepository.count() == 0;
-	}
+        return repository.count() == 0;
+    }
 }

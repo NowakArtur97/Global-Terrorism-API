@@ -1,24 +1,24 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.text.ParseException;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
+import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.icu.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -36,24 +36,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.icu.util.Calendar;
+import java.text.ParseException;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
@@ -65,12 +57,12 @@ public class EventControllerPostMethodTest {
 
 	private MockMvc mockMvc;
 
-	private EventController eventController;
+	private GenericRestController<EventModel, EventDTO> eventController;
 
 	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
 	@Mock
-	private EventService eventService;
+	private GenericService<EventNode, EventDTO> eventService;
 
 	@Mock
 	private EventModelAssembler modelAssembler;
@@ -82,7 +74,7 @@ public class EventControllerPostMethodTest {
 	private PatchHelper patchHelper;
 
 	@Mock
-	private ViolationHelper violationHelper;
+	private ViolationHelper<EventNode, EventDTO> violationHelper;
 
 	private static TargetBuilder targetBuilder;
 	private static EventBuilder eventBuilder;
