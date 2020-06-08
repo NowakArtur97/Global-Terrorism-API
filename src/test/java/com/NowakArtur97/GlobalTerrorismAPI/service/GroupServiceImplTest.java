@@ -1,7 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
@@ -43,13 +45,16 @@ class GroupServiceImplTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private GenericService<EventNode, EventDTO> eventService;
+
     private GroupBuilder groupBuilder;
     private EventBuilder eventBuilder;
 
     @BeforeEach
     private void setUp() {
 
-        groupService = new GroupServiceImpl(groupRepository, objectMapper);
+        groupService = new GroupServiceImpl(groupRepository, objectMapper, eventService);
 
         groupBuilder = new GroupBuilder();
         eventBuilder = new EventBuilder();
