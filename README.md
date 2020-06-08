@@ -44,6 +44,7 @@ To shut down the containers enter:
 ## Features
 - Target (GET, POST, PUT, PATCH, DELETE)
 - Event (GET, POST, PUT, PATCH, DELETE)
+- Group (GET, POST)
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 

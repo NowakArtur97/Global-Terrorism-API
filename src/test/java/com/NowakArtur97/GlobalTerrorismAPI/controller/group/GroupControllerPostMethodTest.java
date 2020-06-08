@@ -195,7 +195,7 @@ public class GroupControllerPostMethodTest {
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group name: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_with_invalid_name_should_return_errors(String invalidName) {
@@ -216,7 +216,7 @@ public class GroupControllerPostMethodTest {
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Target: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_target_should_return_errors(String invalidTarget) {
@@ -237,7 +237,7 @@ public class GroupControllerPostMethodTest {
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
-    @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group event summary: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_summary_should_return_errors(String invalidSummary) {
@@ -259,7 +259,7 @@ public class GroupControllerPostMethodTest {
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
-    @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group event motive: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_motive_should_return_errors(String invalidMotive) {
