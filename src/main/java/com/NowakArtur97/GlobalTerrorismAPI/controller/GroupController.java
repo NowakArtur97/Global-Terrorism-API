@@ -25,14 +25,4 @@ public class GroupController extends GenericRestControllerImpl<GroupModel, Group
     public GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
-
-//    @GetMapping
-//    @Override
-//    public ResponseEntity<PagedModel<GroupModel>> findAll(Pageable pageable) {
-//
-//        Page<GroupNode> resources = service.findAll(pageable);
-//        PagedModel<GroupModel> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
-//
-//        return new ResponseEntity<>(pagedModel, HttpStatus.OK);
-//    }
 }

@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.GroupModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
@@ -33,6 +32,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -68,7 +68,7 @@ class GroupControllerGetMethodTest {
     private GenericService<GroupNode, GroupDTO> groupService;
 
     @Mock
-    private GroupModelAssembler groupModelAssembler;
+    private RepresentationModelAssemblerSupport<GroupNode, GroupModel> groupModelAssembler;
 
     @Mock
     private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;

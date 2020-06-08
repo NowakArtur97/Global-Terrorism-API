@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
-
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
@@ -29,8 +28,6 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     private final String modelType;
 
-    private final Class<M> modelTypeParameterClass;
-
     private final Class<T> nodeTypeParameterClass;
 
     private final Class<D> dtoTypeParameterClass;
@@ -43,14 +40,15 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     protected final PatchHelper patchHelper;
 
-    protected final ViolationHelper violationHelper;
+    protected final ViolationHelper<T, D> violationHelper;
 
-    GenericRestControllerImpl(GenericService<T, D> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper violationHelper) {
+    GenericRestControllerImpl(GenericService<T, D> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
 
-        this.modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
+        Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
+
         this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];
         this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[1];
-        this.modelType = this.modelTypeParameterClass.getSimpleName();
+        this.modelType = modelTypeParameterClass.getSimpleName();
         this.service = service;
         this.modelAssembler = modelAssembler;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
