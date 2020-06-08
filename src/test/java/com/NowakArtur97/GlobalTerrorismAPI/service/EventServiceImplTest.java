@@ -322,7 +322,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void when_delete_event_should_delete_eventand_target() {
+    void when_delete_event_should_delete_event_and_target() {
 
         Long eventId = 1L;
         Long targetId = 1L;
