@@ -19,7 +19,7 @@ public final class GroupBuilder {
 
 	private String name = "group";
 
-	private List<Event> eventsCaused;
+	private List<Event> eventsCaused = new ArrayList<>();
 
 	public GroupBuilder withId(Long id) {
 

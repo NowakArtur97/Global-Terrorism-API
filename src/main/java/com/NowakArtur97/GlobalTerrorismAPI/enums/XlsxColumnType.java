@@ -2,8 +2,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.enums;
 
 import lombok.Getter;
 
-import javax.swing.text.JTextComponent;
-
 public enum XlsxColumnType {
 
 	YEAR_OF_EVENT(1), MONTH_OF_EVENT(2), DAY_OF_EVENT(3), EVENT_SUMMARY(18), WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS(25),

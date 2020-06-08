@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventPagedResourcesAssembler_Tests")
+@Tag("PagedResourcesAssembler_Tests")
 class EventPagedResourcesAssemblerTest {
 
     private final String BASE_URL = "http://localhost";
