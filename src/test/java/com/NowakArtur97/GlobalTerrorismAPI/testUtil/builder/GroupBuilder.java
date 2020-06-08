@@ -15,59 +15,67 @@ import java.util.List;
 
 public final class GroupBuilder {
 
-	private Long id = 1L;
+    private Long id = 1L;
 
-	private String name = "group";
+    private String name = "group";
 
-	private List<Event> eventsCaused = new ArrayList<>();
+    private List<Event> eventsCaused = new ArrayList<>();
 
-	public GroupBuilder withId(Long id) {
+    public GroupBuilder withId(Long id) {
 
-		this.id = id;
+        this.id = id;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GroupBuilder withName(String name) {
+    public GroupBuilder withName(String name) {
 
-		this.name = name;
+        this.name = name;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GroupBuilder withEventsCaused(List<Event> eventsCaused){
+    public GroupBuilder withEventsCaused(List<Event> eventsCaused) {
 
-		this.eventsCaused = eventsCaused;
+        this.eventsCaused = eventsCaused;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Group build(ObjectType type) {
+    public Group build(ObjectType type) {
 
-		switch (type) {
+        switch (type) {
 
-		case DTO:
+            case DTO:
 
-			List<EventDTO> eventDTOs = new ArrayList<>();
-			eventsCaused.forEach(event -> eventDTOs.add((EventDTO) event));
+                List<EventDTO> eventDTOs = convertEvents(eventsCaused);
 
-			return new GroupDTO(name, eventDTOs);
+                return new GroupDTO(name, eventDTOs);
 
-		case NODE:
+            case NODE:
 
-			List<EventNode> eventNodes = new ArrayList<>();
-			eventsCaused.forEach(event -> eventNodes.add((EventNode) event));
+                List<EventNode> eventNodes = convertEvents(eventsCaused);
 
-			return new GroupNode(id, name, eventNodes);
+                return new GroupNode(id, name, eventNodes);
 
-		case MODEL:
+            case MODEL:
 
-			List<EventModel> eventModels = new ArrayList<>();
-			eventsCaused.forEach(event -> eventModels.add((EventModel) event));
+                List<EventModel> eventModels = convertEvents(eventsCaused);
 
-			return new GroupModel(id, name, eventModels);
-		}
+                return new GroupModel(id, name, eventModels);
+        }
 
-		throw new RuntimeException("The specified type does not exist");
-	}
+        throw new RuntimeException("The specified type does not exist");
+    }
+
+    private <T> List<T> convertEvents(List<Event> eventsCaused) {
+
+        List<T> events = new ArrayList<>();
+
+        if (eventsCaused != null) {
+            eventsCaused.forEach(event -> events.add((T) event));
+        }
+
+        return events;
+    }
 }

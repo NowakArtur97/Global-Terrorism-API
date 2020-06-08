@@ -1,24 +1,27 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.GroupModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.icu.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -38,9 +41,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,53 +56,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventController_Tests")
-public class EventControllerPostMethodTest {
+@Tag("GroupController_Tests")
+public class GroupControllerPostMethodTest {
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
+    private GenericRestController<GroupModel, GroupDTO> groupController;
 
     private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private GenericService<GroupNode, GroupDTO> groupService;
 
     @Mock
-    private EventModelAssembler modelAssembler;
+    private GroupModelAssembler modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;
 
     @Mock
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
+    private ViolationHelper<GroupNode, GroupDTO> violationHelper;
 
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
 
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
+        groupController = new GroupController(groupService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(groupController, restResponseGlobalEntityExceptionHandler).build();
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
     }
 
     @Test
-    void when_add_valid_event_should_return_new_event_as_model() {
+    void when_add_valid_group_should_return_new_group_as_model() {
 
+        Long groupId = 1L;
         Long eventId = 1L;
 
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
@@ -105,62 +117,80 @@ public class EventControllerPostMethodTest {
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
+        GroupModel groupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         Link eventLink = new Link(pathToEventLink);
         eventModel.add(eventLink);
 
-        when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
-        when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
+        String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
+        Link groupLink = new Link(pathToGroupLink);
+        groupModel.add(groupLink);
+
+        when(groupService.saveNew(ArgumentMatchers.any(GroupDTO.class))).thenReturn(groupNode);
+        when(modelAssembler.toModel(ArgumentMatchers.any(GroupNode.class))).thenReturn(groupModel);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
-                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
-                        .andExpect(jsonPath("date",
+                        .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                        .andExpect(jsonPath("id", is(groupId.intValue())))
+                        .andExpect(jsonPath("name", is(groupModel.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].id", is(eventId.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventModel.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventModel.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].date",
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
-                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
-                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-                        .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
-                () -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
+                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(eventModel.getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventModel.getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.id", is(targetModel.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.target", is(targetModel.getTarget()))),
+                () -> verify(groupService, times(1)).saveNew(ArgumentMatchers.any(GroupDTO.class)),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(GroupNode.class)),
                 () -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
-    void when_add_event_with_null_fields_should_return_errors() {
+    void when_add_group_with_null_fields_should_return_errors() {
 
-        EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
-                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null).withTarget(null)
-                .build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(null).withEventsCaused(null).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{event.summary.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.motive.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
+                        .andExpect(jsonPath("errors", hasItem("{group.name.notBlank}")))
+                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
+    void when_add_group_with_empty_events_list_should_return_errors() {
+
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(new ArrayList<>()).build(ObjectType.DTO);
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
@@ -168,19 +198,41 @@ public class EventControllerPostMethodTest {
     @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_event_with_invalid_target_should_return_errors(String invalidTarget) {
+    void when_add_group_with_invalid_name_should_return_errors(String invalidName) {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(invalidName).withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("{group.name.notBlank}"))),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_add_group_event_with_invalid_target_should_return_errors(String invalidTarget) {
+
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
@@ -188,20 +240,21 @@ public class EventControllerPostMethodTest {
     @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) {
+    void when_add_group_event_with_invalid_summary_should_return_errors(String invalidSummary) {
 
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO)
                 .build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
@@ -209,41 +262,43 @@ public class EventControllerPostMethodTest {
     @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) {
+    void when_add_group_event_with_invalid_motive_should_return_errors(String invalidMotive) {
 
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO)
                 .build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
-    void when_add_event_with_date_in_the_future_should_return_errors() {
+    void when_add_group_event_with_date_in_the_future_should_return_errors() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2090, 1, 1);
         Date invalidDate = calendar.getTime();
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
