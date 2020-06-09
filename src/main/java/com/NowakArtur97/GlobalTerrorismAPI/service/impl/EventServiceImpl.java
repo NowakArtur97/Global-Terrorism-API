@@ -30,17 +30,13 @@ public class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
         Long id = eventNode.getId();
 
-        TargetNode targetNode = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
+        targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
         eventNode = dtoMapper.map(eventDTO, EventNode.class);
 
         eventNode.setId(id);
 
-        eventNode.setTarget(targetNode);
-
-        eventNode = repository.save(eventNode);
-
-        return eventNode;
+        return repository.save(eventNode);
     }
 
     @Override

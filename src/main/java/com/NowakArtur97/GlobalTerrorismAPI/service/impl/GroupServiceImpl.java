@@ -24,6 +24,26 @@ public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> {
         this.eventService = eventService;
     }
 
+//    @Override
+//    public GroupNode update(GroupNode groupNode, GroupDTO groupDTO) {
+//
+//        Long id = groupNode.getId();
+//
+//        for (int index = 0; index < groupDTO.getEventsCaused().size(); index++) {
+//
+//            EventDTO eventDTO = groupDTO.getEventsCaused().get(index);
+//            EventNode eventNode = groupNode.getEventsCaused().stream().filter(node -> eventDTO.getId());
+//
+//            eventService.update(eventNode, eventDTO);
+//        }
+//
+//        groupNode = dtoMapper.map(groupDTO, GroupNode.class);
+//
+//        groupNode.setId(id);
+//
+//        return repository.save(groupNode);
+//    }
+
     @Override
     public Optional<GroupNode> delete(Long id) {
 

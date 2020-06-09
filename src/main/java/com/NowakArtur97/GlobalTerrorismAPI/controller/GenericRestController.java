@@ -39,4 +39,10 @@ public interface GenericRestController<M extends RepresentationModel<M>, D exten
     @ResponseStatus(HttpStatus.NO_CONTENT)
         // Added to remove the default 200 status added by Swagger
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
+
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    ResponseEntity<?> collectionOptions();
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.OPTIONS)
+    ResponseEntity<?> singularOptions();
 }
