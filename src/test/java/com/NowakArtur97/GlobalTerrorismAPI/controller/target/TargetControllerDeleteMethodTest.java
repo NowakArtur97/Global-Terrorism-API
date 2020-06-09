@@ -56,7 +56,7 @@ class TargetControllerDeleteMethodTest {
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper violationHelper;
+    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
     @BeforeEach
     private void setUp() {
