@@ -24,25 +24,31 @@ public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> {
         this.eventService = eventService;
     }
 
-//    @Override
-//    public GroupNode update(GroupNode groupNode, GroupDTO groupDTO) {
-//
-//        Long id = groupNode.getId();
-//
-//        for (int index = 0; index < groupDTO.getEventsCaused().size(); index++) {
-//
-//            EventDTO eventDTO = groupDTO.getEventsCaused().get(index);
-//            EventNode eventNode = groupNode.getEventsCaused().stream().filter(node -> eventDTO.getId());
-//
-//            eventService.update(eventNode, eventDTO);
-//        }
-//
-//        groupNode = dtoMapper.map(groupDTO, GroupNode.class);
-//
-//        groupNode.setId(id);
-//
-//        return repository.save(groupNode);
-//    }
+    @Override
+    public GroupNode update(GroupNode groupNode, GroupDTO groupDTO) {
+
+        Long id = groupNode.getId();
+
+        deleteEvents(groupNode);
+
+        saveNewEvents(groupDTO);
+
+        groupNode = dtoMapper.map(groupDTO, GroupNode.class);
+
+        groupNode.setId(id);
+
+        return repository.save(groupNode);
+    }
+
+    private void saveNewEvents(GroupDTO groupDTO) {
+
+        groupDTO.getEventsCaused().forEach(eventService::saveNew);
+    }
+
+    private void deleteEvents(GroupNode groupNode) {
+
+        groupNode.getEventsCaused().forEach(event -> eventService.delete(event.getId()));
+    }
 
     @Override
     public Optional<GroupNode> delete(Long id) {
@@ -53,7 +59,7 @@ public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> {
 
             GroupNode groupNode = groupNodeOptional.get();
 
-            groupNode.getEventsCaused().forEach(event -> eventService.delete(event.getId()));
+            deleteEvents(groupNode);
 
             repository.delete(groupNode);
         }
