@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-public class EventControllerOptionsMethodTest {
+class EventControllerOptionsMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
 

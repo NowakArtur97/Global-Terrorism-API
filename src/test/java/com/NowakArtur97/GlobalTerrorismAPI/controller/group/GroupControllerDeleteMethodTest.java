@@ -1,15 +1,16 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -23,10 +24,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -37,81 +40,84 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventController_Tests")
-class EventControllerDeleteMethodTest {
+@Tag("GroupController_Tests")
+public class GroupControllerDeleteMethodTest {
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
+    private GenericRestController<GroupModel, GroupDTO> groupController;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private GenericService<GroupNode, GroupDTO> groupService;
 
     @Mock
-    private EventModelAssembler modelAssembler;
+    private RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;
 
     @Mock
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
+    private ViolationHelper<GroupNode, GroupDTO> violationHelper;
 
-    private static TargetBuilder targetBuilder;
-    private static EventBuilder eventBuilder;
+    private GroupBuilder groupBuilder;
+    private EventBuilder eventBuilder;
+    private TargetBuilder targetBuilder;
 
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        groupController = new GroupController(groupService, modelAssembler, pagedResourcesAssembler,
+                patchHelper, violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
-        targetBuilder = new TargetBuilder();
+        groupBuilder = new GroupBuilder();
         eventBuilder = new EventBuilder();
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
-    void when_delete_existing_event_should_not_return_content() {
+    void when_delete_existing_group_should_not_return_content() {
 
-        Long eventId = 1L;
+        Long groupId = 1L;
 
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+        String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
-        when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
+        when(groupService.delete(groupId)).thenReturn(Optional.of(groupNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNoContent())
+                () -> mockMvc.perform(delete(linkWithParameter, groupId)).andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
+                () -> verify(groupService, times(1)).delete(groupId), () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
-    void when_delete_event_but_event_not_exists_should_return_error_response() {
+    void when_delete_group_but_group_not_exists_should_return_error_response() {
 
-        Long eventId = 1L;
+        Long groupId = 1L;
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+        String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
-        when(eventService.delete(eventId)).thenReturn(Optional.empty());
+        when(groupService.delete(groupId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(linkWithParameter, groupId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
-                () -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
+                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
+                () -> verify(groupService, times(1)).delete(groupId), () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
     }

@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
-public class EventControllerPutMethodTest {
+class EventControllerPutMethodTest {
 
 	private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
 	private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";

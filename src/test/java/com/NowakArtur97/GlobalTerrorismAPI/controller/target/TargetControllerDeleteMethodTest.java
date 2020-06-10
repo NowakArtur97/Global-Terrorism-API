@@ -19,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -69,16 +68,11 @@ class TargetControllerDeleteMethodTest {
     }
 
     @Test
-    void when_delete_existing_target_should_return_target() {
+    void when_delete_existing_target_should_not_return_content() {
 
         Long targetId = 1L;
         String targetName = "target";
         TargetNode targetNode = new TargetNode(targetId, targetName);
-        TargetModel targetModel = new TargetModel(targetId, targetName);
-
-        String pathToLink = BASE_PATH + "/" + targetId.intValue();
-        Link link = new Link(pathToLink);
-        targetModel.add(link);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
