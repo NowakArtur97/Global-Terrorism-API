@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("GroupController_Tests")
-public class GroupControllerDeleteMethodTest {
+class GroupControllerDeleteMethodTest {
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
 

@@ -1,7 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
-import java.util.Date;
-
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
@@ -13,100 +11,132 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.ibm.icu.util.Calendar;
 
+import java.util.Date;
+
 public final class EventBuilder {
 
-	private Long id = 1L;
+    private Long id = 1L;
 
-	private String summary = "summary";
+    private String summary = "summary";
 
-	private String motive = "motive";
+    private String motive = "motive";
 
-	private Date date = Calendar.getInstance().getTime();
+    private Date date = Calendar.getInstance().getTime();
 
-	private Boolean isPartOfMultipleIncidents = true;
+    private Boolean isPartOfMultipleIncidents = true;
 
-	private Boolean isSuccessful = true;
+    private Boolean isSuccessful = true;
 
-	private Boolean isSuicide = true;
+    private Boolean isSuicide = true;
 
-	private Target target = null;
+    private Target target = null;
 
-	public EventBuilder withId(Long id) {
+    public EventBuilder withId(Long id) {
 
-		this.id = id;
+        this.id = id;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withSummary(String summary) {
+    public EventBuilder withSummary(String summary) {
 
-		this.summary = summary;
+        this.summary = summary;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withMotive(String motive) {
+    public EventBuilder withMotive(String motive) {
 
-		this.motive = motive;
+        this.motive = motive;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withDate(Date date) {
+    public EventBuilder withDate(Date date) {
 
-		this.date = date;
+        this.date = date;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withIsPartOfMultipleIncidents(Boolean isPartOfMultipleIncidents) {
+    public EventBuilder withIsPartOfMultipleIncidents(Boolean isPartOfMultipleIncidents) {
 
-		this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
+        this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withIsSuccessful(Boolean isSuccessful) {
+    public EventBuilder withIsSuccessful(Boolean isSuccessful) {
 
-		this.isSuccessful = isSuccessful;
+        this.isSuccessful = isSuccessful;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withIsSuicide(Boolean isSuicide) {
+    public EventBuilder withIsSuicide(Boolean isSuicide) {
 
-		this.isSuicide = isSuicide;
+        this.isSuicide = isSuicide;
 
-		return this;
-	}
+        return this;
+    }
 
-	public EventBuilder withTarget(Target target) {
+    public EventBuilder withTarget(Target target) {
 
-		this.target = target;
+        this.target = target;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Event build(ObjectType type) {
+    public Event build(ObjectType type) {
 
-		switch (type) {
+        Event event;
 
-		case DTO:
-			return EventDTO.builder().summary(summary).motive(motive).date(date)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).target((TargetDTO) target).build();
+        switch (type) {
 
-		case NODE:
-			return EventNode.builder().id(id).summary(summary).motive(motive).date(date)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).target((TargetNode) target).build();
+            case DTO:
+                event = EventDTO.builder().summary(summary).motive(motive).date(date)
+                        .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+                        .isSuicide(isSuicide).target((TargetDTO) target).build();
+                break;
 
-		case MODEL:
-			return EventModel.builder().id(id).summary(summary).motive(motive).date(date)
-					.isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-					.isSuicide(isSuicide).target((TargetModel) target).build();
-		}
+            case NODE:
+                event = EventNode.builder().id(id).summary(summary).motive(motive).date(date)
+                        .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+                        .isSuicide(isSuicide).target((TargetNode) target).build();
+                break;
 
-		throw new RuntimeException("The specified type does not exist");
-	}
+            case MODEL:
+
+                event= EventModel.builder().id(id).summary(summary).motive(motive).date(date)
+                        .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+                        .isSuicide(isSuicide).target((TargetModel) target).build();
+                break;
+
+            default:
+                throw new RuntimeException("The specified type does not exist");
+        }
+
+        resetProperties();
+
+        return event;
+    }
+
+    private void resetProperties() {
+
+        this.id = 1L;
+
+        this.summary = "summary";
+
+        this.motive = "motive";
+
+        this.date = Calendar.getInstance().getTime();
+
+        this.isPartOfMultipleIncidents = true;
+
+        this.isSuccessful = true;
+
+        this.isSuicide = true;
+
+        this.target = null;
+    }
 }

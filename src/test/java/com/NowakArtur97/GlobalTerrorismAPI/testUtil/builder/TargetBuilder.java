@@ -8,38 +8,61 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
 public final class TargetBuilder {
 
-	private Long id = 1L;
+    private Long id = 1L;
 
-	private String target = "target";
+    private String targetName = "target";
 
-	public TargetBuilder withId(Long id) {
+    public TargetBuilder withId(Long id) {
 
-		this.id = id;
+        this.id = id;
 
-		return this;
-	}
+        return this;
+    }
 
-	public TargetBuilder withTarget(String target) {
+    public TargetBuilder withTarget(String target) {
 
-		this.target = target;
+        this.targetName = target;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Target build(ObjectType type) {
+    public Target build(ObjectType type) {
 
-		switch (type) {
+        Target target;
 
-		case DTO:
-			return new TargetDTO(target);
+        switch (type) {
 
-		case NODE:
-			return new TargetNode(id, target);
+            case DTO:
 
-		case MODEL:
-			return new TargetModel(id, target);
-		}
+                target = new TargetDTO(targetName);
 
-		throw new RuntimeException("The specified type does not exist");
-	}
+                break;
+
+            case NODE:
+
+                target = new TargetNode(id, targetName);
+
+                break;
+
+            case MODEL:
+
+                target = new TargetModel(id, targetName);
+
+                break;
+
+            default:
+                throw new RuntimeException("The specified type does not exist");
+        }
+
+        resetProperties();
+
+        return target;
+    }
+
+    private void resetProperties() {
+
+        this.id = 1L;
+
+        this.targetName = "target";
+    }
 }

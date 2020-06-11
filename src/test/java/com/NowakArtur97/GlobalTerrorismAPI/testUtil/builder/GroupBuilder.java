@@ -44,28 +44,41 @@ public final class GroupBuilder {
 
     public Group build(ObjectType type) {
 
+        Group group;
+
         switch (type) {
 
             case DTO:
 
                 List<EventDTO> eventDTOs = convertEvents(eventsCaused);
 
-                return new GroupDTO(name, eventDTOs);
+                group = new GroupDTO(name, eventDTOs);
+
+                break;
 
             case NODE:
 
                 List<EventNode> eventNodes = convertEvents(eventsCaused);
 
-                return new GroupNode(id, name, eventNodes);
+                group = new GroupNode(id, name, eventNodes);
+
+                break;
 
             case MODEL:
 
                 List<EventModel> eventModels = convertEvents(eventsCaused);
 
-                return new GroupModel(id, name, eventModels);
+                group = new GroupModel(id, name, eventModels);
+
+                break;
+
+            default:
+                throw new RuntimeException("The specified type does not exist");
         }
 
-        throw new RuntimeException("The specified type does not exist");
+        resetProperties();
+
+        return group;
     }
 
     private <T> List<T> convertEvents(List<Event> eventsCaused) {
@@ -77,5 +90,14 @@ public final class GroupBuilder {
         }
 
         return events;
+    }
+
+    private void resetProperties() {
+
+        this.id = 1L;
+
+        this.name = "group";
+
+        this.eventsCaused = new ArrayList<>();
     }
 }
