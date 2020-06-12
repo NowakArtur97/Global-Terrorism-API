@@ -145,10 +145,7 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                         .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
-                        .andExpect(jsonPath("eventsCaused[0].date",
-                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
-                                                .toLocalDate()))))
+                        .andExpect(jsonPath("eventsCaused[0].date", is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
                         .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
@@ -453,7 +450,7 @@ class GroupControllerPutMethodTest {
         Long groupId = 1L;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2090, 1, 1);
+        calendar.set(2090, Calendar.FEBRUARY, 1);
         Date invalidDate = calendar.getTime();
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);

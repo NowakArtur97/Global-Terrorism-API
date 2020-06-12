@@ -1,18 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validation;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Date;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
+import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.ibm.icu.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -21,13 +15,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.ibm.icu.util.Calendar;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Date;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventDTOValidation_Tests")
@@ -135,7 +130,7 @@ class EventDTOValidationTest {
 		int expectedNumberOfViolations = 1;
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(2090, 1, 1);
+		calendar.set(2090, Calendar.FEBRUARY, 1);
 		Date invalidDate = calendar.getTime();
 		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
 		EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);

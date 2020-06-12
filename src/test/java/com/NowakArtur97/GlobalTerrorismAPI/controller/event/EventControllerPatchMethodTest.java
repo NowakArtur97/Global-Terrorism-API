@@ -132,20 +132,20 @@ class EventControllerPatchMethodTest {
 					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
 					.withTarget(targetNode).build(ObjectType.NODE);
 
-			EventModel eventModelUpdated = (EventModel) eventBuilder.withDate(updatedEventDate)
+			EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedEventDate)
 					.withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
 					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
 					.withTarget(targetModel).build(ObjectType.MODEL);
 			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-			eventModelUpdated.add(new Link(pathToEventLink));
+			updatedEventModel.add(new Link(pathToEventLink));
 
 			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 			when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
-			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
+			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
 
 			String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
 					+ "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
@@ -175,7 +175,7 @@ class EventControllerPatchMethodTest {
 							.andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 					() -> verifyNoMoreInteractions(eventService),
@@ -212,7 +212,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 			when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
 			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
 
@@ -242,7 +242,7 @@ class EventControllerPatchMethodTest {
 							.andExpect(jsonPath("target.target", is(updatedTargetModel.getTarget()))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 					() -> verifyNoMoreInteractions(eventService),
@@ -268,7 +268,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget
 					+ "\" }]";
@@ -284,7 +284,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -306,7 +306,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + null + "\" },"
 					+ "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + null + "\" },"
@@ -320,6 +320,7 @@ class EventControllerPatchMethodTest {
 					() -> mockMvc
 							.perform(patch(linkWithParameter, eventId).content(jsonPatch)
 									.contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+							.andExpect(status().isBadRequest())
 							.andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
 							.andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
 							.andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
@@ -334,7 +335,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -355,7 +356,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget
 					+ "\" }]";
@@ -370,7 +371,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -394,7 +395,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + invalidSummary
 					+ "\" }]";
@@ -409,7 +410,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -432,7 +433,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + invalidMotive + "\" }]";
 
@@ -446,7 +447,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -471,7 +472,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.patch(any(JsonPatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + invalidDate + "\" }]";
 
@@ -485,7 +486,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -495,7 +496,7 @@ class EventControllerPatchMethodTest {
 	class EventControllerMergeJsonPatchMethodTest {
 
 		@Test
-		void when_partial_update_valid_event_using_merge_json_patch_should_return_partially_updated_node()
+		void when_partial_update_valid_event_using_json_merge_patch_should_return_partially_updated_node()
 				throws ParseException {
 
 			Long eventId = 1L;
@@ -520,19 +521,19 @@ class EventControllerPatchMethodTest {
 					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
 					.withTarget(targetNode).build(ObjectType.NODE);
 
-			EventModel eventModelUpdated = (EventModel) eventBuilder.withDate(updatedEventDate)
+			EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedEventDate)
 					.withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
 					.withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
 					.withTarget(targetModel).build(ObjectType.MODEL);
 			String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-			eventModelUpdated.add(new Link(pathToEventLink));
+			updatedEventModel.add(new Link(pathToEventLink));
 			String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 			when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
-			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModelUpdated);
+			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
 
 			String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", \"motive\" : \"" + updatedMotive
 					+ "\", \"date\" : \"" + updatedEventDateString + "\", \"isPartOfMultipleIncidents\" : "
@@ -558,7 +559,7 @@ class EventControllerPatchMethodTest {
 							.andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 					() -> verifyNoMoreInteractions(eventService),
@@ -568,7 +569,7 @@ class EventControllerPatchMethodTest {
 		}
 
 		@Test
-		void when_partial_update_valid_events_target_using_merge_json_patch_should_return_partially_updated_node() {
+		void when_partial_update_valid_events_target_using_json_merge_patch_should_return_partially_updated_node() {
 
 			Long eventId = 1L;
 
@@ -595,7 +596,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 			when(eventService.save(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventNode);
 			when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
 
@@ -624,7 +625,7 @@ class EventControllerPatchMethodTest {
 							.andExpect(jsonPath("target.target", is(updatedTargetModel.getTarget()))),
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper),
 					() -> verify(eventService, times(1)).save(ArgumentMatchers.any(EventNode.class)),
 					() -> verifyNoMoreInteractions(eventService),
@@ -636,7 +637,7 @@ class EventControllerPatchMethodTest {
 		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " " })
-		void when_partial_update_invalid_events_target_using_merge_json_patch_should_have_errors(String invalidTarget) {
+		void when_partial_update_invalid_events_target_using_json_merge_patch_should_have_errors(String invalidTarget) {
 
 			Long eventId = 1L;
 
@@ -650,7 +651,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{\"target\" : {\"target\"  : \"" + invalidTarget + "\"} }";
 
@@ -665,13 +666,13 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
 
 		@Test
-		void when_partial_update_invalid_event_with_null_fields_using_merge_json_patch_should_return_errors() {
+		void when_partial_update_invalid_event_with_null_fields_using_json_merge_patch_should_return_errors() {
 
 			Long eventId = 1L;
 
@@ -687,7 +688,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{\"summary\" : \"" + null + "\", \"motive\" : \"" + null + "\", \"date\" : \""
 					+ null + "\", \"isPartOfMultipleIncidents\" : " + null + ", \"isSuccessful\" : " + null
@@ -711,7 +712,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -719,7 +720,7 @@ class EventControllerPatchMethodTest {
 		@ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " " })
-		void when_partial_update_invalid_events_target_using_merge_json_patch_should_return_errors(
+		void when_partial_update_invalid_events_target_using_json_merge_patch_should_return_errors(
 				String invalidTarget) {
 
 			Long eventId = 1L;
@@ -733,7 +734,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{ \"target\" : { \"target\" : \"" + invalidTarget + "\" } }";
 
@@ -747,7 +748,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -755,7 +756,7 @@ class EventControllerPatchMethodTest {
 		@ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " " })
-		void when_partial_update_event_with_invalid_summary_using_merge_json_patch_should_return_errors(
+		void when_partial_update_event_with_invalid_summary_using_json_merge_patch_should_return_errors(
 				String invalidSummary) {
 
 			Long eventId = 1L;
@@ -771,7 +772,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{ \"summary\" : \"" + invalidSummary + "\" }";
 
@@ -785,7 +786,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
@@ -793,7 +794,7 @@ class EventControllerPatchMethodTest {
 		@ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
 		@NullAndEmptySource
 		@ValueSource(strings = { " " })
-		void when_partial_update_event_with_invalid_motive_using_merge_json_patch_should_return_errors(
+		void when_partial_update_event_with_invalid_motive_using_json_merge_patch_should_return_errors(
 				String invalidMotive) {
 
 			Long eventId = 1L;
@@ -809,7 +810,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{ \"motive\" : \"" + invalidMotive + "\" }";
 
@@ -823,13 +824,13 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}
 
 		@Test
-		void when_partial_update_event_with_date_in_the_future_using_merge_json_patch_should_return_errors() {
+		void when_partial_update_event_with_date_in_the_future_using_json_merge_patch_should_return_errors() {
 
 			Long eventId = 1L;
 
@@ -848,7 +849,7 @@ class EventControllerPatchMethodTest {
 
 			when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 			when(patchHelper.mergePatch(any(JsonMergePatch.class), ArgumentMatchers.any(EventNode.class),
-					ArgumentMatchers.<Class<EventNode>>any())).thenReturn(updatedEventNode);
+					ArgumentMatchers.any())).thenReturn(updatedEventNode);
 
 			String jsonMergePatch = "{ \"date\" : \"" + invalidDate + "\" }";
 
@@ -862,7 +863,7 @@ class EventControllerPatchMethodTest {
 					() -> verify(eventService, times(1)).findById(eventId),
 					() -> verifyNoMoreInteractions(eventService),
 					() -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
-							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.<Class<EventNode>>any()),
+							ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any()),
 					() -> verifyNoMoreInteractions(patchHelper), () -> verifyNoMoreInteractions(modelAssembler),
 					() -> verifyNoInteractions(pagedResourcesAssembler));
 		}

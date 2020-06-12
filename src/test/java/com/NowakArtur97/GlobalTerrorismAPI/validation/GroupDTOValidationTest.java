@@ -187,7 +187,7 @@ class GroupDTOValidationTest {
         int expectedNumberOfViolations = 1;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2090, 1, 1);
+        calendar.set(2090, Calendar.FEBRUARY, 1);
         Date invalidDate = calendar.getTime();
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);

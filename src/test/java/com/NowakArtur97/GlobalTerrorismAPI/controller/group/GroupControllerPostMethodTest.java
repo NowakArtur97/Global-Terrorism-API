@@ -285,7 +285,7 @@ class GroupControllerPostMethodTest {
     void when_add_group_event_with_date_in_the_future_should_return_errors() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2090, 1, 1);
+        calendar.set(2090, Calendar.FEBRUARY, 1);
         Date invalidDate = calendar.getTime();
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);

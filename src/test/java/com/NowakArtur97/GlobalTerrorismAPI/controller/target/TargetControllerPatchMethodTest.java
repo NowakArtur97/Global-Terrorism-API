@@ -101,7 +101,7 @@ class TargetControllerPatchMethodTest {
 		String linkWithParameter = BASE_PATH + "/" + "{id}";
 
 		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-		when(patchHelper.patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()))
+		when(patchHelper.patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.any()))
 				.thenReturn(targetNodeUpdated);
 		doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
 		when(targetService.save(targetNodeUpdated)).thenReturn(targetNodeUpdated);
@@ -149,7 +149,7 @@ class TargetControllerPatchMethodTest {
 
 		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
 		when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
-				ArgumentMatchers.<Class<TargetNode>>any())).thenReturn(targetNodeUpdated);
+				ArgumentMatchers.any())).thenReturn(targetNodeUpdated);
 		doNothing().when(violationHelper).violate(targetNodeUpdated, TargetDTO.class);
 		when(targetService.save(targetNodeUpdated)).thenReturn(targetNodeUpdated);
 		when(targetModelAssembler.toModel(targetNodeUpdated)).thenReturn(targetModel);
