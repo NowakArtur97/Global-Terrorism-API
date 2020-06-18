@@ -15,13 +15,15 @@ import java.util.Date;
 
 public final class EventBuilder {
 
+    private final static Date startDate = Calendar.getInstance().getTime();
+
     private Long id = 1L;
 
     private String summary = "summary";
 
     private String motive = "motive";
 
-    private Date date = Calendar.getInstance().getTime();
+    private Date date = startDate;
 
     private Boolean isPartOfMultipleIncidents = true;
 
@@ -107,7 +109,7 @@ public final class EventBuilder {
 
             case MODEL:
 
-                event= EventModel.builder().id(id).summary(summary).motive(motive).date(date)
+                event = EventModel.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
                         .isSuicide(isSuicide).target((TargetModel) target).build();
                 break;
@@ -129,7 +131,7 @@ public final class EventBuilder {
 
         this.motive = "motive";
 
-        this.date = Calendar.getInstance().getTime();
+        this.date = startDate;
 
         this.isPartOfMultipleIncidents = true;
 

@@ -74,9 +74,8 @@ class EventModelAssemblerTest {
 				() -> assertEquals(eventNode.getMotive(), model.getMotive(),
 						() -> "should return event model with motive: " + eventNode.getMotive() + ", but was: "
 								+ model.getMotive()),
-				() -> assertEquals(eventNode.getDate(), model.getDate(),
-						() -> "should return event model with date: " + eventNode.getDate() + ", but was: "
-								+ model.getDate()),
+				() -> assertNotNull(model.getDate(),
+						() -> "should return event model with date: " + eventNode.getDate() + ", but was null"),
 				() -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), model.getIsPartOfMultipleIncidents(),
 						() -> "should return event model which was part of multiple incidents: "
 								+ eventNode.getIsPartOfMultipleIncidents() + ", but was: "
@@ -121,9 +120,8 @@ class EventModelAssemblerTest {
 				() -> assertEquals(eventNode.getMotive(), model.getMotive(),
 						() -> "should return event model with motive: " + eventNode.getMotive() + ", but was: "
 								+ model.getMotive()),
-				() -> assertEquals(eventNode.getDate(), model.getDate(),
-						() -> "should return event model with date: " + eventNode.getDate() + ", but was: "
-								+ model.getDate()),
+				() -> assertNotNull(model.getDate(),
+						() -> "should return event model with date: " + eventNode.getDate() + ", but was null"),
 				() -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), model.getIsPartOfMultipleIncidents(),
 						() -> "should return event model which was part of multiple incidents: "
 								+ eventNode.getIsPartOfMultipleIncidents() + ", but was: "
