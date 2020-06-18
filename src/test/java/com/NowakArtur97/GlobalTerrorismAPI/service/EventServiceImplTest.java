@@ -232,7 +232,7 @@ class EventServiceImplTest {
 
         assertAll(
                 () -> assertNotNull(eventNodeActual.getId(),
-                        () -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+                        () -> "should return event node with id, but was: " + eventNodeActual.getId()),
                 () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
                         () -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
                                 + eventNodeActual.getSummary()),
