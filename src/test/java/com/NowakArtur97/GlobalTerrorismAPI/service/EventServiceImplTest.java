@@ -25,7 +25,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -265,21 +268,34 @@ class EventServiceImplTest {
     }
 
     @Test
-    void when_update_event_should_update_event_and_target() {
+    void when_update_event_should_update_event_and_target() throws ParseException {
 
-        String targetNameUpdated = "target2";
+        String updatedTargetName = "target2";
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.NODE);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.DTO);
+        TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTargetName).build(ObjectType.NODE);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).build(ObjectType.DTO);
 
-        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        String updatedSummary = "summary updated";
+        String updatedMotive = "motive updated";
+        Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+        boolean updatedIsPartOfMultipleIncidents = false;
+        boolean updatedIsSuccessful = false;
+        boolean updatedIsSuicide = false;
+        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
+                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(targetDTO)
+                .build(ObjectType.DTO);
         EventNode eventNodeExpectedBeforeMethod = (EventNode) eventBuilder.withTarget(targetNode)
                 .build(ObjectType.NODE);
-        EventNode eventNodeExpectedBeforeSetIdAndTarget = (EventNode) eventBuilder.withTarget(targetNode)
+        EventNode eventNodeExpectedBeforeSetIdAndTarget = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
+                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(targetNode)
                 .build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeUpdated).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
+                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(updatedTargetNode).build(ObjectType.NODE);
 
-        when(targetService.update(targetNode, targetDTO)).thenReturn(targetNodeUpdated);
+        when(targetService.update(targetNode, targetDTO)).thenReturn(updatedTargetNode);
         when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
         when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
