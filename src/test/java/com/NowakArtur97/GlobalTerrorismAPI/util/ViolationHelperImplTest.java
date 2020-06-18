@@ -1,11 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -21,6 +24,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,121 +35,176 @@ import static org.mockito.Mockito.*;
 @Tag("ViolationHelperImpl_Tests")
 class ViolationHelperImplTest {
 
-	private ViolationHelper violationHelper;
+    private ViolationHelper violationHelper;
 
-	@Mock
-	private Validator validator;
+    @Mock
+    private Validator validator;
 
-	@Mock
-	private ObjectMapper objectMapper;
+    @Mock
+    private ObjectMapper objectMapper;
 
-	@Mock
-	@SuppressWarnings("rawtypes")
-	private ConstraintViolation constraintViolation;
+    @Mock
+    @SuppressWarnings("rawtypes")
+    private ConstraintViolation constraintViolation;
 
-	private TargetBuilder targetBuilder;
-	private EventBuilder eventBuilder;
+    private TargetBuilder targetBuilder;
+    private EventBuilder eventBuilder;
+    private GroupBuilder groupBuilder;
 
-	@BeforeEach
-	private void setUp() {
+    @BeforeEach
+    private void setUp() {
 
-		violationHelper = new ViolationHelperImpl(validator, objectMapper);
+        violationHelper = new ViolationHelperImpl(validator, objectMapper);
 
-		targetBuilder = new TargetBuilder();
-		eventBuilder = new EventBuilder();
-	}
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
 
-	@Test
-	void when_violate_valid_target_should_not_have_violations() {
+    @Test
+    void when_violate_valid_target_should_not_have_violations() {
 
-		Long targetId = 1L;
-		String invalidTargetName = "some invalid target name";
-		TargetDTO targetDTO = new TargetDTO(invalidTargetName);
-		TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
+        Long targetId = 1L;
+        String invalidTargetName = "some invalid target name";
+        TargetDTO targetDTO = new TargetDTO(invalidTargetName);
+        TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
 
-		Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
+        Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
-		when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
-		when(validator.validate(targetDTO)).thenReturn(violationsExpected);
+        when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
+        when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
-		assertAll(
-				() -> assertDoesNotThrow(() -> violationHelper.violate(targetNode, TargetDTO.class),
-						() -> "should not throw Constraint Violation Exception, but was thrown"),
-				() -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-				() -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
-				() -> verifyNoMoreInteractions(validator));
-	}
+        assertAll(
+                () -> assertDoesNotThrow(() -> violationHelper.violate(targetNode, TargetDTO.class),
+                        () -> "should not throw Constraint Violation Exception, but was thrown"),
+                () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
 
-	@Test
-	@SuppressWarnings("unchecked")
-	void when_violate_invalid_target_should_have_violations() {
+    @Test
+    @SuppressWarnings("unchecked")
+    void when_violate_invalid_target_should_have_violations() {
 
-		Long targetId = 1L;
-		String invalidTargetName = "some invalid target name";
-		TargetDTO targetDTO = new TargetDTO(invalidTargetName);
-		TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
+        Long targetId = 1L;
+        String invalidTargetName = "some invalid target name";
+        TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
+        TargetDTO targetDTO = new TargetDTO(invalidTargetName);
 
-		Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
+        Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
-		violationsExpected.add(constraintViolation);
+        violationsExpected.add(constraintViolation);
 
-		Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
+        Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
 
-		when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
-		when(validator.validate(targetDTO)).thenReturn(violationsExpected);
+        when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
+        when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
-		assertAll(
-				() -> assertThrows(expectedException, () -> violationHelper.violate(targetNode, TargetDTO.class),
-						() -> "should throw Constraint Violation Exception, but nothing was thrown"),
-				() -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-				() -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
-				() -> verifyNoMoreInteractions(validator));
-	}
+        assertAll(
+                () -> assertThrows(expectedException, () -> violationHelper.violate(targetNode, TargetDTO.class),
+                        () -> "should throw Constraint Violation Exception, but nothing was thrown"),
+                () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
 
-	@Test
-	void when_violate_valid_event_should_not_have_violations() {
+    @Test
+    void when_violate_valid_event_should_not_have_violations() {
 
-		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
-		EventNode eventNode = (EventNode) eventBuilder.withId(null).withTarget(targetNode).build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
-		Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<>();
+        Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<>();
 
-		when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
-		when(validator.validate(eventDTO)).thenReturn(violationsExpected);
+        when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
+        when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
-		assertAll(
-				() -> assertDoesNotThrow(() -> violationHelper.violate(eventNode, EventDTO.class),
-						() -> "should not throw Constraint Violation Exception, but was thrown"),
-				() -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-				() -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
-				() -> verifyNoMoreInteractions(validator));
-	}
+        assertAll(
+                () -> assertDoesNotThrow(() -> violationHelper.violate(eventNode, EventDTO.class),
+                        () -> "should not throw Constraint Violation Exception, but was thrown"),
+                () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
 
-	@Test
-	@SuppressWarnings("unchecked")
-	void when_violate_invalid_event_should_have_violations() {
+    @Test
+    @SuppressWarnings("unchecked")
+    void when_violate_invalid_event_should_have_violations() {
 
-		TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-		EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-		TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
-		EventNode eventNode = (EventNode) eventBuilder.withId(null).withTarget(targetNode).build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
-		Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<>();
+        Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<>();
 
-		violationsExpected.add(constraintViolation);
+        violationsExpected.add(constraintViolation);
 
-		Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
+        Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
 
-		when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
-		when(validator.validate(eventDTO)).thenReturn(violationsExpected);
+        when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
+        when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
-		assertAll(
-				() -> assertThrows(expectedException, () -> violationHelper.violate(eventNode, EventDTO.class),
-						() -> "should throw Constraint Violation Exception, but nothing was thrown"),
-				() -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-				() -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
-				() -> verifyNoMoreInteractions(validator));
-	}
+        assertAll(
+                () -> assertThrows(expectedException, () -> violationHelper.violate(eventNode, EventDTO.class),
+                        () -> "should throw Constraint Violation Exception, but nothing was thrown"),
+                () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
+
+    @Test
+    void when_violate_valid_group_should_not_have_violations() {
+
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
+
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+
+        Set<ConstraintViolation<GroupDTO>> violationsExpected = new HashSet<>();
+
+        when(objectMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
+        when(validator.validate(groupDTO)).thenReturn(violationsExpected);
+
+        assertAll(
+                () -> assertDoesNotThrow(() -> violationHelper.violate(groupNode, GroupDTO.class),
+                        () -> "should not throw Constraint Violation Exception, but was thrown"),
+                () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(groupDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void when_violate_invalid_group_should_have_violations() {
+
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
+
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+
+        Set<ConstraintViolation<GroupDTO>> violationsExpected = new HashSet<>();
+
+        violationsExpected.add(constraintViolation);
+
+        Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
+
+        when(objectMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
+        when(validator.validate(groupDTO)).thenReturn(violationsExpected);
+
+        assertAll(
+                () -> assertThrows(expectedException, () -> violationHelper.violate(groupNode, GroupDTO.class),
+                        () -> "should throw Constraint Violation Exception, but nothing was thrown"),
+                () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
+                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(groupDTO),
+                () -> verifyNoMoreInteractions(validator));
+    }
 }
