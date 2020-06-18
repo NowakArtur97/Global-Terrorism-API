@@ -26,8 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,9 +88,8 @@ class EventPagedResourcesAssemblerTest {
                                 + eventsPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("self").get().getHref().equals(selfLink),
-                        () -> "should have self link with url: " + selfLink + ", but had: "
-                                + eventsPagedModel.getLink("self").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("self").get().getHref(), selfLink, () -> "should have self link with url: " + selfLink + ", but had: "
+                        + eventsPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getNextLink().isEmpty(),
                         () -> "should not have next link, but had: " + eventsPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getPreviousLink().isEmpty(),
@@ -125,27 +123,23 @@ class EventPagedResourcesAssemblerTest {
                         () -> "should have links, but haven`t: " + eventsPagedModel),
                 () -> assertTrue(eventsPagedModel.getLink("first").isPresent(),
                         () -> "should have first link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("first").get().getHref().equals(firstLink),
-                        () -> "should have first link with url: " + firstLink + ", but had: "
-                                + eventsPagedModel.getLink("first").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("first").get().getHref(), firstLink, () -> "should have first link with url: " + firstLink + ", but had: "
+                        + eventsPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("self").get().getHref().equals(selfLink),
-                        () -> "should have self link with url: " + selfLink + ", but had: "
-                                + eventsPagedModel.getLink("self").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("self").get().getHref(), selfLink, () -> "should have self link with url: " + selfLink + ", but had: "
+                        + eventsPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getNextLink().isPresent(),
                         () -> "should have next link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getNextLink().get().getHref().equals(nextLink),
-                        () -> "should have next link with url:" + nextLink + ", but had: "
-                                + eventsPagedModel.getNextLink().get().getHref()),
+                () -> assertEquals(eventsPagedModel.getNextLink().get().getHref(), nextLink, () -> "should have next link with url:" + nextLink + ", but had: "
+                        + eventsPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getPreviousLink().isEmpty(),
                         () -> "should not have previous link, but had: "
                                 + eventsPagedModel.getPreviousLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("last").isPresent(),
                         () -> "should have last link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("last").get().getHref().equals(lastLink),
-                        () -> "should have last link with url: " + lastLink + ", but had: "
-                                + eventsPagedModel.getLink("last").get().getHref()));
+                () -> assertEquals(eventsPagedModel.getLink("last").get().getHref(), lastLink, () -> "should have last link with url: " + lastLink + ", but had: "
+                        + eventsPagedModel.getLink("last").get().getHref()));
     }
 
     @Test
@@ -171,26 +165,22 @@ class EventPagedResourcesAssemblerTest {
                         () -> "should have links, but haven`t: " + eventsPagedModel),
                 () -> assertTrue(eventsPagedModel.getLink("first").isPresent(),
                         () -> "should have first link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("first").get().getHref().equals(firstLink),
-                        () -> "should have first link with url: " + firstLink + ", but had: "
-                                + eventsPagedModel.getLink("first").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("first").get().getHref(), firstLink, () -> "should have first link with url: " + firstLink + ", but had: "
+                        + eventsPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("self").get().getHref().equals(selfLink),
-                        () -> "should have self link with url: " + selfLink + ", but had: "
-                                + eventsPagedModel.getLink("self").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("self").get().getHref(), selfLink, () -> "should have self link with url: " + selfLink + ", but had: "
+                        + eventsPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getNextLink().isEmpty(),
                         () -> "should not have next link, but had: " + eventsPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getPreviousLink().isPresent(),
                         () -> "should have previous link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getPreviousLink().get().getHref().equals(previousLink),
-                        () -> "should have previous link with url:" + previousLink + ", but had: "
-                                + eventsPagedModel.getPreviousLink().get().getHref()),
+                () -> assertEquals(eventsPagedModel.getPreviousLink().get().getHref(), previousLink, () -> "should have previous link with url:" + previousLink + ", but had: "
+                        + eventsPagedModel.getPreviousLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("last").isPresent(),
                         () -> "should have last link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("last").get().getHref().equals(lastLink),
-                        () -> "should have last link with url: " + lastLink + ", but had: "
-                                + eventsPagedModel.getLink("last").get().getHref()));
+                () -> assertEquals(eventsPagedModel.getLink("last").get().getHref(), lastLink, () -> "should have last link with url: " + lastLink + ", but had: "
+                        + eventsPagedModel.getLink("last").get().getHref()));
     }
 
     @Test
@@ -217,29 +207,24 @@ class EventPagedResourcesAssemblerTest {
                         () -> "should have links, but haven`t: " + eventsPagedModel),
                 () -> assertTrue(eventsPagedModel.getLink("first").isPresent(),
                         () -> "should have first link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("first").get().getHref().equals(firstLink),
-                        () -> "should have first link with url: " + firstLink + ", but had: "
-                                + eventsPagedModel.getLink("first").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("first").get().getHref(), firstLink, () -> "should have first link with url: " + firstLink + ", but had: "
+                        + eventsPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("self").get().getHref().equals(selfLink),
-                        () -> "should have self link with url: " + selfLink + ", but had: "
-                                + eventsPagedModel.getLink("self").get().getHref()),
+                () -> assertEquals(eventsPagedModel.getLink("self").get().getHref(), selfLink, () -> "should have self link with url: " + selfLink + ", but had: "
+                        + eventsPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(eventsPagedModel.getNextLink().isPresent(),
                         () -> "should have next link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getNextLink().get().getHref().equals(nextLink),
-                        () -> "should have next link with url:" + nextLink + ", but had: "
-                                + eventsPagedModel.getNextLink().get().getHref()),
+                () -> assertEquals(eventsPagedModel.getNextLink().get().getHref(), nextLink, () -> "should have next link with url:" + nextLink + ", but had: "
+                        + eventsPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getPreviousLink().isPresent(),
                         () -> "should have previous link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getPreviousLink().get().getHref().equals(previousLink),
-                        () -> "should have previous link with url:" + previousLink + ", but had: "
-                                + eventsPagedModel.getPreviousLink().get().getHref()),
+                () -> assertEquals(eventsPagedModel.getPreviousLink().get().getHref(), previousLink, () -> "should have previous link with url:" + previousLink + ", but had: "
+                        + eventsPagedModel.getPreviousLink().get().getHref()),
                 () -> assertTrue(eventsPagedModel.getLink("last").isPresent(),
                         () -> "should have last link, but haven`t: " + eventsPagedModel),
-                () -> assertTrue(eventsPagedModel.getLink("last").get().getHref().equals(lastLink),
-                        () -> "should have last link with url: " + lastLink + ", but had: "
-                                + eventsPagedModel.getLink("last").get().getHref()));
+                () -> assertEquals(eventsPagedModel.getLink("last").get().getHref(), lastLink, () -> "should have last link with url: " + lastLink + ", but had: "
+                        + eventsPagedModel.getLink("last").get().getHref()));
     }
 
     private String getLink(int page, int size) {
@@ -257,8 +242,8 @@ class EventPagedResourcesAssemblerTest {
 
         while (count < listSize) {
 
-            TargetNode targetNode = new TargetNode((long) count, "target" + count);
-            TargetModel targetModel = new TargetModel((long) count, "target" + count);
+            TargetNode targetNode = new TargetNode((long) count, "target");
+            TargetModel targetModel = new TargetModel((long) count, "target");
 
             EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
@@ -276,8 +261,6 @@ class EventPagedResourcesAssemblerTest {
 
         Pageable pageRequest = PageRequest.of(page, size);
 
-        Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected, pageRequest, eventsListExpected.size());
-
-        return eventsExpected;
+        return new PageImpl<>(eventsListExpected, pageRequest, eventsListExpected.size());
     }
 }
