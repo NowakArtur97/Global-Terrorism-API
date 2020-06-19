@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util;
+package com.NowakArtur97.GlobalTerrorismAPI.util.violation;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;

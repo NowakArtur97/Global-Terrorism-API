@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util;
+package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util;
+package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
 
 import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
