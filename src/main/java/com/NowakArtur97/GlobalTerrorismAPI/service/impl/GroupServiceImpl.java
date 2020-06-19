@@ -2,18 +2,21 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> {
+public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implements GroupService {
 
     private final GenericService<EventNode, EventDTO> eventService;
 
@@ -65,5 +68,11 @@ public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> {
         }
 
         return groupNodeOptional;
+    }
+
+    @Override
+    public List<EventNode> findAllEventsCausedByGroup(Long id) {
+
+        return findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
     }
 }

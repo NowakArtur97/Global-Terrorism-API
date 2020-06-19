@@ -2,11 +2,10 @@ package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class ObjectMapperImpl implements ObjectMapper {
 
     private final ModelMapper modelMapper;
