@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class ViolationHelperImpl<T extends Node, D extends DTONode> implements ViolationHelper<T, D> {
+class ViolationHelperImpl<T extends Node, D extends DTONode> implements ViolationHelper<T, D> {
 
     private final Validator validator;
 

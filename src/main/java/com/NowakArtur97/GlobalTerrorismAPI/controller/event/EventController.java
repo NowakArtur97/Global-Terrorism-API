@@ -1,5 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController extends GenericRestControllerImpl<EventModel, EventDTO, EventNode> {
 
-    public EventController(GenericService<EventNode, EventDTO> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<EventNode, EventDTO> violationHelper) {
+    EventController(GenericService<EventNode, EventDTO> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<EventNode, EventDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

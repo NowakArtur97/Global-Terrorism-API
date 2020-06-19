@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
+abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
 
     private static final int DEFAULT_SEARCHING_DEPTH = 1;
 
@@ -25,7 +24,6 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> impl
 
     final ObjectMapper dtoMapper;
 
-    @Autowired
     GenericServiceImpl(BaseRepository<T> repository, ObjectMapper dtoMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;

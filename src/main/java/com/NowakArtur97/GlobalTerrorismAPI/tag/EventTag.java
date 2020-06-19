@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.tag;
 
-public class EventTag {
+public final class EventTag {
 
 	public static final String RESOURCE = "Event Resource";
 	

@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupController;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;

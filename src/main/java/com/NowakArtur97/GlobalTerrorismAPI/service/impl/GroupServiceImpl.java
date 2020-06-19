@@ -9,21 +9,18 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implements GroupService {
+class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implements GroupService {
 
     private final GenericService<EventNode, EventDTO> eventService;
 
-    @Autowired
-    public GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper dtoMapper, GenericService<EventNode, EventDTO> eventService) {
+    GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper dtoMapper, GenericService<EventNode, EventDTO> eventService) {
         super(repository, dtoMapper);
-
         this.eventService = eventService;
     }
 

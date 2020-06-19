@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service;
+package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;

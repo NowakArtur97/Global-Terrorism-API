@@ -10,7 +10,7 @@ import lombok.Getter;
 @ConstructorBinding
 @Getter
 @AllArgsConstructor
-public class SwaggerConfigurationProperties {
+public final class SwaggerConfigurationProperties {
 
 	private final String version;
 

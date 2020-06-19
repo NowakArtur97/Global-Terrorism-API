@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service;
+package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;

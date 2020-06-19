@@ -36,7 +36,7 @@ public class SwaggerConfiguration {
 				.build()
 					.apiInfo(apiDetails(swaggerConfigurationProperties))
 					.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION),
-							new Tag(EventTag.RESOURCE, TargetTag.DESCRIPTION),
+							new Tag(EventTag.RESOURCE, EventTag.DESCRIPTION),
 							new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION));
 	}
 

@@ -1,5 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, GroupNode> {
 
-    public GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
+    GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 }

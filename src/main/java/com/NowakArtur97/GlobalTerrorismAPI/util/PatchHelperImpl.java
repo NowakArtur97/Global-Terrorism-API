@@ -11,7 +11,7 @@ import javax.json.JsonValue;
 
 @Component
 @RequiredArgsConstructor
-public class PatchHelperImpl implements PatchHelper {
+class PatchHelperImpl implements PatchHelper {
 
     private final ObjectMapper objectMapper;
 

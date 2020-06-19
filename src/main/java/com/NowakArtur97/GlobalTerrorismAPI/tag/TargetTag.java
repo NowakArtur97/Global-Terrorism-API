@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.tag;
 
-public class TargetTag {
+public final class TargetTag {
 
 	public static final String RESOURCE = "Target Resource";
 	

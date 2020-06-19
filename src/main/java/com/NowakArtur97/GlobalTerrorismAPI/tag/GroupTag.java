@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.tag;
 
-public class GroupTag {
+public final class GroupTag {
 
 	public static final String RESOURCE = "Group Resource";
 	
