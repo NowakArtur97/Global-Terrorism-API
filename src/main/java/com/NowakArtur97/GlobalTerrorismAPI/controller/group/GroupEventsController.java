@@ -4,11 +4,11 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupTag;
+import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -29,7 +29,6 @@ import java.util.List;
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 @RequiredArgsConstructor
-@Slf4j
 public class GroupEventsController {
 
     protected final GroupService service;
@@ -37,6 +36,8 @@ public class GroupEventsController {
     private final RepresentationModelAssemblerSupport<EventNode, EventModel> eventsModelAssembler;
 
     protected final PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
+
+    private final PageHelper pageHelper;
 
     @GetMapping(path = "/{id}/events")
     public ResponseEntity<PagedModel<?>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
@@ -47,14 +48,7 @@ public class GroupEventsController {
             return new ResponseEntity<>(PagedModel.NO_PAGE, HttpStatus.OK);
         }
 
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > eventsCausedByGroup.size() ?
-                eventsCausedByGroup.size() :
-                pageable.getOffset() + pageable.getPageSize());
-
-        List<EventNode> subList = eventsCausedByGroup.subList(startIndex, endIndex);
-
-        PageImpl<EventNode> pages = new PageImpl<>(subList, pageable, eventsCausedByGroup.size());
+        PageImpl<EventNode> pages = pageHelper.convertListToPage(pageable, eventsCausedByGroup);
 
         PagedModel<EventModel> pagedModel = eventsPagedResourcesAssembler.toModel(pages, eventsModelAssembler);
 
