@@ -1,10 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +42,7 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
         groupModel.setEventsCaused(eventsCaused);
 
         groupModel.add(linkTo(methodOn(GroupController.class).findById(groupModel.getId())).withSelfRel());
+        groupModel.add(linkTo(methodOn(GroupEventsController.class).findGroupEvents(groupModel.getId(), Pageable.unpaged())).withRel("eventsCaused"));
 
         return groupModel;
     }

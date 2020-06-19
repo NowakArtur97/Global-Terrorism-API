@@ -39,7 +39,7 @@ public class GroupEventsController {
     protected final PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     @GetMapping(path = "/{id}/events")
-    public ResponseEntity<PagedModel<?>> findAll(@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<PagedModel<?>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
 
         List<EventNode> eventsCausedByGroup = service.findAllEventsCausedByGroup(id);
 
