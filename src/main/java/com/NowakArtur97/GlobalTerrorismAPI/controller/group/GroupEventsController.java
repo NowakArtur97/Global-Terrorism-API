@@ -31,18 +31,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupEventsController {
 
-    protected final GroupService service;
+    private final GroupService groupService;
 
     private final RepresentationModelAssemblerSupport<EventNode, EventModel> eventsModelAssembler;
 
-    protected final PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
+    private final PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     private final PageHelper pageHelper;
 
     @GetMapping(path = "/{id}/events")
     public ResponseEntity<PagedModel<?>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
 
-        List<EventNode> eventsCausedByGroup = service.findAllEventsCausedByGroup(id);
+        List<EventNode> eventsCausedByGroup = groupService.findAllEventsCausedByGroup(id);
 
         if (pageable.getOffset() >= eventsCausedByGroup.size()) {
             return new ResponseEntity<>(PagedModel.NO_PAGE, HttpStatus.OK);
