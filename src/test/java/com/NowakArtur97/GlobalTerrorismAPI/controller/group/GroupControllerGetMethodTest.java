@@ -34,6 +34,7 @@ import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.ZoneId;
@@ -319,9 +320,10 @@ class GroupControllerGetMethodTest {
         GroupNode groupNode = (GroupNode) createGroupWithEvents(ObjectType.NODE);
         GroupModel groupModel = (GroupModel) createGroupWithEvents(ObjectType.MODEL);
 
-        String pathToLink = GROUP_BASE_PATH + "/" + groupModel.getId().intValue();
-        Link link = new Link(pathToLink);
-        groupModel.add(link);
+        String pathToSelfLink = GROUP_BASE_PATH + "/" + groupModel.getId().intValue();
+        String pathToEventsLink = GROUP_BASE_PATH + "/" + groupModel.getId().intValue() + "/events";
+        Link eventsLink = new Link(pathToEventsLink);
+        groupModel.add(eventsLink);
 
         String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
@@ -329,9 +331,14 @@ class GroupControllerGetMethodTest {
         when(groupModelAssembler.toModel(groupNode)).thenReturn(groupModel);
 
         assertAll(() -> mockMvc.perform(get(linkWithParameter, groupModel.getId()))
+
+                .andDo(MockMvcResultHandlers.print())
+
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToLink))).andExpect(jsonPath("id", is(groupModel.getId().intValue())))
+                        .andExpect(jsonPath("links[0].href", is(pathToSelfLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                        .andExpect(jsonPath("id", is(groupModel.getId().intValue())))
                         .andExpect(jsonPath("name", is(groupModel.getName())))
                         .andExpect(jsonPath("eventsCaused[0].id", is(groupModel.getEventsCaused().get(0).getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].summary", is(groupModel.getEventsCaused().get(0).getSummary())))

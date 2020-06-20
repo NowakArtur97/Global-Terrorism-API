@@ -113,19 +113,20 @@ class GroupControllerPostMethodTest {
         TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
         targetModel.add(new Link(pathToTargetLink));
+
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
-        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
-        GroupModel groupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         Link eventLink = new Link(pathToEventLink);
         eventModel.add(eventLink);
 
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
+        GroupModel groupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
         String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
-        Link groupLink = new Link(pathToGroupLink);
-        groupModel.add(groupLink);
+        String pathToEventsLink = GROUP_BASE_PATH + "/" + groupModel.getId().intValue() + "/events";
+        groupModel.add(new Link(pathToGroupLink), new Link(pathToEventsLink));
 
         when(groupService.saveNew(ArgumentMatchers.any(GroupDTO.class))).thenReturn(groupNode);
         when(modelAssembler.toModel(ArgumentMatchers.any(GroupNode.class))).thenReturn(groupModel);
@@ -137,6 +138,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
                         .andExpect(jsonPath("id", is(groupId.intValue())))
                         .andExpect(jsonPath("name", is(groupModel.getName())))
                         .andExpect(jsonPath("eventsCaused[0].id", is(eventId.intValue())))

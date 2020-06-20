@@ -138,7 +138,8 @@ class GroupControllerPatchMethodTest {
 
             GroupModel updatedGroupModel = (GroupModel) groupBuilder.withName(updatedName).withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
             String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
-            updatedGroupModel.add(new Link(pathToGroupLink));
+            String pathToEventsLink = GROUP_BASE_PATH + "/" + updatedGroupModel.getId().intValue() + "/events";
+            updatedGroupModel.add(new Link(pathToGroupLink), new Link(pathToEventsLink));
 
             String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
@@ -157,7 +158,9 @@ class GroupControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink))).andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
+                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                            .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                             .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
                             .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
@@ -219,7 +222,8 @@ class GroupControllerPatchMethodTest {
 
             GroupModel updatedGroupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(updatedEventModel)).build(ObjectType.MODEL);
             String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
-            updatedGroupModel.add(new Link(pathToGroupLink));
+            String pathToEventsLink = GROUP_BASE_PATH + "/" + updatedGroupModel.getId().intValue() + "/events";
+            updatedGroupModel.add(new Link(pathToGroupLink), new Link(pathToEventsLink));
 
             String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
@@ -245,7 +249,9 @@ class GroupControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink))).andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
+                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                            .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                             .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
                             .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
@@ -587,7 +593,8 @@ class GroupControllerPatchMethodTest {
 
             GroupModel updatedGroupModel = (GroupModel) groupBuilder.withName(updatedName).withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
             String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
-            updatedGroupModel.add(new Link(pathToGroupLink));
+            String pathToEventsLink = GROUP_BASE_PATH + "/" + updatedGroupModel.getId().intValue() + "/events";
+            updatedGroupModel.add(new Link(pathToGroupLink), new Link(pathToEventsLink));
 
             String linkWithParameter = GROUP_BASE_PATH + "/" + "{id2}";
 
@@ -605,7 +612,9 @@ class GroupControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink))).andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
+                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                            .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                             .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
                             .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
@@ -667,7 +676,8 @@ class GroupControllerPatchMethodTest {
 
             GroupModel updatedGroupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(updatedEventModel)).build(ObjectType.MODEL);
             String pathToGroupLink = GROUP_BASE_PATH + "/" + groupId.intValue();
-            updatedGroupModel.add(new Link(pathToGroupLink));
+            String pathToEventsLink = GROUP_BASE_PATH + "/" + updatedGroupModel.getId().intValue() + "/events";
+            updatedGroupModel.add(new Link(pathToGroupLink), new Link(pathToEventsLink));
 
             String linkWithParameter = GROUP_BASE_PATH + "/" + "{id2}";
 
@@ -688,7 +698,9 @@ class GroupControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink))).andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
+                            .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                            .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                             .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
                             .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
