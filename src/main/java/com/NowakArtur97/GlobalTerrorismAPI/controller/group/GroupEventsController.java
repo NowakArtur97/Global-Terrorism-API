@@ -6,13 +6,12 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupTag;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupEventsTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -27,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/groups")
-@Api(tags = {GroupTag.RESOURCE})
+@Api(tags = {GroupEventsTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 @RequiredArgsConstructor

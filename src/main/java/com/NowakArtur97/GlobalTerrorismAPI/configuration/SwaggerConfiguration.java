@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
 import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTag;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupEventsTag;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupTag;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -37,7 +38,8 @@ public class SwaggerConfiguration {
 					.apiInfo(apiDetails(swaggerConfigurationProperties))
 					.tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION),
 							new Tag(EventTag.RESOURCE, EventTag.DESCRIPTION),
-							new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION));
+							new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION),
+							new Tag(GroupEventsTag.RESOURCE, GroupEventsTag.DESCRIPTION));
 	}
 
 	private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {

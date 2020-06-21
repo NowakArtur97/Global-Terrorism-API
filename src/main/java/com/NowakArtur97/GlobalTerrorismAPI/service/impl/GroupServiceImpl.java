@@ -33,7 +33,7 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
         saveNewEvents(groupDTO);
 
-        groupNode = dtoMapper.map(groupDTO, GroupNode.class);
+        groupNode = objectMapper.map(groupDTO, GroupNode.class);
 
         groupNode.setId(id);
 
@@ -71,5 +71,17 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     public List<EventNode> findAllEventsCausedByGroup(Long id) {
 
         return findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
+    }
+
+    @Override
+    public GroupNode addEventToGroup(Long id, EventDTO dto) {
+
+        GroupNode groupNode = findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
+
+        EventNode eventNode = eventService.saveNew(dto);
+
+        groupNode.addEvent(eventNode);
+
+        return repository.save(groupNode);
     }
 }

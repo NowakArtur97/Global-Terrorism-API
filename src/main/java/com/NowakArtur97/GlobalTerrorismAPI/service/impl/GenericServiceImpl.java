@@ -22,12 +22,12 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
 
     protected final BaseRepository<T> repository;
 
-    final ObjectMapper dtoMapper;
+    protected final ObjectMapper objectMapper;
 
-    GenericServiceImpl(BaseRepository<T> repository, ObjectMapper dtoMapper) {
+    GenericServiceImpl(BaseRepository<T> repository, ObjectMapper objectMapper) {
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.repository = repository;
-        this.dtoMapper = dtoMapper;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -53,7 +53,7 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
     @Override
     public T saveNew(D dto) {
 
-        T node = dtoMapper.map(dto, typeParameterClass);
+        T node = objectMapper.map(dto, typeParameterClass);
 
         node = repository.save(node);
 
@@ -65,7 +65,7 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
 
         Long id = node.getId();
 
-        node = dtoMapper.map(dto, typeParameterClass);
+        node = objectMapper.map(dto, typeParameterClass);
 
         node.setId(id);
 

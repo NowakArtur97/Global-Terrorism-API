@@ -4,7 +4,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -59,7 +61,10 @@ public class GroupEventsControllerGetMethodTest {
     private GroupService groupService;
 
     @Mock
-    private RepresentationModelAssemblerSupport<EventNode, EventModel> eventsModelAssembler;
+    private RepresentationModelAssemblerSupport<GroupNode, GroupModel> groupModelAssembler;
+
+    @Mock
+    private RepresentationModelAssemblerSupport<EventNode, EventModel> eventModelAssembler;
 
     @Mock
     private PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
@@ -72,7 +77,7 @@ public class GroupEventsControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, eventsModelAssembler, eventsPagedResourcesAssembler,
+        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler,
                 pageHelper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
@@ -126,7 +131,7 @@ public class GroupEventsControllerGetMethodTest {
 
         when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
-        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink, groupId))
@@ -196,10 +201,10 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
-                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
-    
+
     @Test
     void when_find_all_group_events_with_changed_parameters_in_link_and_events_exist_should_return_group_events() {
 
@@ -244,7 +249,7 @@ public class GroupEventsControllerGetMethodTest {
 
         when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
-        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink, groupId))
@@ -302,7 +307,7 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
-                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
 
@@ -312,7 +317,7 @@ public class GroupEventsControllerGetMethodTest {
         Long groupId = 1L;
 
         List<EventNode> groupEventNodesListExpected = new ArrayList<>();
-        List<EventModel> groupEventModelsListExpected =  new ArrayList<>();
+        List<EventModel> groupEventModelsListExpected = new ArrayList<>();
         List<EventNode> subListOfEvents = new ArrayList<>();
 
         int sizeExpected = 20;
@@ -341,7 +346,7 @@ public class GroupEventsControllerGetMethodTest {
 
         when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
-        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink, groupId))
@@ -359,7 +364,7 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
-                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
 

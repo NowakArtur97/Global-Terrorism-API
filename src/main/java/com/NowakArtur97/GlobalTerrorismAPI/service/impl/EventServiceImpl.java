@@ -28,7 +28,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
         targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
-        eventNode = dtoMapper.map(eventDTO, EventNode.class);
+        eventNode = objectMapper.map(eventDTO, EventNode.class);
 
         eventNode.setId(id);
 
