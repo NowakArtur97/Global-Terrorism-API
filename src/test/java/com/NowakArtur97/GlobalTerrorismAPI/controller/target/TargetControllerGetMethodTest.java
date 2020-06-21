@@ -100,7 +100,7 @@ class TargetControllerGetMethodTest {
         List<TargetModel> targetModelsListExpected = List.of(targetModel1, targetModel2, targetModel3, targetModel4);
         Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 4;
         int totalPagesExpected = 1;
         int numberExpected = 0;
@@ -250,7 +250,7 @@ class TargetControllerGetMethodTest {
 
         Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 0;
         int totalPagesExpected = 0;
         int numberExpected = 0;

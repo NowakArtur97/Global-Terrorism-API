@@ -100,7 +100,7 @@ public class GroupEventsControllerGetMethodTest {
         List<EventModel> groupEventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
         List<EventNode> subListOfEvents = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 4;
         int totalPagesExpected = 1;
         int numberExpected = 0;
@@ -315,7 +315,7 @@ public class GroupEventsControllerGetMethodTest {
         List<EventModel> groupEventModelsListExpected =  new ArrayList<>();
         List<EventNode> subListOfEvents = new ArrayList<>();
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 0;
         int totalPagesExpected = 0;
         int numberExpected = 0;

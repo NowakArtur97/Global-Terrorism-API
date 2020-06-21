@@ -41,6 +41,6 @@ public class PageHelperImpl implements PageHelper {
 
     private <T> boolean hasOffsetExceededListSize(Pageable pageable, List<T> list) {
 
-        return pageable.getOffset() < list.size();
+        return pageable.getOffset() >= list.size();
     }
 }

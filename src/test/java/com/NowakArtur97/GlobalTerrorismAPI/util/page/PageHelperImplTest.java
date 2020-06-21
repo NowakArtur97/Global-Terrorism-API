@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +27,7 @@ class PageHelperImplTest {
     }
 
     @Test
-    void when_size_not_exceed_list_size_should_return_page_impl_with_multiple_pages() {
+    void when_offset_not_exceed_list_size_should_return_page_impl_with_multiple_pages() {
 
         int pageExpected = 1;
         int sizeExpected = 2;
@@ -41,6 +42,8 @@ class PageHelperImplTest {
         PageImpl pageImplActual = pageHelper.convertListToPage(pageable, listToConvert);
 
         assertAll(
+                () -> assertFalse(pageImplActual.getContent().contains(string1), () -> "should not contain: " + string1 + ", but was: " + pageImplActual.getContent()),
+                () -> assertFalse(pageImplActual.getContent().contains(string2), () -> "should not contain: " + string2 + ", but was: " + pageImplActual.getContent()),
                 () -> assertTrue(pageImplActual.getContent().contains(string3), () -> "should contain: " + string3 + ", but was: " + pageImplActual.getContent()),
                 () -> assertTrue(pageImplActual.getContent().contains(string4), () -> "should contain: " + string4 + ", but was: " + pageImplActual.getContent()),
                 () -> assertEquals(pageExpected, pageImplActual.getNumber(), () -> "should be on: " + pageExpected + " page, but was on: " + pageImplActual.getNumber()),
@@ -69,6 +72,25 @@ class PageHelperImplTest {
                 () -> assertTrue(pageImplActual.getContent().contains(string2), () -> "should contain: " + string2 + ", but was: " + pageImplActual.getContent()),
                 () -> assertTrue(pageImplActual.getContent().contains(string3), () -> "should contain: " + string3 + ", but was: " + pageImplActual.getContent()),
                 () -> assertTrue(pageImplActual.getContent().contains(string4), () -> "should contain: " + string4 + ", but was: " + pageImplActual.getContent()),
+                () -> assertEquals(pageExpected, pageImplActual.getNumber(), () -> "should be on: " + pageExpected + " page, but was on: " + pageImplActual.getNumber()),
+                () -> assertEquals(listToConvert.size(), pageImplActual.getNumberOfElements(), () -> "should contain: " + sizeExpected + " elements, but was: " + pageImplActual.getNumberOfElements()),
+                () -> assertEquals(listToConvert.size(), pageImplActual.getTotalElements(), () -> "should contain: " + sizeExpected + " total elements, but was: " + pageImplActual.getNumberOfElements())
+        );
+    }
+
+    @Test
+    void when_list_is_empty_should_return_page_impl_with_empty_content() {
+
+        int pageExpected = 0;
+        int sizeExpected = 10;
+
+        List<String> listToConvert = new ArrayList<>();
+        Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+        PageImpl pageImplActual = pageHelper.convertListToPage(pageable, listToConvert);
+
+        assertAll(
+                () -> assertTrue(pageImplActual.getContent().isEmpty(), () -> "should not contain any element, but was: " + pageImplActual.getContent()),
                 () -> assertEquals(pageExpected, pageImplActual.getNumber(), () -> "should be on: " + pageExpected + " page, but was on: " + pageImplActual.getNumber()),
                 () -> assertEquals(listToConvert.size(), pageImplActual.getNumberOfElements(), () -> "should contain: " + sizeExpected + " elements, but was: " + pageImplActual.getNumberOfElements()),
                 () -> assertEquals(listToConvert.size(), pageImplActual.getTotalElements(), () -> "should contain: " + sizeExpected + " total elements, but was: " + pageImplActual.getNumberOfElements())

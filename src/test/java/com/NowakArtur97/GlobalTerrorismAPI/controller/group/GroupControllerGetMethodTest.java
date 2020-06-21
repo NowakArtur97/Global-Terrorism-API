@@ -115,7 +115,7 @@ class GroupControllerGetMethodTest {
         List<GroupModel> groupModelsListExpected = List.of(groupModel1, groupModel2, groupModel3, groupModel4);
         Page<GroupNode> groupsExpected = new PageImpl<>(groupsListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 4;
         int totalPagesExpected = 1;
         int numberExpected = 0;
@@ -266,7 +266,7 @@ class GroupControllerGetMethodTest {
 
         Page<GroupNode> groupsExpected = new PageImpl<>(groupsListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 0;
         int totalPagesExpected = 0;
         int numberExpected = 0;

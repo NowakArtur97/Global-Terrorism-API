@@ -112,7 +112,7 @@ class EventControllerGetMethodTest {
         List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
         Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 4;
         int totalPagesExpected = 1;
         int numberExpected = 0;
@@ -348,7 +348,7 @@ class EventControllerGetMethodTest {
 
         Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
 
-        int sizeExpected = 100;
+        int sizeExpected = 20;
         int totalElementsExpected = 0;
         int totalPagesExpected = 0;
         int numberExpected = 0;
