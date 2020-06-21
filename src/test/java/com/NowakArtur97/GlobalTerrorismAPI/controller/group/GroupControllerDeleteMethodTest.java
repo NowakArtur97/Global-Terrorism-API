@@ -95,11 +95,15 @@ class GroupControllerDeleteMethodTest {
         when(groupService.delete(groupId)).thenReturn(Optional.of(groupNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, groupId)).andExpect(status().isNoContent())
+                () -> mockMvc.perform(delete(linkWithParameter, groupId))
+                        .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(groupService, times(1)).delete(groupId), () -> verifyNoMoreInteractions(groupService),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verify(groupService, times(1)).delete(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -112,12 +116,16 @@ class GroupControllerDeleteMethodTest {
         when(groupService.delete(groupId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, groupId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(linkWithParameter, groupId))
+                        .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
-                () -> verify(groupService, times(1)).delete(groupId), () -> verifyNoMoreInteractions(groupService),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verify(groupService, times(1)).delete(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 }

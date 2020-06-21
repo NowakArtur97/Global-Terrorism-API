@@ -89,11 +89,15 @@ class EventControllerDeleteMethodTest {
         when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNoContent())
+                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                        .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verify(eventService, times(1)).delete(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -108,10 +112,14 @@ class EventControllerDeleteMethodTest {
         assertAll(
                 () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
-                () -> verify(eventService, times(1)).delete(eventId), () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verify(eventService, times(1)).delete(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 }

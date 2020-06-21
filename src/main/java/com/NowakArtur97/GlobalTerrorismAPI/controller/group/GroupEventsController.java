@@ -44,10 +44,6 @@ public class GroupEventsController {
 
         List<EventNode> eventsCausedByGroup = groupService.findAllEventsCausedByGroup(id);
 
-        if (pageable.getOffset() >= eventsCausedByGroup.size()) {
-            return new ResponseEntity<>(PagedModel.NO_PAGE, HttpStatus.OK);
-        }
-
         PageImpl<EventNode> pages = pageHelper.convertListToPage(pageable, eventsCausedByGroup);
 
         PagedModel<EventModel> pagedModel = eventsPagedResourcesAssembler.toModel(pages, eventsModelAssembler);

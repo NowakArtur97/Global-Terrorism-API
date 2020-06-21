@@ -99,10 +99,12 @@ class TargetControllerPostMethodTest {
 						.andExpect(jsonPath("links[0].href", is(pathToLink)))
 						.andExpect(jsonPath("id", is(targetId.intValue())))
 						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).saveNew(targetDTO), () -> verifyNoMoreInteractions(targetService),
+				() -> verify(targetService, times(1)).saveNew(targetDTO),
+				() -> verifyNoMoreInteractions(targetService),
 				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
 				() -> verifyNoMoreInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+				() -> verifyNoInteractions(pagedResourcesAssembler),
+				() -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));
 	}
 

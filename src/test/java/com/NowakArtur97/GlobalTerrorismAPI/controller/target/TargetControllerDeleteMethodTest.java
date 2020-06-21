@@ -77,12 +77,14 @@ class TargetControllerDeleteMethodTest {
 
         when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
 
-        assertAll(() -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNoContent())
+        assertAll(() -> mockMvc.perform(delete(linkWithParameter, targetId))
+                        .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(targetService, times(1)).delete(targetId),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -96,12 +98,16 @@ class TargetControllerDeleteMethodTest {
         when(targetService.delete(targetId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, targetId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(linkWithParameter, targetId))
+                        .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId))),
-                () -> verify(targetService, times(1)).delete(targetId), () -> verifyNoMoreInteractions(targetService),
-                () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verify(targetService, times(1)).delete(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));
     }
 }

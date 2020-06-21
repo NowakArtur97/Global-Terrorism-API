@@ -55,7 +55,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupController_Tests")
 class GroupControllerGetMethodTest {
 
-    private static int counterForUtilMethods = 0;
+    private static int counterForUtilMethodsModel = 0;
+    private static int counterForUtilMethodsNode = 0;
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
@@ -190,10 +191,9 @@ class GroupControllerGetMethodTest {
         GroupModel groupModel3 = (GroupModel) createGroupWithEvents(ObjectType.MODEL);
 
         GroupNode groupNode4 = (GroupNode) createGroupWithEvents(ObjectType.NODE);
-        GroupModel groupModel4 = (GroupModel) createGroupWithEvents(ObjectType.MODEL);
 
         List<GroupNode> groupsListExpected = List.of(groupNode1, groupNode2, groupNode3, groupNode4);
-        List<GroupModel> groupModelsListExpected = List.of(groupModel1, groupModel2, groupModel3, groupModel4);
+        List<GroupModel> groupModelsListExpected = List.of(groupModel1, groupModel2, groupModel3);
 
         Page<GroupNode> groupsExpected = new PageImpl<>(groupsListExpected);
 
@@ -245,11 +245,7 @@ class GroupControllerGetMethodTest {
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(groupModel3.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].eventsCaused", hasSize(2)))
-                        .andExpect(jsonPath("content[3].id", is(groupModel4.getId().intValue())))
-                        .andExpect(jsonPath("content[3].name", is(groupModel4.getName())))
-                        .andExpect(
-                                jsonPath("content[3].links[0].href", is(groupModel4.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[3].eventsCaused", hasSize(2)))
+                        .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -297,7 +293,8 @@ class GroupControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(groupsExpected, groupModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -406,34 +403,38 @@ class GroupControllerGetMethodTest {
 
             case NODE:
 
-                EventNode eventNode = (EventNode) eventBuilder.withId((long) counterForUtilMethods).withSummary(summary + counterForUtilMethods).withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                counterForUtilMethodsNode++;
+
+                EventNode eventNode = (EventNode) eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode).withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.NODE);
 
-                EventNode eventNode2 = (EventNode) eventBuilder.withId((long) counterForUtilMethods).withSummary(summary + counterForUtilMethods).withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                EventNode eventNode2 = (EventNode) eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode).withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.NODE);
 
-                GroupNode groupNode = (GroupNode) groupBuilder.withId((long) counterForUtilMethods).withName(group + counterForUtilMethods).withEventsCaused(List.of(eventNode, eventNode2)).build(ObjectType.NODE);
+                GroupNode groupNode = (GroupNode) groupBuilder.withId((long) counterForUtilMethodsNode).withName(group + counterForUtilMethodsNode).withEventsCaused(List.of(eventNode, eventNode2)).build(ObjectType.NODE);
 
                 return groupNode;
 
             case MODEL:
 
-                EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethods).withSummary(summary + counterForUtilMethods).withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                counterForUtilMethodsModel++;
+
+                EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel).withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.MODEL);
-                String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethods;
+                String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));
 
-                EventModel eventModel2 = (EventModel) eventBuilder.withId((long) counterForUtilMethods).withSummary(summary + counterForUtilMethods).withMotive(motive + counterForUtilMethods).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                EventModel eventModel2 = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel).withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.MODEL);
-                String pathToEventLink2 = EVENT_BASE_PATH + "/" + counterForUtilMethods;
+                String pathToEventLink2 = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel2.add(new Link(pathToEventLink2));
 
-                GroupModel groupModel = (GroupModel) groupBuilder.withId((long) counterForUtilMethods).withName(group + counterForUtilMethods).withEventsCaused(List.of(eventModel, eventModel2)).build(ObjectType.MODEL);
-                String pathToGroupLink = GROUP_BASE_PATH + "/" + counterForUtilMethods;
+                GroupModel groupModel = (GroupModel) groupBuilder.withId((long) counterForUtilMethodsModel).withName(group + counterForUtilMethodsModel).withEventsCaused(List.of(eventModel, eventModel2)).build(ObjectType.MODEL);
+                String pathToGroupLink = GROUP_BASE_PATH + "/" + counterForUtilMethodsModel;
                 groupModel.add(new Link(pathToGroupLink));
 
                 return groupModel;

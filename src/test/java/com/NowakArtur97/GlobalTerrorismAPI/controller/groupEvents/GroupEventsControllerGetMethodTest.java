@@ -1,22 +1,15 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.hamcrest.core.IsNull;
+import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -24,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +24,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.PagedModel.PageMetadata;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -41,7 +33,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -51,52 +42,49 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventController_Tests")
-class EventControllerGetMethodTest {
+@Tag("GroupEventsControllerGetMethod_Tests")
+public class GroupEventsControllerGetMethodTest {
 
     private static int counterForUtilMethodsModel = 0;
     private static int counterForUtilMethodsNode = 0;
 
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
-    private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
+    private GroupEventsController groupEventsController;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private GroupService groupService;
 
     @Mock
-    private EventModelAssembler modelAssembler;
+    private RepresentationModelAssemblerSupport<EventNode, EventModel> eventsModelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PageHelper pageHelper;
 
-    @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
-
-    private static TargetBuilder targetBuilder;
-    private static EventBuilder eventBuilder;
+    private EventBuilder eventBuilder;
 
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        groupEventsController = new GroupEventsController(groupService, eventsModelAssembler, eventsPagedResourcesAssembler,
+                pageHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 
-        targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
 
     @Test
-    void when_find_all_events_with_default_parameters_in_link_and_events_exist_should_return_all_events() {
+    void when_find_all_group_events_with_default_parameters_in_link_and_events_exist_should_return_group_events() {
+
+        Long groupId = 1L;
 
         EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
         EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
@@ -108,9 +96,9 @@ class EventControllerGetMethodTest {
         EventModel eventModel3 = (EventModel) createEvent(ObjectType.MODEL);
         EventModel eventModel4 = (EventModel) createEvent(ObjectType.MODEL);
 
-        List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
-        List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
-        Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
+        List<EventNode> groupEventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+        List<EventModel> groupEventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
+        List<EventNode> subListOfEvents = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
 
         int sizeExpected = 100;
         int totalElementsExpected = 4;
@@ -120,26 +108,29 @@ class EventControllerGetMethodTest {
         int lastPageExpected = 0;
 
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+        PageImpl<EventNode> pageImpl = new PageImpl<>(subListOfEvents, pageable, groupEventNodesListExpected.size());
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
-        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+        String firstPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters1;
+        String lastPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
         Link pageLink3 = new Link(lastPageLink, "next");
         Link pageLink4 = new Link(lastPageLink, "last");
 
-        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
-        PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
+        PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(eventService.findAll(pageable)).thenReturn(eventsExpected);
-        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink, groupId))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -158,10 +149,6 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[0].target.links[0].href",
-                                is(eventModel1.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -175,10 +162,6 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[1].target.links[0].href",
-                                is(eventModel2.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -192,10 +175,6 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[2].target.links[0].href",
-                                is(eventModel3.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
                         .andExpect(jsonPath("content[3].id", is(eventModel4.getId().intValue())))
                         .andExpect(jsonPath("content[3].summary", is(eventModel4.getSummary())))
                         .andExpect(jsonPath("content[3].motive", is(eventModel4.getMotive())))
@@ -209,25 +188,22 @@ class EventControllerGetMethodTest {
                                 is(eventModel4.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(eventModel4.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[3].target.links[0].href",
-                                is(eventModel4.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[3].target.id", is(eventModel4.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[3].target.target", is(eventModel4.getTarget().getTarget())))
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(eventService, times(1)).findAll(pageable),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
-
-
+    
     @Test
-    void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events() {
+    void when_find_all_group_events_with_changed_parameters_in_link_and_events_exist_should_return_group_events() {
+
+        Long groupId = 1L;
 
         EventNode eventNode1 = (EventNode) createEvent(ObjectType.NODE);
         EventNode eventNode2 = (EventNode) createEvent(ObjectType.NODE);
@@ -238,8 +214,9 @@ class EventControllerGetMethodTest {
         EventModel eventModel2 = (EventModel) createEvent(ObjectType.MODEL);
         EventModel eventModel3 = (EventModel) createEvent(ObjectType.MODEL);
 
-        List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3);
-        List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+        List<EventNode> groupEventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+        List<EventModel> groupEventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3);
+        List<EventNode> subListOfEvents = List.of(eventNode1, eventNode2, eventNode3);
 
         int sizeExpected = 3;
         int totalElementsExpected = 4;
@@ -249,27 +226,29 @@ class EventControllerGetMethodTest {
         int lastPageExpected = 1;
 
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
-        PageImpl<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected, pageable, eventNodesListExpected.size());
+        PageImpl<EventNode> pageImpl = new PageImpl<>(subListOfEvents, pageable, groupEventNodesListExpected.size());
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
-        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+        String firstPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters1;
+        String lastPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
         Link pageLink3 = new Link(lastPageLink, "next");
         Link pageLink4 = new Link(lastPageLink, "last");
 
-        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
-        PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
+        PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(eventService.findAll(pageable)).thenReturn(eventsExpected);
-        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink, groupId))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -288,10 +267,6 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[0].target.links[0].href",
-                                is(eventModel1.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -305,10 +280,6 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[1].target.links[0].href",
-                                is(eventModel2.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -322,31 +293,27 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[2].target.links[0].href",
-                                is(eventModel3.getTarget().getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
-                        .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
                         .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(eventService, times(1)).findAll(pageable),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
 
     @Test
-    void when_find_all_events_but_events_not_exist_should_return_empty_list() {
+    void when_find_all_group_events_but_group_does_not_have_events_should_return_empty_list() {
 
-        List<EventNode> eventsListExpected = new ArrayList<>();
+        Long groupId = 1L;
 
-        List<EventModel> modelsListExpected = new ArrayList<>();
-
-        Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+        List<EventNode> groupEventNodesListExpected = new ArrayList<>();
+        List<EventModel> groupEventModelsListExpected =  new ArrayList<>();
+        List<EventNode> subListOfEvents = new ArrayList<>();
 
         int sizeExpected = 100;
         int totalElementsExpected = 0;
@@ -356,145 +323,44 @@ class EventControllerGetMethodTest {
         int lastPageExpected = 0;
 
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+        PageImpl<EventNode> pageImpl = new PageImpl<>(subListOfEvents, pageable, groupEventNodesListExpected.size());
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
-        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+        String firstPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters1;
+        String lastPageLink = GROUP_BASE_PATH + "/{id}/events/" + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
         Link pageLink3 = new Link(lastPageLink, "next");
         Link pageLink4 = new Link(lastPageLink, "last");
 
-        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
-        PagedModel<EventModel> resources = new PagedModel<>(modelsListExpected, metadata, pageLink1, pageLink2,
+        PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(eventService.findAll(pageable)).thenReturn(eventsExpected);
-        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(eventsPagedResourcesAssembler.toModel(pageImpl, eventsModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink, groupId))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[2].href", is(lastPageLink)))
-                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
-                        .andExpect(jsonPath("content").isEmpty())
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink))).andExpect(jsonPath("content").isEmpty())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(eventService, times(1)).findAll(pageable),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
-    }
-
-    @Test
-    void when_find_existing_event_should_return_event() {
-
-        Long eventId = 1L;
-
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
-        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        eventModel.add(new Link(pathToEventLink));
-
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
-        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-        when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
-
-        assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
-                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
-                        .andExpect(jsonPath("date",
-                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
-                                                .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
-                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
-                        .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(eventNode),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
-    }
-
-    @Test
-    void when_find_existing_event_without_target_should_return_event_without_target() {
-
-        Long eventId = 1L;
-
-        EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
-        EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
-
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        Link eventLink = new Link(pathToEventLink);
-        eventModel.add(eventLink);
-
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
-        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-        when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
-
-        assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
-                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
-                        .andExpect(jsonPath("date",
-                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
-                                                .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
-                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
-                        .andExpect(jsonPath("target").value(IsNull.nullValue())),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(eventNode),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
-    }
-
-    @Test
-    void when_find_event_but_event_not_exists_should_return_error_response() {
-
-        Long eventId = 1L;
-
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
-        when(eventService.findById(eventId)).thenReturn(Optional.empty());
-
-        assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isNotFound())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty())
-                        .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventsModelAssembler),
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
     }
 
     private Event createEvent(ObjectType type) {
@@ -511,24 +377,18 @@ class EventControllerGetMethodTest {
 
                 counterForUtilMethodsNode++;
 
-                TargetNode targetNode = new TargetNode((long) counterForUtilMethodsNode, "target" + counterForUtilMethodsNode);
-
                 return eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode)
                         .withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode)
+                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.NODE);
 
             case MODEL:
 
                 counterForUtilMethodsModel++;
 
-                TargetModel targetModel = new TargetModel((long) counterForUtilMethodsModel, "target" + counterForUtilMethodsModel);
-                String pathToTargetLink = TARGET_BASE_PATH + "/" + counterForUtilMethodsModel;
-                targetModel.add(new Link(pathToTargetLink));
-
                 EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel)
                         .withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetModel)
+                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));

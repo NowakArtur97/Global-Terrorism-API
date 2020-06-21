@@ -68,15 +68,15 @@ class GroupControllerOptionsMethodTest {
         MvcResult mvcResult = mockMvc.perform(options(GROUP_BASE_PATH)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
-        System.out.println(allowedMethods);
-
         assertAll(
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("POST"), () -> "should contain POST option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -98,8 +98,10 @@ class GroupControllerOptionsMethodTest {
                 () -> assertTrue(allowedMethods.contains("PATCH"), () -> "should contain PATCH option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("DELETE"), () -> "should contain DELETE option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 }

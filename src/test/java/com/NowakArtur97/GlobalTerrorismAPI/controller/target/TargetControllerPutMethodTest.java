@@ -40,147 +40,152 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerPutMethodTest {
 
-	private final String BASE_PATH = "http://localhost:8080/api/targets";
+    private final String BASE_PATH = "http://localhost:8080/api/targets";
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	private GenericRestController<TargetModel, TargetDTO> targetController;
+    private GenericRestController<TargetModel, TargetDTO> targetController;
 
-	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
+    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
-	@Mock
-	private GenericService<TargetNode, TargetDTO> targetService;
+    @Mock
+    private GenericService<TargetNode, TargetDTO> targetService;
 
-	@Mock
-	private TargetModelAssembler targetModelAssembler;
+    @Mock
+    private TargetModelAssembler targetModelAssembler;
 
-	@Mock
-	private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
+    @Mock
+    private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
-	@Mock
-	private PatchHelper patchHelper;
+    @Mock
+    private PatchHelper patchHelper;
 
-	@Mock
-	private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    @Mock
+    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
-	@BeforeEach
-	private void setUp() {
+    @BeforeEach
+    private void setUp() {
 
-		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-				patchHelper, violationHelper);
+        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
+                patchHelper, violationHelper);
 
-		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
-		mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
-	}
+        mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
+    }
 
-	@Test
-	void when_update_valid_target_should_return_updated_target_as_model() {
+    @Test
+    void when_update_valid_target_should_return_updated_target_as_model() {
 
-		Long targetId = 1L;
-		String oldTargetName = "target";
-		String updatedTargetName = "updated target";
-		TargetDTO targetDTO = new TargetDTO(oldTargetName);
-		TargetNode targetNode = new TargetNode(targetId, updatedTargetName);
-		TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+        Long targetId = 1L;
+        String oldTargetName = "target";
+        String updatedTargetName = "updated target";
+        TargetDTO targetDTO = new TargetDTO(oldTargetName);
+        TargetNode targetNode = new TargetNode(targetId, updatedTargetName);
+        TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
 
-		String pathToLink = BASE_PATH + "/" + targetId.intValue();
-		Link link = new Link(pathToLink);
-		targetModel.add(link);
+        String pathToLink = BASE_PATH + "/" + targetId.intValue();
+        Link link = new Link(pathToLink);
+        targetModel.add(link);
 
-		String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-		when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-		when(targetService.update(targetNode, targetDTO)).thenReturn(targetNode);
-		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.update(targetNode, targetDTO)).thenReturn(targetNode);
+        when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
-		assertAll(
-				() -> mockMvc
-						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isOk())
-						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("links[0].href", is(pathToLink)))
-						.andExpect(jsonPath("id", is(targetId.intValue())))
-						.andExpect(jsonPath("target", is(updatedTargetName)))
-						.andExpect(jsonPath("target", not(oldTargetName))),
-				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetService, times(1)).update(targetNode, targetDTO),
-				() -> verifyNoMoreInteractions(targetService),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-				() -> verifyNoMoreInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
-				() -> verifyNoInteractions(violationHelper));
-	}
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("id", is(targetId.intValue())))
+                        .andExpect(jsonPath("target", is(updatedTargetName)))
+                        .andExpect(jsonPath("target", not(oldTargetName))),
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).update(targetNode, targetDTO),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+                () -> verifyNoMoreInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
+    }
 
-	@Test
-	void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
+    @Test
+    void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
-		Long targetId = 1L;
-		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(targetName);
-		TargetNode targetNode = new TargetNode(targetId, targetName);
-		TargetModel targetModel = new TargetModel(targetId, targetName);
+        Long targetId = 1L;
+        String targetName = "target";
+        TargetDTO targetDTO = new TargetDTO(targetName);
+        TargetNode targetNode = new TargetNode(targetId, targetName);
+        TargetModel targetModel = new TargetModel(targetId, targetName);
 
-		String pathToLink = BASE_PATH + "/" + targetId.intValue();
-		Link link = new Link(pathToLink);
-		targetModel.add(link);
+        String pathToLink = BASE_PATH + "/" + targetId.intValue();
+        Link link = new Link(pathToLink);
+        targetModel.add(link);
 
-		String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-		when(targetService.findById(targetId)).thenReturn(Optional.empty());
-		when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
-		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+        when(targetService.findById(targetId)).thenReturn(Optional.empty());
+        when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
+        when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
-		assertAll(
-				() -> mockMvc
-						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isCreated())
-						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("links[0].href", is(pathToLink)))
-						.andExpect(jsonPath("id", is(targetId.intValue())))
-						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).findById(targetId),
-				() -> verify(targetService, times(1)).saveNew(targetDTO), () -> verifyNoMoreInteractions(targetService),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-				() -> verifyNoMoreInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
-				() -> verifyNoInteractions(violationHelper));
-	}
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("id", is(targetId.intValue())))
+                        .andExpect(jsonPath("target", is(targetName))),
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).saveNew(targetDTO),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+                () -> verifyNoMoreInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
+    }
 
-	@ParameterizedTest(name = "{index}: Target Name: {0}")
-	@NullAndEmptySource
-	@ValueSource(strings = { " ", "\t", "\n" })
-	void when_update_invalid_target_should_return_errors(String targetName) {
+    @ParameterizedTest(name = "{index}: Target Name: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_update_invalid_target_should_return_errors(String targetName) {
 
-		Long targetId = 1L;
+        Long targetId = 1L;
 
-		TargetDTO targetDTO = new TargetDTO(targetName);
+        TargetDTO targetDTO = new TargetDTO(targetName);
 
-		String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-		assertAll(
-				() -> mockMvc
-						.perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
-						.andExpect(jsonPath("status", is(400)))
-						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
-				() -> verifyNoInteractions(violationHelper));
-	}
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, targetId).content(asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+                () -> verifyNoInteractions(targetService),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
+    }
 
-	public static String asJsonString(final Object obj) {
+    public static String asJsonString(final Object obj) {
 
-		try {
+        try {
 
-			return new ObjectMapper().writeValueAsString(obj);
+            return new ObjectMapper().writeValueAsString(obj);
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			throw new RuntimeException(e);
-		}
-	}
+            throw new RuntimeException(e);
+        }
+    }
 }

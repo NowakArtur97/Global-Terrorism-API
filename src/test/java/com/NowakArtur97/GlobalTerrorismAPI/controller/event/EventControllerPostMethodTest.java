@@ -135,8 +135,10 @@ class EventControllerPostMethodTest {
                 () -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -159,8 +161,10 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -179,8 +183,10 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -200,8 +206,10 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -221,8 +229,10 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -242,8 +252,10 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
-                () -> verifyNoInteractions(eventService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 

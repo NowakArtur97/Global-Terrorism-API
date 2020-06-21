@@ -47,7 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerGetMethodTest {
 
-    private static int counterForUtilMethods = 0;
+    private static int counterForUtilMethodsNode = 0;
+    private static int counterForUtilMethodsModel = 0;
 
     private final String BASE_PATH = "http://localhost:8080/api/targets";
 
@@ -126,7 +127,8 @@ class TargetControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -154,7 +156,9 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(targetService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(targetService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler), () -> verifyNoMoreInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -171,10 +175,9 @@ class TargetControllerGetMethodTest {
         TargetModel targetModel3 = (TargetModel) createTarget(ObjectType.MODEL);
 
         TargetNode targetNode4 = (TargetNode) createTarget(ObjectType.NODE);
-        TargetModel targetModel4 = (TargetModel) createTarget(ObjectType.MODEL);
 
         List<TargetNode> targetsListExpected = List.of(targetNode1, targetNode2, targetNode3, targetNode4);
-        List<TargetModel> targetModelsListExpected = List.of(targetModel1, targetModel2, targetModel3, targetModel4);
+        List<TargetModel> targetModelsListExpected = List.of(targetModel1, targetModel2, targetModel3);
 
         Page<TargetNode> targetsExpected = new PageImpl<>(targetsListExpected);
 
@@ -205,7 +208,8 @@ class TargetControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -223,18 +227,17 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].target", is(targetModel3.getTarget())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(targetModel3.getLink("self").get().getHref())))
-                        .andExpect(jsonPath("content[3].id", is(targetModel4.getId().intValue())))
-                        .andExpect(jsonPath("content[3].target", is(targetModel4.getTarget())))
-                        .andExpect(
-                                jsonPath("content[3].links[0].href", is(targetModel4.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(targetService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetService, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(targetService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -274,20 +277,24 @@ class TargetControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(targetsExpected, targetModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[2].href", is(lastPageLink)))
-                        .andExpect(jsonPath("links[3].href", is(lastPageLink))).andExpect(jsonPath("content").isEmpty())
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
+                        .andExpect(jsonPath("content").isEmpty())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(targetService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetService, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(targetService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -308,14 +315,18 @@ class TargetControllerGetMethodTest {
         when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
         when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
-        assertAll(() -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isOk())
+        assertAll(() -> mockMvc.perform(get(linkWithParameter, targetId))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToLink))).andExpect(jsonPath("id", is(targetId.intValue())))
+                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("id", is(targetId.intValue())))
                         .andExpect(jsonPath("target", is(targetName))),
-                () -> verify(targetService, times(1)).findById(targetId), () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verifyNoMoreInteractions(targetService),
                 () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
                 () -> verifyNoMoreInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -329,13 +340,18 @@ class TargetControllerGetMethodTest {
         when(targetService.findById(targetId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, targetId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(get(linkWithParameter, targetId))
+                        .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId))),
-                () -> verify(targetService, times(1)).findById(targetId), () -> verifyNoMoreInteractions(targetService),
-                () -> verifyNoInteractions(targetModelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
     }
 
     private Target createTarget(ObjectType type) {
@@ -344,14 +360,16 @@ class TargetControllerGetMethodTest {
 
             case NODE:
 
-                TargetNode targetNode = new TargetNode((long) counterForUtilMethods, "target" + counterForUtilMethods);
+                counterForUtilMethodsNode++;
 
-                return targetNode;
+                return new TargetNode((long) counterForUtilMethodsNode, "target" + counterForUtilMethodsNode);
 
             case MODEL:
 
-                TargetModel targetModel = new TargetModel((long) counterForUtilMethods, "target" + counterForUtilMethods);
-                String pathToTargetLink = BASE_PATH + counterForUtilMethods;
+                counterForUtilMethodsModel++;
+
+                TargetModel targetModel = new TargetModel((long) counterForUtilMethodsModel, "target" + counterForUtilMethodsModel);
+                String pathToTargetLink = BASE_PATH + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 
                 return targetModel;

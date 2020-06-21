@@ -159,8 +159,10 @@ class GroupControllerPutMethodTest {
                         ArgumentMatchers.any(GroupDTO.class)),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(GroupNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -239,8 +241,10 @@ class GroupControllerPutMethodTest {
                         ArgumentMatchers.any(GroupDTO.class)),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(GroupNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -302,8 +306,10 @@ class GroupControllerPutMethodTest {
                 () -> verify(groupService, times(1)).saveNew(ArgumentMatchers.any(GroupDTO.class)),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(GroupNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper), () -> verifyNoInteractions(pagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -319,12 +325,15 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("{group.name.notBlank}")))
                         .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -341,11 +350,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -366,11 +378,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{group.name.notBlank}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -391,11 +406,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -417,11 +435,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -443,11 +464,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -469,11 +493,14 @@ class GroupControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, groupId).content(asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
-                () -> verifyNoInteractions(groupService), () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
