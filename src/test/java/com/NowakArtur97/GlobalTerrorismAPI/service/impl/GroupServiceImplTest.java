@@ -3,7 +3,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
@@ -406,52 +405,6 @@ class GroupServiceImplTest {
     }
 
     @Test
-    void when_find_all_group_events_by_id_should_return_all_group_events() {
-
-        Long groupId = 1L;
-        Long eventId = 1L;
-        Long eventId2 = 2L;
-
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).build(ObjectType.NODE);
-        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).build(ObjectType.NODE);
-        GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
-
-        when(groupRepository.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
-
-        List<EventNode> eventsCausedByGroupActual = groupService.findAllEventsCausedByGroup(groupId);
-
-        assertAll(
-                () -> assertFalse(eventsCausedByGroupActual.isEmpty(),
-                        "should not return empty group events list, but was empty"),
-                () -> assertEquals(groupNodeExpected.getEventsCaused().size(), eventsCausedByGroupActual.size(),
-                        "should return group events list with " + groupNodeExpected.getEventsCaused().size() + ", but was: " + eventsCausedByGroupActual),
-                () -> assertTrue(eventsCausedByGroupActual.contains(eventNodeExpected),
-                        "should return group events list with event: " + eventNodeExpected + ", but was: " + eventsCausedByGroupActual),
-                () -> assertTrue(eventsCausedByGroupActual.contains(eventNodeExpected2),
-                        "should return group events list with event: " + eventNodeExpected2 + ", but was: " + eventsCausedByGroupActual),
-                () -> verify(groupRepository, times(1)).findById(groupId),
-                () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
-                () -> verifyNoInteractions(eventService));
-    }
-
-    @Test
-    void when_find_all_group_events_by_id_but_group_does_not_exist_should_throw_error() {
-
-        Long groupId = 1L;
-
-        when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
-
-        assertAll(
-                () -> assertThrows(ResourceNotFoundException.class, () -> groupService.findAllEventsCausedByGroup(groupId),
-                        () -> "should throw ResourceNotFoundException, but wasn't"),
-                () -> verify(groupRepository, times(1)).findById(groupId),
-                () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
-                () -> verifyNoInteractions(eventService));
-    }
-
-    @Test
     void when_add_event_to_group_should_return_group_with_new_event() {
 
         Long groupId = 1L;
@@ -472,7 +425,9 @@ class GroupServiceImplTest {
         when(eventService.saveNew(eventDTO)).thenReturn(newEventNodeExpected);
         when(groupRepository.save(groupNodeExpectedBeforeSave)).thenReturn(groupNodeExpected);
 
-        GroupNode groupNodeActual = groupService.addEventToGroup(groupId, eventDTO);
+        Optional<GroupNode> groupNodeActualOptional = groupService.addEventToGroup(groupId, eventDTO);
+
+        GroupNode groupNodeActual = groupNodeActualOptional.get();
 
         assertAll(
                 () -> assertNotNull(groupNodeActual.getId(),
@@ -524,9 +479,11 @@ class GroupServiceImplTest {
 
         when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
+        Optional<GroupNode> groupNodeOptional = groupService.addEventToGroup(groupId, eventDTO);
+
         assertAll(
-                () -> assertThrows(ResourceNotFoundException.class, () -> groupService.addEventToGroup(groupId, eventDTO),
-                        () -> "should throw ResourceNotFoundException, but wasn't"),
+                () -> assertTrue(groupNodeOptional.isEmpty(),
+                        () -> "should return empty group node optional, but was: " + groupNodeOptional.get()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verifyNoInteractions(objectMapper),

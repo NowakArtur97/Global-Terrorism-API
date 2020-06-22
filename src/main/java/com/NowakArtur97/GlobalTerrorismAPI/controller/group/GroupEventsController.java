@@ -44,9 +44,10 @@ public class GroupEventsController {
     private final PageHelper pageHelper;
 
     @GetMapping(path = "/{id}/events")
-    public ResponseEntity<PagedModel<?>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
 
-        List<EventNode> eventsCausedByGroup = groupService.findAllEventsCausedByGroup(id);
+        List<EventNode> eventsCausedByGroup = groupService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
 
         PageImpl<EventNode> pages = pageHelper.convertListToPage(pageable, eventsCausedByGroup);
 
@@ -58,7 +59,8 @@ public class GroupEventsController {
     @PostMapping(path = "/{id}/events")
     public ResponseEntity<GroupModel> addGroupEvent(@PathVariable("id") Long id, @RequestBody @Valid EventDTO dto) {
 
-        GroupNode groupNode = groupService.addEventToGroup(id, dto);
+        GroupNode groupNode = groupService.addEventToGroup(id, dto)
+                .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 
         GroupModel groupModel = groupModelAssembler.toModel(groupNode);
 
@@ -68,7 +70,7 @@ public class GroupEventsController {
     @DeleteMapping(path = "/{id}/events")
     public ResponseEntity<Void> deleteAllGroupEvents(@PathVariable("id") Long id) {
 
-        groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));;
+        groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

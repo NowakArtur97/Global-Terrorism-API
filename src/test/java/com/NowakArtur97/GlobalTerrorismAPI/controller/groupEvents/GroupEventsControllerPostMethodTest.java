@@ -42,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItem;
@@ -124,7 +125,7 @@ class GroupEventsControllerPostMethodTest {
 
         String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
 
-        when(groupService.addEventToGroup(ArgumentMatchers.any(Long.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(groupNode);
+        when(groupService.addEventToGroup(ArgumentMatchers.any(Long.class), ArgumentMatchers.any(EventDTO.class))).thenReturn(Optional.of(groupNode));
         when(groupModelAssembler.toModel(groupNode)).thenReturn(groupModel);
 
         assertAll(

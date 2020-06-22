@@ -3,13 +3,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupEventsController;
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
@@ -36,6 +36,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -73,6 +74,7 @@ public class GroupEventsControllerGetMethodTest {
     @Mock
     private PageHelper pageHelper;
 
+    private GroupBuilder groupBuilder;
     private EventBuilder eventBuilder;
 
     @BeforeEach
@@ -84,6 +86,7 @@ public class GroupEventsControllerGetMethodTest {
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 
         eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
     }
 
     @Test
@@ -104,6 +107,8 @@ public class GroupEventsControllerGetMethodTest {
         List<EventNode> groupEventNodesListExpected = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
         List<EventModel> groupEventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3, eventModel4);
         List<EventNode> subListOfEvents = List.of(eventNode1, eventNode2, eventNode3, eventNode4);
+
+        GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode1, eventNode2, eventNode3, eventNode4)).build(ObjectType.NODE);
 
         int sizeExpected = 20;
         int totalElementsExpected = 4;
@@ -129,7 +134,7 @@ public class GroupEventsControllerGetMethodTest {
         PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
@@ -197,7 +202,7 @@ public class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
@@ -225,6 +230,8 @@ public class GroupEventsControllerGetMethodTest {
         List<EventModel> groupEventModelsListExpected = List.of(eventModel1, eventModel2, eventModel3);
         List<EventNode> subListOfEvents = List.of(eventNode1, eventNode2, eventNode3);
 
+        GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode1, eventNode2, eventNode3, eventNode4)).build(ObjectType.NODE);
+
         int sizeExpected = 3;
         int totalElementsExpected = 4;
         int totalPagesExpected = 2;
@@ -249,7 +256,7 @@ public class GroupEventsControllerGetMethodTest {
         PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
@@ -305,7 +312,7 @@ public class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
@@ -323,6 +330,8 @@ public class GroupEventsControllerGetMethodTest {
         List<EventNode> groupEventNodesListExpected = new ArrayList<>();
         List<EventModel> groupEventModelsListExpected = new ArrayList<>();
         List<EventNode> subListOfEvents = new ArrayList<>();
+
+        GroupNode groupNodeExpected = (GroupNode) groupBuilder.build(ObjectType.NODE);
 
         int sizeExpected = 20;
         int totalElementsExpected = 0;
@@ -348,7 +357,7 @@ public class GroupEventsControllerGetMethodTest {
         PagedModel<EventModel> resources = new PagedModel<>(groupEventModelsListExpected, metadata, pageLink1, pageLink2,
                 pageLink3, pageLink4);
 
-        when(groupService.findAllEventsCausedByGroup(groupId)).thenReturn(groupEventNodesListExpected);
+        when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
         when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
@@ -364,7 +373,7 @@ public class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
@@ -380,7 +389,7 @@ public class GroupEventsControllerGetMethodTest {
         Long groupId = 1L;
         String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
 
-        when(groupService.findAllEventsCausedByGroup(groupId)).thenThrow(new ResourceNotFoundException("GroupModel", groupId));
+        when(groupService.findById(groupId)).thenReturn(Optional.empty());
 
         assertAll(
                 () -> mockMvc.perform(get(linkWithParameter, groupId))
@@ -389,7 +398,7 @@ public class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
-                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pageHelper),

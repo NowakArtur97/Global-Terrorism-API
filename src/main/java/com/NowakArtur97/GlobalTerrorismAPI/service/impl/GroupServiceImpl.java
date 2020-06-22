@@ -2,7 +2,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
@@ -11,7 +10,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,21 +66,22 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     }
 
     @Override
-    public List<EventNode> findAllEventsCausedByGroup(Long id) {
+    public Optional<GroupNode> addEventToGroup(Long id, EventDTO eventDTO) {
 
-        return findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
-    }
+        Optional<GroupNode> groupNodeOptional = findById(id);
 
-    @Override
-    public GroupNode addEventToGroup(Long id, EventDTO eventDTO) {
+        if (groupNodeOptional.isPresent()) {
 
-        GroupNode groupNode = findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
+            GroupNode groupNode = groupNodeOptional.get();
 
-        EventNode eventNode = eventService.saveNew(eventDTO);
+            EventNode eventNode = eventService.saveNew(eventDTO);
 
-        groupNode.addEvent(eventNode);
+            groupNode.addEvent(eventNode);
 
-        return repository.save(groupNode);
+            repository.save(groupNode);
+        }
+
+        return groupNodeOptional;
     }
 
     @Override
