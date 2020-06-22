@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,5 +74,14 @@ public class GroupEventsController {
         groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(path = "/{id}/events", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> getOptions() {
+
+        return ResponseEntity
+                .ok()
+                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.OPTIONS)
+                .build();
     }
 }
