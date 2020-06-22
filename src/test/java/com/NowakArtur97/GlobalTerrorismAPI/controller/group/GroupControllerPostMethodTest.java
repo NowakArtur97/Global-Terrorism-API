@@ -17,10 +17,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -133,7 +133,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -170,7 +170,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -191,7 +191,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -215,7 +215,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -239,7 +239,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -264,7 +264,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -289,7 +289,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -314,7 +314,7 @@ class GroupControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(GROUP_BASE_PATH).content(asJsonString(groupDTO))
+                        .perform(post(GROUP_BASE_PATH).content(ObjectTestMapper.asJsonString(groupDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -325,17 +325,5 @@ class GroupControllerPostMethodTest {
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
-    }
-
-    public static String asJsonString(final Object obj) {
-
-        try {
-
-            return new ObjectMapper().writeValueAsString(obj);
-
-        } catch (Exception e) {
-
-            throw new RuntimeException(e);
-        }
     }
 }

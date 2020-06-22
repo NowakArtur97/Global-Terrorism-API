@@ -13,10 +13,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.icu.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -114,7 +114,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -150,7 +150,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
@@ -178,7 +178,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
@@ -201,7 +201,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
@@ -224,7 +224,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
@@ -247,7 +247,7 @@ class EventControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).content(asJsonString(eventDTO))
+                        .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
@@ -257,17 +257,5 @@ class EventControllerPostMethodTest {
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
-    }
-
-    public static String asJsonString(final Object obj) {
-
-        try {
-
-            return new ObjectMapper().writeValueAsString(obj);
-
-        } catch (Exception e) {
-
-            throw new RuntimeException(e);
-        }
     }
 }

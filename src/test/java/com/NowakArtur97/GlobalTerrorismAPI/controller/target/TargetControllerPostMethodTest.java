@@ -7,10 +7,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -92,7 +92,7 @@ class TargetControllerPostMethodTest {
 
 		assertAll(
 				() -> mockMvc
-						.perform(post(BASE_PATH, targetIdBeforeSave).content(asJsonString(targetDTO))
+						.perform(post(BASE_PATH, targetIdBeforeSave).content(ObjectTestMapper.asJsonString(targetDTO))
 								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isCreated())
 						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -117,7 +117,7 @@ class TargetControllerPostMethodTest {
 
 		assertAll(
 				() -> mockMvc
-						.perform(post(BASE_PATH).content(asJsonString(targetDTO))
+						.perform(post(BASE_PATH).content(ObjectTestMapper.asJsonString(targetDTO))
 								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
@@ -125,17 +125,5 @@ class TargetControllerPostMethodTest {
 				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));
-	}
-
-	public static String asJsonString(final Object obj) {
-
-		try {
-
-			return new ObjectMapper().writeValueAsString(obj);
-
-		} catch (Exception e) {
-
-			throw new RuntimeException(e);
-		}
 	}
 }
