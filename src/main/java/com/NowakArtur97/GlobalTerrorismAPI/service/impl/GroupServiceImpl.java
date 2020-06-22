@@ -74,11 +74,11 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     }
 
     @Override
-    public GroupNode addEventToGroup(Long id, EventDTO dto) {
+    public GroupNode addEventToGroup(Long id, EventDTO eventDTO) {
 
         GroupNode groupNode = findById(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 
-        EventNode eventNode = eventService.saveNew(dto);
+        EventNode eventNode = eventService.saveNew(eventDTO);
 
         groupNode.addEvent(eventNode);
 

@@ -11,5 +11,5 @@ public interface GroupService extends GenericService<GroupNode, GroupDTO> {
 
     List<EventNode> findAllEventsCausedByGroup(Long id);
 
-    GroupNode addEventToGroup(Long id, EventDTO dto);
+    GroupNode addEventToGroup(Long id, EventDTO eventDTO);
 }
