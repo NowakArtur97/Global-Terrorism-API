@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("GroupEventsControllerGetMethod_Tests")
+@Tag("GroupEventsController_Tests")
 class GroupEventsControllerGetMethodTest {
 
     private static int counterForUtilMethodsModel = 0;

@@ -489,4 +489,83 @@ class GroupServiceImplTest {
                 () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(eventService));
     }
+
+    @Test
+    void when_delete_group_events_should_delete_only_group_events_and_targets() {
+
+        Long groupId = 1L;
+        Long eventId = 1L;
+        Long eventId2 = 2L;
+
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        TargetNode targetNode2 = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
+        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNode2).build(ObjectType.NODE);
+        GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
+
+        when(groupRepository.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
+        when(eventService.delete(eventId)).thenReturn(Optional.of(eventNodeExpected));
+        when(eventService.delete(eventId2)).thenReturn(Optional.of(eventNodeExpected2));
+
+        Optional<GroupNode> groupNodeOptionalActual = groupService.deleteAllGroupEvents(eventId);
+
+        GroupNode groupNodeActual = groupNodeOptionalActual.get();
+
+        assertAll(
+                () -> assertNotNull(groupNodeActual.getId(),
+                        () -> "should return group node with id, but was: " + groupNodeActual.getId()),
+                () -> assertEquals(groupNodeExpected.getName(), groupNodeActual.getName(),
+                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
+                                + groupNodeActual.getName()),
+
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group event node with id: " + groupNodeExpected.getEventsCaused().get(0).getId() + ", but was: "
+                        + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group event node with summary: " + groupNodeExpected.getEventsCaused().get(0).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group event node with motive: " + groupNodeExpected.getEventsCaused().get(0).getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group event node with date: " + groupNodeExpected.getEventsCaused().get(0).getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group event node which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupNodeActual.getEventsCaused().get(0).getIsSuicide(), () -> "should return group event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicide()),
+                () -> assertNotNull(groupNodeExpected.getEventsCaused().get(0).getTarget(),
+                        () -> "should return group event node with not null target, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget(), () -> "should return group event node with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
+
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + groupNodeExpected.getEventsCaused().get(1).getId() + ", but was: "
+                        + groupNodeActual.getEventsCaused().get(1).getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(), () -> "should return group event node with motive: " + groupNodeExpected.getEventsCaused().get(1).getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getDate(), groupNodeActual.getEventsCaused().get(1).getDate(), () -> "should return group event node with date: " + groupNodeExpected.getEventsCaused().get(1).getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getDate()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(1).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsSuccessful(), groupNodeActual.getEventsCaused().get(1).getIsSuccessful(), () -> "should return group event node which was successful: " + groupNodeExpected.getEventsCaused().get(1).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getIsSuicide(), groupNodeActual.getEventsCaused().get(1).getIsSuicide(), () -> "should return group event node which was suicide: " + groupNodeExpected.getEventsCaused().get(1).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicide()),
+                () -> assertNotNull(groupNodeExpected.getEventsCaused().get(1).getTarget(),
+                        () -> "should return group event node with not null target, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget(), groupNodeActual.getEventsCaused().get(1).getTarget(), () -> "should return group event node with target: " + groupNodeExpected.getEventsCaused().get(1).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget()),
+                () -> verify(groupRepository, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(groupRepository),
+                () -> verify(eventService, times(1)).delete(eventId),
+                () -> verify(eventService, times(1)).delete(eventId2),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
+    void when_delete_group_events_by_id_but_group_does_not_exist_should_return_empty_optional() {
+
+        Long groupId = 1L;
+
+        when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
+
+        Optional<GroupNode> groupNodeOptional = groupService.deleteAllGroupEvents(groupId);
+
+        assertAll(
+                () -> assertTrue(groupNodeOptional.isEmpty(),
+                        () -> "should return empty group node optional, but was: " + groupNodeOptional.get()),
+                () -> verify(groupRepository, times(1)).findById(groupId),
+                () -> verifyNoMoreInteractions(groupRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(eventService));
+    }
 }

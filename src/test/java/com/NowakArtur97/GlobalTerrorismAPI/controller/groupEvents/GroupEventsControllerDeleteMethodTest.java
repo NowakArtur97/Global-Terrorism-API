@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("GroupController_Tests")
+@Tag("GroupEventsController_Tests")
 class GroupEventsControllerDeleteMethodTest {
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";

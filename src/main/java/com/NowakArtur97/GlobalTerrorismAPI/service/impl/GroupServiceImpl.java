@@ -38,16 +38,6 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
         return repository.save(groupNode);
     }
 
-    private void saveNewEvents(GroupDTO groupDTO) {
-
-        groupDTO.getEventsCaused().forEach(eventService::saveNew);
-    }
-
-    private void deleteEvents(GroupNode groupNode) {
-
-        groupNode.getEventsCaused().forEach(event -> eventService.delete(event.getId()));
-    }
-
     @Override
     public Optional<GroupNode> delete(Long id) {
 
@@ -92,5 +82,15 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
         groupNodeOptional.ifPresent(this::deleteEvents);
 
         return groupNodeOptional;
+    }
+
+    private void saveNewEvents(GroupDTO groupDTO) {
+
+        groupDTO.getEventsCaused().forEach(eventService::saveNew);
+    }
+
+    private void deleteEvents(GroupNode groupNode) {
+
+        groupNode.getEventsCaused().forEach(event -> eventService.delete(event.getId()));
     }
 }
