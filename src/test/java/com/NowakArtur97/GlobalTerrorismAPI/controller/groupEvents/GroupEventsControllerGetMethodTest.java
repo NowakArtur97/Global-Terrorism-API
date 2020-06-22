@@ -3,6 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.group.GroupEventsController;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -77,8 +78,7 @@ public class GroupEventsControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler,
-                pageHelper);
+        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageHelper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
@@ -202,7 +202,9 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
-                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
+                () -> verifyNoInteractions(eventModelAssembler),
+                () -> verifyNoInteractions(groupModelAssembler));
     }
 
     @Test
@@ -308,7 +310,9 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
-                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
+                () -> verifyNoInteractions(eventModelAssembler),
+                () -> verifyNoInteractions(groupModelAssembler));
     }
 
     @Test
@@ -365,7 +369,32 @@ public class GroupEventsControllerGetMethodTest {
                 () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
                 () -> verifyNoMoreInteractions(pageHelper),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
-                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler));
+                () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
+                () -> verifyNoInteractions(eventModelAssembler),
+                () -> verifyNoInteractions(groupModelAssembler));
+    }
+
+    @Test
+    void when_find_all_group_events_but_group_not_exists_should_return_error_response() {
+
+        Long groupId = 1L;
+        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
+
+        when(groupService.findAllEventsCausedByGroup(groupId)).thenThrow(new ResourceNotFoundException("GroupModel", groupId));
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, groupId))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
+                () -> verify(groupService, times(1)).findAllEventsCausedByGroup(groupId),
+                () -> verifyNoMoreInteractions(groupService),
+                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(pageHelper),
+                () -> verifyNoInteractions(eventModelAssembler),
+                () -> verifyNoInteractions(eventsPagedResourcesAssembler));
     }
 
     private Event createEvent(ObjectType type) {

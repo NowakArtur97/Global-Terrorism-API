@@ -34,7 +34,6 @@ import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.ZoneId;
@@ -172,9 +171,11 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(groupService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(groupService),
+                () -> verify(groupService, times(1)).findAll(pageable),
+                () ->verifyNoMoreInteractions(groupService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
-                () -> verifyNoMoreInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -250,10 +251,12 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
-                () -> verify(groupService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(groupService),
+                () -> verify(groupService, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -307,7 +310,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(groupService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -328,9 +332,6 @@ class GroupControllerGetMethodTest {
         when(groupModelAssembler.toModel(groupNode)).thenReturn(groupModel);
 
         assertAll(() -> mockMvc.perform(get(linkWithParameter, groupModel.getId()))
-
-                .andDo(MockMvcResultHandlers.print())
-
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToSelfLink)))
@@ -366,7 +367,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(groupService, times(1)).findById(groupModel.getId()), () -> verifyNoMoreInteractions(groupService),
                 () -> verify(groupModelAssembler, times(1)).toModel(groupNode),
                 () -> verifyNoMoreInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper));
     }
 
@@ -380,13 +382,17 @@ class GroupControllerGetMethodTest {
         when(groupService.findById(groupId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, groupId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(get(linkWithParameter, groupId))
+                        .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
                 () -> verify(groupService, times(1)).findById(groupId), () -> verifyNoMoreInteractions(groupService),
-                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
     }
 
     private Group createGroupWithEvents(ObjectType type) {
