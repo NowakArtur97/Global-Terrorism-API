@@ -63,4 +63,12 @@ public class GroupEventsController {
 
         return new ResponseEntity<>(groupModel, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(path = "/{id}/events")
+    public ResponseEntity<Void> deleteAllGroupEvents(@PathVariable("id") Long id) {
+
+        groupService.deleteAllGroupEvents(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
