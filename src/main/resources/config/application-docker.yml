@@ -1,0 +1,31 @@
+#
+# Spring Data Neo4j
+#
+spring:
+  data:
+    neo4j:
+      password: secret
+      uri: bolt://192.168.99.100:7687
+      username: neo4j
+#
+# Spring Boot Actuator
+#
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  security:
+    enabled: false
+

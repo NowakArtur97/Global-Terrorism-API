@@ -1,0 +1,8 @@
+#
+# Spring Data Neo4j
+#
+spring:
+  data:
+    neo4j:
+      password: ${NEO4J_PASSWORD}
+      username: ${NEO4J_USER}
