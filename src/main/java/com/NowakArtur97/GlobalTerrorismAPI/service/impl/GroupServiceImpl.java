@@ -84,4 +84,14 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
         return repository.save(groupNode);
     }
+
+    @Override
+    public Optional<GroupNode> deleteAllGroupEvents(Long id) {
+
+        Optional<GroupNode> groupNodeOptional = findById(id);
+
+        groupNodeOptional.ifPresent(this::deleteEvents);
+
+        return groupNodeOptional;
+    }
 }

@@ -55,9 +55,7 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
 
         T node = objectMapper.map(dto, typeParameterClass);
 
-        node = repository.save(node);
-
-        return node;
+        return repository.save(node);
     }
 
     @Override
@@ -69,9 +67,7 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
 
         node.setId(id);
 
-        node = repository.save(node);
-
-        return node;
+        return repository.save(node);
     }
 
     @Override

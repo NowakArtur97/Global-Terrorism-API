@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -67,7 +68,7 @@ public class GroupEventsController {
     @DeleteMapping(path = "/{id}/events")
     public ResponseEntity<Void> deleteAllGroupEvents(@PathVariable("id") Long id) {
 
-        groupService.deleteAllGroupEvents(id);
+        groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));;
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
