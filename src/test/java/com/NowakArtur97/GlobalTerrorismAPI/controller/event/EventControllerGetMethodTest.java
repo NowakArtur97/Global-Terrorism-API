@@ -57,8 +57,8 @@ class EventControllerGetMethodTest {
     private static int counterForUtilMethodsModel = 0;
     private static int counterForUtilMethodsNode = 0;
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
-    private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
 

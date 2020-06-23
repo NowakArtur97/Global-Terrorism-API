@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupEventsController_Tests")
 class GroupEventsControllerDeleteMethodTest {
 
-    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
 
     private MockMvc mockMvc;
 

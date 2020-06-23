@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerPostMethodTest {
 
-	private final String BASE_PATH = "http://localhost:8080/api/targets";
+	private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
 
 	private MockMvc mockMvc;
 

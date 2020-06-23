@@ -27,7 +27,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/groups")
+@RequestMapping("/api/v1/groups")
 @Api(tags = {GroupEventsTag.RESOURCE})
 @ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})

@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Tag("GroupEventsController_Tests")
 class GroupEventsControllerOptionsMethodTest {
 
-    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
 
     private MockMvc mockMvc;
 

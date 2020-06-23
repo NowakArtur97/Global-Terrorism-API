@@ -56,8 +56,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupController_Tests")
 class GroupControllerPutMethodTest {
 
-    private final String GROUP_BASE_PATH = "http://localhost:8080/api/groups";
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
+    private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
 
     private MockMvc mockMvc;
 

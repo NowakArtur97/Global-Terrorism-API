@@ -50,8 +50,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("EventController_Tests")
 class EventControllerPostMethodTest {
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/events";
-    private final String TARGET_BASE_PATH = "http://localhost:8080/api/targets";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
 

@@ -50,7 +50,7 @@ class TargetControllerGetMethodTest {
     private static int counterForUtilMethodsNode = 0;
     private static int counterForUtilMethodsModel = 0;
 
-    private final String BASE_PATH = "http://localhost:8080/api/targets";
+    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
 
