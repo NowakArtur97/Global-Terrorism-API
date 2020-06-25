@@ -4,6 +4,10 @@
 spring:
   profiles:
     active: ci
+  bulk:
+    api:
+      path: /api/v1/bulk
+      limit: 10
 #
 # Spring MVC
 #

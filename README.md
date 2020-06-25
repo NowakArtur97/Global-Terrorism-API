@@ -27,6 +27,7 @@ To shut down the containers enter:
 ## Built With
 - Java 11
 - Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
+- Spring Bulk API - 0.7.0
 - Swagger (Core, Ben Valdiation, UI) - 2.92
 - Lombok - 1.18.12
 - jUnit5 - 5.5.2
@@ -46,6 +47,7 @@ To shut down the containers enter:
 - Event (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Group (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Group Events (GET, POST, DELETE, OPTIONS)
+- Bulk operations using Spring Bulk API
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 
