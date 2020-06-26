@@ -30,7 +30,5 @@ public final class SwaggerConfigurationProperties {
 
 	private final String contactUrl;
 
-	private final String basePackage;
-
 	private final String pathSelectors;
 }
