@@ -18,11 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupDTO implements DTONode, Group {
 
-    @ApiModelProperty(notes = "The group's name", required = true)
+    @ApiModelProperty(notes = "The group's name", required = true, example = "Group")
     @NotBlank(message = "{group.name.notBlank}")
     private String name;
 
-    @ApiModelProperty(notes = "The event's caused by the group")
+    @ApiModelProperty(notes = "The event's caused by the group", required = true)
     @Valid
     @NotEmpty(message = "{group.eventsCaused.notEmpty}")
     private List<EventDTO> eventsCaused;

@@ -19,7 +19,7 @@ public class GroupModel extends RepresentationModel<GroupModel> implements Group
     @ApiModelProperty(notes = "The unique id of the Group")
     private Long id;
 
-    @ApiModelProperty(notes = "The group's name", required = true)
+    @ApiModelProperty(notes = "The group's name")
     private String name;
 
     @ApiModelProperty(notes = "The event's caused by the group")

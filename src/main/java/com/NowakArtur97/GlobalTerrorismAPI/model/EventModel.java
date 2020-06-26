@@ -20,25 +20,25 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 	@ApiModelProperty(notes = "The unique id of the Event")
 	private Long id;
 
-	@ApiModelProperty(notes = "The events's summary", required = true)
+	@ApiModelProperty(notes = "The events's summary")
 	private String summary;
 
-	@ApiModelProperty(notes = "The events's motive", required = true)
+	@ApiModelProperty(notes = "The events's motive")
 	private String motive;
 
-	@ApiModelProperty(notes = "The events's date", required = true)
+	@ApiModelProperty(notes = "The events's date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date date;
 
-	@ApiModelProperty(notes = "Was the event part of multiple incidents?", required = true)
+	@ApiModelProperty(notes = "Was the event part of multiple incidents?")
 	private Boolean isPartOfMultipleIncidents;
 
-	@ApiModelProperty(notes = "Was the event successful?", required = true)
+	@ApiModelProperty(notes = "Was the event successful?")
 	private Boolean isSuccessful;
 
-	@ApiModelProperty(notes = "Was the event suicide?", required = true)
+	@ApiModelProperty(notes = "Was the event suicide?")
 	private Boolean isSuicide;
 
-	@ApiModelProperty(notes = "The event's target", required = true)
+	@ApiModelProperty(notes = "The event's target")
 	private TargetModel target;
 }

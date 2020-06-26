@@ -23,6 +23,6 @@ public class TargetModel extends RepresentationModel<TargetModel> implements Tar
 	@ApiModelProperty(notes = "The unique id of the Target")
 	private Long id;
 
-	@ApiModelProperty(notes = "The target's name", required = true)
+	@ApiModelProperty(notes = "The target's name")
 	private String target;
 }

@@ -1,7 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -10,9 +12,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupEventsTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import com.github.wnameless.spring.bulkapi.Bulkable;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,8 @@ import java.util.List;
 @RequestMapping("/api/v1/groups")
 @Bulkable
 @Api(tags = {GroupEventsTag.RESOURCE})
-@ApiResponses(value = {@ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
+@ApiResponses(value = {
+        @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 @RequiredArgsConstructor
 public class GroupEventsController {
@@ -46,8 +47,14 @@ public class GroupEventsController {
 
     private final PageHelper pageHelper;
 
-    @GetMapping(path = "/{id}/events")
-    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@PathVariable("id") Long id, Pageable pageable) {
+    @GetMapping("/{id}/events")
+    @ApiOperation(value = "Find Group's Events by id", notes = "Provide an id to look up specific Group's Events")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Group's Events found by provided id", response = GroupModel.class),
+            @ApiResponse(code = 400, message = "Invalid Group id supplied"),
+            @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
+    @ApiPageable
+    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
 
         List<EventNode> eventsCausedByGroup = groupService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
@@ -59,8 +66,16 @@ public class GroupEventsController {
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/{id}/events")
-    public ResponseEntity<GroupModel> addGroupEvent(@PathVariable("id") Long id, @RequestBody @Valid EventDTO dto) {
+    @PostMapping("/{id}/events")
+    @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
+    @ApiOperation(value = "Add Group's Event", notes = "Add new Group's Event")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successfully added new Group's Event", response = EventModel.class),
+            @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
+    public ResponseEntity<GroupModel> addGroupEvent(
+            @ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "New Group's Event", name = "event", required = true) @RequestBody @Valid EventDTO dto) {
 
         GroupNode groupNode = groupService.addEventToGroup(id, dto)
                 .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
@@ -70,8 +85,13 @@ public class GroupEventsController {
         return new ResponseEntity<>(groupModel, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/{id}/events")
-    public ResponseEntity<Void> deleteAllGroupEvents(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}/events")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
+    @ApiOperation(value = "Delete Group's Event by id", notes = "Provide an id to delete specific Group's Event")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Successfully deleted Group's Event"),
+            @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
+    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 
@@ -79,6 +99,8 @@ public class GroupEventsController {
     }
 
     @RequestMapping(path = "/{id}/events", method = RequestMethod.OPTIONS)
+    @ApiOperation(value = "Find all Group's Events resource options")
+    @ApiResponse(code = 200, message = "Successfully found all Group's Events resource options", response = ResponseEntity.class)
     public ResponseEntity<?> getOptions() {
 
         return ResponseEntity
