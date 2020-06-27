@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @RestControllerAdvice(basePackageClasses = BulkApiController.class)
 public class BulkApiControllerAdvice {
@@ -16,10 +17,19 @@ public class BulkApiControllerAdvice {
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<ErrorResponse> handleHttpClientErrorException(HttpClientErrorException exception) {
 
-        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value());
+        String message = exception.getResponseBodyAsString().replace("\"", "");
 
-        errorResponse.addError(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), exception.getStatusCode().value());
+
+        Arrays.stream(getMessagesFromBody(message)).forEach(errorResponse::addError);
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    private String[] getMessagesFromBody(String message) {
+
+        return message
+                .substring(message.indexOf("[") + 1, message.indexOf("]"))
+                .split(",");
     }
 }
