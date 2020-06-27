@@ -6,6 +6,7 @@
 * [Built With](#built-with)
 * [Features](#features)
 * [To Do](#to-do)
+* [Routes List](#routes-list)
 * [Status](#status)
 * [Screenshots](#screenshots)
 
@@ -28,7 +29,7 @@ To shut down the containers enter:
 - Java 11
 - Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
 - Spring Bulk API - 0.7.0
-- Swagger (Core, Ben Valdiation, UI) - 2.92
+- Swagger (Core, Ben Validation, UI) - 2.92
 - Lombok - 1.18.12
 - jUnit5 - 5.5.2
 - Mockito - 3.1.0
@@ -54,8 +55,71 @@ To shut down the containers enter:
 ## To Do
 - JWT support
 
+## Routes List:
+
+### Targets
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/targets`                 | `Get a list of targets`                                              |
+| `GET`      | `/api/v1/targets/{id}`            | `Get information about a target`                                     |
+| `POST`     | `/api/v1/targets`                 | `Add a new target`                                                   |
+| `PUT`      | `/api/v1/targets/{id}`            | `Update or add a target`                                             |
+| `PATCH`    | `/api/v1/targets/{id}`            | `Partially update a target(consume Json Patch and Json Merge Patch)` |
+| `DELETE`   | `/api/v1/targets/{id}`            | `Remove a target`                                                    |
+| `OPTIONS`  | `/api/v1/targets`                 | `Find all supported request methods for list of targets`             |
+| `OPTIONS`  | `/api/v1/targets/{id}`            | `Find all supported request methods for target`                      |
+
+### Events
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/events`                  | `Get a list of events`                                               |
+| `GET`      | `/api/v1/events/{id}`             | `Get information about an event`                                     |
+| `POST`     | `/api/v1/events`                  | `Add a new event`                                                    |
+| `PUT`      | `/api/v1/events/{id}`             | `Update or add an event`                                             |
+| `PATCH`    | `/api/v1/events/{id}`             | `Partially update an event(consume Json Patch and Json Merge Patch)` |
+| `DELETE`   | `/api/v1/events/{id}`             | `Remove an event`                                                    |
+| `OPTIONS`  | `/api/v1/events`                  | `Find all supported request methods for list of events`              |
+| `OPTIONS`  | `/api/v1/events/{id}`             | `Find all supported request methods for event`                       |
+
+### Groups
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/groups`                  | `Get a list of groups`                                               |
+| `GET`      | `/api/v1/groups/{id}`             | `Get information about a group`                                      |
+| `GET`      | `/api/v1/groups/{id}/events`      | `Get information about a group's related events`                     |
+| `POST`     | `/api/v1/groups`                  | `Add a new group`                                                    |
+| `POST`     | `/api/v1/groups/{id}/events`      | `Add a new event to an existing group`                               |
+| `PUT`      | `/api/v1/groups/{id}`             | `Update or add a group`                                              |
+| `PATCH`    | `/api/v1/groups/{id}`             | `Partially update a group(consume Json Patch and Json Merge Patch)`  |
+| `DELETE`   | `/api/v1/groups/{id}`             | `Remove a group`                                                     |
+| `DELETE`   | `/api/v1/groups/{id}/events`      | `Remove all group's related events`                                  |
+| `OPTIONS`  | `/api/v1/groups`                  | `Find all supported request methods for list of groups`              |
+| `OPTIONS`  | `/api/v1/groups/{id}`             | `Find all supported request methods for a group`                     |
+| `OPTIONS`  | `/api/v1/groups/{id}/events`      | `Find all supported request methods for a group's events`            |
+
+### Bulk
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `POST`      | `/api/v1/bulk`                   | `Bulk operations`                                                    |
+
+### Bulk Request JSON example
+```json
+# POST /api/v1/bulk
+# Content-Type: application/json
+
+{
+  "operations": [
+    {"method": "GET", "url": "/api/v1/groups"},
+    {"method": "POST", "url": "/api/v1/targets", "params": {"target": "New Target"}}
+  ]
+}
+```
+
 ## Status
-Project is: in progess
+Project is: in progress
 
 ## Screenshots
 ![Documentation](./src/main/resources/screenshots/documentation.png)
