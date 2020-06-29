@@ -172,7 +172,7 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findAll(pageable),
-                () ->verifyNoMoreInteractions(groupService),
+                () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
@@ -225,7 +225,8 @@ class GroupControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(groupsExpected, groupModelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
