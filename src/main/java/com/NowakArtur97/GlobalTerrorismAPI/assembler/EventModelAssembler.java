@@ -1,9 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,7 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
                 .setTarget(eventNode.getTarget() != null ? targetModelAssembler.toModel(eventNode.getTarget()) : null);
 
         eventModel.add(linkTo(methodOn(EventController.class).findById(eventModel.getId())).withSelfRel());
+        eventModel.add(linkTo(methodOn(EventTargetController.class).findEventTarget(eventModel.getId(), Pageable.unpaged())).withRel("target"));
 
         return eventModel;
     }

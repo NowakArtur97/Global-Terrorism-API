@@ -51,10 +51,10 @@ public class GroupEventsController {
     @ApiOperation(value = "Find Group's Events by id", notes = "Provide an id to look up specific Group's Events")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Group's Events found by provided id", response = GroupModel.class),
-            @ApiResponse(code = 400, message = "Invalid Group id supplied"),
+            @ApiResponse(code = 400, message = "Invalid Group's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     @ApiPageable
-    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
 
         List<EventNode> eventsCausedByGroup = groupService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
@@ -68,13 +68,13 @@ public class GroupEventsController {
 
     @PostMapping("/{id}/events")
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
-    @ApiOperation(value = "Add Group's Event", notes = "Add new Group's Event")
+    @ApiOperation(value = "Add Group's Event", notes = "Add a new Group's Event")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Successfully added new Group's Event", response = EventModel.class),
+            @ApiResponse(code = 201, message = "Successfully added a new Group's Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     public ResponseEntity<GroupModel> addGroupEvent(
-            @ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
             @ApiParam(value = "New Group's Event", name = "event", required = true) @RequestBody @Valid EventDTO dto) {
 
         GroupNode groupNode = groupService.addEventToGroup(id, dto)
@@ -91,7 +91,7 @@ public class GroupEventsController {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Group's Event"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 

@@ -52,17 +52,17 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
     @ApiOperation(value = "Find Target by id", notes = "Provide an id to look up specific Target")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Target found by provided id", response = TargetModel.class),
-            @ApiResponse(code = 400, message = "Invalid Target id supplied"),
+            @ApiResponse(code = 400, message = "Invalid Target's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> findById(
-            @ApiParam(value = "Target id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Target's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
         return super.findById(id);
     }
 
     @PostMapping
     @Override
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
-    @ApiOperation(value = "Add Target", notes = "Add new Target")
+    @ApiOperation(value = "Add a Target", notes = "Add a new Target")
     @ApiResponses(
             {@ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
                     @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
@@ -73,10 +73,10 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
 
     @PutMapping(path = "/{id}")
     @Override
-    @ApiOperation(value = "Update Target", notes = "Update Target. If the Target id is not found for update, a new Target with the next free id will be created")
+    @ApiOperation(value = "Update a Target", notes = "Update a Target. If the Target's id is not found for update, a new Target with the next free id will be created")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully updated Target", response = TargetModel.class),
-            @ApiResponse(code = 201, message = "Successfully added new Target", response = TargetModel.class),
+            @ApiResponse(code = 200, message = "Successfully updated a  Target", response = TargetModel.class),
+            @ApiResponse(code = 201, message = "Successfully added a new Target", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> update(
             @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
@@ -86,13 +86,13 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Target fields using Json Patch", notes = "Update Target fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @ApiOperation(value = "Update Target's fields using Json Patch", notes = "Update Target's fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
+            @ApiResponse(code = 200, message = "Successfully updated Target's fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> updateFields(
             @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-            @ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
+            @ApiParam(value = "Target's fields to update", name = "target", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
         return super.updateFields(id, objectAsJsonPatch);
     }
 
@@ -101,13 +101,13 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
 //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Target fields using Json Merge Patch", notes = "Update Target fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Target's fields using Json Merge Patch", notes = "Update Target's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully updated Target fields", response = TargetModel.class),
+            @ApiResponse(code = 200, message = "Successfully updated Target's fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> updateFields(
             @ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
-            @ApiParam(value = "Target fields to update", name = "target", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
+            @ApiParam(value = "Target's fields to update", name = "target", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
         return super.updateFields(id, objectAsJsonMergePatch);
     }
 

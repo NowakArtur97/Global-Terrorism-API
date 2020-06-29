@@ -52,19 +52,19 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
     @ApiOperation(value = "Find Event by id", notes = "Provide an id to look up specific Event")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Event found by provided id", response = EventModel.class),
-            @ApiResponse(code = 400, message = "Invalid Event id supplied"),
+            @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> findById(
-            @ApiParam(value = "Event id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
         return super.findById(id);
     }
 
     @PostMapping
     @Override
     @ResponseStatus(HttpStatus.CREATED) // Added to remove the default 200 status added by Swagger
-    @ApiOperation(value = "Add Event", notes = "Add new Event")
+    @ApiOperation(value = "Add an Event", notes = "Add a new Event")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
+            @ApiResponse(code = 201, message = "Successfully added a new Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> add(
             @ApiParam(value = "New Event", name = "event", required = true) @RequestBody @Valid EventDTO dto) {
@@ -73,7 +73,7 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
 
     @PutMapping(path = "/{id}")
     @Override
-    @ApiOperation(value = "Update Event", notes = "Update Event. If the Event id is not found for update, a new Event with the next free id will be created")
+    @ApiOperation(value = "Update an Event", notes = "Update Event. If the Event's id is not found for update, a new Event with the next free id will be created")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Event", response = EventModel.class),
             @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
@@ -86,13 +86,13 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Event fields using Json Patch", notes = "Update Event fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @ApiOperation(value = "Update an Event's fields using Json Patch", notes = "Update Event's fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
+            @ApiResponse(code = 200, message = "Successfully updated Event's fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> updateFields(
             @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
-            @ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
+            @ApiParam(value = "Event's fields to update", name = "event", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
         return super.updateFields(id, objectAsJsonPatch);
     }
 
@@ -101,13 +101,13 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
 //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Event fields using Json Merge Patch", notes = "Update Event fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Event's fields using Json Merge Patch", notes = "Update Event's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully updated Event fields", response = EventModel.class),
+            @ApiResponse(code = 200, message = "Successfully updated Event's fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> updateFields(
             @ApiParam(value = "Id of the Event being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
-            @ApiParam(value = "Event fields to update", name = "event", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
+            @ApiParam(value = "Event's fields to update", name = "event", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
         return super.updateFields(id, objectAsJsonMergePatch);
     }
 
