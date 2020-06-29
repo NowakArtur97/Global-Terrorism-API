@@ -1,12 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTargetTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
@@ -15,10 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -30,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EventTargetController {
 
-    private final GenericService<EventNode, EventDTO> eventService;
+    private final EventService eventService;
 
     private final RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
@@ -48,5 +43,18 @@ public class EventTargetController {
         TargetModel targetModel = targetModelAssembler.toModel(targetNode);
 
         return new ResponseEntity<>(targetModel, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/target")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
+    @ApiOperation(value = "Delete Event's Target by id", notes = "Provide an id to delete specific Event's Target")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Successfully deleted Event's Target"),
+            @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
+    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Event's id value needed to delete target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+
+        eventService.deleteEventTarget(id).orElseThrow(() -> new ResourceNotFoundException("EventModel", id));
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
