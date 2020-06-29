@@ -6,13 +6,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
+class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implements EventService {
 
     private final GenericService<TargetNode, TargetDTO> targetService;
 
@@ -48,6 +49,16 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> {
 
             repository.delete(eventNode);
         }
+
+        return eventNodeOptional;
+    }
+
+    @Override
+    public Optional<EventNode> deleteEventTarget(Long id) {
+
+        Optional<EventNode> eventNodeOptional = findById(id);
+
+        eventNodeOptional.ifPresent(eventNode -> targetService.delete(eventNode.getTarget().getId()));
 
         return eventNodeOptional;
     }

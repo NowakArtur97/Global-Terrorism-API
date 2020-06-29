@@ -37,12 +37,15 @@ public class EventTargetController {
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
 
-        TargetNode targetNode = eventService.findById(id).orElseThrow(() -> new ResourceNotFoundException("EventModel", id))
+        TargetNode targetNode = eventService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("EventModel", id))
                 .getTarget();
 
-        TargetModel targetModel = targetModelAssembler.toModel(targetNode);
+        if (targetNode == null) {
+            throw new ResourceNotFoundException("TargetModel");
+        }
 
-        return new ResponseEntity<>(targetModel, HttpStatus.OK);
+        return new ResponseEntity<>(targetModelAssembler.toModel(targetNode), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/target")

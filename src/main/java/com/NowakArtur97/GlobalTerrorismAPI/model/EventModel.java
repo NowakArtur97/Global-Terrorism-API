@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.model;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -40,5 +41,6 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 	private Boolean isSuicidal;
 
 	@ApiModelProperty(notes = "The event's target")
+	@JsonInclude
 	private TargetModel target;
 }
