@@ -145,7 +145,7 @@ class GroupEventsControllerPostMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(groupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(groupModel.getEventsCaused().get(0).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(groupModel.getEventsCaused().get(0).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(groupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(groupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -167,7 +167,7 @@ class GroupEventsControllerPostMethodTest {
         String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
-                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null).withTarget(null)
+                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
                 .build(ObjectType.DTO);
 
         assertAll(
@@ -182,7 +182,7 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),

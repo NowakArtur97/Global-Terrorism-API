@@ -29,7 +29,7 @@ public final class EventBuilder {
 
     private Boolean isSuccessful = true;
 
-    private Boolean isSuicide = true;
+    private Boolean isSuicidal = true;
 
     private Target target = null;
 
@@ -75,9 +75,9 @@ public final class EventBuilder {
         return this;
     }
 
-    public EventBuilder withIsSuicide(Boolean isSuicide) {
+    public EventBuilder withIsSuicidal(Boolean isSuicidal) {
 
-        this.isSuicide = isSuicide;
+        this.isSuicidal = isSuicidal;
 
         return this;
     }
@@ -98,20 +98,20 @@ public final class EventBuilder {
             case DTO:
                 event = EventDTO.builder().summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicide(isSuicide).target((TargetDTO) target).build();
+                        .isSuicidal(isSuicidal).target((TargetDTO) target).build();
                 break;
 
             case NODE:
                 event = EventNode.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicide(isSuicide).target((TargetNode) target).build();
+                        .isSuicidal(isSuicidal).target((TargetNode) target).build();
                 break;
 
             case MODEL:
 
                 event = EventModel.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicide(isSuicide).target((TargetModel) target).build();
+                        .isSuicidal(isSuicidal).target((TargetModel) target).build();
                 break;
 
             default:
@@ -137,7 +137,7 @@ public final class EventBuilder {
 
         this.isSuccessful = true;
 
-        this.isSuicide = true;
+        this.isSuicidal = true;
 
         this.target = null;
     }

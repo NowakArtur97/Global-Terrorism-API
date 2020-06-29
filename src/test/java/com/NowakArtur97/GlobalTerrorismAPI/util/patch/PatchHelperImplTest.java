@@ -8,8 +8,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -138,18 +136,18 @@ class PatchHelperImplTest {
 
             EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(targetNode)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(targetNode)
                     .build(ObjectType.NODE);
 
             JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/summary", updatedSummary)
                     .replace("/motive", updatedMotive).replace("/date", date.toString())
                     .replace("/isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-                    .replace("/isSuccessful", updatedIsSuccessful).replace("/isSuicide", updatedIsSuicide).build();
+                    .replace("/isSuccessful", updatedIsSuccessful).replace("/isSuicidal", updatedIsSuicide).build();
 
             JsonStructure event = Json.createObjectBuilder().add("summary", updatedSummary).add("motive", updatedMotive)
                     .add("date", updatedDate.toString())
                     .add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-                    .add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build();
+                    .add("isSuccessful", updatedIsSuccessful).add("isSuicidal", updatedIsSuicide).build();
 
             JsonValue patched = eventAsJsonPatch.apply(event);
 
@@ -180,9 +178,9 @@ class PatchHelperImplTest {
                             () -> "should return event node which was successful: "
                                     + eventNodeExpected.getIsSuccessful() + ", but was: "
                                     + eventNodeActual.getIsSuccessful()),
-                    () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                    + ", but was: " + eventNodeActual.getIsSuicide()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
                     () -> assertNotNull(eventNodeExpected.getTarget(),
                             () -> "should return event node with not null target, but was: null"),
                     () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -237,9 +235,9 @@ class PatchHelperImplTest {
                             () -> "should return event node which was successful: "
                                     + eventNodeExpected.getIsSuccessful() + ", but was: "
                                     + eventNodeActual.getIsSuccessful()),
-                    () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                    + ", but was: " + eventNodeActual.getIsSuicide()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
                     () -> assertNotNull(eventNodeExpected.getTarget(),
                             () -> "should return event node with not null target, but was: null"),
                     () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -267,18 +265,18 @@ class PatchHelperImplTest {
 
             EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(targetNode)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(targetNode)
                     .build(ObjectType.NODE);
 
             JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(Json.createObjectBuilder()
                     .add("summary", updatedSummary).add("motive", updatedMotive).add("date", date.toString())
                     .add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-                    .add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build());
+                    .add("isSuccessful", updatedIsSuccessful).add("isSuicidal", updatedIsSuicide).build());
 
             JsonStructure event = Json.createObjectBuilder().add("summary", updatedSummary).add("motive", updatedMotive)
                     .add("date", updatedDate.toString())
                     .add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
-                    .add("isSuccessful", updatedIsSuccessful).add("isSuicide", updatedIsSuicide).build();
+                    .add("isSuccessful", updatedIsSuccessful).add("isSuicidal", updatedIsSuicide).build();
 
             JsonValue patched = eventAsJsonMergePatch.apply(event);
 
@@ -309,9 +307,9 @@ class PatchHelperImplTest {
                             () -> "should return event node which was successful: "
                                     + eventNodeExpected.getIsSuccessful() + ", but was: "
                                     + eventNodeActual.getIsSuccessful()),
-                    () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                    + ", but was: " + eventNodeActual.getIsSuicide()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
                     () -> assertNotNull(eventNodeExpected.getTarget(),
                             () -> "should return event node with not null target, but was: null"),
                     () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -369,9 +367,9 @@ class PatchHelperImplTest {
                             () -> "should return event node which was successful: "
                                     + eventNodeExpected.getIsSuccessful() + ", but was: "
                                     + eventNodeActual.getIsSuccessful()),
-                    () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                    + ", but was: " + eventNodeActual.getIsSuicide()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
                     () -> assertNotNull(eventNodeExpected.getTarget(),
                             () -> "should return event node with not null target, but was: null"),
                     () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -423,7 +421,7 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
                             groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group with event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group with event node which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupNodeActual.getEventsCaused().get(0).getIsSuicide(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicide()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                     () -> assertNotNull(groupNodeExpected.getEventsCaused().get(0).getTarget(),
                             () -> "should return group with event node with not null target, but was: null"),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget(), () -> "should return group with event node with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
@@ -453,7 +451,7 @@ class PatchHelperImplTest {
             EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(updatedTargetNode)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(updatedTargetNode)
                     .build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -466,7 +464,7 @@ class PatchHelperImplTest {
                     .replace("/eventsCaused[0]/date", date.toString())
                     .replace("/eventsCaused[0]/isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
                     .replace("/eventsCaused[0]/isSuccessful", updatedIsSuccessful)
-                    .replace("/eventsCaused[0]/isSuicide", updatedIsSuicide)
+                    .replace("/eventsCaused[0]/isSuicidal", updatedIsSuicide)
                     .replace("/eventsCaused[0]/target/target", updatedTarget)
                     .build();
 
@@ -478,7 +476,7 @@ class PatchHelperImplTest {
                                     .add("date", updatedDate.toString())
                                     .add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
                                     .add("isSuccessful", updatedIsSuccessful)
-                                    .add("isSuicide", updatedIsSuicide)
+                                    .add("isSuicidal", updatedIsSuicide)
                                     .add("target", Json.createObjectBuilder().add("target", updatedTarget)))
                     .build();
 
@@ -503,7 +501,7 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
                             groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group with event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group with event node which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupNodeActual.getEventsCaused().get(0).getIsSuicide(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicide()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                     () -> assertNotNull(groupNodeExpected.getEventsCaused().get(0).getTarget(),
                             () -> "should return group with event node with not null target, but was: null"),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget(), () -> "should return group with event node with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
@@ -549,7 +547,7 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
                             groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group with event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group with event node which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupNodeActual.getEventsCaused().get(0).getIsSuicide(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicide()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                     () -> assertNotNull(groupNodeExpected.getEventsCaused().get(0).getTarget(),
                             () -> "should return group with event node with not null target, but was: null"),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget(), () -> "should return group with event node with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
@@ -579,7 +577,7 @@ class PatchHelperImplTest {
             EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withTarget(updatedTargetNode)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(updatedTargetNode)
                     .build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -592,7 +590,7 @@ class PatchHelperImplTest {
                     .add("/eventsCaused[0]/date", date.toString())
                     .add("/eventsCaused[0]/isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
                     .add("/eventsCaused[0]/isSuccessful", updatedIsSuccessful)
-                    .add("/eventsCaused[0]/isSuicide", updatedIsSuicide)
+                    .add("/eventsCaused[0]/isSuicidal", updatedIsSuicide)
                     .add("/eventsCaused[0]/target/target", updatedTarget)
                     .build());
 
@@ -604,7 +602,7 @@ class PatchHelperImplTest {
                             .add("date", updatedDate.toString())
                             .add("isPartOfMultipleIncidents", updatedIsPartOfMultipleIncidents)
                             .add("isSuccessful", updatedIsSuccessful)
-                            .add("isSuicide", updatedIsSuicide)
+                            .add("isSuicidal", updatedIsSuicide)
                             .add("target", Json.createObjectBuilder().add("target", updatedTarget)))
                     .build();
 
@@ -629,7 +627,7 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
                             groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group with event node which was part of multiple incidents: " + groupNodeExpected.getEventsCaused().get(0).getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group with event node which was successful: " + groupNodeExpected.getEventsCaused().get(0).getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicide(), groupNodeActual.getEventsCaused().get(0).getIsSuicide(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicide() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicide()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group with event node which was suicide: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                     () -> assertNotNull(groupNodeExpected.getEventsCaused().get(0).getTarget(),
                             () -> "should return group with event node with not null target, but was: null"),
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget(), () -> "should return group with event node with target: " + groupNodeExpected.getEventsCaused().get(0).getTarget() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),

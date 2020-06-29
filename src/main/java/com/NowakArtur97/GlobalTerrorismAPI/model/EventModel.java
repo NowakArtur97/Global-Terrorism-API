@@ -37,7 +37,7 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 	private Boolean isSuccessful;
 
 	@ApiModelProperty(notes = "Was the event suicide?")
-	private Boolean isSuicide;
+	private Boolean isSuicidal;
 
 	@ApiModelProperty(notes = "The event's target")
 	private TargetModel target;

@@ -148,7 +148,7 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                         .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
                         .andExpect(jsonPath("eventsCaused[0].date", is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -176,7 +176,7 @@ class GroupControllerPutMethodTest {
         Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
         boolean updatedIsPartOfMultipleIncidents = false;
         boolean updatedIsSuccessful = false;
-        boolean updatedIsSuicide = false;
+        boolean updatedIsSuicidal = false;
 
         String updatedGroupName = "new group name";
 
@@ -186,11 +186,11 @@ class GroupControllerPutMethodTest {
 
         EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                 .build(ObjectType.NODE);
         EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                 .build(ObjectType.MODEL);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
@@ -230,7 +230,7 @@ class GroupControllerPutMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -296,7 +296,7 @@ class GroupControllerPutMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(groupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(groupModel.getEventsCaused().get(0).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(groupModel.getEventsCaused().get(0).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(groupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(groupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))

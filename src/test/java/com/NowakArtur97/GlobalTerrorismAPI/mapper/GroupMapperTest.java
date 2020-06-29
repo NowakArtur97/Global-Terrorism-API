@@ -60,38 +60,38 @@ class GroupMapperTest {
         String motive = "motive";
         boolean isPartOfMultipleIncidents = true;
         boolean isSuccessful = true;
-        boolean isSuicide = true;
+        boolean isSuicidal = true;
 
         TargetNode targetNode1 = new TargetNode(targetId, "target" + targetId);
         TargetModel targetModel1 = new TargetModel(targetId, "target" + targetId);
 
         EventNode eventNode1 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode1)
+                .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetNode1)
                 .build(ObjectType.NODE);
 
         EventModel eventModel1 = (EventModel) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetModel1)
+                .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetModel1)
                 .build(ObjectType.MODEL);
 
         targetId++;
         eventId++;
         isPartOfMultipleIncidents = false;
         isSuccessful = false;
-        isSuicide = false;
+        isSuicidal = false;
 
         TargetNode targetNode2 = new TargetNode(targetId, "target" + targetId);
         TargetModel targetModel2 = new TargetModel(targetId, "target" + targetId);
 
         EventNode eventNode2 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetNode2)
+                .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetNode2)
                 .build(ObjectType.NODE);
 
         EventModel eventModel2 = (EventModel) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide).withTarget(targetModel2)
+                .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetModel2)
                 .build(ObjectType.MODEL);
 
         GroupNode groupNode = (GroupNode) groupBuilder.withId(groupId).withName(group).withEventsCaused(List.of(eventNode1, eventNode2)).build(ObjectType.NODE);
@@ -127,9 +127,9 @@ class GroupMapperTest {
                 () -> assertEquals(groupModelExpected.getEventsCaused().get(0).getIsSuccessful(), groupModelActual.getEventsCaused().get(0).getIsSuccessful(),
                         () -> "should return group's event model which was successful: " + groupModelExpected.getEventsCaused().get(0).getIsSuccessful()
                                 + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(groupModelExpected.getEventsCaused().get(0).getIsSuicide(), groupModelActual.getEventsCaused().get(0).getIsSuicide(),
-                        () -> "should return group's event model which was suicide: " + groupModelExpected.getEventsCaused().get(0).getIsSuicide()
-                                + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuicide()),
+                () -> assertEquals(groupModelExpected.getEventsCaused().get(0).getIsSuicidal(), groupModelActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group's event model which was suicidal: " + groupModelExpected.getEventsCaused().get(0).getIsSuicidal()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group's event model with not null target, but was: null"),
                 () -> assertEquals(groupModelExpected.getEventsCaused().get(0).getTarget().getId(), groupModelActual.getEventsCaused().get(0).getTarget().getId(),
@@ -156,9 +156,9 @@ class GroupMapperTest {
                 () -> assertEquals(groupModelExpected.getEventsCaused().get(1).getIsSuccessful(), groupModelActual.getEventsCaused().get(1).getIsSuccessful(),
                         () -> "should return group's event model which was successful: " + groupModelExpected.getEventsCaused().get(1).getIsSuccessful()
                                 + ", but was: " + groupModelActual.getEventsCaused().get(1).getIsSuccessful()),
-                () -> assertEquals(groupModelExpected.getEventsCaused().get(1).getIsSuicide(), groupModelActual.getEventsCaused().get(1).getIsSuicide(),
-                        () -> "should return group's event model which was suicide: " + groupModelExpected.getEventsCaused().get(1).getIsSuicide()
-                                + ", but was: " + groupModelActual.getEventsCaused().get(1).getIsSuicide()),
+                () -> assertEquals(groupModelExpected.getEventsCaused().get(1).getIsSuicidal(), groupModelActual.getEventsCaused().get(1).getIsSuicidal(),
+                        () -> "should return group's event model which was suicidal: " + groupModelExpected.getEventsCaused().get(1).getIsSuicidal()
+                                + ", but was: " + groupModelActual.getEventsCaused().get(1).getIsSuicidal()),
                 () -> assertNotNull(groupModelActual.getEventsCaused().get(1).getTarget(),
                         () -> "should return group's event model with not null target, but was: null"),
                 () -> assertEquals(groupModelExpected.getEventsCaused().get(1).getTarget().getId(), groupModelActual.getEventsCaused().get(1).getTarget().getId(),

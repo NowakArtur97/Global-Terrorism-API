@@ -83,9 +83,9 @@ class EventModelAssemblerTest {
 				() -> assertEquals(eventNode.getIsSuccessful(), model.getIsSuccessful(),
 						() -> "should return event model which was successful: " + eventNode.getIsSuccessful()
 								+ ", but was: " + model.getIsSuccessful()),
-				() -> assertEquals(eventNode.getIsSuicide(), model.getIsSuicide(),
-						() -> "should return event model which was suicide: " + eventNode.getIsSuicide() + ", but was: "
-								+ model.getIsSuicide()),
+				() -> assertEquals(eventNode.getIsSuicidal(), model.getIsSuicidal(),
+						() -> "should return event model which was suicidal: " + eventNode.getIsSuicidal() + ", but was: "
+								+ model.getIsSuicidal()),
 				() -> assertNotNull(eventNode.getTarget(),
 						() -> "should return event model with not null target, but was: null"),
 				() -> assertEquals(targetModel, model.getTarget(),
@@ -129,9 +129,9 @@ class EventModelAssemblerTest {
 				() -> assertEquals(eventNode.getIsSuccessful(), model.getIsSuccessful(),
 						() -> "should return event model which was successful: " + eventNode.getIsSuccessful()
 								+ ", but was: " + model.getIsSuccessful()),
-				() -> assertEquals(eventNode.getIsSuicide(), model.getIsSuicide(),
-						() -> "should return event model which was suicide: " + eventNode.getIsSuicide() + ", but was: "
-								+ model.getIsSuicide()),
+				() -> assertEquals(eventNode.getIsSuicidal(), model.getIsSuicidal(),
+						() -> "should return event model which was suicidal: " + eventNode.getIsSuicidal() + ", but was: "
+								+ model.getIsSuicidal()),
 				() -> assertNull(eventNode.getTarget(),
 						() -> "should return event model with null target, but wasn't: null"),
 				() -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),

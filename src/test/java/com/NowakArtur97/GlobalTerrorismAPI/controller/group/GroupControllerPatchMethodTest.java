@@ -166,7 +166,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                             .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
                             .andExpect(jsonPath("eventsCaused[0].date", is(CoreMatchers.notNullValue())))
-                            .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                            .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -195,7 +195,7 @@ class GroupControllerPatchMethodTest {
             Date updatedEventDate = new SimpleDateFormat("yyyy-MM-dd").parse(updatedEventDateString);
             boolean updatedIsPartOfMultipleIncidents = false;
             boolean updatedIsSuccessful = false;
-            boolean updatedIsSuicide = false;
+            boolean updatedIsSuicidal = false;
 
             TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
             TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
@@ -206,12 +206,12 @@ class GroupControllerPatchMethodTest {
 
             EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedEventDate).withSummary(updatedSummary)
                     .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetNode).build(ObjectType.NODE);
 
             EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedEventDate)
                     .withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
@@ -240,7 +240,7 @@ class GroupControllerPatchMethodTest {
                     + "{ \"op\": \"replace\", \"path\": \"/eventsCaused[0]/isPartOfMultipleIncidents\", \"value\": \""
                     + updatedIsPartOfMultipleIncidents + "\" },"
                     + "{ \"op\": \"replace\", \"path\": \"/eventsCaused[0]/isSuccessful\", \"value\": \"" + updatedIsSuccessful
-                    + "\" }," + "{ \"op\": \"replace\", \"path\": \"/eventsCaused[0]/isSuicide\", \"value\": \"" + updatedIsSuicide + "\" }"
+                    + "\" }," + "{ \"op\": \"replace\", \"path\": \"/eventsCaused[0]/isSuicidal\", \"value\": \"" + updatedIsSuicidal + "\" }"
                     + "]";
 
             assertAll(
@@ -257,7 +257,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                             .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
                             .andExpect(jsonPath("eventsCaused[0].date", is(CoreMatchers.notNullValue())))
-                            .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                            .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -400,7 +400,7 @@ class GroupControllerPatchMethodTest {
 
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(null).build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withId(null).withSummary(null).withMotive(null)
-                    .withDate(null).withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null)
+                    .withDate(null).withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null)
                     .withTarget(updatedTargetNode).build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -417,7 +417,7 @@ class GroupControllerPatchMethodTest {
                     + "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + null + "\" },"
                     + "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \"" + null + "\" },"
                     + "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + null + "\" },"
-                    + "{ \"op\": \"replace\", \"path\": \"/isSuicide\", \"value\": \"" + null + "\" },"
+                    + "{ \"op\": \"replace\", \"path\": \"/isSuicidal\", \"value\": \"" + null + "\" },"
                     + "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + null + "\" }" + "]";
 
             assertAll(
@@ -434,7 +434,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     CoreMatchers.hasItem("Event must have information about whether it was successful")))
                             .andExpect(jsonPath("errors",
-                                    CoreMatchers.hasItem("Event must have information about whether it was a suicide attack"))),
+                                    CoreMatchers.hasItem("Event must have information about whether it was a suicidal attack"))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verifyNoMoreInteractions(groupService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -630,7 +630,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                             .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
                             .andExpect(jsonPath("eventsCaused[0].date", is(CoreMatchers.notNullValue())))
-                            .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                            .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -659,7 +659,7 @@ class GroupControllerPatchMethodTest {
             Date updatedEventDate = new SimpleDateFormat("yyyy-MM-dd").parse(updatedEventDateString);
             boolean updatedIsPartOfMultipleIncidents = false;
             boolean updatedIsSuccessful = false;
-            boolean updatedIsSuicide = false;
+            boolean updatedIsSuicidal = false;
 
             TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
             TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
@@ -670,12 +670,12 @@ class GroupControllerPatchMethodTest {
 
             EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedEventDate).withSummary(updatedSummary)
                     .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetNode).build(ObjectType.NODE);
 
             EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedEventDate)
                     .withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
-                    .withIsSuccessful(updatedIsSuccessful).withIsSuicide(updatedIsSuicide).withMotive(updatedMotive)
+                    .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
@@ -700,7 +700,7 @@ class GroupControllerPatchMethodTest {
             String jsonMergePatch = "{\"eventsCaused[0].summary\" : \"" + updatedSummary + "\", \"eventsCaused[0].motive\" : \"" + updatedMotive
                     + "\", \"eventsCaused[0].date\" : \"" + updatedEventDateString + "\", \"eventsCaused[0].isPartOfMultipleIncidents\" : "
                     + updatedIsPartOfMultipleIncidents + ", \"eventsCaused[0].isSuccessful\" : " + updatedIsSuccessful
-                    + ", \"eventsCaused[0].isSuicide\" : " + updatedIsSuicide + "}";
+                    + ", \"eventsCaused[0].isSuicidal\" : " + updatedIsSuicidal + "}";
 
             assertAll(
                     () -> mockMvc
@@ -716,7 +716,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
                             .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
                             .andExpect(jsonPath("eventsCaused[0].date", is(CoreMatchers.notNullValue())))
-                            .andExpect(jsonPath("eventsCaused[0].isSuicide", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicide())))
+                            .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -855,7 +855,7 @@ class GroupControllerPatchMethodTest {
 
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(null).build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withId(null).withSummary(null).withMotive(null)
-                    .withDate(null).withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null)
+                    .withDate(null).withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null)
                     .withTarget(updatedTargetNode).build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -869,7 +869,7 @@ class GroupControllerPatchMethodTest {
 
             String jsonMergePatch = "{\"eventsCaused[0].summary\" : \"" + null + "\", \"eventsCaused[0].motive\" : \"" + null + "\", \"eventsCaused[0].date\" : \""
                     + null + "\", \"eventsCaused[0].isPartOfMultipleIncidents\" : " + null + ", \"eventsCaused[0].isSuccessful\" : " + null
-                    + ", \"eventsCaused[0].isSuicide\" : " + null + "}";
+                    + ", \"eventsCaused[0].isSuicidal\" : " + null + "}";
 
             assertAll(
                     () -> mockMvc
@@ -885,7 +885,7 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was successful")))
                             .andExpect(jsonPath("errors",
-                                    hasItem("Event must have information about whether it was a suicide attack")))
+                                    hasItem("Event must have information about whether it was a suicidal attack")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty"))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verifyNoMoreInteractions(groupService),

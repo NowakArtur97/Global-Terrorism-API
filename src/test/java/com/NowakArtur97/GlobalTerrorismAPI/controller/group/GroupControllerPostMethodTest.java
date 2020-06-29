@@ -148,7 +148,7 @@ class GroupControllerPostMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(eventModel.getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventModel.getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventModel.getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("eventsCaused[0].target.links[0].href", is(pathToTargetLink)))

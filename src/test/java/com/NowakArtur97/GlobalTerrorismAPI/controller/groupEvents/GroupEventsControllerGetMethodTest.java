@@ -153,7 +153,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[0].isSuicide", is(eventModel1.getIsSuicide())))
+                        .andExpect(jsonPath("content[0].isSuicidal", is(eventModel1.getIsSuicidal())))
                         .andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
                         .andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
@@ -166,7 +166,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[1].isSuicide", is(eventModel2.getIsSuicide())))
+                        .andExpect(jsonPath("content[1].isSuicidal", is(eventModel2.getIsSuicidal())))
                         .andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
                         .andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
@@ -179,7 +179,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[2].isSuicide", is(eventModel3.getIsSuicide())))
+                        .andExpect(jsonPath("content[2].isSuicidal", is(eventModel3.getIsSuicidal())))
                         .andExpect(jsonPath("content[2].isSuccessful", is(eventModel3.getIsSuccessful())))
                         .andExpect(jsonPath("content[2].isPartOfMultipleIncidents",
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
@@ -192,7 +192,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel4.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[3].isSuicide", is(eventModel4.getIsSuicide())))
+                        .andExpect(jsonPath("content[3].isSuicidal", is(eventModel4.getIsSuicidal())))
                         .andExpect(jsonPath("content[3].isSuccessful", is(eventModel4.getIsSuccessful())))
                         .andExpect(jsonPath("content[3].isPartOfMultipleIncidents",
                                 is(eventModel4.getIsPartOfMultipleIncidents())))
@@ -275,7 +275,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[0].isSuicide", is(eventModel1.getIsSuicide())))
+                        .andExpect(jsonPath("content[0].isSuicidal", is(eventModel1.getIsSuicidal())))
                         .andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
                         .andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
@@ -288,7 +288,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[1].isSuicide", is(eventModel2.getIsSuicide())))
+                        .andExpect(jsonPath("content[1].isSuicidal", is(eventModel2.getIsSuicidal())))
                         .andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
                         .andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
@@ -301,7 +301,7 @@ class GroupEventsControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("content[2].isSuicide", is(eventModel3.getIsSuicide())))
+                        .andExpect(jsonPath("content[2].isSuicidal", is(eventModel3.getIsSuicidal())))
                         .andExpect(jsonPath("content[2].isSuccessful", is(eventModel3.getIsSuccessful())))
                         .andExpect(jsonPath("content[2].isPartOfMultipleIncidents",
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
@@ -412,7 +412,7 @@ class GroupEventsControllerGetMethodTest {
         String motive = "motive";
         boolean isPartOfMultipleIncidents = true;
         boolean isSuccessful = true;
-        boolean isSuicide = true;
+        boolean isSuicidal = true;
 
         switch (type) {
 
@@ -422,7 +422,7 @@ class GroupEventsControllerGetMethodTest {
 
                 return eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode)
                         .withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.NODE);
 
             case MODEL:
@@ -431,7 +431,7 @@ class GroupEventsControllerGetMethodTest {
 
                 EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel)
                         .withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));

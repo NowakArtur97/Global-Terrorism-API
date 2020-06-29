@@ -146,9 +146,9 @@ class EventServiceImplTest {
                 () -> assertEquals(eventExpected.getIsSuccessful(), eventActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventExpected.getIsSuccessful()
                                 + ", but was: " + eventActual.getIsSuccessful()),
-                () -> assertEquals(eventExpected.getIsSuicide(), eventActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventExpected.getIsSuicide()
-                                + ", but was: " + eventActual.getIsSuicide()),
+                () -> assertEquals(eventExpected.getIsSuicidal(), eventActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventExpected.getIsSuicidal()
+                                + ", but was: " + eventActual.getIsSuicidal()),
                 () -> assertNotNull(eventExpected.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertEquals(eventExpected.getTarget(), eventActual.getTarget(),
@@ -205,9 +205,9 @@ class EventServiceImplTest {
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                + ", but was: " + eventNodeActual.getIsSuicide()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeExpected.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -252,9 +252,9 @@ class EventServiceImplTest {
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                + ", but was: " + eventNodeActual.getIsSuicide()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeExpected.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -279,20 +279,20 @@ class EventServiceImplTest {
         Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
         boolean updatedIsPartOfMultipleIncidents = false;
         boolean updatedIsSuccessful = false;
-        boolean updatedIsSuicide = false;
+        boolean updatedIsSuicidal = false;
         EventDTO eventDTOExpected = (EventDTO) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(targetDTO)
+                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetDTO)
                 .build(ObjectType.DTO);
         EventNode eventNodeExpectedBeforeMethod = (EventNode) eventBuilder.withTarget(targetNode)
                 .build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeSetIdAndTarget = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(targetNode)
+                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetNode)
                 .build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicide(updatedIsSuicide).withMotive(updatedMotive).withTarget(updatedTargetNode).build(ObjectType.NODE);
+                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(updatedTargetNode).build(ObjectType.NODE);
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(updatedTargetNode);
         when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
@@ -320,9 +320,9 @@ class EventServiceImplTest {
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                + ", but was: " + eventNodeActual.getIsSuicide()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeExpected.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
@@ -372,9 +372,9 @@ class EventServiceImplTest {
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                + ", but was: " + eventNodeActual.getIsSuicide()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeExpected.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),

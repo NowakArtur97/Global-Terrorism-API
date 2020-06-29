@@ -108,9 +108,9 @@ class GroupModelAssemblerTest {
                 () -> assertEquals(groupModel.getEventsCaused().get(0).getIsSuccessful(), model.getEventsCaused().get(0).getIsSuccessful(),
                         () -> "should return group's event model which was successful: " + groupModel.getEventsCaused().get(0).getIsSuccessful()
                                 + ", but was: " + model.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(groupModel.getEventsCaused().get(0).getIsSuicide(), model.getEventsCaused().get(0).getIsSuicide(),
-                        () -> "should return group's event model which was suicide: " + groupModel.getEventsCaused().get(0).getIsSuicide()
-                                + ", but was: " + model.getEventsCaused().get(0).getIsSuicide()),
+                () -> assertEquals(groupModel.getEventsCaused().get(0).getIsSuicidal(), model.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group's event model which was suicidal: " + groupModel.getEventsCaused().get(0).getIsSuicidal()
+                                + ", but was: " + model.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(model.getEventsCaused().get(0).getTarget(),
                         () -> "should return group's event model with not null target, but was: null"),
                 () -> assertEquals(groupModel.getEventsCaused().get(0).getTarget().getId(), model.getEventsCaused().get(0).getTarget().getId(),

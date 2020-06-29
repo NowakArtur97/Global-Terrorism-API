@@ -141,10 +141,10 @@ class ApplicationStartupEventListener {
         boolean isSuccessful = parseBoolean(cellValue);
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUICIDE.getIndex());
-        boolean isSuicide = parseBoolean(cellValue);
+        boolean isSuicidal = parseBoolean(cellValue);
 
         return saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, isPartOfMultipleIncidents, isSuccessful,
-                isSuicide, motive, target);
+                isSuicidal, motive, target);
     }
 
     private TargetNode saveTarget(String targetName) {
@@ -155,14 +155,14 @@ class ApplicationStartupEventListener {
     }
 
     private EventNode saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
-                                boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicide, String motive,
+                                boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicidal, String motive,
                                 TargetNode target) {
 
         Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
 
         EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
                 .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                .isSuicide(isSuicide).motive(motive).target(target).build();
+                .isSuicidal(isSuicidal).motive(motive).target(target).build();
 
         return eventService.save(eventNode);
     }

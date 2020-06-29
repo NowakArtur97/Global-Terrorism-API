@@ -126,7 +126,7 @@ class EventControllerPostMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicide", is(eventModel.getIsSuicide())))
+                        .andExpect(jsonPath("isSuicidal", is(eventModel.getIsSuicidal())))
                         .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
                         .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
@@ -145,7 +145,7 @@ class EventControllerPostMethodTest {
     void when_add_event_with_null_fields_should_return_errors() {
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
-                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicide(null).withTarget(null)
+                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
                 .build(ObjectType.DTO);
 
         assertAll(
@@ -159,7 +159,7 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuicide.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),

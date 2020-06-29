@@ -78,9 +78,9 @@ class EventMapperTest {
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicide(), eventNodeActual.getIsSuicide(),
-                        () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicide()
-                                + ", but was: " + eventNodeActual.getIsSuicide()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeActual.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
                 () -> assertNull(eventNodeActual.getTarget().getId(),
@@ -123,9 +123,9 @@ class EventMapperTest {
                 () -> assertEquals(eventDTOExpected.getIsSuccessful(), eventDTOActual.getIsSuccessful(),
                         () -> "should return event dto which was successful: " + eventDTOExpected.getIsSuccessful()
                                 + ", but was: " + eventDTOActual.getIsSuccessful()),
-                () -> assertEquals(eventDTOExpected.getIsSuicide(), eventDTOActual.getIsSuicide(),
-                        () -> "should return event dto which was suicide: " + eventDTOExpected.getIsSuicide()
-                                + ", but was: " + eventDTOActual.getIsSuicide()),
+                () -> assertEquals(eventDTOExpected.getIsSuicidal(), eventDTOActual.getIsSuicidal(),
+                        () -> "should return event dto which was suicidal: " + eventDTOExpected.getIsSuicidal()
+                                + ", but was: " + eventDTOActual.getIsSuicidal()),
                 () -> assertNotNull(eventDTOActual.getTarget(),
                         () -> "should return event dto with not null target, but was: null"),
                 () -> assertEquals(eventDTOExpected.getTarget().getTarget(), eventDTOActual.getTarget().getTarget(),
@@ -169,9 +169,9 @@ class EventMapperTest {
                 () -> assertEquals(eventModelExpected.getIsSuccessful(), eventModelActual.getIsSuccessful(),
                         () -> "should return event model which was successful: " + eventModelExpected.getIsSuccessful()
                                 + ", but was: " + eventModelActual.getIsSuccessful()),
-                () -> assertEquals(eventModelExpected.getIsSuicide(), eventModelActual.getIsSuicide(),
-                        () -> "should return event model which was suicide: " + eventModelExpected.getIsSuicide()
-                                + ", but was: " + eventModelActual.getIsSuicide()),
+                () -> assertEquals(eventModelExpected.getIsSuicidal(), eventModelActual.getIsSuicidal(),
+                        () -> "should return event model which was suicidal: " + eventModelExpected.getIsSuicidal()
+                                + ", but was: " + eventModelActual.getIsSuicidal()),
                 () -> assertNotNull(eventModelActual.getTarget(),
                         () -> "should return event model with not null target, but was: null"),
                 () -> assertEquals(eventModelExpected.getTarget().getId(), eventModelActual.getTarget().getId(),

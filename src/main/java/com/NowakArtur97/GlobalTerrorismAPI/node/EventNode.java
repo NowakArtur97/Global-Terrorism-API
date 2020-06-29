@@ -24,31 +24,31 @@ public class EventNode extends Node implements Event {
 
     private Boolean isSuccessful;
 
-    private Boolean isSuicide;
+    private Boolean isSuicidal;
 
     @Relationship("TARGETS")
     private TargetNode target;
 
     public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents,
-                     Boolean isSuccessful, Boolean isSuicide) {
+                     Boolean isSuccessful, Boolean isSuicidal) {
 
         this.summary = summary;
         this.motive = motive;
         this.date = date;
         this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
         this.isSuccessful = isSuccessful;
-        this.isSuicide = isSuicide;
+        this.isSuicidal = isSuicidal;
     }
 
     public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents,
-                     Boolean isSuccessful, Boolean isSuicide, TargetNode target) {
+                     Boolean isSuccessful, Boolean isSuicidal, TargetNode target) {
 
-        this(summary, motive, date, isPartOfMultipleIncidents, isSuccessful, isSuicide);
+        this(summary, motive, date, isPartOfMultipleIncidents, isSuccessful, isSuicidal);
         this.target = target;
     }
 
     @Builder
-    public EventNode(Long id, String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicide, TargetNode target) {
+    public EventNode(Long id, String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal, TargetNode target) {
 
         super(id);
         this.summary = summary;
@@ -56,7 +56,7 @@ public class EventNode extends Node implements Event {
         this.date = date;
         this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
         this.isSuccessful = isSuccessful;
-        this.isSuicide = isSuicide;
+        this.isSuicidal = isSuicidal;
         this.target = target;
     }
 }

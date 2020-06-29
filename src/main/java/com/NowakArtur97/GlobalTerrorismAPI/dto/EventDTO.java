@@ -45,8 +45,8 @@ public class EventDTO implements DTONode, Event {
 	private Boolean isSuccessful;
 
 	@ApiModelProperty(notes = "Was the event suicide?", required = true, example = "true")
-	@NotNull(message = "{event.isSuicide.notNull}")
-	private Boolean isSuicide;
+	@NotNull(message = "{event.isSuicidal.notNull}")
+	private Boolean isSuicidal;
 
 	@ApiModelProperty(notes = "The event's target", required = true)
 	@Valid

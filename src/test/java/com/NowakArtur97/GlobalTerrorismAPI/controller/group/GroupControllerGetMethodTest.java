@@ -346,7 +346,7 @@ class GroupControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(groupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicide", is(groupModel.getEventsCaused().get(0).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(groupModel.getEventsCaused().get(0).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(groupModel.getEventsCaused().get(0).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(groupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
@@ -359,7 +359,7 @@ class GroupControllerGetMethodTest {
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                         .format(groupModel.getEventsCaused().get(1).getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[1].isSuicide", is(groupModel.getEventsCaused().get(1).getIsSuicide())))
+                        .andExpect(jsonPath("eventsCaused[1].isSuicidal", is(groupModel.getEventsCaused().get(1).getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[1].isSuccessful", is(groupModel.getEventsCaused().get(1).getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[1].isPartOfMultipleIncidents",
                                 is(groupModel.getEventsCaused().get(1).getIsPartOfMultipleIncidents())))
@@ -404,7 +404,7 @@ class GroupControllerGetMethodTest {
         String motive = "motive";
         boolean isPartOfMultipleIncidents = true;
         boolean isSuccessful = true;
-        boolean isSuicide = true;
+        boolean isSuicidal = true;
 
         switch (type) {
 
@@ -413,11 +413,11 @@ class GroupControllerGetMethodTest {
                 counterForUtilMethodsNode++;
 
                 EventNode eventNode = (EventNode) eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode).withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.NODE);
 
                 EventNode eventNode2 = (EventNode) eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode).withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.NODE);
 
                 GroupNode groupNode = (GroupNode) groupBuilder.withId((long) counterForUtilMethodsNode).withName(group + counterForUtilMethodsNode).withEventsCaused(List.of(eventNode, eventNode2)).build(ObjectType.NODE);
@@ -429,13 +429,13 @@ class GroupControllerGetMethodTest {
                 counterForUtilMethodsModel++;
 
                 EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel).withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));
 
                 EventModel eventModel2 = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel).withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicide(isSuicide)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.MODEL);
                 String pathToEventLink2 = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel2.add(new Link(pathToEventLink2));
