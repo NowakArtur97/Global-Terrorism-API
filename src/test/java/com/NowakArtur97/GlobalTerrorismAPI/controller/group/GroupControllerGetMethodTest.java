@@ -374,7 +374,7 @@ class GroupControllerGetMethodTest {
     }
 
     @Test
-    void when_find_group_but_group_not_exists_should_return_error_response() {
+    void when_find_group_but_group_does_not_exist_should_return_error_response() {
 
         Long groupId = 1L;
 

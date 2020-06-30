@@ -9,7 +9,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTargetTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,7 @@ public class EventTargetController {
             @ApiResponse(code = 200, message = "Event's Target found by provided id", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         TargetNode targetNode = eventService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("EventModel", id))
@@ -48,7 +47,7 @@ public class EventTargetController {
         return new ResponseEntity<>(targetModelAssembler.toModel(targetNode), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/target")
+    @DeleteMapping("/{id}/targets")
     @ResponseStatus(HttpStatus.NO_CONTENT) // Added to remove the default 200 status added by Swagger
     @ApiOperation(value = "Delete Event's Target by id", notes = "Provide an id to delete specific Event's Target")
     @ApiResponses({

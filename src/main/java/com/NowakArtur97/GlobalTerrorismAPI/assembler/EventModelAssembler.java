@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetControlle
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +34,8 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 
         if (eventNode.getTarget() != null) {
             eventModel.setTarget(targetModelAssembler.toModel(eventNode.getTarget()));
-            
-            eventModel.add(linkTo(methodOn(EventTargetController.class).findEventTarget(eventModel.getId(), Pageable.unpaged())).withRel("target"));
+
+            eventModel.add(linkTo(methodOn(EventTargetController.class).findEventTarget(eventModel.getId())).withRel("target"));
         }
 
         eventModel.add(linkTo(methodOn(EventController.class).findById(eventModel.getId())).withSelfRel());

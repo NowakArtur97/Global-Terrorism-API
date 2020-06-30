@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -45,7 +46,9 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
             EventNode eventNode = eventNodeOptional.get();
 
-            targetService.delete(eventNode.getTarget().getId());
+            if (eventNode.getTarget() != null) {
+                targetService.delete(eventNode.getTarget().getId());
+            }
 
             repository.delete(eventNode);
         }
@@ -58,7 +61,13 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         Optional<EventNode> eventNodeOptional = findById(id);
 
-        eventNodeOptional.ifPresent(eventNode -> targetService.delete(eventNode.getTarget().getId()));
+        if (eventNodeOptional.isPresent()) {
+            if (eventNodeOptional.get().getTarget() != null) {
+                targetService.delete(eventNodeOptional.get().getTarget().getId());
+            } else {
+                throw new ResourceNotFoundException("TargetModel");
+            }
+        }
 
         return eventNodeOptional;
     }

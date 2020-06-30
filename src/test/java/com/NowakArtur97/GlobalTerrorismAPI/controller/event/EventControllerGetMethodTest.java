@@ -476,7 +476,7 @@ class EventControllerGetMethodTest {
     }
 
     @Test
-    void when_find_event_but_event_not_exists_should_return_error_response() {
+    void when_find_event_but_event_does_not_exist_should_return_error_response() {
 
         Long eventId = 1L;
 

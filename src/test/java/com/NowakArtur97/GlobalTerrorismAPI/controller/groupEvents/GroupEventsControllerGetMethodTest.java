@@ -384,7 +384,7 @@ class GroupEventsControllerGetMethodTest {
     }
 
     @Test
-    void when_find_all_group_events_but_group_not_exists_should_return_error_response() {
+    void when_find_all_group_events_but_group_does_not_exist_should_return_error_response() {
 
         Long groupId = 1L;
         String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";

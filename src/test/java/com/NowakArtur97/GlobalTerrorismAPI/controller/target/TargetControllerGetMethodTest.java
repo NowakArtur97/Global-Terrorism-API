@@ -331,7 +331,7 @@ class TargetControllerGetMethodTest {
     }
 
     @Test
-    void when_find_target_but_target_not_exists_should_return_error_response() {
+    void when_find_target_but_target_does_not_exist_should_return_error_response() {
 
         Long targetId = 1L;
 

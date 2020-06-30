@@ -89,7 +89,7 @@ class TargetControllerDeleteMethodTest {
     }
 
     @Test
-    void when_delete_target_but_target_not_exists_should_return_error_response() {
+    void when_delete_target_but_target_does_not_exist_should_return_error_response() {
 
         Long targetId = 1L;
 
@@ -108,6 +108,7 @@ class TargetControllerDeleteMethodTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper), () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
     }
 }
