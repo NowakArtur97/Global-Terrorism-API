@@ -117,6 +117,7 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
     @ApiOperation(value = "Delete Event by id", notes = "Provide an id to delete specific Event")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Event"),
+            @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> delete(
             @ApiParam(value = "Event id value needed to delete Event", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {

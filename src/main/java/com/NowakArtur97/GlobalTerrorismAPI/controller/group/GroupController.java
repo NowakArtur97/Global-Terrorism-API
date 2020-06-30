@@ -117,6 +117,7 @@ public class GroupController extends GenericRestControllerImpl<GroupModel, Group
     @ApiOperation(value = "Delete Group by id", notes = "Provide an id to delete specific Group")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Group"),
+            @ApiResponse(code = 400, message = "Invalid Group's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> delete(
             @ApiParam(value = "Group's id value needed to delete Group", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {

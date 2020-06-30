@@ -52,6 +52,7 @@ public class EventTargetController {
     @ApiOperation(value = "Delete Event's Target by id", notes = "Provide an id to delete specific Event's Target")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Event's Target"),
+            @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Event's id value needed to delete target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 

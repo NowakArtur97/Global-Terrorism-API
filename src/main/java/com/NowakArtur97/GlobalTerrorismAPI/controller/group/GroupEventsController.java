@@ -90,6 +90,7 @@ public class GroupEventsController {
     @ApiOperation(value = "Delete Group's Event by id", notes = "Provide an id to delete specific Group's Event")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Group's Event"),
+            @ApiResponse(code = 400, message = "Invalid Group's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group's id value needed to delete events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 

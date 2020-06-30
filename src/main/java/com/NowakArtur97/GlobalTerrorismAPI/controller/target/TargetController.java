@@ -117,6 +117,7 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
     @ApiOperation(value = "Delete Target by id", notes = "Provide an id to delete specific Target")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successfully deleted Target"),
+            @ApiResponse(code = 400, message = "Invalid Target's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> delete(
             @ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
