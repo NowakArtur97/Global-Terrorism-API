@@ -82,7 +82,8 @@ class EventTargetControllerGetMethodTest {
         when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
         when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
-        assertAll(() -> mockMvc.perform(get(linkWithParameter, eventId))
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, eventId))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
@@ -110,6 +111,29 @@ class EventTargetControllerGetMethodTest {
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
+                () -> verify(eventService, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(targetModelAssembler));
+    }
+
+    @Test
+    void when_find_event_target_but_event_exists_without_target_should_return_error_response() {
+
+        Long eventId = 1L;
+
+        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(null).build(ObjectType.NODE);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
+
+        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, eventId))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel"))),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(targetModelAssembler));
