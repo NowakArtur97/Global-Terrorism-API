@@ -80,8 +80,8 @@ class TargetControllerPutMethodTest {
         Long targetId = 1L;
         String oldTargetName = "target";
         String updatedTargetName = "updated target";
-        TargetDTO targetDTO = new TargetDTO(oldTargetName);
-        TargetNode targetNode = new TargetNode(targetId, updatedTargetName);
+        TargetDTO targetDTO = new TargetDTO(updatedTargetName);
+        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
         TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
@@ -102,8 +102,7 @@ class TargetControllerPutMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("target", not(oldTargetName))),
+                        .andExpect(jsonPath("target", is(updatedTargetName))),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verify(targetService, times(1)).update(targetNode, targetDTO),
                 () -> verifyNoMoreInteractions(targetService),
