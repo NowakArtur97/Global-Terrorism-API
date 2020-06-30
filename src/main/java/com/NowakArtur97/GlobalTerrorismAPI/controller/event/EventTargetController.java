@@ -1,10 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTargetTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
@@ -13,6 +16,8 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 public class EventTargetController {
 
     private final EventService eventService;
+
+    private final GenericService<TargetNode, TargetDTO> targetService;
 
     private final RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
@@ -45,6 +52,33 @@ public class EventTargetController {
         }
 
         return new ResponseEntity<>(targetModelAssembler.toModel(targetNode), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/targets")
+    @ApiOperation(value = "Update an Event's Target", notes = "Update an Event's Target. If the Event's Target id is not found for update, a new Target with the next free id will be created")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successfully updated an Event's Target", response = TargetModel.class),
+            @ApiResponse(code = 201, message = "Successfully added a new Event's Target", response = TargetModel.class),
+            @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
+    public ResponseEntity<TargetModel> updateEventTarget(
+            @ApiParam(value = "Id of the Target's Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Events's Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
+
+        EventNode eventNode = eventService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("EventModel", id));
+        HttpStatus httpStatus;
+
+        if (eventNode.getTarget() != null) {
+
+            httpStatus = HttpStatus.OK;
+        } else {
+
+            httpStatus = HttpStatus.CREATED;
+        }
+
+        TargetNode targetNode = eventService.updateEventTarget(eventNode).getTarget();
+
+        return new ResponseEntity<>(targetModelAssembler.toModel(targetNode), httpStatus);
     }
 
     @DeleteMapping("/{id}/targets")

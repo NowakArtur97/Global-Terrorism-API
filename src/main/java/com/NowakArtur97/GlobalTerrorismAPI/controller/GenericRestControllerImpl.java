@@ -90,27 +90,20 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
     @Override
     public ResponseEntity<M> update(@PathVariable("id") Long id, @RequestBody @Valid D dto) {
 
-        HttpStatus httpStatus;
-        T node;
-
         Optional<T> nodeOptional = service.findById(id);
 
         if (id != null && nodeOptional.isPresent()) {
 
-            httpStatus = HttpStatus.OK;
+            T node = service.update(nodeOptional.get(), dto);
 
-            node = service.update(nodeOptional.get(), dto);
+            return new ResponseEntity<>(modelAssembler.toModel(node), HttpStatus.OK);
 
         } else {
 
-            httpStatus = HttpStatus.CREATED;
+            T node = service.saveNew(dto);
 
-            node = service.saveNew(dto);
+            return new ResponseEntity<>(modelAssembler.toModel(node), HttpStatus.CREATED);
         }
-
-        M resource = modelAssembler.toModel(node);
-
-        return new ResponseEntity<>(resource, httpStatus);
     }
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)

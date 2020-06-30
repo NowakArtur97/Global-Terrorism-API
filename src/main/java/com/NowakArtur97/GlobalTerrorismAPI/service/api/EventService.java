@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface EventService extends GenericService<EventNode, EventDTO> {
 
     Optional<EventNode> deleteEventTarget(Long id);
+
+    EventNode updateEventTarget(EventNode eventNode);
 }
