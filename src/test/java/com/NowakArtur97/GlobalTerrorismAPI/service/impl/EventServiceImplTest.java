@@ -344,6 +344,110 @@ class EventServiceImplTest {
     }
 
     @Test
+    void when_update_event_target_should_update_target_and_return_event() {
+
+        String updatedTargetName = "target2";
+
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(updatedTargetName).build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTargetName).build(ObjectType.NODE);
+
+        EventNode eventNodeExpectedBeforeSetTarget = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
+
+        when(targetService.update(targetNode, targetDTOExpected)).thenReturn(updatedTargetNode);
+        when(eventRepository.save(eventNodeExpectedBeforeSetTarget)).thenReturn(eventNodeExpected);
+
+        EventNode eventNodeActual = eventService.addOrUpdateEventTarget(eventNodeExpectedBeforeSetTarget, targetDTOExpected);
+
+        assertAll(
+                () -> assertNotNull(eventNodeActual.getId(),
+                        () -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                        () -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + eventNodeActual.getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                        () -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + eventNodeActual.getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                        () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + eventNodeActual.getDate()),
+                () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                        eventNodeActual.getIsPartOfMultipleIncidents(),
+                        () -> "should return event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + eventNodeActual.getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                        () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + eventNodeActual.getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
+                () -> assertNotNull(eventNodeExpected.getTarget(),
+                        () -> "should return event node with not null target, but was: null"),
+                () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+                        () -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
+                                + eventNodeActual.getTarget()),
+                () -> verify(targetService, times(1)).update(targetNode, targetDTOExpected),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(eventRepository, times(1)).save(eventNodeExpected),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
+    void when_update_event_without_target_should_save_new_target_and_return_event() {
+
+        String newTargetName = "target2";
+
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(newTargetName).build(ObjectType.DTO);
+        TargetNode newTargetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+
+        EventNode eventNodeExpectedBeforeSetTarget = (EventNode) eventBuilder.build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(newTargetNode).build(ObjectType.NODE);
+
+        when(targetService.saveNew(targetDTOExpected)).thenReturn(newTargetNode);
+        when(eventRepository.save(eventNodeExpectedBeforeSetTarget)).thenReturn(eventNodeExpected);
+
+        EventNode eventNodeActual = eventService.addOrUpdateEventTarget(eventNodeExpectedBeforeSetTarget, targetDTOExpected);
+
+        assertAll(
+                () -> assertNotNull(eventNodeActual.getId(),
+                        () -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                        () -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + eventNodeActual.getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                        () -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + eventNodeActual.getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                        () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + eventNodeActual.getDate()),
+                () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                        eventNodeActual.getIsPartOfMultipleIncidents(),
+                        () -> "should return event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + eventNodeActual.getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                        () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + eventNodeActual.getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
+                () -> assertNotNull(eventNodeExpected.getTarget(),
+                        () -> "should return event node with not null target, but was: null"),
+                () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+                        () -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
+                                + eventNodeActual.getTarget()),
+                () -> verify(targetService, times(1)).saveNew(targetDTOExpected),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(eventRepository, times(1)).save(eventNodeExpected),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
     void when_delete_event_without_target_should_delete_event() {
 
         Long eventId = 1L;
