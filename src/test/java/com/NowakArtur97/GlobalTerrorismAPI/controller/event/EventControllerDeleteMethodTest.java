@@ -81,6 +81,29 @@ class EventControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(null).build(ObjectType.NODE);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+        when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
+
+        assertAll(
+                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                        .andExpect(status().isNoContent())
+                        .andExpect(jsonPath("$").doesNotExist()),
+                () -> verify(eventService, times(1)).delete(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
+    void when_delete_existing_event_with_target_should_not_return_content() {
+
+        Long eventId = 1L;
+
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 

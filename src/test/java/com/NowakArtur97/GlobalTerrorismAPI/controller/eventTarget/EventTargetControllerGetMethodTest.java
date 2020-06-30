@@ -121,7 +121,7 @@ class EventTargetControllerGetMethodTest {
 
         Long eventId = 1L;
 
-        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(null).build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).build(ObjectType.NODE);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
 

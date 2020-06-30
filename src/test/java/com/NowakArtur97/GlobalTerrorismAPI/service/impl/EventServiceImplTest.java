@@ -2,11 +2,12 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -41,7 +42,7 @@ class EventServiceImplTest {
 
     private static final int DEFAULT_SEARCHING_DEPTH = 1;
 
-    private GenericService<EventNode, EventDTO> eventService;
+    private EventService eventService;
 
     @Mock
     private EventRepository eventRepository;
@@ -84,7 +85,8 @@ class EventServiceImplTest {
                         () -> "should return page with: " + eventsExpected.getNumberOfElements()
                                 + " elements, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -109,7 +111,8 @@ class EventServiceImplTest {
                 () -> assertEquals(eventsExpected.getNumberOfElements(), eventsActual.getNumberOfElements(),
                         () -> "should return empty page, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -155,7 +158,8 @@ class EventServiceImplTest {
                         () -> "should return event node with target: " + eventExpected.getTarget() + ", but was: "
                                 + eventActual.getTarget()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -170,7 +174,8 @@ class EventServiceImplTest {
 
         assertAll(() -> assertTrue(eventActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -214,7 +219,8 @@ class EventServiceImplTest {
                         () -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
                                 + eventNodeActual.getTarget()),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
@@ -263,7 +269,8 @@ class EventServiceImplTest {
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verifyNoInteractions(targetService));
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verifyNoInteractions(targetService));
     }
 
     @Test
@@ -337,6 +344,51 @@ class EventServiceImplTest {
     }
 
     @Test
+    void when_delete_event_without_target_should_delete_event() {
+
+        Long eventId = 1L;
+
+        EventNode eventNodeExpected = (EventNode) eventBuilder.build(ObjectType.NODE);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
+
+        Optional<EventNode> eventNodeOptionalActual = eventService.delete(eventId);
+
+        EventNode eventNodeActual = eventNodeOptionalActual.get();
+
+        assertAll(
+                () -> assertNotNull(eventNodeActual.getId(),
+                        () -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                        () -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + eventNodeActual.getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                        () -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + eventNodeActual.getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                        () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + eventNodeActual.getDate()),
+                () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                        eventNodeActual.getIsPartOfMultipleIncidents(),
+                        () -> "should return event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + eventNodeActual.getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                        () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + eventNodeActual.getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
+                () -> assertNull(eventNodeExpected.getTarget(),
+                        () -> "should return event node with null target, but was: " + eventNodeExpected.getTarget()),
+                () -> verify(eventRepository, times(1)).findById(eventId),
+                () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(targetService),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
     void when_delete_event_should_delete_event_and_target() {
 
         Long eventId = 1L;
@@ -382,8 +434,10 @@ class EventServiceImplTest {
                                 + eventNodeActual.getTarget()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verify(targetService, times(1)).delete(targetId),
-                () -> verifyNoMoreInteractions(targetService), () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verify(targetService, times(1)).delete(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
@@ -399,7 +453,94 @@ class EventServiceImplTest {
                 () -> assertTrue(eventNodeOptional.isEmpty(),
                         () -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventRepository), () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(targetService));
+    }
+
+    @Test
+    void when_delete_event_target_should_delete_target() {
+
+        Long eventId = 1L;
+        Long targetId = 2L;
+
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
+        when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
+
+        Optional<EventNode> eventNodeOptionalActual = eventService.deleteEventTarget(eventId);
+
+        EventNode eventNodeActual = eventNodeOptionalActual.get();
+
+        assertAll(
+                () -> assertNotNull(eventNodeActual.getId(),
+                        () -> "should return event node with new id, but was: " + eventNodeActual.getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                        () -> "should return event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + eventNodeActual.getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                        () -> "should return event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + eventNodeActual.getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                        () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + eventNodeActual.getDate()),
+                () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                        eventNodeActual.getIsPartOfMultipleIncidents(),
+                        () -> "should return event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + eventNodeActual.getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                        () -> "should return event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + eventNodeActual.getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                        () -> "should return event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
+                () -> assertNotNull(eventNodeExpected.getTarget(),
+                        () -> "should return event node with not null target, but was: null"),
+                () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+                        () -> "should return event node with target: " + eventNodeExpected.getTarget() + ", but was: "
+                                + eventNodeActual.getTarget()),
+                () -> verify(eventRepository, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verify(targetService, times(1)).delete(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
+    void when_delete_event_target_but_event_does_not_have_target_should_throw_exception() {
+
+        Long eventId = 1L;
+
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).build(ObjectType.NODE);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
+
+        assertAll(
+                () -> assertThrows(ResourceNotFoundException.class, () -> eventService.deleteEventTarget(eventId), "should throw ResourceNotFoundException but wasn't"),
+                () -> verify(eventRepository, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(targetService));
+    }
+
+    @Test
+    void when_delete_event_target_but_event_does_not_exist_should_return_empty_optional() {
+
+        Long eventId = 1L;
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        Optional<EventNode> eventNodeOptional = eventService.deleteEventTarget(eventId);
+
+        assertAll(
+                () -> assertTrue(eventNodeOptional.isEmpty(),
+                        () -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
+                () -> verify(eventRepository, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventRepository),
+                () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(targetService));
     }
 
