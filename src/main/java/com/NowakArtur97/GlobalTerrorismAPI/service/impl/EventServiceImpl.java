@@ -71,4 +71,23 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         return eventNodeOptional;
     }
+
+    @Override
+    public EventNode addOrUpdateEventTarget(EventNode eventNode, TargetDTO targetDTO) {
+
+        TargetNode targetNode;
+
+        if (eventNode.getTarget() != null) {
+
+            targetNode = targetService.update(eventNode.getTarget(), targetDTO);
+
+        } else {
+
+            targetNode = targetService.saveNew(targetDTO);
+        }
+
+        eventNode.setTarget(targetNode);
+
+        return repository.save(eventNode);
+    }
 }

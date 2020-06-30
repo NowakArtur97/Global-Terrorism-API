@@ -48,9 +48,6 @@ class EventTargetControllerGetMethodTest {
     private EventService eventService;
 
     @Mock
-    private GenericService<TargetNode, TargetDTO> targetService;
-
-    @Mock
     private RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
     private EventBuilder eventBuilder;
@@ -58,7 +55,7 @@ class EventTargetControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        eventTargetController = new EventTargetController(eventService, targetService, targetModelAssembler);
+        eventTargetController = new EventTargetController(eventService, targetModelAssembler);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventTargetController)
                 .setControllerAdvice(new GenericRestControllerAdvice())

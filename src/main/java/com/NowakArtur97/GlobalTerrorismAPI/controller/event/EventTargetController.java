@@ -7,7 +7,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.EventTargetTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
@@ -30,8 +29,6 @@ import javax.validation.Valid;
 public class EventTargetController {
 
     private final EventService eventService;
-
-    private final GenericService<TargetNode, TargetDTO> targetService;
 
     private final RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
@@ -76,7 +73,7 @@ public class EventTargetController {
             httpStatus = HttpStatus.CREATED;
         }
 
-        TargetNode targetNode = eventService.updateEventTarget(eventNode).getTarget();
+        TargetNode targetNode = eventService.addOrUpdateEventTarget(eventNode, targetDTO).getTarget();
 
         return new ResponseEntity<>(targetModelAssembler.toModel(targetNode), httpStatus);
     }
