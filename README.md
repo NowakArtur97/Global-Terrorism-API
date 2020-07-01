@@ -80,6 +80,7 @@ To shut down the containers enter:
 | `GET`      | `/api/v1/events/{id}/targets`     | `Get information about event's related target`                       |
 | `POST`     | `/api/v1/events`                  | `Add a new event`                                                    |
 | `PUT`      | `/api/v1/events/{id}`             | `Update or add an event`                                             |
+| `PUT`      | `/api/v1/events/{id}/targets`     | `Update or add an event's target`                                    |
 | `PATCH`    | `/api/v1/events/{id}`             | `Partially update an event(consume Json Patch and Json Merge Patch)` |
 | `DELETE`   | `/api/v1/events/{id}`             | `Remove an event`                                                    |
 | `DELETE`   | `/api/v1/events/{id}/targets`     | `Remove events's related target`                                     |
