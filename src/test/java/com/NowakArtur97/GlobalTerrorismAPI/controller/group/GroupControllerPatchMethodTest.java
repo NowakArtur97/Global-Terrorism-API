@@ -131,6 +131,8 @@ class GroupControllerPatchMethodTest {
             EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             eventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+            eventModel.add(new Link(pathToTargetEventLink, "target"));
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -170,7 +172,8 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
@@ -215,6 +218,8 @@ class GroupControllerPatchMethodTest {
                     .withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -261,7 +266,8 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
@@ -596,6 +602,8 @@ class GroupControllerPatchMethodTest {
             EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             eventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+            eventModel.add(new Link(pathToTargetEventLink, "target"));
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -634,7 +642,8 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
@@ -679,6 +688,8 @@ class GroupControllerPatchMethodTest {
                     .withTarget(targetModel).build(ObjectType.MODEL);
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -720,7 +731,8 @@ class GroupControllerPatchMethodTest {
                             .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
                             .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                     is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                            .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                     () -> verify(groupService, times(1)).findById(groupId),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),

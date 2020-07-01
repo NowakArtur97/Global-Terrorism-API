@@ -151,21 +151,29 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].name", is(groupModel1.getName())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(groupModel1.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[0].links[1].href", is(groupModel1.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[0].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[1].id", is(groupModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].name", is(groupModel2.getName())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(groupModel2.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[1].links[1].href", is(groupModel2.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[1].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[2].id", is(groupModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].name", is(groupModel3.getName())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(groupModel3.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[2].links[1].href", is(groupModel3.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[2].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[3].id", is(groupModel4.getId().intValue())))
                         .andExpect(jsonPath("content[3].name", is(groupModel4.getName())))
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(groupModel4.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[3].links[1].href", is(groupModel4.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[3].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
@@ -236,16 +244,22 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].name", is(groupModel1.getName())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(groupModel1.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[0].links[1].href", is(groupModel1.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[0].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[1].id", is(groupModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].name", is(groupModel2.getName())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(groupModel2.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[1].links[1].href", is(groupModel2.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[1].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[2].id", is(groupModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].name", is(groupModel3.getName())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(groupModel3.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[2].links[1].href", is(groupModel3.getLink("eventsCaused").get().getHref())))
                         .andExpect(jsonPath("content[2].eventsCaused", hasSize(2)))
                         .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
@@ -352,6 +366,8 @@ class GroupControllerGetMethodTest {
                                 is(groupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("eventsCaused[0].links[0].href", is(groupModel.getEventsCaused().get(0).getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("eventsCaused[0].links[1].href", is(groupModel.getEventsCaused().get(0).getLink("target").get().getHref())))
                         .andExpect(jsonPath("eventsCaused[1].id", is(groupModel.getEventsCaused().get(1).getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].summary", is(groupModel.getEventsCaused().get(1).getSummary())))
                         .andExpect(jsonPath("eventsCaused[1].motive", is(groupModel.getEventsCaused().get(1).getMotive())))
@@ -364,7 +380,9 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].isPartOfMultipleIncidents",
                                 is(groupModel.getEventsCaused().get(1).getIsPartOfMultipleIncidents())))
                         .andExpect(
-                                jsonPath("eventsCaused[1].links[0].href", is(groupModel.getEventsCaused().get(1).getLink("self").get().getHref()))),
+                                jsonPath("eventsCaused[1].links[0].href", is(groupModel.getEventsCaused().get(1).getLink("self").get().getHref())))
+                .andExpect(
+                        jsonPath("eventsCaused[1].links[1].href", is(groupModel.getEventsCaused().get(1).getLink("target").get().getHref()))),
                 () -> verify(groupService, times(1)).findById(groupModel.getId()), () -> verifyNoMoreInteractions(groupService),
                 () -> verify(groupModelAssembler, times(1)).toModel(groupNode),
                 () -> verifyNoMoreInteractions(groupModelAssembler),
@@ -433,17 +451,23 @@ class GroupControllerGetMethodTest {
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));
+                String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+                eventModel.add(new Link(pathToTargetEventLink, "target"));
 
                 EventModel eventModel2 = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel).withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.MODEL);
                 String pathToEventLink2 = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel2.add(new Link(pathToEventLink2));
+                String pathToTargetEventLink2 = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+                eventModel2.add(new Link(pathToTargetEventLink2, "target"));
 
                 GroupModel groupModel = (GroupModel) groupBuilder.withId((long) counterForUtilMethodsModel).withName(group + counterForUtilMethodsModel).withEventsCaused(List.of(eventModel, eventModel2)).build(ObjectType.MODEL);
                 String pathToGroupLink = GROUP_BASE_PATH + "/" + counterForUtilMethodsModel;
                 groupModel.add(new Link(pathToGroupLink));
-
+                String pathToEventsGroupLink = GROUP_BASE_PATH + "/" + counterForUtilMethodsModel + "/events";
+                groupModel.add(new Link(pathToEventsGroupLink, "eventsCaused"));
+                
                 return groupModel;
 
             default:

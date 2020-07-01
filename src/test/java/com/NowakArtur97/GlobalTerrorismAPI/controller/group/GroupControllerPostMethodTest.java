@@ -120,6 +120,8 @@ class GroupControllerPostMethodTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         Link eventLink = new Link(pathToEventLink);
         eventModel.add(eventLink);
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
         GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -141,6 +143,8 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
                         .andExpect(jsonPath("id", is(groupId.intValue())))
                         .andExpect(jsonPath("name", is(groupModel.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink)))
                         .andExpect(jsonPath("eventsCaused[0].id", is(eventId.intValue())))
                         .andExpect(jsonPath("eventsCaused[0].summary", is(eventModel.getSummary())))
                         .andExpect(jsonPath("eventsCaused[0].motive", is(eventModel.getMotive())))

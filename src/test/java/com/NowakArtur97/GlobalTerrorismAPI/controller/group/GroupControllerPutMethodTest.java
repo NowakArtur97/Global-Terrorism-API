@@ -116,6 +116,8 @@ class GroupControllerPutMethodTest {
 
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         eventModel.add(new Link(pathToEventLink));
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(updatedGroupName).withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -144,16 +146,16 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
                         .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                         .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
-                        .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
-                        .andExpect(jsonPath("eventsCaused[0].date", is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
-                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].id", is(eventModel.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventModel.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventModel.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].date", is(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventModel.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventModel.getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
-                                is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                        .andExpect(
-                                jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                                is(eventModel.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verify(groupService, times(1)).update(ArgumentMatchers.any(GroupNode.class),
                         ArgumentMatchers.any(GroupDTO.class)),
@@ -196,6 +198,8 @@ class GroupControllerPutMethodTest {
 
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         updatedEventModel.add(new Link(pathToEventLink));
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+        updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
         GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(updatedGroupName).withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -223,19 +227,19 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
                         .andExpect(jsonPath("id", is(updatedGroupModel.getId().intValue())))
                         .andExpect(jsonPath("name", is(updatedGroupModel.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].id", is(updatedGroupModel.getEventsCaused().get(0).getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].summary", is(updatedGroupModel.getEventsCaused().get(0).getSummary())))
-                        .andExpect(jsonPath("eventsCaused[0].motive", is(updatedGroupModel.getEventsCaused().get(0).getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].id", is(updatedEventModel.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(updatedEventModel.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(updatedEventModel.getMotive())))
                         .andExpect(jsonPath("eventsCaused[0].date",
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(updatedGroupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
+                                        .format(updatedEventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedGroupModel.getEventsCaused().get(0).getIsSuicidal())))
-                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedGroupModel.getEventsCaused().get(0).getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(updatedEventModel.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(updatedEventModel.getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
-                                is(updatedGroupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                        .andExpect(
-                                jsonPath("eventsCaused[0].links[0].href", is(updatedGroupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                                is(updatedEventModel.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verify(groupService, times(1)).update(ArgumentMatchers.any(GroupNode.class),
                         ArgumentMatchers.any(GroupDTO.class)),
@@ -250,7 +254,7 @@ class GroupControllerPutMethodTest {
     @Test
     void when_update_valid_group_with_not_existing_id_should_return_new_group_as_model() {
 
-        long eventId = 1L;
+        Long eventId = 1L;
         Long groupId = 1L;
 
         String updatedGroupName = "new group name";
@@ -262,8 +266,10 @@ class GroupControllerPutMethodTest {
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
         EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
 
-        String pathToEventLink = EVENT_BASE_PATH + "/" + (int) eventId;
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         eventModel.add(new Link(pathToEventLink));
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(updatedGroupName).withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
         GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
@@ -289,19 +295,19 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
                         .andExpect(jsonPath("id", is(groupModel.getId().intValue())))
                         .andExpect(jsonPath("name", is(groupModel.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].id", is(groupModel.getEventsCaused().get(0).getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].summary", is(groupModel.getEventsCaused().get(0).getSummary())))
-                        .andExpect(jsonPath("eventsCaused[0].motive", is(groupModel.getEventsCaused().get(0).getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].id", is(eventModel.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventModel.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventModel.getMotive())))
                         .andExpect(jsonPath("eventsCaused[0].date",
                                 is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(groupModel.getEventsCaused().get(0).getDate().toInstant().atZone(ZoneId.systemDefault())
+                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
                                                 .toLocalDate()))))
-                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(groupModel.getEventsCaused().get(0).getIsSuicidal())))
-                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(groupModel.getEventsCaused().get(0).getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventModel.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventModel.getIsSuccessful())))
                         .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
-                                is(groupModel.getEventsCaused().get(0).getIsPartOfMultipleIncidents())))
-                        .andExpect(
-                                jsonPath("eventsCaused[0].links[0].href", is(groupModel.getEventsCaused().get(0).getLink("self").get().getHref()))),
+                                is(eventModel.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToTargetEventLink))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verify(groupService, times(1)).saveNew(ArgumentMatchers.any(GroupDTO.class)),
                 () -> verifyNoMoreInteractions(groupService),

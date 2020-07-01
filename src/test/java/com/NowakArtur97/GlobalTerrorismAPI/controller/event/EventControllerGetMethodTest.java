@@ -88,7 +88,8 @@ class EventControllerGetMethodTest {
         eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(eventController)
+                .setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 
         targetBuilder = new TargetBuilder();
@@ -225,7 +226,6 @@ class EventControllerGetMethodTest {
                 () -> verifyNoInteractions(violationHelper));
     }
 
-
     @Test
     void when_find_all_events_with_changed_parameters_in_link_and_events_exist_should_return_all_events() {
 
@@ -288,6 +288,7 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].links[1].href", is(eventModel1.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[0].target.links[0].href",
                                 is(eventModel1.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
@@ -305,6 +306,7 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].links[1].href", is(eventModel2.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[1].target.links[0].href",
                                 is(eventModel2.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
@@ -322,6 +324,8 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].links[1].href",
+                                is(eventModel3.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[2].target.links[0].href",
                                 is(eventModel3.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
@@ -402,9 +406,14 @@ class EventControllerGetMethodTest {
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId();
+        targetModel.add(new Link(pathToTargetLink));
+
         EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         eventModel.add(new Link(pathToEventLink));
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -415,6 +424,7 @@ class EventControllerGetMethodTest {
                 () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                         .andExpect(jsonPath("id", is(eventId.intValue())))
                         .andExpect(jsonPath("summary", is(eventModel.getSummary())))
                         .andExpect(jsonPath("motive", is(eventModel.getMotive())))
@@ -426,7 +436,8 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
                         .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
+                        .andExpect(jsonPath("target.target", is(targetModel.getTarget())))
+                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink))),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
@@ -456,6 +467,7 @@ class EventControllerGetMethodTest {
                 () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(eventId.intValue())))
                         .andExpect(jsonPath("summary", is(eventModel.getSummary())))
                         .andExpect(jsonPath("motive", is(eventModel.getMotive())))
@@ -526,12 +538,18 @@ class EventControllerGetMethodTest {
                 String pathToTargetLink = TARGET_BASE_PATH + "/" + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 
-                EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel).withSummary(summary + counterForUtilMethodsModel)
-                        .withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetModel)
+                EventModel eventModel = (EventModel) eventBuilder.withId((long) counterForUtilMethodsModel)
+                        .withSummary(summary + counterForUtilMethodsModel)
+                        .withMotive(motive + counterForUtilMethodsModel)
+                        .withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
+                        .withIsSuccessful(isSuccessful)
+                        .withIsSuicidal(isSuicidal)
+                        .withTarget(targetModel)
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
-                eventModel.add(new Link(pathToEventLink));
+                eventModel.add(new Link(pathToEventLink, "self"));
+                String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+                eventModel.add(new Link(pathToTargetEventLink, "target"));
 
                 return eventModel;
 

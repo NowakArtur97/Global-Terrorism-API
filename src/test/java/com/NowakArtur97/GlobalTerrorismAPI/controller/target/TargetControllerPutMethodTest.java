@@ -154,7 +154,7 @@ class TargetControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: Target Name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_invalid_target_should_return_errors(String targetName) {
+    void when_add_or_update_invalid_event_target_should_return_errors(String targetName) {
 
         Long targetId = 1L;
 

@@ -135,8 +135,11 @@ class EventControllerPatchMethodTest {
                     .withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetModel).build(ObjectType.MODEL);
+
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -162,6 +165,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                             .andExpect(jsonPath("id", is(eventId.intValue())))
                             .andExpect(jsonPath("summary", is(updatedSummary)))
                             .andExpect(jsonPath("motive", is(updatedMotive)))
@@ -206,6 +210,8 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             Link eventLink = new Link(pathToEventLink);
             updatedEventModel.add(eventLink);
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -225,6 +231,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                             .andExpect(jsonPath("id", is(eventId.intValue())))
                             .andExpect(jsonPath("summary", is(updatedEventModel.getSummary())))
                             .andExpect(jsonPath("motive", is(updatedEventModel.getMotive())))
@@ -530,8 +537,12 @@ class EventControllerPatchMethodTest {
                     .withSummary(updatedSummary).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive)
                     .withTarget(targetModel).build(ObjectType.MODEL);
+
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             updatedEventModel.add(new Link(pathToEventLink));
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
+
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
             when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
@@ -552,6 +563,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                             .andExpect(jsonPath("id", is(eventId.intValue())))
                             .andExpect(jsonPath("summary", is(updatedSummary)))
                             .andExpect(jsonPath("motive", is(updatedMotive)))
@@ -596,6 +608,8 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
             Link eventLink = new Link(pathToEventLink);
             updatedEventModel.add(eventLink);
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
+            updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
 
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
@@ -614,6 +628,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                             .andExpect(jsonPath("id", is(eventId.intValue())))
                             .andExpect(jsonPath("summary", is(updatedEventModel.getSummary())))
                             .andExpect(jsonPath("motive", is(updatedEventModel.getMotive())))

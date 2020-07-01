@@ -108,6 +108,8 @@ class EventControllerPostMethodTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         Link eventLink = new Link(pathToEventLink);
         eventModel.add(eventLink);
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
         when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
@@ -119,6 +121,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
                         .andExpect(jsonPath("id", is(eventId.intValue())))
                         .andExpect(jsonPath("summary", is(eventModel.getSummary())))
                         .andExpect(jsonPath("motive", is(eventModel.getMotive())))
@@ -152,7 +155,8 @@ class EventControllerPostMethodTest {
                 () -> mockMvc
                         .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("{event.summary.notBlank}")))
                         .andExpect(jsonPath("errors", hasItem("{event.motive.notBlank}")))
@@ -180,7 +184,8 @@ class EventControllerPostMethodTest {
                 () -> mockMvc
                         .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
                 () -> verifyNoInteractions(eventService),
@@ -203,7 +208,8 @@ class EventControllerPostMethodTest {
                 () -> mockMvc
                         .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
                 () -> verifyNoInteractions(eventService),
@@ -226,7 +232,8 @@ class EventControllerPostMethodTest {
                 () -> mockMvc
                         .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
                 () -> verifyNoInteractions(eventService),
@@ -249,7 +256,8 @@ class EventControllerPostMethodTest {
                 () -> mockMvc
                         .perform(post(EVENT_BASE_PATH).content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
                 () -> verifyNoInteractions(eventService),

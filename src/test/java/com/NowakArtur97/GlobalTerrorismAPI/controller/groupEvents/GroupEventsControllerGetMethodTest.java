@@ -159,6 +159,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[0].links[1].href", is(eventModel1.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -172,6 +174,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[1].links[1].href", is(eventModel2.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -198,6 +202,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel4.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(eventModel4.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[3].links[1].href", is(eventModel4.getLink("target").get().getHref())))
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -281,6 +287,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[0].links[1].href", is(eventModel1.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -294,6 +302,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[1].links[1].href", is(eventModel2.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -307,6 +317,8 @@ class GroupEventsControllerGetMethodTest {
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
+                        .andExpect(
+                                jsonPath("content[2].links[1].href", is(eventModel3.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
@@ -433,8 +445,11 @@ class GroupEventsControllerGetMethodTest {
                         .withMotive(motive + counterForUtilMethodsModel).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
                         .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal)
                         .build(ObjectType.MODEL);
+
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink));
+                String pathToTargetEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel + "/targets";
+                eventModel.add(new Link(pathToTargetEventLink, "target"));
 
                 return eventModel;
 
