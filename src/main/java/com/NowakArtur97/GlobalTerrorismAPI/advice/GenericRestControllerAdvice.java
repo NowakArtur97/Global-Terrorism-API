@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
-import com.NowakArtur97.GlobalTerrorismAPI.model.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

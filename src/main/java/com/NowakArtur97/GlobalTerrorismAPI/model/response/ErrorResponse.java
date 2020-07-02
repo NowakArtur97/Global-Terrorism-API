@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.model;
+package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

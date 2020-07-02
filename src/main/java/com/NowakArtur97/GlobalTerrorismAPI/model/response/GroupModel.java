@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.model;
+package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
 import io.swagger.annotations.ApiModel;

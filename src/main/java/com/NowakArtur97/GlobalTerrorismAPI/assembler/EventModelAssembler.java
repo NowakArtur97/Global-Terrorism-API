@@ -3,7 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
