@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.Set;
 
 @NodeEntity(label = "User")
 @Data
@@ -12,5 +15,9 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class UserNode extends Node {
 
     private String userName;
+
     private char[] password;
+
+    @Relationship(type = "HAS_ROLE")
+    private Set<RoleNode> roles;
 }
