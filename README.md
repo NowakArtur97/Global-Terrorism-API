@@ -38,6 +38,7 @@ To shut down the containers enter:
 - Excel Streaming Reader - 2.1.0
 - Apache Johnzon (johnzon-core) - 1.2.3
 - Jackson (jackson-datatype-jsr353) - 2.10.2
+- JSON Web Token Support For The JVM (jjwt) - 0.9.1
 - Maven
 - Docker
 - Neo4j
