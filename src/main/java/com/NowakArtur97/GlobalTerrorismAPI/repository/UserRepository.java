@@ -4,4 +4,5 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 
 public interface UserRepository extends BaseRepository<UserNode> {
 
+    UserNode findByUserName(String userName);
 }

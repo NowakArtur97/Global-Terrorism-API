@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthenticationRequest {
 
-    private String username;
+    private String userName;
     private String password;
 }
