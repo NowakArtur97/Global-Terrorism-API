@@ -1,11 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.AuthenticationResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jw.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,21 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/authorization")
 @RequiredArgsConstructor
-@Slf4j
 public class AuthorizationController {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtil jwtUtil;
+
     @PostMapping("/authenticate")
-    public ResponseEntity loginUser(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody AuthenticationRequest authenticationRequest) {
 
-        UserDetails user = customUserDetailsService.loadUserByUsername(authenticationRequest.getUserName());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword()));
 
-        log.info(user.getUsername());
-        log.info(user.getPassword());
-        log.info(user.getAuthorities().toString());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        String token = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
 }

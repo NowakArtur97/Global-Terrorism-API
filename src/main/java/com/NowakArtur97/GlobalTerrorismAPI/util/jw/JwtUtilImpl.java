@@ -16,6 +16,8 @@ public class JwtUtilImpl implements JwtUtil {
 
     private static final String SECRET_KEY = "secret";
 
+    private static final long TEN_HOURS = 1000 * 60 * 60 * 10;
+
     @Override
     public String generateToken(UserDetails userDetails) {
 
@@ -61,7 +63,7 @@ public class JwtUtilImpl implements JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + TEN_HOURS))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
