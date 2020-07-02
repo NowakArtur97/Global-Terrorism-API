@@ -54,7 +54,7 @@ public class JwtUtilImpl implements JwtUtil {
 
     private Claims extractAllClaims(String token) {
 
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJwt(token).getBody();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
