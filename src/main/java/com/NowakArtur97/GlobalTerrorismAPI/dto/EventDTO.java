@@ -26,11 +26,11 @@ public class EventDTO implements DTONode, Event {
 	@NotBlank(message = "{event.summary.notBlank}")
 	private String summary;
 
-	@ApiModelProperty(notes = "The events's motive", required = true, example = "Motive")
+	@ApiModelProperty(notes = "The event's motive", required = true, example = "Motive")
 	@NotBlank(message = "{event.motive.notBlank}")
 	private String motive;
 
-	@ApiModelProperty(notes = "The events's date", required = true, example = "2000-01-31")
+	@ApiModelProperty(notes = "The event's date", required = true, example = "2000-01-31")
 	@Past(message = "{event.date.past}")
 	@NotNull(message = "{event.date.notNull}")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
