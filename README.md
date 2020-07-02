@@ -45,6 +45,7 @@ To shut down the containers enter:
 - CircleCI
 
 ## Features
+- JWT support
 - Target (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Event (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Event Target (GET, DELETE)
@@ -55,7 +56,8 @@ To shut down the containers enter:
 - Loading data from an .xlsx file
 
 ## To Do
-- JWT support
+- More endpoints
+- Monitoring using Prometheus, and Grafana
 
 ## Routes List:
 
