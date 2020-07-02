@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implements TargetService {
 
-    TargetServiceImpl(BaseRepository<TargetNode> repository, ObjectMapper dtoMapper) {
-        super(repository, dtoMapper);
+    TargetServiceImpl(BaseRepository<TargetNode> repository, ObjectMapper objectMapper) {
+        super(repository, objectMapper);
     }
 
     @Override
