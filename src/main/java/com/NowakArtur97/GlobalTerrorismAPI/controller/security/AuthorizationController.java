@@ -3,7 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.AuthenticationResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
-import com.NowakArtur97.GlobalTerrorismAPI.util.jw.JwtUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

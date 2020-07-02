@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.jw;
+package com.NowakArtur97.GlobalTerrorismAPI.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,7 @@ public interface JwtUtil {
 
     String generateToken(UserDetails userDetails);
 
-    Boolean validateToken(String token, UserDetails userDetail);
+    Boolean isTokenValid(String token, UserDetails userDetail);
 
     String extractUsername(String token);
 

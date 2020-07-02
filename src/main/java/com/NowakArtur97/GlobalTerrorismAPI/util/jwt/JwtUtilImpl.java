@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.jw;
+package com.NowakArtur97.GlobalTerrorismAPI.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +27,7 @@ public class JwtUtilImpl implements JwtUtil {
     }
 
     @Override
-    public Boolean validateToken(String token, UserDetails userDetail) {
+    public Boolean isTokenValid(String token, UserDetails userDetail) {
 
         return (extractUsername(token).equals(userDetail.getUsername()) && !isTokenExpired(token));
     }
