@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
         UserNode userNode = userRepository.findByUserName(username);
 
-        return new User(userNode.getUserName(), Arrays.toString(userNode.getPassword()), true, true,
+        return new User(userNode.getUserName(), userNode.getPassword(), true, true,
                 true, true, getAuthorities(userNode.getRoles()));
     }
 

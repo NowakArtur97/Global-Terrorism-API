@@ -7,6 +7,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -21,10 +22,14 @@ public class UserServiceImpl implements UserService {
 
     private final ObjectMapper objectMapper;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public UserNode register(UserDTO userDTO) {
 
         UserNode userNode = objectMapper.map(userDTO, UserNode.class);
+
+        userNode.setPassword(bCryptPasswordEncoder.encode(userNode.getPassword()));
 
         userNode.setRoles(Set.of(DEFAULT_USER_ROLE));
 

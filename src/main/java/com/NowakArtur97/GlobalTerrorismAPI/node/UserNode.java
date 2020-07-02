@@ -16,7 +16,7 @@ public class UserNode extends Node {
 
     private String userName;
 
-    private char[] password;
+    private String password;
 
     @Relationship(type = "HAS_ROLE")
     private Set<RoleNode> roles;
