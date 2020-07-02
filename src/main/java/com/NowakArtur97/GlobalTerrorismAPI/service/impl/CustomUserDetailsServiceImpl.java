@@ -27,8 +27,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
         UserNode userNode = userRepository.findByUserName(username);
 
-        return new User(userNode.getUserName(), userNode.getPassword(), true, true,
-                true, true, getAuthorities(userNode.getRoles()));
+        return new User(userNode.getUserName(), userNode.getPassword(), getAuthorities(userNode.getRoles()));
     }
 
     private static List<GrantedAuthority> getAuthorities(Set<RoleNode> userRoles) {
