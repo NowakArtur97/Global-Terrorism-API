@@ -34,17 +34,20 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
                 .build()
-                .apiInfo(apiDetails(swaggerConfigurationProperties))
+                .apiInfo(getApiDetails(swaggerConfigurationProperties))
                 .tags(new Tag(TargetTag.RESOURCE, TargetTag.DESCRIPTION),
                         new Tag(EventTag.RESOURCE, EventTag.DESCRIPTION),
                         new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION),
                         new Tag(GroupEventsTag.RESOURCE, GroupEventsTag.DESCRIPTION),
-                        new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION))
-                .securityContexts(List.of(securityContext(swaggerConfigurationProperties)))
-                .securitySchemes(List.of(apiKey(swaggerConfigurationProperties)));
+                        new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION),
+                        new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION),
+                        new Tag(AuthorizationTag.RESOURCE, AuthorizationTag.DESCRIPTION)
+                )
+                .securityContexts(List.of(getSecurityContext(swaggerConfigurationProperties)))
+                .securitySchemes(List.of(getApiKey(swaggerConfigurationProperties)));
     }
 
-    private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+    private ApiInfo getApiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
         Contact contact = new Contact(swaggerConfigurationProperties.getContactName(),
                 swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
@@ -60,20 +63,20 @@ public class SwaggerConfiguration {
                 .build();
     }
 
-    private ApiKey apiKey(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+    private ApiKey getApiKey(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
         return new ApiKey("JWT", swaggerConfigurationProperties.getAuthorizationHeader(), "header");
     }
 
-    private SecurityContext securityContext(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+    private SecurityContext getSecurityContext(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
         return SecurityContext.builder()
-                .securityReferences(defaultAuth())
+                .securityReferences(getDefaultAuth())
                 .forPaths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
                 .build();
     }
 
-    private List<SecurityReference> defaultAuth() {
+    private List<SecurityReference> getDefaultAuth() {
 
         AuthorizationScope authorizationScope
                 = new AuthorizationScope("global", "accessEverything");

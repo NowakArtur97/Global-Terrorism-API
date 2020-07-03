@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model.request;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthenticationRequest {
 
+    @ApiModelProperty(notes = "The user's name")
     private String userName;
+
+    @ApiModelProperty(notes = "The user's password")
     private String password;
 }

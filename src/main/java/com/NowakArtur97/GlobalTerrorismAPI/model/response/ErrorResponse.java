@@ -1,31 +1,36 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.Data;
-
+@ApiModel(description = "Details about the Error")
 @Data
 public class ErrorResponse {
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-	private LocalDateTime timestamp;
+    @ApiModelProperty(notes = "Error time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime timestamp;
 
-	private int status;
+    @ApiModelProperty(notes = "Error status")
+    private int status;
 
-	private final List<String> errors;
+    @ApiModelProperty(notes = "Details of the cause of the error")
+    private final List<String> errors;
 
-	public ErrorResponse(LocalDateTime timestamp, int status) {
-		this.timestamp = timestamp;
-		this.status = status;
-		this.errors = new ArrayList<>();
-	}
+    public ErrorResponse(LocalDateTime timestamp, int status) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.errors = new ArrayList<>();
+    }
 
-	public void addError(String error) {
+    public void addError(String error) {
 
-		errors.add(error);
-	}
+        errors.add(error);
+    }
 }
