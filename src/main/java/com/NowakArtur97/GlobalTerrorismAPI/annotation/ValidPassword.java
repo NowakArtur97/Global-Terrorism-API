@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.annotation;
 
+import com.NowakArtur97.GlobalTerrorismAPI.validation.PasswordConstraintValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -11,7 +13,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = PasswordConstraintsValidator.class)
+@Constraint(validatedBy = PasswordConstraintValidator.class)
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 public @interface ValidPassword {

@@ -1,7 +1,5 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validation;
+package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;

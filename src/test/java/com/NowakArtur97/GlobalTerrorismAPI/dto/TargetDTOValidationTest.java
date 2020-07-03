@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validation;
+package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
