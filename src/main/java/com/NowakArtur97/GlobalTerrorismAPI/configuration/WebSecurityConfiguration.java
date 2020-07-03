@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
+import com.NowakArtur97.GlobalTerrorismAPI.filter.ExceptionHandlerFilter;
 import com.NowakArtur97.GlobalTerrorismAPI.filter.JwtRequestFilter;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
 
     private final JwtRequestFilter jwtRequestFilter;
+
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     public BCryptPasswordEncoder getBCryptPasswordEncoder() {
@@ -60,6 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, CorsFilter.class);
     }
 
     @Override
