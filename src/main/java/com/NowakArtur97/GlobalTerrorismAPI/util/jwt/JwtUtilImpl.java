@@ -3,6 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.util.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +15,10 @@ import java.util.function.Function;
 @Component
 public class JwtUtilImpl implements JwtUtil {
 
-    private static final String SECRET_KEY = "secret";
+    private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
 
-    private static final long TEN_HOURS = 1000 * 60 * 60 * 10;
+    @Value("${jwt.secretKey:secret}")
+    private static String secretKey;
 
     @Override
     public String generateToken(UserDetails userDetails) {
@@ -54,7 +56,7 @@ public class JwtUtilImpl implements JwtUtil {
 
     private Claims extractAllClaims(String token) {
 
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -63,8 +65,8 @@ public class JwtUtilImpl implements JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TEN_HOURS))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 

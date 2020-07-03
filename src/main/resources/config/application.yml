@@ -3,7 +3,7 @@
 #
 spring:
   profiles:
-    active: ci
+    active: docker
   bulk:
     api:
       path: /api/v1/bulk
@@ -27,3 +27,8 @@ swagger:
   termsOfServiceUrl: https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE
   title: Global Terrorism API
   version: 1.0
+#
+# JWT
+#
+jwt:
+  secretKey: secret
