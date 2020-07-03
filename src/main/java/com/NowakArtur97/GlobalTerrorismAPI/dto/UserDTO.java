@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,5 +21,6 @@ public class UserDTO {
 
     @ApiModelProperty(notes = "The user's password")
     @NotBlank(message = "{user.password.notBlank}")
+    @ValidPassword(message = "{user.password.notBlank}")
     private String password;
 }
