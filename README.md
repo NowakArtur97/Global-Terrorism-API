@@ -52,7 +52,7 @@ Then generate JWT:
 }
 ```
 
-Then use the token as a Bearer Token using e.g. Postman tool.
+Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-ui.html endpoint.
 
 ## Built With
 - Java 11

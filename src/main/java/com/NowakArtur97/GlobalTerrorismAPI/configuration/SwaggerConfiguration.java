@@ -11,12 +11,13 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
@@ -38,7 +39,9 @@ public class SwaggerConfiguration {
                         new Tag(EventTag.RESOURCE, EventTag.DESCRIPTION),
                         new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION),
                         new Tag(GroupEventsTag.RESOURCE, GroupEventsTag.DESCRIPTION),
-                        new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION));
+                        new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION))
+                .securityContexts(List.of(securityContext(swaggerConfigurationProperties)))
+                .securitySchemes(List.of(apiKey(swaggerConfigurationProperties)));
     }
 
     private ApiInfo apiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
@@ -55,5 +58,31 @@ public class SwaggerConfiguration {
                 .licenseUrl(swaggerConfigurationProperties.getLicenseUrl())
                 .contact(contact)
                 .build();
+    }
+
+    private ApiKey apiKey(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+
+        return new ApiKey("JWT", swaggerConfigurationProperties.getAuthorizationHeader(), "header");
+    }
+
+    private SecurityContext securityContext(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.ant(swaggerConfigurationProperties.getPathSelectors()))
+                .build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+
+        AuthorizationScope authorizationScope
+                = new AuthorizationScope("global", "accessEverything");
+
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+
+        authorizationScopes[0] = authorizationScope;
+
+        return List.of(
+                new SecurityReference("JWT", authorizationScopes));
     }
 }

@@ -17,6 +17,7 @@ server:
 # Swagger Custom Properties
 #
 swagger:
+  authorizationHeader: Authorization
   contactEmail: https://github.com/NowakArtur97
   contactName: Artur Nowak
   contactUrl: https://github.com/NowakArtur97
