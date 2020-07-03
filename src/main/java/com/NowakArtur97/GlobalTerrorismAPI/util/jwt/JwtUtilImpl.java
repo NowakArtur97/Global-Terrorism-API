@@ -18,7 +18,7 @@ public class JwtUtilImpl implements JwtUtil {
     private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
 
     @Value("${jwt.secretKey:secret}")
-    private static String secretKey;
+    private String secretKey;
 
     @Override
     public String generateToken(UserDetails userDetails) {

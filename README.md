@@ -25,6 +25,35 @@ To stop the application, enter the following key combination on the command line
 To shut down the containers enter:
 - `docker-compose down`
 
+To access the endpoints you must create an account:
+```json
+# POST /api/v1/authentication
+# Content-Type: application/json
+{
+    "userName" : "user",
+    "password" : "Password1@"
+}
+```
+
+The password must meet the following requirements:
+- Must be 7 or more characters in length
+- Must contain 1 or more uppercase characters
+- Must contain 1 or more lowercase characters
+- Must contain 1 or more digit characters
+- Must contain 1 or more special characters
+
+Then generate JWT:
+```json
+# POST /api/v1/authorization
+# Content-Type: application/json
+{
+    "userName" : "user",
+    "password" : "Password1@"
+}
+```
+
+Then use the token as a Bearer Token using e.g. Postman tool.
+
 ## Built With
 - Java 11
 - Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
@@ -56,12 +85,20 @@ To shut down the containers enter:
 - Bulk operations using Spring Bulk API
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
+- Custom password validation
 
 ## To Do
 - More endpoints
 - Monitoring using Prometheus and Grafana
 
 ## Routes List:
+
+### Security
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `POST`      | `/api/v1/authentication`         | `Create an account to use the API`                                   |
+| `POST`      | `/api/v1/authorization`          | `Generate JWT`                                                       |
 
 ### Targets
 
