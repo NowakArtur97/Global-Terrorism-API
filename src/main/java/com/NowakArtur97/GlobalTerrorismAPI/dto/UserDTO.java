@@ -20,7 +20,6 @@ public class UserDTO {
     private String userName;
 
     @ApiModelProperty(notes = "The user's password")
-    @NotBlank(message = "{user.password.notBlank}")
-    @ValidPassword(message = "{user.password.notBlank}")
+    @ValidPassword
     private String password;
 }

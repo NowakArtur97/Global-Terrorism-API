@@ -17,38 +17,38 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-		ex.getBindingResult().getFieldErrors()
-				.forEach(error -> errorResponse.addError(error.getDefaultMessage()));
+        exception.getBindingResult().getFieldErrors()
+                .forEach(error -> errorResponse.addError(error.getDefaultMessage()));
 
-		return new ResponseEntity<>(errorResponse, headers, status);
-	}
+        return new ResponseEntity<>(errorResponse, headers, status);
+    }
 
-	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		String error = "Malformed JSON request ";
+        String error = "Malformed JSON request ";
 
-		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-		errorResponse.addError(error + ex.getLocalizedMessage());
+        errorResponse.addError(error + exception.getLocalizedMessage());
 
-		return new ResponseEntity<>(errorResponse, headers, status);
-	}
+        return new ResponseEntity<>(errorResponse, headers, status);
+    }
 
-	@ExceptionHandler({ ConstraintViolationException.class })
-	public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception, WebRequest request) {
 
-		ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-		ex.getConstraintViolations().forEach(error -> errorResponse.addError(error.getMessage()));
+        exception.getConstraintViolations().forEach(error -> errorResponse.addError(error.getMessage()));
 
-		return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-	}
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
 }
