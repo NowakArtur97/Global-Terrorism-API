@@ -6,4 +6,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 public interface UserService {
 
     UserNode register(UserDTO userDTO);
+
+    UserNode findByUserName(String userName);
 }
