@@ -34,12 +34,16 @@ public class AuthorizationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully generated API key", response = AuthenticationResponse.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody @ApiParam(value = "User credentials", name = "user", required = true)AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody @ApiParam(value = "User credentials", name = "user", required = true) AuthenticationRequest authenticationRequest) {
+
+        String userNameOrEmail = authenticationRequest.getUserName() != null
+                ? authenticationRequest.getUserName()
+                : authenticationRequest.getEmail();
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getUserName(), authenticationRequest.getPassword()));
+                userNameOrEmail, authenticationRequest.getPassword()));
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUserName());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNameOrEmail);
 
         String token = jwtUtil.generateToken(userDetails);
 

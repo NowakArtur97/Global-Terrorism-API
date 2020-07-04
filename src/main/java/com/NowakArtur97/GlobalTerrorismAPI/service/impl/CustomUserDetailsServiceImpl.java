@@ -23,10 +23,10 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String value) throws UsernameNotFoundException {
 
-        UserNode userNode = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with name: " + username + " not found"));
+        UserNode userNode = userRepository.findByUserNameOrEmail(value, value)
+                .orElseThrow(() -> new UsernameNotFoundException("User with name/email: " + value + " not found"));
 
         return new User(userNode.getUserName(), userNode.getPassword(), getAuthorities(userNode.getRoles()));
     }
