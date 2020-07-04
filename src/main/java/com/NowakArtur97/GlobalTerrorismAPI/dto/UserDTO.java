@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueUsername;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,6 +18,7 @@ public class UserDTO {
 
     @ApiModelProperty(notes = "The user's name")
     @NotBlank(message = "{user.name.notBlank}")
+    @UniqueUsername
     private String userName;
 
     @ApiModelProperty(notes = "The user's password")
