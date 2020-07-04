@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 @RequiredArgsConstructor
-public class UniqueUsernameConstraintValidator implements ConstraintValidator<UniqueUserName, String> {
+public class UniqueUserNameConstraintValidator implements ConstraintValidator<UniqueUserName, String> {
 
     private final UserService userService;
 

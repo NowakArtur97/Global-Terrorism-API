@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueEmail;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueUserName;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
 import io.swagger.annotations.ApiModel;
@@ -28,5 +29,6 @@ public class UserDTO {
 
     @ApiModelProperty(notes = "The user's email")
     @Email//(message = "{user.email.wrongFormat}")
+    @UniqueEmail(message = "{user.email.unique}")
     private String email;
 }
