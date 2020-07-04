@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @ApiModel(description = "Model responsible for User validation during registration")
@@ -24,4 +25,8 @@ public class UserDTO {
     @ApiModelProperty(notes = "The user's password")
     @ValidPassword
     private String password;
+
+    @ApiModelProperty(notes = "The user's email")
+    @Email//(message = "{user.email.wrongFormat}")
+    private String email;
 }

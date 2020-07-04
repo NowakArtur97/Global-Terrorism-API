@@ -15,6 +15,9 @@ public class AuthenticationRequest {
     @ApiModelProperty(notes = "The user's name")
     private String userName;
 
-    @ApiModelProperty(notes = "The user's password")
+    @ApiModelProperty(notes = "The user's password", required = true)
     private String password;
+
+    @ApiModelProperty(notes = "The user's email")
+    private String email;
 }

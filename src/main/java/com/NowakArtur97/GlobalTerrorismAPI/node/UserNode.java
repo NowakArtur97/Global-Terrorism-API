@@ -18,6 +18,8 @@ public class UserNode extends Node {
 
     private String password;
 
+    private String email;
+
     @Relationship(type = "HAS_ROLE")
     private Set<RoleNode> roles;
 }
