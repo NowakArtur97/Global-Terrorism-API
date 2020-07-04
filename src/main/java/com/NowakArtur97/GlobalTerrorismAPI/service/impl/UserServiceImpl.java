@@ -48,4 +48,10 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public Optional<UserNode> findByUserNameOrEmail(String userName, String email) {
+
+        return userRepository.findByUserNameOrEmail(userName, email);
+    }
 }
