@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.annotation;
 
-import com.NowakArtur97.GlobalTerrorismAPI.validation.PasswordConstraintValidator;
+import com.NowakArtur97.GlobalTerrorismAPI.validator.PasswordConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

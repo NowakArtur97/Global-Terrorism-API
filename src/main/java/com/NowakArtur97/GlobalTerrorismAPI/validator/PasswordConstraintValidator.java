@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validation;
+package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
 import org.passay.*;
@@ -17,6 +17,10 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
+
+        if (password == null) {
+            return false;
+        }
 
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
                 new LengthRule(7, 30),

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validation;
+package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueUserName;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;

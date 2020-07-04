@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestControllerAdvice(basePackageClasses = AuthenticationController.class)
 public class AuthenticationControllerAdvice {
@@ -22,11 +22,11 @@ public class AuthenticationControllerAdvice {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-        List<String> validationErrors = new ArrayList<>();
+        Set<String> validationErrors = new HashSet<>();
 
         exception.getBindingResult().getFieldErrors().forEach(error -> validationErrors.add(error.getDefaultMessage()));
 
-        Arrays.stream(String.join(",", validationErrors).split(",")).forEach(errorResponse::addError);;
+        Arrays.stream(String.join(",", validationErrors).split(",")).forEach(errorResponse::addError);
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

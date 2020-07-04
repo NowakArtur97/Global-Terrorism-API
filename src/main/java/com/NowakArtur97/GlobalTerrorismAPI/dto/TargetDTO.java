@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@ApiModel(description = "Model responsible for Target validation")
+@ApiModel(description = "Model responsible for Target validator")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@ApiModel(description = "Model responsible for User validation during registration")
+@ApiModel(description = "Model responsible for User validator during registration")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
