@@ -28,7 +28,7 @@ public class UserDTO {
     private String password;
 
     @ApiModelProperty(notes = "The user's email")
-    @Email//(message = "{user.email.wrongFormat}")
+    @Email(message = "{user.email.wrongFormat}")
     @UniqueEmail(message = "{user.email.unique}")
     private String email;
 }
