@@ -10,4 +10,6 @@ public interface UserService {
     UserNode register(UserDTO userDTO);
 
     Optional<UserNode> findByUserName(String userName);
+
+    Optional<UserNode> findByEmail(String email);
 }
