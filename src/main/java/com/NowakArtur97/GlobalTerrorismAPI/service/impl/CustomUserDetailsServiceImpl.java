@@ -2,8 +2,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +20,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserNode userNode = userService.findByUserName(username)
+        UserNode userNode = userRepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with name: " + username + " not found"));
 
         return new User(userNode.getUserName(), userNode.getPassword(), getAuthorities(userNode.getRoles()));
