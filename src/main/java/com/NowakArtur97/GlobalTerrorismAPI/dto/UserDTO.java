@@ -27,6 +27,10 @@ public class UserDTO {
     @ValidPassword
     private String password;
 
+    @ApiModelProperty(notes = "The user's password for confirmation")
+    @ValidPassword
+    private String matchingPassword;
+
     @ApiModelProperty(notes = "The user's email")
     @Email(message = "{user.email.wrongFormat}")
     @UniqueEmail(message = "{user.email.unique}")
