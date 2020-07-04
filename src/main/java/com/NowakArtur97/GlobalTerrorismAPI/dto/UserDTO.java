@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.PasswordsMatch;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueEmail;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.UniqueUserName;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@PasswordsMatch(message =  "{user.password.notMatch}")
 public class UserDTO {
 
     @ApiModelProperty(notes = "The user's name")

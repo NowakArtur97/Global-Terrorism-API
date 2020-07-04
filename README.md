@@ -32,6 +32,7 @@ To access the endpoints you must create an account:
 {
     "userName" : "user",
     "password" : "Password1@",
+    "matchingPassword" : "Password1@",
     "email" : "email@something.com"
 }
 ```
@@ -42,6 +43,7 @@ The password must meet the following requirements:
 - Must contain 1 or more lowercase characters
 - Must contain 1 or more digit characters
 - Must contain 1 or more special characters
+- Passwords must match
 
 Then generate JWT. The token can be generated using a username or email address. Password is required.
 ```json
