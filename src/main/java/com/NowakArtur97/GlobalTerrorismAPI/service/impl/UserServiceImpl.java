@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserNode findByUserName(String userName) {
+    public Optional<UserNode> findByUserName(String userName) {
 
         return userRepository.findByUserName(userName);
     }
