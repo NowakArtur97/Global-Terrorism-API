@@ -26,7 +26,7 @@ public class AuthenticationControllerAdvice {
 
         exception.getBindingResult().getFieldErrors().forEach(error -> validationErrors.add(error.getDefaultMessage()));
 
-        Arrays.stream(String.join("", validationErrors).split(",")).forEach(errorResponse::addError);;
+        Arrays.stream(String.join(",", validationErrors).split(",")).forEach(errorResponse::addError);;
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

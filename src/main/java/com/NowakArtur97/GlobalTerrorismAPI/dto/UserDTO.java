@@ -18,7 +18,7 @@ public class UserDTO {
 
     @ApiModelProperty(notes = "The user's name")
     @NotBlank(message = "{user.name.notBlank}")
-    @UniqueUserName
+    @UniqueUserName(message = "{user.name.unique}")
     private String userName;
 
     @ApiModelProperty(notes = "The user's password")
