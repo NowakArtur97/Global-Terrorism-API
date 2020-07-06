@@ -38,7 +38,7 @@ To access the endpoints you must create an account:
 ```
 
 The password must meet the following requirements:
-- Must be between 7 and 20 characters long
+- Must be between 7 and 30 characters long
 - Must contain 1 or more uppercase characters
 - Must contain 1 or more lowercase characters
 - Must contain 1 or more digit characters
