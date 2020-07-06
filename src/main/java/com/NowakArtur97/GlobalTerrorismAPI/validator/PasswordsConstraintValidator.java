@@ -59,6 +59,7 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
                 new CharacterRule(EnglishCharacterData.Special, 1),
                 new WhitespaceRule(),
                 new UsernameRule(),
+                new RepeatCharacterRegexRule(3, true),
                 notCommonPasswordRule
         ));
 
