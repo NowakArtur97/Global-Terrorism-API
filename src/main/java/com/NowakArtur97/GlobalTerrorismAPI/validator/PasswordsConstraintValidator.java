@@ -9,33 +9,30 @@ import org.passay.dictionary.sort.ArraysSort;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords, Object> {
 
+    private static final String PASSAY_PROPERTIES_FILE = "/validation/passay.properties";
+    private static final String COMMON_PASSWORDS_LIST = "/validation/common-passwords-list.txt";
+
     private DictionaryRule notCommonPasswordRule;
+
+    private MessageResolver customMessagesResolver;
 
     @Override
     public void initialize(ValidPasswords constraintAnnotation) {
 
-        try {
-            String invalidPasswordList = this.getClass().getResource("/validation/common-passwords-list.txt").getFile();
+        loadCustomPassayMessages();
 
-            notCommonPasswordRule = new DictionaryRule(
-                    new WordListDictionary(WordLists.createFromReader(
-                            new FileReader[]{
-                                    new FileReader(invalidPasswordList)
-                            },
-                            false,
-                            new ArraysSort()
-                    )));
-        } catch (IOException exception) {
-            throw new RuntimeException("Could not find list of common passwords", exception);
-        }
+        loadCommonPasswordsList();
     }
 
     @Override
@@ -51,17 +48,19 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
             return false;
         }
 
-        PasswordValidator validator = new PasswordValidator(Arrays.asList(
-                new LengthRule(7, 30),
-                new CharacterRule(EnglishCharacterData.UpperCase, 1),
-                new CharacterRule(EnglishCharacterData.LowerCase, 1),
-                new CharacterRule(EnglishCharacterData.Digit, 1),
-                new CharacterRule(EnglishCharacterData.Special, 1),
-                new WhitespaceRule(),
-                new UsernameRule(),
-                new RepeatCharacterRegexRule(3, true),
-                notCommonPasswordRule
-        ));
+        PasswordValidator validator = new PasswordValidator(
+                customMessagesResolver,
+                Arrays.asList(
+                        new LengthRule(7, 30),
+                        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+                        new CharacterRule(EnglishCharacterData.LowerCase, 1),
+                        new CharacterRule(EnglishCharacterData.Digit, 1),
+                        new CharacterRule(EnglishCharacterData.Special, 1),
+                        new WhitespaceRule(),
+                        new UsernameRule(),
+                        new RepeatCharacterRegexRule(3, true),
+                        notCommonPasswordRule
+                ));
 
         PasswordData passwordData = new PasswordData(password);
         PasswordData matchingPasswordData = new PasswordData(matchingPassword);
@@ -91,5 +90,39 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
                 .disableDefaultConstraintViolation();
 
         return false;
+    }
+
+
+    private void loadCustomPassayMessages() {
+
+        Properties props = new Properties();
+        URL resource = this.getClass().getResource(PASSAY_PROPERTIES_FILE);
+
+        try {
+            props.load(new FileInputStream(resource.getPath()));
+
+        } catch (IOException exception) {
+            throw new RuntimeException("Could not find passay properties file with custom messages ", exception);
+        }
+
+        customMessagesResolver = new PropertiesMessageResolver(props);
+    }
+
+    private void loadCommonPasswordsList() {
+
+        try {
+            String invalidPasswordList = this.getClass().getResource(COMMON_PASSWORDS_LIST).getFile();
+
+            notCommonPasswordRule = new DictionaryRule(
+                    new WordListDictionary(WordLists.createFromReader(
+                            new FileReader[]{
+                                    new FileReader(invalidPasswordList)
+                            },
+                            false,
+                            new ArraysSort()
+                    )));
+        } catch (IOException exception) {
+            throw new RuntimeException("Could not find list of common passwords ", exception);
+        }
     }
 }
