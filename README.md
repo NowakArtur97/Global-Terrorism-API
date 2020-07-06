@@ -38,13 +38,15 @@ To access the endpoints you must create an account:
 ```
 
 The password must meet the following requirements:
-- Must be 7 or more characters in length
+- Must be between 7 and 20 characters long
 - Must contain 1 or more uppercase characters
 - Must contain 1 or more lowercase characters
 - Must contain 1 or more digit characters
 - Must contain 1 or more special characters
 - Passwords must match
 - Mustn't contain the username
+- Mustn't contain spaces
+- Mustn't contain a repetitive string of characters longer than 2 characters
 - Mustn't be on the list of popular passwords
 
 Then generate JWT. The token can be generated using a username or email address. Password is required.
