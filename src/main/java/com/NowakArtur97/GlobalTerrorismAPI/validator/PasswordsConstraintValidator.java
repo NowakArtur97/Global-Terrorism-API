@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPassword;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPasswords;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import org.passay.*;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
@@ -14,12 +15,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
+public class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords, Object> {
 
     private DictionaryRule notCommonPasswordRule;
 
     @Override
-    public void initialize(ValidPassword constraintAnnotation) {
+    public void initialize(ValidPasswords constraintAnnotation) {
 
         try {
             String invalidPasswordList = this.getClass().getResource("/validation/common-passwords-list.txt").getFile();
@@ -38,9 +39,15 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     }
 
     @Override
-    public boolean isValid(String password, ConstraintValidatorContext context) {
+    public boolean isValid(Object obj, ConstraintValidatorContext context) {
 
-        if (password == null) {
+        UserDTO user = (UserDTO) obj;
+
+        String userName = user.getUserName();
+        String password = user.getPassword();
+        String matchingPassword = user.getMatchingPassword();
+
+        if (password == null || matchingPassword == null) {
             return false;
         }
 
@@ -51,18 +58,31 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 new CharacterRule(EnglishCharacterData.Digit, 1),
                 new CharacterRule(EnglishCharacterData.Special, 1),
                 new WhitespaceRule(),
+                new UsernameRule(),
                 notCommonPasswordRule
         ));
 
-        RuleResult result = validator.validate(new PasswordData(password));
+        PasswordData passwordData = new PasswordData(password);
+        PasswordData matchingPasswordData = new PasswordData(matchingPassword);
 
-        if (result.isValid()) {
+        passwordData.setUsername(userName);
+        matchingPasswordData.setUsername(userName);
+
+        RuleResult passwordResult = validator.validate(passwordData);
+        RuleResult matchingPasswordResult = validator.validate(matchingPasswordData);
+
+        if (passwordResult.isValid() && matchingPasswordResult.isValid()) {
             return true;
         }
 
-        List<String> messages = validator.getMessages(result);
+        List<String> passwordResultMessages = validator.getMessages(passwordResult);
+        List<String> matchingPasswordResultMessages = validator.getMessages(matchingPasswordResult);
 
-        String messageTemplate = messages.stream()
+        passwordResultMessages.addAll(matchingPasswordResultMessages);
+
+        String messageTemplate = passwordResultMessages
+                .stream()
+                .distinct()
                 .collect(Collectors.joining(","));
 
         context.buildConstraintViolationWithTemplate(messageTemplate)
