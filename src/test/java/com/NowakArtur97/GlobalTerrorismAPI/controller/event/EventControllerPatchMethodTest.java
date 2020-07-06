@@ -286,7 +286,7 @@ class EventControllerPatchMethodTest {
                                     .accept(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -329,16 +329,16 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
-                            .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
-                            .andExpect(jsonPath("errors", hasItem("Event date cannot be null")))
+                            .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
                             .andExpect(jsonPath("errors", hasItem(
-                                    "Event must have information on whether it has been part of many incidents")))
+                                    "Event must have information on whether it has been part of many incidents.")))
                             .andExpect(jsonPath("errors",
-                                    hasItem("Event must have information about whether it was successful")))
+                                    hasItem("Event must have information about whether it was successful.")))
                             .andExpect(jsonPath("errors",
-                                    hasItem("Event must have information about whether it was a suicidal attack")))
-                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty"))),
+                                    hasItem("Event must have information about whether it was a suicidal attack.")))
+                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -375,7 +375,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -415,7 +415,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -453,7 +453,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -493,7 +493,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future"))),
+                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
@@ -682,7 +682,7 @@ class EventControllerPatchMethodTest {
                                     .accept(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
@@ -720,16 +720,16 @@ class EventControllerPatchMethodTest {
                             .perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(jsonPath("timestamp", is(notNullValue()))).andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty")))
-                            .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty")))
-                            .andExpect(jsonPath("errors", hasItem("Event date cannot be null")))
+                            .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
                             .andExpect(jsonPath("errors", hasItem(
-                                    "Event must have information on whether it has been part of many incidents")))
+                                    "Event must have information on whether it has been part of many incidents.")))
                             .andExpect(jsonPath("errors",
-                                    hasItem("Event must have information about whether it was successful")))
+                                    hasItem("Event must have information about whether it was successful.")))
                             .andExpect(jsonPath("errors",
-                                    hasItem("Event must have information about whether it was a suicidal attack")))
-                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty"))),
+                                    hasItem("Event must have information about whether it was a suicidal attack.")))
+                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
@@ -766,7 +766,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
@@ -805,7 +805,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
@@ -844,7 +844,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty"))),
+                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
@@ -884,7 +884,7 @@ class EventControllerPatchMethodTest {
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                             .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future"))),
+                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future."))),
                     () -> verify(eventService, times(1)).findById(eventId),
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
