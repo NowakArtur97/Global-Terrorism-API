@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @ApiModel(description = "Model responsible for User validation during registration")
 @Data
@@ -24,6 +25,7 @@ public class UserDTO {
     @ApiModelProperty(notes = "The user's name")
     @UniqueUserName(message = "{user.name.unique}", groups = BasicUserValidationConstraints.class)
     @NotBlank(message = "{user.name.notBlank}")
+    @Size(min = 5, max = 20, message = "{user.name.size}")
     private String userName;
 
     @ApiModelProperty(notes = "The user's password")
