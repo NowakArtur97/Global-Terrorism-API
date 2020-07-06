@@ -48,19 +48,7 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
             return false;
         }
 
-        PasswordValidator validator = new PasswordValidator(
-                customMessagesResolver,
-                Arrays.asList(
-                        new LengthRule(7, 30),
-                        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-                        new CharacterRule(EnglishCharacterData.LowerCase, 1),
-                        new CharacterRule(EnglishCharacterData.Digit, 1),
-                        new CharacterRule(EnglishCharacterData.Special, 1),
-                        new WhitespaceRule(),
-                        new UsernameRule(),
-                        new RepeatCharacterRegexRule(3, true),
-                        notCommonPasswordRule
-                ));
+        PasswordValidator validator = new PasswordValidator(customMessagesResolver, defineRules());
 
         PasswordData passwordData = new PasswordData(password);
         PasswordData matchingPasswordData = new PasswordData(matchingPassword);
@@ -90,6 +78,26 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
                 .disableDefaultConstraintViolation();
 
         return false;
+    }
+
+    private List<Rule> defineRules() {
+
+        CharacterCharacteristicsRule characterCharacteristicsRule = new CharacterCharacteristicsRule();
+        characterCharacteristicsRule.setNumberOfCharacteristics(2);
+
+        characterCharacteristicsRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+        characterCharacteristicsRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
+        characterCharacteristicsRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
+        characterCharacteristicsRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
+
+        return Arrays.asList(
+                new LengthRule(7, 30),
+                new WhitespaceRule(),
+                notCommonPasswordRule,
+                new UsernameRule(),
+                new RepeatCharacterRegexRule(3, true),
+                characterCharacteristicsRule
+        );
     }
 
 
