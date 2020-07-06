@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.util.Date;
 
-@ApiModel(description = "Model responsible for Event validator")
+@ApiModel(description = "Model responsible for Event validation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

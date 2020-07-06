@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.ValidPassword;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPassword;
 import org.passay.*;
 
 import javax.validation.ConstraintValidator;

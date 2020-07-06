@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;

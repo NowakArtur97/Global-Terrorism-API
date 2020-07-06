@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-@ApiModel(description = "Model responsible for Group validator")
+@ApiModel(description = "Model responsible for Group validation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

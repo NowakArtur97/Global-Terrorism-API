@@ -1,6 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.annotation;
+package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
 
-import com.NowakArtur97.GlobalTerrorismAPI.validator.UniqueEmailConstraintValidator;
+import com.NowakArtur97.GlobalTerrorismAPI.validator.PasswordConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -13,12 +13,12 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = UniqueEmailConstraintValidator.class)
+@Constraint(validatedBy = PasswordConstraintValidator.class)
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface UniqueEmail {
+public @interface ValidPassword {
 
-    String message() default "Email is already taken";
+    String message() default "Invalid Password";
 
     Class<?>[] groups() default {};
 

@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.PasswordsMatch;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.PasswordsMatch;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 
 import javax.validation.ConstraintValidator;
@@ -17,9 +17,6 @@ public class PasswordsMatchConstraintValidator implements ConstraintValidator<Pa
 
         UserDTO user = (UserDTO) obj;
 
-        return user != null
-                && user.getPassword() != null
-                && user.getMatchingPassword() != null
-                && user.getPassword().equals(user.getMatchingPassword());
+        return user.getPassword().equals(user.getMatchingPassword());
     }
 }

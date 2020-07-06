@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.ApiPageable;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
