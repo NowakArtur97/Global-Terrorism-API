@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.PasswordsMatch;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.UniqueEmail;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.UniqueUserName;
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPasswords;
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.User;
 import com.NowakArtur97.GlobalTerrorismAPI.constraintGroup.BasicUserValidationConstraints;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,7 +22,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @PasswordsMatch(message = "{user.password.notMatch}", groups = BasicUserValidationConstraints.class)
 @ValidPasswords(groups = BasicUserValidationConstraints.class)
-public class UserDTO {
+public class UserDTO implements User {
 
     @ApiModelProperty(notes = "The user's name")
     @UniqueUserName(message = "{user.name.unique}", groups = BasicUserValidationConstraints.class)

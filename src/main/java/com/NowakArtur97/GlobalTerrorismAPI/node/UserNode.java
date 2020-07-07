@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.node;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserNode extends Node {
+public class UserNode extends Node implements User {
 
     private String userName;
 
