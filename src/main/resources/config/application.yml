@@ -3,7 +3,7 @@
 #
 spring:
   profiles:
-    active: ci
+    active: docker
   bulk:
     api:
       path: /api/v1/bulk

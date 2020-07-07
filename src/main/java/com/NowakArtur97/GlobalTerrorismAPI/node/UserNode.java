@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.node;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -23,4 +24,13 @@ public class UserNode extends Node implements User {
 
     @Relationship(type = "HAS_ROLE")
     private Set<RoleNode> roles;
+
+    @Builder
+    public UserNode(Long id, String userName, String password, String email, Set<RoleNode> roles) {
+        super(id);
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
 }
