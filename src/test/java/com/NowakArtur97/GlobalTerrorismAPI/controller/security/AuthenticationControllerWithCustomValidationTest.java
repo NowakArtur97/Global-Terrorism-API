@@ -43,7 +43,8 @@ class AuthenticationControllerWithCustomValidationTest {
     @Order(1)
     void when_register_valid_user_should_register_user() {
 
-        UserDTO userDTO = (UserDTO) userBuilder.build(ObjectType.DTO);
+        UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser").withEmail("validUser123@email.com")
+                .withPassword("ValidPassword123!").withMatchingPassword("ValidPassword123!").build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc

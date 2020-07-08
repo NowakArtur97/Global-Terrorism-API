@@ -101,16 +101,16 @@ public final class UserBuilder {
 
     private void resetProperties() {
 
-        Long id = 1L;
+        this.id = 1L;
 
-        String userName = "user123";
+        this.userName = "user123";
 
-        String password = "SecretPassword123!@";
+        this.password = "SecretPassword123!@";
 
-        String matchingPassword = "SecretPassword123!@";
+        this.matchingPassword = "SecretPassword123!@";
 
-        String email = "user@email.com";
+        this.email = "user@email.com";
 
-        Set<RoleNode> roles = new HashSet<>();
+        this.roles = new HashSet<>();
     }
 }
