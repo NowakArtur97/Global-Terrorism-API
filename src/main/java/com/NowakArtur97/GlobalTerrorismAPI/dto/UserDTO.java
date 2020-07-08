@@ -35,7 +35,7 @@ public class UserDTO implements User {
     private String password;
 
     @ApiModelProperty(notes = "The user's password for confirmation")
-    @NotBlank(message = "{user.password.notBlank}")
+    @NotBlank(message = "{user.matchingPassword.notBlank}")
     private String matchingPassword;
 
     @ApiModelProperty(notes = "The user's email")
