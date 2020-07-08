@@ -93,7 +93,7 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
                 new LengthRule(7, 30),
                 new WhitespaceRule(),
                 notCommonPasswordRule,
-                new UsernameRule(),
+                new UsernameRule(true, true, MatchBehavior.Contains),
                 new RepeatCharacterRegexRule(3, true),
                 characterCharacteristicsRule
         );

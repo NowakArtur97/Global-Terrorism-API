@@ -40,7 +40,7 @@ To access the endpoints you must create an account:
 The password must meet the following requirements:
 - Must be between 7 and 30 characters long
 - Passwords must match
-- Mustn't contain the username
+- Mustn't contain the user name
 - Mustn't contain spaces
 - Mustn't contain a repetitive string of characters longer than 2 characters
 - Mustn't be on the list of popular passwords
