@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords, Object> {
 
@@ -68,14 +67,14 @@ public class PasswordsConstraintValidator implements ConstraintValidator<ValidPa
 
         passwordResultMessages.addAll(matchingPasswordResultMessages);
 
-        String messageTemplate = passwordResultMessages
-                .stream()
-                .distinct()
-                .collect(Collectors.joining(","));
+        context.disableDefaultConstraintViolation();
 
-        context.buildConstraintViolationWithTemplate(messageTemplate)
-                .addConstraintViolation()
-                .disableDefaultConstraintViolation();
+        for (String message : matchingPasswordResultMessages) {
+
+            context.buildConstraintViolationWithTemplate(message)
+                    .addPropertyNode(message)
+                    .addConstraintViolation();
+        }
 
         return false;
     }

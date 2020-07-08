@@ -13,9 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @RestControllerAdvice
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
@@ -50,11 +47,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-        Set<String> validationErrors = new HashSet<>();
-
-        exception.getConstraintViolations().forEach(error -> validationErrors.add(error.getMessage()));
-
-        Arrays.stream(String.join(",", validationErrors).split(",")).forEach(errorResponse::addError);
+        exception.getConstraintViolations().forEach(error -> errorResponse.addError(error.getMessage()));
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
