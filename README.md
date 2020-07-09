@@ -163,14 +163,17 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `POST`      | `/api/v1/bulk`                   | `Bulk operations`                                                    |
 
 ### Bulk Request JSON example
+
+The previously generated token should be placed in the header. In the example, marked as JWT_TOKEN.
+
 ```json
 # POST /api/v1/bulk
 # Content-Type: application/json
 
 {
   "operations": [
-    {"method": "GET", "url": "/api/v1/groups"},
-    {"method": "POST", "url": "/api/v1/targets", "params": {"target": "New Target"}}
+    {"method": "GET", "url": "/api/v1/groups", headers={Authorization=Bearer JWT_TOKEN}},
+    {"method": "POST", "url": "/api/v1/targets", "params": {"target": "New Target"}, headers={Authorization=Bearer JWT_TOKEN}}
   ]
 }
 ```
