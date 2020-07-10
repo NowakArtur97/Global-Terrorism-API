@@ -78,7 +78,8 @@ class ViolationHelperImplTest {
                 () -> assertDoesNotThrow(() -> violationHelper.violate(targetNode, TargetDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(targetDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 
@@ -104,7 +105,8 @@ class ViolationHelperImplTest {
                 () -> assertThrows(expectedException, () -> violationHelper.violate(targetNode, TargetDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(targetDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(targetDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 
@@ -125,7 +127,8 @@ class ViolationHelperImplTest {
                 () -> assertDoesNotThrow(() -> violationHelper.violate(eventNode, EventDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(eventDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 
@@ -151,7 +154,8 @@ class ViolationHelperImplTest {
                 () -> assertThrows(expectedException, () -> violationHelper.violate(eventNode, EventDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(eventDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(eventDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 
@@ -175,7 +179,8 @@ class ViolationHelperImplTest {
                 () -> assertDoesNotThrow(() -> violationHelper.violate(groupNode, GroupDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(groupDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(groupDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 
@@ -204,7 +209,8 @@ class ViolationHelperImplTest {
                 () -> assertThrows(expectedException, () -> violationHelper.violate(groupNode, GroupDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper), () -> verify(validator, times(1)).validate(groupDTO),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(validator, times(1)).validate(groupDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
 }
