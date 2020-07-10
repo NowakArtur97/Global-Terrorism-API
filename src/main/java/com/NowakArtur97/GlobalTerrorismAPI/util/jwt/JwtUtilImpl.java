@@ -31,11 +31,11 @@ public class JwtUtilImpl implements JwtUtil {
     @Override
     public Boolean isTokenValid(String token, UserDetails userDetail) {
 
-        return (extractUsername(token).equals(userDetail.getUsername()) && !isTokenExpired(token));
+        return (extractUserName(token).equals(userDetail.getUsername()) && !isTokenExpired(token));
     }
 
     @Override
-    public String extractUsername(String token) {
+    public String extractUserName(String token) {
 
         return extractClaim(token, Claims::getSubject);
     }
@@ -72,6 +72,6 @@ public class JwtUtilImpl implements JwtUtil {
 
     private boolean isTokenExpired(String token) {
 
-        return extractClaim(token, Claims::getExpiration).before(new Date());
+        return extractExpirationDate(token).before(new Date());
     }
 }
