@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -169,7 +170,8 @@ class EventTargetControllerPutMethodTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(targetModelAssembler));
     }

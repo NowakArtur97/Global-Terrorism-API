@@ -47,6 +47,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -115,9 +116,9 @@ class GroupEventsControllerPostMethodTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         Link eventLink = new Link(pathToEventLink);
         eventModel.add(eventLink);
-        String pathToTargetEventLink = EVENT_BASE_PATH + "/" +  eventId.intValue() + "/targets";
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
         eventModel.add(new Link(pathToTargetEventLink, "target"));
-        
+
         GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupModel groupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
 
@@ -185,7 +186,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}"))),
+                        .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(7))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pageHelper),
@@ -237,7 +239,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pageHelper),
@@ -263,7 +266,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pageHelper),
@@ -289,7 +293,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.date.past}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pageHelper),
@@ -315,7 +320,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(groupService, times(1)).addEventToGroup(ArgumentMatchers.any(Long.class), ArgumentMatchers.any(EventDTO.class)),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),

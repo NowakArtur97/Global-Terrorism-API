@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -501,7 +502,8 @@ class EventControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),

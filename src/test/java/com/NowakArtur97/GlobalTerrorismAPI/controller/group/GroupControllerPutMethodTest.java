@@ -45,6 +45,7 @@ import java.util.*;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
@@ -335,7 +336,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("{group.name.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
+                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}")))
+                        .andExpect(jsonPath("errors", hasSize(2))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -359,7 +361,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}"))),
+                        .andExpect(jsonPath("errors", hasItem("{group.eventsCaused.notEmpty}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -387,7 +390,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{group.name.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{group.name.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -415,7 +419,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -444,7 +449,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -473,7 +479,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -502,7 +509,8 @@ class GroupControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.date.past}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),

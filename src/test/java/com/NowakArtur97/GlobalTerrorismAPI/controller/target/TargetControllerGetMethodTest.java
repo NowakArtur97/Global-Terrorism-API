@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -345,7 +346,8 @@ class TargetControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),

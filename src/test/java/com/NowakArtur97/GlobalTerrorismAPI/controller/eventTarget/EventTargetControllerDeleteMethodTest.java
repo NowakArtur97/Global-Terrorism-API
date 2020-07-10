@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -98,7 +99,8 @@ class EventTargetControllerDeleteMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(eventService, times(1)).deleteEventTarget(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(targetModelAssembler));
@@ -119,7 +121,8 @@ class EventTargetControllerDeleteMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel"))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(eventService, times(1)).deleteEventTarget(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(targetModelAssembler));

@@ -1,14 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.bulk;
 
+import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import com.github.wnameless.spring.bulkapi.BulkOperation;
 import com.github.wnameless.spring.bulkapi.BulkRequest;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,13 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,8 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("BulkController_Tests")
 class BulkControllerTest {
@@ -51,10 +47,17 @@ class BulkControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
+    @Order(1)
     void when_valid_bulk_request_should_return_array_of_responses() {
 
-        User userDetails = new User("user123", "Password1@",
+        userRepository.save(new UserNode("testuser1234", "Password1@", "testuser1234@email.com",
+                Set.of(new RoleNode("user"))));
+
+        User userDetails = new User("testuser1234", "Password1@",
                 List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
@@ -101,9 +104,10 @@ class BulkControllerTest {
     }
 
     @Test
+    @Order(2)
     void when_invalid_bulk_request_with_exceeded_number_of_operations_should_return_error_response() {
 
-        User userDetails = new User("user123", "Password1@",
+        User userDetails = new User("testuser1234", "Password1@",
                 List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
@@ -130,9 +134,10 @@ class BulkControllerTest {
     }
 
     @Test
+    @Order(3)
     void when_invalid_bulk_request_with_invalid_url_should_return_error_response() {
 
-        User userDetails = new User("user123", "Password1@",
+        User userDetails = new User("testuser1234", "Password1@",
                 List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);

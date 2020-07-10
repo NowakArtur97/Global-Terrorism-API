@@ -59,7 +59,7 @@ class AuthenticationControllerWithCustomValidationTest {
     @Order(2)
     void when_register_user_with_user_name_already_taken_should_return_error_response() {
 
-        UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser").build(ObjectType.DTO);
+        UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser").withEmail("validUserEmail123@email.com").build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc
@@ -76,7 +76,7 @@ class AuthenticationControllerWithCustomValidationTest {
     @Order(2)
     void when_register_user_with_email_already_taken_should_return_error_response() {
 
-        UserDTO userDTO = (UserDTO) userBuilder.withEmail("validUser123@email.com").build(ObjectType.DTO);
+        UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser123").withEmail("validUser123@email.com").build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc

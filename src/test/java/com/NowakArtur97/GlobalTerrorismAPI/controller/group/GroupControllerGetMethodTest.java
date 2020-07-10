@@ -15,6 +15,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -381,8 +382,8 @@ class GroupControllerGetMethodTest {
                                 is(groupModel.getEventsCaused().get(1).getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("eventsCaused[1].links[0].href", is(groupModel.getEventsCaused().get(1).getLink("self").get().getHref())))
-                .andExpect(
-                        jsonPath("eventsCaused[1].links[1].href", is(groupModel.getEventsCaused().get(1).getLink("target").get().getHref()))),
+                        .andExpect(
+                                jsonPath("eventsCaused[1].links[1].href", is(groupModel.getEventsCaused().get(1).getLink("target").get().getHref()))),
                 () -> verify(groupService, times(1)).findById(groupModel.getId()), () -> verifyNoMoreInteractions(groupService),
                 () -> verify(groupModelAssembler, times(1)).toModel(groupNode),
                 () -> verifyNoMoreInteractions(groupModelAssembler),
@@ -406,7 +407,8 @@ class GroupControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
                 () -> verify(groupService, times(1)).findById(groupId), () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
@@ -467,7 +469,7 @@ class GroupControllerGetMethodTest {
                 groupModel.add(new Link(pathToGroupLink));
                 String pathToEventsGroupLink = GROUP_BASE_PATH + "/" + counterForUtilMethodsModel + "/events";
                 groupModel.add(new Link(pathToEventsGroupLink, "eventsCaused"));
-                
+
                 return groupModel;
 
             default:

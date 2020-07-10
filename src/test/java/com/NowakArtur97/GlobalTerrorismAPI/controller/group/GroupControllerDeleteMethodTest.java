@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -120,7 +121,8 @@ class GroupControllerDeleteMethodTest {
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId))),
+                        .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(groupService, times(1)).delete(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),

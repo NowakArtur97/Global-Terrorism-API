@@ -8,6 +8,6 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String nodeType, Long id) {
 
-        super("Could not find " + nodeType + " with id: " + id);
+        super("Could not find " + nodeType + " with id: " + id + ".");
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -121,7 +122,8 @@ class TargetControllerPostMethodTest {
 								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
 						.andExpect(jsonPath("status", is(400)))
-						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
+						.andExpect(jsonPath("errors", hasSize(1))),
 				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
 				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
 				() -> verifyNoInteractions(violationHelper));

@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -326,7 +327,8 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
                         .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}"))),
+                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
+                        .andExpect(jsonPath("errors", hasSize(7))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -352,7 +354,8 @@ class EventControllerPutMethodTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -379,7 +382,8 @@ class EventControllerPutMethodTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -406,7 +410,8 @@ class EventControllerPutMethodTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -433,7 +438,8 @@ class EventControllerPutMethodTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.date.past}"))),
+                        .andExpect(jsonPath("errors[0]", is("{event.date.past}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
