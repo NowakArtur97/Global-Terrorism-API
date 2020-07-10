@@ -84,7 +84,8 @@ class EventTargetControllerGetMethodTest {
         when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId))
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
@@ -106,7 +107,8 @@ class EventTargetControllerGetMethodTest {
         when(eventService.findById(eventId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId))
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
@@ -130,7 +132,8 @@ class EventTargetControllerGetMethodTest {
         when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId))
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())

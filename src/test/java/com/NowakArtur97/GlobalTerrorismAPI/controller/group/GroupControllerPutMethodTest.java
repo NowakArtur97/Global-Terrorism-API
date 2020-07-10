@@ -346,6 +346,41 @@ class GroupControllerPutMethodTest {
     }
 
     @Test
+    void when_update_group_with_null_event_fields_should_return_errors() {
+
+        Long groupId = 1L;
+
+        EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
+                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
+                .build(ObjectType.DTO);
+
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+
+        String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, groupId).content(ObjectTestMapper.asJsonString(groupDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("{event.summary.notBlank}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.motive.notBlank}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
+                        .andExpect(jsonPath("errors", hasItem("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(7))),
+                () -> verifyNoInteractions(groupService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
     void when_update_group_with_empty_events_list_should_return_errors() {
 
         Long groupId = 1L;

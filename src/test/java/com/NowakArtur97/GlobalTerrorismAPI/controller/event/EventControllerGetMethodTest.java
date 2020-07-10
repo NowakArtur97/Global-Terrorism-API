@@ -91,7 +91,8 @@ class EventControllerGetMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController)
                 .setControllerAdvice(new GenericRestControllerAdvice())
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .build();
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
@@ -141,7 +142,9 @@ class EventControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -270,7 +273,9 @@ class EventControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -380,7 +385,10 @@ class EventControllerGetMethodTest {
         when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
-                () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(firstPageLink)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
                         .andExpect(jsonPath("links[1].href", is(firstPageLink)))
@@ -422,7 +430,9 @@ class EventControllerGetMethodTest {
         when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
                         .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
@@ -444,7 +454,8 @@ class EventControllerGetMethodTest {
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
                 () -> verifyNoMoreInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -465,7 +476,9 @@ class EventControllerGetMethodTest {
         when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isOk())
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
                         .andExpect(jsonPath("links[1].href").doesNotExist())
@@ -485,7 +498,8 @@ class EventControllerGetMethodTest {
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
                 () -> verifyNoMoreInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     @Test
@@ -498,7 +512,9 @@ class EventControllerGetMethodTest {
         when(eventService.findById(eventId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
@@ -508,7 +524,8 @@ class EventControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
     private Event createEvent(ObjectType type) {

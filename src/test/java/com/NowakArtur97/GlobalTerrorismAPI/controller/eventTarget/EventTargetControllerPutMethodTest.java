@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
@@ -29,7 +30,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
@@ -65,7 +67,9 @@ class EventTargetControllerPutMethodTest {
 
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventTargetController, restResponseGlobalEntityExceptionHandler).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(eventTargetController, restResponseGlobalEntityExceptionHandler)
+                .setControllerAdvice(new GenericRestControllerAdvice())
+                .build();
 
         eventBuilder = new EventBuilder();
     }
@@ -173,6 +177,32 @@ class EventTargetControllerPutMethodTest {
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(eventService),
+                () -> verifyNoInteractions(targetModelAssembler));
+    }
+
+    @Test
+    void when_add_valid_event_to_target_but_event_not_exist_should_return_error_response() {
+
+        Long eventId = 1L;
+
+        TargetDTO targetDTO = new TargetDTO("updated target");
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
+
+        when(eventService.findById(eventId)).thenReturn(Optional.empty());
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
+                () -> verify(eventService, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(targetModelAssembler));
     }
 }

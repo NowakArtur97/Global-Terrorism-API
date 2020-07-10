@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.GroupModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
@@ -104,6 +105,7 @@ class GroupControllerPatchMethodTest {
         mockMvc = MockMvcBuilders.standaloneSetup(groupController, restResponseGlobalEntityExceptionHandler)
                 .setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
                         new MappingJackson2HttpMessageConverter())
+                .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
         targetBuilder = new TargetBuilder();
@@ -281,6 +283,36 @@ class GroupControllerPatchMethodTest {
         }
 
         @Test
+        void when_partial_update_valid_group_but_group_not_exist_using_json_patch_should_return_error_response() {
+
+            Long groupId = 1L;
+
+            String updatedName = "updated group name";
+
+            String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
+
+            when(groupService.findById(groupId)).thenReturn(Optional.empty());
+
+            String jsonPatch = "["
+                    + "{ \"op\": \"replace\", \"path\": \"/name\", \"value\": \"" + updatedName + "\" }" + "]";
+
+            assertAll(
+                    () -> mockMvc.perform(patch(linkWithParameter, groupId).content(jsonPatch)
+                            .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp").isNotEmpty())
+                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))),
+                    () -> verify(groupService, times(1)).findById(groupId),
+                    () -> verifyNoMoreInteractions(groupService),
+                    () -> verifyNoInteractions(patchHelper),
+                    () -> verifyNoInteractions(modelAssembler),
+                    () -> verifyNoInteractions(pagedResourcesAssembler));
+        }
+
+        @Test
         void when_partial_update_invalid_group_with_null_fields_using_json_patch_should_return_errors() {
 
             Long groupId = 1L;
@@ -314,7 +346,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -350,7 +382,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -393,7 +425,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -447,7 +479,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -491,7 +523,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -533,7 +565,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -577,7 +609,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
     }
@@ -746,6 +778,36 @@ class GroupControllerPatchMethodTest {
         }
 
         @Test
+        void when_partial_update_valid_group_but_group_not_exist_using_json_patch_should_return_error_response() {
+
+            Long groupId = 1L;
+
+            String updatedName = "updated group name";
+
+            String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
+
+            when(groupService.findById(groupId)).thenReturn(Optional.empty());
+
+            String jsonMergePatch = "{ \"name\" : \"" + updatedName + "\" }";
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, groupId).content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp").isNotEmpty())
+                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))),
+                    () -> verify(groupService, times(1)).findById(groupId),
+                    () -> verifyNoMoreInteractions(groupService),
+                    () -> verifyNoInteractions(patchHelper),
+                    () -> verifyNoInteractions(modelAssembler),
+                    () -> verifyNoInteractions(pagedResourcesAssembler));
+        }
+
+        @Test
         void when_partial_update_invalid_group_with_null_fields_using_json_merge_patch_should_return_errors() {
 
             Long groupId = 1L;
@@ -909,7 +971,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -953,7 +1015,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -997,7 +1059,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -1042,7 +1104,7 @@ class GroupControllerPatchMethodTest {
                     () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class),
                             ArgumentMatchers.any(GroupNode.class), ArgumentMatchers.any()),
                     () -> verifyNoMoreInteractions(patchHelper),
-                    () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
     }

@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
@@ -97,6 +98,7 @@ class EventControllerPatchMethodTest {
         mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler)
                 .setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
                         new MappingJackson2HttpMessageConverter())
+                .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
         targetBuilder = new TargetBuilder();
@@ -255,6 +257,48 @@ class EventControllerPatchMethodTest {
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
                     () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(pagedResourcesAssembler));
+        }
+
+        @Test
+        void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
+
+            Long eventId = 1L;
+
+            String updatedSummary = "summary updated";
+            String updatedMotive = "motive updated";
+            String updatedEventDateString = "2001-08-05";
+            boolean updatedIsPartOfMultipleIncidents = false;
+            boolean updatedIsSuccessful = false;
+            boolean updatedIsSuicidal = false;
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+            when(eventService.findById(eventId)).thenReturn(Optional.empty());
+
+            String jsonPatch = "[" + "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary
+                    + "\" }," + "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" },"
+                    + "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedEventDateString + "\" },"
+                    + "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \""
+                    + updatedIsPartOfMultipleIncidents + "\" },"
+                    + "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + updatedIsSuccessful
+                    + "\" }," + "{ \"op\": \"replace\", \"path\": \"/isSuicidal\", \"value\": \"" + updatedIsSuicidal
+                    + "\" }" + "]";
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventId).content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp").isNotEmpty())
+                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))),
+                    () -> verify(eventService, times(1)).findById(eventId),
+                    () -> verifyNoMoreInteractions(eventService),
+                    () -> verifyNoInteractions(patchHelper),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 
@@ -652,6 +696,44 @@ class EventControllerPatchMethodTest {
                     () -> verifyNoMoreInteractions(eventService),
                     () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
                     () -> verifyNoMoreInteractions(modelAssembler),
+                    () -> verifyNoInteractions(pagedResourcesAssembler));
+        }
+
+        @Test
+        void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
+
+            Long eventId = 1L;
+
+            String updatedSummary = "summary updated";
+            String updatedMotive = "motive updated";
+            String updatedEventDateString = "2001-08-05";
+            boolean updatedIsPartOfMultipleIncidents = false;
+            boolean updatedIsSuccessful = false;
+            boolean updatedIsSuicidal = false;
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+            when(eventService.findById(eventId)).thenReturn(Optional.empty());
+
+            String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", \"motive\" : \"" + updatedMotive
+                    + "\", \"date\" : \"" + updatedEventDateString + "\", \"isPartOfMultipleIncidents\" : "
+                    + updatedIsPartOfMultipleIncidents + ", \"isSuccessful\" : " + updatedIsSuccessful
+                    + ", \"isSuicidal\" : " + updatedIsSuicidal + "}";
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventId).content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp").isNotEmpty())
+                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))),
+                    () -> verify(eventService, times(1)).findById(eventId),
+                    () -> verifyNoMoreInteractions(eventService),
+                    () -> verifyNoInteractions(patchHelper),
+                    () -> verifyNoInteractions(modelAssembler),
                     () -> verifyNoInteractions(pagedResourcesAssembler));
         }
 

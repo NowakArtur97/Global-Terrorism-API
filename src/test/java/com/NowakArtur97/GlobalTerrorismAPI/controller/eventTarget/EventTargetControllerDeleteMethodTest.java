@@ -76,7 +76,8 @@ class EventTargetControllerDeleteMethodTest {
 
         when(eventService.deleteEventTarget(eventId)).thenReturn(Optional.of(eventNode));
 
-        assertAll(() -> mockMvc.perform(delete(linkWithParameter, eventId))
+        assertAll(() -> mockMvc.perform(delete(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(eventService, times(1)).deleteEventTarget(eventId),
@@ -94,7 +95,8 @@ class EventTargetControllerDeleteMethodTest {
         when(eventService.deleteEventTarget(eventId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                () -> mockMvc.perform(delete(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
@@ -116,7 +118,8 @@ class EventTargetControllerDeleteMethodTest {
         when(eventService.deleteEventTarget(eventId)).thenThrow(new ResourceNotFoundException("TargetModel"));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                () -> mockMvc.perform(delete(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())

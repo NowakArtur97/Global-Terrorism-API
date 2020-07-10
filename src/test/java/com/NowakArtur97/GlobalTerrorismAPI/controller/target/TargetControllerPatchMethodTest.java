@@ -135,6 +135,67 @@ class TargetControllerPatchMethodTest {
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
+
+    @Test
+    void when_partial_update_target_using_json_patch_but_target_not_exists_should_return_error_response() {
+
+        Long targetId = 1L;
+
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
+
+        when(targetService.findById(targetId)).thenReturn(Optional.empty());
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(linkWithParameter, targetId).content(
+                                "[ { \"op\": \"replace\", \"path\": \"/target\", \"value\": \"updated target\" } ]")
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))                           .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(404)))
+                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @ParameterizedTest(name = "{index}: Target Name: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {" "})
+    void when_partial_update_invalid_target_using_json_patch_should_return_errors(String invalidTargetName) {
+
+        Long targetId = 1L;
+        String oldTargetName = "target";
+        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
+        TargetNode targetNodeUpdated = new TargetNode(targetId, invalidTargetName);
+
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
+
+        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
+                ArgumentMatchers.any())).thenReturn(targetNodeUpdated);
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(linkWithParameter, targetId).content(
+                                "[ { \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + invalidTargetName + "\" } ]")
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
+                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
+                () -> verifyNoMoreInteractions(patchHelper),
+                () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
     @Test
     void when_partial_update_valid_target_using_json_merge_patch_should_return_partially_updated_node() {
 
@@ -178,7 +239,7 @@ class TargetControllerPatchMethodTest {
     }
 
     @Test
-    void when_partial_update_target_but_target_not_exists_should_return_errors() {
+    void when_partial_update_target_using_json_merge_patch_but_target_not_exists_should_return_error_response() {
 
         Long targetId = 1L;
 
@@ -191,7 +252,7 @@ class TargetControllerPatchMethodTest {
                         .perform(patch(linkWithParameter, targetId).content("{ \"target\": \"updated target\" }")
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))                           .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(404)))
                         .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
@@ -205,7 +266,7 @@ class TargetControllerPatchMethodTest {
     @ParameterizedTest(name = "{index}: Target Name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" "})
-    void when_partial_update_invalid_target_should_return_errors(String invalidTargetName) {
+    void when_partial_update_invalid_target_using_json_merge_patch_should_return_errors(String invalidTargetName) {
 
         Long targetId = 1L;
         String oldTargetName = "target";
