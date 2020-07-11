@@ -27,7 +27,7 @@ To shut down the containers enter:
 
 To access the endpoints you must create an account:
 ```json
-# POST /api/v1/authentication
+# POST /api/v1/registration
 # Content-Type: application/json
 {
     "userName" : "user123",
@@ -54,7 +54,7 @@ And at least two of the four rules below:
 
 Then generate JWT. The token can be generated using a username or email address. Password is required.
 ```json
-# POST /api/v1/authorization
+# POST /api/v1/authentication
 # Content-Type: application/json
 {
     "userName" : "user123",
@@ -108,8 +108,8 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 
 | Method     | URI                               | Action                                                               |
 |------------|-----------------------------------|----------------------------------------------------------------------|
-| `POST`      | `/api/v1/authentication`         | `Create an account to use the API`                                   |
-| `POST`      | `/api/v1/authorization`          | `Generate JWT`                                                       |
+| `POST`      | `/api/v1/registration`           | `Create an account to use the API`                                   |
+| `POST`      | `/api/v1/authentication`         | `Generate JWT`                                                       |
 
 ### Targets
 

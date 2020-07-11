@@ -23,10 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("AuthenticationController_Tests")
-class AuthenticationControllerWithCustomValidationTest {
+@Tag("UserRegistrationController_Tests")
+class UserRegistrationControllerWithCustomValidationTest {
 
-    private final String AUTHENTICATION_BASE_PATH = "http://localhost:8080/api/v1/authentication";
+    private final String REGISTRATIONATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -80,7 +80,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -97,7 +97,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -114,7 +114,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -131,7 +131,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -148,7 +148,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -166,7 +166,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -182,7 +182,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -199,7 +199,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -216,7 +216,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -236,7 +236,7 @@ class AuthenticationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))

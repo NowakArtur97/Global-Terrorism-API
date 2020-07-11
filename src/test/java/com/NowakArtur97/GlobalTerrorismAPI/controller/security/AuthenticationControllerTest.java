@@ -1,30 +1,29 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,171 +43,53 @@ class AuthenticationControllerTest {
     private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
     @Mock
-    private UserService userService;
+    private CustomUserDetailsService customUserDetailsService;
 
-    private UserBuilder userBuilder;
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     private void setUp() {
 
-        authenticationController = new AuthenticationController(userService);
+        authenticationController = new AuthenticationController(customUserDetailsService, authenticationManager, jwtUtil);
 
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(authenticationController, restResponseGlobalEntityExceptionHandler)
                 .build();
-
-        userBuilder = new UserBuilder();
     }
 
     @Test
-    void when_register_valid_user_should_register_user() {
+    void when_authenticate_valid_user_should_generate_token() {
 
-        UserDTO userDTO = (UserDTO) userBuilder.build(ObjectType.DTO);
-        UserNode userNode = (UserNode) userBuilder.build(ObjectType.NODE);
+        String userName = "user123";
+        String password = "Password1@";
+        String email = "email@email.com";
 
-        when(userService.register(userDTO)).thenReturn(userNode);
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(userName, password, email);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userName, password);
+        User userDetails = new User(userName, password, List.of(new SimpleGrantedAuthority("user")));
+        String token = "generated token";
+
+        when(customUserDetailsService.loadUserByUsername(userName)).thenReturn(userDetails);
+        when(jwtUtil.generateToken(userDetails)).thenReturn(token);
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isCreated())
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string("Account created successfully")),
-                () -> verify(userService, times(1)).register(userDTO),
-                () -> verifyNoMoreInteractions(userService));
-    }
-
-    @Test
-    void when_register_user_with_null_fields_should_return_error_response() {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withUserName(null).withPassword(null).withMatchingPassword(null).withEmail(null).build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.name.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{user.password.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{user.matchingPassword.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{user.email.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(4))),
-                () -> verifyNoInteractions(userService));
-    }
-
-    @ParameterizedTest(name = "{index}: For User name: {0} should have violation")
-    @EmptySource
-    @ValueSource(strings = {" "})
-    void when_register_user_with_blank_user_name_should_return_error_response(String invalidUserName) {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withUserName(invalidUserName).build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.name.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{user.name.size}")))
-                        .andExpect(jsonPath("errors", hasSize(2))),
-                () -> verifyNoInteractions(userService));
-    }
-
-    @Test
-    void when_register_user_with_too_short_user_name_should_return_error_response() {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withUserName("u").build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.name.size}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(userService));
-    }
-
-    @Test
-    void when_register_user_with_blank_email_should_return_error_response() {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withEmail("     ").build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.email.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{user.email.wrongFormat}")))
-                        .andExpect(jsonPath("errors", hasSize(2))),
-                () -> verifyNoInteractions(userService));
-    }
-
-    @ParameterizedTest(name = "{index}: For User email: {0} should have violation")
-    @ValueSource(strings = {"wrongformat", "wrong.format"})
-    void when_register_user_with_an_incorrect_format_email_should_return_error_response(String invalidEmail) {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withEmail(invalidEmail).build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.email.wrongFormat}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(userService));
-    }
-
-    @ParameterizedTest(name = "{index}: For User password: {0} should have violation")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void when_register_user_with_blank_password_should_return_error_response(String invalidPassword) {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withPassword(invalidPassword).build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.password.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(userService));
-    }
-
-
-    @ParameterizedTest(name = "{index}: For User matching password: {0} should have violation")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void when_register_user_with_blank_matching_password_should_return_error_response(String invalidMatchingPassword) {
-
-        UserDTO userDTO = (UserDTO) userBuilder.withMatchingPassword(invalidMatchingPassword).build(ObjectType.DTO);
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.matchingPassword.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(userService));
+                        .andExpect(jsonPath("token", is(token))),
+                () -> verify(authenticationManager, times(1)).authenticate(usernamePasswordAuthenticationToken),
+                () -> verifyNoMoreInteractions(authenticationManager),
+                () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
+                () -> verifyNoMoreInteractions(customUserDetailsService),
+                () -> verify(jwtUtil, times(1)).generateToken(userDetails),
+                () -> verifyNoMoreInteractions(jwtUtil));
     }
 }
