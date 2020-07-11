@@ -71,7 +71,7 @@ class CustomUserDetailsServiceImplTest {
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(userName, userName),
                 () -> verifyNoMoreInteractions(userRepository));
     }
-    
+
     @Test
     void when_load_user_by_email_should_return_user_details() {
 
