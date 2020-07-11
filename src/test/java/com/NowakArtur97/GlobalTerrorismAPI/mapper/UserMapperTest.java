@@ -50,15 +50,15 @@ class UserMapperTest {
 
         assertAll(
                 () -> assertEquals(userNodeExpected.getUserName(), userNodeActual.getUserName(),
-                        () -> "should return user with user name: " + userNodeExpected.getUserName() + ", but was" + userNodeActual.getUserName()),
+                        () -> "should return user with user name: " + userNodeExpected.getUserName() + ", but was: " + userNodeActual.getUserName()),
                 () -> assertEquals(userNodeExpected.getPassword(), userNodeActual.getPassword(),
-                        () -> "should return user with user password: " + userNodeExpected.getPassword() + ", but was" + userNodeActual.getPassword()),
+                        () -> "should return user with user password: " + userNodeExpected.getPassword() + ", but was: " + userNodeActual.getPassword()),
                 () -> assertEquals(userNodeExpected.getEmail(), userNodeActual.getEmail(),
-                        () -> "should return user with user email: " + userNodeExpected.getEmail() + ", but was" + userNodeActual.getEmail()),
+                        () -> "should return user with user email: " + userNodeExpected.getEmail() + ", but was: " + userNodeActual.getEmail()),
                 () -> assertTrue(userNodeActual.getRoles().isEmpty(),
-                        () -> "should return user with empty roles list, but was" + userNodeActual.getRoles()),
+                        () -> "should return user with empty roles list, but was: " + userNodeActual.getRoles()),
                 () -> assertEquals(userNodeExpected.getRoles(), userNodeActual.getRoles(),
-                        () -> "should return user with user roles: " + userNodeExpected.getRoles() + ", but was" + userNodeActual.getRoles()),
+                        () -> "should return user with user roles: " + userNodeExpected.getRoles() + ", but was: " + userNodeActual.getRoles()),
                 () -> verify(modelMapper, times(1)).map(userDTO, UserNode.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
@@ -75,11 +75,11 @@ class UserMapperTest {
 
         assertAll(
                 () -> assertEquals(userDTOExpected.getUserName(), userDTOActual.getUserName(),
-                        () -> "should return user with user name: " + userDTOExpected.getUserName() + ", but was" + userDTOActual.getUserName()),
+                        () -> "should return user with user name: " + userDTOExpected.getUserName() + ", but was: " + userDTOActual.getUserName()),
                 () -> assertEquals(userDTOExpected.getPassword(), userDTOActual.getPassword(),
-                        () -> "should return user with user password: " + userDTOExpected.getPassword() + ", but was" + userDTOActual.getPassword()),
+                        () -> "should return user with user password: " + userDTOExpected.getPassword() + ", but was: " + userDTOActual.getPassword()),
                 () -> assertEquals(userDTOExpected.getEmail(), userDTOActual.getEmail(),
-                        () -> "should return user with user email: " + userDTOExpected.getEmail() + ", but was" + userDTOActual.getEmail()),
+                        () -> "should return user with user email: " + userDTOExpected.getEmail() + ", but was: " + userDTOActual.getEmail()),
                 () -> verify(modelMapper, times(1)).map(userNode, UserDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }

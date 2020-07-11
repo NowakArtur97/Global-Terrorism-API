@@ -63,11 +63,11 @@ class CustomUserDetailsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(userDetailsExpected.getUsername(), userDetailsActual.getUsername(),
-                        () -> "should return user details with user name: " + userDetailsExpected.getUsername() + ", but was" + userDetailsActual.getUsername()),
+                        () -> "should return user details with user name: " + userDetailsExpected.getUsername() + ", but was: " + userDetailsActual.getUsername()),
                 () -> assertEquals(userDetailsExpected.getPassword(), userDetailsActual.getPassword(),
-                        () -> "should return user details with user password: " + userDetailsExpected.getPassword() + ", but was" + userDetailsActual.getPassword()),
+                        () -> "should return user details with user password: " + userDetailsExpected.getPassword() + ", but was: " + userDetailsActual.getPassword()),
                 () -> assertEquals(userDetailsExpected.getAuthorities(), userDetailsActual.getAuthorities(),
-                        () -> "should return user details with authorities: " + userDetailsExpected.getAuthorities() + ", but was" + userDetailsActual.getAuthorities()),
+                        () -> "should return user details with authorities: " + userDetailsExpected.getAuthorities() + ", but was: " + userDetailsActual.getAuthorities()),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(userName, userName),
                 () -> verifyNoMoreInteractions(userRepository));
     }
@@ -89,11 +89,11 @@ class CustomUserDetailsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(userDetailsExpected.getUsername(), userDetailsActual.getUsername(),
-                        () -> "should return user details with user name: " + userDetailsExpected.getUsername() + ", but was" + userDetailsActual.getUsername()),
+                        () -> "should return user details with user name: " + userDetailsExpected.getUsername() + ", but was: " + userDetailsActual.getUsername()),
                 () -> assertEquals(userDetailsExpected.getPassword(), userDetailsActual.getPassword(),
-                        () -> "should return user details with user password: " + userDetailsExpected.getPassword() + ", but was" + userDetailsActual.getPassword()),
+                        () -> "should return user details with user password: " + userDetailsExpected.getPassword() + ", but was: " + userDetailsActual.getPassword()),
                 () -> assertEquals(userDetailsExpected.getAuthorities(), userDetailsActual.getAuthorities(),
-                        () -> "should return user details with authorities: " + userDetailsExpected.getAuthorities() + ", but was" + userDetailsActual.getAuthorities()),
+                        () -> "should return user details with authorities: " + userDetailsExpected.getAuthorities() + ", but was: " + userDetailsActual.getAuthorities()),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(email, email),
                 () -> verifyNoMoreInteractions(userRepository));
     }

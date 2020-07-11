@@ -2,21 +2,23 @@ package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 
-import java.text.ParseException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +32,7 @@ class ModelMapperTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
+    private static UserBuilder userBuilder;
 
     @BeforeAll
     private static void init() {
@@ -37,6 +40,7 @@ class ModelMapperTest {
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
+        userBuilder = new UserBuilder();
     }
 
     @BeforeEach
@@ -73,7 +77,7 @@ class ModelMapperTest {
     }
 
     @Test
-    void when_map_target_node_to_model_should_return_vali_model() {
+    void when_map_target_node_to_model_should_return_valid_model() {
 
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
@@ -86,7 +90,7 @@ class ModelMapperTest {
     }
 
     @Test
-    void when_map_event_dto_to_node_should_return_valid_node() throws ParseException {
+    void when_map_event_dto_to_node_should_return_valid_node() {
 
         TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withTarget(targetDTO).build(ObjectType.DTO);
@@ -127,7 +131,7 @@ class ModelMapperTest {
     }
 
     @Test
-    void when_map_event_node_to_dto_should_return_valid_dto() throws ParseException {
+    void when_map_event_node_to_dto_should_return_valid_dto() {
 
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
@@ -308,5 +312,43 @@ class ModelMapperTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getTarget(), groupModelActual.getEventsCaused().get(1).getTarget().getTarget(),
                         () -> "should return group's event model with target: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getTarget()
                                 + ", but was: " + groupModelActual.getEventsCaused().get(1).getTarget().getTarget()));
+    }
+
+    @Test
+    void when_map_user_dto_to_node_should_return_valid_node() {
+
+        UserDTO userDTO = (UserDTO) userBuilder.build(ObjectType.DTO);
+        UserNode userNodeExpected = (UserNode) userBuilder.withId(null).withRoles(null).build(ObjectType.NODE);
+
+        UserNode userNodeActual = modelMapper.map(userDTO, UserNode.class);
+
+        assertAll(
+                () -> assertEquals(userNodeExpected.getUserName(), userNodeActual.getUserName(),
+                        () -> "should return user with user name: " + userNodeExpected.getUserName() + ", but was: " + userNodeActual.getUserName()),
+                () -> assertEquals(userNodeExpected.getPassword(), userNodeActual.getPassword(),
+                        () -> "should return user with user password: " + userNodeExpected.getPassword() + ", but was: " + userNodeActual.getPassword()),
+                () -> assertEquals(userNodeExpected.getEmail(), userNodeActual.getEmail(),
+                        () -> "should return user with user email: " + userNodeExpected.getEmail() + ", but was: " + userNodeActual.getEmail()),
+                () -> assertNull(userNodeActual.getRoles(),
+                        () -> "should return user with roles list as null, but was: " + userNodeActual.getRoles()),
+                () -> assertEquals(userNodeExpected.getRoles(), userNodeActual.getRoles(),
+                        () -> "should return user with user roles: " + userNodeExpected.getRoles() + ", but was: " + userNodeActual.getRoles()));
+    }
+
+    @Test
+    void when_map_user_node_to_dto_should_return_valid_dto() {
+
+        UserNode userNode = (UserNode) userBuilder.build(ObjectType.NODE);
+        UserDTO userDTOExpected = (UserDTO) userBuilder.build(ObjectType.DTO);
+
+        UserDTO userDTOActual = modelMapper.map(userNode, UserDTO.class);
+
+        assertAll(
+                () -> assertEquals(userDTOExpected.getUserName(), userDTOActual.getUserName(),
+                        () -> "should return user with user name: " + userDTOExpected.getUserName() + ", but was: " + userDTOActual.getUserName()),
+                () -> assertEquals(userDTOExpected.getPassword(), userDTOActual.getPassword(),
+                        () -> "should return user with user password: " + userDTOExpected.getPassword() + ", but was: " + userDTOActual.getPassword()),
+                () -> assertEquals(userDTOExpected.getEmail(), userDTOActual.getEmail(),
+                        () -> "should return user with user email: " + userDTOExpected.getEmail() + ", but was: " + userDTOActual.getEmail()));
     }
 }
