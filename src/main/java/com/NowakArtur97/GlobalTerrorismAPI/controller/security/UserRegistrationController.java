@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.constraintGroup.BasicUserValidationCo
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.AuthenticationTag;
+import com.NowakArtur97.GlobalTerrorismAPI.tag.UserRegistrationTag;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/registration")
-@Api(tags = {AuthenticationTag.RESOURCE})
+@Api(tags = {UserRegistrationTag.RESOURCE})
 @RequiredArgsConstructor
 @Validated(BasicUserValidationConstraints.class)
 public class UserRegistrationController {
@@ -27,7 +27,7 @@ public class UserRegistrationController {
     private final UserService userService;
 
     @PostMapping
-    @ApiOperation(value = "Create registrationan account", notes = "Create an account. Required for generating API key.")
+    @ApiOperation(value = "Create an account", notes = "Create an account. Required for generating API key.")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Successfully created a new account", response = String.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})

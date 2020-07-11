@@ -40,8 +40,8 @@ public class SwaggerConfiguration {
                         new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION),
                         new Tag(GroupEventsTag.RESOURCE, GroupEventsTag.DESCRIPTION),
                         new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION),
-                        new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION),
-                        new Tag(AuthorizationTag.RESOURCE, AuthorizationTag.DESCRIPTION)
+                        new Tag(UserRegistrationTag.RESOURCE, UserRegistrationTag.DESCRIPTION),
+                        new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION)
                 )
                 .securityContexts(List.of(getSecurityContext(swaggerConfigurationProperties)))
                 .securitySchemes(List.of(getApiKey(swaggerConfigurationProperties)));
