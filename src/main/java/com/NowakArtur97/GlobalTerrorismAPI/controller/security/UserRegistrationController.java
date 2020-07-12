@@ -29,13 +29,13 @@ public class UserRegistrationController {
     @PostMapping
     @ApiOperation(value = "Create an account", notes = "Create an account. Required for generating API key.")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Successfully created a new account", response = String.class),
+            @ApiResponse(code = 200, message = "Successfully created a new account", response = String.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity registerUser(@ApiParam(value = "User data", name = "user", required = true) @RequestBody
                                        @Valid UserDTO userDTO) {
 
         userService.register(userDTO);
 
-        return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Account created successfully", HttpStatus.OK);
     }
 }

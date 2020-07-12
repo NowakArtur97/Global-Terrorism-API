@@ -50,7 +50,7 @@ class UserRegistrationControllerWithCustomValidationTest {
                 () -> mockMvc
                         .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isCreated())
+                        .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(content().string("Account created successfully")));
     }
