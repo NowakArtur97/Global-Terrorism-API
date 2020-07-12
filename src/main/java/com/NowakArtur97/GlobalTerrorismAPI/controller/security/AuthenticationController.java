@@ -40,10 +40,10 @@ public class AuthenticationController {
                 ? authenticationRequest.getUserName()
                 : authenticationRequest.getEmail();
 
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNameOrEmail);
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userNameOrEmail, authenticationRequest.getPassword()));
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userNameOrEmail);
 
         String token = jwtUtil.generateToken(userDetails);
 

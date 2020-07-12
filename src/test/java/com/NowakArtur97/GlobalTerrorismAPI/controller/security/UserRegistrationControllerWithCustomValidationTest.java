@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("UserRegistrationController_Tests")
 class UserRegistrationControllerWithCustomValidationTest {
 
-    private final String REGISTRATIONATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
+    private final String REGISTRATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -63,12 +63,12 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("User name '" + userDTO.getUserName() + "' is already taken.")))
+                        .andExpect(jsonPath("errors", hasItem("User name: '" + userDTO.getUserName() + "' is already taken.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -80,12 +80,12 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Email '" + userDTO.getEmail() + "' is already taken.")))
+                        .andExpect(jsonPath("errors", hasItem("Email: '" + userDTO.getEmail() + "' is already taken.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -97,7 +97,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -114,12 +114,12 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Password contains user name '" + userDTO.getUserName() + "'.")))
+                        .andExpect(jsonPath("errors", hasItem("Password contains user name: '" + userDTO.getUserName() + "'.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -131,7 +131,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -148,12 +148,12 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Password contains a repetitive string 'AAA'.")))
+                        .andExpect(jsonPath("errors", hasItem("Password contains a repetitive string: 'AAA'.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -166,12 +166,12 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Password contains a popular phrase '" + popularPassword + "'."))));
+                        .andExpect(jsonPath("errors", hasItem("Password contains a popular phrase: '" + popularPassword + "'."))));
     }
 
     @Test
@@ -182,7 +182,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -199,7 +199,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -216,7 +216,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -236,7 +236,7 @@ class UserRegistrationControllerWithCustomValidationTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(REGISTRATIONATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(REGISTRATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))

@@ -1,11 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
+import com.NowakArtur97.GlobalTerrorismAPI.advice.AuthenticationControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
 import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -15,9 +17,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -59,6 +63,7 @@ class AuthenticationControllerTest {
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(authenticationController, restResponseGlobalEntityExceptionHandler)
+                .setControllerAdvice(new AuthenticationControllerAdvice())
                 .build();
     }
 
@@ -85,11 +90,73 @@ class AuthenticationControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("token", is(token))),
-                () -> verify(authenticationManager, times(1)).authenticate(usernamePasswordAuthenticationToken),
-                () -> verifyNoMoreInteractions(authenticationManager),
                 () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
                 () -> verifyNoMoreInteractions(customUserDetailsService),
+                () -> verify(authenticationManager, times(1)).authenticate(usernamePasswordAuthenticationToken),
+                () -> verifyNoMoreInteractions(authenticationManager),
                 () -> verify(jwtUtil, times(1)).generateToken(userDetails),
                 () -> verifyNoMoreInteractions(jwtUtil));
+    }
+
+
+    @Test
+    void when_authenticate_not_existing_user_should_return_error_response() {
+
+        String userName = "user123";
+        String password = "Password1@";
+        String email = "email@email.com";
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(userName, password, email);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userName, password);
+
+        when(customUserDetailsService.loadUserByUsername(userName)).thenThrow(new UsernameNotFoundException("User with name/email: '" + userName + "' not found."));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isUnauthorized())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 401}"))
+                        .andExpect(jsonPath("errors[0]", is("User with name/email: '" + userName + "' not found.")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
+                () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
+                () -> verifyNoMoreInteractions(customUserDetailsService),
+                () -> verifyNoInteractions(authenticationManager),
+                () -> verifyNoInteractions(jwtUtil));
+    }
+
+    @Test
+    void when_authenticate_user_with_incorrect_data_should_return_error_response() {
+
+        String userName = "user123";
+        String password = "Password1@";
+        String email = "email@email.com";
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(userName, password, email);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userName, password);
+        User userDetails = new User(userName, password, List.of(new SimpleGrantedAuthority("user")));
+
+        when(customUserDetailsService.loadUserByUsername(userName)).thenReturn(userDetails);
+        when(authenticationManager.authenticate(usernamePasswordAuthenticationToken)).thenThrow(new BadCredentialsException(""));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isUnauthorized())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 401}"))
+                        .andExpect(jsonPath("errors[0]", is("Invalid login credentials.")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
+                () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
+                () -> verifyNoMoreInteractions(customUserDetailsService),
+                () -> verify(authenticationManager, times(1)).authenticate(usernamePasswordAuthenticationToken),
+                () -> verifyNoMoreInteractions(authenticationManager),
+                () -> verifyNoInteractions(jwtUtil));
     }
 }
