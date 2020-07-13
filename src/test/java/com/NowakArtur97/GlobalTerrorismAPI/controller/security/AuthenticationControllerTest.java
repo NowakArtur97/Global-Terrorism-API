@@ -107,8 +107,6 @@ class AuthenticationControllerTest {
         String email = "email@email.com";
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(userName, password, email);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                userName, password);
 
         when(customUserDetailsService.loadUserByUsername(userName)).thenThrow(new UsernameNotFoundException("User with name/email: '" + userName + "' not found."));
 
