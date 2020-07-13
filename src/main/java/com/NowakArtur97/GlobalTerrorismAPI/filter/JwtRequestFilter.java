@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             userName = jwtUtil.extractUserName(jwt);
         } else {
-            throw new JwtTokenMissingException("Missing Jwt token in request headers.");
+            throw new JwtTokenMissingException("Missing JWT token in request headers.");
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -61,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
 
-        String path = request.getServletPath();
+        String path = request.getRequestURI().substring(request.getContextPath().length());
 
         return path.contains("/registration") || path.contains("/authentication");
     }

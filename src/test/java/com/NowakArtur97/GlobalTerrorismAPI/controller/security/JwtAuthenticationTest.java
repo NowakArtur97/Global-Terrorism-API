@@ -9,10 +9,8 @@ import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("AuthenticationController_Tests")
 class JwtAuthenticationTest {
@@ -56,7 +53,7 @@ class JwtAuthenticationTest {
         userRepository.save(userNode);
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} with jwt token should return content")
+    @ParameterizedTest(name = "{index}: For URL: {0} with JWT  token should return content")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_valid_jwt_token_is_in_request_headers_should_return_content(String url) {
 
@@ -74,7 +71,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("errors").doesNotExist()));
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} without jwt token should return error response")
+    @ParameterizedTest(name = "{index}: For URL: {0} without JWT  token should return error response")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_jwt_token_is_missing_in_request_headers_should_return_error_response(String url) {
 
@@ -86,11 +83,11 @@ class JwtAuthenticationTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(jsonPath("status", is(401)))
-                        .andExpect(jsonPath("errors[0]", is("Missing Jwt token in request headers.")))
+                        .andExpect(jsonPath("errors[0]", is("Missing JWT token in request headers.")))
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} with invalid jwt token should return content")
+    @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token should return content")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_valid_jwt_token_is_in_request_headers_without_authorization_type_should_return_content(String url) {
 
@@ -106,11 +103,11 @@ class JwtAuthenticationTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(jsonPath("status", is(401)))
-                        .andExpect(jsonPath("errors[0]", is("Missing Jwt token in request headers.")))
+                        .andExpect(jsonPath("errors[0]", is("Missing JWT token in request headers.")))
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} with invalid jwt token should return error response")
+    @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token should return error response")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_invalid_jwt_token_is_in_request_headers_should_return_error_response(String url) {
 
@@ -131,7 +128,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} with invalid jwt token with wrong format should return error response")
+    @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token with wrong format should return error response")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_invalid_jwt_token_with_wrong_format_is_in_request_headers_should_return_error_response(String url) {
 
@@ -151,7 +148,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For URL: {0} with expired jwt token should return error response")
+    @ParameterizedTest(name = "{index}: For URL: {0} with expired JWT  token should return error response")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_expired_jwt_token_is_in_request_headers_should_return_error_response(String url) {
 
