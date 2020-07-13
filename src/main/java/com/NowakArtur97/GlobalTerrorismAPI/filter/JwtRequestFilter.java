@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.filter;
 
+import com.NowakArtur97.GlobalTerrorismAPI.exception.JwtTokenMissingException;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        String userName = null;
-        String jwt = null;
+        String userName;
+        String jwt;
 
         if (isBearerTypeAuthorization(authorizationHeader)) {
 
             jwt = authorizationHeader.substring(7);
             userName = jwtUtil.extractUserName(jwt);
+        } else {
+            throw new JwtTokenMissingException("Missing Jwt token in request headers.");
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {

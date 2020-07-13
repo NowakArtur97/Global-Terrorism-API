@@ -169,7 +169,6 @@ The previously generated token should be placed in the header. In the example, m
 ```json
 # POST /api/v1/bulk
 # Content-Type: application/json
-
 {
   "operations": [
     {"method": "GET", "url": "/api/v1/groups", headers={Authorization=Bearer JWT_TOKEN}},
