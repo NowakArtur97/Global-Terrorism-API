@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.filter;
 
+import com.NowakArtur97.GlobalTerrorismAPI.exception.JwtTokenMissingException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -26,6 +27,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response);
+
+        } catch (JwtTokenMissingException exception) {
+
+            setErrorResponse(HttpStatus.UNAUTHORIZED, response, exception);
 
         } catch (JwtException exception) {
 
