@@ -52,22 +52,6 @@ class JwtAuthenticationTest {
         userRepository.save(userNode);
     }
 
-    @ParameterizedTest(name = "{index}: For URI: {0} without jwt token should throw exceptions")
-    @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
-    void when_jwt_token_missing_in_request_headers_should_return_error_response(String url) {
-
-        assertAll(
-                () -> mockMvc
-                        .perform(get(url).contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp").isNotEmpty())
-                        .andExpect(jsonPath("status", is(401)))
-                        .andExpect(jsonPath("errors[0]", is("Missing Jwt token in request headers.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
-    }
-
     @ParameterizedTest(name = "{index}: For URI: {0} with jwt token should return content")
     @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
     void when_jwt_token_is_in_request_headers_should_return_content(String url) {
@@ -84,5 +68,63 @@ class JwtAuthenticationTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("content").exists())
                         .andExpect(jsonPath("errors").doesNotExist()));
+    }
+
+
+    @ParameterizedTest(name = "{index}: For URI: {0} without jwt token should return error response")
+    @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
+    void when_jwt_token_missing_in_request_headers_should_return_error_response(String url) {
+
+        assertAll(
+                () -> mockMvc
+                        .perform(get(url).contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isUnauthorized())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(jsonPath("status", is(401)))
+                        .andExpect(jsonPath("errors[0]", is("Missing Jwt token in request headers.")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+    }
+
+    @ParameterizedTest(name = "{index}: For URI: {0} with invalid jwt token should return error response")
+    @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
+    void when_invalid_jwt_token_is_in_request_headers_should_return_error_response(String url) {
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user")))) + "ASSD!@#asd";
+
+        assertAll(
+                () -> mockMvc
+                        .perform(get(url).header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+    }
+
+    @ParameterizedTest(name = "{index}: For URI: {0} with invalid jwt token should return error response")
+    @ValueSource(strings = {TARGET_BASE_PATH, EVENT_BASE_PATH, GROUP_BASE_PATH})
+    void when_invalid_jwt_token_with_wrong_format_is_in_request_headers_should_return_error_response(String url) {
+
+        String token = "invalidToken";
+
+        assertAll(
+                () -> mockMvc
+                        .perform(get(url).header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("JWT strings must contain exactly 2 period characters. Found: 0")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
     }
 }

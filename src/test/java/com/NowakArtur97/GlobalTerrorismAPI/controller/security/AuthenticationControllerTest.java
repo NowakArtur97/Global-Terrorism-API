@@ -117,7 +117,7 @@ class AuthenticationControllerTest {
                         .andExpect(status().isUnauthorized())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
-                        .andExpect(content().json("{'status': 401}"))
+                        .andExpect(jsonPath("status", is(401)))
                         .andExpect(jsonPath("errors[0]", is("User with name/email: '" + userName + "' not found.")))
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
                 () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
@@ -148,7 +148,7 @@ class AuthenticationControllerTest {
                         .andExpect(status().isUnauthorized())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
-                        .andExpect(content().json("{'status': 401}"))
+                        .andExpect(jsonPath("status", is(401)))
                         .andExpect(jsonPath("errors[0]", is("Invalid login credentials.")))
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
                 () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
