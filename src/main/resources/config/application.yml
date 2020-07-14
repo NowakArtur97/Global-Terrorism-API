@@ -3,7 +3,7 @@
 #
 spring:
   profiles:
-    active: dev
+    active: ci
   bulk:
     api:
       path: /api/v1/bulk
@@ -34,3 +34,4 @@ swagger:
 jwt:
   secretKey: secret
   ignoredEndpoints: /registration,/authentication,/v2/api-docs,/configuration/ui,/swagger-resources,/configuration/security,/swagger-ui.html,/webjars
+  ignoredAntMatchers: /api/v1/registration/**,/api/v1/authentication/**,/v2/api-docs,/configuration/ui,/swagger-resources/**,/configuration/security,/swagger-ui.html,/webjars/**
