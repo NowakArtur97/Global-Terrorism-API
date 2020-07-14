@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.exception.JwtTokenMissingException;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService customUserDetailsService;
 
     private final JwtUtil jwtUtil;
+
+    @Value("#{'${jwt.ignoredEndpoints}'.split(',')}")
+    private List<String> ignoredEndpointsList;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -63,7 +68,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        return path.contains("/registration") || path.contains("/authentication");
+        for (String endpoint : ignoredEndpointsList) {
+            if (path.contains(endpoint)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isBearerTypeAuthorization(String authorizationHeader) {

@@ -29,6 +29,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ExceptionHandlerFilter exceptionHandlerFilter;
 
+    private String[] ignoredEndpointsList = {};
+
     @Bean
     public BCryptPasswordEncoder getBCryptPasswordEncoder() {
 
@@ -58,8 +60,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/registration/**", "/api/v1/authentication/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(
+                        "/api/v1/registration/**",
+                        "/api/v1/authentication/**",
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**")
+                .permitAll()
+                .antMatchers("/api/v1/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
