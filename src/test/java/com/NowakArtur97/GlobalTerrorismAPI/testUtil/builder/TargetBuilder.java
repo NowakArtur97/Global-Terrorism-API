@@ -1,8 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
@@ -11,6 +14,8 @@ public final class TargetBuilder {
     private Long id = 1L;
 
     private String targetName = "target";
+
+    private String countryName = "country";
 
     private Country country = null;
 
@@ -28,9 +33,16 @@ public final class TargetBuilder {
         return this;
     }
 
-    public TargetBuilder withCountry(String target) {
+    public TargetBuilder withCountryName(String countryName) {
 
-        this.targetName = target;
+        this.countryName = countryName;
+
+        return this;
+    }
+
+    public TargetBuilder withCountry(Country country) {
+
+        this.country = country;
 
         return this;
     }
@@ -43,19 +55,19 @@ public final class TargetBuilder {
 
             case DTO:
 
-                target = new TargetDTO(targetName, country);
+                target = new TargetDTO(targetName, countryName);
 
                 break;
 
             case NODE:
 
-                target = new TargetNode(id, targetName);
+                target = new TargetNode(id, targetName, (CountryNode) country);
 
                 break;
 
             case MODEL:
 
-                target = new TargetModel(id, targetName);
+                target = new TargetModel(id, targetName, (CountryModel) country);
 
                 break;
 
@@ -73,5 +85,9 @@ public final class TargetBuilder {
         this.id = 1L;
 
         this.targetName = "target";
+
+        this.countryName = "country";
+
+        this.country = null;
     }
 }
