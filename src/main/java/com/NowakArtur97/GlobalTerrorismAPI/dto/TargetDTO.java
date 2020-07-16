@@ -18,4 +18,8 @@ public class TargetDTO implements DTONode, Target {
     @ApiModelProperty(notes = "The target's name", required = true, example = "Target")
     @NotBlank(message = "{target.target.notBlank}")
     private String target;
+
+    @ApiModelProperty(notes = "The target's country of origin", required = true, example = "Country")
+    @CountryExists(message = "{target.countryOfOrigin.exists}")
+    private String countryOfOrigin;
 }
