@@ -7,6 +7,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -23,10 +24,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -37,11 +35,15 @@ class OnApplicationStartupEventListener {
 
     private Map<String, GroupNode> groupsWithTargets = new HashMap<>();
 
+    private Set<CountryNode> allCountries = new HashSet<>();
+
     private final TargetService targetService;
 
     private final GenericService<EventNode, EventDTO> eventService;
 
     private final GenericService<GroupNode, GroupDTO> groupService;
+
+    private final CountryRepository countryRepository;
 
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
@@ -67,18 +69,18 @@ class OnApplicationStartupEventListener {
 
         for (Row row : sheet) {
 
-//            TargetNode target = saveTarget(row);
-
             CountryNode country = createCountry(row);
 
-//            EventNode eventNode = createEvent(row, target);
+            TargetNode target = saveTarget(row, country);
 
-//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+            EventNode eventNode = createEvent(row, target);
 
-//            manageGroup(groupName, eventNode);
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+
+            manageGroup(groupName, eventNode);
         }
 
-//        saveAllGroups();
+        saveAllGroups();
     }
 
     private void saveAllGroups() {
@@ -161,16 +163,16 @@ class OnApplicationStartupEventListener {
 
         CountryNode country = new CountryNode(id, name);
 
-        log.info(country.toString());
+        allCountries.add(country);
 
         return country;
     }
 
-    private TargetNode saveTarget(Row row) {
+    private TargetNode saveTarget(Row row, CountryNode country) {
 
         String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
 
-        TargetNode target = new TargetNode(targetName);
+        TargetNode target = new TargetNode(targetName, country);
 
         return targetService.save(target);
     }

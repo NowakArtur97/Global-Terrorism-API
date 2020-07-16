@@ -11,19 +11,25 @@ import org.neo4j.ogm.annotation.Relationship;
 @NoArgsConstructor
 public class TargetNode extends Node implements Target {
 
-	private String target;
+    private String target;
 
-	@Relationship("IS_FROM")
-	private CountryNode countryOfOrigin;
+    @Relationship("IS_FROM")
+    private CountryNode countryOfOrigin;
 
-	public TargetNode(String target) {
+    public TargetNode(String target) {
 
-		this.target = target;
-	}
+        this.target = target;
+    }
 
-	public TargetNode(Long id, String target) {
+    public TargetNode(Long id, String target) {
 
-		super(id);
-		this.target = target;
-	}
+        super(id);
+        this.target = target;
+    }
+
+    public TargetNode(String target, CountryNode country) {
+
+        this.target = target;
+        this.countryOfOrigin = country;
+    }
 }
