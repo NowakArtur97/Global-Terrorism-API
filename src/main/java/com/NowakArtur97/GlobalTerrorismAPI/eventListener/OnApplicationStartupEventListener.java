@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-class ApplicationStartupEventListener {
+class OnApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
