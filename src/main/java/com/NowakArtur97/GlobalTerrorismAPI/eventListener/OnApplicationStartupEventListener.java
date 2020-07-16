@@ -35,9 +35,9 @@ class OnApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
-    private Map<String, GroupNode> groupsWithTargets = new HashMap<>();
+    private Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
-    private Set<CountryNode> allCountries = new HashSet<>();
+    private Map<String, CountryNode> allCountries = new HashMap<>();
 
     private final TargetService targetService;
 
@@ -59,6 +59,8 @@ class OnApplicationStartupEventListener {
             Sheet sheet = loadSheetFromFile();
 
             insertDataToDatabase(sheet);
+
+            countryRepository.findAll().forEach(c -> log.info(c.toString()));
         }
     }
 
@@ -73,25 +75,32 @@ class OnApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
+        int i = 0;
+
         for (Row row : sheet) {
+
+            if (i == 0) {
+                i++;
+                continue;
+            }
 
             CountryNode country = saveCountry(row);
 
             TargetNode target = saveTarget(row, country);
 
-//            EventNode eventNode = createEvent(row, target);
+            EventNode eventNode = createEvent(row, target);
 
-//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
 
-//            manageGroup(groupName, eventNode);
+            manageGroup(groupName, eventNode);
         }
 
-//        saveAllGroups();
+        saveAllGroups();
     }
 
     private void saveAllGroups() {
 
-        for (GroupNode groupNode : groupsWithTargets.values()) {
+        for (GroupNode groupNode : groupsWithEvents.values()) {
 
             groupService.save(groupNode);
         }
@@ -99,9 +108,9 @@ class OnApplicationStartupEventListener {
 
     private void manageGroup(String groupName, EventNode eventNode) {
 
-        if (groupsWithTargets.containsKey(groupName)) {
+        if (groupsWithEvents.containsKey(groupName)) {
 
-            groupsWithTargets.get(groupName).addEvent(eventNode);
+            groupsWithEvents.get(groupName).addEvent(eventNode);
 
         } else {
 
@@ -109,14 +118,13 @@ class OnApplicationStartupEventListener {
 
             newGroup.addEvent(eventNode);
 
-
             if (isGroupUnknown(groupName)) {
 
                 groupService.save(newGroup);
 
             } else {
 
-                groupsWithTargets.put(groupName, newGroup);
+                groupsWithEvents.put(groupName, newGroup);
             }
         }
     }
@@ -162,11 +170,20 @@ class OnApplicationStartupEventListener {
 
         String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
 
-        CountryNode country = new CountryNode(name);
+        if (allCountries.containsKey(name)) {
 
-        allCountries.add(country);
+            return allCountries.get(name);
 
-        return countryRepository.save(country);
+        } else {
+
+            CountryNode country = new CountryNode(name);
+
+            allCountries.put(name, country);
+
+            countryRepository.save(country);
+
+            return country;
+        }
     }
 
     private TargetNode saveTarget(Row row, CountryNode country) {
