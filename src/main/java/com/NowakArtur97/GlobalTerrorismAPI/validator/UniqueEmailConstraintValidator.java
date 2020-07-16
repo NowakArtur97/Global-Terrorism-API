@@ -13,10 +13,6 @@ public class UniqueEmailConstraintValidator implements ConstraintValidator<Uniqu
     private final UserService userService;
 
     @Override
-    public void initialize(UniqueEmail constraintAnnotation) {
-    }
-
-    @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
 
         return userService.findByEmail(email).isEmpty();

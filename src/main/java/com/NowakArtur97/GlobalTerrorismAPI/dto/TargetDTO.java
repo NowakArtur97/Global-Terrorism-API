@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.CountryExists;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,4 +23,8 @@ public class TargetDTO implements DTONode, Target {
     @ApiModelProperty(notes = "The target's country of origin", required = true, example = "Country")
     @CountryExists(message = "{target.countryOfOrigin.exists}")
     private String countryOfOrigin;
+
+    public TargetDTO(String target) {
+        this.target = target;
+    }
 }

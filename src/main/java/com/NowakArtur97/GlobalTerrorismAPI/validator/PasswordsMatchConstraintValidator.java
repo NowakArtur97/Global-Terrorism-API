@@ -9,10 +9,6 @@ import javax.validation.ConstraintValidatorContext;
 public class PasswordsMatchConstraintValidator implements ConstraintValidator<PasswordsMatch, Object> {
 
     @Override
-    public void initialize(PasswordsMatch constraintAnnotation) {
-    }
-
-    @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
 
         UserDTO user = (UserDTO) obj;

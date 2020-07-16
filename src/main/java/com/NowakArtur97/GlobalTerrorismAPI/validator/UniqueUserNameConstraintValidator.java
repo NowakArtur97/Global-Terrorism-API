@@ -13,10 +13,6 @@ public class UniqueUserNameConstraintValidator implements ConstraintValidator<Un
     private final UserService userService;
 
     @Override
-    public void initialize(UniqueUserName constraintAnnotation) {
-    }
-
-    @Override
     public boolean isValid(String userName, ConstraintValidatorContext context) {
 
         return userService.findByUserName(userName).isEmpty();

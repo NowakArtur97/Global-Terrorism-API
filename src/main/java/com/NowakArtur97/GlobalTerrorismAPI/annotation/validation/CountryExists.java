@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
 
+import com.NowakArtur97.GlobalTerrorismAPI.validator.CountryExistsConstraintValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -16,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface CountryExists {
 
-    String message() default "A country with the given name does not exist";
+    String message() default "A country with the given name does not exist.";
 
     Class<?>[] groups() default {};
 
