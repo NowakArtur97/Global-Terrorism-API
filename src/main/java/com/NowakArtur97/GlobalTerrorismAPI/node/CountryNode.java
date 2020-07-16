@@ -10,4 +10,10 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class CountryNode extends Node {
 
     private String name;
+
+    public CountryNode(Long id, String name) {
+
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -3,6 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
@@ -10,6 +11,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -28,6 +30,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class OnApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
@@ -64,18 +67,18 @@ class OnApplicationStartupEventListener {
 
         for (Row row : sheet) {
 
-            String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
+//            TargetNode target = saveTarget(row);
 
-            TargetNode target = saveTarget(targetName);
+            CountryNode country = createCountry(row);
 
-            EventNode eventNode = createEvent(row, target);
+//            EventNode eventNode = createEvent(row, target);
 
-            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
 
-            manageGroup(groupName, eventNode);
+//            manageGroup(groupName, eventNode);
         }
 
-        saveAllGroups();
+//        saveAllGroups();
     }
 
     private void saveAllGroups() {
@@ -147,7 +150,25 @@ class OnApplicationStartupEventListener {
                 isSuicidal, motive, target);
     }
 
-    private TargetNode saveTarget(String targetName) {
+
+    private CountryNode createCountry(Row row) {
+
+        String idAsString = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_ID.getIndex());
+
+        Long id = (long) parseInt(idAsString);
+
+        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
+
+        CountryNode country = new CountryNode(id, name);
+
+        log.info(country.toString());
+
+        return country;
+    }
+
+    private TargetNode saveTarget(Row row) {
+
+        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
 
         TargetNode target = new TargetNode(targetName);
 
