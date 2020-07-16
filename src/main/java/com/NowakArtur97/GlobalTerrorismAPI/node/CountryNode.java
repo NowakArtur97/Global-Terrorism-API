@@ -16,4 +16,9 @@ public class CountryNode extends Node implements Country {
 
         this.name = name;
     }
+
+    public CountryNode(Long id, String name) {
+        super(id);
+        this.name = name;
+    }
 }

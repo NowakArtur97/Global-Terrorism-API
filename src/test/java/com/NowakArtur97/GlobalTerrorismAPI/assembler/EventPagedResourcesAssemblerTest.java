@@ -1,11 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -48,6 +50,8 @@ class EventPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeAll
     private static void init() {
 
@@ -63,6 +67,8 @@ class EventPagedResourcesAssemblerTest {
         eventModelAssembler = new EventModelAssembler(targetModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
@@ -242,8 +248,8 @@ class EventPagedResourcesAssemblerTest {
 
         while (count < listSize) {
 
-            TargetNode targetNode = new TargetNode((long) count, "target");
-            TargetModel targetModel = new TargetModel((long) count, "target");
+            TargetNode targetNode = (TargetNode) targetBuilder.withId((long) count).build(ObjectType.NODE);
+            TargetModel targetModel = (TargetModel) targetBuilder.withId((long) count).build(ObjectType.MODEL);
 
             EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 

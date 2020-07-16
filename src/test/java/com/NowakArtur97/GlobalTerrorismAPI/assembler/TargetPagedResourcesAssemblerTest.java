@@ -3,6 +3,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +43,8 @@ class TargetPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeAll
     private static void init() {
 
@@ -56,6 +60,8 @@ class TargetPagedResourcesAssemblerTest {
         targetModelAssembler = new TargetModelAssembler(objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
@@ -235,11 +241,14 @@ class TargetPagedResourcesAssemblerTest {
 
         while (count < listSize) {
 
-            TargetNode targetNode = new TargetNode((long) count, targetName);
+            TargetNode targetNode = (TargetNode) targetBuilder.withId((long) count).withTarget(targetName)
+                    .build(ObjectType.NODE);
 
             targetsListExpected.add(targetNode);
 
-            when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(new TargetModel(targetNode.getId(), targetNode.getTarget()));
+            when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(
+                    (TargetModel) targetBuilder.withId((long) count).withTarget(targetName)
+                    .build(ObjectType.MODEL));
 
             count++;
         }
