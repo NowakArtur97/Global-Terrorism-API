@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
@@ -10,6 +11,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +47,14 @@ class OnApplicationStartupEventListener {
 
     private final CountryRepository countryRepository;
 
+    private final UserService userService;
+
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
 
         if (targetService.isDatabaseEmpty()) {
+
+            userService.register(new UserDTO("testuser", "Password123!", "Password123!", "testuser123@email.com"));
 
             Sheet sheet = loadSheetFromFile();
 
@@ -69,18 +75,18 @@ class OnApplicationStartupEventListener {
 
         for (Row row : sheet) {
 
-            CountryNode country = createCountry(row);
+            CountryNode country = saveCountry(row);
 
             TargetNode target = saveTarget(row, country);
 
-            EventNode eventNode = createEvent(row, target);
+//            EventNode eventNode = createEvent(row, target);
 
-            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
 
-            manageGroup(groupName, eventNode);
+//            manageGroup(groupName, eventNode);
         }
 
-        saveAllGroups();
+//        saveAllGroups();
     }
 
     private void saveAllGroups() {
@@ -152,20 +158,15 @@ class OnApplicationStartupEventListener {
                 isSuicidal, motive, target);
     }
 
-
-    private CountryNode createCountry(Row row) {
-
-        String idAsString = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_ID.getIndex());
-
-        Long id = (long) parseInt(idAsString);
+    private CountryNode saveCountry(Row row) {
 
         String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
 
-        CountryNode country = new CountryNode(id, name);
+        CountryNode country = new CountryNode(name);
 
         allCountries.add(country);
 
-        return country;
+        return countryRepository.save(country);
     }
 
     private TargetNode saveTarget(Row row, CountryNode country) {

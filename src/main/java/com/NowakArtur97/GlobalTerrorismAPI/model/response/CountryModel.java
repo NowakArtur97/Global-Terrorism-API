@@ -12,7 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-class CountryModel extends RepresentationModel<CountryModel> {
+public class CountryModel extends RepresentationModel<CountryModel> {
 
     @ApiModelProperty(notes = "The unique id of the Country")
     private Long id;

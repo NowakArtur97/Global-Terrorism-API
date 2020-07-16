@@ -20,12 +20,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TargetModel extends RepresentationModel<TargetModel> implements Target {
 
-	@ApiModelProperty(notes = "The unique id of the Target")
-	private Long id;
+    @ApiModelProperty(notes = "The unique id of the Target")
+    private Long id;
 
-	@ApiModelProperty(notes = "The target's name")
-	private String target;
+    @ApiModelProperty(notes = "The target's name")
+    private String target;
 
-	@ApiModelProperty(notes = "The target's country of origin")
-	private CountryModel countryOfOrigin;
+    @ApiModelProperty(notes = "The target's country of origin")
+    private CountryModel countryOfOrigin;
+
+    public TargetModel(Long id, String target) {
+
+        this.id = id;
+        this.target = target;
+    }
 }

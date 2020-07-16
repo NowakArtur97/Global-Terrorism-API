@@ -11,9 +11,8 @@ public class CountryNode extends Node {
 
     private String name;
 
-    public CountryNode(Long id, String name) {
+    public CountryNode(String name) {
 
-        this.id = id;
         this.name = name;
     }
 }

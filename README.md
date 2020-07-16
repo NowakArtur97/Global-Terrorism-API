@@ -25,7 +25,16 @@ To stop the application, enter the following key combination on the command line
 To shut down the containers enter:
 - `docker-compose down`
 
-To access the endpoints you must create an account:
+To access the endpoints you must have an account. You can use the previously prepared account:
+```json
+{
+    "userName" : "testuser",
+    "password" : "Password123!",
+    "email" : "testuser123@email.com"
+}
+```
+
+or create new account by sending the appropriate request:
 ```json
 # POST /api/v1/registration
 # Content-Type: application/json
