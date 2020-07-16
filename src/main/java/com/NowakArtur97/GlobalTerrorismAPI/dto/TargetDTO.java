@@ -23,8 +23,4 @@ public class TargetDTO implements DTONode, Target {
     @ApiModelProperty(notes = "The target's country of origin", required = true, example = "Country")
     @CountryExists(message = "{target.countryOfOrigin.exists}")
     private String countryOfOrigin;
-
-    public TargetDTO(String target) {
-        this.target = target;
-    }
 }

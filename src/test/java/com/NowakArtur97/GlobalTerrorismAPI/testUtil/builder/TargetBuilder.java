@@ -12,6 +12,8 @@ public final class TargetBuilder {
 
     private String targetName = "target";
 
+    private Country country = null;
+
     public TargetBuilder withId(Long id) {
 
         this.id = id;
@@ -26,6 +28,13 @@ public final class TargetBuilder {
         return this;
     }
 
+    public TargetBuilder withCountry(String target) {
+
+        this.targetName = target;
+
+        return this;
+    }
+
     public Target build(ObjectType type) {
 
         Target target;
@@ -34,7 +43,7 @@ public final class TargetBuilder {
 
             case DTO:
 
-                target = new TargetDTO(targetName);
+                target = new TargetDTO(targetName, country);
 
                 break;
 
