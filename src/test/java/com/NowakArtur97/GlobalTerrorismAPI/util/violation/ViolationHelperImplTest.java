@@ -64,10 +64,8 @@ class ViolationHelperImplTest {
     @Test
     void when_violate_valid_target_should_not_have_violations() {
 
-        Long targetId = 1L;
-        String invalidTargetName = "some invalid target name";
-        TargetDTO targetDTO =(TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName).build(ObjectType.DTO);
+        TargetDTO targetDTO =(TargetDTO) targetBuilder.build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
@@ -87,11 +85,8 @@ class ViolationHelperImplTest {
     @SuppressWarnings("unchecked")
     void when_violate_invalid_target_should_have_violations() {
 
-        Long targetId = 1L;
-        String invalidTargetName = "some invalid target name";
-        TargetDTO targetDTO =(TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName)
-                .build(ObjectType.DTO);
+        TargetDTO targetDTO =(TargetDTO) targetBuilder.build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
