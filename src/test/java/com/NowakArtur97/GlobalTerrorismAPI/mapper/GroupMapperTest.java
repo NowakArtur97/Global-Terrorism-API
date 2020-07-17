@@ -8,6 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -26,19 +27,21 @@ import static org.mockito.Mockito.*;
 @Tag("ObjectMapper_Tests")
 class GroupMapperTest {
 
-    private static GroupBuilder groupBuilder;
-    private static EventBuilder eventBuilder;
-
     private ObjectMapper objectMapper;
 
     @Mock
     private ModelMapper modelMapper;
 
+    private static TargetBuilder targetBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
+
     @BeforeAll
     private static void init() {
 
-        groupBuilder = new GroupBuilder();
+        targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
     }
 
     @BeforeEach
@@ -62,8 +65,10 @@ class GroupMapperTest {
         boolean isSuccessful = true;
         boolean isSuicidal = true;
 
-        TargetNode targetNode1 = new TargetNode(targetId, "target" + targetId);
-        TargetModel targetModel1 = new TargetModel(targetId, "target" + targetId);
+        TargetNode targetNode1 = (TargetNode) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.NODE);
+        TargetModel targetModel1 = (TargetModel) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.MODEL);
 
         EventNode eventNode1 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
@@ -81,8 +86,10 @@ class GroupMapperTest {
         isSuccessful = false;
         isSuicidal = false;
 
-        TargetNode targetNode2 = new TargetNode(targetId, "target" + targetId);
-        TargetModel targetModel2 = new TargetModel(targetId, "target" + targetId);
+        TargetNode targetNode2 = (TargetNode) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.NODE);
+        TargetModel targetModel2 = (TargetModel) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.MODEL);
 
         EventNode eventNode2 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
