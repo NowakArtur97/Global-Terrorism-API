@@ -9,6 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -31,6 +32,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
@@ -73,6 +75,7 @@ class TargetControllerGetMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private CountryBuilder countryBuilder;
     private TargetBuilder targetBuilder;
 
     @BeforeEach
@@ -84,6 +87,7 @@ class TargetControllerGetMethodTest {
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
 
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
 
@@ -142,18 +146,30 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("links[3].href", is(lastPageLink)))
                         .andExpect(jsonPath("content[0].id", is(targetModel1.getId().intValue())))
                         .andExpect(jsonPath("content[0].target", is(targetModel1.getTarget())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.id", is(targetModel1.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.name", is(targetModel1.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(targetModel1.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].target", is(targetModel2.getTarget())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.id", is(targetModel2.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.name", is(targetModel2.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(targetModel2.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].target", is(targetModel3.getTarget())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.id", is(targetModel3.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.name", is(targetModel3.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(targetModel3.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3].id", is(targetModel4.getId().intValue())))
                         .andExpect(jsonPath("content[3].target", is(targetModel4.getTarget())))
+                        .andExpect(jsonPath("content[3].countryOfOrigin.id", is(targetModel4.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[3].countryOfOrigin.name", is(targetModel4.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[3].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(targetModel4.getLink("self").get().getHref())))
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
@@ -215,6 +231,9 @@ class TargetControllerGetMethodTest {
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink))
+
+                        .andDo(MockMvcResultHandlers.print())
+
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(firstPageLink)))
@@ -223,14 +242,23 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("links[3].href", is(lastPageLink)))
                         .andExpect(jsonPath("content[0].id", is(targetModel1.getId().intValue())))
                         .andExpect(jsonPath("content[0].target", is(targetModel1.getTarget())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.id", is(targetModel1.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.name", is(targetModel1.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(targetModel1.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].target", is(targetModel2.getTarget())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.id", is(targetModel2.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.name", is(targetModel2.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(targetModel2.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].target", is(targetModel3.getTarget())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.id", is(targetModel3.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.name", is(targetModel3.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(targetModel3.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3]").doesNotExist())
@@ -308,9 +336,15 @@ class TargetControllerGetMethodTest {
     void when_find_existing_target_should_return_target() {
 
         Long targetId = 1L;
+        Long countryId = 2L;
         String targetName = "target";
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName).build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName).build(ObjectType.MODEL);
+        String country = "country";
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+                .withCountry(countryBuilder.withId(countryId).withName(country).build(ObjectType.NODE))
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+                .withCountry(countryBuilder.withId(countryId).withName(country).build(ObjectType.MODEL))
+                .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -326,7 +360,10 @@ class TargetControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(targetName))),
+                        .andExpect(jsonPath("target", is(targetName)))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(countryId.intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(country)))
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
@@ -351,7 +388,8 @@ class TargetControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetService),
@@ -369,7 +407,10 @@ class TargetControllerGetMethodTest {
 
                 counterForUtilMethodsNode++;
 
-                return targetBuilder.withId((long) counterForUtilMethodsNode).withTarget("target" + counterForUtilMethodsNode)
+                return targetBuilder.withId((long) counterForUtilMethodsNode)
+                        .withTarget("target" + counterForUtilMethodsNode)
+                        .withCountry(countryBuilder.withName("country" + counterForUtilMethodsNode)
+                                .build(ObjectType.NODE))
                         .build(ObjectType.NODE);
 
             case MODEL:
@@ -377,6 +418,8 @@ class TargetControllerGetMethodTest {
                 counterForUtilMethodsModel++;
 
                 TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
+                        .withCountry(countryBuilder.withName("country" + counterForUtilMethodsModel)
+                                .build(ObjectType.MODEL))
                         .build(ObjectType.MODEL);
 
                 String pathToTargetLink = BASE_PATH + counterForUtilMethodsModel;
