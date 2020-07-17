@@ -223,7 +223,8 @@ class ModelMapperTest {
         boolean isSuccessful = true;
         boolean isSuicidal = true;
 
-        TargetNode targetNode1 = new TargetNode(targetId, "target" + targetId);
+        TargetNode targetNode1 = (TargetNode) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.NODE);
 
         EventNode eventNode1 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
@@ -236,7 +237,8 @@ class ModelMapperTest {
         isSuccessful = false;
         isSuicidal = false;
 
-        TargetNode targetNode2 = new TargetNode(targetId, "target" + targetId);
+        TargetNode targetNode2 = (TargetNode) targetBuilder.withId(targetId).withTarget("target" + targetId)
+                .build(ObjectType.NODE);
 
         EventNode eventNode2 = (EventNode) eventBuilder.withId(eventId).withSummary(summary + eventId)
                 .withMotive(motive + eventId).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)

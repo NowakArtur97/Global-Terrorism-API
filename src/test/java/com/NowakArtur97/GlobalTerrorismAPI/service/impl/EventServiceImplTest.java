@@ -658,7 +658,8 @@ class EventServiceImplTest {
 
         while (count < listSize) {
 
-            TargetNode targetNode = new TargetNode((long) count, "target" + count);
+            TargetNode targetNode = (TargetNode) targetBuilder.withId((long) count).withTarget("target" + count)
+                    .build(ObjectType.NODE);
 
             EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
