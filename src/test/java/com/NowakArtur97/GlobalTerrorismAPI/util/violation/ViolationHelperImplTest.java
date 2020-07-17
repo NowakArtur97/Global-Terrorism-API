@@ -66,8 +66,8 @@ class ViolationHelperImplTest {
 
         Long targetId = 1L;
         String invalidTargetName = "some invalid target name";
-        TargetDTO targetDTO = new TargetDTO(invalidTargetName);
-        TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
+        TargetDTO targetDTO =(TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName).build(ObjectType.DTO);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
@@ -89,8 +89,9 @@ class ViolationHelperImplTest {
 
         Long targetId = 1L;
         String invalidTargetName = "some invalid target name";
-        TargetNode targetNode = new TargetNode(targetId, invalidTargetName);
-        TargetDTO targetDTO = new TargetDTO(invalidTargetName);
+        TargetDTO targetDTO =(TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName)
+                .build(ObjectType.DTO);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
