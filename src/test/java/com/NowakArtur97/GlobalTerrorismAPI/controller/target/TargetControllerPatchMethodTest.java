@@ -11,6 +11,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
@@ -76,6 +78,8 @@ class TargetControllerPatchMethodTest {
     @Autowired
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeEach
     private void setUp() {
 
@@ -89,17 +93,20 @@ class TargetControllerPatchMethodTest {
                         new MappingJackson2HttpMessageConverter())
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
     void when_partial_update_valid_target_using_json_patch_should_return_partially_updated_node() {
 
         Long targetId = 1L;
-        String oldTargetName = "target";
         String updatedTargetName = "updated target";
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetNode targetNodeUpdated = new TargetNode(targetId, updatedTargetName);
-        TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -122,11 +129,10 @@ class TargetControllerPatchMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("target", not(oldTargetName))),
+                        .andExpect(jsonPath("target", is(updatedTargetName))),
                 () -> verify(targetService, times(1)).findById(targetId),
-                () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(targetNode),
-                        ArgumentMatchers.<Class<TargetNode>>any()),
+                () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), 
+                        eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
                 () -> verify(targetService, times(1)).save(targetNodeUpdated),
                 () -> verifyNoMoreInteractions(targetService),
@@ -134,8 +140,7 @@ class TargetControllerPatchMethodTest {
                 () -> verifyNoMoreInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
-
-
+    
     @Test
     void when_partial_update_target_using_json_patch_but_target_not_exists_should_return_error_response() {
 
@@ -151,9 +156,11 @@ class TargetControllerPatchMethodTest {
                                 "[ { \"op\": \"replace\", \"path\": \"/target\", \"value\": \"updated target\" } ]")
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isNotFound())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))                           .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(404)))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
+                        .andExpect(jsonPath("errors[0]", 
+                                is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetService),
@@ -168,9 +175,9 @@ class TargetControllerPatchMethodTest {
     void when_partial_update_invalid_target_using_json_patch_should_return_errors(String invalidTargetName) {
 
         Long targetId = 1L;
-        String oldTargetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetNode targetNodeUpdated = new TargetNode(targetId, invalidTargetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName)
+                .build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
@@ -200,11 +207,12 @@ class TargetControllerPatchMethodTest {
     void when_partial_update_valid_target_using_json_merge_patch_should_return_partially_updated_node() {
 
         Long targetId = 1L;
-        String oldTargetName = "target";
         String updatedTargetName = "updated target";
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetNode targetNodeUpdated = new TargetNode(targetId, updatedTargetName);
-        TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        TargetNode targetNodeUpdated =(TargetNode) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -226,8 +234,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("target", not(oldTargetName))),
+                        .andExpect(jsonPath("target", is(updatedTargetName))),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -252,7 +259,7 @@ class TargetControllerPatchMethodTest {
                         .perform(patch(linkWithParameter, targetId).content("{ \"target\": \"updated target\" }")
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isNotFound())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))                           .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)).andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(404)))
                         .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
@@ -269,9 +276,9 @@ class TargetControllerPatchMethodTest {
     void when_partial_update_invalid_target_using_json_merge_patch_should_return_errors(String invalidTargetName) {
 
         Long targetId = 1L;
-        String oldTargetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetNode targetNodeUpdated = new TargetNode(targetId, invalidTargetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);;
+        TargetNode targetNodeUpdated = (TargetNode) targetBuilder.withId(targetId).withTarget(invalidTargetName)
+                .build(ObjectType.NODE);;
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 

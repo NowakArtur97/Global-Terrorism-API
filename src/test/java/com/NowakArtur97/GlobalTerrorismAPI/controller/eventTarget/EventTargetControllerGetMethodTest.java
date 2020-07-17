@@ -7,6 +7,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,7 @@ class EventTargetControllerGetMethodTest {
     @Mock
     private RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
+    private TargetBuilder targetBuilder;
     private EventBuilder eventBuilder;
 
     @BeforeEach
@@ -60,6 +62,7 @@ class EventTargetControllerGetMethodTest {
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
+        targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -70,9 +73,12 @@ class EventTargetControllerGetMethodTest {
 
         Long targetId = 2L;
         String targetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, targetName);
-        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
-        TargetModel targetModel = new TargetModel(targetId, targetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode)
+                .build(ObjectType.NODE);
+        TargetModel targetModel =(TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = TARGET_BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);

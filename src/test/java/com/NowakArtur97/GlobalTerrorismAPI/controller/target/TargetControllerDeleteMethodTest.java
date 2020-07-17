@@ -7,6 +7,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
@@ -57,6 +59,8 @@ class TargetControllerDeleteMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeEach
     private void setUp() {
 
@@ -65,14 +69,16 @@ class TargetControllerDeleteMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
     void when_delete_existing_target_should_not_return_content() {
 
         Long targetId = 1L;
-        String targetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, targetName);
+
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 

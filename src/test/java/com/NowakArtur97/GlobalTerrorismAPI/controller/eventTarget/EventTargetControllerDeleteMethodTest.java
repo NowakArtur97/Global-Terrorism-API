@@ -8,6 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,7 @@ class EventTargetControllerDeleteMethodTest {
     @Mock
     private RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
+    private TargetBuilder targetBuilder;
     private EventBuilder eventBuilder;
 
     @BeforeEach
@@ -59,6 +61,7 @@ class EventTargetControllerDeleteMethodTest {
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
+        targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -66,10 +69,8 @@ class EventTargetControllerDeleteMethodTest {
     void when_delete_existing_event_target_should_not_return_content() {
 
         Long eventId = 1L;
-
         Long targetId = 2L;
-        String targetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, targetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";

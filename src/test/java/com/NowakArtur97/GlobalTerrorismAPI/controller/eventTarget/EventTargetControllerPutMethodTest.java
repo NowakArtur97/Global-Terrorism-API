@@ -9,6 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -58,6 +59,7 @@ class EventTargetControllerPutMethodTest {
     @Mock
     private RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
+    private TargetBuilder targetBuilder;
     private EventBuilder eventBuilder;
 
     @BeforeEach
@@ -71,6 +73,7 @@ class EventTargetControllerPutMethodTest {
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
+        targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -81,9 +84,12 @@ class EventTargetControllerPutMethodTest {
 
         Long targetId = 2L;
         String targetName = "updated target";
-        TargetDTO targetDTO = new TargetDTO(targetName);
-        TargetNode newTargetNode = new TargetNode(targetId, targetName);
-        TargetModel targetModel = new TargetModel(targetId, targetName);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.DTO);
+        TargetNode newTargetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = TARGET_BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -121,12 +127,13 @@ class EventTargetControllerPutMethodTest {
         Long eventId = 1L;
 
         Long targetId = 2L;
-        String oldTargetName = "target";
         String updatedTargetName = "updated target";
-        TargetDTO targetDTO = new TargetDTO(oldTargetName);
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetNode updatedTargetNode = new TargetNode(targetId, updatedTargetName);
-        TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = TARGET_BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -160,11 +167,11 @@ class EventTargetControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: Target Name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_invalid_event_target_should_return_errors(String targetName) {
+    void when_update_invalid_event_target_should_return_errors(String invalidTargetName) {
 
         Long eventId = 1L;
 
-        TargetDTO targetDTO = new TargetDTO(targetName);
+        TargetDTO targetDTO =(TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.NODE);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
 
@@ -172,7 +179,8 @@ class EventTargetControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
@@ -181,11 +189,11 @@ class EventTargetControllerPutMethodTest {
     }
 
     @Test
-    void when_add_valid_event_to_target_but_event_not_exist_should_return_error_response() {
+    void when_add_valid_target_to_event_but_event_not_exist_should_return_error_response() {
 
         Long eventId = 1L;
 
-        TargetDTO targetDTO = new TargetDTO("updated target");
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.NODE);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
 

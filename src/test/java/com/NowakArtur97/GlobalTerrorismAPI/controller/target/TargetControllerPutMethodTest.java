@@ -7,6 +7,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -29,7 +31,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
@@ -64,6 +67,8 @@ class TargetControllerPutMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeEach
     private void setUp() {
 
@@ -73,17 +78,19 @@ class TargetControllerPutMethodTest {
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
     void when_update_valid_target_should_return_updated_target_as_model() {
 
         Long targetId = 1L;
-        String oldTargetName = "target";
         String updatedTargetName = "updated target";
-        TargetDTO targetDTO = new TargetDTO(updatedTargetName);
-        TargetNode targetNode = new TargetNode(targetId, oldTargetName);
-        TargetModel targetModel = new TargetModel(targetId, updatedTargetName);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -119,9 +126,12 @@ class TargetControllerPutMethodTest {
 
         Long targetId = 1L;
         String targetName = "target";
-        TargetDTO targetDTO = new TargetDTO(targetName);
-        TargetNode targetNode = new TargetNode(targetId, targetName);
-        TargetModel targetModel = new TargetModel(targetId, targetName);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName)
+                .build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel =(TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -155,11 +165,11 @@ class TargetControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: Target Name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_or_update_invalid_event_target_should_return_errors(String targetName) {
+    void when_add_or_update_invalid_event_target_should_return_errors(String invalidTargetName) {
 
         Long targetId = 1L;
 
-        TargetDTO targetDTO = new TargetDTO(targetName);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
@@ -167,7 +177,8 @@ class TargetControllerPutMethodTest {
                 () -> mockMvc
                         .perform(put(linkWithParameter, targetId).content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
                         .andExpect(jsonPath("errors", hasSize(1))),

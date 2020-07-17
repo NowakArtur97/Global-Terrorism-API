@@ -8,6 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -72,6 +73,8 @@ class TargetControllerGetMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private TargetBuilder targetBuilder;
+
     @BeforeEach
     private void setUp() {
 
@@ -80,6 +83,8 @@ class TargetControllerGetMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+
+        targetBuilder = new TargetBuilder();
     }
 
     @Test
@@ -304,8 +309,8 @@ class TargetControllerGetMethodTest {
 
         Long targetId = 1L;
         String targetName = "target";
-        TargetNode targetNode = new TargetNode(targetId, targetName);
-        TargetModel targetModel = new TargetModel(targetId, targetName);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName).build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName).build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
@@ -364,13 +369,16 @@ class TargetControllerGetMethodTest {
 
                 counterForUtilMethodsNode++;
 
-                return new TargetNode((long) counterForUtilMethodsNode, "target" + counterForUtilMethodsNode);
+                return targetBuilder.withId((long) counterForUtilMethodsNode).withTarget("target" + counterForUtilMethodsNode)
+                        .build(ObjectType.NODE);
 
             case MODEL:
 
                 counterForUtilMethodsModel++;
 
-                TargetModel targetModel = new TargetModel((long) counterForUtilMethodsModel, "target" + counterForUtilMethodsModel);
+                TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
+                        .build(ObjectType.MODEL);
+
                 String pathToTargetLink = BASE_PATH + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 

@@ -16,10 +16,16 @@ public class TargetNode extends Node implements Target {
     @Relationship("IS_FROM")
     private CountryNode countryOfOrigin;
 
-    public TargetNode(Long id, String target, CountryNode country) {
+    public TargetNode(Long id, String target, CountryNode countryOfOrigin) {
 
         super(id);
         this.target = target;
-        this.countryOfOrigin = country;
+        this.countryOfOrigin = countryOfOrigin;
+    }
+
+    public TargetNode(String target, CountryNode countryOfOrigin) {
+
+        this.target = target;
+        this.countryOfOrigin = countryOfOrigin;
     }
 }

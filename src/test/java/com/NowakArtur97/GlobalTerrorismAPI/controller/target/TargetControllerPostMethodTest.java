@@ -7,6 +7,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -40,92 +42,98 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerPostMethodTest {
 
-	private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	private GenericRestController<TargetModel, TargetDTO> targetController;
+    private GenericRestController<TargetModel, TargetDTO> targetController;
 
-	private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
+    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
 
-	@Mock
-	private GenericService<TargetNode, TargetDTO> targetService;
+    @Mock
+    private GenericService<TargetNode, TargetDTO> targetService;
 
-	@Mock
-	private TargetModelAssembler targetModelAssembler;
+    @Mock
+    private TargetModelAssembler targetModelAssembler;
 
-	@Mock
-	private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
+    @Mock
+    private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
-	@Mock
-	private PatchHelper patchHelper;
+    @Mock
+    private PatchHelper patchHelper;
 
-	@Mock
-	private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    @Mock
+    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
-	@BeforeEach
-	private void setUp() {
+    private TargetBuilder targetBuilder;
 
-		targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-				patchHelper, violationHelper);
+    @BeforeEach
+    private void setUp() {
 
-		restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
+                patchHelper, violationHelper);
 
-		mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
-	}
+        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
-	@Test
-	void when_add_valid_target_should_return_new_target_as_model() {
+        mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
 
-		Long targetId = 1L;
-		Long targetIdBeforeSave = null;
-		String targetName = "target";
-		TargetDTO targetDTO = new TargetDTO(targetName);
-		TargetNode targetNode = new TargetNode(targetId, targetName);
-		TargetModel targetModel = new TargetModel(targetId, targetName);
+        targetBuilder = new TargetBuilder();
+    }
 
-		String pathToLink = BASE_PATH + "/" + targetId.intValue();
-		Link link = new Link(pathToLink);
-		targetModel.add(link);
+    @Test
+    void when_add_valid_target_should_return_new_target_as_model() {
 
-		when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
-		when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+        Long targetId = 1L;
+        Long targetIdBeforeSave = null;
+        String targetName = "target";
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).build(ObjectType.DTO);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+                .build(ObjectType.MODEL);
 
-		assertAll(
-				() -> mockMvc
-						.perform(post(BASE_PATH, targetIdBeforeSave).content(ObjectTestMapper.asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isCreated())
-						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("links[0].href", is(pathToLink)))
-						.andExpect(jsonPath("id", is(targetId.intValue())))
-						.andExpect(jsonPath("target", is(targetName))),
-				() -> verify(targetService, times(1)).saveNew(targetDTO),
-				() -> verifyNoMoreInteractions(targetService),
-				() -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-				() -> verifyNoMoreInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler),
-				() -> verifyNoInteractions(patchHelper),
-				() -> verifyNoInteractions(violationHelper));
-	}
+        String pathToLink = BASE_PATH + "/" + targetId.intValue();
+        Link link = new Link(pathToLink);
+        targetModel.add(link);
 
-	@ParameterizedTest(name = "{index}: Target Name: {0}")
-	@NullAndEmptySource
-	@ValueSource(strings = { " ", "\t", "\n" })
-	void when_add_invalid_target_should_return_errors(String targetName) {
+        when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
+        when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
 
-		TargetDTO targetDTO = new TargetDTO(targetName);
+        assertAll(
+                () -> mockMvc
+                        .perform(post(BASE_PATH, targetIdBeforeSave).content(ObjectTestMapper.asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("id", is(targetId.intValue())))
+                        .andExpect(jsonPath("target", is(targetName))),
+                () -> verify(targetService, times(1)).saveNew(targetDTO),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
+                () -> verifyNoMoreInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
+    }
 
-		assertAll(
-				() -> mockMvc
-						.perform(post(BASE_PATH).content(ObjectTestMapper.asJsonString(targetDTO))
-								.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
-						.andExpect(jsonPath("status", is(400)))
-						.andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
-						.andExpect(jsonPath("errors", hasSize(1))),
-				() -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
-				() -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
-				() -> verifyNoInteractions(violationHelper));
-	}
+    @ParameterizedTest(name = "{index}: Target Name: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_add_invalid_target_should_return_errors(String invalidTargetName) {
+
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(BASE_PATH).content(ObjectTestMapper.asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
+                () -> verifyNoInteractions(targetService), () -> verifyNoInteractions(targetModelAssembler),
+                () -> verifyNoInteractions(pagedResourcesAssembler), () -> verifyNoInteractions(patchHelper),
+                () -> verifyNoInteractions(violationHelper));
+    }
 }

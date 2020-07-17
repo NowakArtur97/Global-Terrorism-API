@@ -542,7 +542,8 @@ class EventControllerGetMethodTest {
 
                 counterForUtilMethodsNode++;
 
-                TargetNode targetNode = new TargetNode((long) counterForUtilMethodsNode, "target" + counterForUtilMethodsNode);
+                TargetNode targetNode = (TargetNode) targetBuilder.withId((long) counterForUtilMethodsNode).withTarget("target" + counterForUtilMethodsNode)
+                        .build(ObjectType.NODE);
 
                 return eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode)
                         .withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
@@ -553,7 +554,9 @@ class EventControllerGetMethodTest {
 
                 counterForUtilMethodsModel++;
 
-                TargetModel targetModel = new TargetModel((long) counterForUtilMethodsModel, "target" + counterForUtilMethodsModel);
+                TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
+                        .build(ObjectType.MODEL);
+
                 String pathToTargetLink = TARGET_BASE_PATH + "/" + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 
