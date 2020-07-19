@@ -14,7 +14,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,11 +25,13 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 class OnApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
@@ -59,8 +60,6 @@ class OnApplicationStartupEventListener {
             Sheet sheet = loadSheetFromFile();
 
             insertDataToDatabase(sheet);
-
-            countryRepository.findAll().forEach(c -> log.info(c.toString()));
         }
     }
 
@@ -75,14 +74,7 @@ class OnApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
-        int i = 0;
-
         for (Row row : sheet) {
-
-            if (i == 0) {
-                i++;
-                continue;
-            }
 
             CountryNode country = saveCountry(row);
 
