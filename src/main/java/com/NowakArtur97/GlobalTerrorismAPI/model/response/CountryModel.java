@@ -20,4 +20,8 @@ public class CountryModel extends RepresentationModel<CountryModel> implements C
 
     @ApiModelProperty(notes = "The country's name")
     private String name;
+
+    public CountryModel(String name) {
+        this.name = name;
+    }
 }

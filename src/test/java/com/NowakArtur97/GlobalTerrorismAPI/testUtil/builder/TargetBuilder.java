@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
@@ -55,19 +56,25 @@ public final class TargetBuilder {
 
             case DTO:
 
-                target = new TargetDTO(targetName, countryName);
+                target = new TargetDTO(targetName, new CountryDTO(countryName));
 
                 break;
 
             case NODE:
 
-                target = new TargetNode(id, targetName, (CountryNode) country);
+                target = new TargetNode(id, targetName,
+                        country != null ?
+                                (CountryNode) country
+                                : new CountryNode(countryName));
 
                 break;
 
             case MODEL:
 
-                target = new TargetModel(id, targetName, (CountryModel) country);
+                target = new TargetModel(id, targetName,
+                        country != null ?
+                                (CountryModel) country
+                                : new CountryModel(countryName));
 
                 break;
 
