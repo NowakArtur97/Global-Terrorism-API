@@ -1,165 +1,147 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
 class TargetControllerPutMethodTest {
 
     private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
 
+    @Autowired
     private MockMvc mockMvc;
 
-    private GenericRestController<TargetModel, TargetDTO> targetController;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
-    @Mock
-    private GenericService<TargetNode, TargetDTO> targetService;
-
-    @Mock
-    private TargetModelAssembler targetModelAssembler;
-
-    @Mock
-    private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
-
-    @Mock
-    private PatchHelper patchHelper;
-
-    @Mock
-    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
-
+    private CountryBuilder countryBuilder;
     private TargetBuilder targetBuilder;
+
+    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+            Set.of(new RoleNode("user")));
+
+    private static CountryNode countryNode = new CountryNode("country");
+
+    private static TargetNode targetNode = new TargetNode("target", countryNode);
+
+    @BeforeAll
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository) {
+
+        userRepository.save(userNode);
+
+        targetRepository.save(targetNode);
+    }
+
+    @AfterAll
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository, @Autowired TargetRepository targetRepository) {
+
+        userRepository.delete(userNode);
+
+        targetRepository.delete(targetNode);
+
+        countryRepository.delete(countryNode);
+    }
 
     @BeforeEach
     private void setUp() {
 
-        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
-
-        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
-
-        mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler).build();
-
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
 
     @Test
     void when_update_valid_target_should_return_updated_target_as_model() {
 
-        Long targetId = 1L;
         String updatedTargetName = "updated target";
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(updatedTargetName)
-                .build(ObjectType.MODEL);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName)
+                .withCountry(countryDTO).build(ObjectType.DTO);
 
-        String pathToLink = BASE_PATH + "/" + targetId.intValue();
-        Link link = new Link(pathToLink);
-        targetModel.add(link);
+        String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
-        when(targetService.update(targetNode, targetDTO)).thenReturn(targetNode);
-        when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetId).content(ObjectTestMapper.asJsonString(targetDTO))
+                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
-                        .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName))),
-                () -> verify(targetService, times(1)).findById(targetId),
-                () -> verify(targetService, times(1)).update(targetNode, targetDTO),
-                () -> verifyNoMoreInteractions(targetService),
-                () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-                () -> verifyNoMoreInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                        .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
+                        .andExpect(jsonPath("target", is(updatedTargetName)))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(targetNode.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(targetNode.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
     }
 
     @Test
     void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
-        Long targetId = 1L;
+        Long notExistingTargetId = 1L;
         String targetName = "target";
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName)
                 .build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
-                .build(ObjectType.NODE);
-        TargetModel targetModel =(TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
-                .build(ObjectType.MODEL);
-
-        String pathToLink = BASE_PATH + "/" + targetId.intValue();
-        Link link = new Link(pathToLink);
-        targetModel.add(link);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.empty());
-        when(targetService.saveNew(targetDTO)).thenReturn(targetNode);
-        when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetId).content(ObjectTestMapper.asJsonString(targetDTO))
+                        .perform(put(linkWithParameter, notExistingTargetId).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
-                        .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(targetName))),
-                () -> verify(targetService, times(1)).findById(targetId),
-                () -> verify(targetService, times(1)).saveNew(targetDTO),
-                () -> verifyNoMoreInteractions(targetService),
-                () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
-                () -> verifyNoMoreInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                        .andExpect(jsonPath("links[0].href", notNullValue()))
+                        .andExpect(jsonPath("id", notNullValue()))
+                        .andExpect(jsonPath("target", is(targetName)))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(targetNode.getCountryOfOrigin().getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(targetNode.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
     }
 
     @ParameterizedTest(name = "{index}: Target Name: {0}")
@@ -173,19 +155,18 @@ class TargetControllerPutMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetId).content(ObjectTestMapper.asJsonString(targetDTO))
+                        .perform(put(linkWithParameter, targetId).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                        .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }
