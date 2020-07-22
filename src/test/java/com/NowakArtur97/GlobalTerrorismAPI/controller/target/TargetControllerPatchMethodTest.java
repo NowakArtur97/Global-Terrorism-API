@@ -251,7 +251,7 @@ class TargetControllerPatchMethodTest {
     }
 
     @Test
-    void when_partial_update_invalid_target_with_null_country_using_json_patch_should_return_errors() {
+    void when_partial_update_target_with_country_as_null_using_json_patch_should_return_errors() {
 
         Long targetId = 1L;
         String updatedTargetName = "updated target";
@@ -456,7 +456,7 @@ class TargetControllerPatchMethodTest {
     }
 
     @Test
-    void when_partial_update_invalid_target_with_null_country_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_target_with_country_as_null_using_json_merge_patch_should_return_errors() {
 
         Long targetId = 1L;
         String updatedTargetName = "updated target";

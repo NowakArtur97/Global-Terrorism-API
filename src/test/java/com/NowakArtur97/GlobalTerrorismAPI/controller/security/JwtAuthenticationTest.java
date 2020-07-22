@@ -6,6 +6,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtilImpl;
 import org.hamcrest.collection.IsCollectionWithSize;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Tag;
@@ -51,6 +52,12 @@ class JwtAuthenticationTest {
     private static void setUpUser(@Autowired UserRepository userRepository) {
 
         userRepository.save(userNode);
+    }
+
+    @AfterAll
+    private static void tearDown(@Autowired UserRepository userRepository) {
+
+        userRepository.delete(userNode);
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with JWT  token should return content")

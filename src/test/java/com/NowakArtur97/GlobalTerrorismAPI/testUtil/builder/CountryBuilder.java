@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -31,6 +32,12 @@ public final class CountryBuilder {
 
         switch (type) {
 
+            case DTO:
+
+                country = new CountryDTO(name);
+
+                break;
+
             case NODE:
 
                 country = new CountryNode(id, name);
@@ -43,7 +50,6 @@ public final class CountryBuilder {
 
                 break;
 
-            case DTO:
             default:
                 throw new RuntimeException("The specified type does not exist");
         }
