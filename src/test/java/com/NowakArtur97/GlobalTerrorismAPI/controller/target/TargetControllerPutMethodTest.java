@@ -15,6 +15,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -149,8 +151,6 @@ class TargetControllerPutMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_or_update_invalid_event_target_should_return_errors(String invalidTargetName) {
 
-        Long targetId = 1L;
-
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
@@ -160,7 +160,7 @@ class TargetControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetId).header("Authorization", "Bearer " + token)
+                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -168,5 +168,29 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @ParameterizedTest(name = "{index}: Target Country: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {" "})
+    void when_update_not_existing_target_with_not_existing_country_should_return_errors(String invalidCountryName) {
+
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountryName(invalidCountryName).build(ObjectType.DTO);
+
+        String linkWithParameter = BASE_PATH + "/" + "{id}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(targetDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
     }
 }

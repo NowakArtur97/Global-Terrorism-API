@@ -137,10 +137,7 @@ class TargetControllerPostMethodTest {
     @ValueSource(strings = {" "})
     void when_add_target_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
-        String targetName = "target";
-
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountryName(invalidCountryName)
-                .build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountryName(invalidCountryName).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
