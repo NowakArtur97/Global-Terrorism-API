@@ -8,7 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
@@ -46,7 +46,7 @@ class OnApplicationStartupEventListener {
 
     private final GenericService<GroupNode, GroupDTO> groupService;
 
-    private final CountryRepository countryRepository;
+    private final CountryService countryService;
 
     private final UserService userService;
 
@@ -172,7 +172,7 @@ class OnApplicationStartupEventListener {
 
             allCountries.put(name, country);
 
-            countryRepository.save(country);
+            countryService.save(country);
 
             return country;
         }
