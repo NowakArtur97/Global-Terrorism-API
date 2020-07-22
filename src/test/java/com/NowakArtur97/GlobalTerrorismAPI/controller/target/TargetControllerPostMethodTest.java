@@ -52,16 +52,22 @@ class TargetControllerPostMethodTest {
     private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
+    private static CountryNode countryNode = new CountryNode("country");
+
     @BeforeAll
-    private static void setUpUser(@Autowired UserRepository userRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
+
+        countryRepository.save(countryNode);
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
 
         userRepository.delete(userNode);
+
+        countryRepository.delete(countryNode);
     }
 
     private CountryBuilder countryBuilder;
@@ -80,19 +86,15 @@ class TargetControllerPostMethodTest {
     @Test
     void when_add_valid_target_should_return_new_target_as_model() {
 
-        CountryNode country = new CountryNode("country");
-
         String targetName = "target";
 
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(country.getName()).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
 
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
-
-        countryRepository.save(country);
 
         assertAll(
                 () -> mockMvc
@@ -105,21 +107,17 @@ class TargetControllerPostMethodTest {
                         .andExpect(jsonPath("links[0].href", notNullValue()))
                         .andExpect(jsonPath("id", notNullValue()))
                         .andExpect(jsonPath("target", is(targetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(country.getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(country.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
-
-        countryRepository.delete(country);
-    }
+        }
 
     @ParameterizedTest(name = "{index}: Target Name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_invalid_target_should_return_errors(String invalidTargetName) {
 
-        String countryName = "country";
-
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountryName(countryName)
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountryName(countryNode.getName())
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
