@@ -14,19 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements GenericService<T, D> {
+abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BaseGenericServiceImpl<T> implements GenericService<T, D> {
 
     private static final int DEFAULT_SEARCHING_DEPTH = 1;
 
     private final Class<T> typeParameterClass;
 
-    protected final BaseRepository<T> repository;
-
     protected final ObjectMapper objectMapper;
 
     GenericServiceImpl(BaseRepository<T> repository, ObjectMapper objectMapper) {
+        super(repository);
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
-        this.repository = repository;
         this.objectMapper = objectMapper;
     }
 
@@ -42,12 +40,6 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> implements 
     public Page<T> findAll(Pageable pageable) {
 
         return repository.findAll(pageable, DEFAULT_SEARCHING_DEPTH);
-    }
-
-    @Override
-    public T save(T node) {
-
-        return repository.save(node);
     }
 
     @Override

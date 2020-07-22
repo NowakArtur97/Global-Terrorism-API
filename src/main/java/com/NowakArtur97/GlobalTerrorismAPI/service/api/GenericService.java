@@ -7,13 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface GenericService<T extends Node, D extends DTONode> {
+public interface GenericService<T extends Node, D extends DTONode> extends BaseGenericService<T> {
 
     Optional<T> findById(Long id);
 
     Page<T> findAll(Pageable pageable);
-
-    T save(T node);
 
     T saveNew(D dto);
 
