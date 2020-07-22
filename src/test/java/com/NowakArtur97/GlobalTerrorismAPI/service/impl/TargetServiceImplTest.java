@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -42,12 +43,15 @@ class TargetServiceImplTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private CountryService countryService;
+
     private TargetBuilder targetBuilder;
 
     @BeforeEach
     private void setUp() {
 
-        targetService = new TargetServiceImpl(targetRepository, objectMapper);
+        targetService = new TargetServiceImpl(targetRepository, objectMapper, countryService);
 
         targetBuilder = new TargetBuilder();
     }
