@@ -31,6 +31,21 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
     }
 
     @Override
+    public TargetNode update(TargetNode targetNode, TargetDTO targetDTO) {
+
+        Long id = targetNode.getId();
+
+        targetNode = objectMapper.map(targetDTO, TargetNode.class);
+
+        targetNode.setId(id);
+
+        targetNode.setCountryOfOrigin(countryService.findByName(targetDTO.getCountryOfOrigin().getName())
+                .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+
+        return repository.save(targetNode);
+    }
+
+    @Override
     public boolean isDatabaseEmpty() {
 
         return repository.count() == 0;
