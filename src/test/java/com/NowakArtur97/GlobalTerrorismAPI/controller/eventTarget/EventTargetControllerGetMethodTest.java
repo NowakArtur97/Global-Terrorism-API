@@ -2,10 +2,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -50,6 +53,7 @@ class EventTargetControllerGetMethodTest {
     @Mock
     private RepresentationModelAssemblerSupport<TargetNode, TargetModel> targetModelAssembler;
 
+    private CountryBuilder countryBuilder;
     private TargetBuilder targetBuilder;
     private EventBuilder eventBuilder;
 
@@ -62,6 +66,7 @@ class EventTargetControllerGetMethodTest {
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
 
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
@@ -69,15 +74,18 @@ class EventTargetControllerGetMethodTest {
     @Test
     void when_find_existing_event_target_should_return_target() {
 
-        Long eventId = 1L;
+        Long eventId = 3L;
 
+        Long countryId = 1L;
         Long targetId = 2L;
-        String targetName = "target";
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
+
+        CountryNode countryNode = (CountryNode) countryBuilder.withId(countryId).build(ObjectType.NODE);
+        CountryModel countryModel = (CountryModel) countryBuilder.withId(countryId).build(ObjectType.MODEL);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withCountry(countryNode)
                 .build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode)
                 .build(ObjectType.NODE);
-        TargetModel targetModel =(TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withCountry(countryModel)
                 .build(ObjectType.MODEL);
 
         String pathToLink = TARGET_BASE_PATH + "/" + targetId.intValue();
@@ -96,7 +104,10 @@ class EventTargetControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(targetName))),
+                        .andExpect(jsonPath("target", is(targetModel.getTarget())))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(countryId.intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(countryModel.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(targetModelAssembler, times(1)).toModel(targetNode),

@@ -60,25 +60,30 @@ class TargetControllerPutMethodTest {
             Set.of(new RoleNode("user")));
 
     private static CountryNode countryNode = new CountryNode("country");
+    private static CountryNode anotherCountryNode = new CountryNode("another country");
 
     private static TargetNode targetNode = new TargetNode("target", countryNode);
 
     @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository,
+                              @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
+
+        countryRepository.save(anotherCountryNode);
 
         targetRepository.save(targetNode);
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository, @Autowired TargetRepository targetRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository,
+                                 @Autowired CountryRepository countryRepository) {
 
         userRepository.delete(userNode);
 
-        targetRepository.delete(targetNode);
+        targetRepository.deleteAll();
 
-        countryRepository.delete(countryNode);
+        countryRepository.deleteAll();
     }
 
     @BeforeEach
@@ -92,7 +97,7 @@ class TargetControllerPutMethodTest {
     void when_update_valid_target_should_return_updated_target_as_model() {
 
         String updatedTargetName = "updated target";
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName)
                 .withCountry(countryDTO).build(ObjectType.DTO);
 
@@ -105,7 +110,8 @@ class TargetControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
+                        .perform(put(linkWithParameter, targetNode.getId())
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -113,8 +119,8 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
                         .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
     }
 
