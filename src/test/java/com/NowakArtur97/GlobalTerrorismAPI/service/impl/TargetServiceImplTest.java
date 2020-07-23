@@ -1,11 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -46,6 +49,7 @@ class TargetServiceImplTest {
     @Mock
     private CountryService countryService;
 
+    private CountryBuilder countryBuilder;
     private TargetBuilder targetBuilder;
 
     @BeforeEach
@@ -53,6 +57,7 @@ class TargetServiceImplTest {
 
         targetService = new TargetServiceImpl(targetRepository, objectMapper, countryService);
 
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
 
@@ -85,7 +90,8 @@ class TargetServiceImplTest {
                                 + " elements, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -110,7 +116,8 @@ class TargetServiceImplTest {
                         () -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable, DEFAULT_SEARCHING_DEPTH),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -134,7 +141,8 @@ class TargetServiceImplTest {
                                 + targetActual.getTarget()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(objectMapper),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -149,22 +157,25 @@ class TargetServiceImplTest {
         assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
-    void when_save_new_target_should_save_target() {
+    void when_save_new_target_should_return_new_target() {
 
         Long targetId = 1L;
 
-        String targetName = "Target";
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
 
-        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(targetName).build(ObjectType.DTO);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withCountry(null).build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected).build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(targetId).withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withTarget(targetName).build(ObjectType.NODE);
-        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName).build(ObjectType.NODE);
-
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSave);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.of(countryNodeExpected));
         when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
         TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
@@ -175,46 +186,77 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                                + ", but was: " + targetNodeActual.getId()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
+                () -> verifyNoMoreInteractions(countryService),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository));
     }
 
     @Test
-    void when_update_target_should_update_target() {
+    void when_update_target_should_return_updated_target() {
 
         Long targetId = 1L;
 
         String targetName = "Target";
-        String targetNameUpdated = "Target";
+        String countryName = "Country";
+        String updatedTargetName = "Updated Target";
+        String updatedCountryName = "Another Country";
 
-        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(targetNameUpdated).build(ObjectType.DTO);
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.withName(updatedCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTOExpected)
+                .build(ObjectType.DTO);
 
-        TargetNode targetNodeExpectedAfterMapping = (TargetNode) targetBuilder.withId(null).withTarget(targetName)
+        CountryNode countryNode = (CountryNode) countryBuilder.withName(countryName).build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
+
+        TargetNode targetNodeToUpdate = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName).withCountry(countryNode)
                 .build(ObjectType.NODE);
-        TargetNode targetNodeExpectedAfterUpdate = (TargetNode) targetBuilder.withId(targetId).withTarget(targetNameUpdated)
-                .build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
+                .withCountry(null).build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
+                .withCountry(countryNodeExpected).build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(targetId).withTarget(updatedTargetName)
+                .withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedAfterMapping);
-        when(targetRepository.save(targetNodeExpectedAfterMapping)).thenReturn(targetNodeExpectedAfterUpdate);
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.of(countryNodeExpected));
+        when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
-        TargetNode targetNodeActual = targetService.update(targetNodeExpectedAfterMapping, targetDTOExpected);
+        TargetNode targetNodeActual = targetService.update(targetNodeToUpdate, targetDTOExpected);
 
         assertAll(
-                () -> assertEquals(targetNodeExpectedAfterUpdate.getId(), targetNodeActual.getId(),
-                        () -> "should return target node with id: " + targetNodeExpectedAfterUpdate.getId() + ", but was: "
+                () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
+                        () -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
                                 + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpectedAfterUpdate.getTarget(), targetNodeActual.getTarget(),
-                        () -> "should return target node with target: " + targetNodeExpectedAfterUpdate.getTarget() + ", but was: " + targetNodeActual.getTarget()),
+                () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+                        () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: " + targetNodeActual.getTarget()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                                + ", but was: " + targetNodeActual.getId()),
+                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
-                () -> verify(targetRepository, times(1)).save(targetNodeExpectedAfterMapping),
-                () -> verifyNoMoreInteractions(targetRepository));
+                () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
+                () -> verifyNoMoreInteractions(countryService),
+                () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave));
     }
 
     @Test
-    void when_save_target_should_save_target() {
+    void when_save_target_should_return_saved_target() {
 
         Long targetId = 1L;
         String targetName = "Target";
@@ -234,7 +276,8 @@ class TargetServiceImplTest {
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -260,7 +303,8 @@ class TargetServiceImplTest {
                 () -> verify(targetRepository, times(1)).findById(targetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -277,7 +321,8 @@ class TargetServiceImplTest {
                         () -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
                 () -> verify(targetRepository, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -290,8 +335,10 @@ class TargetServiceImplTest {
         boolean isDatabaseEmpty = targetService.isDatabaseEmpty();
 
         assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
-                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verify(targetRepository, times(1)).count(),
+                () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 
     @Test
@@ -306,7 +353,9 @@ class TargetServiceImplTest {
         assertAll(
                 () -> assertFalse(isDatabaseEmpty,
                         () -> "should not database be empty, but that was: " + isDatabaseEmpty),
-                () -> verify(targetRepository, times(1)).count(), () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verify(targetRepository, times(1)).count(),
+                () -> verifyNoMoreInteractions(targetRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(countryService));
     }
 }

@@ -16,8 +16,6 @@ public final class TargetBuilder {
 
     private String targetName = "target";
 
-    private String countryName = "country";
-
     private Country country = null;
 
     public TargetBuilder withId(Long id) {
@@ -30,13 +28,6 @@ public final class TargetBuilder {
     public TargetBuilder withTarget(String target) {
 
         this.targetName = target;
-
-        return this;
-    }
-
-    public TargetBuilder withCountryName(String countryName) {
-
-        this.countryName = countryName;
 
         return this;
     }
@@ -56,25 +47,19 @@ public final class TargetBuilder {
 
             case DTO:
 
-                target = new TargetDTO(targetName, new CountryDTO(countryName));
+                target = new TargetDTO(targetName, (CountryDTO) country);
 
                 break;
 
             case NODE:
 
-                target = new TargetNode(id, targetName,
-                        country != null ?
-                                (CountryNode) country
-                                : new CountryNode(countryName));
+                target = new TargetNode(id, targetName, (CountryNode) country);
 
                 break;
 
             case MODEL:
 
-                target = new TargetModel(id, targetName,
-                        country != null ?
-                                (CountryModel) country
-                                : new CountryModel(countryName));
+                target = new TargetModel(id, targetName, (CountryModel) country);
 
                 break;
 
@@ -92,8 +77,6 @@ public final class TargetBuilder {
         this.id = 1L;
 
         this.targetName = "target";
-
-        this.countryName = "country";
 
         this.country = null;
     }

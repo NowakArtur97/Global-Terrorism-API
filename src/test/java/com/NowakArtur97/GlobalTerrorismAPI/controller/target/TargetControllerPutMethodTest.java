@@ -113,8 +113,8 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
                         .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(targetNode.getCountryOfOrigin().getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(targetNode.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
     }
 
@@ -123,7 +123,8 @@ class TargetControllerPutMethodTest {
 
         Long notExistingTargetId = 1L;
         String targetName = "target";
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName)
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
@@ -141,8 +142,8 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("links[0].href", notNullValue()))
                         .andExpect(jsonPath("id", notNullValue()))
                         .andExpect(jsonPath("target", is(targetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(targetNode.getCountryOfOrigin().getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(targetNode.getCountryOfOrigin().getName())))
+                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
     }
 
@@ -151,7 +152,8 @@ class TargetControllerPutMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_or_update_invalid_event_target_should_return_errors(String invalidTargetName) {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountry(countryDTO).build(ObjectType.DTO);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
@@ -175,7 +177,8 @@ class TargetControllerPutMethodTest {
     @ValueSource(strings = {" "})
     void when_update_not_existing_target_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountryName(invalidCountryName).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 

@@ -114,7 +114,8 @@ class TargetControllerPostMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_invalid_target_should_return_errors(String invalidTargetName) {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountryName(countryNode.getName())
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -137,7 +138,8 @@ class TargetControllerPostMethodTest {
     @ValueSource(strings = {" "})
     void when_add_target_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountryName(invalidCountryName).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));

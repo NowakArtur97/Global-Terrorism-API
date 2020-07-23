@@ -219,8 +219,10 @@ class TargetControllerPatchMethodTest {
         String updatedCountryName = "updated country";
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName)
+                .build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(invalidTargetName).withCountryName(updatedCountryName)
+                .withTarget(invalidTargetName).withCountry(updatedCountryNode)
                 .build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
@@ -258,7 +260,7 @@ class TargetControllerPatchMethodTest {
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(updatedTargetName).withCountryName(null).build(ObjectType.NODE);
+                .withTarget(updatedTargetName).withCountry(null).build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
@@ -292,11 +294,13 @@ class TargetControllerPatchMethodTest {
 
         Long targetId = 1L;
         String updatedTargetName = "updated target";
-        String notExistingCountry = "not existing country";
+        String notExistingCountryName = "not existing country";
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        CountryNode notExistingCountry = (CountryNode) countryBuilder.withName(notExistingCountryName)
+                .build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(updatedTargetName).withCountryName(notExistingCountry).build(ObjectType.NODE);
+                .withTarget(updatedTargetName).withCountry(notExistingCountry).build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
@@ -425,8 +429,10 @@ class TargetControllerPatchMethodTest {
         String updatedCountryName = "updated country";
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName)
+                .build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(invalidTargetName).withCountryName(updatedCountryName)
+                .withTarget(invalidTargetName).withCountry(updatedCountryNode)
                 .build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
@@ -463,7 +469,7 @@ class TargetControllerPatchMethodTest {
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(updatedTargetName).withCountryName(null).build(ObjectType.NODE);
+                .withTarget(updatedTargetName).withCountry(null).build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
@@ -496,11 +502,13 @@ class TargetControllerPatchMethodTest {
 
         Long targetId = 1L;
         String updatedTargetName = "updated target";
-        String notExistingCountry = "not existing country";
+        String notExistingCountryName = "not existing country";
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
+        CountryNode notExistingCountry = (CountryNode) countryBuilder.withName(notExistingCountryName)
+                .build(ObjectType.NODE);
         TargetNode updatedTargetNode = (TargetNode) targetBuilder.withId(targetId)
-                .withTarget(updatedTargetName).withCountryName(notExistingCountry).build(ObjectType.NODE);
+                .withTarget(updatedTargetName).withCountry(notExistingCountry).build(ObjectType.NODE);
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
