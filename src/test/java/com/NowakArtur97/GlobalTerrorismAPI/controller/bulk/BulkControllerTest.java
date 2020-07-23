@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.*;
 
@@ -28,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("BulkController_Tests")
 class BulkControllerTest {
@@ -47,18 +47,25 @@ class BulkControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private UserRepository userRepository;
+    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+            Set.of(new RoleNode("user")));
+
+    @BeforeAll
+    private static void setUp(@Autowired UserRepository userRepository) {
+
+        userRepository.save(userNode);
+    }
+
+    @AfterAll
+    private static void tearDown(@Autowired UserRepository userRepository) {
+
+        userRepository.deleteAll();
+    }
 
     @Test
-    @Order(1)
     void when_valid_bulk_request_should_return_array_of_responses() {
 
-        userRepository.save(new UserNode("testuser1234", "Password1@", "testuser1234@email.com",
-                Set.of(new RoleNode("user"))));
-
-        User userDetails = new User("testuser1234", "Password1@",
-                List.of(new SimpleGrantedAuthority("user")));
+        User userDetails = new User(userNode.getUserName(), userNode.getPassword(), List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
 
@@ -88,6 +95,9 @@ class BulkControllerTest {
                         .header("Authorization", token)
                         .content(ObjectTestMapper.asJsonString(bulkRequest))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+
+                        .andDo(MockMvcResultHandlers.print())
+
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("results").isArray())
@@ -104,11 +114,9 @@ class BulkControllerTest {
     }
 
     @Test
-    @Order(2)
     void when_invalid_bulk_request_with_exceeded_number_of_operations_should_return_error_response() {
 
-        User userDetails = new User("testuser1234", "Password1@",
-                List.of(new SimpleGrantedAuthority("user")));
+        User userDetails = new User(userNode.getUserName(), userNode.getPassword(), List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
 
@@ -129,16 +137,13 @@ class BulkControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isPayloadTooLarge())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string("Bulk operations exceed the limitation(" + bulkOperationsLimit + ")"))
-        );
+                        .andExpect(content().string("Bulk operations exceed the limitation(" + bulkOperationsLimit + ")")));
     }
 
     @Test
-    @Order(3)
     void when_invalid_bulk_request_with_invalid_url_should_return_error_response() {
 
-        User userDetails = new User("testuser1234", "Password1@",
-                List.of(new SimpleGrantedAuthority("user")));
+        User userDetails = new User(userNode.getUserName(), userNode.getPassword(), List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
 
@@ -161,7 +166,6 @@ class BulkControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnprocessableEntity())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string("Invalid URL(/" + invalidUrl + ") exists in this bulk request"))
-        );
+                        .andExpect(content().string("Invalid URL(/" + invalidUrl + ") exists in this bulk request")));
     }
 }

@@ -180,8 +180,8 @@ The previously generated token should be placed in the header. In the example, m
 # Content-Type: application/json
 {
   "operations": [
-    {"method": "GET", "url": "/api/v1/groups", headers={Authorization=Bearer JWT_TOKEN}},
-    {"method": "POST", "url": "/api/v1/targets", "params": {"target": "New Target"}, headers={Authorization=Bearer JWT_TOKEN}}
+    {"method": "GET", "url": "/api/v1/groups", "headers": {"Authentication" : "Bearer TOKEN"}},
+    {"method": "POST", "url": "/api/v1/targets", "headers": {"Authentication" : "Bearer TOKEN"}}
   ]
 }
 ```
