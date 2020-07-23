@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
@@ -37,6 +38,12 @@ class UserRegistrationControllerWithCustomValidationTest {
     private void setUp() {
 
         userBuilder = new UserBuilder();
+    }
+
+    @AfterAll
+    private static void tearDown(@Autowired UserRepository userRepository) {
+
+        userRepository.deleteAll();
     }
 
     @Test
