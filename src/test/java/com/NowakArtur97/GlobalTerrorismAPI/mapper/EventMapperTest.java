@@ -1,11 +1,15 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -29,12 +33,14 @@ class EventMapperTest {
     @Mock
     private ModelMapper modelMapper;
 
+    private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
     @BeforeAll
     private static void init() {
 
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
@@ -48,9 +54,11 @@ class EventMapperTest {
     @Test
     void when_map_event_dto_to_node_should_return_node() {
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.withId(null).build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(null).withCountry(countryNode).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withId(null).withTarget(targetNode)
                 .build(ObjectType.NODE);
 
@@ -89,6 +97,11 @@ class EventMapperTest {
                 () -> assertEquals(eventNodeExpected.getTarget().getTarget(), eventNodeActual.getTarget().getTarget(),
                         () -> "should return event node with target: " + eventNodeExpected.getTarget().getTarget()
                                 + ", but was: " + eventNodeActual.getTarget().getTarget()),
+                () -> assertNull(eventNodeActual.getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return event target node with id as null, but was: " + eventNodeActual.getId()),
+                () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
+                                + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(eventDTO, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
@@ -96,9 +109,11 @@ class EventMapperTest {
     @Test
     void when_map_event_node_to_dto_should_return_dto() {
 
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
         when(modelMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTOExpected);
@@ -131,6 +146,9 @@ class EventMapperTest {
                 () -> assertEquals(eventDTOExpected.getTarget().getTarget(), eventDTOActual.getTarget().getTarget(),
                         () -> "should return event dto with target: " + eventDTOExpected.getTarget().getTarget()
                                 + ", but was: " + eventDTOActual.getTarget().getTarget()),
+                () -> assertEquals(eventDTOExpected.getTarget().getCountryOfOrigin().getName(), eventDTOActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event dto with country name: " + eventDTOExpected.getTarget().getCountryOfOrigin().getName()
+                                + ", but was: " + eventDTOActual.getTarget().getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
@@ -138,9 +156,11 @@ class EventMapperTest {
     @Test
     void when_map_event_node_to_model_should_return_model() {
 
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+        CountryModel countryModel = (CountryModel) countryBuilder.build(ObjectType.MODEL);
+        TargetModel targetModel = (TargetModel) targetBuilder.withCountry(countryModel).build(ObjectType.MODEL);
         EventModel eventModelExpected = (EventModel) eventBuilder.withTarget(targetModel)
                 .build(ObjectType.MODEL);
 
@@ -180,6 +200,12 @@ class EventMapperTest {
                 () -> assertEquals(eventModelExpected.getTarget().getTarget(), eventModelActual.getTarget().getTarget(),
                         () -> "should return event model with target: " + eventModelExpected.getTarget().getTarget()
                                 + ", but was: " + eventModelActual.getTarget().getTarget()),
+                () -> assertEquals(eventModelExpected.getTarget().getCountryOfOrigin().getId(), eventModelActual.getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return event model with country id: " + eventModelExpected.getTarget().getCountryOfOrigin().getId()
+                                + ", but was: " + eventModelActual.getTarget().getId()),
+                () -> assertEquals(eventModelExpected.getTarget().getCountryOfOrigin().getName(), eventModelActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event model with country name: " + eventModelExpected.getTarget().getCountryOfOrigin().getName()
+                                + ", but was: " + eventModelActual.getTarget().getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
