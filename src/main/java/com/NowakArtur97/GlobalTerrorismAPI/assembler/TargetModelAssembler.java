@@ -27,8 +27,8 @@ public class TargetModelAssembler extends RepresentationModelAssemblerSupport<Ta
 
         TargetModel targetModel = objectMapper.map(targetNode, TargetModel.class);
 
-        if (targetModel.getCountryOfOrigin() != null) {
-            targetModel.setCountryOfOrigin(objectMapper.map(targetModel.getCountryOfOrigin(), CountryModel.class));
+        if (targetNode.getCountryOfOrigin() != null) {
+            targetModel.setCountryOfOrigin(objectMapper.map(targetNode.getCountryOfOrigin(), CountryModel.class));
         }
 
         targetModel.add(linkTo(methodOn(TargetController.class).findById(targetModel.getId())).withSelfRel());
