@@ -19,10 +19,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -81,9 +78,17 @@ class GroupControllerPutMethodTest {
     @Mock
     private ViolationHelper<GroupNode, GroupDTO> violationHelper;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
-    private TargetBuilder targetBuilder;
+    private static TargetBuilder targetBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -94,10 +99,6 @@ class GroupControllerPutMethodTest {
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController, restResponseGlobalEntityExceptionHandler).build();
-
-        groupBuilder = new GroupBuilder();
-        eventBuilder = new EventBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

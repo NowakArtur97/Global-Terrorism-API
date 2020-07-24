@@ -10,13 +10,11 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -75,8 +73,15 @@ class GroupEventsControllerGetMethodTest {
     @Mock
     private PageHelper pageHelper;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -85,9 +90,6 @@ class GroupEventsControllerGetMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
-
-        eventBuilder = new EventBuilder();
-        groupBuilder = new GroupBuilder();
     }
 
     @Test

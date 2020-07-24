@@ -14,10 +14,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -74,8 +71,15 @@ class TargetControllerGetMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -85,9 +89,6 @@ class TargetControllerGetMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

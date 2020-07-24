@@ -94,6 +94,14 @@ class GroupControllerPatchMethodTest {
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
+
     @BeforeEach
     private void setUp() {
 
@@ -107,10 +115,6 @@ class GroupControllerPatchMethodTest {
                         new MappingJackson2HttpMessageConverter())
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
-        groupBuilder = new GroupBuilder();
     }
 
     @Nested

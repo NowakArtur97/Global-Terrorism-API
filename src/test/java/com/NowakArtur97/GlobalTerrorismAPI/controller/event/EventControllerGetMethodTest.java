@@ -11,16 +11,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import org.hamcrest.core.IsNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -83,6 +81,13 @@ class EventControllerGetMethodTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+    }
+
     @BeforeEach
     private void setUp() {
 
@@ -93,9 +98,6 @@ class EventControllerGetMethodTest {
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Test

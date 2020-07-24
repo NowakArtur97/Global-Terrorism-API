@@ -16,10 +16,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import org.hamcrest.collection.IsCollectionWithSize;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -80,8 +77,15 @@ class GroupControllerGetMethodTest {
     @Mock
     private ViolationHelper<GroupNode, GroupDTO> violationHelper;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -91,9 +95,6 @@ class GroupControllerGetMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
-
-        groupBuilder = new GroupBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Test

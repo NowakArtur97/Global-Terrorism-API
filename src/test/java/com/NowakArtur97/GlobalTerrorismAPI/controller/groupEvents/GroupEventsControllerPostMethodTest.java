@@ -19,10 +19,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -82,9 +79,17 @@ class GroupEventsControllerPostMethodTest {
     @Mock
     private PageHelper pageHelper;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
-    private TargetBuilder targetBuilder;
+    private static TargetBuilder targetBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -95,10 +100,6 @@ class GroupEventsControllerPostMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController, restResponseGlobalEntityExceptionHandler)
                 .setControllerAdvice(new GenericRestControllerAdvice()).build();
-
-        groupBuilder = new GroupBuilder();
-        eventBuilder = new EventBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

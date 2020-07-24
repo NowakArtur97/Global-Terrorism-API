@@ -6,18 +6,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -61,8 +56,13 @@ class EventControllerDeleteMethodTest {
     @Mock
     private ViolationHelper<EventNode, EventDTO> violationHelper;
 
-    private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        eventBuilder = new EventBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -72,9 +72,6 @@ class EventControllerDeleteMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Test
@@ -105,8 +102,7 @@ class EventControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 

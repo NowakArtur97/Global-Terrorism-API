@@ -53,8 +53,8 @@ class TargetControllerPutMethodTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
 
     private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
@@ -63,6 +63,13 @@ class TargetControllerPutMethodTest {
     private static CountryNode anotherCountryNode = new CountryNode("another country");
 
     private static TargetNode targetNode = new TargetNode("target", countryNode);
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository,
@@ -84,13 +91,6 @@ class TargetControllerPutMethodTest {
         targetRepository.deleteAll();
 
         countryRepository.deleteAll();
-    }
-
-    @BeforeEach
-    private void setUp() {
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

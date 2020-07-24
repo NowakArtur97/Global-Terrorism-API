@@ -49,13 +49,20 @@ class TargetControllerPostMethodTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
 
     private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
     private static CountryNode countryNode = new CountryNode("country");
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
@@ -71,13 +78,6 @@ class TargetControllerPostMethodTest {
         userRepository.delete(userNode);
 
         countryRepository.delete(countryNode);
-    }
-
-    @BeforeEach
-    private void setUp() {
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

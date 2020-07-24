@@ -57,14 +57,18 @@ class GroupPagedResourcesAssemblerTest {
     private static GroupBuilder groupBuilder;
 
     @BeforeAll
-    private static void init() {
-
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    private static void setUpBuilders() {
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
+    }
+
+    @BeforeAll
+    private static void init() {
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
     @BeforeEach

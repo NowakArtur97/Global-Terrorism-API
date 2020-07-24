@@ -87,6 +87,13 @@ class EventControllerPatchMethodTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+    }
+
     @BeforeEach
     private void setUp() {
 
@@ -100,9 +107,6 @@ class EventControllerPatchMethodTest {
                         new MappingJackson2HttpMessageConverter())
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Nested

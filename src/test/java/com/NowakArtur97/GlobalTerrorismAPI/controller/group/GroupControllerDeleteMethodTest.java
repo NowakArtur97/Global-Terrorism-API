@@ -4,21 +4,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -64,9 +56,13 @@ class GroupControllerDeleteMethodTest {
     @Mock
     private ViolationHelper<GroupNode, GroupDTO> violationHelper;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
-    private TargetBuilder targetBuilder;
+    private static GroupBuilder groupBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        groupBuilder = new GroupBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -76,10 +72,6 @@ class GroupControllerDeleteMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        groupBuilder = new GroupBuilder();
-        eventBuilder = new EventBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test
@@ -87,9 +79,7 @@ class GroupControllerDeleteMethodTest {
 
         Long groupId = 1L;
 
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-        GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
+        GroupNode groupNode = (GroupNode) groupBuilder.build(ObjectType.NODE);
 
         String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 

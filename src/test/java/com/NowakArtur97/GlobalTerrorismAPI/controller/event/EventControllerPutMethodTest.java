@@ -18,10 +18,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpaces
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import com.ibm.icu.util.Calendar;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -81,6 +78,13 @@ class EventControllerPutMethodTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+    }
+
     @BeforeEach
     private void setUp() {
 
@@ -90,9 +94,6 @@ class EventControllerPutMethodTest {
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler).build();
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Test

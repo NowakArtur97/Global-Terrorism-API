@@ -12,10 +12,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -59,7 +56,13 @@ class TargetControllerDeleteMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
-    private TargetBuilder targetBuilder;
+    private static TargetBuilder targetBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -69,8 +72,6 @@ class TargetControllerDeleteMethodTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

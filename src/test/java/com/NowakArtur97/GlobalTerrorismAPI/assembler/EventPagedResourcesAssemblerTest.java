@@ -52,12 +52,16 @@ class EventPagedResourcesAssemblerTest {
     private static TargetBuilder targetBuilder;
 
     @BeforeAll
+    private static void setUpBuilders() {
+
+        targetBuilder = new TargetBuilder();
+    }
+
+    @BeforeAll
     private static void init() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-
-        targetBuilder = new TargetBuilder();
     }
 
     @BeforeEach

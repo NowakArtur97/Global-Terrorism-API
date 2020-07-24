@@ -79,10 +79,17 @@ class TargetControllerPatchMethodTest {
     @Autowired
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
 
     private static CountryNode country = new CountryNode("updated country");
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeAll
     private static void setUpCountry(@Autowired CountryRepository countryRepository) {
@@ -109,9 +116,6 @@ class TargetControllerPatchMethodTest {
                         new MappingJackson2HttpMessageConverter())
                 .setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

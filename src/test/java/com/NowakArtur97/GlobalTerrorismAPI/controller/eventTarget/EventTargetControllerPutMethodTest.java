@@ -8,7 +8,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
@@ -53,9 +52,8 @@ class EventTargetControllerPutMethodTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
-    private EventBuilder eventBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
 
     private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
@@ -67,6 +65,13 @@ class EventTargetControllerPutMethodTest {
 
     private static EventNode eventNodeWithoutTarget = new EventNode("summary", "motive", new Date(), true, true, true);
     private static EventNode eventNodeWithTarget = new EventNode("summary", "motive", new Date(), true, true, true);
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
@@ -93,14 +98,6 @@ class EventTargetControllerPutMethodTest {
         eventRepository.deleteAll();
 
         countryRepository.deleteAll();
-    }
-
-    @BeforeEach
-    private void setUp() {
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
     }
 
     @Test
