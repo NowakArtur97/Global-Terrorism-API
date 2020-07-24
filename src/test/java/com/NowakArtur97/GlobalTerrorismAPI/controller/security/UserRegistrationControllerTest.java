@@ -8,10 +8,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -46,7 +43,13 @@ class UserRegistrationControllerTest {
     @Mock
     private UserService userService;
 
-    private UserBuilder userBuilder;
+    private static UserBuilder userBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        userBuilder = new UserBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
@@ -57,8 +60,6 @@ class UserRegistrationControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(userRegistrationController, restResponseGlobalEntityExceptionHandler)
                 .build();
-
-        userBuilder = new UserBuilder();
     }
 
     @Test

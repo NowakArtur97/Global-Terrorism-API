@@ -32,10 +32,10 @@ class UserRegistrationControllerWithCustomValidationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private UserBuilder userBuilder;
+    private static UserBuilder userBuilder;
 
-    @BeforeEach
-    private void setUp() {
+    @BeforeAll
+    private static void setUpBuilders() {
 
         userBuilder = new UserBuilder();
     }
