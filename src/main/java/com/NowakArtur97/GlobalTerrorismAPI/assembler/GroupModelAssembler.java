@@ -42,7 +42,8 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
         groupModel.setEventsCaused(eventsCaused);
 
         groupModel.add(linkTo(methodOn(GroupController.class).findById(groupModel.getId())).withSelfRel());
-        groupModel.add(linkTo(methodOn(GroupEventsController.class).findGroupEvents(groupModel.getId(), Pageable.unpaged())).withRel("eventsCaused"));
+        groupModel.add(linkTo(methodOn(GroupEventsController.class).findGroupEvents(groupModel.getId(), Pageable.unpaged()))
+                .withRel("eventsCaused"));
 
         return groupModel;
     }

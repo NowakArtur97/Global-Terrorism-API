@@ -32,13 +32,13 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 
         EventModel eventModel = objectMapper.map(eventNode, EventModel.class);
 
+        eventModel.add(linkTo(methodOn(EventController.class).findById(eventModel.getId())).withSelfRel());
+
         if (eventNode.getTarget() != null) {
             eventModel.setTarget(targetModelAssembler.toModel(eventNode.getTarget()));
 
             eventModel.add(linkTo(methodOn(EventTargetController.class).findEventTarget(eventModel.getId())).withRel("target"));
         }
-
-        eventModel.add(linkTo(methodOn(EventController.class).findById(eventModel.getId())).withSelfRel());
 
         return eventModel;
     }
