@@ -24,6 +24,16 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     }
 
     @Override
+    public EventNode saveNew(EventDTO eventDTO) {
+
+        EventNode eventNode = objectMapper.map(eventDTO, EventNode.class);
+
+        eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
+
+        return repository.save(eventNode);
+    }
+
+    @Override
     public EventNode update(EventNode eventNode, EventDTO eventDTO) {
 
         Long id = eventNode.getId();
