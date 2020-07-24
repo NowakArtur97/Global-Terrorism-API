@@ -43,13 +43,15 @@ class TargetPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    private TargetBuilder targetBuilder;
+    private static TargetBuilder targetBuilder;
 
     @BeforeAll
     private static void init() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        targetBuilder = new TargetBuilder();
     }
 
     @BeforeEach
@@ -60,8 +62,6 @@ class TargetPagedResourcesAssemblerTest {
         targetModelAssembler = new TargetModelAssembler(objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
-
-        targetBuilder = new TargetBuilder();
     }
 
     @Test
@@ -248,7 +248,7 @@ class TargetPagedResourcesAssemblerTest {
 
             when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(
                     (TargetModel) targetBuilder.withId((long) count).withTarget(targetName)
-                    .build(ObjectType.MODEL));
+                            .build(ObjectType.MODEL));
 
             count++;
         }

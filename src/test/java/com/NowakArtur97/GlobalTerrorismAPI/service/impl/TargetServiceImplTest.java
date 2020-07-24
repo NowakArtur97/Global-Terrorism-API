@@ -12,10 +12,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -49,16 +46,20 @@ class TargetServiceImplTest {
     @Mock
     private CountryService countryService;
 
-    private CountryBuilder countryBuilder;
-    private TargetBuilder targetBuilder;
+    private static CountryBuilder countryBuilder;
+    private static TargetBuilder targetBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        countryBuilder = new CountryBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
 
         targetService = new TargetServiceImpl(targetRepository, objectMapper, countryService);
-
-        countryBuilder = new CountryBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

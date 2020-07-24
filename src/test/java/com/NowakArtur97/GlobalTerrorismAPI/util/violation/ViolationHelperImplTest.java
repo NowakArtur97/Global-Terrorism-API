@@ -12,10 +12,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -47,24 +44,28 @@ class ViolationHelperImplTest {
     @SuppressWarnings("rawtypes")
     private ConstraintViolation constraintViolation;
 
-    private TargetBuilder targetBuilder;
-    private EventBuilder eventBuilder;
-    private GroupBuilder groupBuilder;
+    private static TargetBuilder targetBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
 
-    @BeforeEach
-    private void setUp() {
-
-        violationHelper = new ViolationHelperImpl(validator, objectMapper);
+    @BeforeAll
+    private static void setUpBuilders() {
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
     }
 
+    @BeforeEach
+    private void setUp() {
+
+        violationHelper = new ViolationHelperImpl(validator, objectMapper);
+    }
+
     @Test
     void when_violate_valid_target_should_not_have_violations() {
 
-        TargetDTO targetDTO =(TargetDTO) targetBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
@@ -85,7 +86,7 @@ class ViolationHelperImplTest {
     @SuppressWarnings("unchecked")
     void when_violate_invalid_target_should_have_violations() {
 
-        TargetDTO targetDTO =(TargetDTO) targetBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();

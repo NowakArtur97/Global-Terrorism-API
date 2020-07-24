@@ -37,7 +37,7 @@ class GroupMapperTest {
     private static GroupBuilder groupBuilder;
 
     @BeforeAll
-    private static void init() {
+    private static void setUpBuilders() {
 
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();

@@ -9,10 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,14 +37,18 @@ class UserServiceImplTest {
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private UserBuilder userBuilder;
+    private static UserBuilder userBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        userBuilder = new UserBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
 
         userService = new UserServiceImpl(userRepository, objectMapper, bCryptPasswordEncoder);
-
-        userBuilder = new UserBuilder();
     }
 
     @Test

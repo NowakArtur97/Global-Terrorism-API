@@ -52,15 +52,19 @@ class GroupPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    private TargetBuilder targetBuilder;
-    private EventBuilder eventBuilder;
-    private GroupBuilder groupBuilder;
+    private static TargetBuilder targetBuilder;
+    private static EventBuilder eventBuilder;
+    private static GroupBuilder groupBuilder;
 
     @BeforeAll
     private static void init() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        targetBuilder = new TargetBuilder();
+        eventBuilder = new EventBuilder();
+        groupBuilder = new GroupBuilder();
     }
 
     @BeforeEach
@@ -71,10 +75,6 @@ class GroupPagedResourcesAssemblerTest {
         groupModelAssembler = new GroupModelAssembler(eventModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
-        groupBuilder = new GroupBuilder();
     }
 
     @Test

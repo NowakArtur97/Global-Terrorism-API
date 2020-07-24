@@ -49,13 +49,15 @@ class EventPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    private TargetBuilder targetBuilder;
+    private static TargetBuilder targetBuilder;
 
     @BeforeAll
     private static void init() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        targetBuilder = new TargetBuilder();
     }
 
     @BeforeEach
@@ -66,8 +68,6 @@ class EventPagedResourcesAssemblerTest {
         eventModelAssembler = new EventModelAssembler(targetModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
-
-        targetBuilder = new TargetBuilder();
     }
 
     @Test

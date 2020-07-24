@@ -15,10 +15,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -52,18 +49,22 @@ class GroupServiceImplTest {
     @Mock
     private GenericService<EventNode, EventDTO> eventService;
 
-    private GroupBuilder groupBuilder;
-    private EventBuilder eventBuilder;
-    private TargetBuilder targetBuilder;
+    private static GroupBuilder groupBuilder;
+    private static EventBuilder eventBuilder;
+    private static TargetBuilder targetBuilder;
+
+    @BeforeAll
+    private static void setUpBuilders() {
+
+        groupBuilder = new GroupBuilder();
+        eventBuilder = new EventBuilder();
+        targetBuilder = new TargetBuilder();
+    }
 
     @BeforeEach
     private void setUp() {
 
         groupService = new GroupServiceImpl(groupRepository, objectMapper, eventService);
-
-        groupBuilder = new GroupBuilder();
-        eventBuilder = new EventBuilder();
-        targetBuilder = new TargetBuilder();
     }
 
 

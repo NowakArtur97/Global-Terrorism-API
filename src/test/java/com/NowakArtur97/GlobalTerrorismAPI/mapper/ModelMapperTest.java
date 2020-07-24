@@ -31,7 +31,7 @@ class ModelMapperTest {
     private static UserBuilder userBuilder;
 
     @BeforeAll
-    private static void init() {
+    private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();

@@ -33,7 +33,7 @@ class TargetMapperTest {
     private static TargetBuilder targetBuilder;
 
     @BeforeAll
-    private static void init() {
+    private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();

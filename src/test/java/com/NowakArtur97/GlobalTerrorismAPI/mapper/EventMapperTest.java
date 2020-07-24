@@ -38,7 +38,7 @@ class EventMapperTest {
     private static EventBuilder eventBuilder;
 
     @BeforeAll
-    private static void init() {
+    private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
