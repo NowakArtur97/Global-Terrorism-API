@@ -18,6 +18,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,7 +178,7 @@ class EventControllerPostMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_with_invalid_target_should_return_errors(String invalidTarget) {
 
@@ -201,7 +202,7 @@ class EventControllerPostMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_with_invalid_summary_should_return_errors(String invalidSummary) {
 
@@ -226,7 +227,7 @@ class EventControllerPostMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_with_invalid_motive_should_return_errors(String invalidMotive) {
 

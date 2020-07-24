@@ -1,52 +1,51 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import com.ibm.icu.util.Calendar;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventController_Tests")
 class EventControllerPutMethodTest {
@@ -54,53 +53,65 @@ class EventControllerPutMethodTest {
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
+    @Autowired
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
-    @Mock
-    private GenericService<EventNode, EventDTO> eventService;
-
-    @Mock
-    private EventModelAssembler modelAssembler;
-
-    @Mock
-    private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
-
-    @Mock
-    private PatchHelper patchHelper;
-
-    @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
-
+    private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
+
+    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+            Set.of(new RoleNode("user")));
+
+    private static CountryNode countryNode = new CountryNode("country");
+    private static CountryNode anotherCountryNode = new CountryNode("another country");
+
+    private static TargetNode targetNode = new TargetNode("target", countryNode);
+
+    private static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
 
     @BeforeAll
     private static void setUpBuilders() {
 
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
 
-    @BeforeEach
-    private void setUp() {
+    @BeforeAll
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
+                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        userRepository.save(userNode);
 
-        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+        countryRepository.save(anotherCountryNode);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController, restResponseGlobalEntityExceptionHandler).build();
+        eventNode.setTarget(targetNode);
+
+        eventRepository.save(eventNode);
+    }
+
+    @AfterAll
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
+
+        countryRepository.findAll().forEach(System.out::println);
+
+        userRepository.delete(userNode);
+
+        targetRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        countryRepository.deleteAll();
     }
 
     @Test
     void when_update_valid_event_should_return_updated_event_as_model() throws ParseException {
 
-        Long eventId = 1L;
-
         String updatedSummary = "summary updated";
         String updatedMotive = "motive updated";
         Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
@@ -108,47 +119,32 @@ class EventControllerPutMethodTest {
         boolean updatedIsSuccessful = false;
         boolean updatedIsSuicidal = false;
 
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
-        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
-        targetModel.add(new Link(pathToTargetLink));
-
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-
-        EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive).withDate(updatedDate)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetNode)
-                .build(ObjectType.NODE);
+                .withIsSuicidal(updatedIsSuccessful).withTarget(targetDTO).build(ObjectType.DTO);
 
-        EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
-                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetModel)
-                .build(ObjectType.MODEL);
-
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        updatedEventModel.add(new Link(pathToEventLink));
-        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
-        updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
-        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-        when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
-                .thenReturn(updatedEventNode);
-        when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
                         .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
+                        .andExpect(jsonPath("id", is(eventNode.getId().intValue())))
                         .andExpect(jsonPath("summary", is(updatedSummary)))
                         .andExpect(jsonPath("motive", is(updatedMotive)))
                         .andExpect(jsonPath("date", is(notNullValue())))
@@ -156,160 +152,99 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
                         .andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
                         .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-                        .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
-                        ArgumentMatchers.any(EventDTO.class)),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
     }
 
     @Test
-    void when_update_valid_event_with_updated_target_should_return_updated_event_as_model_with_updated_target()
-            throws ParseException {
-
-        Long eventId = 1L;
-
-        String updatedSummary = "summary updated";
-        String updatedMotive = "motive updated";
-        Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
-        boolean updatedIsPartOfMultipleIncidents = false;
-        boolean updatedIsSuccessful = false;
-        boolean updatedIsSuicidal = false;
+    void when_update_valid_event_with_updated_target_should_return_updated_event_as_model_with_updated_target() {
 
         String updatedTarget = "updated target";
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
-        TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).build(ObjectType.NODE);
-
-        TargetModel updatedTargetModel = (TargetModel) targetBuilder.withTarget(updatedTarget).build(ObjectType.MODEL);
-        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
-        updatedTargetModel.add(new Link(pathToTargetLink));
-
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTarget).withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
-        EventNode updatedEventNode = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
-                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(updatedTargetNode)
-                .build(ObjectType.NODE);
-
-        EventModel updatedEventModel = (EventModel) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
-                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(updatedTargetModel)
-                .build(ObjectType.MODEL);
-
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        updatedEventModel.add(new Link(pathToEventLink));
-        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + updatedEventModel.getId().intValue() + "/targets";
-        updatedEventModel.add(new Link(pathToTargetEventLink, "target"));
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
-        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-        when(eventService.update(ArgumentMatchers.any(EventNode.class), ArgumentMatchers.any(EventDTO.class)))
-                .thenReturn(updatedEventNode);
-        when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(updatedEventModel);
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
                         .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(updatedSummary)))
-                        .andExpect(jsonPath("motive", is(updatedMotive)))
+                        .andExpect(jsonPath("id", is(eventNode.getId().intValue())))
+                        .andExpect(jsonPath("summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventDTO.getMotive())))
                         .andExpect(jsonPath("date", is(notNullValue())))
-                        .andExpect(jsonPath("isSuicidal", is(updatedIsSuicidal)))
-                        .andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
+                        .andExpect(jsonPath("isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-                        .andExpect(jsonPath("target.id", is(updatedTargetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(updatedTargetModel.getTarget()))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verify(eventService, times(1)).update(ArgumentMatchers.any(EventNode.class),
-                        ArgumentMatchers.any(EventDTO.class)),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(anotherCountryNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
     }
 
     @Test
     void when_update_valid_event_with_not_existing_id_should_return_new_event_as_model() {
 
-        Long eventId = 1L;
+        Long notExistingId = 10000L;
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
-
-        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId().intValue();
-        targetModel.add(new Link(pathToTargetLink));
-
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-
-        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        eventModel.add(new Link(pathToEventLink));
-        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
-        eventModel.add(new Link(pathToTargetEventLink, "target"));
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
-        when(eventService.findById(eventId)).thenReturn(Optional.empty());
-        when(eventService.saveNew(ArgumentMatchers.any(EventDTO.class))).thenReturn(eventNode);
-        when(modelAssembler.toModel(ArgumentMatchers.any(EventNode.class))).thenReturn(eventModel);
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, notExistingId)
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
-                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
-                        .andExpect(jsonPath("date",
-                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
-                                                .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicidal", is(eventModel.getIsSuicidal())))
-                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
-                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-                        .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
-                        .andExpect(jsonPath("target.target", is(targetModel.getTarget()))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verify(eventService, times(1)).saveNew(ArgumentMatchers.any(EventDTO.class)),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(ArgumentMatchers.any(EventNode.class)),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("links[0].href", notNullValue()))
+                        .andExpect(jsonPath("links[1].href", notNullValue()))
+                        .andExpect(jsonPath("id", notNullValue()))
+                        .andExpect(jsonPath("summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventDTO.getMotive())))
+                        .andExpect(jsonPath("date", is(notNullValue())))
+                        .andExpect(jsonPath("isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", notNullValue()))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
     }
 
     @Test
     void when_update_event_with_null_fields_should_return_errors() {
-
-        Long eventId = 1L;
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
                 .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
@@ -317,51 +252,80 @@ class EventControllerPutMethodTest {
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{event.summary.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.motive.notBlank}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.date.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isPartOfMultipleIncidents.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuccessful.notNull}")))
-                        .andExpect(jsonPath("errors", hasItem("{event.isSuicidal.notNull}")))
-                        .andExpect(jsonPath("errors", hasSize(7))),
-                () -> verifyNoInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
+                        .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(7))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: Event Target Country: {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_event_with_invalid_target_should_return_errors(String invalidTarget) {
+    @ValueSource(strings = {" "})
+    void when_add_event_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
-        Long eventId = 1L;
-
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{target.target.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @EmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_update_event_with_invalid_target_should_return_errors(String invalidTarget) {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).withCountry(countryDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
@@ -369,27 +333,27 @@ class EventControllerPutMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_summary_should_return_errors(String invalidSummary) {
 
-        Long eventId = 1L;
-
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO)
                 .build(ObjectType.DTO);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.summary.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
@@ -397,54 +361,54 @@ class EventControllerPutMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_motive_should_return_errors(String invalidMotive) {
 
-        Long eventId = 1L;
-
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO)
                 .build(ObjectType.DTO);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.motive.notBlank}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
     void when_update_event_with_date_in_the_future_should_return_errors() {
 
-        Long eventId = 1L;
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(2090, Calendar.FEBRUARY, 1);
         Date invalidDate = calendar.getTime();
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventId).content(ObjectTestMapper.asJsonString(eventDTO))
+                        .perform(put(linkWithParameter, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest()).andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("{event.date.past}")))
-                        .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verifyNoInteractions(eventService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
+                        .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }
