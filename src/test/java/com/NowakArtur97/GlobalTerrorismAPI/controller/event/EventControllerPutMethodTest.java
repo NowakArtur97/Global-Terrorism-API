@@ -98,8 +98,6 @@ class EventControllerPutMethodTest {
     private static void tearDown(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
                                  @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
 
-        countryRepository.findAll().forEach(System.out::println);
-
         userRepository.delete(userNode);
 
         targetRepository.deleteAll();

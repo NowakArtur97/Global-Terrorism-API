@@ -3,12 +3,10 @@ package com.NowakArtur97.GlobalTerrorismAPI.node;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 @NodeEntity(label = "Country")
 @Data
-@ToString(callSuper = true)
 @NoArgsConstructor
 public class CountryNode extends Node implements Country {
 
