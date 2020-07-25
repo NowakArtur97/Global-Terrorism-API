@@ -58,6 +58,8 @@ class TargetControllerPatchMethodTest {
 
     private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
 
+    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 3;
+
     private MockMvc mockMvc;
 
     private GenericRestController<TargetModel, TargetDTO> targetController;
@@ -147,7 +149,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.any()))
                 .thenReturn(updatedTargetNode);
         when(targetService.save(updatedTargetNode)).thenReturn(updatedTargetNode);
@@ -164,12 +166,13 @@ class TargetControllerPatchMethodTest {
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(targetId.intValue())))
                         .andExpect(jsonPath("target", is(updatedTargetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryId.intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(updatedCountryName)))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class),
                         eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -190,7 +193,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.empty());
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.empty());
 
         String jsonPatch = "[" +
                 "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
@@ -207,7 +210,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("errors[0]",
                                 is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(targetModelAssembler),
@@ -231,7 +234,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.patch(any(JsonPatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -248,7 +251,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -268,7 +271,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.patch(any(JsonPatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -285,7 +288,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -308,7 +311,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.patch(any(JsonPatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -325,7 +328,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).patch(any(JsonPatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -361,7 +364,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
         when(targetService.save(updatedTargetNode)).thenReturn(updatedTargetNode);
@@ -377,12 +380,13 @@ class TargetControllerPatchMethodTest {
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(targetId.intValue())))
                         .andExpect(jsonPath("target", is(updatedTargetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryId.intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(updatedCountryName)))
                         .andExpect(jsonPath("countryOfOrigin.links").isEmpty()),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
                 () -> verify(targetService, times(1)).save(updatedTargetNode),
@@ -402,7 +406,7 @@ class TargetControllerPatchMethodTest {
         String updatedTargetName = "updated target";
         String updatedCountryName = "updated country";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.empty());
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.empty());
 
         String jsonMergePatch = "{ \"target\": \"" + updatedTargetName + "\", " +
                 "\"countryOfOrigin/name\": \"" + updatedCountryName + "\" }";
@@ -417,7 +421,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(404)))
                         .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + targetId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(targetModelAssembler),
@@ -441,7 +445,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -457,7 +461,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -477,7 +481,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -493,7 +497,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),
@@ -516,7 +520,7 @@ class TargetControllerPatchMethodTest {
 
         String linkWithParameter = BASE_PATH + "/" + "{id2}";
 
-        when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
+        when(targetService.findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNode));
         when(patchHelper.mergePatch(any(JsonMergePatch.class), eq(targetNode),
                 ArgumentMatchers.any())).thenReturn(updatedTargetNode);
 
@@ -532,7 +536,7 @@ class TargetControllerPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(targetService, times(1)).findById(targetId),
+                () -> verify(targetService, times(1)).findById(targetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(patchHelper, times(1)).mergePatch(any(JsonMergePatch.class), eq(targetNode), ArgumentMatchers.<Class<TargetNode>>any()),
                 () -> verifyNoMoreInteractions(patchHelper),

@@ -102,6 +102,7 @@ class TargetControllerPostMethodTest {
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", notNullValue()))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", notNullValue()))
                         .andExpect(jsonPath("target", is(targetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
