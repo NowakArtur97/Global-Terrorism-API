@@ -27,6 +27,8 @@ import java.util.Optional;
 @RestController
 public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node> implements GenericRestController<M, D> {
 
+    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 3;
+
     private final String modelType;
 
     private final Class<T> nodeTypeParameterClass;
@@ -110,7 +112,7 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
     @Override
     public ResponseEntity<M> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch) {
 
-        T node = service.findById(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
+        T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         T nodePatched = patchHelper.patch(objectAsJsonPatch, node, nodeTypeParameterClass);
 

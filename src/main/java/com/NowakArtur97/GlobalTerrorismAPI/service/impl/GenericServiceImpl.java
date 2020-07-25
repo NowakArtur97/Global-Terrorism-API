@@ -16,8 +16,6 @@ import java.util.Optional;
 @Service
 abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BaseGenericServiceImpl<T> implements GenericService<T, D> {
 
-    private static final int DEFAULT_SEARCHING_DEPTH = 1;
-
     private final Class<T> typeParameterClass;
 
     protected final ObjectMapper objectMapper;
@@ -37,9 +35,16 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends Bas
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<T> findById(Long id, int depth) {
+
+        return id != null ? repository.findById(id, depth) : Optional.empty();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<T> findAll(Pageable pageable) {
 
-        return repository.findAll(pageable, DEFAULT_SEARCHING_DEPTH);
+        return repository.findAll(pageable);
     }
 
     @Override

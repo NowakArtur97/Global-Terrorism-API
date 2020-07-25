@@ -11,6 +11,8 @@ public interface GenericService<T extends Node, D extends DTONode> extends BaseG
 
     Optional<T> findById(Long id);
 
+    Optional<T> findById(Long id, int depth);
+
     Page<T> findAll(Pageable pageable);
 
     T saveNew(D dto);
