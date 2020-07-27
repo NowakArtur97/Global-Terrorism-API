@@ -12,7 +12,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -100,9 +100,19 @@ class TargetControllerPatchMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired CountryRepository countryRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository) {
 
-        countryRepository.delete(country);
+        userRepository.deleteAll();
+
+        countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @BeforeEach

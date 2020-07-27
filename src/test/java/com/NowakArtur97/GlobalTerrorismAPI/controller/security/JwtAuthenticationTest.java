@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtilImpl;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -55,9 +55,19 @@ class JwtAuthenticationTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository) {
 
-        userRepository.delete(userNode);
+        userRepository.deleteAll();
+
+        countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with JWT  token should return content")

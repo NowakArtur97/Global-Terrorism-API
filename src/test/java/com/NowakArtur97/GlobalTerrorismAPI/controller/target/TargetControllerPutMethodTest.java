@@ -6,9 +6,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -83,14 +81,19 @@ class TargetControllerPutMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository,
-                                 @Autowired CountryRepository countryRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository) {
 
-        userRepository.delete(userNode);
-
-        targetRepository.deleteAll();
+        userRepository.deleteAll();
 
         countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @Test

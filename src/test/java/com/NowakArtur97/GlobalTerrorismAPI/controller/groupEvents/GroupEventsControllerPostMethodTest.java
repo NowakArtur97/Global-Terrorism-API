@@ -146,7 +146,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].links[1].href", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].target.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].target.target", is(targetDTO.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", CoreMatchers.notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty()));

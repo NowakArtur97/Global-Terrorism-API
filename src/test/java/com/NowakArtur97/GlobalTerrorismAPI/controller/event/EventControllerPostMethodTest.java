@@ -6,8 +6,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -84,11 +83,19 @@ class EventControllerPostMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository) {
 
-        userRepository.delete(userNode);
+        userRepository.deleteAll();
 
-        countryRepository.delete(countryNode);
+        countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @Test
@@ -121,8 +128,12 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("isSuccessful", is(eventDTO.getIsSuccessful())))
                         .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("target.id", notNullValue()))
-                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget()))));
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryDTO.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
     }
 
     @Test

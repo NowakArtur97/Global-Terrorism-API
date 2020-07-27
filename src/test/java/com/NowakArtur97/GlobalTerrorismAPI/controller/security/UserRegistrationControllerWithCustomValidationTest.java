@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
@@ -41,9 +41,19 @@ class UserRegistrationControllerWithCustomValidationTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
+                                 @Autowired TargetRepository targetRepository) {
 
         userRepository.deleteAll();
+
+        countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @Test
