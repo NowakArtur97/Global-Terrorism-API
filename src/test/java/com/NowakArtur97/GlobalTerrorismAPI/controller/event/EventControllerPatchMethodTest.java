@@ -249,7 +249,67 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_events_target_with_country_as_null_using_json_patch_should_have_errors() {
+
+            String updatedTargetName = "updated target";
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": " + null + "}" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_valid_events_target_with_not_existing_country_using_json_patch_should_have_errors() {
+
+            String updatedTargetName = "updated target";
+            String notExistingCountryName = "not existing country";
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": \"" + notExistingCountryName + "\" }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
@@ -287,7 +347,9 @@ class EventControllerPatchMethodTest {
                                     hasItem("Event must have information about whether it was successful.")))
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
-                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(7))));
+
         }
 
         @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
@@ -311,7 +373,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
@@ -336,7 +399,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
@@ -360,7 +424,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
@@ -384,7 +449,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future."))));
+                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
 
@@ -407,9 +473,9 @@ class EventControllerPatchMethodTest {
 
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
-            String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\"" + ", " +
-                    "\"motive\" : \"" + updatedMotive + "\"" + ", " +
-                    "\"date\" : \"" + updatedEventDateString + "\"" + ", " +
+            String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", " +
+                    "\"motive\" : \"" + updatedMotive + "\", " +
+                    "\"date\" : \"" + updatedEventDateString + "\", " +
                     "\"isPartOfMultipleIncidents\" : " + updatedIsPartOfMultipleIncidents + ", " +
                     "\"isSuccessful\" : " + updatedIsSuccessful + ", " +
                     "\"isSuicidal\" : " + updatedIsSuicidal + "}";
@@ -456,7 +522,7 @@ class EventControllerPatchMethodTest {
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
             String jsonMergePatch =
-                    "{\"target\" : {\"target\" : \"" + updatedTargetName + "\"" + ", " +
+                    "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
                             "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\"}}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -502,9 +568,9 @@ class EventControllerPatchMethodTest {
 
             String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
-            String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\"" + ", " +
-                    "\"motive\" : \"" + updatedMotive + "\"" + ", " +
-                    "\"date\" : \"" + updatedEventDateString + "\"" + ", " +
+            String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", " +
+                    "\"motive\" : \"" + updatedMotive + "\", " +
+                    "\"date\" : \"" + updatedEventDateString + "\", " +
                     "\"isPartOfMultipleIncidents\" : " + updatedIsPartOfMultipleIncidents + ", " +
                     "\"isSuccessful\" : " + updatedIsSuccessful + ", " +
                     "\"isSuicidal\" : " + updatedIsSuicidal + "}";
@@ -548,7 +614,65 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_events_target_with_country_as_null_using_json_merge_patch_should_have_errors() {
+
+            String updatedTargetName = "updated target";
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
+
+            String jsonMergePatch =
+                    "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
+                            "\"countryOfOrigin\" : { \"name\" : " + null + "}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_valid_events_target_with_not_existing_country_using_json_merge_patch_should_have_errors() {
+
+            String updatedTargetName = "updated target";
+            String notExistingCountryName = "not existing country";
+
+            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
+
+            String jsonMergePatch =
+                    "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
+                            "\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\"}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(linkWithParameter, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
@@ -585,7 +709,8 @@ class EventControllerPatchMethodTest {
                                     hasItem("Event must have information about whether it was successful.")))
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
-                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(7))));
         }
 
         @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
@@ -610,7 +735,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
@@ -635,7 +761,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
@@ -660,7 +787,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty."))));
+                            .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
@@ -684,7 +812,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future."))));
+                            .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
 }
