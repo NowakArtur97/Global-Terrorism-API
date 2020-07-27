@@ -97,11 +97,11 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 ## Features
 - User registration
 - JWT authorization
-- Target (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Event (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Event Target (GET, DELETE)
-- Group (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Group Events (GET, POST, DELETE, OPTIONS)
+- Targets endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Events endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Events Target endpoint (GET, PUT, DELETE)
+- Groups endpoint(GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Groups Events endpoint (GET, POST, DELETE, OPTIONS)
 - Bulk operations using Spring Bulk API
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
