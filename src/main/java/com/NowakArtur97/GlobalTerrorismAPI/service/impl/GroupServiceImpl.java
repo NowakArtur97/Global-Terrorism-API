@@ -10,7 +10,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implements GroupService {
@@ -20,6 +22,20 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper objectMapper, GenericService<EventNode, EventDTO> eventService) {
         super(repository, objectMapper);
         this.eventService = eventService;
+    }
+
+    @Override
+    public GroupNode saveNew(GroupDTO groupDTO) {
+
+        GroupNode groupNode = objectMapper.map(groupDTO, GroupNode.class);
+
+        List<EventNode> eventsCaused = groupDTO.getEventsCaused().stream()
+                .map(eventService::saveNew)
+                .collect(Collectors.toList());
+
+        groupNode.setEventsCaused(eventsCaused);
+
+        return repository.save(groupNode);
     }
 
     @Override
