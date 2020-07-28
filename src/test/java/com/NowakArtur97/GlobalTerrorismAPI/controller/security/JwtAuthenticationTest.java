@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtilImpl;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,6 +24,7 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -101,7 +101,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(jsonPath("status", is(401)))
                         .andExpect(jsonPath("errors[0]", is("Missing JWT token in request headers.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token should return content")
@@ -121,7 +121,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(jsonPath("status", is(401)))
                         .andExpect(jsonPath("errors[0]", is("Missing JWT token in request headers.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token should return error response")
@@ -142,7 +142,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
                                 is("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with invalid JWT  token with wrong format should return error response")
@@ -162,7 +162,7 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
                                 is("JWT strings must contain exactly 2 period characters. Found: 0")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @ParameterizedTest(name = "{index}: For URL: {0} with expired JWT  token should return error response")
@@ -181,6 +181,6 @@ class JwtAuthenticationTest {
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", containsString("JWT expired")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }

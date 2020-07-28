@@ -103,7 +103,7 @@ class EventTargetControllerPutMethodTest {
     @Test
     void when_add_valid_event_to_target_should_return_new_target_as_model() {
 
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";

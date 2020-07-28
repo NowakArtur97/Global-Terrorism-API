@@ -102,7 +102,8 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH).header("Authorization", "Bearer " + token)
+                        .perform(post(BASE_PATH)
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
@@ -131,7 +132,8 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH).header("Authorization", "Bearer " + token)
+                        .perform(post(BASE_PATH)
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -154,7 +156,8 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH).header("Authorization", "Bearer " + token)
+                        .perform(post(BASE_PATH)
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())

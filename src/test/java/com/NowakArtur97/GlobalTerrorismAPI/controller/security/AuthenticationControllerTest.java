@@ -85,7 +85,8 @@ class AuthenticationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(authenticationRequest))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -112,7 +113,8 @@ class AuthenticationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(authenticationRequest))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -143,7 +145,8 @@ class AuthenticationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(authenticationRequest))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(authenticationRequest))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

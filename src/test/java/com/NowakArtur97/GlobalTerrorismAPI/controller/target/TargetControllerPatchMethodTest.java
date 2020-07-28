@@ -171,7 +171,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonPatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonPatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -211,7 +212,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonPatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonPatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -254,7 +256,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonPatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonPatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -291,7 +294,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonPatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonPatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -331,7 +335,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonPatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonPatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -385,7 +390,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonMergePatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -423,7 +429,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonMergePatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -464,7 +471,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonMergePatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -500,7 +508,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonMergePatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -539,7 +548,8 @@ class TargetControllerPatchMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(patch(linkWithParameter, targetId).content(jsonMergePatch)
+                        .perform(patch(linkWithParameter, targetId)
+                                .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))

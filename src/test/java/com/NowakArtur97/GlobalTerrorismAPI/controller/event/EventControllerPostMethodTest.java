@@ -233,7 +233,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event summary cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -258,7 +258,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event motive cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 

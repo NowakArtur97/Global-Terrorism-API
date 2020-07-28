@@ -72,7 +72,8 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -88,7 +89,8 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -110,7 +112,8 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -128,12 +131,13 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.name.size}")))
+                        .andExpect(jsonPath("errors[0]", is("{user.name.size}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(userService));
     }
@@ -145,7 +149,8 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
@@ -164,12 +169,13 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.email.wrongFormat}")))
+                        .andExpect(jsonPath("errors[0]", is("{user.email.wrongFormat}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(userService));
     }
@@ -183,12 +189,13 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.password.notBlank}")))
+                        .andExpect(jsonPath("errors[0]", is("{user.password.notBlank}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(userService));
     }
@@ -203,12 +210,13 @@ class UserRegistrationControllerTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(AUTHENTICATION_BASE_PATH).content(ObjectTestMapper.asJsonString(userDTO))
+                        .perform(post(AUTHENTICATION_BASE_PATH)
+                                .content(ObjectTestMapper.asJsonString(userDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("{user.matchingPassword.notBlank}")))
+                        .andExpect(jsonPath("errors[0]", is("{user.matchingPassword.notBlank}")))
                         .andExpect(jsonPath("errors", hasSize(1))),
                 () -> verifyNoInteractions(userService));
     }

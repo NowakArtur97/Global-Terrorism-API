@@ -144,7 +144,8 @@ class TargetControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, notExistingTargetId).header("Authorization", "Bearer " + token)
+                        .perform(put(linkWithParameter, notExistingTargetId)
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
@@ -173,7 +174,8 @@ class TargetControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
+                        .perform(put(linkWithParameter, targetNode.getId())
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -198,7 +200,8 @@ class TargetControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId()).header("Authorization", "Bearer " + token)
+                        .perform(put(linkWithParameter, targetNode.getId())
+                                .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
