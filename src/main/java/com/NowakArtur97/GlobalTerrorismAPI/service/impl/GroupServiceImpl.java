@@ -45,11 +45,12 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
         deleteEvents(groupNode);
 
-        saveNewEvents(groupDTO);
+        List<EventNode> eventsCaused = saveNewEvents(groupDTO);
 
         groupNode = objectMapper.map(groupDTO, GroupNode.class);
 
         groupNode.setId(id);
+        groupNode.setEventsCaused(eventsCaused);
 
         return repository.save(groupNode);
     }
@@ -100,9 +101,11 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
         return groupNodeOptional;
     }
 
-    private void saveNewEvents(GroupDTO groupDTO) {
+    private List<EventNode> saveNewEvents(GroupDTO groupDTO) {
 
-        groupDTO.getEventsCaused().forEach(eventService::saveNew);
+        return groupDTO.getEventsCaused().stream()
+                .map(eventService::saveNew)
+                .collect(Collectors.toList());
     }
 
     private void deleteEvents(GroupNode groupNode) {
