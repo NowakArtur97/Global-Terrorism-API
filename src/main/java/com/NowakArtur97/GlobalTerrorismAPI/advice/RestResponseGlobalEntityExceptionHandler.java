@@ -1,6 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +53,19 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
         exception.getConstraintViolations().forEach(error -> errorResponse.addError(error.getMessage()));
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({InvalidFormatException.class, MismatchedInputException.class})
+    public ResponseEntity<Object> handlerIllegalArgumentException(JsonProcessingException exception) {
+
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        errorResponse.addError(exception.getOriginalMessage());
+
+        if (exception instanceof InvalidFormatException) {
+            status = HttpStatus.CONFLICT;
+        }
+
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
     }
 }
