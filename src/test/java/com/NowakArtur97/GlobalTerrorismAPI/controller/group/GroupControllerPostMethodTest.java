@@ -62,10 +62,10 @@ class GroupControllerPostMethodTest {
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode countryNode = new CountryNode("country");
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -212,13 +212,13 @@ class GroupControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event summary cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event motive cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event date cannot be null.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event must have information on whether it has been part of many incidents.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event must have information about whether it was successful.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Event must have information about whether it was a suicidal attack.")))
-                        .andExpect(jsonPath("errors", Matchers.hasItem("Target name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful.")))
+                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
+                        .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(7))));
     }
 
@@ -239,7 +239,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("List of Events caused by the Group cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("List of Events caused by the Group cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -265,7 +265,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Group name cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Group name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
