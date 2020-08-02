@@ -62,12 +62,12 @@ class GroupEventsControllerPostMethodTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static GroupNode groupNode = new GroupNode("group");
+    private final static GroupNode groupNode = new GroupNode("group");
 
-    private static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode countryNode = new CountryNode("country");
 
     @BeforeAll
     private static void setUpBuilders() {

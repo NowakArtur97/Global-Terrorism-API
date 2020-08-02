@@ -42,17 +42,17 @@ class EventControllerPatchMethodTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static CountryNode countryNode = new CountryNode("country");
-    private static CountryNode anotherCountryNode = new CountryNode("another country");
+    private final static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode anotherCountryNode = new CountryNode("another country");
 
-    private static TargetNode targetNode = new TargetNode("target", countryNode);
-    private static TargetNode anotherTargetNode = new TargetNode("target", countryNode);
+    private final static TargetNode targetNode = new TargetNode("target", countryNode);
+    private final static TargetNode anotherTargetNode = new TargetNode("target", countryNode);
 
-    private static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
-    private static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
+    private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
@@ -222,7 +222,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isNotFound())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("timestamp").isNotEmpty())
-                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("status", is(404)))
                             .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + notExistingId + ".")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
@@ -324,7 +324,7 @@ class EventControllerPatchMethodTest {
                     "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": " + null + "}," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": " + null + "}," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuicidal\", \"value\": " + null + "}," +
-                    "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": " + null + "}]";
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": " + null + "}]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -350,31 +350,6 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(7))));
 
-        }
-
-        @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
-        @EmptySource
-        @ValueSource(strings = {" "})
-        void when_partial_update_invalid_events_target_using_json_patch_should_return_errors(String invalidTarget) {
-
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
-            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget + "\" }]";
-
-            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                    List.of(new SimpleGrantedAuthority("user"))));
-
-            assertAll(
-                    () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
-                                    .header("Authorization", "Bearer " + token)
-                                    .content(jsonPatch)
-                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                            .andExpect(status().isBadRequest())
-                            .andExpect(jsonPath("timestamp", is(notNullValue())))
-                            .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
@@ -587,7 +562,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isNotFound())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                             .andExpect(jsonPath("timestamp").isNotEmpty())
-                            .andExpect(content().json("{'status': 404}"))
+                            .andExpect(jsonPath("status", is(404)))
                             .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + notExistingId + ".")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
@@ -686,7 +661,7 @@ class EventControllerPatchMethodTest {
                     "\"isPartOfMultipleIncidents\" : " + null + ", " +
                     "\"isSuccessful\" : " + null + ", " +
                     "\"isSuicidal\" : " + null + ", " +
-                    "\"target\" : { \"target\" : " + null + "}}";
+                    "\"target\" : " + null + "}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -711,32 +686,6 @@ class EventControllerPatchMethodTest {
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(7))));
-        }
-
-        @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
-        @EmptySource
-        @ValueSource(strings = {" "})
-        void when_partial_update_invalid_events_target_using_json_merge_patch_should_return_errors(
-                String invalidTarget) {
-
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
-            String jsonMergePatch = "{\"target\" : {\"target\" : \"" + invalidTarget + "\"}}";
-
-            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                    List.of(new SimpleGrantedAuthority("user"))));
-
-            assertAll(
-                    () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
-                                    .header("Authorization", "Bearer " + token)
-                                    .content(jsonMergePatch)
-                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                            .andExpect(status().isBadRequest())
-                            .andExpect(jsonPath("timestamp", is(notNullValue())))
-                            .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")

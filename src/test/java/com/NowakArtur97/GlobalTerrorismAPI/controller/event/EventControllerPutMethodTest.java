@@ -60,15 +60,15 @@ class EventControllerPutMethodTest {
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static CountryNode countryNode = new CountryNode("country");
-    private static CountryNode anotherCountryNode = new CountryNode("another country");
+    private final static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode anotherCountryNode = new CountryNode("another country");
 
-    private static TargetNode targetNode = new TargetNode("target", countryNode);
+    private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
-    private static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
 
     @BeforeAll
     private static void setUpBuilders() {

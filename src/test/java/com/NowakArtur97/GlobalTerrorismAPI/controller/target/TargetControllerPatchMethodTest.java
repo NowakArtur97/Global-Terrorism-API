@@ -84,7 +84,7 @@ class TargetControllerPatchMethodTest {
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
-    private static CountryNode country = new CountryNode("updated country");
+    private final static CountryNode country = new CountryNode("updated country");
 
     @BeforeAll
     private static void setUpBuilders() {

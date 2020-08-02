@@ -54,13 +54,13 @@ class TargetControllerPutMethodTest {
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static CountryNode countryNode = new CountryNode("country");
-    private static CountryNode anotherCountryNode = new CountryNode("another country");
+    private final static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode anotherCountryNode = new CountryNode("another country");
 
-    private static TargetNode targetNode = new TargetNode("target", countryNode);
+    private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
     @BeforeAll
     private static void setUpBuilders() {

@@ -51,10 +51,10 @@ class TargetControllerPostMethodTest {
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
-    private static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private static CountryNode countryNode = new CountryNode("country");
+    private final static CountryNode countryNode = new CountryNode("country");
 
     @BeforeAll
     private static void setUpBuilders() {
