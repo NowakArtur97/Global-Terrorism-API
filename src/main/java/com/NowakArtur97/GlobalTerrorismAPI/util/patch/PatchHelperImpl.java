@@ -22,7 +22,9 @@ class PatchHelperImpl implements PatchHelper {
 
         JsonValue patched = jsonPatch.apply(target);
 
-        return objectMapper.convertValue(patched, beanClass);
+        targetBean = objectMapper.convertValue(patched, beanClass);
+
+        return targetBean;
     }
 
     @Override
@@ -32,6 +34,8 @@ class PatchHelperImpl implements PatchHelper {
 
         JsonValue patched = jsonMergePatch.apply(target);
 
-        return objectMapper.convertValue(patched, beanClass);
+        targetBean = objectMapper.convertValue(patched, beanClass);
+
+        return targetBean;
     }
 }
