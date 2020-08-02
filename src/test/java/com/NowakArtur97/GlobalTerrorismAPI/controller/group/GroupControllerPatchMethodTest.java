@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZoneId;
@@ -34,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(methodMode =  DirtiesContext.MethodMode.BEFORE_METHOD)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("GroupController_Tests")
 class GroupControllerPatchMethodTest {
@@ -70,8 +71,8 @@ class GroupControllerPatchMethodTest {
     private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group 2 ", List.of(eventNode2, eventNode3));
     private final static GroupNode groupNodeWithMultipleEvents2 = new GroupNode("group 3", List.of(eventNode4, eventNode5));
 
-    @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository) {
+    @BeforeEach
+    private void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository) {
 
         userRepository.save(userNode);
 
