@@ -192,8 +192,7 @@ class EventServiceImplTest {
 
         Long expectedEventId = 1L;
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected)
-                .build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).build(ObjectType.NODE);
 
         when(eventRepository.findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(eventNodeExpected));
