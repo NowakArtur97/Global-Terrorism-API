@@ -7,7 +7,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import org.springframework.stereotype.Service;
@@ -19,20 +18,15 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
     private final GenericService<TargetNode, TargetDTO> targetService;
 
-    private final CountryService countryService;
-
-    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper, GenericService<TargetNode, TargetDTO> targetService, CountryService countryService) {
+    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper, GenericService<TargetNode, TargetDTO> targetService) {
         super(repository, objectMapper);
         this.targetService = targetService;
-        this.countryService = countryService;
     }
 
     @Override
     public EventNode save(EventNode eventNode) {
 
-        eventNode.getTarget().setCountryOfOrigin(
-                countryService.findByName(eventNode.getTarget().getCountryOfOrigin().getName())
-                        .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+        eventNode.setTarget(targetService.save(eventNode.getTarget()));
 
         return repository.save(eventNode);
     }

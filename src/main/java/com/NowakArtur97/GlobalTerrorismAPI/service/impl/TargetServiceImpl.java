@@ -20,6 +20,16 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
     }
 
     @Override
+    public TargetNode save(TargetNode targetNode) {
+
+        targetNode.setCountryOfOrigin(
+                countryService.findByName(targetNode.getCountryOfOrigin().getName())
+                        .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+
+        return repository.save(targetNode);
+    }
+
+    @Override
     public TargetNode saveNew(TargetDTO targetDTO) {
 
         TargetNode targetNode = objectMapper.map(targetDTO, TargetNode.class);
