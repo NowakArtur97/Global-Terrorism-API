@@ -74,8 +74,6 @@ class GroupControllerPatchMethodTest {
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository) {
 
-        groupRepository.findAll().forEach(System.out::println);
-
         userRepository.save(userNode);
 
         groupRepository.save(groupNode);
