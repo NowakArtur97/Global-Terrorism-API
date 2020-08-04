@@ -4,16 +4,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,20 +23,20 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
+    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
 
-    private Map<String, GroupNode> groupsWithEvents = new HashMap<>();
+    private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
-    private Map<String, CountryNode> allCountries = new HashMap<>();
+    private final Map<String, CountryNode> allCountries = new HashMap<>();
+
+    private final List<CityNode> allCities = new ArrayList<>();
 
     private final TargetService targetService;
 
@@ -54,8 +52,6 @@ class OnApplicationStartupEventListener {
     public void onApplicationStartup(ContextRefreshedEvent event) {
 
         if (targetService.isDatabaseEmpty()) {
-
-            userService.register(new UserDTO("testuser", "Password123!", "Password123!", "testuser123@email.com"));
 
             Sheet sheet = loadSheetFromFile();
 
@@ -74,59 +70,63 @@ class OnApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
+        saveUser();
+
         for (Row row : sheet) {
+
+            CityNode city = saveCity(row);
 
             CountryNode country = saveCountry(row);
 
             TargetNode target = saveTarget(row, country);
 
-            EventNode eventNode = createEvent(row, target);
+            EventNode event = saveEvent(row, target, city);
 
             String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
 
-            manageGroup(groupName, eventNode);
+            manageGroup(groupName, event);
         }
 
         saveAllGroups();
     }
 
-    private void saveAllGroups() {
+    private void saveUser() {
 
-        for (GroupNode groupNode : groupsWithEvents.values()) {
-
-            groupService.save(groupNode);
-        }
+        userService.register(new UserDTO("testuser", "Password123!", "Password123!", "testuser123@email.com"));
     }
 
-    private void manageGroup(String groupName, EventNode eventNode) {
+    private void manageGroup(String groupName, EventNode event) {
 
         if (groupsWithEvents.containsKey(groupName)) {
 
-            groupsWithEvents.get(groupName).addEvent(eventNode);
+            groupsWithEvents.get(groupName).addEvent(event);
 
         } else {
 
-            GroupNode newGroup = new GroupNode(groupName);
+            GroupNode group = new GroupNode(groupName);
 
-            newGroup.addEvent(eventNode);
+            group.addEvent(event);
 
-            if (isGroupUnknown(groupName)) {
+            if (isUnknown(groupName)) {
 
-                groupService.save(newGroup);
+                groupService.save(group);
 
             } else {
 
-                groupsWithEvents.put(groupName, newGroup);
+                groupsWithEvents.put(groupName, group);
             }
         }
     }
 
-    private boolean isGroupUnknown(String groupName) {
+    private void saveAllGroups() {
 
-        return groupName.equalsIgnoreCase("unknown");
+        for (GroupNode group : groupsWithEvents.values()) {
+
+            groupService.save(group);
+        }
     }
 
-    private EventNode createEvent(Row row, TargetNode target) {
+    private EventNode saveEvent(Row row, TargetNode target, CityNode city) {
 
         String cellValue;
 
@@ -154,8 +154,20 @@ class OnApplicationStartupEventListener {
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUICIDE.getIndex());
         boolean isSuicidal = parseBoolean(cellValue);
 
-        return saveEvent(yearOfEvent, monthOfEvent, dayOfEvent, eventSummary, isPartOfMultipleIncidents, isSuccessful,
-                isSuicidal, motive, target);
+        Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
+
+        return eventService.save(EventNode.builder().date(date).summary(eventSummary)
+                .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
+                .isSuicidal(isSuicidal).motive(motive).target(target).city(city).build());
+    }
+
+    private TargetNode saveTarget(Row row, CountryNode country) {
+
+        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
+
+        TargetNode target = new TargetNode(targetName, country);
+
+        return targetService.save(target);
     }
 
     private CountryNode saveCountry(Row row) {
@@ -178,26 +190,31 @@ class OnApplicationStartupEventListener {
         }
     }
 
-    private TargetNode saveTarget(Row row, CountryNode country) {
+    private CityNode saveCity(Row row) {
 
-        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
+        String cellValue;
 
-        TargetNode target = new TargetNode(targetName, country);
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_NAME.getIndex());
+        String name = cellValue;
 
-        return targetService.save(target);
-    }
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LATITUDE.getIndex());
+        double latitude = isNumeric(cellValue) ? parseDouble(cellValue) : 0;
 
-    private EventNode saveEvent(int yearOfEvent, int monthOfEvent, int dayOfEvent, String eventSummary,
-                                boolean isPartOfMultipleIncidents, boolean isSuccessful, boolean isSuicidal, String motive,
-                                TargetNode target) {
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LONGITUDE.getIndex());
+        double longitude = isNumeric(cellValue) ? parseDouble(cellValue) : 0;
 
-        Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
+        CityNode city = new CityNode(name, latitude, longitude);
 
-        EventNode eventNode = EventNode.builder().date(date).summary(eventSummary)
-                .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                .isSuicidal(isSuicidal).motive(motive).target(target).build();
+        if (!allCities.contains(city) || isUnknown(name)) {
 
-        return eventService.save(eventNode);
+//            city = cityRepository.save(city);
+
+//            log.info(String.valueOf(city.getId()));
+
+            allCities.add(city);
+        }
+
+        return city;
     }
 
     private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
@@ -254,6 +271,11 @@ class OnApplicationStartupEventListener {
         return value;
     }
 
+    private boolean isUnknown(String name) {
+
+        return name.equalsIgnoreCase("unknown");
+    }
+
     private boolean isMonthCorrect(int monthOfEvent) {
 
         return monthOfEvent > 0 && monthOfEvent <= 12;
@@ -272,6 +294,11 @@ class OnApplicationStartupEventListener {
     private int parseInt(String stringToParse) {
 
         return (int) Double.parseDouble(stringToParse);
+    }
+
+    private double parseDouble(String stringToParse) {
+
+        return Double.parseDouble(stringToParse);
     }
 
     private boolean parseBoolean(String stringToParse) {
