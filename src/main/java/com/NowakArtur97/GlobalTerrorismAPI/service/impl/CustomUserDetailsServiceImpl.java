@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
+class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
 

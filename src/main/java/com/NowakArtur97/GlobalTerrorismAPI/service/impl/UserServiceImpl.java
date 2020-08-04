@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
     private final static RoleNode DEFAULT_USER_ROLE = new RoleNode("user");
 

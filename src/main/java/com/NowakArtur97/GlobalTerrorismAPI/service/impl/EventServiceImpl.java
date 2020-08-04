@@ -7,6 +7,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,12 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
     private final GenericService<TargetNode, TargetDTO> targetService;
 
-    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper, GenericService<TargetNode, TargetDTO> targetService) {
+    private final CityService cityService;
+
+    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper, GenericService<TargetNode, TargetDTO> targetService, CityService cityService) {
         super(repository, objectMapper);
         this.targetService = targetService;
+        this.cityService = cityService;
     }
 
     @Override
@@ -37,6 +41,8 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         EventNode eventNode = objectMapper.map(eventDTO, EventNode.class);
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
+        eventNode.setCity(cityService.findByName(eventDTO.getCity().getName())
+                .orElse(cityService.saveNew(eventDTO.getCity())));
 
         return repository.save(eventNode);
     }

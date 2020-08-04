@@ -5,11 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.*;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -43,9 +39,9 @@ class OnApplicationStartupEventListener {
 
     private final GenericService<GroupNode, GroupDTO> groupService;
 
-    private final CityRepository cityRepository;
-
     private final CountryService countryService;
+
+    private final CityService cityService;
 
     private final UserService userService;
 
@@ -212,7 +208,7 @@ class OnApplicationStartupEventListener {
 
             allCities.add(city);
 
-            cityRepository.save(city);
+            cityService.save(city);
 
             return city;
         }

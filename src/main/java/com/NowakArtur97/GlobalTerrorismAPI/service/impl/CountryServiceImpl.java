@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CountryServiceImpl extends BaseGenericServiceImpl<CountryNode> implements CountryService {
+class CountryServiceImpl extends BaseGenericServiceImpl<CountryNode> implements CountryService {
 
     private final CountryRepository repository;
 
