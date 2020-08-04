@@ -82,7 +82,7 @@ class OnApplicationStartupEventListener {
 
             EventNode eventNode = createEvent(row, target);
 
-            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP.getIndex());
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
 
             manageGroup(groupName, eventNode);
         }
@@ -142,7 +142,7 @@ class OnApplicationStartupEventListener {
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_SUMMARY.getIndex());
         String eventSummary = !cellValue.isEmpty() ? cellValue : "";
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MOTIVE.getIndex());
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_MOTIVE.getIndex());
         String motive = !cellValue.isEmpty() ? cellValue : "";
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS.getIndex());
@@ -180,7 +180,7 @@ class OnApplicationStartupEventListener {
 
     private TargetNode saveTarget(Row row, CountryNode country) {
 
-        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET.getIndex());
+        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
 
         TargetNode target = new TargetNode(targetName, country);
 
