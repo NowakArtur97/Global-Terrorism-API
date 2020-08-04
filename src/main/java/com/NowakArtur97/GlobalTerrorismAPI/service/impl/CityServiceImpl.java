@@ -5,6 +5,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CityService {
 
@@ -13,5 +15,11 @@ public class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements
     public CityServiceImpl(CityRepository repository) {
         super(repository);
         this.repository = repository;
+    }
+
+    @Override
+    public Optional<CityNode> findByName(String name) {
+
+        return repository.findByName(name);
     }
 }
