@@ -5,13 +5,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -27,10 +27,9 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
+    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
     private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
@@ -43,6 +42,8 @@ class OnApplicationStartupEventListener {
     private final GenericService<EventNode, EventDTO> eventService;
 
     private final GenericService<GroupNode, GroupDTO> groupService;
+
+    private final CityRepository cityRepository;
 
     private final CountryService countryService;
 
@@ -207,9 +208,7 @@ class OnApplicationStartupEventListener {
 
         if (!allCities.contains(city) || isUnknown(name)) {
 
-//            city = cityRepository.save(city);
-
-//            log.info(String.valueOf(city.getId()));
+            cityRepository.save(city);
 
             allCities.add(city);
         }
