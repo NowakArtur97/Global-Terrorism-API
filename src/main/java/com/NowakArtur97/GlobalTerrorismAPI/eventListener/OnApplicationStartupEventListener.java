@@ -166,9 +166,7 @@ class OnApplicationStartupEventListener {
 
         String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
 
-        TargetNode target = new TargetNode(targetName, country);
-
-        return targetService.save(target);
+        return targetService.save(new TargetNode(targetName, country));
     }
 
     private CountryNode saveCountry(Row row) {
@@ -208,12 +206,16 @@ class OnApplicationStartupEventListener {
 
         if (!allCities.contains(city) || isUnknown(name)) {
 
+            allCities.add(city);
+
             cityRepository.save(city);
 
-            allCities.add(city);
-        }
+            return city;
 
-        return city;
+        } else {
+
+            return allCities.get(allCities.indexOf(city));
+        }
     }
 
     private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
