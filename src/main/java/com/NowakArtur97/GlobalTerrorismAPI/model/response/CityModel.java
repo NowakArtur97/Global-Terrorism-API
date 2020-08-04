@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -12,7 +13,7 @@ import org.springframework.hateoas.RepresentationModel;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-public class CityModel extends RepresentationModel<CityModel> {
+public class CityModel extends RepresentationModel<CityModel> implements City {
 
     @ApiModelProperty(notes = "The unique id of the City")
     private Long id;
