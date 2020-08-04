@@ -41,4 +41,7 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 
 	@ApiModelProperty(notes = "The event's target")
 	private TargetModel target;
+
+	@ApiModelProperty(notes = "The event's city")
+	private CityModel city;
 }

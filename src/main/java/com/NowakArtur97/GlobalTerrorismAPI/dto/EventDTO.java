@@ -52,4 +52,8 @@ public class EventDTO implements DTONode, Event {
 	@Valid
 	@NotNull(message = "{target.target.notBlank}")
 	private TargetDTO target;
+
+	@ApiModelProperty(notes = "The event's city", required = true)
+	@Valid
+	private CityDTO city;
 }

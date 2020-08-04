@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel(description = "Model responsible for City validation")
 @Data
@@ -22,12 +23,14 @@ public class CityDTO implements DTONode, City {
     private String name;
 
     @ApiModelProperty(notes = "The city's latitude", required = true, example = "1.00")
-    @Min(value = -90, message = "{city.longitude.min}")
-    @Max(value = 90, message = "{city.longitude.max}")
-    private double latitude;
+    @NotNull(message = "{city.latitude.notNull}")
+    @Min(value = -90, message = "{city.latitude.min}")
+    @Max(value = 90, message = "{city.latitude.max}")
+    private Double latitude;
 
     @ApiModelProperty(notes = "The city's longitude", required = true, example = "1.00")
+    @NotNull(message = "{city.longitude.notNull}")
     @Min(value = -180, message = "{city.longitude.min}")
     @Max(value = 180, message = "{city.longitude.max}")
-    private double longitude;
+    private Double longitude;
 }
