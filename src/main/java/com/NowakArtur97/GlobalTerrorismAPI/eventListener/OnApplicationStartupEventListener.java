@@ -33,7 +33,7 @@ class OnApplicationStartupEventListener {
 
     private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
-    private final Map<String, CountryNode> allCountries = new HashMap<>();
+    private final List<CountryNode> allCountries = new ArrayList<>();
 
     private final List<CityNode> allCities = new ArrayList<>();
 
@@ -173,15 +173,15 @@ class OnApplicationStartupEventListener {
 
         String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
 
-        if (allCountries.containsKey(name)) {
+        CountryNode country = new CountryNode(name);
 
-            return allCountries.get(name);
+        if (allCountries.contains(country)) {
+
+            return allCountries.get(allCountries.indexOf(country));
 
         } else {
 
-            CountryNode country = new CountryNode(name);
-
-            allCountries.put(name, country);
+            allCountries.add(country);
 
             countryService.save(country);
 
@@ -204,17 +204,17 @@ class OnApplicationStartupEventListener {
 
         CityNode city = new CityNode(name, latitude, longitude);
 
-        if (!allCities.contains(city) || isUnknown(name)) {
+        if (allCities.contains(city) && !isUnknown(name)) {
+
+            return allCities.get(allCities.indexOf(city));
+
+        } else {
 
             allCities.add(city);
 
             cityRepository.save(city);
 
             return city;
-
-        } else {
-
-            return allCities.get(allCities.indexOf(city));
         }
     }
 
