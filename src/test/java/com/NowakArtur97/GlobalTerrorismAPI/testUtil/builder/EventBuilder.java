@@ -1,11 +1,15 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -32,6 +36,8 @@ public final class EventBuilder {
     private Boolean isSuicidal = true;
 
     private Target target = null;
+
+    private City city = null;
 
     public EventBuilder withId(Long id) {
 
@@ -89,6 +95,13 @@ public final class EventBuilder {
         return this;
     }
 
+    public EventBuilder withCity(City city) {
+
+        this.city = city;
+
+        return this;
+    }
+
     public Event build(ObjectType type) {
 
         Event event;
@@ -98,20 +111,20 @@ public final class EventBuilder {
             case DTO:
                 event = EventDTO.builder().summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetDTO) target).build();
+                        .isSuicidal(isSuicidal).target((TargetDTO) target).city((CityDTO) city).build();
                 break;
 
             case NODE:
                 event = EventNode.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetNode) target).build();
+                        .isSuicidal(isSuicidal).target((TargetNode) target).city((CityNode) city).build();
                 break;
 
             case MODEL:
 
                 event = EventModel.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetModel) target).build();
+                        .isSuicidal(isSuicidal).target((TargetModel) target).city((CityModel) city).build();
                 break;
 
             default:
@@ -140,5 +153,7 @@ public final class EventBuilder {
         this.isSuicidal = true;
 
         this.target = null;
+
+        this.city = null;
     }
 }
