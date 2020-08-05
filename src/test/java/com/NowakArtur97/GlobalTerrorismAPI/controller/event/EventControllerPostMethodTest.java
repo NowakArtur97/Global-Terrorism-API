@@ -60,8 +60,8 @@ class EventControllerPostMethodTest {
     private JwtUtil jwtUtil;
 
     private static CountryBuilder countryBuilder;
-    private static CityBuilder cityBuilder;
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
 
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
@@ -73,8 +73,8 @@ class EventControllerPostMethodTest {
     private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
-        cityBuilder = new CityBuilder();
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -305,30 +305,6 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @Test
-    void when_add_event_with_invalid_geographical_location_of_city_should_return_errors() {
-
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
-        System.out.println(cityDTO);
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
-                                .content(ObjectTestMapper.asJsonString(eventDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(2))));
-    }
-
     @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
     @NullAndEmptySource
     void when_add_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
@@ -351,6 +327,30 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_with_invalid_geographical_location_of_city_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
