@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.json.JsonException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
@@ -46,7 +47,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception, WebRequest request) {
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
@@ -67,5 +68,15 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
         }
 
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
+    }
+
+    @ExceptionHandler({JsonException.class})
+    public ResponseEntity<Object> handleJsonException(JsonException exception) {
+
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+
+        errorResponse.addError(exception.getMessage());
+
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
