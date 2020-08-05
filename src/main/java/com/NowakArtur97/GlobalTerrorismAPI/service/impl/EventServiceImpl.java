@@ -43,12 +43,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
 
-        Optional<CityNode> cityNodeOptional = cityService.findByName(eventDTO.getCity().getName());
-        if (cityNodeOptional.isPresent()) {
-            eventNode.setCity(cityNodeOptional.get());
-        } else {
-            eventNode.setCity(cityService.saveNew(eventDTO.getCity()));
-        }
+        setEventCity(eventDTO, eventNode);
 
         return repository.save(eventNode);
     }
@@ -64,6 +59,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setId(id);
         eventNode.setTarget(updatedTarget);
+        setEventCity(eventDTO, eventNode);
 
         return repository.save(eventNode);
     }
@@ -120,5 +116,14 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         eventNode.setTarget(targetNode);
 
         return repository.save(eventNode);
+    }
+
+    private void setEventCity(EventDTO eventDTO, EventNode eventNode) {
+        Optional<CityNode> cityNodeOptional = cityService.findByName(eventDTO.getCity().getName());
+        if (cityNodeOptional.isPresent()) {
+            eventNode.setCity(cityNodeOptional.get());
+        } else {
+            eventNode.setCity(cityService.saveNew(eventDTO.getCity()));
+        }
     }
 }
