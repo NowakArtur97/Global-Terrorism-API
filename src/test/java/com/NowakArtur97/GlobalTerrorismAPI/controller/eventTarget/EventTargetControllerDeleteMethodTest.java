@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventTargetControllerDeleteMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}/targets";
 
     private MockMvc mockMvc;
 
@@ -72,11 +73,9 @@ class EventTargetControllerDeleteMethodTest {
         Long eventId = 1L;
         EventNode eventNode = (EventNode) eventBuilder.withId(eventId).build(ObjectType.NODE);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         when(eventService.deleteEventTarget(eventId)).thenReturn(Optional.of(eventNode));
 
-        assertAll(() -> mockMvc.perform(delete(linkWithParameter, eventId)
+        assertAll(() -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
@@ -90,12 +89,10 @@ class EventTargetControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         when(eventService.deleteEventTarget(eventId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -113,12 +110,10 @@ class EventTargetControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         when(eventService.deleteEventTarget(eventId)).thenThrow(new ResourceNotFoundException("TargetModel"));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

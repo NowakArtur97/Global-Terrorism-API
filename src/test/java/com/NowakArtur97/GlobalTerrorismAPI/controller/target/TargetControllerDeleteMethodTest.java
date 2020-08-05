@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TargetControllerDeleteMethodTest {
 
     private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER = BASE_PATH + "/" + "{id}";
 
     private MockMvc mockMvc;
 
@@ -81,11 +82,9 @@ class TargetControllerDeleteMethodTest {
 
         TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         when(targetService.delete(targetId)).thenReturn(Optional.of(targetNode));
 
-        assertAll(() -> mockMvc.perform(delete(linkWithParameter, targetId))
+        assertAll(() -> mockMvc.perform(delete(LINK_WITH_PARAMETER, targetId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(targetService, times(1)).delete(targetId),
@@ -101,12 +100,10 @@ class TargetControllerDeleteMethodTest {
 
         Long targetId = 1L;
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         when(targetService.delete(targetId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, targetId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, targetId))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())

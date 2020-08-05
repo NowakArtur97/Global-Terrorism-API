@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GroupEventsControllerDeleteMethodTest {
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
+    private final String LINK_WITH_PARAMETER = GROUP_BASE_PATH + "/{id}/events";
 
     private MockMvc mockMvc;
 
@@ -80,12 +81,10 @@ class GroupEventsControllerDeleteMethodTest {
 
         GroupNode groupNode = (GroupNode) groupBuilder.build(ObjectType.NODE);
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         when(groupService.deleteAllGroupEvents(groupId)).thenReturn(Optional.of(groupNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, groupId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, groupId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(groupService, times(1)).deleteAllGroupEvents(groupId),
@@ -101,12 +100,10 @@ class GroupEventsControllerDeleteMethodTest {
 
         Long groupId = 1L;
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         when(groupService.deleteAllGroupEvents(groupId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, groupId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, groupId))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty()).andExpect(content().json("{'status': 404}"))

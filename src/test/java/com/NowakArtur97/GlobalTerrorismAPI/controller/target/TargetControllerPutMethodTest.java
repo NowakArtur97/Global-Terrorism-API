@@ -44,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TargetControllerPutMethodTest {
 
     private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER = BASE_PATH + "/" + "{id}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -108,14 +109,12 @@ class TargetControllerPutMethodTest {
 
         String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId())
+                        .perform(put(LINK_WITH_PARAMETER, targetNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -139,14 +138,12 @@ class TargetControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, notExistingTargetId)
+                        .perform(put(LINK_WITH_PARAMETER, notExistingTargetId)
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -169,14 +166,12 @@ class TargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId())
+                        .perform(put(LINK_WITH_PARAMETER, targetNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -195,14 +190,12 @@ class TargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, targetNode.getId())
+                        .perform(put(LINK_WITH_PARAMETER, targetNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))

@@ -42,6 +42,7 @@ class EventTargetControllerPutMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}/targets";
 
     @Autowired
     private MockMvc mockMvc;
@@ -108,14 +109,12 @@ class EventTargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventNodeWithoutTarget.getId())
+                        .perform(put(LINK_WITH_PARAMETER, eventNodeWithoutTarget.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -138,14 +137,12 @@ class EventTargetControllerPutMethodTest {
 
         String pathToLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventNodeWithTarget.getId())
+                        .perform(put(LINK_WITH_PARAMETER, eventNodeWithTarget.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -167,14 +164,12 @@ class EventTargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTargetName).withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventNodeWithTarget.getId())
+                        .perform(put(LINK_WITH_PARAMETER, eventNodeWithTarget.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -193,14 +188,12 @@ class EventTargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, eventNodeWithTarget.getId())
+                        .perform(put(LINK_WITH_PARAMETER, eventNodeWithTarget.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -219,14 +212,12 @@ class EventTargetControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}/targets";
-
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(linkWithParameter, notExistingId)
+                        .perform(put(LINK_WITH_PARAMETER, notExistingId)
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
