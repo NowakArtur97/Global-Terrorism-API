@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
@@ -41,8 +42,13 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         EventNode eventNode = objectMapper.map(eventDTO, EventNode.class);
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
-        eventNode.setCity(cityService.findByName(eventDTO.getCity().getName())
-                .orElse(cityService.saveNew(eventDTO.getCity())));
+
+        Optional<CityNode> cityNodeOptional = cityService.findByName(eventDTO.getCity().getName());
+        if (cityNodeOptional.isPresent()) {
+            eventNode.setCity(cityNodeOptional.get());
+        } else {
+            eventNode.setCity(cityService.saveNew(eventDTO.getCity()));
+        }
 
         return repository.save(eventNode);
     }
