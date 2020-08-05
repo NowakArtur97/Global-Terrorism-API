@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.bulk;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
@@ -57,9 +57,21 @@ class BulkControllerTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository) {
+    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
 
         userRepository.deleteAll();
+
+        cityRepository.deleteAll();
+
+        countryRepository.deleteAll();
+
+        groupRepository.deleteAll();
+
+        eventRepository.deleteAll();
+
+        targetRepository.deleteAll();
     }
 
     @Test

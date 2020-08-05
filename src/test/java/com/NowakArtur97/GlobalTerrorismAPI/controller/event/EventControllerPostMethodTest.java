@@ -84,10 +84,12 @@ class EventControllerPostMethodTest {
 
     @AfterAll
     private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                                 @Autowired CountryRepository countryRepository, @Autowired EventRepository eventRepository,
-                                 @Autowired TargetRepository targetRepository) {
+                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
+                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
 
         userRepository.deleteAll();
+
+        cityRepository.deleteAll();
 
         countryRepository.deleteAll();
 
