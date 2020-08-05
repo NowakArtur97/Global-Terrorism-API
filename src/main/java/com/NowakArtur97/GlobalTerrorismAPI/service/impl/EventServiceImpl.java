@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
@@ -11,11 +12,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implements EventService {
 
     private final GenericService<TargetNode, TargetDTO> targetService;
@@ -32,6 +35,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     public EventNode save(EventNode eventNode) {
 
         eventNode.setTarget(targetService.save(eventNode.getTarget()));
+        setEventCity(eventNode, objectMapper.map(eventNode.getCity(), CityDTO.class));
 
         return repository.save(eventNode);
     }
@@ -43,7 +47,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
 
-        setEventCity(eventDTO, eventNode);
+        setEventCity(eventNode, eventDTO.getCity());
 
         return repository.save(eventNode);
     }
@@ -59,7 +63,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setId(id);
         eventNode.setTarget(updatedTarget);
-        setEventCity(eventDTO, eventNode);
+        setEventCity(eventNode, eventDTO.getCity());
 
         return repository.save(eventNode);
     }
@@ -118,12 +122,12 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         return repository.save(eventNode);
     }
 
-    private void setEventCity(EventDTO eventDTO, EventNode eventNode) {
-        Optional<CityNode> cityNodeOptional = cityService.findByName(eventDTO.getCity().getName());
+    private void setEventCity(EventNode eventNode, CityDTO cityDTO) {
+        Optional<CityNode> cityNodeOptional = cityService.findByName(cityDTO.getName());
         if (cityNodeOptional.isPresent()) {
             eventNode.setCity(cityNodeOptional.get());
         } else {
-            eventNode.setCity(cityService.saveNew(eventDTO.getCity()));
+            eventNode.setCity(cityService.saveNew(cityDTO));
         }
     }
 }

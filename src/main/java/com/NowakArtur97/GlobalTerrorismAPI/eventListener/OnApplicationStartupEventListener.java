@@ -41,8 +41,6 @@ class OnApplicationStartupEventListener {
 
     private final CountryService countryService;
 
-    private final CityService cityService;
-
     private final UserService userService;
 
     @EventListener
@@ -207,8 +205,6 @@ class OnApplicationStartupEventListener {
         } else {
 
             allCities.add(city);
-
-            cityService.save(city);
 
             return city;
         }
