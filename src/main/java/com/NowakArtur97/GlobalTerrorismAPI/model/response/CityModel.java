@@ -26,5 +26,4 @@ public class CityModel extends RepresentationModel<CityModel> implements City {
 
     @ApiModelProperty(notes = "The city's longitude")
     private double longitude;
-
 }
