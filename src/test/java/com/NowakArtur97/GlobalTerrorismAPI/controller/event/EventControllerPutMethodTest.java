@@ -73,6 +73,8 @@ class EventControllerPutMethodTest {
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
 
     @BeforeAll
@@ -86,9 +88,12 @@ class EventControllerPutMethodTest {
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
-                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
+                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository,
+                              @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
+
+        cityRepository.save(cityNode);
 
         countryRepository.save(anotherCountryNode);
 
@@ -116,7 +121,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_valid_event_should_return_updated_event_as_model() throws ParseException {
+    void when_update_valid_event_should_return_updated_event() throws ParseException {
 
         String updatedSummary = "summary updated";
         String updatedMotive = "motive updated";
@@ -170,7 +175,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_valid_event_with_updated_target_should_return_updated_event_as_model_with_updated_target() {
+    void when_update_valid_event_with_updated_target_should_return_updated_event_with_updated_target() {
 
         String updatedTarget = "updated target";
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
@@ -215,7 +220,62 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_valid_event_with_not_existing_id_should_return_new_event_as_model() {
+    void when_update_valid_event_with_existing_city_should_return_event_with_existing_city() throws ParseException {
+
+        String updatedSummary = "summary updated";
+        String updatedMotive = "motive updated";
+        Date updatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").parse("01/08/2010 02:00:00:000");
+        boolean updatedIsPartOfMultipleIncidents = false;
+        boolean updatedIsSuccessful = false;
+        boolean updatedIsSuicidal = false;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
+                .withLongitude(cityNode.getLongitude()).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive).withDate(updatedDate)
+                .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
+                .withIsSuicidal(updatedIsSuccessful).withTarget(targetDTO).withCity(cityDTO)
+                .build(ObjectType.DTO);
+
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                        .andExpect(jsonPath("id", is(eventNode.getId().intValue())))
+                        .andExpect(jsonPath("summary", is(updatedSummary)))
+                        .andExpect(jsonPath("motive", is(updatedMotive)))
+                        .andExpect(jsonPath("date", is(notNullValue())))
+                        .andExpect(jsonPath("isSuicidal", is(updatedIsSuicidal)))
+                        .andExpect(jsonPath("isSuccessful", is(updatedIsSuccessful)))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(updatedIsPartOfMultipleIncidents)))
+                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
+                        .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("city.links").isEmpty()));
+    }
+
+    @Test
+    void when_update_valid_event_with_not_existing_id_should_return_new_event() {
 
         Long notExistingId = 10000L;
 

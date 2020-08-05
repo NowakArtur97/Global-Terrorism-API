@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventControllerDeleteMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}";
 
     private MockMvc mockMvc;
 
@@ -81,12 +82,10 @@ class EventControllerDeleteMethodTest {
 
         EventNode eventNode = (EventNode) eventBuilder.withTarget(null).build(ObjectType.NODE);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
         when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(eventService, times(1)).delete(eventId),
@@ -104,12 +103,10 @@ class EventControllerDeleteMethodTest {
 
         EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
         when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
                 () -> verify(eventService, times(1)).delete(eventId),
@@ -125,12 +122,10 @@ class EventControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
         when(eventService.delete(eventId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(linkWithParameter, eventId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))

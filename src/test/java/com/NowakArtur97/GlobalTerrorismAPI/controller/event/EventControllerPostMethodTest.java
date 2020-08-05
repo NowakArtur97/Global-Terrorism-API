@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
@@ -69,6 +70,8 @@ class EventControllerPostMethodTest {
 
     private final static CountryNode countryNode = new CountryNode("country");
 
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+
     @BeforeAll
     private static void setUpBuilders() {
 
@@ -79,11 +82,14 @@ class EventControllerPostMethodTest {
     }
 
     @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository,
+                              @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
 
         countryRepository.save(countryNode);
+
+        cityRepository.save(cityNode);
     }
 
     @AfterAll
@@ -105,7 +111,7 @@ class EventControllerPostMethodTest {
     }
 
     @Test
-    void when_add_valid_event_should_return_new_event_as_model() {
+    void when_add_valid_event_should_return_new_event() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -143,6 +149,49 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.links").isEmpty()));
+    }
+
+    @Test
+    void when_add_valid_event_with_existing_city_should_return_new_event_with_existing_city() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
+                .withLongitude(cityNode.getLongitude()).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", notNullValue()))
+                        .andExpect(jsonPath("links[1].href", notNullValue()))
+                        .andExpect(jsonPath("id", notNullValue()))
+                        .andExpect(jsonPath("summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventDTO.getMotive())))
+                        .andExpect(jsonPath("date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventDTO.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", notNullValue()))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryDTO.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
+                        .andExpect(jsonPath("city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
