@@ -12,9 +12,9 @@ public final class CityBuilder {
 
     private String name = "city";
 
-    private double latitude = 45.0;
+    private Double latitude = 45.0;
 
-    private double longitude = 45.0;
+    private Double longitude = 45.0;
 
     public CityBuilder withId(Long id) {
 
@@ -82,5 +82,9 @@ public final class CityBuilder {
         this.id = 1L;
 
         this.name = "city";
+
+        this.latitude = 45.0;
+
+        this.longitude = 45.0;
     }
 }
