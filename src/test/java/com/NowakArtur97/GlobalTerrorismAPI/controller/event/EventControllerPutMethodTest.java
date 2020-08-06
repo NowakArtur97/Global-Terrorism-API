@@ -15,7 +15,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.Matchers;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -350,7 +349,7 @@ class EventControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: Event Target Country: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" "})
-    void when_add_event_with_not_existing_country_should_return_errors(String invalidCountryName) {
+    void when_update_event_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -483,7 +482,8 @@ class EventControllerPutMethodTest {
 
     @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
     @NullAndEmptySource
-    void when_add_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
+    @ValueSource(strings = {" "})
+    void when_update_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -503,11 +503,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_add_event_with_invalid_geographical_location_of_city_should_return_errors() {
+    void when_update_event_with_invalid_geographical_location_of_city_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -528,11 +528,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
-    void when_add_event_with_too_small_city_latitude_should_return_errors() {
+    void when_update_event_with_too_small_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = -91.0;
 
@@ -554,11 +554,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City latitude must be greater or equal to -90.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_add_event_with_too_big_city_latitude_should_return_errors() {
+    void when_update_event_with_too_big_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = 91.0;
 
@@ -580,11 +580,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City latitude must be less or equal to 90.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_add_event_with_too_small_city_longitude_should_return_errors() {
+    void when_update_event_with_too_small_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = -181.0;
 
@@ -606,11 +606,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be greater or equal to -180.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_add_event_with_too_big_city_longitude_should_return_errors() {
+    void when_update_event_with_too_big_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = 181.0;
 
@@ -632,6 +632,6 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
-                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }

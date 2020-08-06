@@ -21,7 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -35,6 +37,8 @@ class EventControllerPatchMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = EVENT_BASE_PATH + "/" + "{id}";
+    private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = EVENT_BASE_PATH + "/" + "{id2}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,19 +55,21 @@ class EventControllerPatchMethodTest {
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
     private final static TargetNode anotherTargetNode = new TargetNode("target", countryNode);
 
-    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true);
-    private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false);
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
+    private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false, anotherTargetNode, cityNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
-                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
+                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository,
+                              @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
 
         countryRepository.save(anotherCountryNode);
 
-        eventNode.setTarget(targetNode);
-        anotherEventNode.setTarget(anotherTargetNode);
+        cityRepository.save(cityNode);
 
         eventRepository.save(eventNode);
         eventRepository.save(anotherEventNode);
@@ -104,8 +110,6 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" }," +
@@ -120,7 +124,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -141,8 +145,10 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.target", is(targetNode.getTarget())))
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
-                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
-        }
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
+                            .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                            .andExpect(jsonPath("city.links").isEmpty()));        }
 
         @Test
         void when_partial_update_valid_events_target_using_json_patch_should_return_partially_updated_node() {
@@ -154,8 +160,6 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": \"" + updatedCountryName + "\" }" +
@@ -166,7 +170,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, anotherEventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, anotherEventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -187,8 +191,10 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.target", is(updatedTargetName)))
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
-                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
-        }
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                            .andExpect(jsonPath("city.links").isEmpty()));        }
 
         @Test
         void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
@@ -201,8 +207,6 @@ class EventControllerPatchMethodTest {
             boolean updatedIsPartOfMultipleIncidents = false;
             boolean updatedIsSuccessful = false;
             boolean updatedIsSuicidal = false;
-
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary + "\" }," +
@@ -217,7 +221,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, notExistingId)
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, notExistingId)
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -234,8 +238,6 @@ class EventControllerPatchMethodTest {
         @ValueSource(strings = {" "})
         void when_partial_update_invalid_events_target_using_json_patch_should_have_errors(String invalidTarget) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + invalidTarget + "\" }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -243,7 +245,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
@@ -260,8 +262,6 @@ class EventControllerPatchMethodTest {
 
             String updatedTargetName = "updated target";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": " + null + "}" +
@@ -272,7 +272,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
@@ -290,8 +290,6 @@ class EventControllerPatchMethodTest {
             String updatedTargetName = "updated target";
             String notExistingCountryName = "not existing country";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": \"" + notExistingCountryName + "\" }" +
@@ -302,7 +300,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
@@ -316,8 +314,6 @@ class EventControllerPatchMethodTest {
 
         @Test
         void when_partial_update_invalid_event_with_null_fields_using_json_patch_should_return_errors() {
-
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": " + null + "}," +
@@ -333,7 +329,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -360,8 +356,6 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_with_invalid_summary_using_json_patch_should_return_errors(
                 String invalidSummary) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + invalidSummary + "\" }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -369,7 +363,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -385,8 +379,6 @@ class EventControllerPatchMethodTest {
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_motive_using_json_patch_should_return_errors(String invalidMotive) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + invalidMotive + "\" }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -394,7 +386,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -410,8 +402,6 @@ class EventControllerPatchMethodTest {
 
             String invalidDate = "2101-08-05";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
             String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + invalidDate + "\" }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -419,7 +409,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonPatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
@@ -427,6 +417,152 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_event_with_invalid_city_name_using_json_patch_should_return_errors(String invalidCityName) {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": \"" + invalidCityName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_null_city_values_using_json_patch_should_return_errors(){
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": " + null + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": " + null + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + null + " }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_small_city_latitude_using_json_patch_should_return_errors() {
+
+            double invalidCityLatitude = -91.0;
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": \"" + invalidCityLatitude + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City latitude must be greater or equal to -90.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_big_city_latitude_using_json_patch_should_return_errors() {
+
+            double invalidCityLatitude = 91.0;
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": \"" + invalidCityLatitude + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City latitude must be less or equal to 90.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_small_city_longitude_using_json_patch_should_return_errors() {
+
+            double invalidCityLongitude = -181.0;
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": \"" + invalidCityLongitude + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City longitude must be greater or equal to -180.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_big_city_longitude_using_json_patch_should_return_errors() {
+
+            double invalidCityLongitude = 181.0;
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": \"" + invalidCityLongitude + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
@@ -448,8 +584,6 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", " +
                     "\"motive\" : \"" + updatedMotive + "\", " +
                     "\"date\" : \"" + updatedEventDateString + "\", " +
@@ -462,7 +596,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -483,8 +617,10 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.target", is(targetNode.getTarget())))
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
-                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
-        }
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                            .andExpect(jsonPath("city.links").isEmpty()));        }
 
         @Test
         void when_partial_update_valid_events_target_using_json_merge_patch_should_return_partially_updated_node() {
@@ -496,8 +632,6 @@ class EventControllerPatchMethodTest {
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch =
                     "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
                             "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\"}}}";
@@ -507,7 +641,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, anotherEventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, anotherEventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -528,11 +662,13 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.target", is(updatedTargetName)))
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
-                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty()));
-        }
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                            .andExpect(jsonPath("city.links").isEmpty()));        }
 
         @Test
-        void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
+        void when_partial_update_valid_event_but_event_not_exist_using_json_merge_patch_should_return_error_response() {
 
             Long notExistingId = 1000L;
 
@@ -542,8 +678,6 @@ class EventControllerPatchMethodTest {
             boolean updatedIsPartOfMultipleIncidents = false;
             boolean updatedIsSuccessful = false;
             boolean updatedIsSuicidal = false;
-
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
 
             String jsonMergePatch = "{\"summary\" : \"" + updatedSummary + "\", " +
                     "\"motive\" : \"" + updatedMotive + "\", " +
@@ -557,7 +691,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, notExistingId)
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, notExistingId)
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -574,8 +708,6 @@ class EventControllerPatchMethodTest {
         @ValueSource(strings = {" "})
         void when_partial_update_invalid_events_target_using_json_merge_patch_should_have_errors(String invalidTarget) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"target\" : { \"target\" : \"" + invalidTarget + "\"}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -583,7 +715,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
@@ -600,8 +732,6 @@ class EventControllerPatchMethodTest {
 
             String updatedTargetName = "updated target";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch =
                     "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
                             "\"countryOfOrigin\" : { \"name\" : " + null + "}}}";
@@ -611,7 +741,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
@@ -629,8 +759,6 @@ class EventControllerPatchMethodTest {
             String updatedTargetName = "updated target";
             String notExistingCountryName = "not existing country";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch =
                     "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
                             "\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\"}}}";
@@ -640,7 +768,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
@@ -655,8 +783,6 @@ class EventControllerPatchMethodTest {
         @Test
         void when_partial_update_invalid_event_with_null_fields_using_json_merge_patch_should_return_errors() {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"summary\" : " + null + ", " +
                     "\"motive\" : " + null + ", " +
                     "\"date\" : " + null + ", " +
@@ -670,7 +796,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -696,8 +822,6 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_with_invalid_summary_using_json_merge_patch_should_return_errors(
                 String invalidSummary) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"summary\" : \"" + invalidSummary + "\"}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -705,7 +829,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -722,8 +846,6 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_with_invalid_motive_using_json_merge_patch_should_return_errors(
                 String invalidMotive) {
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"motive\" : \"" + invalidMotive + "\"}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -731,7 +853,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -747,8 +869,6 @@ class EventControllerPatchMethodTest {
 
             String invalidDate = "2101-08-05";
 
-            String linkWithParameter = EVENT_BASE_PATH + "/" + "{id2}";
-
             String jsonMergePatch = "{\"date\" : \"" + invalidDate + "\"}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -756,7 +876,7 @@ class EventControllerPatchMethodTest {
 
             assertAll(
                     () -> mockMvc
-                            .perform(patch(linkWithParameter, eventNode.getId())
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
                                     .header("Authorization", "Bearer " + token)
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
@@ -764,6 +884,148 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("Event date cannot be in the future.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_event_with_invalid_city_name_using_json_merge_patch_should_return_errors(String invalidCityName) {
+            String jsonMergePatch = "{\"city\" : {\"name\" : \"" + invalidCityName + "\" }}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_null_city_values_using_json_merge_patch_should_return_errors(){
+
+            String jsonMergePatch = "{\"city\" : " +
+                    "{\"name\" : " + null + ", \"latitude\" : " + null + ", \"longitude\" : " + null + " }}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_small_city_latitude_using_merge_json_patch_should_return_errors() {
+
+            double invalidCityLatitude = -91.0;
+
+            String jsonMergePatch = "{\"city\" : {\"latitude\" : \"" + invalidCityLatitude + "\"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City latitude must be greater or equal to -90.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_big_city_latitude_using_json_merge_patch_should_return_errors() {
+
+            double invalidCityLatitude = 91.0;
+
+            String jsonMergePatch = "{\"city\" : {\"latitude\" : \"" + invalidCityLatitude + "\"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City latitude must be less or equal to 90.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_small_city_longitude_using_json_merge_patch_should_return_errors() {
+
+            double invalidCityLongitude = -181.0;
+
+            String jsonMergePatch = "{\"city\" : {\"longitude\" : \"" + invalidCityLongitude + "\"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City longitude must be greater or equal to -180.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_too_big_city_longitude_using_json_merge_patch_should_return_errors() {
+
+            double invalidCityLongitude = 181.0;
+
+            String jsonMergePatch = "{\"city\" : {\"longitude\" : \"" + invalidCityLongitude + "\"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
