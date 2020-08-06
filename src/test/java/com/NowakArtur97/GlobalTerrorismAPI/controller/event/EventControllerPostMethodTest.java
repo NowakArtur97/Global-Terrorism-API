@@ -149,6 +149,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
@@ -190,8 +192,10 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.name", is(countryDTO.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                        .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
-                        .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("city.id", notNullValue()))
+                        .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 

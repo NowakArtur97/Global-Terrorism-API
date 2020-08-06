@@ -53,12 +53,14 @@ class EventControllerPatchMethodTest {
     private final static CountryNode anotherCountryNode = new CountryNode("another country");
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
-    private final static TargetNode anotherTargetNode = new TargetNode("target", countryNode);
+    private final static TargetNode anotherTargetNode = new TargetNode("target2", countryNode);
+    private final static TargetNode anotherTargetNode2 = new TargetNode("target 3", countryNode);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
     private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false, anotherTargetNode, cityNode);
+    private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(), true, false, true, anotherTargetNode2, cityNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
@@ -73,6 +75,7 @@ class EventControllerPatchMethodTest {
 
         eventRepository.save(eventNode);
         eventRepository.save(anotherEventNode);
+        eventRepository.save(anotherEventNode2);
     }
 
     @AfterAll
@@ -148,7 +151,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
-                            .andExpect(jsonPath("city.links").isEmpty()));        }
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
 
         @Test
         void when_partial_update_valid_events_target_using_json_patch_should_return_partially_updated_node() {
@@ -192,9 +196,63 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
-                            .andExpect(jsonPath("city.links").isEmpty()));        }
+                            .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_valid_events_city_using_json_patch_should_return_partially_updated_node() {
+
+            String updatedCityName = "updated city";
+            Double updatedCityLatitude = 20.0;
+            Double updatedCityLongitude = 20.0;
+
+            String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
+            String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": \"" + updatedCityName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": " + updatedCityLatitude + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + updatedCityLongitude + " }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, anotherEventNode2.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                            .andExpect(jsonPath("id", is(anotherEventNode2.getId().intValue())))
+                            .andExpect(jsonPath("summary", is(anotherEventNode2.getSummary())))
+                            .andExpect(jsonPath("motive", is(anotherEventNode2.getMotive())))
+                            .andExpect(jsonPath("date", is(notNullValue())))
+                            .andExpect(jsonPath("isSuicidal", is(anotherEventNode2.getIsSuicidal())))
+                            .andExpect(jsonPath("isSuccessful", is(anotherEventNode2.getIsSuccessful())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode2.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                            .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.id", is(anotherTargetNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.target", is(anotherTargetNode2.getTarget())))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.name", is(updatedCityName)))
+                            .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
+                            .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
 
         @Test
         void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
@@ -445,7 +503,7 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_with_null_city_values_using_json_patch_should_return_errors(){
+        void when_partial_update_event_with_null_city_values_using_json_patch_should_return_errors() {
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": " + null + " }," +
@@ -618,9 +676,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
-                            .andExpect(jsonPath("city.links").isEmpty()));        }
+                            .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
 
         @Test
         void when_partial_update_valid_events_target_using_json_merge_patch_should_return_partially_updated_node() {
@@ -663,9 +724,60 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
-                            .andExpect(jsonPath("city.links").isEmpty()));        }
+                            .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_valid_events_city_using_json_merge_patch_should_return_partially_updated_node() {
+
+            String updatedCityName = "updated city";
+            Double updatedCityLatitude = 20.0;
+            Double updatedCityLongitude = 20.0;
+
+            String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
+            String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
+
+            String jsonMergePatch = "{\"city\" : " +
+                    "{\"name\" : \"" + updatedCityName + "\", \"latitude\" : " + updatedCityLatitude + ", \"longitude\" : " + updatedCityLongitude + " }}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, anotherEventNode2.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                            .andExpect(jsonPath("id", is(anotherEventNode2.getId().intValue())))
+                            .andExpect(jsonPath("summary", is(anotherEventNode2.getSummary())))
+                            .andExpect(jsonPath("motive", is(anotherEventNode2.getMotive())))
+                            .andExpect(jsonPath("date", is(notNullValue())))
+                            .andExpect(jsonPath("isSuicidal", is(anotherEventNode2.getIsSuicidal())))
+                            .andExpect(jsonPath("isSuccessful", is(anotherEventNode2.getIsSuccessful())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode2.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                            .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.id", is(anotherTargetNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.target", is(anotherTargetNode2.getTarget())))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("city.id", notNullValue()))
+                            .andExpect(jsonPath("city.name", is(updatedCityName)))
+                            .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
+                            .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("city.links").isEmpty()));
+        }
 
         @Test
         void when_partial_update_valid_event_but_event_not_exist_using_json_merge_patch_should_return_error_response() {
@@ -911,7 +1023,7 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_with_null_city_values_using_json_merge_patch_should_return_errors(){
+        void when_partial_update_event_with_null_city_values_using_json_merge_patch_should_return_errors() {
 
             String jsonMergePatch = "{\"city\" : " +
                     "{\"name\" : " + null + ", \"latitude\" : " + null + ", \"longitude\" : " + null + " }}";

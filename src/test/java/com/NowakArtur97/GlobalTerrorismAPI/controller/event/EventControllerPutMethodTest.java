@@ -170,6 +170,8 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
@@ -215,6 +217,8 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
@@ -270,6 +274,8 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
@@ -312,6 +318,8 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty()));
     }
 
