@@ -5,19 +5,20 @@ import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -78,12 +79,14 @@ class EventControllerGetMethodTest {
     @Mock
     private ViolationHelper<EventNode, EventDTO> violationHelper;
 
+    private static CityBuilder cityBuilder;
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
+        cityBuilder = new CityBuilder();
         targetBuilder = new TargetBuilder();
         eventBuilder = new EventBuilder();
     }
@@ -169,6 +172,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[0].city.links").isEmpty())
+                        .andExpect(jsonPath("content[0].city.id", is(eventModel1.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.name", is(eventModel1.getCity().getName())))
+                        .andExpect(jsonPath("content[0].city.latitude", is(eventModel1.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[0].city.longitude", is(eventModel1.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -186,6 +195,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[1].city.links").isEmpty())
+                        .andExpect(jsonPath("content[1].city.id", is(eventModel2.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.name", is(eventModel2.getCity().getName())))
+                        .andExpect(jsonPath("content[1].city.latitude", is(eventModel2.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[1].city.longitude", is(eventModel2.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -203,6 +218,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[2].city.links").isEmpty())
+                        .andExpect(jsonPath("content[2].city.id", is(eventModel3.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[2].city.name", is(eventModel3.getCity().getName())))
+                        .andExpect(jsonPath("content[2].city.latitude", is(eventModel3.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[2].city.longitude", is(eventModel3.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[3].id", is(eventModel4.getId().intValue())))
                         .andExpect(jsonPath("content[3].summary", is(eventModel4.getSummary())))
                         .andExpect(jsonPath("content[3].motive", is(eventModel4.getMotive())))
@@ -220,6 +241,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel4.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3].target.id", is(eventModel4.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[3].target.target", is(eventModel4.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[3].city.links").isEmpty())
+                        .andExpect(jsonPath("content[3].city.id", is(eventModel4.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[3].city.name", is(eventModel4.getCity().getName())))
+                        .andExpect(jsonPath("content[3].city.latitude", is(eventModel4.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[3].city.longitude", is(eventModel4.getCity().getLongitude())))
+
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
@@ -301,6 +328,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[0].city.links").isEmpty())
+                        .andExpect(jsonPath("content[0].city.id", is(eventModel1.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.name", is(eventModel1.getCity().getName())))
+                        .andExpect(jsonPath("content[0].city.latitude", is(eventModel1.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[0].city.longitude", is(eventModel1.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
                         .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
@@ -319,6 +352,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[1].city.links").isEmpty())
+                        .andExpect(jsonPath("content[1].city.id", is(eventModel2.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.name", is(eventModel2.getCity().getName())))
+                        .andExpect(jsonPath("content[1].city.latitude", is(eventModel2.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[1].city.longitude", is(eventModel2.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[2].id", is(eventModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].summary", is(eventModel3.getSummary())))
                         .andExpect(jsonPath("content[2].motive", is(eventModel3.getMotive())))
@@ -338,6 +377,12 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getTarget().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
+                        .andExpect(jsonPath("content[2].city.links").isEmpty())
+                        .andExpect(jsonPath("content[2].city.id", is(eventModel3.getCity().getId().intValue())))
+                        .andExpect(jsonPath("content[2].city.name", is(eventModel3.getCity().getName())))
+                        .andExpect(jsonPath("content[2].city.latitude", is(eventModel3.getCity().getLatitude())))
+                        .andExpect(jsonPath("content[2].city.longitude", is(eventModel3.getCity().getLongitude())))
+
                         .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
@@ -414,13 +459,15 @@ class EventControllerGetMethodTest {
 
         Long eventId = 1L;
 
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        CityModel cityModel = (CityModel) cityBuilder.build(ObjectType.MODEL);
         TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId();
         targetModel.add(new Link(pathToTargetLink));
 
-        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
+        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).withCity(cityModel).build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         eventModel.add(new Link(pathToEventLink));
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
@@ -450,51 +497,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
                         .andExpect(jsonPath("target.target", is(targetModel.getTarget())))
-                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink))),
-                () -> verify(eventService, times(1)).findById(eventId),
-                () -> verifyNoMoreInteractions(eventService),
-                () -> verify(modelAssembler, times(1)).toModel(eventNode),
-                () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
-    }
-
-    @Test
-    void when_find_existing_event_without_target_should_return_event_without_target() {
-
-        Long eventId = 1L;
-
-        EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
-        EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
-
-        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
-        Link eventLink = new Link(pathToEventLink);
-        eventModel.add(eventLink);
-
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
-
-        when(eventService.findById(eventId)).thenReturn(Optional.of(eventNode));
-        when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
-
-        assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
-                        .andExpect(jsonPath("links[1].href").doesNotExist())
-                        .andExpect(jsonPath("id", is(eventId.intValue())))
-                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
-                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
-                        .andExpect(jsonPath("date",
-                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
-                                                .toLocalDate()))))
-                        .andExpect(jsonPath("isSuicidal", is(eventModel.getIsSuicidal())))
-                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
-                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
-                        .andExpect(jsonPath("target").value(IsNull.nullValue())),
+                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("city.links").isEmpty())
+                        .andExpect(jsonPath("city.id", is(cityModel.getId().intValue())))
+                        .andExpect(jsonPath("city.name", is(cityModel.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityModel.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityModel.getLongitude()))),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
@@ -544,17 +552,31 @@ class EventControllerGetMethodTest {
 
                 counterForUtilMethodsNode++;
 
+                CityNode cityNode = (CityNode) cityBuilder
+                        .withId((long) counterForUtilMethodsModel)
+                        .withName("city" + counterForUtilMethodsModel)
+                        .withLatitude((double) (20 + counterForUtilMethodsModel))
+                        .withLongitude((double) (40 + counterForUtilMethodsModel))
+                        .build(ObjectType.NODE);
+
                 TargetNode targetNode = (TargetNode) targetBuilder.withId((long) counterForUtilMethodsNode).withTarget("target" + counterForUtilMethodsNode)
                         .build(ObjectType.NODE);
 
                 return eventBuilder.withId((long) counterForUtilMethodsNode).withSummary(summary + counterForUtilMethodsNode)
                         .withMotive(motive + counterForUtilMethodsNode).withIsPartOfMultipleIncidents(isPartOfMultipleIncidents)
-                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetNode)
+                        .withIsSuccessful(isSuccessful).withIsSuicidal(isSuicidal).withTarget(targetNode).withCity(cityNode)
                         .build(ObjectType.NODE);
 
             case MODEL:
 
                 counterForUtilMethodsModel++;
+
+                CityModel cityModel = (CityModel) cityBuilder
+                        .withId((long) counterForUtilMethodsModel)
+                        .withName("city" + counterForUtilMethodsModel)
+                        .withLatitude((double) (20 + counterForUtilMethodsModel))
+                        .withLongitude((double) (40 + counterForUtilMethodsModel))
+                        .build(ObjectType.MODEL);
 
                 TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
                         .build(ObjectType.MODEL);
@@ -569,6 +591,7 @@ class EventControllerGetMethodTest {
                         .withIsSuccessful(isSuccessful)
                         .withIsSuicidal(isSuicidal)
                         .withTarget(targetModel)
+                        .withCity(cityModel)
                         .build(ObjectType.MODEL);
                 String pathToEventLink = EVENT_BASE_PATH + "/" + counterForUtilMethodsModel;
                 eventModel.add(new Link(pathToEventLink, "self"));
