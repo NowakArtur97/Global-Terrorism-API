@@ -182,7 +182,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
 
@@ -427,7 +427,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event City name: {0} should have violation")
     @NullAndEmptySource
     void when_add_group_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
