@@ -290,7 +290,7 @@ class GroupControllerPostMethodTest {
 
     @ParameterizedTest(name = "{index}: Group Target Country: {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {" "})
+    @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
@@ -429,6 +429,7 @@ class GroupControllerPostMethodTest {
 
     @ParameterizedTest(name = "{index}: For Group Event City name: {0} should have violation")
     @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);

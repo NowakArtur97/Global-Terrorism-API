@@ -356,7 +356,7 @@ class EventControllerPutMethodTest {
 
     @ParameterizedTest(name = "{index}: Event Target Country: {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {" "})
+    @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
@@ -381,7 +381,7 @@ class EventControllerPutMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
-    @EmptySource
+    @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_target_should_return_errors(String invalidTarget) {
 
@@ -407,7 +407,7 @@ class EventControllerPutMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_summary_should_return_errors(String invalidSummary) {
 
@@ -434,7 +434,7 @@ class EventControllerPutMethodTest {
     }
 
     @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_motive_should_return_errors(String invalidMotive) {
 
@@ -490,7 +490,7 @@ class EventControllerPutMethodTest {
 
     @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
     @NullAndEmptySource
-    @ValueSource(strings = {" "})
+    @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
