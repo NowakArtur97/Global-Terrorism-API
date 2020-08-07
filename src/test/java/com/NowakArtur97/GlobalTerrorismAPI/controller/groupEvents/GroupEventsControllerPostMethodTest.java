@@ -1,13 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -51,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GroupEventsControllerPostMethodTest {
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
+    private final String LINK_WITH_PARAMETER = GROUP_BASE_PATH + "/{id}/events";
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,32 +60,40 @@ class GroupEventsControllerPostMethodTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
 
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static GroupNode groupNode = new GroupNode("group");
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
 
     private final static CountryNode countryNode = new CountryNode("country");
+
+    private final static GroupNode groupNode = new GroupNode("group");
+    private final static GroupNode groupNode2 = new GroupNode("group 2");
 
     @BeforeAll
     private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
     }
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                              @Autowired CountryRepository countryRepository) {
+                              @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
 
         countryRepository.save(countryNode);
 
+        cityRepository.save(cityNode);
+
         groupRepository.save(groupNode);
+        groupRepository.save(groupNode2);
     }
 
     @AfterAll
@@ -111,19 +119,18 @@ class GroupEventsControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String pathToSelfLink = GROUP_BASE_PATH + "/" + groupNode.getId();
         String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue() + "/events";
-
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(linkWithParameter, groupNode.getId())
+                        .perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -152,16 +159,73 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty()));
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityDTO.getLongitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty()));
+    }
+
+    @Test
+    void when_add_valid_event_to_group_with_existing_city_should_return_new_event_with_existing_city() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
+                .withLongitude(cityNode.getLongitude()).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String pathToSelfLink = GROUP_BASE_PATH + "/" + groupNode2.getId();
+        String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNode2.getId().intValue() + "/events";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(LINK_WITH_PARAMETER, groupNode2.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToSelfLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                        .andExpect(jsonPath("id", is(groupNode2.getId().intValue())))
+                        .andExpect(jsonPath("name", is(groupNode2.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventDTO.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventDTO.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
+                                is(eventDTO.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty()));
     }
 
     @Test
     void when_add_event_to_group_with_null_fields_should_return_errors() {
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
-                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
+                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null).withCity(null)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -169,7 +233,7 @@ class GroupEventsControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(linkWithParameter, groupNode.getId())
+                        .perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -183,7 +247,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful.")))
                         .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(7))));
+                        .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(8))));
     }
 
     @ParameterizedTest(name = "{index}: Event Target Country: {0}")
@@ -193,16 +258,15 @@ class GroupEventsControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(linkWithParameter, groupNode.getId())
+                        .perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -218,17 +282,16 @@ class GroupEventsControllerPostMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_target_should_return_errors(String invalidTarget) {
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
-                () -> mockMvc.perform(post(linkWithParameter, groupNode.getId())
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                         .header("Authorization", "Bearer " + token)
                         .content(ObjectTestMapper.asJsonString(eventDTO))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -244,11 +307,10 @@ class GroupEventsControllerPostMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_summary_should_return_errors(String invalidSummary) {
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO)
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -256,7 +318,7 @@ class GroupEventsControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(linkWithParameter, groupNode.getId())
+                        .perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -272,18 +334,17 @@ class GroupEventsControllerPostMethodTest {
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_motive_should_return_errors(String invalidMotive) {
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO)
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
-                () -> mockMvc.perform(post(linkWithParameter, groupNode.getId())
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                         .header("Authorization", "Bearer " + token)
                         .content(ObjectTestMapper.asJsonString(eventDTO))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -297,21 +358,21 @@ class GroupEventsControllerPostMethodTest {
     @Test
     void when_add_event_to_group_with_date_in_the_future_should_return_errors() {
 
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(2090, Calendar.FEBRUARY, 1);
         Date invalidDate = calendar.getTime();
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).withCity(cityDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
-                () -> mockMvc.perform(post(linkWithParameter, groupNode.getId())
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
                         .header("Authorization", "Bearer " + token)
                         .content(ObjectTestMapper.asJsonString(eventDTO))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -322,21 +383,170 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @Test
-    void when_add_event_to_group_but_group_not_exists_should_return_error_response() {
+    @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_add_event_to_group_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
-        Long notExistingId = 1000L;
-        String linkWithParameter = GROUP_BASE_PATH + "/{id}/events";
-
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
         assertAll(
-                () -> mockMvc.perform(post(linkWithParameter, notExistingId)
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_to_group_with_invalid_geographical_location_of_city_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
+    }
+
+    @Test
+    void when_add_event_to_group_with_too_small_city_latitude_should_return_errors() {
+
+        Double invalidCityLatitude = -91.0;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("City latitude must be greater or equal to -90.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_to_group_with_too_big_city_latitude_should_return_errors() {
+
+        Double invalidCityLatitude = 91.0;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("City latitude must be less or equal to 90.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_to_group_with_too_small_city_longitude_should_return_errors() {
+
+        Double invalidCityLongitude = -181.0;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("City longitude must be greater or equal to -180.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_to_group_with_too_big_city_longitude_should_return_errors() {
+
+        Double invalidCityLongitude = 181.0;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, groupNode.getId())
+                        .header("Authorization", "Bearer " + token)
+                        .content(ObjectTestMapper.asJsonString(eventDTO))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_to_group_but_group_not_exists_should_return_error_response() {
+
+        Long notExistingId = 1000L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc.perform(post(LINK_WITH_PARAMETER, notExistingId)
                         .header("Authorization", "Bearer " + token)
                         .content(ObjectTestMapper.asJsonString(eventDTO))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))

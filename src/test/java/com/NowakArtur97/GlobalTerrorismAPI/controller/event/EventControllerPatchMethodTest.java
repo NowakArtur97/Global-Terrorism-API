@@ -151,6 +151,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                            .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                             .andExpect(jsonPath("city.links").isEmpty()));
         }
 
