@@ -1,14 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
@@ -51,6 +45,7 @@ class GroupServiceImplTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
@@ -59,6 +54,7 @@ class GroupServiceImplTest {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
     }
@@ -68,7 +64,6 @@ class GroupServiceImplTest {
 
         groupService = new GroupServiceImpl(groupRepository, objectMapper, eventService);
     }
-
 
     @Test
     void when_groups_exist_and_return_all_groups_should_return_groups() {
@@ -91,7 +86,7 @@ class GroupServiceImplTest {
 
         Page<GroupNode> groupsActual = groupService.findAll(pageable);
 
-        assertAll(() -> assertNotNull(groupsActual, () -> "shouldn`t return null"),
+        assertAll(() -> assertNotNull(groupsActual, () -> "shouldn't return null"),
                 () -> assertEquals(groupsListExpected, groupsActual.getContent(),
                         () -> "should contain: " + groupsListExpected + ", but was: " + groupsActual.getContent()),
                 () -> assertEquals(groupsExpected.getNumberOfElements(), groupsActual.getNumberOfElements(),
@@ -116,7 +111,7 @@ class GroupServiceImplTest {
 
         Page<GroupNode> groupsActual = groupService.findAll(pageable);
 
-        assertAll(() -> assertNotNull(groupsActual, () -> "shouldn`t return null"),
+        assertAll(() -> assertNotNull(groupsActual, () -> "shouldn't return null"),
                 () -> assertEquals(groupsListExpected, groupsActual.getContent(),
                         () -> "should contain empty list, but was: " + groupsActual.getContent()),
                 () -> assertEquals(groupsListExpected, groupsActual.getContent(),
@@ -159,6 +154,8 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + groupNodeExpected.getEventsCaused().get(0).getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with null target, but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
+                () -> assertNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with null city, but was: " + groupNodeActual.getEventsCaused().get(0).getCity()),
                 () -> verify(groupRepository, times(1)).findById(expectedGroupId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verifyNoInteractions(objectMapper),
@@ -188,7 +185,8 @@ class GroupServiceImplTest {
 
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
         when(groupRepository.findById(expectedGroupId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(groupNodeExpected));
@@ -232,6 +230,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
                 () -> verify(groupRepository, times(1))
                         .findById(expectedGroupId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -244,7 +260,8 @@ class GroupServiceImplTest {
 
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -290,6 +307,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verifyNoInteractions(objectMapper),
@@ -299,13 +334,16 @@ class GroupServiceImplTest {
     @Test
     void when_save_new_group_with_events_should_save_new_group_and_events() {
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTOExpected = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
+
+        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
@@ -353,6 +391,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
                 () -> verify(objectMapper, times(1)).map(groupDTOExpected, GroupNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
@@ -366,6 +422,10 @@ class GroupServiceImplTest {
 
         String updatedCountryName = "country updated";
         String updatedTargetName = "target2";
+        String updatedCityName = "city2";
+        double updatedCityLatitude = 13.0;
+        double updatedCityLongitude = -11.0;
+
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
@@ -373,12 +433,20 @@ class GroupServiceImplTest {
                 .withCountry(updatedCountryNode).build(ObjectType.NODE);
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(updatedCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-        EventNode updatedEventNode = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                .withLongitude(updatedCityLongitude).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                .withLongitude(updatedCityLongitude).build(ObjectType.NODE);
+        EventNode updatedEventNode = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(updatedCityNode).build(ObjectType.NODE);
 
         String updatedCountryName2 = "country updated 2";
         String updatedTargetName2 = "target3";
+        String updatedCityName2 = "city2";
+        double updatedCityLatitude2 = 23.0;
+        double updatedCityLongitude2 = -21.0;
         CountryNode countryNode2 = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode2 = (TargetNode) targetBuilder.withCountry(countryNode2).build(ObjectType.NODE);
         CountryNode updatedCountryNode2 = (CountryNode) countryBuilder.withName(updatedCountryName2).build(ObjectType.NODE);
@@ -386,9 +454,14 @@ class GroupServiceImplTest {
                 .withCountry(updatedCountryNode2).build(ObjectType.NODE);
         CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(updatedCountryName2).build(ObjectType.DTO);
         TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget(updatedTargetName2).withCountry(countryDTO2).build(ObjectType.DTO);
-        EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).build(ObjectType.DTO);
-        EventNode eventNode2 = (EventNode) eventBuilder.withTarget(targetNode2).build(ObjectType.NODE);
-        EventNode updatedEventNode2 = (EventNode) eventBuilder.withTarget(updatedTargetNode2).build(ObjectType.NODE);
+        CityDTO cityDTO2 = (CityDTO) cityBuilder.withName(updatedCityName2).withLatitude(updatedCityLatitude2)
+                .withLongitude(updatedCityLongitude2).build(ObjectType.DTO);
+        EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).withCity(cityDTO2).build(ObjectType.DTO);
+        CityNode cityNode2 = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode2 = (EventNode) eventBuilder.withTarget(targetNode2).withCity(cityNode2).build(ObjectType.NODE);
+        CityNode updatedCityNode2 = (CityNode) cityBuilder.withName(updatedCityName2).withLatitude(updatedCityLatitude2)
+                .withLongitude(updatedCityLongitude2).build(ObjectType.NODE);
+        EventNode updatedEventNode2 = (EventNode) eventBuilder.withTarget(updatedTargetNode2).withCity(updatedCityNode2).build(ObjectType.NODE);
 
         String updatedGroupName = "new group name";
         GroupDTO groupDTOExpected = (GroupDTO) groupBuilder.withName(updatedGroupName).withEventsCaused(List.of(eventDTO, eventDTO2)).build(ObjectType.DTO);
@@ -441,6 +514,23 @@ class GroupServiceImplTest {
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
 
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
 
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group node with event node with id: " + groupNodeExpected.getEventsCaused().get(1).getId() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getId()),
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group node with event node with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
@@ -470,6 +560,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity(), groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude()),
                 () -> verify(eventService, times(1)).delete(eventNode.getId()),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verify(eventService, times(1)).saveNew(eventDTO2),
@@ -491,8 +599,12 @@ class GroupServiceImplTest {
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         CountryNode countryNode2 = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode2 = (TargetNode) targetBuilder.withCountry(countryNode2).build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
-        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNode2).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        CityNode cityNode2 = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).withCity(cityNode)
+                .build(ObjectType.NODE);
+        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNode2).withCity(cityNode)
+                .build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
 
         when(groupRepository.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
@@ -540,6 +652,24 @@ class GroupServiceImplTest {
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
 
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
+
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + groupNodeExpected.getEventsCaused().get(1).getId() + ", but was: "
                         + groupNodeActual.getEventsCaused().get(1).getId()),
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
@@ -572,6 +702,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity(), groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verify(groupRepository, times(1)).delete(groupNodeExpected),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -608,13 +756,17 @@ class GroupServiceImplTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName("new country").build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
         TargetNode newTargetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNodeExpected).build(ObjectType.NODE);
-        EventNode newEventNodeExpected = (EventNode) eventBuilder.withId(eventId2).withTarget(newTargetNodeExpected).build(ObjectType.NODE);
+        CityNode cityNodeExpected = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNodeExpected)
+                .withCity(cityNodeExpected).build(ObjectType.NODE);
+        EventNode newEventNodeExpected = (EventNode) eventBuilder.withId(eventId2).withTarget(newTargetNodeExpected)
+                .withCity(cityNodeExpected).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected)).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected, newEventNodeExpected)).build(ObjectType.NODE);
 
@@ -663,6 +815,24 @@ class GroupServiceImplTest {
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
 
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
+
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + groupNodeExpected.getEventsCaused().get(1).getId() + ", but was: "
                         + groupNodeActual.getEventsCaused().get(1).getId()),
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
@@ -692,6 +862,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity(), groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -705,8 +893,7 @@ class GroupServiceImplTest {
 
         Long groupId = 1L;
 
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.build(ObjectType.DTO);
 
         when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
@@ -732,8 +919,12 @@ class GroupServiceImplTest {
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         CountryNode countryNode2 = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode2 = (TargetNode) targetBuilder.withCountry(countryNode2).build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).build(ObjectType.NODE);
-        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNode2).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        CityNode cityNode2 = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).withCity(cityNode).
+                build(ObjectType.NODE);
+        EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNode2).withCity(cityNode2)
+                .build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId).withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
 
         when(groupRepository.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
@@ -781,6 +972,24 @@ class GroupServiceImplTest {
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
 
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity(), groupNodeActual.getEventsCaused().get(0).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()),
+
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + groupNodeExpected.getEventsCaused().get(1).getId() + ", but was: "
                         + groupNodeActual.getEventsCaused().get(1).getId()),
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + groupNodeExpected.getEventsCaused().get(1).getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
@@ -810,6 +1019,24 @@ class GroupServiceImplTest {
                 () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + groupNodeExpected.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event node with not null city, but was: null"),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity(), groupNodeActual.getEventsCaused().get(1).getCity(),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
+                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getId()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
+                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getName()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLatitude()),
+                () -> assertEquals(groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                                + groupNodeExpected.getEventsCaused().get(1).getCity().getLongitude()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verify(eventService, times(1)).delete(eventId),
