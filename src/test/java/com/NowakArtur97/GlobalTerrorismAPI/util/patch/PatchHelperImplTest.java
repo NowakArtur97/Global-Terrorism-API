@@ -1,13 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +31,7 @@ class PatchHelperImplTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
@@ -45,6 +40,7 @@ class PatchHelperImplTest {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
     }
@@ -242,6 +238,7 @@ class PatchHelperImplTest {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
 
             String updatedSummary = "updated summary";
             String updatedMotive = "updated motive";
@@ -250,12 +247,12 @@ class PatchHelperImplTest {
             boolean updatedIsSuccessful = false;
             boolean updatedIsSuicide = false;
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
 
             EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(targetNode)
-                    .build(ObjectType.NODE);
+                    .withCity(cityNode).build(ObjectType.NODE);
 
             JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/summary", updatedSummary)
                     .replace("/motive", updatedMotive).replace("/date", date.toString())
@@ -312,6 +309,21 @@ class PatchHelperImplTest {
                     () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                             () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -322,7 +334,8 @@ class PatchHelperImplTest {
 
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
 
             String updatedCountryName = "updated country";
             String updatedTarget = "updated target";
@@ -330,7 +343,8 @@ class PatchHelperImplTest {
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).withCountry(updatedCountryNode)
                     .build(ObjectType.NODE);
 
-            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
+            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(cityNode)
+                    .build(ObjectType.NODE);
 
             JsonPatch eventAsJsonPatch = Json.createPatchBuilder().replace("/target/target", updatedTarget)
                     .replace("/target/countryOfOrigin/name", updatedCountryName).build();
@@ -385,6 +399,116 @@ class PatchHelperImplTest {
                     () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                             () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
+                    () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
+                    () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
+                    () -> verifyNoMoreInteractions(objectMapper));
+        }
+
+        @Test
+        void when_patch_event_nodes_city_should_return_event_node_with_patched_city() {
+
+            CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+            TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+
+            String updatedCityName = "updated city";
+            double updatedCityLatitude = 31.0;
+            double updatedCityLongitude = 27.0;
+            CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                    .withLongitude(updatedCityLongitude).build(ObjectType.NODE);
+
+            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).withCity(updatedCityNode)
+                    .build(ObjectType.NODE);
+
+            JsonPatch eventAsJsonPatch = Json.createPatchBuilder()
+                    .replace("/city/name", updatedCityName)
+                    .replace("/city/latitude", String.valueOf(updatedCityLatitude))
+                    .replace("/city/longitude", String.valueOf(updatedCityLongitude))
+                    .build();
+
+            JsonStructure event = Json.createObjectBuilder()
+                    .add("city", Json.createObjectBuilder()
+                            .add("name", updatedCityName)
+                            .add("latitude", updatedCityLatitude)
+                            .add("longitude", updatedCityLongitude))
+                    .build();
+
+            JsonValue patched = eventAsJsonPatch.apply(event);
+
+            when(objectMapper.convertValue(eventNode, JsonStructure.class)).thenReturn(event);
+            when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
+
+            EventNode eventNodeActual = patchHelper.patch(eventAsJsonPatch, eventNode, EventNode.class);
+
+            assertAll(
+                    () -> assertEquals(eventNodeExpected.getId(), eventNodeActual.getId(),
+                            () -> "should return event node with idd: " + eventNodeExpected.getId() + ", but was: "
+                                    + eventNodeActual.getId()),
+                    () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                            () -> "should return event node with summary: " + eventNodeExpected.getSummary()
+                                    + ", but was: " + eventNodeActual.getSummary()),
+                    () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                            () -> "should return event node with motive: " + eventNodeExpected.getMotive()
+                                    + ", but was: " + eventNodeActual.getMotive()),
+                    () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                            () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                    + eventNodeActual.getDate()),
+                    () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                            eventNodeActual.getIsPartOfMultipleIncidents(),
+                            () -> "should return event node which was part of multiple incidents: "
+                                    + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+                                    + eventNodeActual.getIsPartOfMultipleIncidents()),
+                    () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                            () -> "should return event node which was successful: "
+                                    + eventNodeExpected.getIsSuccessful() + ", but was: "
+                                    + eventNodeActual.getIsSuccessful()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
+                    () -> assertNotNull(eventNodeExpected.getTarget(),
+                            () -> "should return event node with not null target, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+                            () -> "should return event node with target: " + eventNodeExpected.getTarget()
+                                    + ", but was: " + eventNodeActual.getTarget()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin(), eventNodeActual.getTarget().getCountryOfOrigin(),
+                            () -> "should return event node with target node with country: " + eventNodeExpected.getTarget().getCountryOfOrigin() + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getId(), eventNodeActual.getTarget().getCountryOfOrigin().getId(),
+                            () -> "should return event node with target node with country id: " + eventNodeExpected.getTarget().getCountryOfOrigin().getId()
+                                    + ", but was: " + eventNodeActual.getTarget().getId()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
+                            () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
+                                    + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -396,6 +520,7 @@ class PatchHelperImplTest {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2000-09-01");
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
 
             String updatedSummary = "updated summary";
             String updatedMotive = "updated motive";
@@ -404,12 +529,12 @@ class PatchHelperImplTest {
             boolean updatedIsSuccessful = false;
             boolean updatedIsSuicide = false;
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
 
             EventNode eventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(targetNode)
-                    .build(ObjectType.NODE);
+                    .withCity(cityNode).build(ObjectType.NODE);
 
             JsonMergePatch eventAsJsonMergePatch = Json.createMergePatch(Json.createObjectBuilder()
                     .add("summary", updatedSummary).add("motive", updatedMotive).add("date", date.toString())
@@ -466,6 +591,21 @@ class PatchHelperImplTest {
                     () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                             () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -476,14 +616,16 @@ class PatchHelperImplTest {
 
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
 
             String updatedCountryName = "updated country";
             String updatedTarget = "updated target";
             CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).withCountry(updatedCountryNode)
                     .build(ObjectType.NODE);
-            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).build(ObjectType.NODE);
+            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(cityNode)
+                    .build(ObjectType.NODE);
 
             JsonMergePatch eventAsJsonMergePatch = Json
                     .createMergePatch(Json.createObjectBuilder().add("/target/target", updatedTarget)
@@ -540,6 +682,116 @@ class PatchHelperImplTest {
                     () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                             () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
+                    () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
+                    () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
+                    () -> verifyNoMoreInteractions(objectMapper));
+        }
+
+        @Test
+        void when_merge_patch_event_nodes_city_should_return_event_node_with_patched_city() {
+
+            CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+            TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+
+            String updatedCityName = "updated city";
+            double updatedCityLatitude = 31.0;
+            double updatedCityLongitude = 27.0;
+            CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                    .withLongitude(updatedCityLongitude).build(ObjectType.NODE);
+
+            EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).withCity(updatedCityNode)
+                    .build(ObjectType.NODE);
+
+            JsonMergePatch eventAsJsonMergePatch = Json
+                    .createMergePatch(Json.createObjectBuilder()
+                            .add("/city/name", updatedCityName)
+                            .add("/city/latitude", updatedCityLatitude)
+                            .add("/city/longitude", updatedCityLongitude)
+                            .build());
+
+            JsonStructure event = Json.createObjectBuilder()
+                    .add("city", Json.createObjectBuilder()
+                            .add("name", updatedCityName)
+                            .add("latitude", updatedCityLatitude).add("longitude", updatedCityLongitude))
+                    .build();
+
+            JsonValue patched = eventAsJsonMergePatch.apply(event);
+
+            when(objectMapper.convertValue(eventNode, JsonValue.class)).thenReturn(event);
+            when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
+
+            EventNode eventNodeActual = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+
+            assertAll(
+                    () -> assertEquals(eventNodeExpected.getId(), eventNodeActual.getId(),
+                            () -> "should return event node with idd: " + eventNodeExpected.getId() + ", but was: "
+                                    + eventNodeActual.getId()),
+                    () -> assertEquals(eventNodeExpected.getSummary(), eventNodeActual.getSummary(),
+                            () -> "should return event node with summary: " + eventNodeExpected.getSummary()
+                                    + ", but was: " + eventNodeActual.getSummary()),
+                    () -> assertEquals(eventNodeExpected.getMotive(), eventNodeActual.getMotive(),
+                            () -> "should return event node with motive: " + eventNodeExpected.getMotive()
+                                    + ", but was: " + eventNodeActual.getMotive()),
+                    () -> assertEquals(eventNodeExpected.getDate(), eventNodeActual.getDate(),
+                            () -> "should return event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                    + eventNodeActual.getDate()),
+                    () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
+                            eventNodeActual.getIsPartOfMultipleIncidents(),
+                            () -> "should return event node which was part of multiple incidents: "
+                                    + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+                                    + eventNodeActual.getIsPartOfMultipleIncidents()),
+                    () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
+                            () -> "should return event node which was successful: "
+                                    + eventNodeExpected.getIsSuccessful() + ", but was: "
+                                    + eventNodeActual.getIsSuccessful()),
+                    () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
+                            () -> "should return event node which was suicide: " + eventNodeExpected.getIsSuicidal()
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
+                    () -> assertNotNull(eventNodeExpected.getTarget(),
+                            () -> "should return event node with not null target, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getTarget(), eventNodeActual.getTarget(),
+                            () -> "should return event node with target: " + eventNodeExpected.getTarget()
+                                    + ", but was: " + eventNodeActual.getTarget()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin(), eventNodeActual.getTarget().getCountryOfOrigin(),
+                            () -> "should return event node with target node with country: " + eventNodeExpected.getTarget().getCountryOfOrigin() + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getId(), eventNodeActual.getTarget().getCountryOfOrigin().getId(),
+                            () -> "should return event node with target node with country id: " + eventNodeExpected.getTarget().getCountryOfOrigin().getId()
+                                    + ", but was: " + eventNodeActual.getTarget().getId()),
+                    () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
+                            () -> "should return event node with target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
+                                    + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(eventNodeActual.getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(eventNodeExpected.getCity().getId(), eventNodeActual.getCity().getId(),
+                            () -> "should return event node with city id: " + eventNodeExpected.getCity().getId()
+                                    + ", but was: " + eventNodeActual.getCity().getId()),
+                    () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                            () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                    + ", but was: " + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -557,7 +809,9 @@ class PatchHelperImplTest {
 
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode)
+                    .build(ObjectType.NODE);
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
             GroupNode groupNodeExpected = (GroupNode) groupBuilder.withName(updatedName).withEventsCaused(List.of(eventNode))
                     .build(ObjectType.NODE);
@@ -599,6 +853,21 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                             () -> "should return group with event node with target node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+
+                    () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                            () -> "should return event node with city id: " + groupNodeExpected.getEventsCaused().get(0).getCity().getId()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getId()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                            () -> "should return event node with city name: " + groupNodeExpected.getEventsCaused().get(0).getCity().getName()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getName()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -623,12 +892,19 @@ class PatchHelperImplTest {
             CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).withCountry(updatedCountryNode)
                     .build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            String updatedCityName = "updated city";
+            double updatedCityLatitude = 31.0;
+            double updatedCityLongitude = 27.0;
+            CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                    .withLongitude(updatedCityLongitude).build(ObjectType.NODE);
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode)
+                    .build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(updatedTargetNode)
-                    .build(ObjectType.NODE);
+                    .withCity(updatedCityNode).build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
             GroupNode groupNodeExpected = (GroupNode) groupBuilder.withName(updatedName).withEventsCaused(List.of(updatedEventNode)).build(ObjectType.NODE);
@@ -643,6 +919,9 @@ class PatchHelperImplTest {
                     .replace("/eventsCaused[0]/isSuicidal", updatedIsSuicide)
                     .replace("/eventsCaused[0]/target/target", updatedTarget)
                     .replace("/eventsCaused[0]/target/countryOfOrigin/name", updatedCountryName)
+                    .replace("/eventsCaused[0]/city/name", updatedCityName)
+                    .replace("/eventsCaused[0]/city/latitude", String.valueOf(updatedCityLatitude))
+                    .replace("/eventsCaused[0]/city/longitude", String.valueOf(updatedCityLongitude))
                     .build();
 
             JsonStructure group = Json.createObjectBuilder()
@@ -655,7 +934,13 @@ class PatchHelperImplTest {
                                     .add("isSuccessful", updatedIsSuccessful)
                                     .add("isSuicidal", updatedIsSuicide)
                                     .add("target", Json.createObjectBuilder().add("target", updatedTarget)
-                                            .add("countryOfOrigin", Json.createObjectBuilder().add("name", updatedCountryName))))
+                                            .add("countryOfOrigin",
+                                                    Json.createObjectBuilder().add("name", updatedCountryName)))
+                                    .add("city", Json.createObjectBuilder()
+                                            .add("name", updatedCityName)
+                                            .add("latitude", updatedCityLatitude)
+                                            .add("longitude", updatedCityLongitude))
+                   )
                     .build();
 
             JsonValue patched = groupAsJsonPatch.apply(group);
@@ -691,6 +976,20 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                             () -> "should return group with event node with target node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                    () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                            () -> "should return event node with city id: " + groupNodeExpected.getEventsCaused().get(0).getCity().getId()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getId()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                            () -> "should return event node with city name: " + groupNodeExpected.getEventsCaused().get(0).getCity().getName()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getName()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -703,10 +1002,11 @@ class PatchHelperImplTest {
 
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
             TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
-            GroupNode groupNodeExpected = (GroupNode) groupBuilder.withName(updatedName).withEventsCaused(List.of(eventNode))
-                    .build(ObjectType.NODE);
+            GroupNode groupNodeExpected = (GroupNode) groupBuilder.withName(updatedName)
+                    .withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
             JsonMergePatch groupAsJsonMergePatch = Json.createMergePatch(Json.createObjectBuilder()
                     .add("name", updatedName).build());
@@ -746,6 +1046,20 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                             () -> "should return group with event node with target node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                    () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                            () -> "should return event node with city id: " + groupNodeExpected.getEventsCaused().get(0).getCity().getId()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getId()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                            () -> "should return event node with city name: " + groupNodeExpected.getEventsCaused().get(0).getCity().getName()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getName()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -770,12 +1084,18 @@ class PatchHelperImplTest {
             CountryNode updatedCountryNode = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
             TargetNode updatedTargetNode = (TargetNode) targetBuilder.withTarget(updatedTarget).withCountry(updatedCountryNode)
                     .build(ObjectType.NODE);
+            CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+            String updatedCityName = "updated city";
+            double updatedCityLatitude = 31.0;
+            double updatedCityLongitude = 27.0;
+            CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
+                    .withLongitude(updatedCityLongitude).build(ObjectType.NODE);
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
             EventNode updatedEventNode = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
                     .withDate(updatedDate).withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents)
                     .withIsSuccessful(updatedIsSuccessful).withIsSuicidal(updatedIsSuicide).withTarget(updatedTargetNode)
-                    .build(ObjectType.NODE);
+                    .withCity(updatedCityNode).build(ObjectType.NODE);
 
             GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
             GroupNode groupNodeExpected = (GroupNode) groupBuilder.withName(updatedName).withEventsCaused(List.of(updatedEventNode)).build(ObjectType.NODE);
@@ -790,6 +1110,9 @@ class PatchHelperImplTest {
                     .add("/eventsCaused[0]/isSuicidal", updatedIsSuicide)
                     .add("/eventsCaused[0]/target/target", updatedTarget)
                     .add("/eventsCaused[0]/target/countryOfOrigin/name", updatedCountryName)
+                    .add("/eventsCaused[0]/city/name", updatedCityName)
+                    .add("/eventsCaused[0]/city/latitude", updatedCityLatitude)
+                    .add("/eventsCaused[0]/city/longitude", updatedCityLongitude)
                     .build());
 
             JsonStructure group = Json.createObjectBuilder()
@@ -803,6 +1126,9 @@ class PatchHelperImplTest {
                             .add("isSuicidal", updatedIsSuicide)
                             .add("target", Json.createObjectBuilder().add("target", updatedTarget)
                                     .add("countryOfOrigin", Json.createObjectBuilder().add("name", updatedCountryName))))
+                    .add("city", Json.createObjectBuilder()
+                            .add("name", updatedCityName)
+                            .add("latitude", updatedCityLatitude).add("longitude", updatedCityLongitude))
                     .build();
 
             JsonValue patched = groupAsJsonMergePatch.apply(group);
@@ -838,6 +1164,20 @@ class PatchHelperImplTest {
                     () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                             () -> "should return group with event node with target node with country name: " + groupNodeExpected.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName()
                                     + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                    () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
+                            () -> "should return event node with not null city, but was: null"),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
+                            () -> "should return event node with city id: " + groupNodeExpected.getEventsCaused().get(0).getCity().getId()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getId()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
+                            () -> "should return event node with city name: " + groupNodeExpected.getEventsCaused().get(0).getCity().getName()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getName()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
+                            () -> "should return event node with city latitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLatitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude()),
+                    () -> assertEquals(groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
+                            () -> "should return event node with city longitude: " + groupNodeExpected.getEventsCaused().get(0).getCity().getLongitude()
+                                    + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
