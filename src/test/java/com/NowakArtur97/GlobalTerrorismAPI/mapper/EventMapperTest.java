@@ -1,14 +1,18 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -35,6 +39,7 @@ class EventMapperTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
 
     @BeforeAll
@@ -42,6 +47,7 @@ class EventMapperTest {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -56,10 +62,12 @@ class EventMapperTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         CountryNode countryNode = (CountryNode) countryBuilder.withId(null).build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withId(null).withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(null).withTarget(targetNode)
+        CityNode cityNode = (CityNode) cityBuilder.withId(null).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withId(null).withTarget(targetNode).withCity(cityNode)
                 .build(ObjectType.NODE);
 
         when(modelMapper.map(eventDTO, EventNode.class)).thenReturn(eventNodeExpected);
@@ -102,6 +110,21 @@ class EventMapperTest {
                 () -> assertEquals(eventNodeExpected.getTarget().getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                         () -> "should return event target node with country name: " + eventNodeExpected.getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(eventNodeActual.getCity(),
+                        () -> "should return event node with not null city, but was: null"),
+                () -> assertNull(eventNodeActual.getCity().getId(),
+                        () -> "should return event city node with id as null, but was: "
+                                + eventNodeActual.getCity().getId()),
+                () -> assertEquals(eventNodeExpected.getCity().getName(), eventNodeActual.getCity().getName(),
+                        () -> "should return event node with city name: " + eventNodeExpected.getCity().getName()
+                                + ", but was: " + eventNodeActual.getCity().getName()),
+                () -> assertEquals(eventNodeExpected.getCity().getLatitude(), eventNodeActual.getCity().getLatitude(),
+                        () -> "should return event node with city latitude: " + eventNodeExpected.getCity().getLatitude()
+                                + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                () -> assertEquals(eventNodeExpected.getCity().getLongitude(), eventNodeActual.getCity().getLongitude(),
+                        () -> "should return event node with city longitude: " + eventNodeExpected.getCity().getLongitude()
+                                + ", but was: " + eventNodeActual.getCity().getLongitude()),
                 () -> verify(modelMapper, times(1)).map(eventDTO, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
@@ -111,10 +134,12 @@ class EventMapperTest {
 
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         when(modelMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTOExpected);
 
@@ -149,6 +174,18 @@ class EventMapperTest {
                 () -> assertEquals(eventDTOExpected.getTarget().getCountryOfOrigin().getName(), eventDTOActual.getTarget().getCountryOfOrigin().getName(),
                         () -> "should return event dto with country name: " + eventDTOExpected.getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + eventDTOActual.getTarget().getCountryOfOrigin()),
+
+                () -> assertNotNull(eventDTOActual.getCity(),
+                        () -> "should return event node dto not null city, but was: null"),
+                () -> assertEquals(eventDTOExpected.getCity().getName(), eventDTOActual.getCity().getName(),
+                        () -> "should return event dto with city name: " + eventDTOExpected.getCity().getName()
+                                + ", but was: " + eventDTOActual.getCity().getName()),
+                () -> assertEquals(eventDTOExpected.getCity().getLatitude(), eventDTOActual.getCity().getLatitude(),
+                        () -> "should return event dto with city latitude: " + eventDTOExpected.getCity().getLatitude()
+                                + ", but was: " + eventDTOActual.getCity().getLatitude()),
+                () -> assertEquals(eventDTOExpected.getCity().getLongitude(), eventDTOActual.getCity().getLongitude(),
+                        () -> "should return event dto with city longitude: " + eventDTOExpected.getCity().getLongitude()
+                                + ", but was: " + eventDTOActual.getCity().getLongitude()),
                 () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
@@ -158,10 +195,12 @@ class EventMapperTest {
 
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         CountryModel countryModel = (CountryModel) countryBuilder.build(ObjectType.MODEL);
         TargetModel targetModel = (TargetModel) targetBuilder.withCountry(countryModel).build(ObjectType.MODEL);
-        EventModel eventModelExpected = (EventModel) eventBuilder.withTarget(targetModel)
+        CityModel cityModel = (CityModel) cityBuilder.build(ObjectType.MODEL);
+        EventModel eventModelExpected = (EventModel) eventBuilder.withTarget(targetModel).withCity(cityModel)
                 .build(ObjectType.MODEL);
 
         when(modelMapper.map(eventNode, EventModel.class)).thenReturn(eventModelExpected);
@@ -206,6 +245,17 @@ class EventMapperTest {
                 () -> assertEquals(eventModelExpected.getTarget().getCountryOfOrigin().getName(), eventModelActual.getTarget().getCountryOfOrigin().getName(),
                         () -> "should return event model with country name: " + eventModelExpected.getTarget().getCountryOfOrigin().getName()
                                 + ", but was: " + eventModelActual.getTarget().getCountryOfOrigin()),
+                () -> assertNotNull(eventModelActual.getCity(),
+                        () -> "should return event node model not null city, but was: null"),
+                () -> assertEquals(eventModelExpected.getCity().getName(), eventModelActual.getCity().getName(),
+                        () -> "should return event model with city name: " + eventModelExpected.getCity().getName()
+                                + ", but was: " + eventModelActual.getCity().getName()),
+                () -> assertEquals(eventModelExpected.getCity().getLatitude(), eventModelActual.getCity().getLatitude(),
+                        () -> "should return event model with city latitude: " + eventModelExpected.getCity().getLatitude()
+                                + ", but was: " + eventModelActual.getCity().getLatitude()),
+                () -> assertEquals(eventModelExpected.getCity().getLongitude(), eventModelActual.getCity().getLongitude(),
+                        () -> "should return event model with city longitude: " + eventModelExpected.getCity().getLongitude()
+                                + ", but was: " + eventModelActual.getCity().getLongitude()),
                 () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
