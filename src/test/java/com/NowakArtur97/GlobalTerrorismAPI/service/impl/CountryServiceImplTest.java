@@ -58,7 +58,7 @@ class CountryServiceImplTest {
                         + ", but was: " + countryNodeActual.getId()),
                 () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
                         () -> "should return country node with name: " + countryNodeExpected.getName()
-                                + ", but was: " + countryNodeActual),
+                                + ", but was: " + countryNodeActual.getName()),
                 () -> verify(countryRepository, times(1)).findByName(countryName),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
@@ -120,7 +120,7 @@ class CountryServiceImplTest {
                         + ", but was: " + countryNodeActual.getId()),
                 () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
                         () -> "should return country node with name: " + countryNodeExpected.getName()
-                                + ", but was: " + countryNodeActual),
+                                + ", but was: " + countryNodeActual.getName()),
                 () -> verify(countryRepository, times(1)).save(countryNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
