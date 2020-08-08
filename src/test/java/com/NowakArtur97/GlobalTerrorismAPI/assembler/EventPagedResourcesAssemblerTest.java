@@ -1,10 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -50,11 +53,13 @@ class EventPagedResourcesAssemblerTest {
     private ObjectMapper objectMapper;
 
     private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
         targetBuilder = new TargetBuilder();
+        cityBuilder = new CityBuilder();
     }
 
     @BeforeAll
@@ -253,10 +258,13 @@ class EventPagedResourcesAssemblerTest {
 
             TargetNode targetNode = (TargetNode) targetBuilder.withId((long) count).build(ObjectType.NODE);
             TargetModel targetModel = (TargetModel) targetBuilder.withId((long) count).build(ObjectType.MODEL);
+            CityNode cityNode = (CityNode) cityBuilder.withId((long) count).build(ObjectType.NODE);
+            CityModel cityModel = (CityModel) cityBuilder.withId((long) count).build(ObjectType.MODEL);
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
 
-            when(objectMapper.map(eventNode, EventModel.class)).thenReturn((EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL));
+            when(objectMapper.map(eventNode, EventModel.class)).thenReturn((EventModel) eventBuilder.withTarget(targetModel)
+                    .withCity(cityModel).build(ObjectType.MODEL));
 
             eventsListExpected.add(eventNode);
 
