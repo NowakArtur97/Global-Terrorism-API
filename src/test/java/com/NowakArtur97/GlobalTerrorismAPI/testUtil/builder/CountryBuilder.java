@@ -1,9 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Region;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
 public final class CountryBuilder {
@@ -11,6 +14,8 @@ public final class CountryBuilder {
     private Long id = 1L;
 
     private String name = "country";
+
+    private Region region = null;
 
     public CountryBuilder withId(Long id) {
 
@@ -22,6 +27,13 @@ public final class CountryBuilder {
     public CountryBuilder withName(String name) {
 
         this.name = name;
+
+        return this;
+    }
+
+    public CountryBuilder withRegion(Region region) {
+
+        this.region = region;
 
         return this;
     }
@@ -40,13 +52,13 @@ public final class CountryBuilder {
 
             case NODE:
 
-                country = new CountryNode(id, name);
+                country = new CountryNode(id, name, (RegionNode) region);
 
                 break;
 
             case MODEL:
 
-                country = new CountryModel(id, name);
+                country = new CountryModel(id, name, (RegionModel) region);
 
                 break;
 
@@ -64,5 +76,7 @@ public final class CountryBuilder {
         this.id = 1L;
 
         this.name = "country";
+
+        this.region = null;
     }
 }

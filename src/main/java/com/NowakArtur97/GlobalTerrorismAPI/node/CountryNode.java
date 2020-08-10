@@ -22,7 +22,7 @@ public class CountryNode extends Node implements Country {
         this.region = region;
     }
 
-    public CountryNode(Long id, String name) {
+    public CountryNode(Long id, String name, RegionNode region) {
         super(id);
         this.name = name;
     }
