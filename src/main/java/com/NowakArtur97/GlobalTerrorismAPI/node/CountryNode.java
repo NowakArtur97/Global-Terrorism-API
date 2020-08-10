@@ -16,6 +16,12 @@ public class CountryNode extends Node implements Country {
     @Relationship("PART_OF")
     private RegionNode region;
 
+    // TO REMOVE
+    public CountryNode(String name) {
+
+        this.name = name;
+    }
+
     public CountryNode(String name, RegionNode region) {
 
         this.name = name;
