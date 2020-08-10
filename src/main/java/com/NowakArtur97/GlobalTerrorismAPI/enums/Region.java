@@ -2,14 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.enums;
 
 public enum Region {
 
-    NORTH_AMERICA("North America"), CENTRAL_AMERICA_AND_CARIBBEAN("Central America & Caribbean"),
-    SOUTH_AMERICA("South America"), EAST_ASIA("East Asia"), SOUTHEAST_ASIA("Southeast Asia"),
-    SOUTH_ASIA("South Asia"), CENTRAL_ASIA("Central Asia"), WESTERN_EUROPE("Western Europe"),
-    EASTERN_EUROPE("Eastern Europe"), MIDDLE_EAST_AND_NORTH_AFRICA("Middle East & North Africa"),
-    SUB_SAHARAN_AFRICA("Sub-Saharan Africa"), AUSTRALASIA_AND_OCEANIA("Australasia & Oceania");
-
-    Region(String name) {
-    }
+    NORTH_AMERICA(), CENTRAL_AMERICA_AND_CARIBBEAN(), SOUTH_AMERICA(), EAST_ASIA(), SOUTHEAST_ASIA(), SOUTH_ASIA(),
+    CENTRAL_ASIA(), WESTERN_EUROPE(), EASTERN_EUROPE(), MIDDLE_EAST_AND_NORTH_AFRICA(), SUB_SAHARAN_AFRICA(),
+    AUSTRALASIA_AND_OCEANIA();
 
     public static Region getRegionByName(String name) {
 
