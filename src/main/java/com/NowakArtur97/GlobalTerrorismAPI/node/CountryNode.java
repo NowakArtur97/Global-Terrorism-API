@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.node;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.enums.Region;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -11,6 +12,8 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class CountryNode extends Node implements Country {
 
     private String name;
+
+    private Region region;
 
     public CountryNode(String name) {
 
