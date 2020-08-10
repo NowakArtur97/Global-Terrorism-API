@@ -5,6 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.RegionRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
@@ -36,6 +37,8 @@ class OnApplicationStartupEventListener {
 
     private final List<CityNode> allCities = new ArrayList<>();
 
+    private final List<RegionNode> allRegions = new ArrayList<>();
+
     private final TargetService targetService;
 
     private final GenericService<EventNode, EventDTO> eventService;
@@ -43,6 +46,8 @@ class OnApplicationStartupEventListener {
     private final GenericService<GroupNode, GroupDTO> groupService;
 
     private final CountryService countryService;
+
+    private final RegionRepository regionRepository;
 
     private final UserService userService;
 
@@ -74,7 +79,9 @@ class OnApplicationStartupEventListener {
 
             CityNode city = saveCity(row);
 
-            CountryNode country = saveCountry(row);
+            RegionNode regionNode = saveRegion(row);
+
+            CountryNode country = saveCountry(row, regionNode);
 
             TargetNode target = saveTarget(row, country);
 
@@ -166,11 +173,11 @@ class OnApplicationStartupEventListener {
         return targetService.save(new TargetNode(targetName, country));
     }
 
-    private CountryNode saveCountry(Row row) {
+    private CountryNode saveCountry(Row row, RegionNode regionNode) {
 
         String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
 
-        CountryNode country = new CountryNode(name);
+        CountryNode country = new CountryNode(name, regionNode);
 
         if (allCountries.contains(country)) {
 
@@ -183,6 +190,26 @@ class OnApplicationStartupEventListener {
             countryService.save(country);
 
             return country;
+        }
+    }
+
+    private RegionNode saveRegion(Row row) {
+
+        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.REGION_NAME.getIndex());
+
+        RegionNode region = new RegionNode(name);
+
+        if (allRegions.contains(region)) {
+
+            return allRegions.get(allRegions.indexOf(region));
+
+        } else {
+
+            allRegions.add(region);
+
+            regionRepository.save(region);
+
+            return region;
         }
     }
 
