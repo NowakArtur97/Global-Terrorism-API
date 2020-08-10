@@ -2,7 +2,10 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.CoreMatchers;
@@ -14,6 +17,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -34,6 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Import(Neo4jTestConfiguration.class)
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("GroupController_Tests")
@@ -42,7 +47,6 @@ class GroupControllerJsonMergePatchMethodTest {
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
-    private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = GROUP_BASE_PATH + "/" + "{id}";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = GROUP_BASE_PATH + "/" + "{id2}";
 
     @Autowired
@@ -80,21 +84,9 @@ class GroupControllerJsonMergePatchMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
-                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
+    private static void tearDown(@Autowired Neo4jDatabaseUtil neo4jDatabaseUtil) {
 
-        userRepository.deleteAll();
-
-        cityRepository.deleteAll();
-
-        countryRepository.deleteAll();
-
-        groupRepository.deleteAll();
-
-        eventRepository.deleteAll();
-
-        targetRepository.deleteAll();
+        neo4jDatabaseUtil.cleanDatabase();
     }
 
     @Test
@@ -176,56 +168,56 @@ class GroupControllerJsonMergePatchMethodTest {
 
         String jsonMergePatch =
                 "{\"eventsCaused\" : [" +
-                "{" +
-                "\"id\" : \"" + eventNode2.getId().intValue() + "\", " +
-                "\"summary\" : \"" + updatedSummary + "\", " +
-                "\"motive\" : \"" + updatedMotive + "\", " +
-                "\"date\" : \"" + updatedEventDateString + "\", " +
-                "\"isPartOfMultipleIncidents\" : \"" + updatedIsPartOfMultipleIncidents + "\", " +
-                "\"isSuccessful\" : \"" + updatedIsSuccessful + "\", " +
-                "\"isSuicidal\" : \"" + updatedIsSuicidal + "\", " +
-                "\"target\" : " +
-                "{" +
-                "\"id\" : \"" + targetNode2.getId().intValue() + "\", " +
-                "\"target\" : \"" + updatedTargetName + "\", " +
-                "\"countryOfOrigin\" : " +
-                "{ " +
-                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
-                "\"name\" : \"" + countryNode.getName() + "\"" +
-                "}" +
-                "}," +
-                "\"city\" : { " +
-                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
-                "\"name\" : \"" + cityNode.getName() + "\"," +
-                "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
-                "}" +
-                "}," +
-                "{" +
-                "\"id\" : \"" + eventNode3.getId().intValue() + "\", " +
-                "\"summary\" : \"" + eventNode3.getSummary() + "\", " +
-                "\"motive\" : \"" + eventNode3.getMotive() + "\", " +
-                "\"date\" : \"" + updatedEventDateString2 + "\", " +
-                "\"isPartOfMultipleIncidents\" : \"" + eventNode3.getIsPartOfMultipleIncidents() + "\", " +
-                "\"isSuccessful\" : \"" + eventNode3.getIsSuccessful() + "\", " +
-                "\"isSuicidal\" : \"" + eventNode3.getIsSuicidal() + "\", " +
-                "\"target\" : " +
-                "{" +
-                "\"id\" : \"" + targetNode3.getId().intValue() + "\", " +
-                "\"target\" : \"" + targetNode3.getTarget() + "\", " +
-                "\"countryOfOrigin\" : " +
-                "{ " +
-                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
-                "\"name\" : \"" + countryNode.getName() + "\"" +
-                "}" +
-                "}," +
-                "\"city\" : { " +
-                "\"id\" : \"" + cityNode2.getId().intValue() + "\", " +
-                "\"name\" : \"" + cityNode2.getName() + "\"," +
-                "\"latitude\" : " + cityNode2.getLatitude() + "," +
-                "\"longitude\" : " + cityNode2.getLongitude() +
-                "}" +
-                "}]}";
+                        "{" +
+                        "\"id\" : \"" + eventNode2.getId().intValue() + "\", " +
+                        "\"summary\" : \"" + updatedSummary + "\", " +
+                        "\"motive\" : \"" + updatedMotive + "\", " +
+                        "\"date\" : \"" + updatedEventDateString + "\", " +
+                        "\"isPartOfMultipleIncidents\" : \"" + updatedIsPartOfMultipleIncidents + "\", " +
+                        "\"isSuccessful\" : \"" + updatedIsSuccessful + "\", " +
+                        "\"isSuicidal\" : \"" + updatedIsSuicidal + "\", " +
+                        "\"target\" : " +
+                        "{" +
+                        "\"id\" : \"" + targetNode2.getId().intValue() + "\", " +
+                        "\"target\" : \"" + updatedTargetName + "\", " +
+                        "\"countryOfOrigin\" : " +
+                        "{ " +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"" +
+                        "}" +
+                        "}," +
+                        "\"city\" : { " +
+                        "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + cityNode.getName() + "\"," +
+                        "\"latitude\" : " + cityNode.getLatitude() + "," +
+                        "\"longitude\" : " + cityNode.getLongitude() +
+                        "}" +
+                        "}," +
+                        "{" +
+                        "\"id\" : \"" + eventNode3.getId().intValue() + "\", " +
+                        "\"summary\" : \"" + eventNode3.getSummary() + "\", " +
+                        "\"motive\" : \"" + eventNode3.getMotive() + "\", " +
+                        "\"date\" : \"" + updatedEventDateString2 + "\", " +
+                        "\"isPartOfMultipleIncidents\" : \"" + eventNode3.getIsPartOfMultipleIncidents() + "\", " +
+                        "\"isSuccessful\" : \"" + eventNode3.getIsSuccessful() + "\", " +
+                        "\"isSuicidal\" : \"" + eventNode3.getIsSuicidal() + "\", " +
+                        "\"target\" : " +
+                        "{" +
+                        "\"id\" : \"" + targetNode3.getId().intValue() + "\", " +
+                        "\"target\" : \"" + targetNode3.getTarget() + "\", " +
+                        "\"countryOfOrigin\" : " +
+                        "{ " +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"" +
+                        "}" +
+                        "}," +
+                        "\"city\" : { " +
+                        "\"id\" : \"" + cityNode2.getId().intValue() + "\", " +
+                        "\"name\" : \"" + cityNode2.getName() + "\"," +
+                        "\"latitude\" : " + cityNode2.getLatitude() + "," +
+                        "\"longitude\" : " + cityNode2.getLongitude() +
+                        "}" +
+                        "}]}";
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));

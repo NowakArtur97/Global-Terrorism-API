@@ -6,10 +6,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
@@ -22,6 +26,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -38,6 +43,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Import(Neo4jTestConfiguration.class)
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
@@ -82,21 +88,9 @@ class TargetControllerPutMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
-                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
+    private static void tearDown(@Autowired Neo4jDatabaseUtil neo4jDatabaseUtil) {
 
-        userRepository.deleteAll();
-
-        cityRepository.deleteAll();
-
-        countryRepository.deleteAll();
-
-        groupRepository.deleteAll();
-
-        eventRepository.deleteAll();
-
-        targetRepository.deleteAll();
+        neo4jDatabaseUtil.cleanDatabase();
     }
 
     @Test

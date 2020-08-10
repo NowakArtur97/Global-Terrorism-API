@@ -1,45 +1,38 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonMergePatchHttpMessageConverter;
-import com.NowakArtur97.GlobalTerrorismAPI.httpMessageConverter.JsonPatchHttpMessageConverter;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -50,8 +43,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Import(Neo4jTestConfiguration.class)
+@AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("TargetController_Tests")
 class TargetControllerPatchMethodTest {
@@ -60,31 +54,19 @@ class TargetControllerPatchMethodTest {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 3;
 
+    @Autowired
     private MockMvc mockMvc;
 
-    private GenericRestController<TargetModel, TargetDTO> targetController;
-
-    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
-    @Mock
-    private GenericService<TargetNode, TargetDTO> targetService;
-
-    @Mock
-    private TargetModelAssembler targetModelAssembler;
-
-    @Mock
-    private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
-
-    @Mock
-    private PatchHelper patchHelper;
-
     @Autowired
-    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    private JwtUtil jwtUtil;
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
-    private final static CountryNode country = new CountryNode("updated country");
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
+            Set.of(new RoleNode("user")));
+
+    private final static CountryNode countryNode = new CountryNode("updated country");
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -94,42 +76,17 @@ class TargetControllerPatchMethodTest {
     }
 
     @BeforeAll
-    private static void setUpCountry(@Autowired CountryRepository countryRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository) {
 
-        countryRepository.save(country);
+        userRepository.save(userNode);
+
+        countryRepository.save(countryNode);
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
-                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
+    private static void tearDown(@Autowired Neo4jDatabaseUtil neo4jDatabaseUtil) {
 
-        userRepository.deleteAll();
-
-        cityRepository.deleteAll();
-
-        countryRepository.deleteAll();
-
-        groupRepository.deleteAll();
-
-        eventRepository.deleteAll();
-
-        targetRepository.deleteAll();
-    }
-
-    @BeforeEach
-    private void setUp() {
-
-        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
-
-        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
-
-        mockMvc = MockMvcBuilders.standaloneSetup(targetController, restResponseGlobalEntityExceptionHandler)
-                .setMessageConverters(new JsonMergePatchHttpMessageConverter(), new JsonPatchHttpMessageConverter(),
-                        new MappingJackson2HttpMessageConverter())
-                .setControllerAdvice(new GenericRestControllerAdvice())
-                .build();
+        neo4jDatabaseUtil.cleanDatabase();
     }
 
     @Test

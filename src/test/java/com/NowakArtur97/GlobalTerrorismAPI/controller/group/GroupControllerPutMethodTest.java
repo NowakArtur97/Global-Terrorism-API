@@ -2,9 +2,12 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
@@ -18,6 +21,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -38,6 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Import(Neo4jTestConfiguration.class)
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("GroupController_Tests")
@@ -93,21 +98,9 @@ class GroupControllerPutMethodTest {
     }
 
     @AfterAll
-    private static void tearDown(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
-                                 @Autowired EventRepository eventRepository, @Autowired TargetRepository targetRepository,
-                                 @Autowired CountryRepository countryRepository, @Autowired CityRepository cityRepository) {
+    private static void tearDown(@Autowired Neo4jDatabaseUtil neo4jDatabaseUtil) {
 
-        userRepository.deleteAll();
-
-        cityRepository.deleteAll();
-
-        countryRepository.deleteAll();
-
-        groupRepository.deleteAll();
-
-        eventRepository.deleteAll();
-
-        targetRepository.deleteAll();
+        neo4jDatabaseUtil.cleanDatabase();
     }
 
     @Test
