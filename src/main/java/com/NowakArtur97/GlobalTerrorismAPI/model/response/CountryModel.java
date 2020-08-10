@@ -21,7 +21,11 @@ public class CountryModel extends RepresentationModel<CountryModel> implements C
     @ApiModelProperty(notes = "The country's name")
     private String name;
 
-    public CountryModel(String name) {
+    @ApiModelProperty(notes = "The country's region")
+    private RegionModel region;
+
+    public CountryModel(String name, RegionModel region) {
         this.name = name;
+        this.region = region;
     }
 }
