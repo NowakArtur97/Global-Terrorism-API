@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class CountryDTO implements DTONode, Country {
 
     @ApiModelProperty(notes = "The country's name", required = true, example = "Country")
-    @CountryExists(message = "{country.countryOfOrigin.exists}")
+    @CountryExists(message = "{country.name.exists}")
     private String name;
 }

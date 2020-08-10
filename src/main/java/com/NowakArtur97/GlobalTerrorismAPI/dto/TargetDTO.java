@@ -23,6 +23,6 @@ public class TargetDTO implements DTONode, Target {
 
     @ApiModelProperty(notes = "The target's country of origin", required = true, example = "Country")
     @Valid
-    @NotNull(message = "{country.countryOfOrigin.notBlank}")
+    @NotNull(message = "{country.name.notBlank}")
     private CountryDTO countryOfOrigin;
 }
