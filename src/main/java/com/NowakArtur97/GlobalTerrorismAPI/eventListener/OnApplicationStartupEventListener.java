@@ -3,9 +3,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.enums.Region;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.*;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -169,6 +173,8 @@ class OnApplicationStartupEventListener {
 
         CountryNode country = new CountryNode(name);
 
+        country.setRegion(getRegion(row));
+
         if (allCountries.contains(country)) {
 
             return allCountries.get(allCountries.indexOf(country));
@@ -208,6 +214,13 @@ class OnApplicationStartupEventListener {
 
             return city;
         }
+    }
+
+    private Region getRegion(Row row){
+
+        String regionName = getCellValueFromRowOnIndex(row, XlsxColumnType.REGION_NAME.getIndex());
+
+       return Region.getRegionByName(regionName);
     }
 
     private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
