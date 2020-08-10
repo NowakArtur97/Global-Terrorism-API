@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
 
-import com.NowakArtur97.GlobalTerrorismAPI.validator.CountryExistsConstraintValidator;
+import com.NowakArtur97.GlobalTerrorismAPI.validator.RegionExistsConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

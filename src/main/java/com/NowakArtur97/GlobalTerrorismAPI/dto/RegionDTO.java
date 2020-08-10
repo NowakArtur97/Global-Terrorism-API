@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.RegionExists;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Region;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

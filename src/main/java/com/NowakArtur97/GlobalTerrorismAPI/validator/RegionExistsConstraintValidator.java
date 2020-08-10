@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.RegionExists;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.RegionService;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.ConstraintValidator;
