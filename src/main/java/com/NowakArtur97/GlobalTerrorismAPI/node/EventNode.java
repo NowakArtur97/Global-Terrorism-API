@@ -32,15 +32,6 @@ public class EventNode extends Node implements Event {
     @Relationship("LOCATED_IN")
     private CityNode city;
 
-    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal) {
-        this.summary = summary;
-        this.motive = motive;
-        this.date = date;
-        this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
-        this.isSuccessful = isSuccessful;
-        this.isSuicidal = isSuicidal;
-    }
-
     public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal, TargetNode target, CityNode city) {
         this.summary = summary;
         this.motive = motive;
@@ -64,5 +55,14 @@ public class EventNode extends Node implements Event {
         this.isSuicidal = isSuicidal;
         this.target = target;
         this.city = city;
+    }
+
+    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal) {
+        this.summary = summary;
+        this.motive = motive;
+        this.date = date;
+        this.isPartOfMultipleIncidents = isPartOfMultipleIncidents;
+        this.isSuccessful = isSuccessful;
+        this.isSuicidal = isSuicidal;
     }
 }

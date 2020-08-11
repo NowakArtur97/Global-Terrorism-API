@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -63,13 +62,20 @@ class EventTargetControllerPutMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CountryNode countryNode = new CountryNode("country");
-    private final static CountryNode anotherCountryNode = new CountryNode("another country");
+    private final static RegionNode regionNode = new RegionNode("region");
+    private final static RegionNode anotherRegionNode = new RegionNode("another region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("another country", anotherRegionNode);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
-    private final static EventNode eventNodeWithoutTarget = new EventNode("summary", "motive", new Date(), true, true, true);
-    private final static EventNode eventNodeWithTarget = new EventNode("summary", "motive", new Date(), true, true, true);
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+
+    private final static EventNode eventNodeWithoutTarget = new EventNode("summary", "motive", new Date(),
+            true, true, true);
+    private final static EventNode eventNodeWithTarget = new EventNode("summary", "motive", new Date(),
+            true, false, false, targetNode, cityNode);
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -80,12 +86,10 @@ class EventTargetControllerPutMethodTest {
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
-                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
+                              @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
-
-        eventNodeWithTarget.setTarget(targetNode);
-
+        
         countryRepository.save(anotherCountryNode);
 
         eventRepository.save(eventNodeWithoutTarget);

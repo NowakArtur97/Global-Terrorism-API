@@ -1,10 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
@@ -67,7 +64,9 @@ class GroupControllerPostMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CountryNode countryNode = new CountryNode("country");
+    private final static RegionNode regionNode = new RegionNode("region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
 
@@ -147,6 +146,9 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
@@ -172,6 +174,9 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode.getLatitude())))

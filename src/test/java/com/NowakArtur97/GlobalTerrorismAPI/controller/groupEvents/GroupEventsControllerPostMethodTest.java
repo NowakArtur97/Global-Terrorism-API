@@ -75,7 +75,9 @@ class GroupEventsControllerPostMethodTest {
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
 
-    private final static CountryNode countryNode = new CountryNode("country");
+    private final static RegionNode regionNode = new RegionNode("region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
 
     private final static GroupNode groupNode = new GroupNode("group");
     private final static GroupNode groupNode2 = new GroupNode("group 2");
@@ -155,6 +157,9 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
@@ -209,6 +214,9 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))

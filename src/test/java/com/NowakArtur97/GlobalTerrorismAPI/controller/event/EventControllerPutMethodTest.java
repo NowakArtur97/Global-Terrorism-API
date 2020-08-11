@@ -7,7 +7,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.EventRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.RegionRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
@@ -97,13 +96,11 @@ class EventControllerPutMethodTest {
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
-                              @Autowired CountryRepository countryRepository, @Autowired RegionRepository regionRepository) {
+                              @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
 
         countryRepository.save(anotherCountryNode);
-
-        regionRepository.save(anotherRegionNode);
 
         eventRepository.save(eventNode);
     }
