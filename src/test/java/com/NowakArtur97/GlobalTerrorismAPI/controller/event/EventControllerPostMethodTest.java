@@ -4,10 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
@@ -74,7 +71,9 @@ class EventControllerPostMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CountryNode countryNode = new CountryNode("country");
+    private final static RegionNode regionNode = new RegionNode("region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
 
@@ -88,7 +87,8 @@ class EventControllerPostMethodTest {
     }
 
     @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired CountryRepository countryRepository,
+    private static void setUp(@Autowired UserRepository userRepository,
+                              @Autowired CountryRepository countryRepository,
                               @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
@@ -141,6 +141,9 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.name", is(countryDTO.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
@@ -186,6 +189,9 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.name", is(countryDTO.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
