@@ -5,10 +5,15 @@ import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -71,12 +76,14 @@ class TargetControllerGetMethodTest {
     @Mock
     private ViolationHelper<TargetNode, TargetDTO> violationHelper;
 
+    private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
+        regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
@@ -149,6 +156,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].countryOfOrigin.id", is(targetModel1.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[0].countryOfOrigin.name", is(targetModel1.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[0].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[0].countryOfOrigin.region.id",
+                                is(targetModel1.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.region.name",
+                                is(targetModel1.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(targetModel1.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
@@ -156,6 +168,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].countryOfOrigin.id", is(targetModel2.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[1].countryOfOrigin.name", is(targetModel2.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[1].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.id",
+                                is(targetModel2.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.name",
+                                is(targetModel2.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(targetModel2.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
@@ -163,6 +180,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].countryOfOrigin.id", is(targetModel3.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[2].countryOfOrigin.name", is(targetModel3.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[2].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.id",
+                                is(targetModel3.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.name",
+                                is(targetModel3.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(targetModel3.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3].id", is(targetModel4.getId().intValue())))
@@ -170,6 +192,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[3].countryOfOrigin.id", is(targetModel4.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[3].countryOfOrigin.name", is(targetModel4.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[3].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[3].countryOfOrigin.region.id",
+                                is(targetModel4.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[3].countryOfOrigin.region.name",
+                                is(targetModel4.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[3].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(targetModel4.getLink("self").get().getHref())))
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
@@ -242,6 +269,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].countryOfOrigin.id", is(targetModel1.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[0].countryOfOrigin.name", is(targetModel1.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[0].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[0].countryOfOrigin.region.id",
+                                is(targetModel1.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[0].countryOfOrigin.region.name",
+                                is(targetModel1.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(targetModel1.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].id", is(targetModel2.getId().intValue())))
@@ -249,6 +281,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].countryOfOrigin.id", is(targetModel2.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[1].countryOfOrigin.name", is(targetModel2.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[1].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.id",
+                                is(targetModel2.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.name",
+                                is(targetModel2.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[1].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(targetModel2.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].id", is(targetModel3.getId().intValue())))
@@ -256,6 +293,11 @@ class TargetControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].countryOfOrigin.id", is(targetModel3.getCountryOfOrigin().getId().intValue())))
                         .andExpect(jsonPath("content[2].countryOfOrigin.name", is(targetModel3.getCountryOfOrigin().getName())))
                         .andExpect(jsonPath("content[2].countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.id",
+                                is(targetModel3.getCountryOfOrigin().getRegion().getId().intValue())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.name",
+                                is(targetModel3.getCountryOfOrigin().getRegion().getName())))
+                        .andExpect(jsonPath("content[2].countryOfOrigin.region.links").isEmpty())
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(targetModel3.getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3]").doesNotExist())
@@ -332,15 +374,21 @@ class TargetControllerGetMethodTest {
     @Test
     void when_find_existing_target_should_return_target() {
 
-        Long targetId = 1L;
+        Long regionId = 1L;
         Long countryId = 2L;
-        String targetName = "target";
-        String country = "country";
-        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withTarget(targetName)
-                .withCountry(countryBuilder.withId(countryId).withName(country).build(ObjectType.NODE))
+        Long targetId = 3L;
+
+        RegionNode regionNode = (RegionNode) regionBuilder.withId(regionId).build(ObjectType.NODE);
+        RegionModel regionModel = (RegionModel) regionBuilder.withId(regionId).build(ObjectType.MODEL);
+
+        CountryNode countryNode = (CountryNode) countryBuilder.withId(countryId).withRegion(regionNode)
                 .build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withTarget(targetName)
-                .withCountry(countryBuilder.withId(countryId).withName(country).build(ObjectType.MODEL))
+        CountryModel countryModel = (CountryModel) countryBuilder.withId(countryId).withRegion(regionModel)
+                .build(ObjectType.MODEL);
+
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).withCountry(countryNode)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withCountry(countryModel)
                 .build(ObjectType.MODEL);
 
         String pathToLink = BASE_PATH + "/" + targetId.intValue();
@@ -357,10 +405,13 @@ class TargetControllerGetMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToLink)))
                         .andExpect(jsonPath("id", is(targetId.intValue())))
-                        .andExpect(jsonPath("target", is(targetName)))
+                        .andExpect(jsonPath("target", is(targetNode.getTarget())))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryId.intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(country)))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()),
+                        .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()),
                 () -> verify(targetService, times(1)).findById(targetId),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
@@ -407,6 +458,8 @@ class TargetControllerGetMethodTest {
                 return targetBuilder.withId((long) counterForUtilMethodsNode)
                         .withTarget("target" + counterForUtilMethodsNode)
                         .withCountry(countryBuilder.withName("country" + counterForUtilMethodsNode)
+                                .withRegion(regionBuilder.withName("region" + counterForUtilMethodsNode)
+                                        .build(ObjectType.NODE))
                                 .build(ObjectType.NODE))
                         .build(ObjectType.NODE);
 
@@ -416,7 +469,10 @@ class TargetControllerGetMethodTest {
 
                 TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
                         .withCountry(countryBuilder.withName("country" + counterForUtilMethodsModel)
-                                .build(ObjectType.MODEL))
+                                .withRegion(regionBuilder.withName("region" + counterForUtilMethodsNode)
+                                        .build(ObjectType.MODEL))
+                                .build(ObjectType.MODEL)
+                        )
                         .build(ObjectType.MODEL);
 
                 String pathToTargetLink = BASE_PATH + counterForUtilMethodsModel;

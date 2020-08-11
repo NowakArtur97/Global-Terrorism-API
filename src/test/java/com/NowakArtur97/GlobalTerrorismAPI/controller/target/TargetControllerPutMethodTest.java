@@ -2,10 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
@@ -64,8 +61,10 @@ class TargetControllerPutMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CountryNode countryNode = new CountryNode("country");
-    private final static CountryNode anotherCountryNode = new CountryNode("another country");
+    private final static RegionNode regionNode = new RegionNode("region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("another country", regionNode);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
@@ -120,7 +119,10 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("target", is(updatedTargetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
     }
 
     @Test
@@ -149,7 +151,10 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("target", is(targetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
     }
 
     @ParameterizedTest(name = "{index}: Target Name: {0}")

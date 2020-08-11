@@ -1,10 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
@@ -49,8 +46,6 @@ class TargetControllerPatchMethodTest {
     private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = BASE_PATH + "/" + "{id}";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = BASE_PATH + "/" + "{id2}";
 
-    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 3;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -60,7 +55,10 @@ class TargetControllerPatchMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CountryNode countryNode = new CountryNode("updated country");
+    private final static RegionNode regionNode = new RegionNode("region");
+
+    private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("another country", regionNode);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
@@ -69,9 +67,9 @@ class TargetControllerPatchMethodTest {
 
         userRepository.save(userNode);
 
-        targetRepository.save(targetNode);
+        countryRepository.save(anotherCountryNode);
 
-        countryRepository.save(countryNode);
+        targetRepository.save(targetNode);
     }
 
     @AfterAll
@@ -80,320 +78,322 @@ class TargetControllerPatchMethodTest {
         neo4jDatabaseUtil.cleanDatabase();
     }
 
-    @Test
-    void when_partial_update_valid_target_using_json_patch_should_return_partially_updated_node() {
+    @Nested
+    class TargetControllerJsonPatchMethodTest {
 
-        String updatedTargetName = "updated target";
-        String updatedCountryName = "updated country";
+        @Test
+        void when_partial_update_valid_target_using_json_patch_should_return_partially_updated_node() {
 
-        String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
+            String updatedTargetName = "updated target";
 
-        String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
-                "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + updatedCountryName + "\" }]";
+            String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + anotherCountryNode.getName() + "\" }]";
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
-                        .andExpect(jsonPath("links[1].href").doesNotExist())
-                        .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(updatedCountryName)))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
+                            .andExpect(jsonPath("target", is(updatedTargetName)))
+                            .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_target_using_json_patch_but_target_not_exists_should_return_error_response() {
+
+            Long notExistingId = 1000L;
+
+            String updatedTargetName = "updated target";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + anotherCountryNode.getName() + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, notExistingId)
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(404)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Could not find TargetModel with id: " + notExistingId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: Target Name: {0}")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_invalid_target_using_json_patch_should_return_errors(String invalidTargetName) {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + invalidTargetName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: Target Country: {0}")
+        @NullAndEmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_target_with_null_values_using_json_patch_should_return_error_response(String invalidCountryName) {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + invalidCountryName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_target_with_country_as_null_using_json_patch_should_return_errors() {
+
+            String updatedTargetName = "updated target";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": " + null + " }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_valid_target_with_not_existing_country_using_json_patch_should_return_errors() {
+
+            String updatedTargetName = "updated target";
+            String notExistingCountryName = "not existing country";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + notExistingCountryName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
     }
 
-    @Test
-    void when_partial_update_target_using_json_patch_but_target_not_exists_should_return_error_response() {
+    @Nested
+    class TargetControllerJsonMergePatchMethodTest {
+        @Test
+        void when_partial_update_valid_target_using_json_merge_patch_should_return_partially_updated_node() {
 
-        Long notExistingId = 1000L;
+            String updatedTargetName = "updated target";
 
-        String updatedTargetName = "updated target";
-        String updatedCountryName = "updated country";
+            String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
 
-        String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
-                "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + updatedCountryName + "\" }]";
+            String jsonMergePatch =
+                    "{\"target\" : \"" + updatedTargetName + "\", " +
+                            "\"countryOfOrigin\" : { \"name\" : \"" + anotherCountryNode.getName() + "\" }}";
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, notExistingId)
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isNotFound())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(404)))
-                        .andExpect(jsonPath("errors[0]",
-                                is("Could not find TargetModel with id: " + notExistingId + ".")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
+                            .andExpect(jsonPath("target", is(updatedTargetName)))
+                            .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
+        }
 
-    @ParameterizedTest(name = "{index}: Target Name: {0}")
-    @EmptySource
-    @ValueSource(strings = {" "})
-    void when_partial_update_invalid_target_using_json_patch_should_return_errors(String invalidTargetName) {
+        @Test
+        void when_partial_update_target_using_json_merge_patch_but_target_not_exists_should_return_error_response() {
 
-        String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + invalidTargetName + "\" }," +
-                "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + countryNode.getName() + "\" }]";
+            Long notExistingId = 1000L;
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+            String updatedTargetName = "updated target";
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
+            String jsonMergePatch =
+                    "{\"target\" : \"" + updatedTargetName + "\", " +
+                            "\"countryOfOrigin\" : { \"name\" : \"" + anotherCountryNode.getName() + "\" }}";
 
-    @ParameterizedTest(name = "{index}: Target Country: {0}")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void when_partial_update_target_with_null_values_using_json_patch_should_return_error_response(String invalidCountryName) {
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + invalidCountryName + "\" }]";
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, notExistingId)
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(404)))
+                            .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + notExistingId + ".")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+        @ParameterizedTest(name = "{index}: Target Name: {0}")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_invalid_target_using_json_merge_patch_should_return_errors(String invalidTargetName) {
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
-    }
+            String jsonMergePatch = "{\"target\" : \"" + invalidTargetName + "\"}";
 
-    @Test
-    void when_partial_update_target_with_country_as_null_using_json_patch_should_return_errors() {
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-        String updatedTargetName = "updated target";
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
 
-        String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
-                "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": " + null + " }]";
+        @ParameterizedTest(name = "{index}: Target Country: {0}")
+        @NullAndEmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_target_with_null_values_using_json_merge_patch_should_return_error_response(String invalidCountryName) {
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+            String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : \"" + invalidCountryName + "\" }}";
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-    @Test
-    void when_partial_update_valid_target_with_not_existing_country_using_json_patch_should_return_errors() {
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+        }
 
-        String updatedTargetName = "updated target";
-        String notExistingCountryName = "not existing country";
+        @Test
+        void when_partial_update_target_with_country_as_null_using_json_merge_patch_should_return_errors() {
 
-        String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
-                "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/name\", \"value\": \"" + notExistingCountryName + "\" }]";
+            String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : " + null + " }}";
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonPatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
 
-    @Test
-    void when_partial_update_valid_target_using_json_merge_patch_should_return_partially_updated_node() {
+        @Test
+        void when_partial_update_valid_target_with_not_existing_country_using_json_merge_patch_should_return_errors() {
 
-        String updatedTargetName = "updated target";
-        String updatedCountryName = "updated country";
+            String notExistingCountryName = "not existing country";
 
-        String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
+            String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\" }}";
 
-        String jsonMergePatch =
-                "{\"target\" : \"" + updatedTargetName + "\", " +
-                        "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\" }}";
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
 
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToLink)))
-                        .andExpect(jsonPath("links[1].href").doesNotExist())
-                        .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
-                        .andExpect(jsonPath("target", is(updatedTargetName)))
-                        .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.name", is(updatedCountryName)))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
-    }
-
-    @Test
-    void when_partial_update_target_using_json_merge_patch_but_target_not_exists_should_return_error_response() {
-
-        Long notExistingId = 1000L;
-
-        String updatedTargetName = "updated target";
-        String updatedCountryName = "updated country";
-
-        String jsonMergePatch =
-                "{\"target\" : \"" + updatedTargetName + "\", " +
-                        "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\" }}";
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, notExistingId)
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isNotFound())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(404)))
-                        .andExpect(jsonPath("errors[0]", is("Could not find TargetModel with id: " + notExistingId + ".")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
-
-    @ParameterizedTest(name = "{index}: Target Name: {0}")
-    @EmptySource
-    @ValueSource(strings = {" "})
-    void when_partial_update_invalid_target_using_json_merge_patch_should_return_errors(String invalidTargetName) {
-
-        String updatedCountryName = "updated country";
-
-        String jsonMergePatch =
-                "{\"target\" : \"" + invalidTargetName + "\", " +
-                        "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\" }}";
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
-
-    @ParameterizedTest(name = "{index}: Target Country: {0}")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void when_partial_update_target_with_null_values_using_json_merge_patch_should_return_error_response(String invalidCountryName) {
-
-        String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : \"" + invalidCountryName + "\" }}";
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
-    }
-
-    @Test
-    void when_partial_update_target_with_country_as_null_using_json_merge_patch_should_return_errors() {
-
-        String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : " + null + " }}";
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
-    }
-
-    @Test
-    void when_partial_update_valid_target_with_not_existing_country_using_json_merge_patch_should_return_errors() {
-
-        String notExistingCountryName = "not existing country";
-
-        String jsonMergePatch =
-                "{\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\" }}";
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(jsonMergePatch)
-                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(notNullValue())))
-                        .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", hasSize(1))));
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, targetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
     }
 }
