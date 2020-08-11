@@ -1,9 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -26,11 +28,13 @@ class CountryServiceImplTest {
     @Mock
     private CountryRepository countryRepository;
 
+    private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
+        regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
     }
 
@@ -45,7 +49,7 @@ class CountryServiceImplTest {
 
         String countryName = "country";
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(countryName).build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(countryName)  .build(ObjectType.NODE);
 
         when(countryRepository.findByName(countryName)).thenReturn(Optional.of(countryNodeExpected));
 
@@ -108,8 +112,11 @@ class CountryServiceImplTest {
     @Test
     void when_save_country_should_return_saved_country() {
 
-        CountryNode countryNodeExpectedBeforeSave = (CountryNode) countryBuilder.withId(null).build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpectedBeforeSave = (CountryNode) countryBuilder.withId(null).withRegion(regionNode)
+                .build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNode)
+                .build(ObjectType.NODE);
 
         when(countryRepository.save(countryNodeExpectedBeforeSave)).thenReturn(countryNodeExpected);
 
@@ -121,6 +128,14 @@ class CountryServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
                         () -> "should return country node with name: " + countryNodeExpected.getName()
                                 + ", but was: " + countryNodeActual.getName()),
+                () -> assertEquals(countryNodeExpected.getRegion().getId(),
+                        countryNodeActual.getRegion().getId(),
+                        () -> "should return country node with region id: " +
+                                countryNodeExpected.getRegion().getId()
+                                + ", but was: " + countryNodeActual.getRegion().getId()),
+                () -> assertEquals(countryNodeExpected.getRegion().getName(), countryNodeActual.getRegion().getName(),
+                        () -> "should return country node with region name: " + countryNodeExpected.getRegion().getName()
+                                + ", but was: " + countryNodeActual.getRegion().getName()),
                 () -> verify(countryRepository, times(1)).save(countryNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
