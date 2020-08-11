@@ -89,7 +89,7 @@ class EventTargetControllerPutMethodTest {
                               @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
-        
+
         countryRepository.save(anotherCountryNode);
 
         eventRepository.save(eventNodeWithoutTarget);
@@ -124,7 +124,10 @@ class EventTargetControllerPutMethodTest {
                         .andExpect(jsonPath("target", is(targetDTO.getTarget())))
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
     }
 
     @Test
@@ -152,7 +155,10 @@ class EventTargetControllerPutMethodTest {
                         .andExpect(jsonPath("target", is(updatedTargetName)))
                         .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty()));
+                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(anotherRegionNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
     }
 
     @ParameterizedTest(name = "{index}: Target Name: {0}")
