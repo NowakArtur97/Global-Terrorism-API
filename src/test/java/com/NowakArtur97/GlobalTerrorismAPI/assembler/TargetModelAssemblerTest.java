@@ -2,10 +2,13 @@ package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -24,6 +27,7 @@ class TargetModelAssemblerTest {
 
     private TargetModelAssembler targetModelAssembler;
 
+    private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
@@ -33,6 +37,7 @@ class TargetModelAssemblerTest {
     @BeforeAll
     private static void setUpBuilders() {
 
+        regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
@@ -46,13 +51,17 @@ class TargetModelAssemblerTest {
     @Test
     void when_map_target_node_to_model_should_return_target_model() {
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        CountryModel countryModel = (CountryModel) countryBuilder.build(ObjectType.MODEL);
+
+        RegionModel regionModel = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        CountryModel countryModel = (CountryModel) countryBuilder.withRegion(regionModel).build(ObjectType.MODEL);
         TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
         TargetModel targetModelExpected = (TargetModel) targetBuilder.withCountry(countryModel).build(ObjectType.MODEL);
 
         when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(targetModel);
+        when(objectMapper.map(countryNode.getRegion(), RegionModel.class)).thenReturn(regionModel);
         when(objectMapper.map(targetNode.getCountryOfOrigin(), CountryModel.class)).thenReturn(countryModel);
 
         TargetModel targetModelActual = targetModelAssembler.toModel(targetNode);
@@ -76,7 +85,16 @@ class TargetModelAssemblerTest {
                                 + ", but was: " + targetModelActual.getCountryOfOrigin()),
                 () -> assertTrue(targetModelActual.getCountryOfOrigin().getLinks().isEmpty(),
                         () -> "should return target country model without links, but was: " + targetModelActual.getCountryOfOrigin()),
+                () -> assertEquals(regionModel.getId(), targetModelActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target model with region id: " + regionModel.getId()
+                                + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionModel.getName(), targetModelActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target model with region name: " + regionModel.getName()
+                                + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion().getName()),
+                () -> assertTrue(targetModelActual.getCountryOfOrigin().getRegion().getLinks().isEmpty(),
+                        () -> "should return target with region model without links, but was: " + targetModelActual.getCountryOfOrigin().getRegion().getLinks()),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetModel.class),
+                () -> verify(objectMapper, times(1)).map(targetNode.getCountryOfOrigin(), CountryModel.class),
                 () -> verify(objectMapper, times(1)).map(targetNode.getCountryOfOrigin(), CountryModel.class),
                 () -> verifyNoMoreInteractions(objectMapper));
     }

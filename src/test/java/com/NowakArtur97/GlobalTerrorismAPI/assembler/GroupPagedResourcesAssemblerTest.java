@@ -1,15 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -52,15 +46,10 @@ class GroupPagedResourcesAssemblerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    private static TargetBuilder targetBuilder;
-    private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
-
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
     }
 
@@ -256,15 +245,9 @@ class GroupPagedResourcesAssemblerTest {
 
         while (count < listSize) {
 
-            TargetNode targetNode = (TargetNode) targetBuilder.withId((long) count).build(ObjectType.NODE);
-            TargetModel targetModel = (TargetModel) targetBuilder.withId((long) count).build(ObjectType.MODEL);
+            GroupNode groupNode = (GroupNode) groupBuilder.build(ObjectType.NODE);
 
-            EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
-            EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).build(ObjectType.MODEL);
-
-            GroupNode groupNode = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
-
-            when(objectMapper.map(groupNode, GroupModel.class)).thenReturn((GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL));
+            when(objectMapper.map(groupNode, GroupModel.class)).thenReturn((GroupModel) groupBuilder.build(ObjectType.MODEL));
 
             groupsListExpected.add(groupNode);
 
