@@ -112,10 +112,10 @@ class CountryServiceImplTest {
     @Test
     void when_save_country_should_return_saved_country() {
 
-        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNodeExpectedBeforeSave = (CountryNode) countryBuilder.withId(null).withRegion(regionNode)
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpectedBeforeSave = (CountryNode) countryBuilder.withId(null).withRegion(regionNodeExpected)
                 .build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNode)
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
                 .build(ObjectType.NODE);
 
         when(countryRepository.save(countryNodeExpectedBeforeSave)).thenReturn(countryNodeExpected);
@@ -128,13 +128,13 @@ class CountryServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
                         () -> "should return country node with name: " + countryNodeExpected.getName()
                                 + ", but was: " + countryNodeActual.getName()),
-                () -> assertEquals(countryNodeExpected.getRegion().getId(),
+                () -> assertEquals(regionNodeExpected.getId(),
                         countryNodeActual.getRegion().getId(),
                         () -> "should return country node with region id: " +
-                                countryNodeExpected.getRegion().getId()
+                                regionNodeExpected.getId()
                                 + ", but was: " + countryNodeActual.getRegion().getId()),
-                () -> assertEquals(countryNodeExpected.getRegion().getName(), countryNodeActual.getRegion().getName(),
-                        () -> "should return country node with region name: " + countryNodeExpected.getRegion().getName()
+                () -> assertEquals(regionNodeExpected.getName(), countryNodeActual.getRegion().getName(),
+                        () -> "should return country node with region name: " + regionNodeExpected.getName()
                                 + ", but was: " + countryNodeActual.getRegion().getName()),
                 () -> verify(countryRepository, times(1)).save(countryNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(countryRepository));

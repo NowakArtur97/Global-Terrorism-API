@@ -4,11 +4,13 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.TargetRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -33,7 +35,7 @@ import static org.mockito.Mockito.*;
 @Tag("TargetServiceImpl_Tests")
 class TargetServiceImplTest {
 
-    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 3;
+    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 4;
 
     private TargetService targetService;
 
@@ -46,12 +48,14 @@ class TargetServiceImplTest {
     @Mock
     private CountryService countryService;
 
+    private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
+        regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
     }
@@ -141,11 +145,11 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target with target: " + targetNodeExpected.getTarget() + ", but was"
                                 + targetNodeActual.getTarget()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(targetRepository),
@@ -174,7 +178,8 @@ class TargetServiceImplTest {
 
         Long expectedTargetId = 1L;
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(expectedTargetId).withCountry(countryNodeExpected).build(ObjectType.NODE);
 
         when(targetRepository.findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNodeExpected));
@@ -188,14 +193,22 @@ class TargetServiceImplTest {
                         + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
-                                + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getName()),
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetRepository),
                 () -> verifyNoInteractions(objectMapper),
@@ -241,13 +254,13 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -290,13 +303,13 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: " + targetNodeActual.getTarget()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -325,13 +338,13 @@ class TargetServiceImplTest {
                                 + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository),
@@ -360,13 +373,13 @@ class TargetServiceImplTest {
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
