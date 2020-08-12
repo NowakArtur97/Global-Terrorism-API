@@ -63,13 +63,13 @@ class TargetMapperTest {
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin(), targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + targetNodeExpected.getCountryOfOrigin() + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + targetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNode, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNode + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNode.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNode.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(targetNodeExpected.getCountryOfOrigin().getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + targetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNode.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNode.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(targetDTO, TargetNode.class),
                 () -> verifyNoMoreInteractions(modelMapper));
@@ -91,10 +91,10 @@ class TargetMapperTest {
                 () -> assertEquals(targetDTOExpected.getTarget(), targetDTOActual.getTarget(),
                         () -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
                                 + targetDTOActual.getTarget()),
-                () -> assertEquals(targetDTOExpected.getCountryOfOrigin(), targetDTOActual.getCountryOfOrigin(),
-                        () -> "should return target dto with country: " + targetDTOExpected.getCountryOfOrigin() + ", but was: " + targetDTOActual.getCountryOfOrigin()),
-                () -> assertEquals(targetDTOExpected.getCountryOfOrigin().getName(), targetDTOActual.getCountryOfOrigin().getName(),
-                        () -> "should return target dto with country name: " + targetDTOExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryDTO, targetDTOActual.getCountryOfOrigin(),
+                        () -> "should return target dto with country: " + countryDTO + ", but was: " + targetDTOActual.getCountryOfOrigin()),
+                () -> assertEquals(countryDTO.getName(), targetDTOActual.getCountryOfOrigin().getName(),
+                        () -> "should return target dto with country name: " + countryDTO.getName()
                                 + ", but was: " + targetDTOActual.getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(targetNode, TargetDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
@@ -116,13 +116,13 @@ class TargetMapperTest {
                 () -> assertEquals(targetModelExpected.getTarget(), targetModelActual.getTarget(),
                         () -> "should return target model with target: " + targetModelExpected.getTarget() + ", but was: "
                                 + targetModelActual.getTarget()),
-                () -> assertEquals(targetModelExpected.getCountryOfOrigin(), targetModelActual.getCountryOfOrigin(),
-                        () -> "should return target model with country: " + targetModelExpected.getCountryOfOrigin() + ", but was: " + targetModelActual.getCountryOfOrigin()),
-                () -> assertEquals(targetModelExpected.getCountryOfOrigin().getId(), targetModelActual.getCountryOfOrigin().getId(),
-                        () -> "should return target model with country id: " + targetModelExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(countryModel, targetModelActual.getCountryOfOrigin(),
+                        () -> "should return target model with country: " + countryModel + ", but was: " + targetModelActual.getCountryOfOrigin()),
+                () -> assertEquals(countryModel.getId(), targetModelActual.getCountryOfOrigin().getId(),
+                        () -> "should return target model with country id: " + countryModel.getId()
                                 + ", but was: " + targetModelActual.getId()),
-                () -> assertEquals(targetModelExpected.getCountryOfOrigin().getName(), targetModelActual.getCountryOfOrigin().getName(),
-                        () -> "should return target model with country name: " + targetModelExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(countryModel.getName(), targetModelActual.getCountryOfOrigin().getName(),
+                        () -> "should return target model with country name: " + countryModel.getName()
                                 + ", but was: " + targetModelActual.getCountryOfOrigin()),
                 () -> verify(modelMapper, times(1)).map(targetNode, TargetModel.class),
                 () -> verifyNoMoreInteractions(modelMapper));
