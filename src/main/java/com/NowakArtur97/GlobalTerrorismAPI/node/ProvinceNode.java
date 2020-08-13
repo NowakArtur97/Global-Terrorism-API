@@ -15,9 +15,10 @@ public class ProvinceNode extends Node {
     @Relationship("PART_OF")
     private CountryNode country;
 
-    public ProvinceNode(String name) {
+    public ProvinceNode(String name, CountryNode country) {
 
         this.name = name;
+        this.country = country;
     }
 
     public ProvinceNode(Long id, String name, CountryNode country) {

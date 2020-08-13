@@ -20,10 +20,11 @@ public class CityNode extends Node implements City {
     @Relationship("PART_OF")
     private ProvinceNode province;
 
-    public CityNode(String name, double latitude, double longitude) {
+    public CityNode(String name, double latitude, double longitude, ProvinceNode province) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.province = province;
     }
 
     public CityNode(Long id, String name, double latitude, double longitude, ProvinceNode province) {

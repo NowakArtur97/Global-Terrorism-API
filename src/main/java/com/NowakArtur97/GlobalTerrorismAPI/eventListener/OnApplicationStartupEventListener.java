@@ -5,11 +5,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.RegionRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.ProvinceRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.*;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,6 +32,8 @@ class OnApplicationStartupEventListener {
 
     private final List<CountryNode> allCountries = new ArrayList<>();
 
+    private final List<ProvinceNode> allProvinces = new ArrayList<>();
+
     private final List<CityNode> allCities = new ArrayList<>();
 
     private final List<RegionNode> allRegions = new ArrayList<>();
@@ -45,9 +44,11 @@ class OnApplicationStartupEventListener {
 
     private final GenericService<GroupNode, GroupDTO> groupService;
 
+    private final ProvinceRepository provinceRepository;
+
     private final CountryService countryService;
 
-    private final RegionRepository regionRepository;
+    private final RegionService regionService;
 
     private final UserService userService;
 
@@ -77,11 +78,13 @@ class OnApplicationStartupEventListener {
 
         for (Row row : sheet) {
 
-            CityNode city = saveCity(row);
+            RegionNode region = saveRegion(row);
 
-            RegionNode regionNode = saveRegion(row);
+            CountryNode country = saveCountry(row, region);
 
-            CountryNode country = saveCountry(row, regionNode);
+            ProvinceNode province = saveProvince(row, country);
+
+            CityNode city = saveCity(row, province);
 
             TargetNode target = saveTarget(row, country);
 
@@ -207,13 +210,33 @@ class OnApplicationStartupEventListener {
 
             allRegions.add(region);
 
-            regionRepository.save(region);
+            regionService.save(region);
 
             return region;
         }
     }
 
-    private CityNode saveCity(Row row) {
+    private ProvinceNode saveProvince(Row row, CountryNode country) {
+
+        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.PROVINCE_NAME.getIndex());
+
+        ProvinceNode province = new ProvinceNode(name, country);
+
+        if (allProvinces.contains(province) && !isUnknown(name)) {
+
+            return allProvinces.get(allProvinces.indexOf(province));
+
+        } else {
+
+            provinceRepository.save(province);
+
+            allProvinces.add(province);
+
+            return province;
+        }
+    }
+
+    private CityNode saveCity(Row row, ProvinceNode province) {
 
         String cellValue;
 
@@ -226,7 +249,7 @@ class OnApplicationStartupEventListener {
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LONGITUDE.getIndex());
         double longitude = isNumeric(cellValue) ? parseDouble(cellValue) : 0;
 
-        CityNode city = new CityNode(name, latitude, longitude);
+        CityNode city = new CityNode(name, latitude, longitude, province);
 
         if (allCities.contains(city) && !isUnknown(name)) {
 
