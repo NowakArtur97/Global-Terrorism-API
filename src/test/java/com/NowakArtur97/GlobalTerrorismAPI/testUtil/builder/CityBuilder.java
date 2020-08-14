@@ -1,9 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Province;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
 public final class CityBuilder {
@@ -15,6 +19,8 @@ public final class CityBuilder {
     private Double latitude = 45.0;
 
     private Double longitude = 45.0;
+
+    private Province province = null;
 
     public CityBuilder withId(Long id) {
 
@@ -44,6 +50,13 @@ public final class CityBuilder {
         return this;
     }
 
+    public CityBuilder withProvince(Province province) {
+
+        this.province = province;
+
+        return this;
+    }
+
     public City build(ObjectType type) {
 
         City city;
@@ -52,19 +65,19 @@ public final class CityBuilder {
 
             case DTO:
 
-                city = new CityDTO(name, latitude, longitude);
+                city = new CityDTO(name, latitude, longitude, (ProvinceDTO) province);
 
                 break;
 
             case NODE:
 
-                city = new CityNode(id, name, latitude, longitude);
+                city = new CityNode(id, name, latitude, longitude, (ProvinceNode) province);
 
                 break;
 
             case MODEL:
 
-                city = new CityModel(id, name, latitude, longitude);
+                city = new CityModel(id, name, latitude, longitude, (ProvinceModel) province);
 
                 break;
 
@@ -86,5 +99,7 @@ public final class CityBuilder {
         this.latitude = 45.0;
 
         this.longitude = 45.0;
+
+        this.province = null;
     }
 }
