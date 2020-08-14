@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.CityAndTargetAreInSameCountry;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -20,9 +21,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@CityAndTargetAreInSameCountry
 public class EventDTO implements DTONode, Event {
 
-	@ApiModelProperty(notes = "The events's summary", required = true, example = "Summary")
+	@ApiModelProperty(notes = "The event's summary", required = true, example = "Summary")
 	@NotBlank(message = "{event.summary.notBlank}")
 	private String summary;
 
