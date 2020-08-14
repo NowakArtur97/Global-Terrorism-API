@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.node;
 
+import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Province;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -8,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity(label = "Province")
 @Data
 @NoArgsConstructor
-public class ProvinceNode extends Node {
+public class ProvinceNode extends Node implements Province {
 
     private String name;
 
