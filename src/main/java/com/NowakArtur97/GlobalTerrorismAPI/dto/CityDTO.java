@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -33,4 +34,9 @@ public class CityDTO implements DTONode, City {
     @Min(value = -180, message = "{city.longitude.min}")
     @Max(value = 180, message = "{city.longitude.max}")
     private Double longitude;
+
+    @ApiModelProperty(notes = "The city's province", required = true)
+    @Valid
+    @NotNull(message = "{province.name.notBlank}")
+    private ProvinceDTO province;
 }
