@@ -63,7 +63,9 @@ class EventControllerPatchMethodTest {
     private final static TargetNode anotherTargetNode = new TargetNode("target2", countryNode);
     private final static TargetNode anotherTargetNode2 = new TargetNode("target 3", countryNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
     private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false, anotherTargetNode, cityNode);

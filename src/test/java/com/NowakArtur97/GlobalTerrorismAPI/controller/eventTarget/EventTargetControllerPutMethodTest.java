@@ -70,7 +70,9 @@ class EventTargetControllerPutMethodTest {
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
     private final static EventNode eventNodeWithoutTarget = new EventNode("summary", "motive", new Date(),
             true, true, true);

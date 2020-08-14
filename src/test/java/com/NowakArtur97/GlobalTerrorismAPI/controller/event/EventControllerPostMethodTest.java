@@ -75,7 +75,9 @@ class EventControllerPostMethodTest {
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
     @BeforeAll
     private static void setUpBuilders() {

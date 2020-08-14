@@ -73,8 +73,10 @@ class GroupControllerPutMethodTest {
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
     private final static TargetNode targetNode2 = new TargetNode("target 2", countryNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
-    private final static CityNode cityNode2 = new CityNode("city 2", 15.0, 25.0);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
+    private final static CityNode cityNode2 = new CityNode("city 2", 15.0, 25.0, provinceNode);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
     private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(), false, false, false, targetNode2, cityNode2);

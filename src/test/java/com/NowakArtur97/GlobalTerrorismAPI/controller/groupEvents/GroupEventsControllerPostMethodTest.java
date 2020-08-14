@@ -73,11 +73,13 @@ class GroupEventsControllerPostMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0);
-
     private final static RegionNode regionNode = new RegionNode("region");
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    
+    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+
+    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
     private final static GroupNode groupNode = new GroupNode("group");
     private final static GroupNode groupNode2 = new GroupNode("group 2");
