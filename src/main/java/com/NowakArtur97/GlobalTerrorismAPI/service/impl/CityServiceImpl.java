@@ -5,6 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.ProvinceService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,10 +17,13 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
 
     private final ObjectMapper objectMapper;
 
-    public CityServiceImpl(CityRepository repository, ObjectMapper objectMapper) {
+    private final ProvinceService provinceService;
+
+    public CityServiceImpl(CityRepository repository, ObjectMapper objectMapper, ProvinceService provinceService) {
         super(repository);
         this.repository = repository;
         this.objectMapper = objectMapper;
+        this.provinceService = provinceService;
     }
 
     @Override
@@ -32,6 +36,9 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
     public CityNode saveNew(CityDTO cityDTO) {
 
         CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
+
+        cityNode.setProvince(provinceService.findByName(cityNode.getProvince().getName())
+                .orElse(provinceService.saveNew(cityDTO.getProvince())));
 
         return repository.save(cityNode);
     }
