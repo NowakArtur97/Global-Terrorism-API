@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
 
-import com.NowakArtur97.GlobalTerrorismAPI.validator.PasswordsMatchConstraintValidator;
+import com.NowakArtur97.GlobalTerrorismAPI.validator.CountriesMatchConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface CityAndTargetAreInSameCountry {
 
-    String message() default "Passwords don't match";
+    String message() default "City and target should be located in the same country.";
 
     Class<?>[] groups() default {};
 

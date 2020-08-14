@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@CityAndTargetAreInSameCountry
+@CityAndTargetAreInSameCountry(message = "{event.cityAndTarget.sameCountry}")
 public class EventDTO implements DTONode, Event {
 
 	@ApiModelProperty(notes = "The event's summary", required = true, example = "Summary")
