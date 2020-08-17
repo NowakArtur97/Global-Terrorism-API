@@ -344,7 +344,7 @@ class EventServiceImplTest {
 
         when(targetService.save(eventNodeExpectedBeforeSave.getTarget())).thenReturn(targetNodeExpected);
         when(objectMapper.map(eventNodeExpectedBeforeSave.getCity(), CityDTO.class)).thenReturn(cityDTO);
-        when(cityService.findByName(cityDTO.getName())).thenReturn(Optional.of(cityNodeExpected));
+        when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude())).thenReturn(Optional.of(cityNodeExpected));
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.save(eventNodeExpectedBeforeSave);
@@ -409,7 +409,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetService, times(1)).save(eventNodeExpectedBeforeSave.getTarget()),
                 () -> verifyNoMoreInteractions(targetService),
-                () -> verify(cityService, times(1)).findByName(cityDTO.getName()),
+                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository));
@@ -432,7 +432,7 @@ class EventServiceImplTest {
 
         when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(targetService.saveNew(eventDTOExpected.getTarget())).thenReturn(targetNodeExpected);
-        when(cityService.findByName(cityDTO.getName())).thenReturn(Optional.of(cityNodeExpected));
+        when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude())).thenReturn(Optional.of(cityNodeExpected));
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
         EventNode eventNodeActual = eventService.saveNew(eventDTOExpected);
@@ -497,7 +497,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
                 () -> verifyNoMoreInteractions(objectMapper),
-                () -> verify(cityService, times(1)).findByName(cityDTO.getName()),
+                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository));
@@ -520,7 +520,7 @@ class EventServiceImplTest {
 
         when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(targetService.saveNew(eventDTOExpected.getTarget())).thenReturn(targetNodeExpected);
-        when(cityService.findByName(cityDTO.getName())).thenReturn(Optional.empty());
+        when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude())).thenReturn(Optional.empty());
         when(cityService.saveNew(cityDTO)).thenReturn(cityNodeExpected);
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
 
@@ -586,7 +586,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
                 () -> verifyNoMoreInteractions(objectMapper),
-                () -> verify(cityService, times(1)).findByName(cityDTO.getName()),
+                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
@@ -638,7 +638,7 @@ class EventServiceImplTest {
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(updatedTargetNode);
         when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
-        when(cityService.findByName(cityDTO.getName())).thenReturn(Optional.empty());
+        when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude())).thenReturn(Optional.empty());
         when(cityService.saveNew(cityDTO)).thenReturn(updatedCityNode);
         when(eventRepository.save(eventNodeExpectedBeforeSetIdAndTarget)).thenReturn(eventNodeExpected);
 
@@ -704,7 +704,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
-                () -> verify(cityService, times(1)).findByName(cityDTO.getName()),
+                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),

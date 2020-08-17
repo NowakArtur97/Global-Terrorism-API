@@ -76,7 +76,7 @@ class GroupEventsControllerPostMethodTest {
     private final static RegionNode regionNode = new RegionNode("region");
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
-    
+
     private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);

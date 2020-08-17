@@ -1,17 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
@@ -32,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -65,6 +60,7 @@ class EventControllerPostMethodTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
 
@@ -84,6 +80,7 @@ class EventControllerPostMethodTest {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
     }
@@ -111,7 +108,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -122,6 +120,11 @@ class EventControllerPostMethodTest {
                         .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+
+
+                        .andDo(MockMvcResultHandlers.print())
+
+
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", notNullValue()))
@@ -150,7 +153,10 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty()));
+                        .andExpect(jsonPath("city.links").isEmpty())
+                        .andExpect(jsonPath("city.province.id", notNullValue()))
+                        .andExpect(jsonPath("city.province.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.province.links").isEmpty()));
     }
 
     @Test
