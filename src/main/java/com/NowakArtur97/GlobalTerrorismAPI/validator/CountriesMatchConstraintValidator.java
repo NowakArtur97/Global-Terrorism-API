@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.CityAndTargetAreInSameCountry;
+import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ProvinceAndTargetAreInSameCountry;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
@@ -8,11 +8,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class CountriesMatchConstraintValidator implements ConstraintValidator<CityAndTargetAreInSameCountry, Object> {
+public class CountriesMatchConstraintValidator implements ConstraintValidator<ProvinceAndTargetAreInSameCountry, Object> {
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-
 
         EventDTO event = (EventDTO) obj;
 

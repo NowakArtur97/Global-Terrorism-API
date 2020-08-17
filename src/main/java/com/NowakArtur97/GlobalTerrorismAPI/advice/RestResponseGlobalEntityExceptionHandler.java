@@ -27,7 +27,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
-        exception.getBindingResult().getFieldErrors()
+        exception.getBindingResult().getAllErrors()
                 .forEach(error -> errorResponse.addError(error.getDefaultMessage()));
 
         return new ResponseEntity<>(errorResponse, headers, status);

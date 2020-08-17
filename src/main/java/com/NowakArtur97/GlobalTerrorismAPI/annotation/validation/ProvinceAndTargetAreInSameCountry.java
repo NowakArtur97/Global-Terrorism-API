@@ -16,9 +16,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = CountriesMatchConstraintValidator.class)
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface CityAndTargetAreInSameCountry {
+public @interface ProvinceAndTargetAreInSameCountry {
 
-    String message() default "City and target should be located in the same country.";
+    String message() default "Province and target should be located in the same country.";
 
     Class<?>[] groups() default {};
 
