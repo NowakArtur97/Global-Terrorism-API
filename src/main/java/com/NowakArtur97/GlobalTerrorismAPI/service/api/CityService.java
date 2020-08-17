@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CityService extends BaseGenericService<CityNode> {
 
-    Optional<CityNode> findByName(String name);
+    Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude);
 
     CityNode saveNew(CityDTO cityDTO);
 }

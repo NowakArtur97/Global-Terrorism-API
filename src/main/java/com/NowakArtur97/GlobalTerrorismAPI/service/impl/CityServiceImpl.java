@@ -27,9 +27,12 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
     }
 
     @Override
-    public Optional<CityNode> findByName(String name) {
+    public CityNode save(CityNode cityNode) {
 
-        return repository.findByName(name);
+        cityNode.setProvince(provinceService.findByNameAndCountryName(cityNode.getProvince())
+                .orElse(provinceService.save(cityNode.getProvince())));
+
+        return repository.save(cityNode);
     }
 
     @Override
@@ -37,9 +40,15 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
 
         CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
 
-        cityNode.setProvince(provinceService.findByName(cityNode.getProvince().getName())
+        cityNode.setProvince(provinceService.findByNameAndCountryName(cityNode.getProvince())
                 .orElse(provinceService.saveNew(cityDTO.getProvince())));
 
         return repository.save(cityNode);
+    }
+
+    @Override
+    public Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude) {
+
+        return repository.findByNameAndLatitudeAndLongitude(name, latitude, longitude);
     }
 }
