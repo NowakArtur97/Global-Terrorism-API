@@ -31,6 +31,6 @@ public class CountriesMatchConstraintValidator implements ConstraintValidator<Ci
         String provincesCountryName = event.getCity().getProvince().getCountry().getName();
         String targetCountryName = event.getTarget().getCountryOfOrigin().getName();
 
-        return provincesCountryName.equals(targetCountryName);
+        return provincesCountryName != null && provincesCountryName.equals(targetCountryName);
     }
 }
