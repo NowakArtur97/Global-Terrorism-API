@@ -23,6 +23,6 @@ public class ProvinceDTO implements DTONode, Province {
 
     @ApiModelProperty(notes = "The province's country", required = true)
     @Valid
-    @NotNull(message = "{country.name.exists}")
+    @NotNull(message = "{country.name.notBlank}")
     private CountryDTO country;
 }

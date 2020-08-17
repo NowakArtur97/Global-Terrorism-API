@@ -26,7 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -120,11 +119,6 @@ class EventControllerPostMethodTest {
                         .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(eventDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-
-
-                        .andDo(MockMvcResultHandlers.print())
-
-
                         .andExpect(status().isCreated())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", notNullValue()))
@@ -155,17 +149,19 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", notNullValue()))
-                        .andExpect(jsonPath("city.province.name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty()));
     }
 
     @Test
-    void when_add_valid_event_with_existing_city_should_return_new_event_with_existing_city() {
+    void when_add_valid_event_with_existing_city_and_province_should_return_new_event_with_existing_city() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName())
+                .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
-                .withLongitude(cityNode.getLongitude()).build(ObjectType.DTO);
+                .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -204,7 +200,10 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty()));
+                        .andExpect(jsonPath("city.links").isEmpty())
+                        .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("city.province.links").isEmpty()));
     }
 
     @Test
@@ -244,7 +243,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -259,7 +259,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[1]", is("A country with the provided name does not exist.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
     }
 
     @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
@@ -269,7 +270,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -294,7 +296,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
 
@@ -320,7 +323,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
 
@@ -347,7 +351,8 @@ class EventControllerPostMethodTest {
         Date invalidDate = calendar.getTime();
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
 
@@ -373,7 +378,9 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -396,7 +403,8 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(null)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -412,7 +420,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(2))));
+                        .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(3))));
     }
 
     @Test
@@ -422,7 +431,9 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -447,7 +458,9 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -472,7 +485,9 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -497,7 +512,9 @@ class EventControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
