@@ -22,8 +22,7 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
     @Override
     public TargetNode save(TargetNode targetNode) {
 
-        targetNode.setCountryOfOrigin(
-                countryService.findByName(targetNode.getCountryOfOrigin().getName())
+        targetNode.setCountryOfOrigin(countryService.findByName(targetNode.getCountryOfOrigin().getName())
                         .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
 
         return repository.save(targetNode);

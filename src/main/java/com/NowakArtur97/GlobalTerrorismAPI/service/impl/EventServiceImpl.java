@@ -12,13 +12,11 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@Slf4j
 class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implements EventService {
 
     private final GenericService<TargetNode, TargetDTO> targetService;
@@ -34,8 +32,12 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     @Override
     public EventNode save(EventNode eventNode) {
 
+        CityNode cityNode = eventNode.getCity();
+
         eventNode.setTarget(targetService.save(eventNode.getTarget()));
-        setEventCity(eventNode, objectMapper.map(eventNode.getCity(), CityDTO.class));
+        eventNode.setCity(cityService.findByNameAndLatitudeAndLongitude(
+                cityNode.getName(), cityNode.getLatitude(), cityNode.getLongitude())
+                .orElse(cityService.save(eventNode.getCity())));
 
         return repository.save(eventNode);
     }
@@ -123,7 +125,10 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     }
 
     private void setEventCity(EventNode eventNode, CityDTO cityDTO) {
-        Optional<CityNode> cityNodeOptional = cityService.findByName(cityDTO.getName());
+
+        Optional<CityNode> cityNodeOptional = cityService
+                .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude());
+
         if (cityNodeOptional.isPresent()) {
             eventNode.setCity(cityNodeOptional.get());
         } else {

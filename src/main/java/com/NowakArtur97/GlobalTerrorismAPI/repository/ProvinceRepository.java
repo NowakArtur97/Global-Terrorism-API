@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ProvinceRepository extends BaseRepository<ProvinceNode> {
 
-    Optional<ProvinceNode> findByName(String name);
+    Optional<ProvinceNode> findByNameAndCountry_Name(String name, String countryName);
 }

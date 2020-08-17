@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface CityRepository extends BaseRepository<CityNode> {
 
     Optional<CityNode> findByName(String name);
+
+    Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude);
 }

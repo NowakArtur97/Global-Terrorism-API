@@ -2,10 +2,10 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.ProvinceRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.*;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +44,13 @@ class OnApplicationStartupEventListener {
 
     private final GenericService<GroupNode, GroupDTO> groupService;
 
-    private final ProvinceRepository provinceRepository;
+    private final GenericService<ProvinceNode, ProvinceDTO> provinceService;
 
     private final CountryService countryService;
 
     private final RegionService regionService;
+
+    private final CityService cityService;
 
     private final UserService userService;
 
@@ -86,16 +88,16 @@ class OnApplicationStartupEventListener {
 
             CityNode city = saveCity(row, province);
 
-            TargetNode target = saveTarget(row, country);
+//            TargetNode target = saveTarget(row, country);
 
-            EventNode event = saveEvent(row, target, city);
-
-            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
-
-            manageGroup(groupName, event);
+//            EventNode event = saveEvent(row, target, city);
+//
+//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
+//
+//            manageGroup(groupName, event);
         }
 
-        saveAllGroups();
+//        saveAllGroups();
     }
 
     private void saveUser() {
@@ -188,9 +190,9 @@ class OnApplicationStartupEventListener {
 
         } else {
 
-            allCountries.add(country);
-
             countryService.save(country);
+
+            allCountries.add(country);
 
             return country;
         }
@@ -208,9 +210,9 @@ class OnApplicationStartupEventListener {
 
         } else {
 
-            allRegions.add(region);
-
             regionService.save(region);
+
+            allRegions.add(region);
 
             return region;
         }
@@ -222,13 +224,13 @@ class OnApplicationStartupEventListener {
 
         ProvinceNode province = new ProvinceNode(name, country);
 
-        if (allProvinces.contains(province) && !isUnknown(name)) {
+        if (allProvinces.contains(province)) {
 
             return allProvinces.get(allProvinces.indexOf(province));
 
         } else {
 
-            provinceRepository.save(province);
+            provinceService.save(province);
 
             allProvinces.add(province);
 
@@ -251,11 +253,13 @@ class OnApplicationStartupEventListener {
 
         CityNode city = new CityNode(name, latitude, longitude, province);
 
-        if (allCities.contains(city) && !isUnknown(name)) {
+        if (allCities.contains(city)) {
 
             return allCities.get(allCities.indexOf(city));
 
         } else {
+
+            cityService.save(city);
 
             allCities.add(city);
 
