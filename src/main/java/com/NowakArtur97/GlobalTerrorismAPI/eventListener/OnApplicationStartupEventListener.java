@@ -26,7 +26,7 @@ import java.util.*;
 @RequiredArgsConstructor
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
+    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
 
     private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
