@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ProvinceService extends GenericService<ProvinceNode, ProvinceDTO> {
 
-    Optional<ProvinceNode> findByName(String name);
+    Optional<ProvinceNode> findByNameAndCountryName(ProvinceNode province);
 }
