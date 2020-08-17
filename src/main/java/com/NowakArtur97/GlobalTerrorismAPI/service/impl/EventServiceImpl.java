@@ -32,9 +32,9 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     @Override
     public EventNode save(EventNode eventNode) {
 
-        CityNode cityNode = eventNode.getCity();
-
         eventNode.setTarget(targetService.save(eventNode.getTarget()));
+
+        CityNode cityNode = eventNode.getCity();
         eventNode.setCity(cityService.findByNameAndLatitudeAndLongitude(
                 cityNode.getName(), cityNode.getLatitude(), cityNode.getLongitude())
                 .orElse(cityService.save(eventNode.getCity())));

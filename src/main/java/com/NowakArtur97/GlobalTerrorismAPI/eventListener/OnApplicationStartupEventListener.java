@@ -26,7 +26,7 @@ import java.util.*;
 @RequiredArgsConstructor
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
+    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
 
     private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
@@ -88,16 +88,16 @@ class OnApplicationStartupEventListener {
 
             CityNode city = saveCity(row, province);
 
-//            TargetNode target = saveTarget(row, country);
+            TargetNode target = saveTarget(row, country);
 
-//            EventNode event = saveEvent(row, target, city);
-//
-//            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
-//
-//            manageGroup(groupName, event);
+            EventNode event = saveEvent(row, target, city);
+
+            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
+
+            manageGroup(groupName, event);
         }
 
-//        saveAllGroups();
+        saveAllGroups();
     }
 
     private void saveUser() {
