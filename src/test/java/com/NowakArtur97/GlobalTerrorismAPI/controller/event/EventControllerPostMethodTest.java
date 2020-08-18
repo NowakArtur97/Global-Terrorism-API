@@ -208,11 +208,11 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("city.links").isEmpty())
-                        .andExpect(jsonPath("city.province.id", notNullValue()))
-                        .andExpect(jsonPath("city.province.name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("city.province.id",  is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
                         .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.name", is(countryDTO.getName())))
+                        .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("city.province.country.links").isEmpty())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
@@ -547,7 +547,7 @@ class EventControllerPostMethodTest {
     }
 
     @Test
-    void when_add_event_with_province_and_target_different_countries_should_return_errors() {
+    void when_add_event_with_province_and_target_in_different_countries_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(countryNode2.getName()).build(ObjectType.DTO);
