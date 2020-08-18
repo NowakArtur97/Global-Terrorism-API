@@ -16,19 +16,27 @@ public class CountriesMatchConstraintValidator implements ConstraintValidator<Pr
         EventDTO event = (EventDTO) obj;
 
         if (event == null) {
-            return false;
+            return true;
         }
 
         CityDTO city = event.getCity();
         TargetDTO target = event.getTarget();
 
-        if (city == null || target == null || city.getProvince() == null ||
-                city.getProvince().getCountry() == null || target.getCountryOfOrigin() == null) {
+        if (city == null && target == null) {
+            return true;
+        }
+
+        if (city == null || city.getProvince() == null || city.getProvince().getCountry() == null
+                || target == null || target.getCountryOfOrigin() == null) {
             return false;
         }
 
-        String provincesCountryName = event.getCity().getProvince().getCountry().getName();
-        String targetCountryName = event.getTarget().getCountryOfOrigin().getName();
+        String provincesCountryName = city.getProvince().getCountry().getName();
+        String targetCountryName = target.getCountryOfOrigin().getName();
+
+        if (provincesCountryName == null && targetCountryName == null) {
+            return true;
+        }
 
         return provincesCountryName != null && provincesCountryName.equals(targetCountryName);
     }

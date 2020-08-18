@@ -31,7 +31,7 @@ public class UserRegistrationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully created a new account", response = String.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity registerUser(@ApiParam(value = "User data", name = "user", required = true) @RequestBody
+    public ResponseEntity<String> registerUser(@ApiParam(value = "User data", name = "user", required = true) @RequestBody
                                        @Valid UserDTO userDTO) {
 
         userService.register(userDTO);

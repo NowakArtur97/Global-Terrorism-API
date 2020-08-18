@@ -25,7 +25,8 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node> implements GenericRestController<M, D> {
+public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node>
+        implements GenericRestController<M, D> {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 4;
 
@@ -47,10 +48,13 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     protected GenericRestControllerImpl(GenericService<T, D> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
 
-        Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[0];
+        Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(),
+                GenericRestControllerImpl.class)[0];
 
-        this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[2];
-        this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericRestControllerImpl.class)[1];
+        this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(),
+                GenericRestControllerImpl.class)[2];
+        this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(),
+                GenericRestControllerImpl.class)[1];
         this.modelType = modelTypeParameterClass.getSimpleName();
         this.service = service;
         this.modelAssembler = modelAssembler;
