@@ -69,6 +69,7 @@ class EventControllerPostMethodTest {
     private final static RegionNode regionNode = new RegionNode("region");
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode countryNode2 = new CountryNode("country 2", regionNode);
 
     private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
 
@@ -92,6 +93,7 @@ class EventControllerPostMethodTest {
         userRepository.save(userNode);
 
         countryRepository.save(countryNode);
+        countryRepository.save(countryNode2);
 
         cityRepository.save(cityNode);
     }
@@ -421,7 +423,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(3))));
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(4))));
     }
 
     @Test
@@ -530,5 +533,82 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_with_province_and_target_different_countries_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(countryNode2.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO2).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "\t", "\n"})
+    void when_add_event_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(invalidProvinceName)
+                .withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_without_province_country_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(null).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 }
