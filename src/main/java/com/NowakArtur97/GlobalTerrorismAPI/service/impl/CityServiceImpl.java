@@ -13,6 +13,8 @@ import java.util.Optional;
 @Service
 class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CityService {
 
+    private final int DEFAULT_DEPTH_FOR_CITY_NODE = 2;
+
     private final CityRepository repository;
 
     private final ObjectMapper objectMapper;
@@ -49,6 +51,6 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
     @Override
     public Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude) {
 
-        return repository.findByNameAndLatitudeAndLongitude(name, latitude, longitude);
+        return repository.findByNameAndLatitudeAndLongitude(name, latitude, longitude, DEFAULT_DEPTH_FOR_CITY_NODE);
     }
 }
