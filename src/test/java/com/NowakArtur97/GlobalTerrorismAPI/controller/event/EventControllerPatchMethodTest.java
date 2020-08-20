@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Date;
 import java.util.List;
@@ -667,6 +668,76 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
+
+        @Test
+        void when_partial_update_event_with_province_and_target_in_different_countries_using_json_patch_should_return_errors() {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/province/country/name\", \"value\": \"" + countryNode.getName() + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": \"" + anotherCountryNode.getName() + "\"}]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_event_with_invalid_province_name_using_json_patch_should_return_errors(String invalidProvinceName) {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/province/name\", \"value\": \"" + invalidProvinceName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_without_province_country_using_json_patch_should_return_errors() {
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/city/province/country\", \"value\": " + null + " }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
+        }
     }
 
     @Nested
@@ -1231,6 +1302,82 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_province_and_target_in_different_countries_using_json_merge_patch_should_return_errors() {
+
+            String jsonMergePatch = "{\"city\" : {\"province\" : {" +
+                    "\"country\" : {\"name\" : \"" + countryNode.getName() + "\"}}}," +
+                    "\"target\" : {\"countryOfOrigin\" : {" +
+                    "\"name\" : \"" + anotherCountryNode.getName() + "\"}}" +
+                    "}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+
+                            .andDo(MockMvcResultHandlers.print())
+
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+        @EmptySource
+        @ValueSource(strings = {" "})
+        void when_partial_update_event_with_invalid_province_name_using_json_patch_merge_should_return_errors(String invalidProvinceName) {
+
+            String jsonMergePatch = "{\"city\" : {\"province\" : {\"name\" : \"" + invalidProvinceName + "\"}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_without_province_country_using_json_patch_merge_should_return_errors() {
+
+            String jsonMergePatch = "{\"city\" : {\"province\" : {\"country\" : " + null + "}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
     }
 }

@@ -709,7 +709,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_add_event_with_province_and_target_in_different_countries_should_return_errors() {
+    void when_update_event_with_province_and_target_in_different_countries_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
@@ -737,7 +737,7 @@ class EventControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_event_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
+    void when_update_event_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -763,7 +763,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_add_event_without_province_country_should_return_errors() {
+    void when_update_event_without_province_country_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
