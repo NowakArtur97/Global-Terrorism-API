@@ -55,30 +55,36 @@ class EventControllerPatchMethodTest {
 
     private final static RegionNode regionNode = new RegionNode("region");
     private final static RegionNode anotherRegionNode = new RegionNode("another region");
+    private final static RegionNode anotherRegionNode2 = new RegionNode("another region 2");
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
     private final static CountryNode anotherCountryNode = new CountryNode("another country", anotherRegionNode);
+    private final static CountryNode anotherCountryNode2 = new CountryNode("another country 2", anotherRegionNode2);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
     private final static TargetNode anotherTargetNode = new TargetNode("target2", countryNode);
-    private final static TargetNode anotherTargetNode2 = new TargetNode("target 3", countryNode);
+    private final static TargetNode anotherTargetNode2 = new TargetNode("target 3", anotherCountryNode2);
 
     private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+    private final static ProvinceNode anotherProvinceNode = new ProvinceNode("province 2", anotherCountryNode);
+    private final static ProvinceNode anotherProvinceNode2 = new ProvinceNode("province 3", anotherCountryNode2);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
+    private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
     private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false, anotherTargetNode, cityNode);
-    private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(), true, false, true, anotherTargetNode2, cityNode);
+    private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(), true, false, true, anotherTargetNode2, anotherCityNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
-                              @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository,
+                              @Autowired TargetRepository targetRepository, @Autowired ProvinceRepository provinceRepository,
                               @Autowired CityRepository cityRepository) {
 
         userRepository.save(userNode);
 
-        countryRepository.save(anotherCountryNode);
+        provinceRepository.save(anotherProvinceNode);
+        provinceRepository.save(anotherProvinceNode2);
 
         cityRepository.save(cityNode);
 
@@ -153,23 +159,28 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
         void when_partial_update_valid_events_target_using_json_patch_should_return_partially_updated_node() {
 
             String updatedTargetName = "updated target";
-            String updatedCountryName = anotherCountryNode.getName();
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
-            String jsonPatch = "[" +
-                    "{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }," +
-                    "{ \"op\": \"replace\", \"path\": \"/target/countryOfOrigin/name\", \"value\": \"" + updatedCountryName + "\" }" +
-                    "]";
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/target/target\", \"value\": \"" + updatedTargetName + "\" }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -195,17 +206,26 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode.getId().intValue())))
                             .andExpect(jsonPath("target.target", is(updatedTargetName)))
-                            .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
@@ -214,6 +234,8 @@ class EventControllerPatchMethodTest {
             String updatedCityName = "updated city";
             Double updatedCityLatitude = 20.0;
             Double updatedCityLongitude = 20.0;
+            String updatedProvinceName = "updated province";
+            String updatedCountryName = anotherCountryNode2.getName();
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
@@ -222,7 +244,9 @@ class EventControllerPatchMethodTest {
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": \"" + updatedCityName + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": " + updatedCityLatitude + " }," +
-                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + updatedCityLongitude + " }" +
+                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + updatedCityLongitude + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/province/name\", \"value\": \"" + updatedProvinceName + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/province/country/name\", \"value\": \"" + updatedCountryName + "\" }" +
                     "]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -249,17 +273,26 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode2.getId().intValue())))
                             .andExpect(jsonPath("target.target", is(anotherTargetNode2.getTarget())))
-                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(anotherCountryNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                             .andExpect(jsonPath("city.id", notNullValue()))
                             .andExpect(jsonPath("city.name", is(updatedCityName)))
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", notNullValue()))
+                            .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(anotherCountryNode2.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(updatedCountryName)))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(anotherRegionNode2.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
@@ -346,8 +379,9 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @Test
@@ -374,8 +408,9 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @Test
@@ -412,7 +447,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(7))));
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(8))));
 
         }
 
@@ -691,22 +727,28 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
         void when_partial_update_valid_events_target_using_json_merge_patch_should_return_partially_updated_node() {
 
             String updatedTargetName = "updated target 2";
-            String updatedCountryName = anotherCountryNode.getName();
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
-            String jsonMergePatch =
-                    "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
-                            "\"countryOfOrigin\" : { \"name\" : \"" + updatedCountryName + "\"}}}";
+            String jsonMergePatch = "{\"target\" : {\"target\" : \"" + updatedTargetName + "\"}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -732,17 +774,26 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode.getId().intValue())))
                             .andExpect(jsonPath("target.target", is(updatedTargetName)))
-                            .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.name", is(updatedCountryName)))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
@@ -751,13 +802,24 @@ class EventControllerPatchMethodTest {
             String updatedCityName = "updated city";
             Double updatedCityLatitude = 20.0;
             Double updatedCityLongitude = 20.0;
+            String updatedProvinceName = "updated province";
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
 
             String jsonMergePatch = "{\"city\" : " +
-                    "{\"name\" : \"" + updatedCityName + "\", \"latitude\" : " + updatedCityLatitude + ", \"longitude\" : " + updatedCityLongitude + " }}";
+                    "{\"name\" : \"" + updatedCityName + "\", \"latitude\" : " + updatedCityLatitude + ", " +
+                    "\"longitude\" : " + updatedCityLongitude + ", " +
+                    "\"province\" : {\"name\" : \"" + updatedProvinceName + "\"," +
+                    "\"country\" : {\"id\" : " + anotherCountryNode2.getId().intValue() + "," +
+                    "\"name\" : \"" + anotherCountryNode2.getName() + "\"}" +
+                    "}}," +
+                    "\"target\" : {" +
+                    "\"countryOfOrigin\": " +
+                    "{\"id\" : " + anotherCountryNode2.getId().intValue() + "," +
+                    "\"name\" : \"" + anotherCountryNode2.getName() + "\"}" +
+                    "}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -783,17 +845,26 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode2.getId().intValue())))
                             .andExpect(jsonPath("target.target", is(anotherTargetNode2.getTarget())))
-                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(anotherCountryNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(anotherCountryNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.links").isEmpty())
-                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode2.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
                             .andExpect(jsonPath("city.id", notNullValue()))
                             .andExpect(jsonPath("city.name", is(updatedCityName)))
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
-                            .andExpect(jsonPath("city.links").isEmpty()));
+                            .andExpect(jsonPath("city.links").isEmpty())
+                            .andExpect(jsonPath("city.province.id", notNullValue()))
+                            .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
+                            .andExpect(jsonPath("city.province.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.id", is(anotherCountryNode2.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(anotherCountryNode2.getName())))
+                            .andExpect(jsonPath("city.province.country.links").isEmpty())
+                            .andExpect(jsonPath("city.province.country.region.id", is(anotherRegionNode2.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links").isEmpty()));
         }
 
         @Test
@@ -878,8 +949,9 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @Test
@@ -890,7 +962,7 @@ class EventControllerPatchMethodTest {
 
             String jsonMergePatch =
                     "{\"target\" : {\"target\" : \"" + updatedTargetName + "\", " +
-                            "\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\"}}}";
+                            "\"countryOfOrigin\" : {\"name\" : \"" + notExistingCountryName + "\"}}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -905,8 +977,9 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @Test
@@ -942,7 +1015,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(7))));
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(8))));
         }
 
         @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
