@@ -57,6 +57,7 @@ class GroupControllerPostMethodTest {
 
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
@@ -64,19 +65,22 @@ class GroupControllerPostMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static RegionNode regionNode = new RegionNode("region");
+    private final static RegionNode regionNode = new RegionNode("region name");
+    private final static RegionNode anotherRegionNode = new RegionNode("region name 2");
 
-    private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode countryNode = new CountryNode("country name", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("country name 2", anotherRegionNode);
 
-    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province name", anotherCountryNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
+    private final static CityNode cityNode = new CityNode("city name", 45.0, 45.0, provinceNode);
 
     @BeforeAll
     private static void setUpBuilders() {
 
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
@@ -103,10 +107,17 @@ class GroupControllerPostMethodTest {
     void when_add_valid_group_should_return_new_group_as_model() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget("target 2").withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
-        CityDTO cityDTO2 = (CityDTO) cityBuilder.withName(cityNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget("target 2").withCountry(countryDTO2)
+                .build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO2 = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName())
+                .withCountry(countryDTO2).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        CityDTO cityDTO2 = (CityDTO) cityBuilder.withName(cityNode.getName()).withProvince(provinceDTO2)
+                .build(ObjectType.DTO);
+
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         EventDTO eventDTO2 = (EventDTO) eventBuilder.withMotive("motive 2").withSummary("summary 2")
                 .withIsSuicidal(false).withIsSuccessful(false).withIsPartOfMultipleIncidents(false)
@@ -156,6 +167,15 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityDTO.getLongitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryDTO.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
 
                         .andExpect(jsonPath("eventsCaused[1].links[0].href", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].links[1].href", notNullValue()))
@@ -173,17 +193,26 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].target.target", is(targetDTO2.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.name", is(anotherCountryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links").isEmpty())
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(anotherCountryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(anotherCountryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(anotherRegionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(anotherRegionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
 
@@ -213,7 +242,8 @@ class GroupControllerPostMethodTest {
     void when_add_group_with_null_event_fields_should_return_errors() {
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
-                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null).withTarget(null)
+                .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null)
+                .withTarget(null).withCity(null)
                 .build(ObjectType.DTO);
 
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -269,7 +299,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withName(invalidName).withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -296,7 +327,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -312,8 +344,8 @@ class GroupControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
     }
 
     @ParameterizedTest(name = "{index}: For Group Target: {0} should have violation")
@@ -323,7 +355,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -350,7 +383,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -378,7 +412,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -407,7 +442,8 @@ class GroupControllerPostMethodTest {
         Date invalidDate = calendar.getTime();
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).withCity(cityDTO)
                 .build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
@@ -435,7 +471,8 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -460,7 +497,9 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -488,7 +527,9 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -515,7 +556,9 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -542,7 +585,9 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
@@ -569,7 +614,9 @@ class GroupControllerPostMethodTest {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
+                .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
         GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
