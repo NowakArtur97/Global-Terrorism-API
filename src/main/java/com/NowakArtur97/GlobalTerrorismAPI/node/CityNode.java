@@ -14,22 +14,22 @@ public class CityNode extends Node implements City {
 
     private String name;
 
-    private double latitude;
+    private Double latitude;
 
-    private double longitude;
+    private Double longitude;
 
     @Relationship("PART_OF")
     @EqualsAndHashCode.Exclude
     private ProvinceNode province;
 
-    public CityNode(String name, double latitude, double longitude, ProvinceNode province) {
+    public CityNode(String name, Double latitude, Double longitude, ProvinceNode province) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.province = province;
     }
 
-    public CityNode(Long id, String name, double latitude, double longitude, ProvinceNode province) {
+    public CityNode(Long id, String name, Double latitude, Double longitude, ProvinceNode province) {
         super(id);
         this.name = name;
         this.latitude = latitude;

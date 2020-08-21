@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Date;
 import java.util.List;
@@ -424,7 +423,9 @@ class EventControllerPatchMethodTest {
                     "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": " + null + "}," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": " + null + "}," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuicidal\", \"value\": " + null + "}," +
-                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": " + null + "}]";
+                    "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": " + null + "}," +
+                    "{ \"op\": \"replace\", \"path\": \"/city\", \"value\": " + null + "}" +
+                    "]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -448,7 +449,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(8))));
 
         }
@@ -551,9 +552,9 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_with_null_city_values_using_json_patch_should_return_errors() {
 
             String jsonPatch = "[" +
-                    "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": " + null + " }," +
                     "{ \"op\": \"replace\", \"path\": \"/city/latitude\", \"value\": " + null + " }," +
-                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + null + " }" +
+                    "{ \"op\": \"replace\", \"path\": \"/city/longitude\", \"value\": " + null + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/name\", \"value\": " + null + " }" +
                     "]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -569,8 +570,10 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(3))));
         }
 
         @Test
@@ -690,6 +693,32 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_null_province_values_using_json_patch_should_return_errors() {
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/city/province/name\", \"value\": " + null + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/city/province/country\", \"value\": " + null + " }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
@@ -1062,7 +1091,9 @@ class EventControllerPatchMethodTest {
                     "\"isPartOfMultipleIncidents\" : " + null + ", " +
                     "\"isSuccessful\" : " + null + ", " +
                     "\"isSuicidal\" : " + null + ", " +
-                    "\"target\" : " + null + "}";
+                    "\"target\" : " + null + ", " +
+                    "\"city\" : " + null +
+                    "}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1086,7 +1117,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors",
                                     hasItem("Event must have information about whether it was a suicidal attack.")))
                             .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(8))));
         }
 
@@ -1189,7 +1220,7 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_with_null_city_values_using_json_merge_patch_should_return_errors() {
 
             String jsonMergePatch = "{\"city\" : " +
-                    "{\"name\" : " + null + ", \"latitude\" : " + null + ", \"longitude\" : " + null + " }}";
+                    "{\"name\" : " + null + ", \"latitude\" : " + null + ", \"longitude\" : " + null + "}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1204,8 +1235,10 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
+                            .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(3))));
         }
 
         @Test
@@ -1323,14 +1356,35 @@ class EventControllerPatchMethodTest {
                                     .content(jsonMergePatch)
                                     .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
                                     .accept(MediaType.APPLICATION_JSON))
-
-                            .andDo(MockMvcResultHandlers.print())
-
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_null_province_values_using_json_merge_patch_should_return_errors() {
+
+            String jsonMergePatch = "{\"city\" : {" +
+                    "\"province\" : {\"name\" : " + null + ", \"country\" : " + null + "}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                            .andExpect(jsonPath("errors", hasSize(2))));
         }
 
         @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
