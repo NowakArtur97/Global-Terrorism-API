@@ -9,7 +9,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -149,6 +148,15 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
     }
 
@@ -202,7 +210,19 @@ class GroupControllerJsonMergePatchMethodTest {
                         "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                         "\"name\" : \"" + cityNode.getName() + "\"," +
                         "\"latitude\" : " + cityNode.getLatitude() + "," +
-                        "\"longitude\" : " + cityNode.getLongitude() +
+                        "\"longitude\" : " + cityNode.getLongitude() + "," +
+                        "\"province\" : { " +
+                        "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + provinceNode.getName() + "\"," +
+                        "\"country\" : {" +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"," +
+                        "\"region\" : {" +
+                        "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + regionNode.getName() + "\"" +
+                        "}" +
+                        "}" +
+                        "}" +
                         "}" +
                         "}," +
                         "{" +
@@ -232,7 +252,19 @@ class GroupControllerJsonMergePatchMethodTest {
                         "\"id\" : \"" + cityNode2.getId().intValue() + "\", " +
                         "\"name\" : \"" + cityNode2.getName() + "\"," +
                         "\"latitude\" : " + cityNode2.getLatitude() + "," +
-                        "\"longitude\" : " + cityNode2.getLongitude() +
+                        "\"longitude\" : " + cityNode2.getLongitude() + "," +
+                        "\"province\" : { " +
+                        "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + provinceNode.getName() + "\"," +
+                        "\"country\" : {" +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"," +
+                        "\"region\" : {" +
+                        "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + regionNode.getName() + "\"" +
+                        "}" +
+                        "}" +
+                        "}" +
                         "}" +
                         "}]}";
 
@@ -275,7 +307,16 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
-
+                        .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
+                        
                         .andExpect(jsonPath("eventsCaused[1].links[0].href", is(pathToEventLink2)))
                         .andExpect(jsonPath("eventsCaused[1].links[1].href", is(pathToEventTargetLink2)))
                         .andExpect(jsonPath("eventsCaused[1].id", is(eventNode3.getId().intValue())))
@@ -300,6 +341,15 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode2.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityNode2.getLongitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
 
@@ -427,7 +477,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -474,7 +536,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -490,8 +564,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -522,7 +597,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -538,8 +625,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("A country with the provided name does not exist.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -613,7 +701,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -665,7 +765,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -713,7 +825,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -762,7 +886,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : \"" + invalidCityName + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -809,7 +945,8 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : " + null + "," +
                 "\"latitude\" : " + null + "," +
-                "\"longitude\" : " + null +
+                "\"longitude\" : " + null + "," +
+                "\"province\" : " + null +
                 "}" +
                 "}]}";
 
@@ -825,8 +962,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("City name cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -858,7 +996,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + invalidCityLatitude + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -907,7 +1057,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + invalidCityLatitude + "," +
-                "\"longitude\" : " + cityNode.getLongitude() +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -956,7 +1118,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + invalidCityLongitude +
+                "\"longitude\" : " + invalidCityLongitude + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
@@ -1005,7 +1179,19 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{ " +
                 "\"name\" : \"" + cityNode.getName() + "\"," +
                 "\"latitude\" : " + cityNode.getLatitude() + "," +
-                "\"longitude\" : " + invalidCityLongitude +
+                "\"longitude\" : " + invalidCityLongitude + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
                 "}" +
                 "}]}";
 
