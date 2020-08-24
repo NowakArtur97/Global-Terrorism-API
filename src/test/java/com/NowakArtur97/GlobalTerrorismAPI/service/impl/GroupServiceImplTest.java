@@ -46,6 +46,7 @@ class GroupServiceImplTest {
     private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
@@ -56,6 +57,7 @@ class GroupServiceImplTest {
         regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
@@ -264,10 +266,14 @@ class GroupServiceImplTest {
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        EventNode eventNodeBeforeSave = (EventNode) eventBuilder.withId(null).withTarget(targetNode).withCity(cityNode)
+                .build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode)
+                .build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNode)).build(ObjectType.NODE);
 
+        when(eventService.save(eventNodeBeforeSave)).thenReturn(eventNode);
         when(groupRepository.save(groupNodeExpectedBeforeSave)).thenReturn(groupNodeExpected);
 
         GroupNode groupNodeActual = groupService.save(groupNodeExpectedBeforeSave);
@@ -328,10 +334,11 @@ class GroupServiceImplTest {
                 () -> assertEquals(cityNode.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
                         () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNode.getLongitude()),
+                () -> verify(eventService, times(1)).save(eventNodeBeforeSave),
+                () -> verifyNoMoreInteractions(eventService),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
-                () -> verifyNoInteractions(eventService));
+                () -> verifyNoInteractions(objectMapper));
     }
 
     @Test
