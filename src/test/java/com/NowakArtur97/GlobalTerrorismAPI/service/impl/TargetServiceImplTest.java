@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
@@ -272,6 +273,30 @@ class TargetServiceImplTest {
     }
 
     @Test
+    void when_save_new_target_with_not_existing_country_should_throw_exception() {
+
+        String notExistingCountryName = "Not Existing Country";
+
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.withName(notExistingCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
+
+        TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
+
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.empty());
+
+        assertAll(
+                () -> assertThrows(ResourceNotFoundException.class,
+                        () -> targetService.saveNew(targetDTOExpected),
+                        () -> "should throw ResourceNotFoundException but wasn't"),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
+                () -> verifyNoMoreInteractions(countryService),
+                () -> verifyNoInteractions(targetRepository));
+    }
+
+    @Test
     void when_update_target_should_return_updated_target() {
 
         String updatedTargetName = "Updated Target";
@@ -316,7 +341,38 @@ class TargetServiceImplTest {
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
-                () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave));
+                () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
+                () -> verifyNoMoreInteractions(targetRepository));
+    }
+
+    @Test
+    void when_update_target_with_not_existing_country_should_throw_exception() {
+
+        String updatedTargetName = "Updated Target";
+        String notExistingCountryName = "Not Existing Country";
+
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.withName(notExistingCountryName).build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTOExpected)
+                .build(ObjectType.DTO);
+
+        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+
+        TargetNode targetNodeToUpdate = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
+                .build(ObjectType.NODE);
+
+        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.empty());
+
+        assertAll(
+                () -> assertThrows(ResourceNotFoundException.class,
+                        () -> targetService.update(targetNodeToUpdate, targetDTOExpected),
+                        () -> "should throw ResourceNotFoundException but wasn't"),
+                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
+                () -> verifyNoMoreInteractions(countryService),
+                () -> verifyNoInteractions(targetRepository));
     }
 
     @Test
@@ -352,6 +408,29 @@ class TargetServiceImplTest {
                 () -> verify(countryService, times(1))
                         .findByName(targetNodeExpectedBeforeSave.getCountryOfOrigin().getName()),
                 () -> verifyNoMoreInteractions(countryService),
+                () -> verifyNoInteractions(objectMapper));
+    }
+
+    @Test
+    void when_save_target_with_not_existing_country_should_throw_exception() {
+
+        String notExistingCountryName = "Not Existing Country";
+
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(notExistingCountryName).build(ObjectType.NODE);
+        TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
+
+        when(countryService.findByName(targetNodeExpectedBeforeSave.getCountryOfOrigin().getName()))
+                .thenReturn(Optional.empty());
+
+        assertAll(
+                () -> assertThrows(ResourceNotFoundException.class,
+                        () -> targetService.save(targetNodeExpectedBeforeSave),
+                        () -> "should throw ResourceNotFoundException but wasn't"),
+                () -> verify(countryService, times(1))
+                        .findByName(targetNodeExpectedBeforeSave.getCountryOfOrigin().getName()),
+                () -> verifyNoMoreInteractions(countryService),
+                () -> verifyNoInteractions(targetRepository),
                 () -> verifyNoInteractions(objectMapper));
     }
 
