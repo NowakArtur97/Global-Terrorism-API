@@ -31,8 +31,8 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
     @Override
     public CityNode save(CityNode cityNode) {
 
-        cityNode.setProvince(provinceService.findByNameAndCountryName(cityNode.getProvince())
-                .orElse(provinceService.save(cityNode.getProvince())));
+        provinceService.findByNameAndCountryName(cityNode.getProvince())
+                .ifPresentOrElse(cityNode::setProvince, () -> provinceService.save(cityNode.getProvince()));
 
         return repository.save(cityNode);
     }
@@ -42,8 +42,8 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
 
         CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
 
-        cityNode.setProvince(provinceService.findByNameAndCountryName(cityNode.getProvince())
-                .orElse(provinceService.saveNew(cityDTO.getProvince())));
+        provinceService.findByNameAndCountryName(cityNode.getProvince())
+                .ifPresentOrElse(cityNode::setProvince, () -> provinceService.saveNew(cityDTO.getProvince()));
 
         return repository.save(cityNode);
     }
