@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.CountryRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
@@ -61,6 +62,7 @@ class GroupControllerJsonPatchMethodTest {
     private final static RegionNode regionNode = new RegionNode("region");
 
     private final static CountryNode countryNode = new CountryNode("country", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("country 2", regionNode);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
     private final static TargetNode targetNode2 = new TargetNode("target 2", countryNode);
@@ -76,12 +78,16 @@ class GroupControllerJsonPatchMethodTest {
     private final static EventNode eventNode3 = new EventNode("summary 3", "motive 3", new Date(), true, false, true, targetNode3, cityNode2);
 
     private final static GroupNode groupNode = new GroupNode("group", List.of(eventNode));
-    private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group 2 ", List.of(eventNode2, eventNode3));
+    private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group 2 ",
+            List.of(eventNode2, eventNode3));
 
     @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired GroupRepository groupRepository,
+                              @Autowired CountryRepository countryRepository) {
 
         userRepository.save(userNode);
+
+        countryRepository.save(anotherCountryNode);
 
         groupRepository.save(groupNode);
         groupRepository.save(groupNodeWithMultipleEvents);
@@ -699,5 +705,105 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_province_and_target_in_different_countries_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city/province/country/name\", " +
+                "\"value\": \"" + countryNode.getName() + "\" }," +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/target/countryOfOrigin/name\", " +
+                "\"value\": \"" + anotherCountryNode.getName() + "\"}]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_null_province_values_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[" +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city/province/name\", \"value\": " + null + " }," +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city/province/country\", \"value\": " + null +
+                " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+    }
+
+    @ParameterizedTest(name = "{index}: For Group Event Province name: {0} should have violation")
+    @EmptySource
+    @ValueSource(strings = {" "})
+    void when_partial_update_group_event_with_invalid_province_name_using_json_patch_should_return_errors(String invalidProvinceName) {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city/province/name\", " +
+                "\"value\": \"" + invalidProvinceName + "\" }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_province_country_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city/province/country\", " +
+                "\"value\": " + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
     }
 }
