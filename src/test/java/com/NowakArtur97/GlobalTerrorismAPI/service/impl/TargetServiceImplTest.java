@@ -184,7 +184,8 @@ class TargetServiceImplTest {
 
         when(targetRepository.findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(targetNodeExpected));
 
-        Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH);
+        Optional<TargetNode> targetActualOptional = targetService.findById(expectedTargetId,
+                DEFAULT_DEPTH_FOR_JSON_PATCH);
 
         TargetNode targetNodeActual = targetActualOptional.get();
 
