@@ -66,7 +66,7 @@ class CityServiceImplTest {
     }
 
     @Test
-    void when_find_existing_city_by_name_should_return_city() {
+    void when_find_existing_city_by_name_latitude_and_longitude_should_return_city() {
 
         String cityName = "city";
         Double cityLatitude = 21.0;
@@ -140,7 +140,7 @@ class CityServiceImplTest {
     }
 
     @Test
-    void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
+    void when_find_not_existing_city_by_name_latitude_and_longitude_should_return_empty_optional() {
 
         String cityName = "city";
         Double cityLatitude = 21.0;
