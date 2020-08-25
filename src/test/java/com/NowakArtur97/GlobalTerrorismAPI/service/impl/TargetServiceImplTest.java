@@ -239,7 +239,8 @@ class TargetServiceImplTest {
         CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withCountry(null).build(ObjectType.NODE);
         TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
@@ -264,6 +265,14 @@ class TargetServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
                         () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
@@ -301,13 +310,17 @@ class TargetServiceImplTest {
 
         String updatedTargetName = "Updated Target";
         String updatedCountryName = "Another Country";
+        String updatedRegionName = "Another Region";
 
         CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.withName(updatedCountryName).build(ObjectType.DTO);
         TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTOExpected)
                 .build(ObjectType.DTO);
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName).build(ObjectType.NODE);
+        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.withName(updatedRegionName).build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName)
+                .withRegion(regionNodeExpected).build(ObjectType.NODE);
 
         TargetNode targetNodeToUpdate = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
@@ -337,6 +350,14 @@ class TargetServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
                         () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
@@ -355,7 +376,8 @@ class TargetServiceImplTest {
         TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTOExpected)
                 .build(ObjectType.DTO);
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
 
         TargetNode targetNodeToUpdate = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
         TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
@@ -378,7 +400,9 @@ class TargetServiceImplTest {
     @Test
     void when_save_target_should_return_saved_target() {
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+
         TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
@@ -403,6 +427,14 @@ class TargetServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
                         () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(targetRepository),
                 () -> verify(countryService, times(1))
@@ -416,7 +448,9 @@ class TargetServiceImplTest {
 
         String notExistingCountryName = "Not Existing Country";
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(notExistingCountryName).build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(notExistingCountryName)
+                .withRegion(regionNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
 
@@ -439,7 +473,8 @@ class TargetServiceImplTest {
 
         Long expectedTargetId = 1L;
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(expectedTargetId).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
 
@@ -461,6 +496,14 @@ class TargetServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
                         () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
                 () -> verifyNoMoreInteractions(targetRepository),
