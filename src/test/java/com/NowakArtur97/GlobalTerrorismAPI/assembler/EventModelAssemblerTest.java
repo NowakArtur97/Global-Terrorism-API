@@ -92,8 +92,6 @@ class EventModelAssemblerTest {
                 () -> assertEquals(pathToTargetLink, model.getTarget().getLink("self").get().getHref(),
                         () -> "should return event target model with self link: " + pathToTargetLink + ", but was: "
                                 + model.getTarget().getLink("self").get().getHref()),
-                () -> assertNotNull(model.getId(),
-                        () -> "should return event model with id, but was null"),
                 () -> assertEquals(eventNode.getId(), model.getId(),
                         () -> "should return event model with id: " + eventNode.getSummary() + ", but was: "
                                 + model.getSummary()), () -> assertEquals(eventNode.getSummary(), model.getSummary(),
