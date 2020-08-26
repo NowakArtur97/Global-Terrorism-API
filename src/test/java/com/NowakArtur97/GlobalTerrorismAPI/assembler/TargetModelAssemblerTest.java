@@ -71,12 +71,15 @@ class TargetModelAssemblerTest {
         TargetModel targetModelActual = targetModelAssembler.toModel(targetNode);
 
         assertAll(
+                () -> assertNotNull(targetModelActual.getId(),
+                        () -> "should return target node with id, but was null"),
                 () -> assertEquals(pathToTargetLink, targetModelActual.getLink("self").get().getHref(),
                         () -> "should return target model with self link: " + pathToTargetLink + ", but was: "
                                 + targetModelActual.getLink("self").get().getHref()),
                 () -> assertTrue(targetModelActual.getLink("country").isEmpty(),
                         () -> "should return target model without country link, but was: "
                                 + targetModelActual.getLink("country").get().getHref()),
+
                 () -> assertEquals(targetNode.getId(), targetModelActual.getId(),
                         () -> "should return target model with id: " + targetNode.getId() + ", but was: "
                                 + targetModelActual.getId()),

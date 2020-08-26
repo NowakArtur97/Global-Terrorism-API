@@ -37,7 +37,9 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
 
         GroupModel groupModel = objectMapper.map(groupNode, GroupModel.class);
 
-        List<EventModel> eventsCaused = groupNode.getEventsCaused().stream().map(eventModelAssembler::toModel).collect(Collectors.toList());
+        List<EventModel> eventsCaused = groupNode.getEventsCaused()
+                .stream().map(eventModelAssembler::toModel)
+                .collect(Collectors.toList());
 
         groupModel.setEventsCaused(eventsCaused);
 

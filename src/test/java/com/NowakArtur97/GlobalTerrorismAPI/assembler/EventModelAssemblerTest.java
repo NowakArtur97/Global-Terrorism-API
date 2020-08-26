@@ -77,73 +77,74 @@ class EventModelAssemblerTest {
         when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
         when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
 
-        EventModel model = modelAssembler.toModel(eventNode);
+        EventModel eventModelActual = modelAssembler.toModel(eventNode);
 
         assertAll(
-                () -> assertEquals(pathToEventLink, model.getLink("self").get().getHref(),
+                () -> assertEquals(pathToEventLink, eventModelActual.getLink("self").get().getHref(),
                         () -> "should return event model with self link: " + pathToEventLink + ", but was: "
-                                + model.getLink("self").get().getHref()),
-                () -> assertEquals(pathToEventTargetLink, model.getLink("target").get().getHref(),
+                                + eventModelActual.getLink("self").get().getHref()),
+                () -> assertEquals(pathToEventTargetLink, eventModelActual.getLink("target").get().getHref(),
                         () -> "should return event model with target link: " + pathToEventTargetLink + ", but was: "
-                                + model.getLink("target").get().getHref()),
-                () -> assertTrue(model.getLink("city").isEmpty(),
+                                + eventModelActual.getLink("target").get().getHref()),
+                () -> assertTrue(eventModelActual.getLink("city").isEmpty(),
                         () -> "should return event model without city link, but was: "
-                                + model.getLink("city").get().getHref()),
-                () -> assertEquals(pathToTargetLink, model.getTarget().getLink("self").get().getHref(),
+                                + eventModelActual.getLink("city").get().getHref()),
+                () -> assertEquals(pathToTargetLink, eventModelActual.getTarget().getLink("self").get().getHref(),
                         () -> "should return event target model with self link: " + pathToTargetLink + ", but was: "
-                                + model.getTarget().getLink("self").get().getHref()),
-                () -> assertEquals(eventNode.getId(), model.getId(),
+                                + eventModelActual.getTarget().getLink("self").get().getHref()),
+
+                () -> assertEquals(eventNode.getId(), eventModelActual.getId(),
                         () -> "should return event model with id: " + eventNode.getSummary() + ", but was: "
-                                + model.getSummary()), () -> assertEquals(eventNode.getSummary(), model.getSummary(),
+                                + eventModelActual.getSummary()), () -> assertEquals(eventNode.getSummary(), eventModelActual.getSummary(),
                         () -> "should return event model with summary: " + eventNode.getSummary() + ", but was: "
-                                + model.getSummary()),
-                () -> assertEquals(eventNode.getMotive(), model.getMotive(),
+                                + eventModelActual.getSummary()),
+                () -> assertEquals(eventNode.getMotive(), eventModelActual.getMotive(),
                         () -> "should return event model with motive: " + eventNode.getMotive() + ", but was: "
-                                + model.getMotive()),
-                () -> assertNotNull(model.getDate(),
+                                + eventModelActual.getMotive()),
+                () -> assertNotNull(eventModelActual.getDate(),
                         () -> "should return event model with date: " + eventNode.getDate() + ", but was null"),
-                () -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), model.getIsPartOfMultipleIncidents(),
+                () -> assertEquals(eventNode.getIsPartOfMultipleIncidents(), eventModelActual.getIsPartOfMultipleIncidents(),
                         () -> "should return event model which was part of multiple incidents: "
                                 + eventNode.getIsPartOfMultipleIncidents() + ", but was: "
-                                + model.getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNode.getIsSuccessful(), model.getIsSuccessful(),
+                                + eventModelActual.getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNode.getIsSuccessful(), eventModelActual.getIsSuccessful(),
                         () -> "should return event model which was successful: " + eventNode.getIsSuccessful()
-                                + ", but was: " + model.getIsSuccessful()),
-                () -> assertEquals(eventNode.getIsSuicidal(), model.getIsSuicidal(),
+                                + ", but was: " + eventModelActual.getIsSuccessful()),
+                () -> assertEquals(eventNode.getIsSuicidal(), eventModelActual.getIsSuicidal(),
                         () -> "should return event model which was suicidal: " + eventNode.getIsSuicidal() + ", but was: "
-                                + model.getIsSuicidal()),
+                                + eventModelActual.getIsSuicidal()),
                 () -> assertNotNull(eventNode.getTarget(),
                         () -> "should return event model with not null target, but was: null"),
-                () -> assertEquals(targetModel, model.getTarget(),
+                () -> assertEquals(targetModel, eventModelActual.getTarget(),
                         () -> "should return event model with target model: " + targetModel + ", but was: "
-                                + model.getTarget()),
-                () -> assertEquals(targetModel.getId(), model.getTarget().getId(),
+                                + eventModelActual.getTarget()),
+                () -> assertEquals(targetModel.getId(), eventModelActual.getTarget().getId(),
                         () -> "should return event model with target model id: " + targetModel.getId() + ", but was: "
-                                + model.getTarget().getId()),
-                () -> assertEquals(targetModel.getTarget(), model.getTarget().getTarget(),
+                                + eventModelActual.getTarget().getId()),
+                () -> assertEquals(targetModel.getTarget(), eventModelActual.getTarget().getTarget(),
                         () -> "should return event model with target model name: " + targetModel.getTarget() + ", but was: "
-                                + model.getTarget().getTarget()),
+                                + eventModelActual.getTarget().getTarget()),
                 () -> assertNotNull(eventNode.getCity(),
                         () -> "should return event model with not null city, but was: null"),
-                () -> assertEquals(cityModel.getId(), model.getCity().getId(),
+                () -> assertEquals(cityModel.getId(), eventModelActual.getCity().getId(),
                         () -> "should return event model with city model id: " + cityModel.getId() + ", but was: "
-                                + model.getCity().getId()),
-                () -> assertEquals(cityModel.getName(), model.getCity().getName(),
+                                + eventModelActual.getCity().getId()),
+                () -> assertEquals(cityModel.getName(), eventModelActual.getCity().getName(),
                         () -> "should return event model with target city name: " + cityModel.getName() + ", but was: "
-                                + model.getCity().getName()),
-                () -> assertEquals(cityModel.getLatitude(), model.getCity().getLatitude(),
+                                + eventModelActual.getCity().getName()),
+                () -> assertEquals(cityModel.getLatitude(), eventModelActual.getCity().getLatitude(),
                         () -> "should return event model with target city latitude: " + cityModel.getLatitude() + ", but was: "
-                                + model.getCity().getLatitude()),
-                () -> assertEquals(cityModel.getLongitude(), model.getCity().getLongitude(),
+                                + eventModelActual.getCity().getLatitude()),
+                () -> assertEquals(cityModel.getLongitude(), eventModelActual.getCity().getLongitude(),
                         () -> "should return event model with target city longitude: " + cityModel.getLongitude() + ", but was: "
-                                + model.getCity().getLongitude()),
-                () -> assertTrue(model.getCity().getLinks().isEmpty(),
+                                + eventModelActual.getCity().getLongitude()),
+                () -> assertTrue(eventModelActual.getCity().getLinks().isEmpty(),
                         () -> "should return event model with city model with links, but wasn't"),
-                () -> assertFalse(model.getTarget().getLinks().isEmpty(),
+                () -> assertFalse(eventModelActual.getTarget().getLinks().isEmpty(),
                         () -> "should return event model with target model with links, but wasn't"),
-                () -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
-                () -> assertFalse(model.getLinks().isEmpty(),
-                        () -> "should return model with links, but was: " + model),
+                () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " + eventModelActual),
+                () -> assertFalse(eventModelActual.getLinks().isEmpty(),
+                        () -> "should return model with links, but was: " + eventModelActual),
                 () -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(targetModelAssembler, times(1)).toModel(eventNode.getTarget()),
