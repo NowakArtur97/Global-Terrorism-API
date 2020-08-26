@@ -26,7 +26,8 @@ import static org.mockito.Mockito.*;
 @Tag("EventModelAssembler_Tests")
 class EventModelAssemblerTest {
 
-    private final String BASE_PATH = "http://localhost:8080/api/events";
+    private final String TARGET_BASE_PATH = "/api/v1/targets";
+    private final String EVENT_BASE_PATH = "/api/v1/events";
 
     private EventModelAssembler modelAssembler;
 
@@ -58,15 +59,20 @@ class EventModelAssemblerTest {
     void when_map_event_node_to_model_should_return_event_model() {
 
         Long targetId = 1L;
-        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
+        Long eventId = 2L;
+        TargetNode targetNode = (TargetNode) targetBuilder.withId(targetId).build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
-        TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
+        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withTarget(targetNode).withCity(cityNode)
+                .build(ObjectType.NODE);
+        TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).build(ObjectType.MODEL);
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
+        Link targetLink = new Link(pathToTargetLink);
+        targetModel.add(targetLink);
         CityModel cityModel = (CityModel) cityBuilder.build(ObjectType.MODEL);
-        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).withCity(cityModel).build(ObjectType.MODEL);
-        String pathToLink = BASE_PATH + targetId.intValue();
-        Link link = new Link(pathToLink);
-        targetModel.add(link);
+        EventModel eventModel = (EventModel) eventBuilder.withId(eventId).withTarget(targetModel).withCity(cityModel)
+                .build(ObjectType.MODEL);
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+        String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
 
         when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
         when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
@@ -74,9 +80,23 @@ class EventModelAssemblerTest {
         EventModel model = modelAssembler.toModel(eventNode);
 
         assertAll(
+                () -> assertEquals(pathToEventLink, model.getLink("self").get().getHref(),
+                        () -> "should return event model with self link: " + pathToEventLink + ", but was: "
+                                + model.getLink("self").get().getHref()),
+                () -> assertEquals(pathToEventTargetLink, model.getLink("target").get().getHref(),
+                        () -> "should return event model with target link: " + pathToEventTargetLink + ", but was: "
+                                + model.getLink("target").get().getHref()),
+                () -> assertTrue(model.getLink("city").isEmpty(),
+                        () -> "should return event model without city link, but was: "
+                                + model.getLink("city").get().getHref()),
+                () -> assertEquals(pathToTargetLink, model.getTarget().getLink("self").get().getHref(),
+                        () -> "should return event target model with self link: " + pathToTargetLink + ", but was: "
+                                + model.getTarget().getLink("self").get().getHref()),
                 () -> assertNotNull(model.getId(),
-                        () -> "should return event model with new id, but was: " + model.getId()),
-                () -> assertEquals(eventNode.getSummary(), model.getSummary(),
+                        () -> "should return event model with id, but was null"),
+                () -> assertEquals(eventNode.getId(), model.getId(),
+                        () -> "should return event model with id: " + eventNode.getSummary() + ", but was: "
+                                + model.getSummary()), () -> assertEquals(eventNode.getSummary(), model.getSummary(),
                         () -> "should return event model with summary: " + eventNode.getSummary() + ", but was: "
                                 + model.getSummary()),
                 () -> assertEquals(eventNode.getMotive(), model.getMotive(),
@@ -135,20 +155,29 @@ class EventModelAssemblerTest {
     @Test
     void when_map_event_node_to_model_without_target_should_return_event_model_without_target() {
 
+        Long eventId = 1L;
         CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withCity(cityNode).build(ObjectType.NODE);
-
+        EventNode eventNode = (EventNode) eventBuilder.withId(eventId).withCity(cityNode).build(ObjectType.NODE);
         CityModel cityModel = (CityModel) cityBuilder.build(ObjectType.MODEL);
-        EventModel eventModel = (EventModel) eventBuilder.withCity(cityModel).build(ObjectType.MODEL);
+        EventModel eventModel = (EventModel) eventBuilder.withId(eventId).withCity(cityModel).build(ObjectType.MODEL);
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 
         when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
 
         EventModel model = modelAssembler.toModel(eventNode);
 
         assertAll(
+                () -> assertEquals(pathToEventLink, model.getLink("self").get().getHref(),
+                        () -> "should return event model with self link: " + pathToEventLink + ", but was: "
+                                + model.getLink("self").get().getHref()),
+                () -> assertTrue(model.getLink("target").isEmpty(),
+                        () -> "should return event model without target link, but was: "
+                                + model.getLink("target").get().getHref()),
                 () -> assertNotNull(model.getId(),
-                        () -> "should return event model with new id, but was: " + model.getId()),
-                () -> assertEquals(eventNode.getSummary(), model.getSummary(),
+                        () -> "should return event model with id, but was null"),
+                () -> assertEquals(eventNode.getId(), model.getId(),
+                        () -> "should return event model with id: " + eventNode.getSummary() + ", but was: "
+                                + model.getSummary()), () -> assertEquals(eventNode.getSummary(), model.getSummary(),
                         () -> "should return event model with summary: " + eventNode.getSummary() + ", but was: "
                                 + model.getSummary()),
                 () -> assertEquals(eventNode.getMotive(), model.getMotive(),
@@ -167,7 +196,7 @@ class EventModelAssemblerTest {
                         () -> "should return event model which was suicidal: " + eventNode.getIsSuicidal() + ", but was: "
                                 + model.getIsSuicidal()),
                 () -> assertNull(eventNode.getTarget(),
-                        () -> "should return event model with null target, but wasn't: null"),
+                        () -> "should return event model without target, but was: " + eventNode.getTarget()),
                 () -> assertNotNull(eventNode.getCity(),
                         () -> "should return event model with not null city, but was: null"),
                 () -> assertEquals(cityModel.getId(), model.getCity().getId(),
