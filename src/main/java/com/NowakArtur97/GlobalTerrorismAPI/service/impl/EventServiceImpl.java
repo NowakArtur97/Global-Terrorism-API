@@ -35,8 +35,15 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         eventNode.setTarget(targetService.save(eventNode.getTarget()));
 
         CityNode cityNode = eventNode.getCity();
-        cityService.findByNameAndLatitudeAndLongitude(cityNode.getName(), cityNode.getLatitude(), cityNode.getLongitude())
-                .ifPresentOrElse(eventNode::setCity, () -> cityService.save(cityNode));
+
+        Optional<CityNode> cityNodeOptional = cityService
+                .findByNameAndLatitudeAndLongitude(cityNode.getName(), cityNode.getLatitude(), cityNode.getLongitude());
+
+        if (cityNodeOptional.isPresent()) {
+            eventNode.setCity(cityNodeOptional.get());
+        } else {
+            eventNode.setCity(cityService.save(cityNode));
+        }
 
         return repository.save(eventNode);
     }

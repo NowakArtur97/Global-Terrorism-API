@@ -3,6 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.ProvinceService;
@@ -31,8 +32,14 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
     @Override
     public CityNode save(CityNode cityNode) {
 
-        provinceService.findByNameAndCountryName(cityNode.getProvince())
-                .ifPresentOrElse(cityNode::setProvince, () -> provinceService.save(cityNode.getProvince()));
+        Optional<ProvinceNode> provinceNodeOptional = provinceService
+                .findByNameAndCountryName(cityNode.getProvince());
+
+        if (provinceNodeOptional.isPresent()) {
+            cityNode.setProvince(provinceNodeOptional.get());
+        } else {
+            cityNode.setProvince(provinceService.save(cityNode.getProvince()));
+        }
 
         return repository.save(cityNode);
     }
@@ -42,8 +49,14 @@ class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CitySe
 
         CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
 
-        provinceService.findByNameAndCountryName(cityNode.getProvince())
-                .ifPresentOrElse(cityNode::setProvince, () -> provinceService.saveNew(cityDTO.getProvince()));
+        Optional<ProvinceNode> provinceNodeOptional = provinceService
+                .findByNameAndCountryName(cityNode.getProvince());
+
+        if (provinceNodeOptional.isPresent()) {
+            cityNode.setProvince(provinceNodeOptional.get());
+        } else {
+            cityNode.setProvince(provinceService.saveNew(cityDTO.getProvince()));
+        }
 
         return repository.save(cityNode);
     }
