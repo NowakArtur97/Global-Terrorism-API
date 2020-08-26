@@ -28,9 +28,9 @@ import static org.mockito.Mockito.*;
 @Tag("GroupModelAssembler_Tests")
 class GroupModelAssemblerTest {
 
-    private final String GROUP_BASE_PATH = "http://localhost/api/v1/groups";
-    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
-    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
+    private final String GROUP_BASE_PATH = "/api/v1/groups";
+    private final String EVENT_BASE_PATH = "/api/v1/events";
+    private final String TARGET_BASE_PATH = "/api/v1/targets";
 
     private GroupModelAssembler modelAssembler;
 

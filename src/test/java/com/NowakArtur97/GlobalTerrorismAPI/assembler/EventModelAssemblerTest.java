@@ -26,8 +26,8 @@ import static org.mockito.Mockito.*;
 @Tag("EventModelAssembler_Tests")
 class EventModelAssemblerTest {
 
-    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
-    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
+    private final String TARGET_BASE_PATH = "/api/v1/targets";
+    private final String EVENT_BASE_PATH = "/api/v1/events";
 
     private EventModelAssembler modelAssembler;
 
