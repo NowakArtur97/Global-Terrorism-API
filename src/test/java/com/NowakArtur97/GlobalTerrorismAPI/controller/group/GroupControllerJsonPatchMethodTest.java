@@ -12,8 +12,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -24,6 +22,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZoneId;
@@ -169,7 +168,7 @@ class GroupControllerJsonPatchMethodTest {
     }
 
     @Test
-    @DisabledOnOs(OS.LINUX)
+    @DirtiesContext
     void when_partial_update_valid_group_with_events_using_json_patch_should_return_partially_updated_node() {
 
         String updatedSummary = "summary updated";
