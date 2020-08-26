@@ -28,9 +28,9 @@ import static org.mockito.Mockito.*;
 @Tag("GroupModelAssembler_Tests")
 class GroupModelAssemblerTest {
 
-    private final String GROUP_BASE_PATH = "/api/v1/groups";
-    private final String EVENT_BASE_PATH = "/api/v1/events";
-    private final String TARGET_BASE_PATH = "/api/v1/targets";
+    private final String GROUP_BASE_PATH = "http://localhost/api/v1/groups";
+    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
+    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
 
     private GroupModelAssembler modelAssembler;
 
@@ -169,24 +169,33 @@ class GroupModelAssemblerTest {
 
         GroupModel groupModel = (GroupModel) groupBuilder.build(ObjectType.MODEL);
 
+        String pathToGroupLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue();
+        String pathToGroupEventsLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue() + "/events";
+
         when(objectMapper.map(groupNode, GroupModel.class)).thenReturn(groupModel);
 
-        GroupModel model = modelAssembler.toModel(groupNode);
+        GroupModel groupModelActual = modelAssembler.toModel(groupNode);
 
         assertAll(
-                () -> assertNotNull(model.getId(),
-                        () -> "should return event node with new id, but was: " + model.getId()),
-                () -> assertEquals(groupModel.getId(), model.getId(),
+                () -> assertEquals(pathToGroupLink, groupModelActual.getLink("self").get().getHref(),
+                        () -> "should return group model with self link: " + pathToGroupLink + ", but was: "
+                                + groupModelActual.getLink("self").get().getHref()),
+                () -> assertEquals(pathToGroupEventsLink, groupModelActual.getLink("eventsCaused").get().getHref(),
+                        () -> "should return group model with events link: " + pathToGroupEventsLink + ", but was: "
+                                + groupModelActual.getLink("eventsCaused").get().getHref()),
+                () -> assertNotNull(groupModelActual.getId(),
+                        () -> "should return event node with new id, but was: " + groupModelActual.getId()),
+                () -> assertEquals(groupModel.getId(), groupModelActual.getId(),
                         () -> "should return group model with id: " + groupModel.getId() + ", but was: "
-                                + model.getId()),
-                () -> assertEquals(groupModel.getName(), model.getName(),
+                                + groupModelActual.getId()),
+                () -> assertEquals(groupModel.getName(), groupModelActual.getName(),
                         () -> "should return group model with name: " + groupModel.getName() + ", but was: "
-                                + model.getName()),
+                                + groupModelActual.getName()),
                 () -> assertTrue(groupModel.getEventsCaused().isEmpty(),
                         () -> "should return group model with empty events list, but was: " + groupModel.getEventsCaused()),
-                () -> assertNotNull(model.getLinks(), () -> "should return model with links, but was: " + model),
-                () -> assertFalse(model.getLinks().isEmpty(),
-                        () -> "should return model with links, but was: " + model),
+                () -> assertNotNull(groupModelActual.getLinks(), () -> "should return model with links, but was: " + groupModelActual),
+                () -> assertFalse(groupModelActual.getLinks().isEmpty(),
+                        () -> "should return model with links, but was: " + groupModelActual),
                 () -> verify(objectMapper, times(1)).map(groupNode, GroupModel.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verifyNoInteractions(eventModelAssembler));
