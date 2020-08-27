@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 @Tag("GroupServiceImpl_Tests")
 class GroupServiceImplTest {
 
-    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 4;
+    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
     private GroupService groupService;
 

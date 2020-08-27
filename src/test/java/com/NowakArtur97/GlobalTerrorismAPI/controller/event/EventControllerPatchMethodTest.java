@@ -72,9 +72,12 @@ class EventControllerPatchMethodTest {
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
     private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
 
-    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
-    private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(), false, false, false, anotherTargetNode, cityNode);
-    private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(), true, false, true, anotherTargetNode2, anotherCityNode);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true,
+            true, true, targetNode, cityNode);
+    private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(),
+            false, false, false, anotherTargetNode, cityNode);
+    private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(),
+            true, false, true, anotherTargetNode2, anotherCityNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,

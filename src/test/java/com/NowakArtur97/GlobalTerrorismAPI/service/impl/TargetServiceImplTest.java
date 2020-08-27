@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 @Tag("TargetServiceImpl_Tests")
 class TargetServiceImplTest {
 
-    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 4;
+    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
     private TargetService targetService;
 
@@ -190,7 +190,11 @@ class TargetServiceImplTest {
 
         TargetNode targetNodeActual = targetActualOptional.get();
 
-        assertAll(() -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
+        assertAll(
+                () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
+                        () -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
+                                + targetNodeActual.getId()),
+                () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                 () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
                         + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
@@ -252,6 +256,9 @@ class TargetServiceImplTest {
         TargetNode targetNodeActual = targetService.saveNew(targetDTOExpected);
 
         assertAll(
+                () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
+                        () -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
+                                + targetNodeActual.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
                         () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
