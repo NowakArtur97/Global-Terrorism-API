@@ -82,8 +82,6 @@ class ModelMapperTest {
                 () -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
                         + targetDTOActual.getTarget()),
 
-                () -> assertEquals(countryNodeExpected, targetDTOActual.getCountryOfOrigin(),
-                        () -> "should return target dto with country: " + countryNodeExpected + ", but was: " + targetDTOActual.getCountryOfOrigin()),
                 () -> assertEquals(countryNodeExpected.getName(), targetDTOActual.getCountryOfOrigin().getName(),
                         () -> "should return target dto with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetDTOActual.getCountryOfOrigin()));

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 @Tag("TargetModelAssembler_Tests")
 class TargetModelAssemblerTest {
 
-    private final String TARGET_BASE_PATH = "/api/v1/targets";
+    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
 
     private TargetModelAssembler targetModelAssembler;
 

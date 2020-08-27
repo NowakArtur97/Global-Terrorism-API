@@ -56,9 +56,11 @@ class TargetMapperTest {
         CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
 
-        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
-        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected).build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.withId(null).build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withId(null).withRegion(regionNodeExpected)
+                .build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
 
         when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
 
