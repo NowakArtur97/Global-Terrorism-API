@@ -24,6 +24,7 @@ class ModelMapperTest {
     private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static TargetBuilder targetBuilder;
+    private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
@@ -35,6 +36,7 @@ class ModelMapperTest {
         regionBuilder = new RegionBuilder();
         countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
@@ -116,18 +118,20 @@ class ModelMapperTest {
 
     @Test
     void when_map_event_dto_to_node_should_return_valid_node() {
-
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.build(ObjectType.DTO);
-        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withId(null).withTarget(targetDTO).withCity(cityDTO)
+        
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.withId(null).build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withId(null).withCountry(countryDTOExpected).build(ObjectType.DTO);
+        ProvinceDTO provinceDTOExpected = (ProvinceDTO) provinceBuilder.withId(null).withCountry(countryDTOExpected)
+                .build(ObjectType.DTO);
+        CityDTO cityDTOExpected = (CityDTO) cityBuilder.withId(null).withProvince(provinceDTOExpected).build(ObjectType.DTO);
+        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withId(null).withTarget(targetDTOExpected).withCity(cityDTOExpected)
                 .build(ObjectType.DTO);
 
         EventNode eventNodeActual = modelMapper.map(eventDTOExpected, EventNode.class);
 
         assertAll(
                 () -> assertNull(eventNodeActual.getId(),
-                        () -> "should return event node with id as null, but was: " + eventNodeActual.getId()),
+                        () -> "should return event node with id, but was: " + eventNodeActual.getId()),
                 () -> assertEquals(eventDTOExpected.getSummary(), eventNodeActual.getSummary(),
                         () -> "should return event node with summary: " + eventDTOExpected.getSummary() + ", but was: "
                                 + eventNodeActual.getSummary()),
@@ -140,51 +144,64 @@ class ModelMapperTest {
                 () -> assertEquals(eventDTOExpected.getIsPartOfMultipleIncidents(),
                         eventNodeActual.getIsPartOfMultipleIncidents(),
                         () -> "should return event node which was part of multiple incidents: "
-                                + eventDTOExpected.getIsPartOfMultipleIncidents() + ", but was: "
+                                + eventDTOExpected.getIsPartOfMultipleIncidents() + ", but was was: "
                                 + eventNodeActual.getIsPartOfMultipleIncidents()),
                 () -> assertEquals(eventDTOExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                         () -> "should return event node which was successful: " + eventDTOExpected.getIsSuccessful()
                                 + ", but was: " + eventNodeActual.getIsSuccessful()),
                 () -> assertEquals(eventDTOExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
-                        () -> "should return event node which was suicidal: " + eventDTOExpected.getIsSuicidal() + ", but was: "
-                                + eventNodeActual.getIsSuicidal()),
+                        () -> "should return event node which was suicidal: " + eventDTOExpected.getIsSuicidal()
+                                + ", but was: " + eventNodeActual.getIsSuicidal()),
                 () -> assertNotNull(eventNodeActual.getTarget(),
                         () -> "should return event node with not null target, but was: null"),
-                () -> assertNull(eventNodeActual.getTarget().getId(),
-                        () -> "should return event target node with id as null, but was: "
-                                + eventNodeActual.getTarget().getId()),
-                () -> assertEquals(targetDTO.getTarget(), eventNodeActual.getTarget().getTarget(),
-                        () -> "should return event node with target: " + targetDTO.getTarget()
-                                + ", but was: " + eventNodeActual.getTarget().getTarget()),
-                () -> assertNull(eventNodeActual.getTarget().getCountryOfOrigin().getId(),
-                        () -> "should return event target node with id as null, but was: " + eventNodeActual.getId()),
-                () -> assertEquals(countryDTO.getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
-                        () -> "should return event target node with country name: " + countryDTO.getName()
+                () -> assertEquals(targetDTOExpected.getTarget(), eventNodeActual.getTarget().getTarget(),
+                        () -> "should return event node with target: " + targetDTOExpected.getTarget() + ", but was: "
+                                + eventNodeActual.getTarget().getTarget()),
+                () -> assertEquals(countryDTOExpected.getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event node with country name: " + countryDTOExpected.getName()
                                 + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+                () -> assertNull(eventNodeActual.getTarget().getCountryOfOrigin().getRegion(),
+                        () -> "should return event node with null region, but was: "
+                                + eventNodeActual.getTarget().getCountryOfOrigin().getRegion()),
 
                 () -> assertNotNull(eventNodeActual.getCity(),
-                        () -> "should return event node with not null city, but was: null"),
-                () -> assertNull(eventNodeActual.getCity().getId(),
-                        () -> "should return event city node with id as null, but was: "
-                                + eventNodeActual.getCity().getId()),
-                () -> assertEquals(cityDTO.getName(), eventNodeActual.getCity().getName(),
-                        () -> "should return event node with city name: " + cityDTO.getName()
-                                + ", but was: " + eventNodeActual.getCity().getName()),
-                () -> assertEquals(cityDTO.getLatitude(), eventNodeActual.getCity().getLatitude(),
-                        () -> "should return event node with city latitude: " + cityDTO.getLatitude()
-                                + ", but was: " + eventNodeActual.getCity().getLatitude()),
-                () -> assertEquals(cityDTO.getLongitude(), eventNodeActual.getCity().getLongitude(),
-                        () -> "should return event node with city longitude: " + cityDTO.getLongitude()
-                                + ", but was: " + eventNodeActual.getCity().getLongitude()));
+                        () -> "should return event node with not null cty, but was: null"),
+                () -> assertEquals(cityDTOExpected.getName(), eventNodeActual.getCity().getName(),
+                        () -> "should return event node with city name: " + cityDTOExpected.getName() + ", but was: "
+                                + eventNodeActual.getCity().getName()),
+                () -> assertEquals(cityDTOExpected.getLatitude(), eventNodeActual.getCity().getLatitude(),
+                        () -> "should return event node with city latitude: " + cityDTOExpected.getLatitude() + ", but was: "
+                                + eventNodeActual.getCity().getLatitude()),
+                () -> assertEquals(cityDTOExpected.getLongitude(), eventNodeActual.getCity().getLongitude(),
+                        () -> "should return event node with city longitude: " + cityDTOExpected.getLongitude() + ", but was: "
+                                + eventNodeActual.getCity().getLongitude()),
+
+                () -> assertNotNull(eventNodeActual.getCity().getProvince(),
+                        () -> "should return event node with not null province, but was: null"),
+                () -> assertEquals(provinceDTOExpected.getName(), eventNodeActual.getCity().getProvince().getName(),
+                        () -> "should return event node with province name: " + provinceDTOExpected.getName() + ", but was: "
+                                + eventNodeActual.getCity().getProvince().getName()),
+                () -> assertEquals(countryDTOExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getName(),
+                        () -> "should return event node with country name: " + countryDTOExpected.getName()
+                                + ", but was: " + eventNodeActual.getCity().getProvince().getCountry()),
+                () -> assertNull(eventNodeActual.getCity().getProvince().getCountry().getRegion(),
+                        () -> "should return event node with null region, but was: "
+                                + eventNodeActual.getCity().getProvince().getCountry().getRegion()));
     }
 
     @Test
     void when_map_event_node_to_dto_should_return_valid_dto() {
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
+                .build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
+        CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
+                .build(ObjectType.NODE);
 
         EventDTO eventDTOActual = modelMapper.map(eventNodeExpected, EventDTO.class);
 
@@ -201,49 +218,64 @@ class ModelMapperTest {
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
                         eventDTOActual.getIsPartOfMultipleIncidents(),
                         () -> "should return event dto which was part of multiple incidents: "
-                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
                                 + eventDTOActual.getIsPartOfMultipleIncidents()),
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventDTOActual.getIsSuccessful(),
                         () -> "should return event dto which was successful: " + eventNodeExpected.getIsSuccessful()
                                 + ", but was: " + eventDTOActual.getIsSuccessful()),
                 () -> assertEquals(eventNodeExpected.getIsSuicidal(), eventDTOActual.getIsSuicidal(),
-                        () -> "should return event dto which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: "
-                                + eventDTOActual.getIsSuicidal()),
-                () -> assertNotNull(targetNode,
+                        () -> "should return event dto which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + eventDTOActual.getIsSuicidal()),
+                () -> assertNotNull(eventDTOActual.getTarget(),
                         () -> "should return event dto with not null target, but was: null"),
-                () -> assertEquals(targetNode.getTarget(), eventDTOActual.getTarget().getTarget(),
-                        () -> "should return event dto with target: " + targetNode.getTarget()
-                                + ", but was: " + eventDTOActual.getTarget().getTarget()),
-                () -> assertEquals(countryNode.getName(), eventDTOActual.getTarget().getCountryOfOrigin().getName(),
-                        () -> "should return event dto with country name: " + countryNode.getName()
+                () -> assertEquals(targetNodeExpected.getTarget(), eventDTOActual.getTarget().getTarget(),
+                        () -> "should return event dto with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + eventDTOActual.getTarget().getTarget()),
+                () -> assertEquals(countryNodeExpected.getName(), eventDTOActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event dto with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + eventDTOActual.getTarget().getCountryOfOrigin()),
+
                 () -> assertNotNull(eventDTOActual.getCity(),
-                        () -> "should return event node dto not null city, but was: null"),
-                () -> assertEquals(cityNode.getName(), eventDTOActual.getCity().getName(),
-                        () -> "should return event dto with city name: " + cityNode.getName()
-                                + ", but was: " + eventDTOActual.getCity().getName()),
-                () -> assertEquals(cityNode.getLatitude(), eventDTOActual.getCity().getLatitude(),
-                        () -> "should return event dto with city latitude: " + cityNode.getLatitude()
-                                + ", but was: " + eventDTOActual.getCity().getLatitude()),
-                () -> assertEquals(cityNode.getLongitude(), eventDTOActual.getCity().getLongitude(),
-                        () -> "should return event dto with city longitude: " + cityNode.getLongitude()
-                                + ", but was: " + eventDTOActual.getCity().getLongitude()));
+                        () -> "should return event dto with not null cty, but was: null"),
+                () -> assertEquals(cityNodeExpected.getName(), eventDTOActual.getCity().getName(),
+                        () -> "should return event dto with city name: " + cityNodeExpected.getName() + ", but was: "
+                                + eventDTOActual.getCity().getName()),
+                () -> assertEquals(cityNodeExpected.getLatitude(), eventDTOActual.getCity().getLatitude(),
+                        () -> "should return event dto with city latitude: " + cityNodeExpected.getLatitude() + ", but was: "
+                                + eventDTOActual.getCity().getLatitude()),
+                () -> assertEquals(cityNodeExpected.getLongitude(), eventDTOActual.getCity().getLongitude(),
+                        () -> "should return event dto with city longitude: " + cityNodeExpected.getLongitude() + ", but was: "
+                                + eventDTOActual.getCity().getLongitude()),
+
+                () -> assertNotNull(eventDTOActual.getCity().getProvince(),
+                        () -> "should return event dto with not null province, but was: null"),
+                () -> assertEquals(provinceNodeExpected.getName(), eventDTOActual.getCity().getProvince().getName(),
+                        () -> "should return event dto with province name: " + provinceNodeExpected.getName() + ", but was: "
+                                + eventDTOActual.getCity().getProvince().getName()),
+                () -> assertEquals(countryNodeExpected.getName(), eventDTOActual.getCity().getProvince().getCountry().getName(),
+                        () -> "should return event dto with country name: " + countryNodeExpected.getName()
+                                + ", but was: " + eventDTOActual.getCity().getProvince().getCountry()));
     }
 
     @Test
     void when_map_event_node_to_model_should_return_valid_model() {
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
+                .build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
+                .build(ObjectType.NODE);
+        CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
+                .build(ObjectType.NODE);
 
         EventModel eventModelActual = modelMapper.map(eventNodeExpected, EventModel.class);
 
         assertAll(
-                () -> assertEquals(eventNodeExpected.getId(), eventModelActual.getId(),
-                        () -> "should return event model with id: " + eventNodeExpected.getId() + ", but was: "
-                                + eventModelActual.getId()),
+                () -> assertNotNull(eventModelActual.getId(),
+                        () -> "should return event model with id, but was: " + eventModelActual.getId()),
                 () -> assertEquals(eventNodeExpected.getSummary(), eventModelActual.getSummary(),
                         () -> "should return event model with summary: " + eventNodeExpected.getSummary() + ", but was: "
                                 + eventModelActual.getSummary()),
@@ -256,7 +288,7 @@ class ModelMapperTest {
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
                         eventModelActual.getIsPartOfMultipleIncidents(),
                         () -> "should return event model which was part of multiple incidents: "
-                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
                                 + eventModelActual.getIsPartOfMultipleIncidents()),
                 () -> assertEquals(eventNodeExpected.getIsSuccessful(), eventModelActual.getIsSuccessful(),
                         () -> "should return event model which was successful: " + eventNodeExpected.getIsSuccessful()
@@ -266,30 +298,61 @@ class ModelMapperTest {
                                 + ", but was: " + eventModelActual.getIsSuicidal()),
                 () -> assertNotNull(eventModelActual.getTarget(),
                         () -> "should return event model with not null target, but was: null"),
-                () -> assertEquals(targetNode.getId(), eventModelActual.getTarget().getId(),
-                        () -> "should return event model target with id: " + targetNode.getId() + ", but was: "
+                () -> assertEquals(targetNodeExpected.getId(), eventModelActual.getTarget().getId(),
+                        () -> "should return event model with target id: " + targetNodeExpected.getId() + ", but was: "
                                 + eventModelActual.getTarget().getId()),
-                () -> assertEquals(targetNode.getTarget(), eventModelActual.getTarget().getTarget(),
-                        () -> "should return event model with target: " + targetNode.getTarget()
-                                + ", but was: " + eventModelActual.getTarget().getTarget()),
-                () -> assertEquals(countryNode.getId(), eventModelActual.getTarget().getCountryOfOrigin().getId(),
-                        () -> "should return event model with country id: " + countryNode.getId()
+                () -> assertEquals(targetNodeExpected.getTarget(), eventModelActual.getTarget().getTarget(),
+                        () -> "should return event model with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + eventModelActual.getTarget().getTarget()),
+                () -> assertEquals(countryNodeExpected.getId(), eventModelActual.getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return event model with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + eventModelActual.getTarget().getId()),
-                () -> assertEquals(countryNode.getName(), eventModelActual.getTarget().getCountryOfOrigin().getName(),
-                        () -> "should return event model with country name: " + countryNode.getName()
+                () -> assertEquals(countryNodeExpected.getName(), eventModelActual.getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return event model with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + eventModelActual.getTarget().getCountryOfOrigin()),
+                () -> assertNotNull(eventModelActual.getTarget().getCountryOfOrigin().getRegion(),
+                        () -> "should return event model with not null region, but was: null"),
+                () -> assertEquals(regionNodeExpected.getId(), eventModelActual.getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return event model with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + eventModelActual.getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), eventModelActual.getTarget().getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return event model with region name: " + regionNodeExpected.getName() + ", but was: "
+                                + eventModelActual.getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(eventModelActual.getCity(),
-                        () -> "should return event node model not null city, but was: null"),
-                () -> assertEquals(cityNode.getName(), eventModelActual.getCity().getName(),
-                        () -> "should return event model with city name: " + cityNode.getName()
-                                + ", but was: " + eventModelActual.getCity().getName()),
-                () -> assertEquals(cityNode.getLatitude(), eventModelActual.getCity().getLatitude(),
-                        () -> "should return event model with city latitude: " + cityNode.getLatitude()
-                                + ", but was: " + eventModelActual.getCity().getLatitude()),
-                () -> assertEquals(cityNode.getLongitude(), eventModelActual.getCity().getLongitude(),
-                        () -> "should return event model with city longitude: " + cityNode.getLongitude()
-                                + ", but was: " + eventModelActual.getCity().getLongitude()));
+                        () -> "should return event model with not null cty, but was: null"),
+                () -> assertEquals(cityNodeExpected.getName(), eventModelActual.getCity().getName(),
+                        () -> "should return event model with city name: " + cityNodeExpected.getName() + ", but was: "
+                                + eventModelActual.getCity().getName()),
+                () -> assertEquals(cityNodeExpected.getLatitude(), eventModelActual.getCity().getLatitude(),
+                        () -> "should return event model with city latitude: " + cityNodeExpected.getLatitude() + ", but was: "
+                                + eventModelActual.getCity().getLatitude()),
+                () -> assertEquals(cityNodeExpected.getLongitude(), eventModelActual.getCity().getLongitude(),
+                        () -> "should return event model with city longitude: " + cityNodeExpected.getLongitude() + ", but was: "
+                                + eventModelActual.getCity().getLongitude()),
+
+                () -> assertNotNull(eventModelActual.getCity().getProvince(),
+                        () -> "should return event model with not null province, but was: null"),
+                () -> assertEquals(provinceNodeExpected.getId(), eventModelActual.getCity().getProvince().getId(),
+                        () -> "should return event model with province id: " + provinceNodeExpected.getId()
+                                + ", but was: " + eventModelActual.getCity().getProvince().getId()),
+                () -> assertEquals(provinceNodeExpected.getName(), eventModelActual.getCity().getProvince().getName(),
+                        () -> "should return event model with province name: " + provinceNodeExpected.getName() + ", but was: "
+                                + eventModelActual.getCity().getProvince().getName()),
+                () -> assertEquals(countryNodeExpected.getId(), eventModelActual.getCity().getProvince().getCountry().getId(),
+                        () -> "should return event model with country id: " + countryNodeExpected.getId()
+                                + ", but was: " + eventModelActual.getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(), eventModelActual.getCity().getProvince().getCountry().getName(),
+                        () -> "should return event model with country name: " + countryNodeExpected.getName()
+                                + ", but was: " + eventModelActual.getCity().getProvince().getCountry()),
+                () -> assertNotNull(eventModelActual.getCity().getProvince().getCountry().getRegion(),
+                        () -> "should return event model with not null region, but was: null"),
+                () -> assertEquals(regionNodeExpected.getId(), eventModelActual.getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return event model with region id: " + regionNodeExpected.getId()
+                                + ", but was: " + eventModelActual.getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), eventModelActual.getCity().getProvince().getCountry().getRegion().getName(),
+                        () -> "should return event model with region name: " + regionNodeExpected.getName() + ", but was: "
+                                + eventModelActual.getCity().getProvince().getCountry().getRegion().getName()));
     }
 
     @Test
