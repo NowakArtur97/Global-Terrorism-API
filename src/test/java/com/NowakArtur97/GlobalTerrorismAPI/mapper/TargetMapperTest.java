@@ -53,15 +53,16 @@ class TargetMapperTest {
     @Test
     void when_map_target_dto_to_node_should_return_target_node() {
 
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
-        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(null).withCountry(countryNode).build(ObjectType.NODE);
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
 
-        when(modelMapper.map(targetDTO, TargetNode.class)).thenReturn(targetNodeExpected);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        TargetNode targetNodeActual = objectMapper.map(targetDTO, TargetNode.class);
+        when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpected);
+
+        TargetNode targetNodeActual = objectMapper.map(targetDTOExpected, TargetNode.class);
 
         assertAll(
                 () -> assertNull(targetNodeActual.getId(),
@@ -70,93 +71,95 @@ class TargetMapperTest {
                         () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
                                 + targetNodeActual.getTarget()),
 
-                () -> assertEquals(countryNode, targetNodeActual.getCountryOfOrigin(),
-                        () -> "should return target node with country: " + countryNode + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(countryNode.getId(), targetNodeActual.getCountryOfOrigin().getId(),
-                        () -> "should return target node with country id: " + countryNode.getId()
+                () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),
+                        () -> "should return target node with country: " + countryNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getId(),
+                        () -> "should return target node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getId()),
-                () -> assertEquals(countryNode.getName(), targetNodeActual.getCountryOfOrigin().getName(),
-                        () -> "should return target node with country name: " + countryNode.getName()
+                () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
+                        () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
 
-                () -> assertEquals(regionNode, targetNodeActual.getCountryOfOrigin().getRegion(),
-                        () -> "should return target node with region: " + regionNode + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNode.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return target node with region id: " + regionNode.getId()
+                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target node with region id: " + regionNodeExpected.getId()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNode.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
-                        () -> "should return target node with region name: " + regionNode.getName()
+                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target node with region name: " + regionNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
-                () -> verify(modelMapper, times(1)).map(targetDTO, TargetNode.class),
+                () -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
     void when_map_target_node_to_dto_should_return_target_dto() {
 
-        CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
-        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(modelMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTOExpected);
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
 
-        TargetDTO targetDTOActual = objectMapper.map(targetNode, TargetDTO.class);
+        when(modelMapper.map(targetNodeExpected, TargetDTO.class)).thenReturn(targetDTOExpected);
+
+        TargetDTO targetDTOActual = objectMapper.map(targetNodeExpected, TargetDTO.class);
 
         assertAll(
                 () -> assertEquals(targetDTOExpected.getTarget(), targetDTOActual.getTarget(),
                         () -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
                                 + targetDTOActual.getTarget()),
 
-                () -> assertEquals(countryDTO, targetDTOActual.getCountryOfOrigin(),
-                        () -> "should return target dto with country: " + countryDTO + ", but was: " + targetDTOActual.getCountryOfOrigin()),
-                () -> assertEquals(countryDTO.getName(), targetDTOActual.getCountryOfOrigin().getName(),
-                        () -> "should return target dto with country name: " + countryDTO.getName()
+                () -> assertEquals(countryDTOExpected, targetDTOActual.getCountryOfOrigin(),
+                        () -> "should return target dto with country: " + countryDTOExpected + ", but was: " + targetDTOActual.getCountryOfOrigin()),
+                () -> assertEquals(countryDTOExpected.getName(), targetDTOActual.getCountryOfOrigin().getName(),
+                        () -> "should return target dto with country name: " + countryDTOExpected.getName()
                                 + ", but was: " + targetDTOActual.getCountryOfOrigin()),
-                () -> verify(modelMapper, times(1)).map(targetNode, TargetDTO.class),
+                () -> verify(modelMapper, times(1)).map(targetNodeExpected, TargetDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
     void when_map_target_node_to_model_should_return_target_model() {
 
-        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
-        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
-        RegionModel regionModel = (RegionModel) regionBuilder.build(ObjectType.MODEL);
-        CountryModel countryModel = (CountryModel) countryBuilder.withRegion(regionModel).build(ObjectType.MODEL);
-        TargetModel targetModelExpected = (TargetModel) targetBuilder.withCountry(countryModel).build(ObjectType.MODEL);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+        TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(modelMapper.map(targetNode, TargetModel.class)).thenReturn(targetModelExpected);
+        RegionModel regionModelExpected = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        CountryModel countryModelExpected = (CountryModel) countryBuilder.withRegion(regionModelExpected).build(ObjectType.MODEL);
+        TargetModel targetModelExpected = (TargetModel) targetBuilder.withCountry(countryModelExpected).build(ObjectType.MODEL);
 
-        TargetModel targetModelActual = objectMapper.map(targetNode, TargetModel.class);
+        when(modelMapper.map(targetNodeExpected, TargetModel.class)).thenReturn(targetModelExpected);
+
+        TargetModel targetModelActual = objectMapper.map(targetNodeExpected, TargetModel.class);
 
         assertAll(
                 () -> assertEquals(targetModelExpected.getId(), targetModelActual.getId(),
-                        () -> "should return target model with id: " + countryModel.getId()
+                        () -> "should return target model with id: " + countryModelExpected.getId()
                                 + ", but was: " + targetModelActual.getId()),
                 () -> assertEquals(targetModelExpected.getTarget(), targetModelActual.getTarget(),
                         () -> "should return target model with target: " + targetModelExpected.getTarget() + ", but was: "
                                 + targetModelActual.getTarget()),
 
-                () -> assertEquals(countryModel, targetModelActual.getCountryOfOrigin(),
-                        () -> "should return target model with country: " + countryModel + ", but was: " + targetModelActual.getCountryOfOrigin()),
-                () -> assertEquals(countryModel.getId(), targetModelActual.getCountryOfOrigin().getId(),
-                        () -> "should return target model with country id: " + countryModel.getId()
+                () -> assertEquals(countryModelExpected, targetModelActual.getCountryOfOrigin(),
+                        () -> "should return target model with country: " + countryModelExpected + ", but was: " + targetModelActual.getCountryOfOrigin()),
+                () -> assertEquals(countryModelExpected.getId(), targetModelActual.getCountryOfOrigin().getId(),
+                        () -> "should return target model with country id: " + countryModelExpected.getId()
                                 + ", but was: " + targetModelActual.getId()),
-                () -> assertEquals(countryModel.getName(), targetModelActual.getCountryOfOrigin().getName(),
-                        () -> "should return target model with country name: " + countryModel.getName()
+                () -> assertEquals(countryModelExpected.getName(), targetModelActual.getCountryOfOrigin().getName(),
+                        () -> "should return target model with country name: " + countryModelExpected.getName()
                                 + ", but was: " + targetModelActual.getCountryOfOrigin()),
 
-                () -> assertEquals(regionModel, targetModelActual.getCountryOfOrigin().getRegion(),
-                        () -> "should return target model with region: " + regionModel + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionModel.getId(), targetModelActual.getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return target model with region id: " + regionModel.getId()
+                () -> assertEquals(regionModelExpected, targetModelActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target model with region: " + regionModelExpected + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion()),
+                () -> assertEquals(regionModelExpected.getId(), targetModelActual.getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return target model with region id: " + regionModelExpected.getId()
                                 + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionModel.getName(), targetModelActual.getCountryOfOrigin().getRegion().getName(),
-                        () -> "should return target model with region name: " + regionModel.getName()
+                () -> assertEquals(regionModelExpected.getName(), targetModelActual.getCountryOfOrigin().getRegion().getName(),
+                        () -> "should return target model with region name: " + regionModelExpected.getName()
                                 + ", but was: " + targetModelActual.getCountryOfOrigin().getRegion().getName()),
-                () -> verify(modelMapper, times(1)).map(targetNode, TargetModel.class),
+                () -> verify(modelMapper, times(1)).map(targetNodeExpected, TargetModel.class),
                 () -> verifyNoMoreInteractions(modelMapper));
     }
 }
