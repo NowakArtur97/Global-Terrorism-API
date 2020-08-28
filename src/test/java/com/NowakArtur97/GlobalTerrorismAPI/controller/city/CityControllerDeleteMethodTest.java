@@ -1,15 +1,15 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
+import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -34,66 +34,66 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventController_Tests")
-class EventControllerDeleteMethodTest {
+@Tag("CityController_Tests")
+class CityControllerDeleteMethodTest {
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
+    private GenericRestController<CityModel, CityDTO> cityController;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private GenericService<CityNode, CityDTO> cityService;
 
     @Mock
-    private EventModelAssembler modelAssembler;
+    private CityModelAssembler modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<CityNode> pagedResourcesAssembler;
 
     @Mock
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
+    private ViolationHelper<CityNode, CityDTO> violationHelper;
 
-    private static TargetBuilder targetBuilder;
-    private static EventBuilder eventBuilder;
+    private static ProvinceBuilder provinceBuilder;
+    private static CityBuilder cityBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
-        targetBuilder = new TargetBuilder();
-        eventBuilder = new EventBuilder();
+        provinceBuilder = new ProvinceBuilder();
+        cityBuilder = new CityBuilder();
     }
 
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
+        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(cityController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
     }
 
     @Test
-    void when_delete_existing_event_should_not_return_content() {
+    void when_delete_existing_city_should_not_return_content() {
 
-        Long eventId = 1L;
+        Long cityId = 1L;
 
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(null).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
 
-        when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
+        when(cityService.delete(cityId)).thenReturn(Optional.of(cityNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(eventService, times(1)).delete(eventId),
-                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(cityService, times(1)).delete(cityId),
+                () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
@@ -101,21 +101,21 @@ class EventControllerDeleteMethodTest {
     }
 
     @Test
-    void when_delete_existing_event_with_target_should_not_return_content() {
+    void when_delete_existing_city_with_province_should_not_return_content() {
 
-        Long eventId = 1L;
+        Long cityId = 2L;
 
-        TargetNode targetNode = (TargetNode) eventBuilder.build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
+        ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNode).build(ObjectType.NODE);
 
-        when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
+        when(cityService.delete(cityId)).thenReturn(Optional.of(cityNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(eventService, times(1)).delete(eventId),
-                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(cityService, times(1)).delete(cityId),
+                () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
@@ -123,21 +123,21 @@ class EventControllerDeleteMethodTest {
     }
 
     @Test
-    void when_delete_event_but_event_does_not_exist_should_return_error_response() {
+    void when_delete_city_but_city_does_not_exist_should_return_error_response() {
 
-        Long eventId = 1L;
+        Long cityId = 1L;
 
-        when(eventService.delete(eventId)).thenReturn(Optional.empty());
+        when(cityService.delete(cityId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, eventId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                        .andExpect(jsonPath("errors[0]", is("Could not find CityModel with id: " + cityId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(eventService, times(1)).delete(eventId),
-                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(cityService, times(1)).delete(cityId),
+                () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
