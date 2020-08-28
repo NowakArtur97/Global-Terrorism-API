@@ -34,7 +34,10 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, GroupNode> {
 
-    GroupController(GenericService<GroupNode, GroupDTO> service, RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler, PagedResourcesAssembler<GroupNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
+    GroupController(GenericService<GroupNode, GroupDTO> service,
+                    RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler,
+                    PagedResourcesAssembler<GroupNode> pagedResourcesAssembler,
+                    PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

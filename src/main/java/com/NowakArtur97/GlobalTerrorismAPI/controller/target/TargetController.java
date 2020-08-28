@@ -34,7 +34,10 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
-    TargetController(GenericService<TargetNode, TargetDTO> service, RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler, PagedResourcesAssembler<TargetNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<TargetNode, TargetDTO> violationHelper) {
+    TargetController(GenericService<TargetNode, TargetDTO> service,
+                     RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler,
+                     PagedResourcesAssembler<TargetNode> pagedResourcesAssembler,
+                     PatchHelper patchHelper, ViolationHelper<TargetNode, TargetDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

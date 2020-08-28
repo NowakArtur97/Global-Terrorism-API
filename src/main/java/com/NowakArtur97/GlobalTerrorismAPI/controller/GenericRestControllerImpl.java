@@ -46,7 +46,10 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     protected final ViolationHelper<T, D> violationHelper;
 
-    protected GenericRestControllerImpl(GenericService<T, D> service, RepresentationModelAssemblerSupport<T, M> modelAssembler, PagedResourcesAssembler<T> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
+    protected GenericRestControllerImpl(GenericService<T, D> service,
+                                        RepresentationModelAssemblerSupport<T, M> modelAssembler,
+                                        PagedResourcesAssembler<T> pagedResourcesAssembler,
+                                        PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
 
         Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(),
                 GenericRestControllerImpl.class)[0];
