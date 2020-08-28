@@ -59,6 +59,27 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
     }
 
     @Override
+    public CityNode update(CityNode cityNode, CityDTO cityDTO) {
+
+        Long id = cityNode.getId();
+
+        cityNode = objectMapper.map(cityDTO, CityNode.class);
+
+        cityNode.setId(id);
+
+        Optional<ProvinceNode> provinceNodeOptional = provinceService
+                .findByNameAndCountryName(cityNode.getProvince());
+
+        if (provinceNodeOptional.isPresent()) {
+            cityNode.setProvince(provinceNodeOptional.get());
+        } else {
+            cityNode.setProvince(provinceService.saveNew(cityDTO.getProvince()));
+        }
+
+        return repository.save(cityNode);
+    }
+
+    @Override
     public Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude) {
 
         return repository.findByNameAndLatitudeAndLongitude(name, latitude, longitude, DEFAULT_DEPTH_FOR_CITY_NODE);
