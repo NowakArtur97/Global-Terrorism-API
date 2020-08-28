@@ -40,6 +40,7 @@ public class SwaggerConfiguration {
                         new Tag(GroupTag.RESOURCE, GroupTag.DESCRIPTION),
                         new Tag(GroupEventsTag.RESOURCE, GroupEventsTag.DESCRIPTION),
                         new Tag(EventTargetTag.RESOURCE, EventTargetTag.DESCRIPTION),
+                        new Tag(CityTag.RESOURCE, CityTag.DESCRIPTION),
                         new Tag(UserRegistrationTag.RESOURCE, UserRegistrationTag.DESCRIPTION),
                         new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION)
                 )
