@@ -30,7 +30,7 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
     public ProvinceNode save(ProvinceNode provinceNode) {
 
         provinceNode.setCountry(countryService.findByName(provinceNode.getCountry().getName())
-                        .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+                .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
 
         return provinceRepository.save(provinceNode);
     }
@@ -41,7 +41,22 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
         ProvinceNode provinceNode = objectMapper.map(provinceDTO, ProvinceNode.class);
 
         provinceNode.setCountry(countryService.findByName(provinceNode.getCountry().getName())
-                        .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+                .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+
+        return provinceRepository.save(provinceNode);
+    }
+
+    @Override
+    public ProvinceNode update(ProvinceNode provinceNode, ProvinceDTO provinceDTO) {
+
+        Long id = provinceNode.getId();
+
+        provinceNode = objectMapper.map(provinceDTO, ProvinceNode.class);
+
+        provinceNode.setId(id);
+
+        provinceNode.setCountry(countryService.findByName(provinceNode.getCountry().getName())
+                .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
 
         return provinceRepository.save(provinceNode);
     }
