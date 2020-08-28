@@ -12,20 +12,17 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-class CityServiceImpl extends BaseGenericServiceImpl<CityNode> implements CityService {
+class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements CityService {
 
     private final int DEFAULT_DEPTH_FOR_CITY_NODE = 2;
 
     private final CityRepository repository;
 
-    private final ObjectMapper objectMapper;
-
     private final ProvinceService provinceService;
 
     public CityServiceImpl(CityRepository repository, ObjectMapper objectMapper, ProvinceService provinceService) {
-        super(repository);
+        super(repository, objectMapper);
         this.repository = repository;
-        this.objectMapper = objectMapper;
         this.provinceService = provinceService;
     }
 
