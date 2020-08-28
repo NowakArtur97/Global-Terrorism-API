@@ -12,6 +12,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -169,6 +171,7 @@ class GroupControllerJsonPatchMethodTest {
 
     @Test
     @DirtiesContext
+    @DisabledOnOs(OS.LINUX)
     void when_partial_update_valid_group_with_events_using_json_patch_should_return_partially_updated_node() {
 
         String updatedSummary = "summary updated";

@@ -172,7 +172,8 @@ class CityServiceImplTest {
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
-        when(provinceService.findByNameAndCountryName(provinceNodeExpected)).thenReturn(Optional.of(provinceNodeExpected));
+        when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
+                .thenReturn(Optional.of(provinceNodeExpected));
         when(cityRepository.save(cityNodeExpectedBeforeSave)).thenReturn(cityNodeExpected);
 
         CityNode cityNodeActual = cityService.save(cityNodeExpected);
@@ -220,7 +221,8 @@ class CityServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), cityNodeActual.getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + cityNodeActual.getProvince().getCountry().getRegion().getName()),
-                () -> verify(provinceService, times(1)).findByNameAndCountryName(provinceNodeExpected),
+                () -> verify(provinceService, times(1))
+                        .findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()),
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(cityRepository),
@@ -244,7 +246,8 @@ class CityServiceImplTest {
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
         when(objectMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
-        when(provinceService.findByNameAndCountryName(provinceNodeExpected)).thenReturn(Optional.empty());
+        when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
+                .thenReturn(Optional.empty());
         when(provinceService.saveNew(provinceDTO)).thenReturn(provinceNodeExpected);
         when(cityRepository.save(cityNodeExpectedBeforeSave)).thenReturn(cityNodeExpected);
 
@@ -293,7 +296,8 @@ class CityServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), cityNodeActual.getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + cityNodeActual.getProvince().getCountry().getRegion().getName()),
-                () -> verify(provinceService, times(1)).findByNameAndCountryName(provinceNodeExpected),
+                () -> verify(provinceService, times(1))
+                        .findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()),
                 () -> verify(provinceService, times(1)).saveNew(provinceDTO),
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpected),

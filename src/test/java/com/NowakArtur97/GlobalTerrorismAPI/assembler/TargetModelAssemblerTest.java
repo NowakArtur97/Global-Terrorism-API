@@ -65,8 +65,6 @@ class TargetModelAssemblerTest {
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
 
         when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(targetModel);
-        when(objectMapper.map(countryNode.getRegion(), RegionModel.class)).thenReturn(regionModel);
-        when(objectMapper.map(targetNode.getCountryOfOrigin(), CountryModel.class)).thenReturn(countryModel);
 
         TargetModel targetModelActual = targetModelAssembler.toModel(targetNode);
 
@@ -107,8 +105,6 @@ class TargetModelAssemblerTest {
                 () -> assertTrue(targetModelActual.getCountryOfOrigin().getRegion().getLinks().isEmpty(),
                         () -> "should return target with region model without links, but was: " + targetModelActual.getCountryOfOrigin().getRegion().getLinks()),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetModel.class),
-                () -> verify(objectMapper, times(1)).map(targetNode.getCountryOfOrigin(), CountryModel.class),
-                () -> verify(objectMapper, times(1)).map(targetNode.getCountryOfOrigin(), CountryModel.class),
                 () -> verifyNoMoreInteractions(objectMapper));
     }
 }

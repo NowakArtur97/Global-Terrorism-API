@@ -105,7 +105,7 @@ class EventControllerDeleteMethodTest {
 
         Long eventId = 1L;
 
-        TargetNode targetNode = (TargetNode) eventBuilder.build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).build(ObjectType.NODE);
 
         when(eventService.delete(eventId)).thenReturn(Optional.of(eventNode));
