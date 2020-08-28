@@ -55,7 +55,16 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
 
-        setEventCity(eventNode, eventDTO.getCity());
+        CityDTO cityDTO = eventDTO.getCity();
+
+        Optional<CityNode> cityNodeOptional = cityService
+                .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude());
+
+        if (cityNodeOptional.isPresent()) {
+            eventNode.setCity(cityNodeOptional.get());
+        } else {
+            eventNode.setCity(cityService.saveNew(cityDTO));
+        }
 
         return repository.save(eventNode);
     }
@@ -66,12 +75,13 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         Long id = eventNode.getId();
 
         TargetNode updatedTarget = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
+        CityNode updatedCity = cityService.update(eventNode.getCity(), eventDTO.getCity());
 
         eventNode = objectMapper.map(eventDTO, EventNode.class);
 
         eventNode.setId(id);
         eventNode.setTarget(updatedTarget);
-        setEventCity(eventNode, eventDTO.getCity());
+        eventNode.setCity(updatedCity);
 
         return repository.save(eventNode);
     }
@@ -128,17 +138,5 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         eventNode.setTarget(targetNode);
 
         return repository.save(eventNode);
-    }
-
-    private void setEventCity(EventNode eventNode, CityDTO cityDTO) {
-
-        Optional<CityNode> cityNodeOptional = cityService
-                .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude());
-
-        if (cityNodeOptional.isPresent()) {
-            eventNode.setCity(cityNodeOptional.get());
-        } else {
-            eventNode.setCity(cityService.saveNew(cityDTO));
-        }
     }
 }
