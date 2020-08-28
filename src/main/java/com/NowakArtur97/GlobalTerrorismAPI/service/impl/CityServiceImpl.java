@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
@@ -29,8 +30,10 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
     @Override
     public CityNode save(CityNode cityNode) {
 
+        ProvinceNode provinceNode = cityNode.getProvince();
+
         Optional<ProvinceNode> provinceNodeOptional = provinceService
-                .findByNameAndCountryName(cityNode.getProvince());
+                .findByNameAndCountryName(provinceNode.getName(), provinceNode.getCountry().getName());
 
         if (provinceNodeOptional.isPresent()) {
             cityNode.setProvince(provinceNodeOptional.get());
@@ -46,8 +49,10 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
 
         CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
 
+        ProvinceDTO provinceDTO = cityDTO.getProvince();
+
         Optional<ProvinceNode> provinceNodeOptional = provinceService
-                .findByNameAndCountryName(cityNode.getProvince());
+                .findByNameAndCountryName(provinceDTO.getName(), provinceDTO.getCountry().getName());
 
         if (provinceNodeOptional.isPresent()) {
             cityNode.setProvince(provinceNodeOptional.get());
@@ -63,7 +68,18 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
 
         Long id = cityNode.getId();
 
-        ProvinceNode updatedProvince = provinceService.update(cityNode.getProvince(), cityDTO.getProvince());
+        ProvinceDTO provinceDTO = cityDTO.getProvince();
+
+        Optional<ProvinceNode> provinceNodeOptional = provinceService
+                .findByNameAndCountryName(provinceDTO.getName(), provinceDTO.getCountry().getName());
+
+        ProvinceNode updatedProvince;
+
+        if (provinceNodeOptional.isPresent()) {
+            updatedProvince = provinceNodeOptional.get();
+        } else {
+            updatedProvince = provinceService.update(cityNode.getProvince(), cityDTO.getProvince());
+        }
 
         cityNode = objectMapper.map(cityDTO, CityNode.class);
 

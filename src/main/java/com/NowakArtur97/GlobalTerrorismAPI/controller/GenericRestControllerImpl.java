@@ -99,7 +99,7 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
     @Override
     public ResponseEntity<M> update(@PathVariable("id") Long id, @RequestBody @Valid D dto) {
 
-        Optional<T> nodeOptional = service.findById(id);
+        Optional<T> nodeOptional = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH);
 
         if (id != null && nodeOptional.isPresent()) {
 

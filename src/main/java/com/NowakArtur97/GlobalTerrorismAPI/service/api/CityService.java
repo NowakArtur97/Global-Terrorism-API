@@ -5,7 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 
 import java.util.Optional;
 
-public interface CityService extends BaseGenericService<CityNode> {
+public interface CityService extends GenericService<CityNode, CityDTO> {
 
     Optional<CityNode> findByNameAndLatitudeAndLongitude(String name, Double latitude, Double longitude);
 

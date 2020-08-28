@@ -61,10 +61,10 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
         return provinceRepository.save(provinceNode);
     }
 
-    @Override
-    public Optional<ProvinceNode> findByNameAndCountryName(ProvinceNode province) {
 
-        return provinceRepository.findByNameAndCountry_Name(province.getName(), province.getCountry().getName(),
-                DEFAULT_DEPTH_FOR_PROVINCE_NODE);
+    @Override
+    public Optional<ProvinceNode> findByNameAndCountryName(String provinceName, String countryName) {
+
+        return provinceRepository.findByNameAndCountry_Name(provinceName, countryName, DEFAULT_DEPTH_FOR_PROVINCE_NODE);
     }
 }
