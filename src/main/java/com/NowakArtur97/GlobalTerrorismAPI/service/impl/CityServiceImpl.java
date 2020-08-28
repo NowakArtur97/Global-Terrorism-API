@@ -56,10 +56,12 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
 
         Long id = cityNode.getId();
 
+        ProvinceNode updatedProvince = provinceService.update(cityNode.getProvince(), cityDTO.getProvince());
+
         cityNode = objectMapper.map(cityDTO, CityNode.class);
 
         cityNode.setId(id);
-        setProvince(cityDTO, cityNode);
+        cityNode.setProvince(updatedProvince);
 
         return repository.save(cityNode);
     }
