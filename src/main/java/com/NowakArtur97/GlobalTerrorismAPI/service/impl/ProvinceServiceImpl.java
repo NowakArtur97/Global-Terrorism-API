@@ -14,6 +14,8 @@ import java.util.Optional;
 @Service
 class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> implements ProvinceService {
 
+    private final int DEFAULT_DEPTH_FOR_PROVINCE_NODE = 2;
+
     private final ProvinceRepository provinceRepository;
 
     private final CountryService countryService;
@@ -47,6 +49,7 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
     @Override
     public Optional<ProvinceNode> findByNameAndCountryName(ProvinceNode province) {
 
-        return provinceRepository.findByNameAndCountry_Name(province.getName(), province.getCountry().getName());
+        return provinceRepository.findByNameAndCountry_Name(province.getName(), province.getCountry().getName(),
+                DEFAULT_DEPTH_FOR_PROVINCE_NODE);
     }
 }
