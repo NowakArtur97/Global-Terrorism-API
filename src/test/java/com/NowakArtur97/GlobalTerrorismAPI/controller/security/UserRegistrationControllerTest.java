@@ -103,7 +103,7 @@ class UserRegistrationControllerTest {
                 () -> verifyNoInteractions(userService));
     }
 
-    @ParameterizedTest(name = "{index}: For User name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For User name: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_register_user_with_blank_user_name_should_return_error_response(String invalidUserName) {
@@ -161,7 +161,7 @@ class UserRegistrationControllerTest {
                 () -> verifyNoInteractions(userService));
     }
 
-    @ParameterizedTest(name = "{index}: For User email: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For User email: {0}")
     @ValueSource(strings = {"wrongformat", "wrong.format"})
     void when_register_user_with_an_incorrect_format_email_should_return_error_response(String invalidEmail) {
 
@@ -180,7 +180,7 @@ class UserRegistrationControllerTest {
                 () -> verifyNoInteractions(userService));
     }
 
-    @ParameterizedTest(name = "{index}: For User password: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For User password: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" "})
     void when_register_user_with_blank_password_should_return_error_response(String invalidPassword) {
@@ -201,7 +201,7 @@ class UserRegistrationControllerTest {
     }
 
 
-    @ParameterizedTest(name = "{index}: For User matching password: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For User matching password: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" "})
     void when_register_user_with_blank_matching_password_should_return_error_response(String invalidMatchingPassword) {

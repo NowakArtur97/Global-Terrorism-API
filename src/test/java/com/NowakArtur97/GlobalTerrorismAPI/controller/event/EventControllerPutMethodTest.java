@@ -428,7 +428,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", Matchers.hasSize(2))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event Target: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_target_should_return_errors(String invalidTarget) {
@@ -455,7 +455,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event summary: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_summary_should_return_errors(String invalidSummary) {
@@ -483,7 +483,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event motive: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_motive_should_return_errors(String invalidMotive) {
@@ -540,7 +540,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event City name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
@@ -734,7 +734,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event Province name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_update_event_with_invalid_province_name_should_return_errors(String invalidProvinceName) {

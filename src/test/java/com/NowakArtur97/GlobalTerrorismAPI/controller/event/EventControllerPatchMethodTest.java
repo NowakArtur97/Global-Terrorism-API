@@ -335,7 +335,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event Target: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_invalid_events_target_using_json_patch_should_have_errors(String invalidTarget) {
@@ -457,7 +457,7 @@ class EventControllerPatchMethodTest {
 
         }
 
-        @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event summary: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_summary_using_json_patch_should_return_errors(
@@ -481,7 +481,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event motive: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_motive_using_json_patch_should_return_errors(String invalidMotive) {
@@ -527,7 +527,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event City name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_city_name_using_json_patch_should_return_errors(String invalidCityName) {
@@ -724,7 +724,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(2))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event Province name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_province_name_using_json_patch_should_return_errors(String invalidProvinceName) {
@@ -1006,7 +1006,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event Target: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_invalid_events_target_using_json_merge_patch_should_have_errors(String invalidTarget) {
@@ -1124,7 +1124,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(8))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event summary: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event summary: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_summary_using_json_merge_patch_should_return_errors(
@@ -1148,7 +1148,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event motive: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event motive: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_motive_using_json_merge_patch_should_return_errors(
@@ -1195,7 +1195,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event City name: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event City name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_city_name_using_json_merge_patch_should_return_errors(String invalidCityName) {
@@ -1390,7 +1390,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(2))));
         }
 
-        @ParameterizedTest(name = "{index}: For Event Province name: {0} should have violation")
+        @ParameterizedTest(name = "{index}: For Event Province name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_event_with_invalid_province_name_using_json_patch_merge_should_return_errors(String invalidProvinceName) {

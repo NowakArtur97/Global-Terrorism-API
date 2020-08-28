@@ -291,7 +291,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group name: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_with_invalid_name_should_return_errors(String invalidName) {
@@ -347,7 +347,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(2))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Target: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_target_should_return_errors(String invalidTarget) {
@@ -375,7 +375,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group event summary: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group event summary: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_summary_should_return_errors(String invalidSummary) {
@@ -404,7 +404,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group event motive: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group event motive: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_motive_should_return_errors(String invalidMotive) {
@@ -463,7 +463,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event City name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event City name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_city_name_should_return_errors(String invalidCityName) {
@@ -663,7 +663,7 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event Province name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event Province name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_group_event_with_invalid_province_name_should_return_errors(String invalidProvinceName) {

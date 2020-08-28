@@ -174,7 +174,7 @@ class UserRegistrationControllerWithCustomValidationTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For User password: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For User password: {0}")
     @ValueSource(strings = {"123456", "qwerty", "iloveyou"})
     void when_register_user_with_popular_password_should_return_error_response(String popularPassword) {
 

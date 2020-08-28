@@ -30,6 +30,8 @@ import static org.mockito.Mockito.*;
 @Tag("ProvinceServiceImpl_Tests")
 class ProvinceServiceImplTest {
 
+    private final int DEFAULT_DEPTH_FOR_PROVINCE_NODE = 2;
+
     private ProvinceService provinceService;
 
     @Mock
@@ -69,7 +71,7 @@ class ProvinceServiceImplTest {
                 .build(ObjectType.NODE);
 
         when(provinceRepository.findByNameAndCountry_Name(
-                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName()))
+                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(), DEFAULT_DEPTH_FOR_PROVINCE_NODE))
                 .thenReturn(Optional.of(provinceNodeExpected));
 
         Optional<ProvinceNode> provinceNodeActualOptional = provinceService.findByNameAndCountryName(provinceNodeExpected);
@@ -103,7 +105,7 @@ class ProvinceServiceImplTest {
                         () -> "should return province node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + provinceNodeActual.getCountry().getRegion().getName()),
                 () -> verify(provinceRepository, times(1)).findByNameAndCountry_Name(
-                        provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName()),
+                        provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(), DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
                 () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(countryService));
@@ -119,7 +121,7 @@ class ProvinceServiceImplTest {
                 .build(ObjectType.NODE);
 
         when(provinceRepository.findByNameAndCountry_Name(
-                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName()))
+                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(), DEFAULT_DEPTH_FOR_PROVINCE_NODE))
                 .thenReturn(Optional.empty());
 
         Optional<ProvinceNode> provinceNodeActualOptional = provinceService.findByNameAndCountryName(provinceNodeExpected);
@@ -127,7 +129,7 @@ class ProvinceServiceImplTest {
         assertAll(() -> assertTrue(provinceNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(provinceRepository, times(1))
                         .findByNameAndCountry_Name(
-                                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName()),
+                                provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(), DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
                 () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(countryService));

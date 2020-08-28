@@ -155,6 +155,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].province.name", is(cityModel1.getProvince().getName())))
                         .andExpect(jsonPath("content[0].links[0].href",
                                 is(cityModel1.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[1].id", is(cityModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].name", is(cityModel2.getName())))
@@ -164,6 +165,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].province.name", is(cityModel2.getProvince().getName())))
                         .andExpect(jsonPath("content[1].links[0].href",
                                 is(cityModel2.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[2].id", is(cityModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].name", is(cityModel3.getName())))
@@ -173,6 +175,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].province.name", is(cityModel3.getProvince().getName())))
                         .andExpect(jsonPath("content[2].links[0].href",
                                 is(cityModel3.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[3].id", is(cityModel4.getId().intValue())))
                         .andExpect(jsonPath("content[3].name", is(cityModel4.getName())))
@@ -182,6 +185,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[3].province.name", is(cityModel4.getProvince().getName())))
                         .andExpect(jsonPath("content[3].links[0].href",
                                 is(cityModel4.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[3].province.links").isEmpty())
 
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
                         .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
@@ -254,6 +258,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].province.name", is(cityModel1.getProvince().getName())))
                         .andExpect(jsonPath("content[0].links[0].href",
                                 is(cityModel1.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[1].id", is(cityModel2.getId().intValue())))
                         .andExpect(jsonPath("content[1].name", is(cityModel2.getName())))
@@ -263,6 +268,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].province.name", is(cityModel2.getProvince().getName())))
                         .andExpect(jsonPath("content[1].links[0].href",
                                 is(cityModel2.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[2].id", is(cityModel3.getId().intValue())))
                         .andExpect(jsonPath("content[2].name", is(cityModel3.getName())))
@@ -272,6 +278,7 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].province.name", is(cityModel3.getProvince().getName())))
                         .andExpect(jsonPath("content[2].links[0].href",
                                 is(cityModel3.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].province.links").isEmpty())
 
                         .andExpect(jsonPath("content[3]").doesNotExist())
                         .andExpect(jsonPath("page.size", is(sizeExpected)))
@@ -374,7 +381,8 @@ class CityControllerGetMethodTest {
                         .andExpect(jsonPath("latitude", is(cityModel.getLatitude())))
                         .andExpect(jsonPath("longitude", is(cityModel.getLongitude())))
                         .andExpect(jsonPath("province.id", is(cityModel.getProvince().getId().intValue())))
-                        .andExpect(jsonPath("province.name", is(cityModel.getProvince().getName()))),
+                        .andExpect(jsonPath("province.name", is(cityModel.getProvince().getName())))
+                        .andExpect(jsonPath("province.links").isEmpty()),
                 () -> verify(cityService, times(1)).findById(cityId),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(modelAssembler, times(1)).toModel(cityNode),

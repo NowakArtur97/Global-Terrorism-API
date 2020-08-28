@@ -357,7 +357,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group name: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_group_with_invalid_name_using_json_patch_should_return_errors(
@@ -381,7 +381,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Event Target: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_invalid_group_events_target_using_json_patch_should_have_errors(String invalidTarget) {
@@ -498,7 +498,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(8))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event summary: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event summary: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_group_event_with_invalid_summary_using_json_patch_should_return_errors(
@@ -522,7 +522,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event motive: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event motive: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_group_event_with_invalid_motive_using_json_patch_should_return_errors(String invalidMotive) {
@@ -568,7 +568,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event City name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event City name: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_group_event_with_invalid_city_name_using_json_patch_should_return_errors(String invalidCityName) {
@@ -761,7 +761,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", Matchers.hasSize(2))));
     }
 
-    @ParameterizedTest(name = "{index}: For Group Event Province name: {0} should have violation")
+    @ParameterizedTest(name = "{index}: For Group Event Province name: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_group_event_with_invalid_province_name_using_json_patch_should_return_errors(String invalidProvinceName) {
