@@ -11,6 +11,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import com.github.wnameless.spring.bulkapi.BulkOperation;
 import com.github.wnameless.spring.bulkapi.BulkRequest;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.*;
 
@@ -67,9 +68,11 @@ class BulkControllerTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void when_valid_bulk_request_should_return_array_of_responses() {
 
-        User userDetails = new User(userNode.getUserName(), userNode.getPassword(), List.of(new SimpleGrantedAuthority("user")));
+        User userDetails = new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user")));
 
         String token = "Bearer " + jwtUtil.generateToken(userDetails);
 
@@ -99,9 +102,6 @@ class BulkControllerTest {
                         .header("Authorization", token)
                         .content(ObjectTestMapper.asJsonString(bulkRequest))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-
-                        .andDo(MockMvcResultHandlers.print())
-
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("results").isArray())

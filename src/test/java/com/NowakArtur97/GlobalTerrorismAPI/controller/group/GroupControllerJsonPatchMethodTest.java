@@ -191,7 +191,6 @@ class GroupControllerJsonPatchMethodTest {
         String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNodeWithMultipleEvents.getId().intValue() + "/events";
 
         String jsonPatch = "[" +
-                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/id\", \"value\": \"" +  eventNode2.getId().intValue() + "\" }," +
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/summary\", \"value\": \"" + updatedSummary + "\" }," +
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/motive\", \"value\": \"" + updatedMotive + "\" }," +
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/date\", \"value\": \"" + updatedEventDateString + "\" }," +
