@@ -27,11 +27,7 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     @Override
     public GroupNode save(GroupNode groupNode) {
 
-        List<EventNode> eventsCaused = groupNode.getEventsCaused().stream()
-                .map(eventService::save)
-                .collect(Collectors.toList());
-
-        groupNode.setEventsCaused(eventsCaused);
+        groupNode.getEventsCaused().forEach(eventService::save);
 
         return repository.save(groupNode);
     }
@@ -41,9 +37,7 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
         GroupNode groupNode = objectMapper.map(groupDTO, GroupNode.class);
 
-        List<EventNode> eventsCaused = groupDTO.getEventsCaused().stream()
-                .map(eventService::saveNew)
-                .collect(Collectors.toList());
+        List<EventNode> eventsCaused = saveNewEvents(groupDTO);
 
         groupNode.setEventsCaused(eventsCaused);
 

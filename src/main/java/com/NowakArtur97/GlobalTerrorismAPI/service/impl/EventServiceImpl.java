@@ -147,11 +147,15 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         Optional<CityNode> cityNodeOptional = cityService
                 .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude());
 
-        if (cityNodeOptional.isPresent()
-                && cityNodeOptional.get().getProvince().getName().equals(cityDTO.getProvince().getName())) {
-            eventNode.setCity(cityNodeOptional.get());
-        } else if (cityNodeOptional.isPresent()) {
-            eventNode.setCity(cityService.update(cityNodeOptional.get(), cityDTO));
+        if (cityNodeOptional.isPresent()) {
+
+            CityNode cityNode = cityNodeOptional.get();
+
+            if (cityNode.getProvince().getName().equals(cityDTO.getProvince().getName())) {
+                eventNode.setCity(cityNode);
+            } else {
+                eventNode.setCity(cityService.update(cityNode, cityDTO));
+            }
         } else {
             eventNode.setCity(cityService.saveNew(cityDTO));
         }

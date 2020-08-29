@@ -125,7 +125,7 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
         violationHelper.violate(nodePatched, dtoTypeParameterClass);
 
-        nodePatched = service.save(nodePatched);
+        service.save(nodePatched);
 
         M resource = modelAssembler.toModel(nodePatched);
 
