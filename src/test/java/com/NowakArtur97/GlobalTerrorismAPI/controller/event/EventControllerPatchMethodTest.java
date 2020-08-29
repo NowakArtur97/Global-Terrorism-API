@@ -776,7 +776,7 @@ class EventControllerPatchMethodTest {
     class EventControllerMergeJsonPatchMethodTest {
 
         @Test
-        void when_partial_update_valid_event_using_json_merge_patch_should_return_partially_updated_node() {
+        void when_partial_update_valid_event_using_json_meusing_json_merge_patch_should_return_partially_updated_node() {
 
             String updatedSummary = "summary updated 2";
             String updatedMotive = "motive updated 2";
@@ -1393,7 +1393,7 @@ class EventControllerPatchMethodTest {
         @ParameterizedTest(name = "{index}: For Event Province name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
-        void when_partial_update_event_with_invalid_province_name_using_json_patch_merge_should_return_errors(String invalidProvinceName) {
+        void when_partial_update_event_with_invalid_province_name_using_json_merge_patch_should_return_errors(String invalidProvinceName) {
 
             String jsonMergePatch = "{\"city\" : {\"province\" : {\"name\" : \"" + invalidProvinceName + "\"}}}";
 
@@ -1415,7 +1415,7 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_without_province_country_using_json_patch_merge_should_return_errors() {
+        void when_partial_update_event_without_province_country_using_json_merge_patch_should_return_errors() {
 
             String jsonMergePatch = "{\"city\" : {\"province\" : {\"country\" : " + null + "}}}";
 
