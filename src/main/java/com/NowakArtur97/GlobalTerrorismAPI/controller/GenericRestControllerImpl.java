@@ -119,7 +119,8 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
     @Override
     public ResponseEntity<M> updateFields(@PathVariable("id") Long id, @RequestBody JsonPatch objectAsJsonPatch) {
 
-        T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
+        T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH)
+                .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         T nodePatched = patchHelper.patch(objectAsJsonPatch, node, nodeTypeParameterClass);
 
@@ -136,7 +137,8 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
     @Override
     public ResponseEntity<M> updateFields(@PathVariable("id2") Long id, @RequestBody JsonMergePatch objectAsJsonMergePatch) {
 
-        T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
+        T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH)
+                .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         T nodePatched = patchHelper.mergePatch(objectAsJsonMergePatch, node, nodeTypeParameterClass);
 

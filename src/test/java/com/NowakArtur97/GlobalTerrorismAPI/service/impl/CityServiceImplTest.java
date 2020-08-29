@@ -135,6 +135,69 @@ class CityServiceImplTest {
 
         long cityId = 1L;
 
+        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.build(ObjectType.NODE);
+        CityNode cityNodeExpected = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNodeExpected)
+                .build(ObjectType.NODE);
+
+        when(cityRepository.findById(cityId)).thenReturn(Optional.of(cityNodeExpected));
+
+        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId);
+
+        CityNode cityNodeActual = cityNodeActualOptional.get();
+
+        assertAll(() -> assertEquals(cityNodeExpected.getId(), cityNodeActual.getId(),
+                () -> "should return city node with id: " + cityNodeExpected.getId()
+                        + ", but was: " + cityNodeActual.getId()),
+                () -> assertEquals(cityNodeExpected.getName(), cityNodeActual.getName(),
+                        () -> "should return city node with name: " + cityNodeExpected.getName()
+                                + ", but was: " + cityNodeExpected.getName()),
+                () -> assertEquals(cityNodeExpected.getLatitude(), cityNodeActual.getLatitude(),
+                        () -> "should return city node with latitude: " + cityNodeExpected.getLatitude()
+                                + ", but was: " + cityNodeActual.getLatitude()),
+                () -> assertEquals(cityNodeExpected.getLongitude(), cityNodeActual.getLongitude(),
+                        () -> "should return city node with longitude: " + cityNodeExpected.getLongitude()
+                                + ", but was: " + cityNodeActual.getLongitude()),
+
+                () -> assertNotNull(cityNodeActual.getProvince(),
+                        () -> "should return city node with not null province, but was: null"),
+                () -> assertEquals(provinceNodeExpected, cityNodeActual.getProvince(),
+                        () -> "should return city node with province: " + provinceNodeExpected + ", but was: "
+                                + cityNodeActual.getProvince()),
+                () -> assertEquals(provinceNodeExpected.getId(), cityNodeActual.getProvince().getId(),
+                        () -> "should return city node with province id: " + provinceNodeExpected.getId()
+                                + ", but was: " + cityNodeActual.getProvince().getId()),
+                () -> assertEquals(provinceNodeExpected.getName(), cityNodeActual.getProvince().getName(),
+                        () -> "should return city node with province name: " + provinceNodeExpected.getName() + ", but was: "
+                                + cityNodeActual.getProvince().getName()),
+                () -> assertNull(cityNodeActual.getProvince().getCountry(),
+                        () -> "should return city node with null region, but was: " + cityNodeActual.getProvince().getCountry()),
+                () -> verify(cityRepository, times(1)).findById(cityId),
+                () -> verifyNoMoreInteractions(cityRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(provinceService));
+    }
+
+    @Test
+    void when_find_not_existing_city_by_id_should_return_empty_optional() {
+
+        long cityId = 1L;
+
+        when(cityRepository.findById(cityId)).thenReturn(Optional.empty());
+
+        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId);
+
+        assertAll(() -> assertTrue(cityNodeActualOptional.isEmpty(), () -> "should return empty optional"),
+                () -> verify(cityRepository, times(1)).findById(cityId),
+                () -> verifyNoMoreInteractions(cityRepository),
+                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(provinceService));
+    }
+
+    @Test
+    void when_find_existing_city_by_id_with_depth_should_return_city() {
+
+        long cityId = 1L;
+
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
                 .build(ObjectType.NODE);
@@ -143,9 +206,9 @@ class CityServiceImplTest {
         CityNode cityNodeExpected = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNodeExpected)
                 .build(ObjectType.NODE);
 
-        when(cityRepository.findById(cityId)).thenReturn(Optional.of(cityNodeExpected));
+        when(cityRepository.findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE)).thenReturn(Optional.of(cityNodeExpected));
 
-        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId);
+        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE);
 
         CityNode cityNodeActual = cityNodeActualOptional.get();
 
@@ -192,23 +255,23 @@ class CityServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), cityNodeActual.getProvince().getCountry().getRegion().getName(),
                         () -> "should return city node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + cityNodeActual.getProvince().getCountry().getRegion().getName()),
-                () -> verify(cityRepository, times(1)).findById(cityId),
+                () -> verify(cityRepository, times(1)).findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
                 () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
     @Test
-    void when_find_not_existing_city_by_id_should_return_empty_optional() {
+    void when_find_not_existing_city_by_id_with_depth_should_return_empty_optional() {
 
         long cityId = 1L;
 
-        when(cityRepository.findById(cityId)).thenReturn(Optional.empty());
+        when(cityRepository.findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE)).thenReturn(Optional.empty());
 
-        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId);
+        Optional<CityNode> cityNodeActualOptional = cityService.findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE);
 
         assertAll(() -> assertTrue(cityNodeActualOptional.isEmpty(), () -> "should return empty optional"),
-                () -> verify(cityRepository, times(1)).findById(cityId),
+                () -> verify(cityRepository, times(1)).findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
                 () -> verifyNoInteractions(objectMapper),
                 () -> verifyNoInteractions(provinceService));
