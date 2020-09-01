@@ -843,11 +843,7 @@ class CityServiceImplTest {
 
         Long cityId = 1L;
 
-        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
-                .build(ObjectType.NODE);
-        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
-                .build(ObjectType.NODE);
+        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNodeExpected)
                 .build(ObjectType.NODE);
 
@@ -881,25 +877,8 @@ class CityServiceImplTest {
                 () -> assertEquals(provinceNodeExpected.getName(), cityNodeActual.getProvince().getName(),
                         () -> "should return city node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + cityNodeActual.getProvince().getName()),
-                () -> assertEquals(countryNodeExpected, cityNodeActual.getProvince().getCountry(),
-                        () -> "should return city node with country: " + countryNodeExpected + ", but was: " + cityNodeActual.getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), cityNodeActual.getProvince().getCountry().getId(),
-                        () -> "should return city node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + cityNodeActual.getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), cityNodeActual.getProvince().getCountry().getName(),
-                        () -> "should return city node with country name: " + countryNodeExpected.getName()
-                                + ", but was: " + cityNodeActual.getProvince().getCountry()),
-                () -> assertNotNull(cityNodeActual.getProvince().getCountry().getRegion(),
-                        () -> "should return city node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, cityNodeActual.getProvince().getCountry().getRegion(),
-                        () -> "should return city node with region: " + regionNodeExpected + ", but was: "
-                                + cityNodeActual.getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), cityNodeActual.getProvince().getCountry().getRegion().getId(),
-                        () -> "should return city node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + cityNodeActual.getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), cityNodeActual.getProvince().getCountry().getRegion().getName(),
-                        () -> "should return city node with region name: " + regionNodeExpected.getName() + ", but was: "
-                                + cityNodeActual.getProvince().getCountry().getRegion().getName()),
+                () -> assertNull(cityNodeActual.getProvince().getCountry(),
+                        () -> "should return city node with null country, but was: " + cityNodeActual.getProvince().getCountry()),
                 () -> verify(cityRepository, times(1)).findById(cityId),
                 () -> verify(cityRepository, times(1)).delete(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),

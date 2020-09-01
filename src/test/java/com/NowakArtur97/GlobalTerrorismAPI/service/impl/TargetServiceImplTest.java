@@ -480,8 +480,7 @@ class TargetServiceImplTest {
 
         Long expectedTargetId = 1L;
 
-        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(expectedTargetId).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
 
@@ -503,14 +502,9 @@ class TargetServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getName(),
                         () -> "should return target node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
-                () -> assertEquals(regionNodeExpected, targetNodeActual.getCountryOfOrigin().getRegion(),
-                        () -> "should return target node with region: " + regionNodeExpected + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), targetNodeActual.getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return target node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
-                        () -> "should return target node with region name: " + regionNodeExpected.getName()
-                                + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
+                () -> assertNull(targetNodeActual.getCountryOfOrigin().getRegion(),
+                        () -> "should return target node with null region, but was: " +
+                                targetNodeActual.getCountryOfOrigin().getRegion()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
                 () -> verifyNoMoreInteractions(targetRepository),
