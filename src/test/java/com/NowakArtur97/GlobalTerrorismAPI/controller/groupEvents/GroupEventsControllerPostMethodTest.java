@@ -50,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupEventsController_Tests")
 class GroupEventsControllerPostMethodTest {
 
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
     private final String LINK_WITH_PARAMETER = GROUP_BASE_PATH + "/{id}/events";
 
@@ -160,11 +161,12 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -187,6 +189,7 @@ class GroupEventsControllerPostMethodTest {
                 .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
         String pathToSelfLink = GROUP_BASE_PATH + "/" + groupNode2.getId();
         String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNode2.getId().intValue() + "/events";
 
@@ -228,11 +231,12 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
