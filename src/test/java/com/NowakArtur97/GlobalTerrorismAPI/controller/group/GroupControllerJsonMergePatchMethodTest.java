@@ -46,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GroupControllerJsonMergePatchMethodTest {
 
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = GROUP_BASE_PATH + "/" + "{id2}";
@@ -59,26 +60,29 @@ class GroupControllerJsonMergePatchMethodTest {
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
 
-    private final static RegionNode regionNode = new RegionNode("region");
+    private final static RegionNode regionNode = new RegionNode("region name");
 
-    private final static CountryNode countryNode = new CountryNode("country", regionNode);
-    private final static CountryNode anotherCountryNode = new CountryNode("country 2", regionNode);
+    private final static CountryNode countryNode = new CountryNode("country name", regionNode);
+    private final static CountryNode anotherCountryNode = new CountryNode("country name 2", regionNode);
 
-    private final static TargetNode targetNode = new TargetNode("target", countryNode);
-    private final static TargetNode targetNode2 = new TargetNode("target 2", countryNode);
-    private final static TargetNode targetNode3 = new TargetNode("target 3", countryNode);
+    private final static TargetNode targetNode = new TargetNode("target name", countryNode);
+    private final static TargetNode targetNode2 = new TargetNode("target name 2", countryNode);
+    private final static TargetNode targetNode3 = new TargetNode("target name 3", countryNode);
 
-    private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
+    private final static ProvinceNode provinceNode = new ProvinceNode("province name", countryNode);
 
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
-    private final static CityNode cityNode2 = new CityNode("city 2", 15.0, -45.0, provinceNode);
+    private final static CityNode cityNode = new CityNode("city name", 45.0, 45.0, provinceNode);
+    private final static CityNode cityNode2 = new CityNode("city name 2", 15.0, -45.0, provinceNode);
 
-    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
-    private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(), false, false, false, targetNode2, cityNode);
-    private final static EventNode eventNode3 = new EventNode("summary 3", "motive 3", new Date(), true, false, true, targetNode3, cityNode2);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
+            true, true, true, targetNode, cityNode);
+    private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(),
+            false, false, false, targetNode2, cityNode);
+    private final static EventNode eventNode3 = new EventNode("summary 3", "motive 3", new Date(),
+            true, false, true, targetNode3, cityNode2);
 
-    private final static GroupNode groupNode = new GroupNode("group", List.of(eventNode));
-    private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group 2 ",
+    private final static GroupNode groupNode = new GroupNode("group name", List.of(eventNode));
+    private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group name 2",
             List.of(eventNode2, eventNode3));
 
     @BeforeAll
@@ -105,6 +109,7 @@ class GroupControllerJsonMergePatchMethodTest {
         String updatedName = "updated group name";
 
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
         String pathToGroupLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue();
@@ -150,11 +155,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -181,6 +187,7 @@ class GroupControllerJsonMergePatchMethodTest {
 
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode2.getId().intValue();
         String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetNode3.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue();
         String pathToEventLink2 = EVENT_BASE_PATH + "/" + eventNode3.getId().intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue() + "/targets";
@@ -309,11 +316,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -343,11 +351,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.id", is(cityNode2.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityNode2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode2.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityNode2.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
