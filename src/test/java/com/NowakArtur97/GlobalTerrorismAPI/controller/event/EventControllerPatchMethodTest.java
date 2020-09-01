@@ -41,6 +41,7 @@ class EventControllerPatchMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = EVENT_BASE_PATH + "/" + "{id}";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = EVENT_BASE_PATH + "/" + "{id2}";
 
@@ -72,8 +73,8 @@ class EventControllerPatchMethodTest {
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
     private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
 
-    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true,
-            true, true, targetNode, cityNode);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
+            true, true, true, targetNode, cityNode);
     private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(),
             false, false, false, anotherTargetNode, cityNode);
     private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(),
@@ -116,6 +117,7 @@ class EventControllerPatchMethodTest {
             boolean updatedIsSuicidal = false;
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -158,11 +160,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.links").isEmpty())
@@ -180,6 +183,7 @@ class EventControllerPatchMethodTest {
             String updatedTargetName = "updated target";
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
@@ -204,7 +208,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("date", is(notNullValue())))
                             .andExpect(jsonPath("isSuicidal", is(anotherEventNode.getIsSuicidal())))
                             .andExpect(jsonPath("isSuccessful", is(anotherEventNode.getIsSuccessful())))
-                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents",
+                                    is(anotherEventNode.getIsPartOfMultipleIncidents())))
                             .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode.getId().intValue())))
@@ -215,11 +220,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.links").isEmpty())
@@ -241,6 +247,7 @@ class EventControllerPatchMethodTest {
             String updatedCountryName = anotherCountryNode2.getName();
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
 
@@ -282,11 +289,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode2.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", notNullValue()))
                             .andExpect(jsonPath("city.name", is(updatedCityName)))
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", notNullValue()))
                             .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
                             .andExpect(jsonPath("city.province.links").isEmpty())
@@ -786,6 +794,7 @@ class EventControllerPatchMethodTest {
             boolean updatedIsSuicidal = false;
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -826,11 +835,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.links").isEmpty())
@@ -848,6 +858,7 @@ class EventControllerPatchMethodTest {
             String updatedTargetName = "updated target 2";
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
@@ -883,11 +894,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                             .andExpect(jsonPath("city.name", is(cityNode.getName())))
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.links").isEmpty())
@@ -908,6 +920,7 @@ class EventControllerPatchMethodTest {
             String updatedProvinceName = "updated province";
 
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
 
@@ -954,11 +967,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode2.getId().intValue())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode2.getName())))
                             .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.id", notNullValue()))
                             .andExpect(jsonPath("city.name", is(updatedCityName)))
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
-                            .andExpect(jsonPath("city.links").isEmpty())
                             .andExpect(jsonPath("city.province.id", notNullValue()))
                             .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
                             .andExpect(jsonPath("city.province.links").isEmpty())
