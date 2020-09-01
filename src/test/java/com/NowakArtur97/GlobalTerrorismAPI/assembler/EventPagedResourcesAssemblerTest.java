@@ -44,6 +44,9 @@ class EventPagedResourcesAssemblerTest {
     private TargetModelAssembler targetModelAssembler;
 
     @Mock
+    private CityModelAssembler cityModelAssembler;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     @BeforeAll
@@ -58,7 +61,7 @@ class EventPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        eventModelAssembler = new EventModelAssembler(targetModelAssembler, objectMapper);
+        eventModelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
