@@ -51,6 +51,7 @@ class EventControllerPutMethodTest {
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}";
 
     @Autowired
@@ -80,9 +81,11 @@ class EventControllerPutMethodTest {
     private final static ProvinceNode anotherProvinceNode = new ProvinceNode("province name 2", anotherCountryNode);
 
     private final static CityNode cityNode = new CityNode("city name", 25.0, 35.0, provinceNode);
-    private final static CityNode anotherCityNode = new CityNode("city name 2", 15.0, -15.0, anotherProvinceNode);
+    private final static CityNode anotherCityNode = new CityNode("city name 2", 15.0, -15.0,
+            anotherProvinceNode);
 
-    private final static EventNode eventNode = new EventNode("event summary", "event motive", new Date(), true, true, true, targetNode, cityNode);
+    private final static EventNode eventNode = new EventNode("event summary", "event motive", new Date(),
+            true, true, true, targetNode, cityNode);
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -164,11 +167,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", notNullValue()))
                         .andExpect(jsonPath("city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -193,6 +197,7 @@ class EventControllerPutMethodTest {
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
 
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -226,11 +231,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", is(anotherCityNode.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(anotherCityNode.getName())))
                         .andExpect(jsonPath("city.latitude", is(anotherCityNode.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(anotherCityNode.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", is(anotherProvinceNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.name", is(anotherProvinceNode.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -243,7 +249,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_event_with_existing_city_should_return_event_with_existing_city()   {
+    void when_update_event_with_existing_city_should_return_event_with_existing_city() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -254,6 +260,7 @@ class EventControllerPutMethodTest {
                 .build(ObjectType.DTO);
 
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -287,11 +294,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", notNullValue()))
                         .andExpect(jsonPath("city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -304,7 +312,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_event_with_new_city_should_return_event_with_new_city()   {
+    void when_update_event_with_new_city_should_return_event_with_new_city() {
 
         String cityName = "some new city name";
         Double cityLatitude = 12.0;
@@ -353,11 +361,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityName)))
                         .andExpect(jsonPath("city.latitude", is(cityLatitude)))
                         .andExpect(jsonPath("city.longitude", is(cityLongitude)))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -370,7 +379,7 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_event_province_should_return_event_with_updated_province()   {
+    void when_update_event_province_should_return_event_with_updated_province() {
 
         String updatedProvinceName = "province updated";
 
@@ -384,6 +393,7 @@ class EventControllerPutMethodTest {
                 .build(ObjectType.DTO);
 
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -417,11 +427,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(cityNode.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -474,11 +485,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.id", notNullValue()))
                         .andExpect(jsonPath("city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.province.id", notNullValue()))
                         .andExpect(jsonPath("city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("city.province.links").isEmpty())
@@ -513,9 +525,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information on whether it has been part of many incidents.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information about whether it was successful.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(8))));
