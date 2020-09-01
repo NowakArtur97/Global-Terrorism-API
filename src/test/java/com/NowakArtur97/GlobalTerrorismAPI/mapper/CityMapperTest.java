@@ -133,7 +133,9 @@ class CityMapperTest {
     void when_map_city_node_to_dto_should_return_dto() {
 
         CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
+        ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.withCountry(countryNode)
+                .build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
