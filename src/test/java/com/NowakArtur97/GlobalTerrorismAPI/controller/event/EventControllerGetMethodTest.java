@@ -58,6 +58,7 @@ class EventControllerGetMethodTest {
     private static int counterForUtilMethodsNode = 0;
 
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/citites";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
@@ -168,11 +169,14 @@ class EventControllerGetMethodTest {
                                 is(eventModel1.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[0].links[0].href", is(eventModel1.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].links[1].href",
+                                is(eventModel1.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[0].target.links[0].href",
                                 is(eventModel1.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].city.links[0].href",
+                                is(eventModel1.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[0].city.links").isEmpty())
                         .andExpect(jsonPath("content[0].city.id", is(eventModel1.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[0].city.name", is(eventModel1.getCity().getName())))
                         .andExpect(jsonPath("content[0].city.latitude", is(eventModel1.getCity().getLatitude())))
@@ -191,11 +195,14 @@ class EventControllerGetMethodTest {
                                 is(eventModel2.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[1].links[0].href", is(eventModel2.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].links[1].href",
+                                is(eventModel2.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[1].target.links[0].href",
                                 is(eventModel2.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].city.links[0].href",
+                                is(eventModel2.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[1].city.links").isEmpty())
                         .andExpect(jsonPath("content[1].city.id", is(eventModel2.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[1].city.name", is(eventModel2.getCity().getName())))
                         .andExpect(jsonPath("content[1].city.latitude", is(eventModel2.getCity().getLatitude())))
@@ -214,11 +221,14 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[2].links[0].href", is(eventModel3.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].links[1].href",
+                                is(eventModel3.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[2].target.links[0].href",
                                 is(eventModel3.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].city.links[0].href",
+                                is(eventModel3.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[2].city.links").isEmpty())
                         .andExpect(jsonPath("content[2].city.id", is(eventModel3.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[2].city.name", is(eventModel3.getCity().getName())))
                         .andExpect(jsonPath("content[2].city.latitude", is(eventModel3.getCity().getLatitude())))
@@ -237,11 +247,14 @@ class EventControllerGetMethodTest {
                                 is(eventModel4.getIsPartOfMultipleIncidents())))
                         .andExpect(
                                 jsonPath("content[3].links[0].href", is(eventModel4.getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[3].links[1].href",
+                                is(eventModel4.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[3].target.links[0].href",
                                 is(eventModel4.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[3].city.links[0].href",
+                                is(eventModel4.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[3].target.id", is(eventModel4.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[3].target.target", is(eventModel4.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[3].city.links").isEmpty())
                         .andExpect(jsonPath("content[3].city.id", is(eventModel4.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[3].city.name", is(eventModel4.getCity().getName())))
                         .andExpect(jsonPath("content[3].city.latitude", is(eventModel4.getCity().getLatitude())))
@@ -326,9 +339,10 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].links[1].href", is(eventModel1.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[0].target.links[0].href",
                                 is(eventModel1.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[0].city.links[0].href",
+                                is(eventModel1.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[0].target.id", is(eventModel1.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[0].target.target", is(eventModel1.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[0].city.links").isEmpty())
                         .andExpect(jsonPath("content[0].city.id", is(eventModel1.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[0].city.name", is(eventModel1.getCity().getName())))
                         .andExpect(jsonPath("content[0].city.latitude", is(eventModel1.getCity().getLatitude())))
@@ -350,9 +364,10 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].links[1].href", is(eventModel2.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[1].target.links[0].href",
                                 is(eventModel2.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[1].city.links[0].href",
+                                is(eventModel2.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[1].target.id", is(eventModel2.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[1].target.target", is(eventModel2.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[1].city.links").isEmpty())
                         .andExpect(jsonPath("content[1].city.id", is(eventModel2.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[1].city.name", is(eventModel2.getCity().getName())))
                         .andExpect(jsonPath("content[1].city.latitude", is(eventModel2.getCity().getLatitude())))
@@ -375,9 +390,10 @@ class EventControllerGetMethodTest {
                                 is(eventModel3.getLink("target").get().getHref())))
                         .andExpect(jsonPath("content[2].target.links[0].href",
                                 is(eventModel3.getTarget().getLink("self").get().getHref())))
+                        .andExpect(jsonPath("content[2].city.links[0].href",
+                                is(eventModel3.getCity().getLink("self").get().getHref())))
                         .andExpect(jsonPath("content[2].target.id", is(eventModel3.getTarget().getId().intValue())))
                         .andExpect(jsonPath("content[2].target.target", is(eventModel3.getTarget().getTarget())))
-                        .andExpect(jsonPath("content[2].city.links").isEmpty())
                         .andExpect(jsonPath("content[2].city.id", is(eventModel3.getCity().getId().intValue())))
                         .andExpect(jsonPath("content[2].city.name", is(eventModel3.getCity().getName())))
                         .andExpect(jsonPath("content[2].city.latitude", is(eventModel3.getCity().getLatitude())))
@@ -463,6 +479,8 @@ class EventControllerGetMethodTest {
         TargetNode targetNode = (TargetNode) targetBuilder.build(ObjectType.NODE);
         EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
         CityModel cityModel = (CityModel) cityBuilder.build(ObjectType.MODEL);
+        String pathToCityLink = CITY_BASE_PATH + "/" + counterForUtilMethodsModel;
+        cityModel.add(new Link(pathToCityLink));
         TargetModel targetModel = (TargetModel) targetBuilder.build(ObjectType.MODEL);
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId();
         targetModel.add(new Link(pathToTargetLink));
@@ -498,11 +516,11 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
                         .andExpect(jsonPath("target.target", is(targetModel.getTarget())))
                         .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
-                        .andExpect(jsonPath("city.links").isEmpty())
                         .andExpect(jsonPath("city.id", is(cityModel.getId().intValue())))
                         .andExpect(jsonPath("city.name", is(cityModel.getName())))
                         .andExpect(jsonPath("city.latitude", is(cityModel.getLatitude())))
-                        .andExpect(jsonPath("city.longitude", is(cityModel.getLongitude()))),
+                        .andExpect(jsonPath("city.longitude", is(cityModel.getLongitude())))
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink))),
                 () -> verify(eventService, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
@@ -577,8 +595,11 @@ class EventControllerGetMethodTest {
                         .withLatitude((double) (20 + counterForUtilMethodsModel))
                         .withLongitude((double) (40 + counterForUtilMethodsModel))
                         .build(ObjectType.MODEL);
+                String pathToCityLink = CITY_BASE_PATH + "/" + counterForUtilMethodsModel;
+                cityModel.add(new Link(pathToCityLink));
 
-                TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel).withTarget("target" + counterForUtilMethodsModel)
+                TargetModel targetModel = (TargetModel) targetBuilder.withId((long) counterForUtilMethodsModel)
+                        .withTarget("target" + counterForUtilMethodsModel)
                         .build(ObjectType.MODEL);
 
                 String pathToTargetLink = TARGET_BASE_PATH + "/" + counterForUtilMethodsModel;
