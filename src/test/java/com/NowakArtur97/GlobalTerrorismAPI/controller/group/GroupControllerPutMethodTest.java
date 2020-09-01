@@ -51,6 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GroupControllerPutMethodTest {
 
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER = GROUP_BASE_PATH + "/" + "{id}";
 
     @Autowired
@@ -83,8 +84,10 @@ class GroupControllerPutMethodTest {
     private final static CityNode cityNode = new CityNode("city name", 25.0, 41.0, provinceNode);
     private final static CityNode anotherCityNode = new CityNode("city name 2", 11.0, 25.0, provinceNode);
 
-    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true, true, true, targetNode, cityNode);
-    private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(), false, false, false, targetNode2, anotherCityNode);
+    private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
+            true, true, true, targetNode, cityNode);
+    private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(),
+            false, false, false, targetNode2, anotherCityNode);
 
     private final static GroupNode groupNode = new GroupNode("group name", List.of(eventNode, eventNode2));
 
@@ -187,11 +190,12 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -224,12 +228,13 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityDTO2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityDTO2.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityDTO2.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
-                        .andExpect(jsonPath("eventsCaused[1].city.province.id",  notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceDTO2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(countryNode.getId().intValue())))
@@ -325,11 +330,12 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(cityDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -362,11 +368,12 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityDTO2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityDTO2.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityDTO2.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.province.name", is(updatedProvinceName)))
                         .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
@@ -375,6 +382,120 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(anotherRegionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
+    }
+
+    @Test
+    void when_update_valid_group_with_events_using_existing_city_should_return_updated_group_as_model() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget("target2").withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName()).withCountry(countryDTO)
+                .build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
+                .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).withCity(cityDTO)
+                .build(ObjectType.DTO);
+        GroupDTO groupDTO = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO, eventDTO2))
+                .build(ObjectType.DTO);
+
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+        String pathToGroupLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue();
+        String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue() + "/events";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(groupDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                        .andExpect(jsonPath("id", is(groupNode.getId().intValue())))
+                        .andExpect(jsonPath("name", is(groupDTO.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventDTO.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventDTO.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].target.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].city.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode.getLatitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode.getLongitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
+
+                        .andExpect(jsonPath("eventsCaused[1].links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].links[1].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].summary", is(eventDTO2.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[1].motive", is(eventDTO2.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[1].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventDTO2.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("eventsCaused[1].isSuicidal", is(eventDTO2.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[1].isSuccessful", is(eventDTO2.getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[1].isPartOfMultipleIncidents", is(eventDTO2.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[1].target.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[1].target.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].target.target", is(targetDTO2.getTarget())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(is(regionNode.getId().intValue()))))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[1].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[1].city.id", is(cityNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityNode.getLatitude())))
+                        .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityNode.getLongitude())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
@@ -441,11 +562,12 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(anotherCityNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.name", is(anotherCityNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.latitude", is(anotherCityNode.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[0].city.longitude", is(anotherCityNode.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[0].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.links").isEmpty())
@@ -478,11 +600,12 @@ class GroupControllerPutMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
+                        .andExpect(jsonPath("eventsCaused[1].city.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[1].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.name", is(cityDTO2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.latitude", is(cityDTO2.getLatitude())))
                         .andExpect(jsonPath("eventsCaused[1].city.longitude", is(cityDTO2.getLongitude())))
-                        .andExpect(jsonPath("eventsCaused[1].city.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.province.id", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceDTO2.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.links").isEmpty())
