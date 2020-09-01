@@ -16,14 +16,16 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 
     private final TargetModelAssembler targetModelAssembler;
 
+    private final CityModelAssembler cityModelAssembler;
+
     private final ObjectMapper objectMapper;
 
-    public EventModelAssembler(TargetModelAssembler targetModelAssembler, ObjectMapper objectMapper) {
+    public EventModelAssembler(TargetModelAssembler targetModelAssembler, CityModelAssembler cityModelAssembler,
+                               ObjectMapper objectMapper) {
 
         super(EventController.class, EventModel.class);
-
         this.targetModelAssembler = targetModelAssembler;
-
+        this.cityModelAssembler = cityModelAssembler;
         this.objectMapper = objectMapper;
     }
 
@@ -38,6 +40,10 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
             eventModel.setTarget(targetModelAssembler.toModel(eventNode.getTarget()));
 
             eventModel.add(linkTo(methodOn(EventTargetController.class).findEventTarget(eventModel.getId())).withRel("target"));
+        }
+
+        if (eventNode.getCity() != null) {
+            eventModel.setCity(cityModelAssembler.toModel(eventNode.getCity()));
         }
 
         return eventModel;

@@ -18,7 +18,6 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
     public CityModelAssembler(ObjectMapper objectMapper) {
 
         super(CityController.class, CityModel.class);
-
         this.objectMapper = objectMapper;
     }
 

@@ -26,9 +26,7 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
     public GroupModelAssembler(EventModelAssembler eventModelAssembler, ObjectMapper objectMapper) {
 
         super(GroupController.class, GroupModel.class);
-
         this.eventModelAssembler = eventModelAssembler;
-
         this.objectMapper = objectMapper;
     }
 
