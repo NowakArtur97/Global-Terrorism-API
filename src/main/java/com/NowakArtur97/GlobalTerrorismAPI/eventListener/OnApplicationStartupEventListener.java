@@ -9,6 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.*;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,11 +20,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class OnApplicationStartupEventListener {
 
     private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
@@ -54,22 +58,42 @@ class OnApplicationStartupEventListener {
 
     private final UserService userService;
 
+    private InputStream inputStream;
+    private Workbook workbook;
+
     @EventListener
     public void onApplicationStartup(ContextRefreshedEvent event) {
 
         if (targetService.isDatabaseEmpty()) {
 
-            Sheet sheet = loadSheetFromFile();
+            try {
+                Sheet sheet = loadSheetFromFile();
 
-            insertDataToDatabase(sheet);
+                insertDataToDatabase(sheet);
+
+                workbook.close();
+                inputStream.close();
+
+            } catch (NullPointerException | FileNotFoundException e) {
+
+                log.info("##################### File: " + PATH_TO_FILE + " not found #####################");
+
+                e.printStackTrace();
+
+            } catch (IOException e) {
+
+                log.info("##################### Couldn't load data #####################");
+
+                e.printStackTrace();
+            }
         }
     }
 
     private Sheet loadSheetFromFile() {
 
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(PATH_TO_FILE);
+        inputStream = this.getClass().getClassLoader().getResourceAsStream(PATH_TO_FILE);
 
-        Workbook workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
+        workbook = StreamingReader.builder().rowCacheSize(10).bufferSize(4096).open(inputStream);
 
         return workbook.getSheetAt(0);
     }
