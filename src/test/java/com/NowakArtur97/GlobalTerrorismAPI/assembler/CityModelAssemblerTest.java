@@ -58,12 +58,11 @@ class CityModelAssemblerTest {
         ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.withId(provinceId).build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNode).build(ObjectType.NODE);
         ProvinceModel provinceModelExpected = (ProvinceModel) provinceBuilder.withId(provinceId).build(ObjectType.MODEL);
-        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + cityId.intValue();
-        provinceModelExpected.add(new Link("self", pathToProvinceLink));
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceId.intValue();
+        provinceModelExpected.add(new Link(pathToProvinceLink));
         CityModel cityModelExpected = (CityModel) cityBuilder.withId(cityId).withProvince(provinceModelExpected)
                 .build(ObjectType.MODEL);
         String pathToCityLink = CITY_BASE_PATH + "/" + cityId.intValue();
-        cityModelExpected.add(new Link("self", pathToCityLink));
 
         when(objectMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
         when(provinceModelAssembler.toModel(provinceNode)).thenReturn(provinceModelExpected);
@@ -75,7 +74,7 @@ class CityModelAssemblerTest {
                         () -> "should return city model with self link: " + pathToCityLink + ", but was: "
                                 + cityModelActual.getLink("self").get().getHref()),
                 () -> assertEquals(pathToProvinceLink, cityModelActual.getProvince().getLink("self").get().getHref(),
-                        () -> "should return city model with self link: " + pathToProvinceLink + ", but was: "
+                        () -> "should return city province model with self link: " + pathToProvinceLink + ", but was: "
                                 + cityModelActual.getProvince().getLink("self").get().getHref()),
 
                 () -> assertNotNull(cityModelActual, () -> "should return not null city model, but was: null"),
