@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 @Tag("CityModelAssembler_Tests")
 class CityModelAssemblerTest {
 
+    private final String PROVINCE_BASE_PATH = "http://localhost/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost/api/v1/cities";
 
     private CityModelAssembler modelAssembler;
@@ -57,6 +58,8 @@ class CityModelAssemblerTest {
         ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.withId(provinceId).build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNode).build(ObjectType.NODE);
         ProvinceModel provinceModelExpected = (ProvinceModel) provinceBuilder.withId(provinceId).build(ObjectType.MODEL);
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + cityId.intValue();
+        provinceModelExpected.add(new Link("self", pathToProvinceLink));
         CityModel cityModelExpected = (CityModel) cityBuilder.withId(cityId).withProvince(provinceModelExpected)
                 .build(ObjectType.MODEL);
         String pathToCityLink = CITY_BASE_PATH + "/" + cityId.intValue();
@@ -71,6 +74,9 @@ class CityModelAssemblerTest {
                 () -> assertEquals(pathToCityLink, cityModelActual.getLink("self").get().getHref(),
                         () -> "should return city model with self link: " + pathToCityLink + ", but was: "
                                 + cityModelActual.getLink("self").get().getHref()),
+                () -> assertEquals(pathToProvinceLink, cityModelActual.getProvince().getLink("self").get().getHref(),
+                        () -> "should return city model with self link: " + pathToProvinceLink + ", but was: "
+                                + cityModelActual.getProvince().getLink("self").get().getHref()),
 
                 () -> assertNotNull(cityModelActual, () -> "should return not null city model, but was: null"),
                 () -> assertEquals(cityModelExpected.getId(), cityModelActual.getId(),
@@ -100,9 +106,8 @@ class CityModelAssemblerTest {
 
                 () -> assertFalse(cityModelActual.getLinks().isEmpty(),
                         () -> "should return city model with links, but wasn't"),
-                () -> assertTrue(cityModelActual.getProvince().getLinks().isEmpty(),
-                        () -> "should return city model with province model without links, but was: " +
-                                cityModelActual.getProvince().getLinks()),
+                () -> assertFalse(cityModelActual.getProvince().getLinks().isEmpty(),
+                        () -> "should return city model with province model with links, but wasn't"),
                 () -> verify(objectMapper, times(1)).map(cityNode, CityModel.class),
                 () -> verifyNoMoreInteractions(objectMapper),
                 () -> verify(provinceModelAssembler, times(1)).toModel(provinceNode),
