@@ -40,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("CityController_Tests")
 class CityControllerPatchMethodTest {
 
+    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = CITY_BASE_PATH + "/" + "{id}";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = CITY_BASE_PATH + "/" + "{id2}";
@@ -102,6 +103,7 @@ class CityControllerPatchMethodTest {
             Double updatedCityLatitude = 20.0;
             Double updatedCityLongitude = 20.0;
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
 
             String jsonPatch = "[" +
@@ -127,9 +129,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(updatedCityName)))
                             .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(provinceNode.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -146,6 +148,7 @@ class CityControllerPatchMethodTest {
             Double updatedCityLongitude = 20.0;
             String updatedProvinceName = "updated province";
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
 
             String jsonPatch = "[" +
@@ -173,9 +176,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(updatedCityName)))
                             .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(anotherProvinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(updatedProvinceName)))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -187,6 +190,7 @@ class CityControllerPatchMethodTest {
         @Test
         void when_partial_update_city_with_existing_province_using_json_patch_should_return_partially_updated_node() {
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode2.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode2.getId().intValue();
 
             String jsonPatch = "[" +
@@ -211,9 +215,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(anotherCityNode2.getName())))
                             .andExpect(jsonPath("latitude", is(anotherCityNode2.getLatitude())))
                             .andExpect(jsonPath("longitude", is(anotherCityNode2.getLongitude())))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(anotherProvinceNode2.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(anotherProvinceNode2.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -225,6 +229,7 @@ class CityControllerPatchMethodTest {
         @Test
         void when_partial_update_city_region_using_json_patch_should_return_node_without_changes() {
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
 
             String notExistingRegionName = "Not existing region";
@@ -251,9 +256,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(anotherCityNode3.getName())))
                             .andExpect(jsonPath("latitude", is(anotherCityNode3.getLatitude())))
                             .andExpect(jsonPath("longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(provinceNode.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -526,6 +531,7 @@ class CityControllerPatchMethodTest {
             Double updatedCityLatitude = 20.0;
             Double updatedCityLongitude = 20.0;
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
 
             String jsonMergePatch = "{" +
@@ -551,9 +557,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(updatedCityName)))
                             .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(provinceNode.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -570,6 +576,7 @@ class CityControllerPatchMethodTest {
             Double updatedCityLongitude = 20.0;
             String updatedProvinceName = "updated province";
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
 
             String jsonMergePatch = "{" +
@@ -601,9 +608,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(updatedCityName)))
                             .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(anotherProvinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(updatedProvinceName)))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())
@@ -615,6 +622,7 @@ class CityControllerPatchMethodTest {
         @Test
         void when_partial_update_city_with_existing_province_using_json_merge_patch_should_return_partially_updated_node() {
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode2.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode2.getId().intValue();
 
             String jsonMergePatch = "{" +
@@ -643,12 +651,11 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(anotherCityNode2.getName())))
                             .andExpect(jsonPath("latitude", is(anotherCityNode2.getLatitude())))
                             .andExpect(jsonPath("longitude", is(anotherCityNode2.getLongitude())))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(anotherProvinceNode2.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(anotherProvinceNode2.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
-                            .andExpect(jsonPath("province.country.links").isEmpty())
                             .andExpect(jsonPath("province.country.region.id", is(anotherRegionNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.region.name", is(anotherRegionNode.getName())))
                             .andExpect(jsonPath("province.country.region.links").isEmpty()));
@@ -657,6 +664,7 @@ class CityControllerPatchMethodTest {
         @Test
         void when_partial_update_city_region_using_json_merge_patch_should_return_node_without_changes() {
 
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
 
             String notExistingRegionName = "Not existing region";
@@ -688,9 +696,9 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("name", is(anotherCityNode3.getName())))
                             .andExpect(jsonPath("latitude", is(anotherCityNode3.getLatitude())))
                             .andExpect(jsonPath("longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                             .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("province.name", is(provinceNode.getName())))
-                            .andExpect(jsonPath("province.links").isEmpty())
                             .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                             .andExpect(jsonPath("province.country.links").isEmpty())

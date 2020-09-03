@@ -47,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("CityController_Tests")
 class CityControllerPostMethodTest {
 
+    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
 
     @Autowired
@@ -113,9 +114,9 @@ class CityControllerPostMethodTest {
                         .andExpect(jsonPath("name", is(cityDTO.getName())))
                         .andExpect(jsonPath("latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("longitude", is(cityDTO.getLongitude())))
+                        .andExpect(jsonPath("province.links[0].href", notNullValue()))
                         .andExpect(jsonPath("province.id", notNullValue()))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
-                        .andExpect(jsonPath("province.links").isEmpty())
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("province.country.links").isEmpty())
@@ -135,6 +136,8 @@ class CityControllerPostMethodTest {
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
+
         assertAll(
                 () -> mockMvc
                         .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
@@ -148,9 +151,9 @@ class CityControllerPostMethodTest {
                         .andExpect(jsonPath("name", is(cityDTO.getName())))
                         .andExpect(jsonPath("latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("longitude", is(cityDTO.getLongitude())))
+                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                         .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("province.name", is(provinceNode.getName())))
-                        .andExpect(jsonPath("province.links").isEmpty())
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("province.country.links").isEmpty())
