@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(Neo4jTestConfiguration.class)
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("EventController_Tests")
+@Tag("CityController_Tests")
 class CityControllerPostMethodTest {
 
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
