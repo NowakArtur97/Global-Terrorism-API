@@ -136,9 +136,9 @@ class CityControllerPutMethodTest {
                         .andExpect(jsonPath("name", is(updatedCityName)))
                         .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
                         .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
+                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
                         .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
-                        .andExpect(jsonPath("province.links").isEmpty())
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("province.country.links").isEmpty())
@@ -202,8 +202,6 @@ class CityControllerPutMethodTest {
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
-        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
-
         assertAll(
                 () -> mockMvc
                         .perform(put(LINK_WITH_PARAMETER, notExistingId)
@@ -218,7 +216,7 @@ class CityControllerPutMethodTest {
                         .andExpect(jsonPath("name", is(cityDTO.getName())))
                         .andExpect(jsonPath("latitude", is(cityDTO.getLatitude())))
                         .andExpect(jsonPath("longitude", is(cityDTO.getLongitude())))
-                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
+                        .andExpect(jsonPath("province.links[0].href", notNullValue()))
                         .andExpect(jsonPath("province.id", notNullValue()))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
