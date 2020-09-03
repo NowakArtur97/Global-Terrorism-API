@@ -28,6 +28,9 @@ class CityModelAssemblerTest {
     private CityModelAssembler modelAssembler;
 
     @Mock
+    private ProvinceModelAssembler provinceModelAssembler;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     private static ProvinceBuilder provinceBuilder;
@@ -43,7 +46,7 @@ class CityModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new CityModelAssembler(objectMapper);
+        modelAssembler = new CityModelAssembler(provinceModelAssembler, objectMapper);
     }
 
     @Test
@@ -60,6 +63,7 @@ class CityModelAssemblerTest {
         cityModelExpected.add(new Link("self", pathToCityLink));
 
         when(objectMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
+        when(provinceModelAssembler.toModel(provinceNode)).thenReturn(provinceModelExpected);
 
         CityModel cityModelActual = modelAssembler.toModel(cityNode);
 
@@ -100,7 +104,9 @@ class CityModelAssemblerTest {
                         () -> "should return city model with province model without links, but was: " +
                                 cityModelActual.getProvince().getLinks()),
                 () -> verify(objectMapper, times(1)).map(cityNode, CityModel.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(provinceModelAssembler, times(1)).toModel(provinceNode),
+                () -> verifyNoMoreInteractions(provinceModelAssembler));
     }
 
     @Test
@@ -141,6 +147,7 @@ class CityModelAssemblerTest {
                 () -> assertFalse(cityModelActual.getLinks().isEmpty(),
                         () -> "should return city model with links, but wasn't"),
                 () -> verify(objectMapper, times(1)).map(cityNode, CityModel.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verifyNoInteractions(provinceModelAssembler));
     }
 }

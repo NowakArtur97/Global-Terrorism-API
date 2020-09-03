@@ -41,6 +41,9 @@ class CityPagedResourcesAssemblerTest {
     private CityModelAssembler cityModelAssembler;
 
     @Mock
+    private ProvinceModelAssembler provinceModelAssembler;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     @BeforeAll
@@ -55,7 +58,7 @@ class CityPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        cityModelAssembler = new CityModelAssembler(objectMapper);
+        cityModelAssembler = new CityModelAssembler(provinceModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -85,7 +88,7 @@ class CityPagedResourcesAssemblerTest {
                         () -> "should have self link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("self").get().getHref(), selfLink,
                         () -> "should have self link with url: " + selfLink + ", but had: "
-                        + citiesPagedModel.getLink("self").get().getHref()),
+                                + citiesPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getNextLink().isEmpty(),
                         () -> "should not have next link, but had: " + citiesPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getPreviousLink().isEmpty(),
@@ -119,19 +122,19 @@ class CityPagedResourcesAssemblerTest {
                         () -> "should have links, but haven`t: " + citiesPagedModel),
                 () -> assertTrue(citiesPagedModel.getLink("first").isPresent(),
                         () -> "should have first link, but haven`t: " + citiesPagedModel),
-                () -> assertEquals(citiesPagedModel.getLink("first").get().getHref(), firstLink, 
+                () -> assertEquals(citiesPagedModel.getLink("first").get().getHref(), firstLink,
                         () -> "should have first link with url: " + firstLink + ", but had: "
-                        + citiesPagedModel.getLink("first").get().getHref()),
+                                + citiesPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("self").get().getHref(), selfLink,
                         () -> "should have self link with url: " + selfLink + ", but had: "
-                        + citiesPagedModel.getLink("self").get().getHref()),
+                                + citiesPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getNextLink().isPresent(),
                         () -> "should have next link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getNextLink().get().getHref(), nextLink,
                         () -> "should have next link with url:" + nextLink + ", but had: "
-                        + citiesPagedModel.getNextLink().get().getHref()),
+                                + citiesPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getPreviousLink().isEmpty(),
                         () -> "should not have previous link, but had: "
                                 + citiesPagedModel.getPreviousLink().get().getHref()),
@@ -139,7 +142,7 @@ class CityPagedResourcesAssemblerTest {
                         () -> "should have last link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("last").get().getHref(), lastLink,
                         () -> "should have last link with url: " + lastLink + ", but had: "
-                        + citiesPagedModel.getLink("last").get().getHref()));
+                                + citiesPagedModel.getLink("last").get().getHref()));
     }
 
     @Test
@@ -167,24 +170,24 @@ class CityPagedResourcesAssemblerTest {
                         () -> "should have first link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("first").get().getHref(), firstLink,
                         () -> "should have first link with url: " + firstLink + ", but had: "
-                        + citiesPagedModel.getLink("first").get().getHref()),
+                                + citiesPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("self").get().getHref(), selfLink,
                         () -> "should have self link with url: " + selfLink + ", but had: "
-                        + citiesPagedModel.getLink("self").get().getHref()),
+                                + citiesPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getNextLink().isEmpty(),
                         () -> "should not have next link, but had: " + citiesPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getPreviousLink().isPresent(),
                         () -> "should have previous link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getPreviousLink().get().getHref(), previousLink,
                         () -> "should have previous link with url:" + previousLink + ", but had: "
-                        + citiesPagedModel.getPreviousLink().get().getHref()),
+                                + citiesPagedModel.getPreviousLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getLink("last").isPresent(),
                         () -> "should have last link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("last").get().getHref(), lastLink,
                         () -> "should have last link with url: " + lastLink + ", but had: "
-                        + citiesPagedModel.getLink("last").get().getHref()));
+                                + citiesPagedModel.getLink("last").get().getHref()));
     }
 
     @Test
@@ -213,27 +216,27 @@ class CityPagedResourcesAssemblerTest {
                         () -> "should have first link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("first").get().getHref(), firstLink,
                         () -> "should have first link with url: " + firstLink + ", but had: "
-                        + citiesPagedModel.getLink("first").get().getHref()),
+                                + citiesPagedModel.getLink("first").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getLink("self").isPresent(),
                         () -> "should have self link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("self").get().getHref(), selfLink,
                         () -> "should have self link with url: " + selfLink + ", but had: "
-                        + citiesPagedModel.getLink("self").get().getHref()),
+                                + citiesPagedModel.getLink("self").get().getHref()),
                 () -> assertTrue(citiesPagedModel.getNextLink().isPresent(),
                         () -> "should have next link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getNextLink().get().getHref(), nextLink,
                         () -> "should have next link with url:" + nextLink + ", but had: "
-                        + citiesPagedModel.getNextLink().get().getHref()),
+                                + citiesPagedModel.getNextLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getPreviousLink().isPresent(),
                         () -> "should have previous link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getPreviousLink().get().getHref(), previousLink,
                         () -> "should have previous link with url:" + previousLink + ", but had: "
-                        + citiesPagedModel.getPreviousLink().get().getHref()),
+                                + citiesPagedModel.getPreviousLink().get().getHref()),
                 () -> assertTrue(citiesPagedModel.getLink("last").isPresent(),
                         () -> "should have last link, but haven`t: " + citiesPagedModel),
                 () -> assertEquals(citiesPagedModel.getLink("last").get().getHref(), lastLink,
                         () -> "should have last link with url: " + lastLink + ", but had: "
-                        + citiesPagedModel.getLink("last").get().getHref()));
+                                + citiesPagedModel.getLink("last").get().getHref()));
     }
 
     private String getLink(int page, int size) {
