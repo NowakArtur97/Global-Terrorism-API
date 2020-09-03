@@ -176,6 +176,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
@@ -237,6 +238,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
@@ -307,6 +309,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", notNullValue()))
                             .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
                             .andExpect(jsonPath("city.province.country.id", is(anotherCountryNode2.getId().intValue())))
@@ -370,6 +373,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(anotherCityNode2.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(anotherCityNode2.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(anotherProvinceNode3.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(anotherProvinceNode3.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
@@ -917,6 +921,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
@@ -977,6 +982,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
@@ -1052,6 +1058,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(updatedCityLatitude)))
                             .andExpect(jsonPath("city.longitude", is(updatedCityLongitude)))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", notNullValue()))
                             .andExpect(jsonPath("city.province.name", is(updatedProvinceName)))
                             .andExpect(jsonPath("city.province.country.id", is(anotherCountryNode2.getId().intValue())))
@@ -1080,8 +1087,8 @@ class EventControllerPatchMethodTest {
                     "\"name\" : \"" + notExistingRegionName + "\"}" +
                     "}}}," +
                     "\"target\" : {" +
-                    "\"countryOfOrigin\": {"+
-                    "\"region\": {"+
+                    "\"countryOfOrigin\": {" +
+                    "\"region\": {" +
                     "\"name\" : \"" + notExistingRegionName + "\"}" +
                     "}}}";
 
@@ -1122,6 +1129,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.latitude", is(anotherCityNode2.getLatitude())))
                             .andExpect(jsonPath("city.longitude", is(anotherCityNode2.getLongitude())))
                             .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.id", is(anotherProvinceNode3.getId().intValue())))
                             .andExpect(jsonPath("city.province.name", is(anotherProvinceNode3.getName())))
                             .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
