@@ -61,6 +61,7 @@ class TargetControllerPatchMethodTest {
     private final static CountryNode anotherCountryNode = new CountryNode("another country", regionNode);
 
     private final static TargetNode targetNode = new TargetNode("target", countryNode);
+    private final static TargetNode anotherTargetNode = new TargetNode("target 2", countryNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired TargetRepository targetRepository, @Autowired CountryRepository countryRepository) {
@@ -70,6 +71,7 @@ class TargetControllerPatchMethodTest {
         countryRepository.save(anotherCountryNode);
 
         targetRepository.save(targetNode);
+        targetRepository.save(anotherTargetNode);
     }
 
     @AfterAll
@@ -109,6 +111,39 @@ class TargetControllerPatchMethodTest {
                             .andExpect(jsonPath("target", is(updatedTargetName)))
                             .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                             .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_target_region_using_json_patch_should_return_node_without_changes() {
+
+            String notExistingRegionName = "Not existing region";
+
+            String pathToLink = BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/region/name\", \"value\": \"" + notExistingRegionName + "\" }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, anotherTargetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(anotherTargetNode.getId().intValue())))
+                            .andExpect(jsonPath("target", is(anotherTargetNode.getTarget())))
+                            .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
                             .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
                             .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                             .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
@@ -279,6 +314,39 @@ class TargetControllerPatchMethodTest {
         }
 
         @Test
+        void when_partial_update_target_region_using_json_merge_patch_should_return_node_without_changes() {
+
+            String notExistingRegionName = "Not existing region";
+
+            String pathToLink = BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+
+            String jsonMergePatch =
+                    "{\"countryOfOrigin\" : { \"region\" : { \"name\" : \"" + notExistingRegionName + "\" }}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, anotherTargetNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(anotherTargetNode.getId().intValue())))
+                            .andExpect(jsonPath("target", is(anotherTargetNode.getTarget())))
+                            .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
+                            .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
+        }
+
+        @Test
         void when_partial_update_target_using_json_merge_patch_but_target_not_exists_should_return_error_response() {
 
             Long notExistingId = 1000L;
@@ -376,9 +444,9 @@ class TargetControllerPatchMethodTest {
         @Test
         void when_partial_update_valid_target_with_not_existing_country_using_json_merge_patch_should_return_errors() {
 
-            String notExistingCountryName = "not existing country";
+            String notExistingRegionName = "not existing region";
 
-            String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : \"" + notExistingCountryName + "\" }}";
+            String jsonMergePatch = "{\"countryOfOrigin\" : { \"name\" : \"" + notExistingRegionName + "\" }}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));

@@ -68,6 +68,9 @@ class CityControllerPatchMethodTest {
             anotherProvinceNode);
     private final static CityNode anotherCityNode2 = new CityNode("another city", 12.0, 11.0,
             anotherProvinceNode);
+    private final static CityNode anotherCityNode3 = new CityNode("another city 2", 11.0, 21.0,
+            provinceNode);
+
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired CityRepository cityRepository,
@@ -80,6 +83,7 @@ class CityControllerPatchMethodTest {
         cityRepository.save(cityNode);
         cityRepository.save(anotherCityNode);
         cityRepository.save(anotherCityNode2);
+        cityRepository.save(anotherCityNode3);
     }
 
     @AfterAll
@@ -215,6 +219,46 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("province.country.links").isEmpty())
                             .andExpect(jsonPath("province.country.region.id", is(anotherRegionNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.region.name", is(anotherRegionNode.getName())))
+                            .andExpect(jsonPath("province.country.region.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_city_region_using_json_patch_should_return_node_without_changes() {
+
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
+
+            String notExistingRegionName = "Not existing region";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/province/country/region/name\", " +
+                    "\"value\": \"" + notExistingRegionName + "\" }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, anotherCityNode3.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(anotherCityNode3.getId().intValue())))
+                            .andExpect(jsonPath("name", is(anotherCityNode3.getName())))
+                            .andExpect(jsonPath("latitude", is(anotherCityNode3.getLatitude())))
+                            .andExpect(jsonPath("longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("province.links").isEmpty())
+                            .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("province.country.links").isEmpty())
+                            .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("province.country.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("province.country.region.links").isEmpty()));
         }
 
@@ -607,6 +651,51 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("province.country.links").isEmpty())
                             .andExpect(jsonPath("province.country.region.id", is(anotherRegionNode.getId().intValue())))
                             .andExpect(jsonPath("province.country.region.name", is(anotherRegionNode.getName())))
+                            .andExpect(jsonPath("province.country.region.links").isEmpty()));
+        }
+
+        @Test
+        void when_partial_update_city_region_using_json_merge_patch_should_return_node_without_changes() {
+
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
+
+            String notExistingRegionName = "Not existing region";
+
+            String jsonMergePatch = "{" +
+                    "\"province\" :{ " +
+                    "\"country\" :{ " +
+                    "\"region\" :{ " +
+                    "\"name\" : \"" + notExistingRegionName + "\"" +
+                    "}" +
+                    "}" +
+                    "}" +
+                    "}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, anotherCityNode3.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("links[1].href").doesNotExist())
+                            .andExpect(jsonPath("id", is(anotherCityNode3.getId().intValue())))
+                            .andExpect(jsonPath("name", is(anotherCityNode3.getName())))
+                            .andExpect(jsonPath("latitude", is(anotherCityNode3.getLatitude())))
+                            .andExpect(jsonPath("longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
+                            .andExpect(jsonPath("province.name", is(provinceNode.getName())))
+                            .andExpect(jsonPath("province.links").isEmpty())
+                            .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("province.country.links").isEmpty())
+                            .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("province.country.region.name", is(regionNode.getName())))
                             .andExpect(jsonPath("province.country.region.links").isEmpty()));
         }
 
