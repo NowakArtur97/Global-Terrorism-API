@@ -100,6 +100,8 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Targets endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Events endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Events Target endpoint (GET, PUT, DELETE)
+- Cities endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Provinces endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups endpoint(GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups Events endpoint (GET, POST, DELETE, OPTIONS)
 - Bulk operations using Spring Bulk API
@@ -132,6 +134,32 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `DELETE`   | `/api/v1/targets/{id}`            | `Remove a target`                                                    |
 | `OPTIONS`  | `/api/v1/targets`                 | `Find all supported request methods for list of targets`             |
 | `OPTIONS`  | `/api/v1/targets/{id}`            | `Find all supported request methods for target`                      |
+
+### Cities
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/cities`                  | `Get a list of cities`                                               |
+| `GET`      | `/api/v1/cities/{id}`             | `Get information about a city`                                       |
+| `POST`     | `/api/v1/cities`                  | `Add a new city`                                                     |
+| `PUT`      | `/api/v1/cities/{id}`             | `Update or add a city`                                               |
+| `PATCH`    | `/api/v1/cities/{id}`             | `Partially update a city(consume Json Patch and Json Merge Patch)`   |
+| `DELETE`   | `/api/v1/cities/{id}`             | `Remove a city`                                                      |
+| `OPTIONS`  | `/api/v1/cities`                  | `Find all supported request methods for list of cities`              |
+| `OPTIONS`  | `/api/v1/cities/{id}`             | `Find all supported request methods for city`                        |
+
+### Provinces
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/provinces`                  | `Get a list of provinces`                                         |
+| `GET`      | `/api/v1/provinces/{id}`             | `Get information about a province`                                |
+| `POST`     | `/api/v1/provinces`                  | `Add a new province`                                              |
+| `PUT`      | `/api/v1/provinces/{id}`             | `Update or add a province`                                        |
+| `PATCH`    | `/api/v1/provinces/{id}`             | `Partially update a province(consume Json Patch and Json Merge Patch)`|
+| `DELETE`   | `/api/v1/provinces/{id}`             | `Remove a province`                                               |
+| `OPTIONS`  | `/api/v1/provinces`                  | `Find all supported request methods for list of provinces`        |
+| `OPTIONS`  | `/api/v1/provinces/{id}`             | `Find all supported request methods for province`                 |
 
 ### Events
 
