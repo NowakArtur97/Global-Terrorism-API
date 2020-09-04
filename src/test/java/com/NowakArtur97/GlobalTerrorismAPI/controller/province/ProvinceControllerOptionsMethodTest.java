@@ -1,10 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.CityModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
@@ -28,44 +28,44 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("CityController_Tests")
-class CityControllerOptionsMethodTest {
+@Tag("ProvinceController_Tests")
+class ProvinceControllerOptionsMethodTest {
 
-    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
+    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<CityModel, CityDTO> cityController;
+    private GenericRestController<ProvinceModel, ProvinceDTO> provinceController;
 
     @Mock
-    private GenericService<CityNode, CityDTO> cityService;
+    private GenericService<ProvinceNode, ProvinceDTO> provinceService;
 
     @Mock
-    private CityModelAssembler modelAssembler;
+    private ProvinceModelAssembler modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<CityNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler;
 
     @Mock
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper<CityNode, CityDTO> violationHelper;
+    private ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper;
 
     @BeforeEach
     private void setUp() {
 
-        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchHelper,
+        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(cityController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(provinceController).build();
     }
 
     @Test
     @SneakyThrows
     void when_show_endpoint_options_for_collection_should_show_possible_request_methods() {
 
-        MvcResult mvcResult = mockMvc.perform(options(CITY_BASE_PATH)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(options(PROVINCE_BASE_PATH)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
         assertAll(
@@ -73,7 +73,7 @@ class CityControllerOptionsMethodTest {
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("POST"), () -> "should contain POST option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(provinceService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
@@ -84,11 +84,11 @@ class CityControllerOptionsMethodTest {
     @SneakyThrows
     void when_show_endpoint_options_for_singular_resource_should_show_possible_request_methods() {
 
-        Long cityId = 1L;
+        Long provinceId = 1L;
 
-        String linkWithParameter = CITY_BASE_PATH + "/" + "{id}";
+        String linkWithParameter = PROVINCE_BASE_PATH + "/" + "{id}";
 
-        MvcResult mvcResult = mockMvc.perform(options(linkWithParameter, cityId)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(options(linkWithParameter, provinceId)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
         assertAll(
@@ -98,7 +98,7 @@ class CityControllerOptionsMethodTest {
                 () -> assertTrue(allowedMethods.contains("PATCH"), () -> "should contain PATCH option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("DELETE"), () -> "should contain DELETE option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(provinceService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),

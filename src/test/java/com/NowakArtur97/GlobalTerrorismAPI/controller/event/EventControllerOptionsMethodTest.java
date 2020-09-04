@@ -68,8 +68,6 @@ class EventControllerOptionsMethodTest {
         MvcResult mvcResult = mockMvc.perform(options(EVENT_BASE_PATH)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
-        System.out.println(allowedMethods);
-
         assertAll(
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
