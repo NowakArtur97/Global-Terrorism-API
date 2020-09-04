@@ -137,9 +137,9 @@ class CityMapperTest {
                 .build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
 
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.build(ObjectType.DTO);
-        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
-        CityDTO cityDTOExpected = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+        ProvinceDTO provinceDTOExpected = (ProvinceDTO) provinceBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
+        CityDTO cityDTOExpected = (CityDTO) cityBuilder.withProvince(provinceDTOExpected).build(ObjectType.DTO);
 
         when(modelMapper.map(cityNode, CityDTO.class)).thenReturn(cityDTOExpected);
 
@@ -159,19 +159,19 @@ class CityMapperTest {
 
                 () -> assertNotNull(cityDTOActual.getProvince(),
                         () -> "should return city dto with not null province, but was: null"),
-                () -> assertEquals(provinceDTO, cityDTOActual.getProvince(),
-                        () -> "should return city dto with province: " + provinceDTO + ", but was: "
+                () -> assertEquals(provinceDTOExpected, cityDTOActual.getProvince(),
+                        () -> "should return city dto with province: " + provinceDTOExpected + ", but was: "
                                 + cityDTOActual.getProvince()),
-                () -> assertEquals(provinceDTO.getName(), cityDTOActual.getProvince().getName(),
-                        () -> "should return city dto with province name: " + provinceDTO.getName() + ", but was: "
+                () -> assertEquals(provinceDTOExpected.getName(), cityDTOActual.getProvince().getName(),
+                        () -> "should return city dto with province name: " + provinceDTOExpected.getName() + ", but was: "
                                 + cityDTOActual.getProvince().getName()),
                 () -> assertNotNull(cityDTOActual.getProvince().getCountry(),
                         () -> "should return city dto with not null country, but was: null"),
-                () -> assertEquals(countryDTO, cityDTOActual.getProvince().getCountry(),
-                        () -> "should return city dto with country: " + countryDTO + ", but was: " +
+                () -> assertEquals(countryDTOExpected, cityDTOActual.getProvince().getCountry(),
+                        () -> "should return city dto with country: " + countryDTOExpected + ", but was: " +
                                 cityDTOActual.getProvince().getCountry()),
-                () -> assertEquals(countryDTO.getName(), cityDTOActual.getProvince().getCountry().getName(),
-                        () -> "should return city dto with country name: " + countryDTO.getName()
+                () -> assertEquals(countryDTOExpected.getName(), cityDTOActual.getProvince().getCountry().getName(),
+                        () -> "should return city dto with country name: " + countryDTOExpected.getName()
                                 + ", but was: " + cityDTOActual.getProvince().getCountry()),
                 () -> verify(modelMapper, times(1)).map(cityNode, CityDTO.class),
                 () -> verifyNoMoreInteractions(modelMapper));
@@ -186,11 +186,11 @@ class CityMapperTest {
                 .build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
 
-        RegionModel regionModel = (RegionModel) regionBuilder.build(ObjectType.MODEL);
-        CountryModel countryModel = (CountryModel) countryBuilder.withRegion(regionModel).build(ObjectType.MODEL);
-        ProvinceModel provinceModel = (ProvinceModel) provinceBuilder.withCountry(countryModel)
+        RegionModel regionModelExpected = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        CountryModel countryModelExpected = (CountryModel) countryBuilder.withRegion(regionModelExpected).build(ObjectType.MODEL);
+        ProvinceModel provinceModelExpected = (ProvinceModel) provinceBuilder.withCountry(countryModelExpected)
                 .build(ObjectType.MODEL);
-        CityModel cityModelExpected = (CityModel) cityBuilder.withProvince(provinceModel).build(ObjectType.MODEL);
+        CityModel cityModelExpected = (CityModel) cityBuilder.withProvince(provinceModelExpected).build(ObjectType.MODEL);
 
         when(modelMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
 
@@ -214,36 +214,36 @@ class CityMapperTest {
 
                 () -> assertNotNull(cityModelActual.getProvince(),
                         () -> "should return city model with not null province, but was: null"),
-                () -> assertEquals(provinceModel, cityModelActual.getProvince(),
-                        () -> "should return city model with province: " + provinceModel + ", but was: "
+                () -> assertEquals(provinceModelExpected, cityModelActual.getProvince(),
+                        () -> "should return city model with province: " + provinceModelExpected + ", but was: "
                                 + cityModelActual.getProvince()),
-                () -> assertEquals(provinceModel.getId(), cityModelActual.getProvince().getId(),
-                        () -> "should return city model with province id: " + provinceModel.getId()
+                () -> assertEquals(provinceModelExpected.getId(), cityModelActual.getProvince().getId(),
+                        () -> "should return city model with province id: " + provinceModelExpected.getId()
                                 + ", but was: " + cityModelActual.getProvince().getId()),
-                () -> assertEquals(provinceModel.getName(), cityModelActual.getProvince().getName(),
-                        () -> "should return city model with province name: " + provinceModel.getName() + ", but was: "
+                () -> assertEquals(provinceModelExpected.getName(), cityModelActual.getProvince().getName(),
+                        () -> "should return city model with province name: " + provinceModelExpected.getName() + ", but was: "
                                 + cityModelActual.getProvince().getName()),
                 () -> assertNotNull(cityModelActual.getProvince().getCountry(),
                         () -> "should return city model with not null country, but was: null"),
-                () -> assertEquals(countryModel, cityModelActual.getProvince().getCountry(),
-                        () -> "should return city model with country: " + countryModel + ", but was: " +
+                () -> assertEquals(countryModelExpected, cityModelActual.getProvince().getCountry(),
+                        () -> "should return city model with country: " + countryModelExpected + ", but was: " +
                                 cityModelActual.getProvince().getCountry()),
-                () -> assertEquals(countryModel.getId(), cityModelActual.getProvince().getCountry().getId(),
-                        () -> "should return city model with country id: " + countryModel.getId()
+                () -> assertEquals(countryModelExpected.getId(), cityModelActual.getProvince().getCountry().getId(),
+                        () -> "should return city model with country id: " + countryModelExpected.getId()
                                 + ", but was: " + cityModelActual.getProvince().getCountry().getId()),
-                () -> assertEquals(countryModel.getName(), cityModelActual.getProvince().getCountry().getName(),
-                        () -> "should return city model with country name: " + countryModel.getName()
+                () -> assertEquals(countryModelExpected.getName(), cityModelActual.getProvince().getCountry().getName(),
+                        () -> "should return city model with country name: " + countryModelExpected.getName()
                                 + ", but was: " + cityModelActual.getProvince().getCountry()),
                 () -> assertNotNull(cityModelActual.getProvince().getCountry().getRegion(),
                         () -> "should return city model with not null region, but was: null"),
-                () -> assertEquals(regionModel, cityModelActual.getProvince().getCountry().getRegion(),
-                        () -> "should return city model with region: " + regionModel + ", but was: "
+                () -> assertEquals(regionModelExpected, cityModelActual.getProvince().getCountry().getRegion(),
+                        () -> "should return city model with region: " + regionModelExpected + ", but was: "
                                 + cityModelActual.getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionModel.getId(), cityModelActual.getProvince().getCountry().getRegion().getId(),
-                        () -> "should return city model with region id: " + regionModel.getId()
+                () -> assertEquals(regionModelExpected.getId(), cityModelActual.getProvince().getCountry().getRegion().getId(),
+                        () -> "should return city model with region id: " + regionModelExpected.getId()
                                 + ", but was: " + cityModelActual.getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionModel.getName(), cityModelActual.getProvince().getCountry().getRegion().getName(),
-                        () -> "should return city model with region name: " + regionModel.getName() + ", but was: "
+                () -> assertEquals(regionModelExpected.getName(), cityModelActual.getProvince().getCountry().getRegion().getName(),
+                        () -> "should return city model with region name: " + regionModelExpected.getName() + ", but was: "
                                 + cityModelActual.getProvince().getCountry().getRegion().getName()),
                 () -> verify(modelMapper, times(1)).map(cityNode, CityModel.class),
                 () -> verifyNoMoreInteractions(modelMapper));
