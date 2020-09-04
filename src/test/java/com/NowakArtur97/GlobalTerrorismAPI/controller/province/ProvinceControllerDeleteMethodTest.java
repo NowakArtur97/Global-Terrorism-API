@@ -1,14 +1,12 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
+package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.CityModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -34,88 +32,64 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("CityController_Tests")
-class CityControllerDeleteMethodTest {
+@Tag("ProvinceController_Tests")
+class ProvinceControllerDeleteMethodTest {
 
-    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/cities";
+    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String LINK_WITH_PARAMETER = PROVINCE_BASE_PATH + "/" + "{id}";
 
     private MockMvc mockMvc;
 
-    private GenericRestController<CityModel, CityDTO> cityController;
+    private GenericRestController<ProvinceModel, ProvinceDTO> provinceController;
 
     @Mock
-    private GenericService<CityNode, CityDTO> cityService;
+    private GenericService<ProvinceNode, ProvinceDTO> provinceService;
 
     @Mock
-    private CityModelAssembler modelAssembler;
+    private ProvinceModelAssembler modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<CityNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler;
 
     @Mock
     private PatchHelper patchHelper;
 
     @Mock
-    private ViolationHelper<CityNode, CityDTO> violationHelper;
+    private ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper;
 
     private static ProvinceBuilder provinceBuilder;
-    private static CityBuilder cityBuilder;
 
     @BeforeAll
     private static void setUpBuilders() {
 
         provinceBuilder = new ProvinceBuilder();
-        cityBuilder = new CityBuilder();
     }
 
     @BeforeEach
     private void setUp() {
 
-        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchHelper,
+        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchHelper,
                 violationHelper);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(cityController).setControllerAdvice(new GenericRestControllerAdvice())
+        mockMvc = MockMvcBuilders.standaloneSetup(provinceController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
     }
 
     @Test
-    void when_delete_existing_city_should_not_return_content() {
+    void when_delete_existing_province_should_not_return_content() {
 
-        Long cityId = 1L;
-
-        CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
-
-        when(cityService.delete(cityId)).thenReturn(Optional.of(cityNode));
-
-        assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId))
-                        .andExpect(status().isNoContent())
-                        .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(cityService, times(1)).delete(cityId),
-                () -> verifyNoMoreInteractions(cityService),
-                () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
-                () -> verifyNoInteractions(pagedResourcesAssembler));
-    }
-
-    @Test
-    void when_delete_existing_city_with_province_should_not_return_content() {
-
-        Long cityId = 2L;
+        Long provinceId = 1L;
 
         ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.build(ObjectType.NODE);
-        CityNode cityNode = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNode).build(ObjectType.NODE);
 
-        when(cityService.delete(cityId)).thenReturn(Optional.of(cityNode));
+        when(provinceService.delete(provinceId)).thenReturn(Optional.of(provinceNode));
 
         assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId))
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, provinceId))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist()),
-                () -> verify(cityService, times(1)).delete(cityId),
-                () -> verifyNoMoreInteractions(cityService),
+                () -> verify(provinceService, times(1)).delete(provinceId),
+                () -> verifyNoMoreInteractions(provinceService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
@@ -123,21 +97,21 @@ class CityControllerDeleteMethodTest {
     }
 
     @Test
-    void when_delete_city_but_city_does_not_exist_should_return_error_response() {
+    void when_delete_province_but_province_does_not_exist_should_return_error_response() {
 
-        Long cityId = 1L;
+        Long provinceId = 1L;
 
-        when(cityService.delete(cityId)).thenReturn(Optional.empty());
+        when(provinceService.delete(provinceId)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, cityId)).andExpect(status().isNotFound())
+                () -> mockMvc.perform(delete(LINK_WITH_PARAMETER, provinceId)).andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("timestamp").isNotEmpty())
                         .andExpect(content().json("{'status': 404}"))
-                        .andExpect(jsonPath("errors[0]", is("Could not find CityModel with id: " + cityId + ".")))
+                        .andExpect(jsonPath("errors[0]", is("Could not find ProvinceModel with id: " + provinceId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(cityService, times(1)).delete(cityId),
-                () -> verifyNoMoreInteractions(cityService),
+                () -> verify(provinceService, times(1)).delete(provinceId),
+                () -> verifyNoMoreInteractions(provinceService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchHelper),
                 () -> verifyNoInteractions(violationHelper),
