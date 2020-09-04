@@ -440,10 +440,10 @@ class CityControllerGetMethodTest {
                         .build(ObjectType.NODE);
 
                 return cityBuilder
-                        .withId((long) counterForUtilMethodsModel)
-                        .withName("city" + counterForUtilMethodsModel)
-                        .withLatitude((double) (20 + counterForUtilMethodsModel))
-                        .withLongitude((double) (40 + counterForUtilMethodsModel))
+                        .withId((long) counterForUtilMethodsNode)
+                        .withName("city" + counterForUtilMethodsNode)
+                        .withLatitude((double) (20 + counterForUtilMethodsNode))
+                        .withLongitude((double) (40 + counterForUtilMethodsNode))
                         .withProvince(provinceNode)
                         .build(ObjectType.NODE);
 
