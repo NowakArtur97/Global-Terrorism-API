@@ -61,7 +61,6 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
         return provinceRepository.save(provinceNode);
     }
 
-
     @Override
     public Optional<ProvinceNode> findByNameAndCountryName(String provinceName, String countryName) {
 

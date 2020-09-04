@@ -231,7 +231,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_null_fields_should_return_errors() {
+    void when_update_city_with_null_fields_should_return_errors() {
 
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(null).withLatitude(null).withLongitude(null).withProvince(null)
                 .build(ObjectType.DTO);
@@ -258,7 +258,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City Country name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_city_with_not_existing_country_should_return_errors(String invalidCountryName) {
+    void when_update_city_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -283,7 +283,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_city_with_invalid_city_name_should_return_errors(String invalidCityName) {
+    void when_update_city_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -307,7 +307,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_invalid_geographical_location_of_city_should_return_errors() {
+    void when_update_city_with_invalid_geographical_location_of_city_should_return_errors() {
 
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(null)
                 .build(ObjectType.DTO);
@@ -331,7 +331,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_too_small_city_latitude_should_return_errors() {
+    void when_update_city_with_too_small_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = -91.0;
 
@@ -357,7 +357,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_too_big_city_latitude_should_return_errors() {
+    void when_update_city_with_too_big_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = 91.0;
 
@@ -383,7 +383,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_too_small_city_longitude_should_return_errors() {
+    void when_update_city_with_too_small_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = -181.0;
 
@@ -409,7 +409,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_with_too_big_city_longitude_should_return_errors() {
+    void when_update_city_with_too_big_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = 181.0;
 
@@ -437,7 +437,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City Province name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_add_city_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
+    void when_update_city_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(invalidProvinceName)
@@ -461,7 +461,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_add_city_without_province_country_should_return_errors() {
+    void when_update_city_without_province_country_should_return_errors() {
 
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(null).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
