@@ -523,6 +523,31 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
+
+        @Test
+        void when_partial_update_city_with_not_existing_country_using_json_patch_should_have_errors() {
+
+            String notExistingCountryName = "not existing country";
+
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/province/country/name\", \"value\": \"" +
+                    notExistingCountryName + "\"}]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, cityNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
     }
 
     @Nested
@@ -776,7 +801,7 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("errors", hasSize(4))));
         }
 
-        @ParameterizedTest(name = "{index}: For City City name: {0}")
+        @ParameterizedTest(name = "{index}: For City name: {0}")
         @EmptySource
         @ValueSource(strings = {" "})
         void when_partial_update_city_with_invalid_name_using_json_merge_patch_should_return_errors(String invalidCityName) {
@@ -962,6 +987,30 @@ class CityControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]", is("Country name cannot be empty.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_city_with_not_existing_country_using_json_merge_patch_should_have_errors() {
+
+            String notExistingCountryName = "not existing country";
+
+            String jsonMergePatch = "{\"province\" : {\"country\" : {\"name\" : \"" + notExistingCountryName + "\"}}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, cityNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
