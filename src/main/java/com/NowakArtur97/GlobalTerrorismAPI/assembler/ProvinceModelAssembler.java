@@ -13,18 +13,25 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class ProvinceModelAssembler extends RepresentationModelAssemblerSupport<ProvinceNode, ProvinceModel> {
 
+    private final CountryModelAssembler countryModelAssembler;
+
     private final ObjectMapper objectMapper;
 
-    public ProvinceModelAssembler(ObjectMapper objectMapper) {
+    public ProvinceModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
 
         super(ProvinceController.class, ProvinceModel.class);
         this.objectMapper = objectMapper;
+        this.countryModelAssembler = countryModelAssembler;
     }
 
     @Override
     public ProvinceModel toModel(ProvinceNode provinceNode) {
 
         ProvinceModel provinceModel = objectMapper.map(provinceNode, ProvinceModel.class);
+
+        if (provinceNode.getCountry() != null) {
+            provinceModel.setCountry(countryModelAssembler.toModel(provinceNode.getCountry()));
+        }
 
         provinceModel.add(linkTo(methodOn(ProvinceController.class).findById(provinceModel.getId())).withSelfRel());
 
