@@ -8,13 +8,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import org.springframework.core.GenericTypeResolver;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,21 +22,15 @@ import java.util.Optional;
 
 @RestController
 public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTONode, T extends Node>
-        implements GenericRestController<M, D> {
+        extends BasicGenericRestControllerImpl<M, T> implements GenericRestController<M, D> {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
-
-    private final String modelType;
 
     private final Class<T> nodeTypeParameterClass;
 
     private final Class<D> dtoTypeParameterClass;
 
     protected final GenericService<T, D> service;
-
-    private final RepresentationModelAssemblerSupport<T, M> modelAssembler;
-
-    protected final PagedResourcesAssembler<T> pagedResourcesAssembler;
 
     protected final PatchHelper patchHelper;
 
@@ -51,37 +41,15 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
                                         PagedResourcesAssembler<T> pagedResourcesAssembler,
                                         PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
 
-        Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(),
-                GenericRestControllerImpl.class)[0];
+        super(service, modelAssembler, pagedResourcesAssembler);
 
         this.nodeTypeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(),
                 GenericRestControllerImpl.class)[2];
         this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(),
                 GenericRestControllerImpl.class)[1];
-        this.modelType = modelTypeParameterClass.getSimpleName();
         this.service = service;
-        this.modelAssembler = modelAssembler;
-        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.patchHelper = patchHelper;
         this.violationHelper = violationHelper;
-    }
-
-    @GetMapping
-    @Override
-    public ResponseEntity<PagedModel<M>> findAll(Pageable pageable) {
-
-        Page<T> resources = service.findAll(pageable);
-        PagedModel<M> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
-
-        return new ResponseEntity<>(pagedModel, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/{id}")
-    @Override
-    public ResponseEntity<M> findById(@PathVariable("id") Long id) {
-
-        return service.findById(id).map(modelAssembler::toModel).map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
     }
 
     @PostMapping
@@ -158,25 +126,5 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
         service.delete(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    @Override
-    public ResponseEntity<?> collectionOptions() {
-
-        return ResponseEntity
-                .ok()
-                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
-                .build();
-    }
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.OPTIONS)
-    @Override
-    public ResponseEntity<?> singularOptions() {
-
-        return ResponseEntity
-                .ok()
-                .allow(HttpMethod.GET, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.OPTIONS)
-                .build();
     }
 }

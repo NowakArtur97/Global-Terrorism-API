@@ -2,8 +2,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
-import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +11,7 @@ import javax.json.JsonMergePatch;
 import javax.json.JsonPatch;
 import javax.validation.Valid;
 
-public interface GenericRestController<M extends RepresentationModel<M>, D extends DTONode> {
-
-    @GetMapping
-    ResponseEntity<PagedModel<M>> findAll(Pageable pageable);
-
-    @GetMapping(path = "/{id}")
-    ResponseEntity<M> findById(Long id);
+public interface GenericRestController<M extends RepresentationModel<M>, D extends DTONode> extends BasicGenericRestController<M> {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,10 +31,4 @@ public interface GenericRestController<M extends RepresentationModel<M>, D exten
     @ResponseStatus(HttpStatus.NO_CONTENT)
         // Added to remove the default 200 status added by Swagger
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
-
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    ResponseEntity<?> collectionOptions();
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.OPTIONS)
-    ResponseEntity<?> singularOptions();
 }

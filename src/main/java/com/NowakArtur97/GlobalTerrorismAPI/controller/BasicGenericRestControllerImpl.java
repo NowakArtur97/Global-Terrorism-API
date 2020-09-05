@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public abstract class BasicGenericRestControllerImpl<M extends RepresentationModel<M>, T extends Node>
         implements BasicGenericRestController<M> {
 
-    private final String modelType;
+    protected final String modelType;
+
+    protected final Class<M> modelTypeParameterClass;
 
     protected final BasicGenericService<T> service;
 
-    private final RepresentationModelAssemblerSupport<T, M> modelAssembler;
+    protected final RepresentationModelAssemblerSupport<T, M> modelAssembler;
 
     protected final PagedResourcesAssembler<T> pagedResourcesAssembler;
 
@@ -31,9 +33,9 @@ public abstract class BasicGenericRestControllerImpl<M extends RepresentationMod
                                              RepresentationModelAssemblerSupport<T, M> modelAssembler,
                                              PagedResourcesAssembler<T> pagedResourcesAssembler) {
 
-        Class<M> modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(),
+        this.modelTypeParameterClass = (Class<M>) GenericTypeResolver.resolveTypeArguments(getClass(),
                 BasicGenericRestControllerImpl.class)[0];
-        this.modelType = modelTypeParameterClass.getSimpleName();
+        this.modelType = this.modelTypeParameterClass.getSimpleName();
         this.service = service;
         this.modelAssembler = modelAssembler;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
