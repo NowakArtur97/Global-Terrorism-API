@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-public interface BasicGenericRestController<M extends RepresentationModel<M>, D extends DTONode> {
+public interface BasicGenericRestController<M extends RepresentationModel<M>> {
 
     @GetMapping
     ResponseEntity<PagedModel<M>> findAll(Pageable pageable);
