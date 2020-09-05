@@ -13,6 +13,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.hateoas.Link;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,9 +23,13 @@ import static org.mockito.Mockito.*;
 @Tag("ProvinceModelAssembler_Tests")
 class ProvinceModelAssemblerTest {
 
+    private final String COUNTRY_BASE_PATH = "http://localhost/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost/api/v1/provinces";
 
     private ProvinceModelAssembler modelAssembler;
+
+    @Mock
+    private CountryModelAssembler countryModelAssembler;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -42,7 +47,7 @@ class ProvinceModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new ProvinceModelAssembler(objectMapper);
+        modelAssembler = new ProvinceModelAssembler(countryModelAssembler, objectMapper);
     }
 
     @Test
@@ -55,12 +60,16 @@ class ProvinceModelAssemblerTest {
                 .build(ObjectType.NODE);
 
         CountryModel countryModelExpected = (CountryModel) countryBuilder.withId(countryId).build(ObjectType.MODEL);
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryId.intValue();
+        countryModelExpected.add(new Link(pathToCountryLink));
+
         ProvinceModel provinceModelExpected = (ProvinceModel) provinceBuilder.withId(provinceId).withCountry(countryModelExpected)
                 .build(ObjectType.MODEL);
 
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceId.intValue();
 
         when(objectMapper.map(provinceNode, ProvinceModel.class)).thenReturn(provinceModelExpected);
+        when(countryModelAssembler.toModel(countryNode)).thenReturn(countryModelExpected);
 
         ProvinceModel provinceModelActual = modelAssembler.toModel(provinceNode);
 
@@ -68,6 +77,9 @@ class ProvinceModelAssemblerTest {
                 () -> assertEquals(pathToProvinceLink, provinceModelActual.getLink("self").get().getHref(),
                         () -> "should return province model with self link: " + pathToProvinceLink + ", but was: "
                                 + provinceModelActual.getLink("self").get().getHref()),
+                () -> assertEquals(pathToCountryLink, provinceModelActual.getCountry().getLink("self").get().getHref(),
+                        () -> "should return province model with country model with self link: " + pathToProvinceLink + ", but was: "
+                                + provinceModelActual.getCountry().getLink("self").get().getHref()),
 
                 () -> assertNotNull(provinceModelActual, () -> "should return not null province model, but was: null"),
                 () -> assertEquals(provinceModelExpected.getId(), provinceModelActual.getId(),
@@ -91,10 +103,12 @@ class ProvinceModelAssemblerTest {
 
                 () -> assertFalse(provinceModelActual.getLinks().isEmpty(),
                         () -> "should return province model with links, but wasn't"),
-                () -> assertTrue(provinceModelActual.getCountry().getLinks().isEmpty(),
-                        () -> "should return province model with country model without links, but was: " +
+                () -> assertFalse(provinceModelActual.getCountry().getLinks().isEmpty(),
+                        () -> "should return province model with country model with links, but was: " +
                                 provinceModelActual.getCountry().getLinks()),
                 () -> verify(objectMapper, times(1)).map(provinceNode, ProvinceModel.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(countryModelAssembler, times(1)).toModel(countryNode),
+                () -> verifyNoMoreInteractions(countryModelAssembler));
     }
 }
