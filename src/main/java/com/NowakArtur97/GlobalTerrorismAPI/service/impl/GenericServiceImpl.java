@@ -6,15 +6,14 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import org.springframework.core.GenericTypeResolver;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BaseGenericServiceImpl<T> implements GenericService<T, D> {
+abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BasicGenericServiceImpl<T>
+        implements GenericService<T, D> {
 
     private final Class<T> typeParameterClass;
 
@@ -28,23 +27,9 @@ abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends Bas
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<T> findById(Long id) {
-
-        return id != null ? repository.findById(id) : Optional.empty();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Optional<T> findById(Long id, int depth) {
 
         return id != null ? repository.findById(id, depth) : Optional.empty();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<T> findAll(Pageable pageable) {
-
-        return repository.findAll(pageable);
     }
 
     @Override

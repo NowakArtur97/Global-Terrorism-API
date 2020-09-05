@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 
 import java.util.Optional;
 
-public interface CountryService extends BaseGenericService<CountryNode> {
+public interface CountryService extends BasicGenericService<CountryNode> {
 
     Optional<CountryNode> findByName(String name);
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-class RegionServiceImpl extends BaseGenericServiceImpl<RegionNode> implements RegionService {
+class RegionServiceImpl extends BasicGenericServiceImpl<RegionNode> implements RegionService {
 
     private final RegionRepository repository;
 

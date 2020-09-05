@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 
 import java.util.Optional;
 
-public interface RegionService extends BaseGenericService<RegionNode> {
+public interface RegionService extends BasicGenericService<RegionNode> {
 
     Optional<RegionNode> findByName(String name);
 
