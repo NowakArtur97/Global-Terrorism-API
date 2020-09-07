@@ -100,6 +100,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Targets endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Events endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Events Target endpoint (GET, PUT, DELETE)
+- Countries endpoint (GET, OPTIONS)
 - Cities endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Provinces endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups endpoint(GET, POST, PUT, PATCH, DELETE, OPTIONS)
@@ -134,6 +135,15 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `DELETE`   | `/api/v1/targets/{id}`            | `Remove a target`                                                    |
 | `OPTIONS`  | `/api/v1/targets`                 | `Find all supported request methods for list of targets`             |
 | `OPTIONS`  | `/api/v1/targets/{id}`            | `Find all supported request methods for target`                      |
+
+### Countries
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/countries`               | `Get a list of countries`                                            |
+| `GET`      | `/api/v1/countries/{id}`          | `Get information about a country`                                    |
+| `OPTIONS`  | `/api/v1/countries`               | `Find all supported request methods for list of countries`           |
+| `OPTIONS`  | `/api/v1/countries/{id}`          | `Find all supported request methods for country`                     |
 
 ### Cities
 
