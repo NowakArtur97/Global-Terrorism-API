@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TargetControllerPostMethodTest {
 
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     @Autowired
     private MockMvc mockMvc;
@@ -103,7 +103,7 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH)
+                        .perform(post(TARGET_BASE_PATH)
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH)
+                        .perform(post(TARGET_BASE_PATH)
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -161,7 +161,7 @@ class TargetControllerPostMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(post(BASE_PATH)
+                        .perform(post(TARGET_BASE_PATH)
                                 .header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(targetDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))

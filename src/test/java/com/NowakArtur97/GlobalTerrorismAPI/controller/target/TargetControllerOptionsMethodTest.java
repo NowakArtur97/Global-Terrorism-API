@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Tag("TargetController_Tests")
 class TargetControllerOptionsMethodTest {
 
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
 
@@ -65,7 +65,7 @@ class TargetControllerOptionsMethodTest {
     @SneakyThrows
     void when_show_endpoint_options_for_collection_should_show_possible_request_methods() {
 
-        MvcResult mvcResult = mockMvc.perform(options(BASE_PATH)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(options(TARGET_BASE_PATH)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
         System.out.println(allowedMethods);
@@ -88,7 +88,7 @@ class TargetControllerOptionsMethodTest {
 
         Long eventId = 1L;
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = TARGET_BASE_PATH + "/" + "{id}";
 
         MvcResult mvcResult = mockMvc.perform(options(linkWithParameter, eventId)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");

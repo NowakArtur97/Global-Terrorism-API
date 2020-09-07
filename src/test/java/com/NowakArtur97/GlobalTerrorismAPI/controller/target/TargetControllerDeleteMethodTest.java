@@ -35,8 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerDeleteMethodTest {
 
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
-    private final String LINK_WITH_PARAMETER = BASE_PATH + "/" + "{id}";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER = TARGET_BASE_PATH + "/" + "{id}";
 
     private MockMvc mockMvc;
 

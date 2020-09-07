@@ -55,7 +55,7 @@ class TargetControllerGetMethodTest {
     private static int counterForUtilMethodsNode = 0;
     private static int counterForUtilMethodsModel = 0;
 
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
     private MockMvc mockMvc;
 
@@ -128,8 +128,8 @@ class TargetControllerGetMethodTest {
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = BASE_PATH + urlParameters1;
-        String lastPageLink = BASE_PATH + urlParameters2;
+        String firstPageLink = TARGET_BASE_PATH + urlParameters1;
+        String lastPageLink = TARGET_BASE_PATH + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
@@ -241,8 +241,8 @@ class TargetControllerGetMethodTest {
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = BASE_PATH + urlParameters1;
-        String lastPageLink = BASE_PATH + urlParameters2;
+        String firstPageLink = TARGET_BASE_PATH + urlParameters1;
+        String lastPageLink = TARGET_BASE_PATH + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
@@ -334,8 +334,8 @@ class TargetControllerGetMethodTest {
 
         String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
         String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
-        String firstPageLink = BASE_PATH + urlParameters1;
-        String lastPageLink = BASE_PATH + urlParameters2;
+        String firstPageLink = TARGET_BASE_PATH + urlParameters1;
+        String lastPageLink = TARGET_BASE_PATH + urlParameters2;
 
         Link pageLink1 = new Link(firstPageLink, "first");
         Link pageLink2 = new Link(firstPageLink, "self");
@@ -391,11 +391,11 @@ class TargetControllerGetMethodTest {
         TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withCountry(countryModel)
                 .build(ObjectType.MODEL);
 
-        String pathToLink = BASE_PATH + "/" + targetId.intValue();
+        String pathToLink = TARGET_BASE_PATH + "/" + targetId.intValue();
         Link link = new Link(pathToLink);
         targetModel.add(link);
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = TARGET_BASE_PATH + "/" + "{id}";
 
         when(targetService.findById(targetId)).thenReturn(Optional.of(targetNode));
         when(targetModelAssembler.toModel(targetNode)).thenReturn(targetModel);
@@ -426,7 +426,7 @@ class TargetControllerGetMethodTest {
 
         Long targetId = 1L;
 
-        String linkWithParameter = BASE_PATH + "/" + "{id}";
+        String linkWithParameter = TARGET_BASE_PATH + "/" + "{id}";
 
         when(targetService.findById(targetId)).thenReturn(Optional.empty());
 
@@ -475,7 +475,7 @@ class TargetControllerGetMethodTest {
                         )
                         .build(ObjectType.MODEL);
 
-                String pathToTargetLink = BASE_PATH + counterForUtilMethodsModel;
+                String pathToTargetLink = TARGET_BASE_PATH + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 
                 return targetModel;

@@ -43,9 +43,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TargetControllerPatchMethodTest {
 
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
-    private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = BASE_PATH + "/" + "{id}";
-    private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = BASE_PATH + "/" + "{id2}";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = TARGET_BASE_PATH + "/" + "{id}";
+    private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = TARGET_BASE_PATH + "/" + "{id2}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -90,7 +90,7 @@ class TargetControllerPatchMethodTest {
             String updatedTargetName = "updated target";
 
             String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
-            String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
+            String pathToLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/target\", \"value\": \"" + updatedTargetName + "\" }," +
@@ -126,7 +126,7 @@ class TargetControllerPatchMethodTest {
             String notExistingRegionName = "Not existing region";
 
             String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
-            String pathToLink = BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+            String pathToLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/countryOfOrigin/region/name\", \"value\": \"" + notExistingRegionName + "\" }]";
@@ -290,7 +290,7 @@ class TargetControllerPatchMethodTest {
             String updatedTargetName = "updated target";
 
             String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
-            String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
+            String pathToLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
 
             String jsonMergePatch =
                     "{\"target\" : \"" + updatedTargetName + "\", " +
@@ -326,7 +326,7 @@ class TargetControllerPatchMethodTest {
             String notExistingRegionName = "Not existing region";
 
             String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
-            String pathToLink = BASE_PATH + "/" + anotherTargetNode.getId().intValue();
+            String pathToLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
 
             String jsonMergePatch =
                     "{\"countryOfOrigin\" : { \"region\" : { \"name\" : \"" + notExistingRegionName + "\" }}}";

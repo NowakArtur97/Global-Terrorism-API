@@ -47,8 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TargetControllerPutMethodTest {
 
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
-    private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
-    private final String LINK_WITH_PARAMETER = BASE_PATH + "/" + "{id}";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String LINK_WITH_PARAMETER = TARGET_BASE_PATH + "/" + "{id}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -102,7 +102,7 @@ class TargetControllerPutMethodTest {
                 .withCountry(countryDTO).build(ObjectType.DTO);
 
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
-        String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
