@@ -48,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("CityController_Tests")
 class CityControllerPutMethodTest {
 
+    private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String LINK_WITH_PARAMETER = CITY_BASE_PATH + "/" + "{id}";
@@ -116,6 +117,7 @@ class CityControllerPutMethodTest {
                 .withLatitude(updatedCityLatitude).withLongitude(updatedCityLongitude)
                 .withProvince(provinceDTO).build(ObjectType.DTO);
 
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
         String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
 
@@ -140,9 +142,10 @@ class CityControllerPutMethodTest {
                         .andExpect(jsonPath("province.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("province.country.links").isEmpty())
                         .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("province.country.region.links").isEmpty()));
@@ -160,6 +163,7 @@ class CityControllerPutMethodTest {
                 .withLatitude(cityNode.getLatitude()).withLongitude(cityNode.getLongitude())
                 .withProvince(provinceDTO).build(ObjectType.DTO);
 
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
         String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
 
@@ -184,9 +188,10 @@ class CityControllerPutMethodTest {
                         .andExpect(jsonPath("province.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("province.country.links").isEmpty())
                         .andExpect(jsonPath("province.country.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("province.country.region.links").isEmpty()));
@@ -200,6 +205,8 @@ class CityControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -222,9 +229,10 @@ class CityControllerPutMethodTest {
                         .andExpect(jsonPath("province.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.id", notNullValue()))
                         .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("province.country.links").isEmpty())
                         .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("province.country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("province.country.region.links").isEmpty()));
