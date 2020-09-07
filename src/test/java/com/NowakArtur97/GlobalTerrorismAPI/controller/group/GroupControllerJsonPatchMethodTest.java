@@ -48,8 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupController_Tests")
 class GroupControllerJsonPatchMethodTest {
 
-    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
