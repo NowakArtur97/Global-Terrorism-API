@@ -204,7 +204,7 @@ class GroupControllerJsonPatchMethodTest {
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode2.getId().intValue();
         String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetNode3.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
-        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode2.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue();
         String pathToEventLink2 = EVENT_BASE_PATH + "/" + eventNode3.getId().intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue() + "/targets";
