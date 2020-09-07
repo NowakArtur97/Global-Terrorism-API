@@ -46,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerPutMethodTest {
 
+    private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String LINK_WITH_PARAMETER = BASE_PATH + "/" + "{id}";
 
@@ -100,6 +101,7 @@ class TargetControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName)
                 .withCountry(countryDTO).build(ObjectType.DTO);
 
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
         String pathToLink = BASE_PATH + "/" + targetNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -117,9 +119,10 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(targetNode.getId().intValue())))
                         .andExpect(jsonPath("target", is(updatedTargetName)))
+                        .andExpect(jsonPath("countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("countryOfOrigin.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
@@ -128,11 +131,13 @@ class TargetControllerPutMethodTest {
     @Test
     void when_update_valid_target_with_not_existing_id_should_return_new_target_as_model() {
 
-        Long notExistingTargetId = 1L;
+        Long notExistingTargetId = 10000L;
         String targetName = "target";
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
+
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -149,9 +154,10 @@ class TargetControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", notNullValue()))
                         .andExpect(jsonPath("target", is(targetName)))
+                        .andExpect(jsonPath("countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.links").isEmpty())
                         .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
