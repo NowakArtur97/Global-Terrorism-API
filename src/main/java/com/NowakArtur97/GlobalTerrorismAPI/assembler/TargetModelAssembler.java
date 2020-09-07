@@ -13,11 +13,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class TargetModelAssembler extends RepresentationModelAssemblerSupport<TargetNode, TargetModel> {
 
+    private final CountryModelAssembler countryModelAssembler;
+
     private final ObjectMapper objectMapper;
 
-    public TargetModelAssembler(ObjectMapper objectMapper) {
+    public TargetModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
 
         super(TargetController.class, TargetModel.class);
+        this.countryModelAssembler = countryModelAssembler;
         this.objectMapper = objectMapper;
     }
 
@@ -25,6 +28,10 @@ public class TargetModelAssembler extends RepresentationModelAssemblerSupport<Ta
     public TargetModel toModel(TargetNode targetNode) {
 
         TargetModel targetModel = objectMapper.map(targetNode, TargetModel.class);
+
+        if (targetNode.getCountryOfOrigin() != null) {
+            targetModel.setCountryOfOrigin(countryModelAssembler.toModel(targetNode.getCountryOfOrigin()));
+        }
 
         targetModel.add(linkTo(methodOn(TargetController.class).findById(targetModel.getId())).withSelfRel());
 
