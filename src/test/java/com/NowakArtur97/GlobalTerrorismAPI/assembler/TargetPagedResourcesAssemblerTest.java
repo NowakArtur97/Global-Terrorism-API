@@ -41,6 +41,9 @@ class TargetPagedResourcesAssemblerTest {
     private TargetModelAssembler targetModelAssembler;
 
     @Mock
+    private CountryModelAssembler countryModelAssembler;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     private static TargetBuilder targetBuilder;
@@ -63,7 +66,7 @@ class TargetPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        targetModelAssembler = new TargetModelAssembler(objectMapper);
+        targetModelAssembler = new TargetModelAssembler(countryModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
