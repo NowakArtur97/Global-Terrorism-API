@@ -43,6 +43,7 @@ public class SwaggerConfiguration {
                         new Tag(CityTag.RESOURCE, CityTag.DESCRIPTION),
                         new Tag(ProvinceTag.RESOURCE, ProvinceTag.DESCRIPTION),
                         new Tag(CountryTag.RESOURCE, CountryTag.DESCRIPTION),
+                        new Tag(RegionTag.RESOURCE, RegionTag.DESCRIPTION),
                         new Tag(UserRegistrationTag.RESOURCE, UserRegistrationTag.DESCRIPTION),
                         new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION)
                 )
