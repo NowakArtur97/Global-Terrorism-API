@@ -45,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("GroupController_Tests")
 class GroupControllerJsonMergePatchMethodTest {
 
+    private final String REGION_BASE_PATH = "http://localhost:8080/api/v1/regions";
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
@@ -117,6 +118,7 @@ class GroupControllerJsonMergePatchMethodTest {
 
         String updatedName = "updated group name";
 
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
@@ -164,9 +166,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
@@ -180,9 +183,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist()) .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
     }
 
@@ -198,6 +202,7 @@ class GroupControllerJsonMergePatchMethodTest {
         boolean updatedIsSuccessful = true;
         boolean updatedIsSuicidal = false;
 
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode2.getId().intValue();
         String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetNode3.getId().intValue();
@@ -330,9 +335,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
@@ -347,9 +353,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
 
                         .andExpect(jsonPath("eventsCaused[1].links[0].href", is(pathToEventLink2)))
                         .andExpect(jsonPath("eventsCaused[1].links[1].href", is(pathToEventTargetLink2)))
@@ -368,9 +375,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1].city.links[0].href", is(pathToCityLink2)))
                         .andExpect(jsonPath("eventsCaused[1].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.id", is(cityNode2.getId().intValue())))
@@ -385,9 +393,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
 
@@ -397,6 +406,7 @@ class GroupControllerJsonMergePatchMethodTest {
         String notExistingRegionName = "not existing region";
         String updatedEventDateString = "2011-01-15";
 
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode4.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode2.getId().intValue();
@@ -483,9 +493,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode3.getId().intValue())))
@@ -500,9 +511,10 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links").isEmpty())
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
     }
 
