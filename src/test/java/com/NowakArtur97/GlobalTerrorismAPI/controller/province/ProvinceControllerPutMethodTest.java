@@ -46,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("ProvinceController_Tests")
 class ProvinceControllerPutMethodTest {
 
+    private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String LINK_WITH_PARAMETER = PROVINCE_BASE_PATH + "/" + "{id}";
 
@@ -102,6 +103,7 @@ class ProvinceControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(updatedProvinceName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -117,11 +119,12 @@ class ProvinceControllerPutMethodTest {
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToProvinceLink)))
                         .andExpect(jsonPath("links[1].href").doesNotExist())
+                        .andExpect(jsonPath("country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("name", is(updatedProvinceName)))
                         .andExpect(jsonPath("country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("country.links").isEmpty())
                         .andExpect(jsonPath("country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("country.region.links").isEmpty()));
@@ -134,6 +137,7 @@ class ProvinceControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName()).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -151,9 +155,10 @@ class ProvinceControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("country.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("country.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("country.links").isEmpty())
                         .andExpect(jsonPath("country.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("country.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("country.region.links").isEmpty()));
@@ -167,6 +172,8 @@ class ProvinceControllerPutMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO)
                 .build(ObjectType.DTO);
+
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -183,9 +190,10 @@ class ProvinceControllerPutMethodTest {
                         .andExpect(jsonPath("links[1].href").doesNotExist())
                         .andExpect(jsonPath("id", notNullValue()))
                         .andExpect(jsonPath("name", is(provinceDTO.getName())))
+                        .andExpect(jsonPath("country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("country.links").isEmpty())
                         .andExpect(jsonPath("country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("country.region.links").isEmpty()));
