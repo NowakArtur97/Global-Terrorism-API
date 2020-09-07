@@ -232,7 +232,8 @@ class GroupControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.id", is(anotherCountryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(anotherCountryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[0].href", is(pathToRegionLink2)))
-                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[1].href").doesNotExist())   .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(anotherRegionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.region.id", is(anotherRegionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.name", is(anotherRegionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
     }
