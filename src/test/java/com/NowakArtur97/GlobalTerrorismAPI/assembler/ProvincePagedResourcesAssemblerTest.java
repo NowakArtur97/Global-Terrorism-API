@@ -41,6 +41,9 @@ class ProvincePagedResourcesAssemblerTest {
     private ProvinceModelAssembler provinceModelAssembler;
 
     @Mock
+    private CountryModelAssembler countryModelAssembler;
+
+    @Mock
     private ObjectMapper objectMapper;
 
     @BeforeAll
@@ -55,7 +58,7 @@ class ProvincePagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        provinceModelAssembler = new ProvinceModelAssembler(objectMapper);
+        provinceModelAssembler = new ProvinceModelAssembler(countryModelAssembler, objectMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
