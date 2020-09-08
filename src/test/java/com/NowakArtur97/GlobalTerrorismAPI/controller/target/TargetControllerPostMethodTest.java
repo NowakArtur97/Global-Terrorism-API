@@ -46,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("TargetController_Tests")
 class TargetControllerPostMethodTest {
 
+    private final String REGION_BASE_PATH = "http://localhost:8080/api/v1/regions";
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
 
@@ -96,6 +97,7 @@ class TargetControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(targetName).withCountry(countryDTO)
                 .build(ObjectType.DTO);
 
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -118,9 +120,10 @@ class TargetControllerPostMethodTest {
                         .andExpect(jsonPath("countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("countryOfOrigin.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("countryOfOrigin.region.links").isEmpty()));
+                        .andExpect(jsonPath("countryOfOrigin.region.name", is(regionNode.getName()))));
     }
 
     @ParameterizedTest(name = "{index}: Target Name: {0}")
