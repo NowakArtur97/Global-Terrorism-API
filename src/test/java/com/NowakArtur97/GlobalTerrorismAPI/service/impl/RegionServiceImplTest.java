@@ -10,7 +10,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +47,61 @@ class RegionServiceImplTest {
     }
 
     @Test
+    void when_regions_exist_and_return_all_regions_should_return_regions() {
+
+        List<RegionNode> regionsListExpected = new ArrayList<>();
+
+        RegionNode region1 = (RegionNode) regionBuilder.withName("region1").build(ObjectType.NODE);
+        RegionNode region2 = (RegionNode) regionBuilder.withName("region2").build(ObjectType.NODE);
+        RegionNode region3 = (RegionNode) regionBuilder.withName("region2").build(ObjectType.NODE);
+
+        regionsListExpected.add(region1);
+        regionsListExpected.add(region2);
+        regionsListExpected.add(region3);
+
+        Page<RegionNode> regionsExpected = new PageImpl<>(regionsListExpected);
+
+        Pageable pageable = PageRequest.of(0, 100);
+
+        when(regionRepository.findAll(pageable)).thenReturn(regionsExpected);
+
+        Page<RegionNode> regionsActual = regionService.findAll(pageable);
+
+        assertAll(() -> assertNotNull(regionsActual, () -> "shouldn't return null"),
+                () -> assertEquals(regionsListExpected, regionsActual.getContent(),
+                        () -> "should contain: " + regionsListExpected + ", but was: " + regionsActual.getContent()),
+                () -> assertEquals(regionsExpected.getNumberOfElements(), regionsActual.getNumberOfElements(),
+                        () -> "should return page with: " + regionsExpected.getNumberOfElements()
+                                + " elements, but was: " + regionsActual.getNumberOfElements()),
+                () -> verify(regionRepository, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(regionRepository));
+    }
+
+    @Test
+    void when_regions_not_exist_and_return_all_regions_should_not_return_any_regions() {
+
+        List<RegionNode> regionsListExpected = new ArrayList<>();
+
+        Page<RegionNode> regionsExpected = new PageImpl<>(regionsListExpected);
+
+        Pageable pageable = PageRequest.of(0, 100);
+
+        when(regionRepository.findAll(pageable)).thenReturn(regionsExpected);
+
+        Page<RegionNode> regionsActual = regionService.findAll(pageable);
+
+        assertAll(() -> assertNotNull(regionsActual, () -> "shouldn't return null"),
+                () -> assertEquals(regionsListExpected, regionsActual.getContent(),
+                        () -> "should contain empty list, but was: " + regionsActual.getContent()),
+                () -> assertEquals(regionsListExpected, regionsActual.getContent(),
+                        () -> "should contain: " + regionsListExpected + ", but was: " + regionsActual.getContent()),
+                () -> assertEquals(regionsExpected.getNumberOfElements(), regionsActual.getNumberOfElements(),
+                        () -> "should return empty page, but was: " + regionsActual.getNumberOfElements()),
+                () -> verify(regionRepository, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(regionRepository));
+    }
+
+    @Test
     void when_find_existing_region_by_name_should_return_region() {
 
         String regionName = "region";
@@ -64,7 +125,7 @@ class RegionServiceImplTest {
     }
 
     @Test
-    void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
+    void when_find_not_existing_region_by_name_should_return_empty_optional() {
 
         String regionName = "region";
 
@@ -77,6 +138,43 @@ class RegionServiceImplTest {
                 () -> verifyNoMoreInteractions(regionRepository));
     }
 
+    @Test
+    void when_find_existing_region_by_id_should_return_region() {
+
+        Long regionId = 2L;
+
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.withId(regionId).build(ObjectType.NODE);
+
+        when(regionRepository.findById(regionId)).thenReturn(Optional.of(regionNodeExpected));
+
+        Optional<RegionNode> regionNodeActualOptional = regionService.findById(regionId);
+
+        RegionNode regionNodeActual = regionNodeActualOptional.get();
+
+        assertAll(() -> assertEquals(regionNodeExpected.getId(), regionNodeActual.getId(),
+                () -> "should return region node with id: " + regionNodeExpected.getId()
+                        + ", but was: " + regionNodeActual.getId()),
+                () -> assertEquals(regionNodeExpected.getName(), regionNodeActual.getName(),
+                        () -> "should return region node with name: " + regionNodeExpected.getName()
+                                + ", but was: " + regionNodeActual.getName()),
+                () -> verify(regionRepository, times(1)).findById(regionId),
+                () -> verifyNoMoreInteractions(regionRepository));
+    }
+
+    @Test
+    void when_find_not_existing_region_by_id_should_return_empty_optional() {
+
+        Long regionId = 1L;
+
+        when(regionRepository.findById(regionId)).thenReturn(Optional.empty());
+
+        Optional<RegionNode> regionNodeActualOptional = regionService.findById(regionId);
+
+        assertAll(() -> assertTrue(regionNodeActualOptional.isEmpty(), () -> "should return empty optional"),
+                () -> verify(regionRepository, times(1)).findById(regionId),
+                () -> verifyNoMoreInteractions(regionRepository));
+    }
+    
     @Test
     void when_check_by_name_if_existing_region_exists_should_return_true() {
 
@@ -92,7 +190,7 @@ class RegionServiceImplTest {
     }
 
     @Test
-    void when_check_by_name_if_not_existing_region_exists_should_return_true() {
+    void when_check_by_name_if_not_existing_region_exists_should_return_false() {
 
         String notExistingRegionName = "not existing region";
 
