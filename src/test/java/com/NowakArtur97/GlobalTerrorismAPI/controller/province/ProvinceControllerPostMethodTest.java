@@ -48,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("ProvinceController_Tests")
 class ProvinceControllerPostMethodTest {
 
+    private final String REGION_BASE_PATH = "http://localhost:8080/api/v1/regions";
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
 
@@ -94,6 +95,7 @@ class ProvinceControllerPostMethodTest {
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
 
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -114,9 +116,10 @@ class ProvinceControllerPostMethodTest {
                         .andExpect(jsonPath("country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("country.region.name", is(regionNode.getName())))
-                        .andExpect(jsonPath("country.region.links").isEmpty()));
+                        .andExpect(jsonPath("country.region.name", is(regionNode.getName()))));
     }
 
     @Test
