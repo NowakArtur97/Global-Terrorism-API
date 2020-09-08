@@ -6,7 +6,8 @@
 * [Built With](#built-with)
 * [Features](#features)
 * [To Do](#to-do)
-* [Routes List](#routes-list)
+* [Endpoints List](#endpoints-list)
+* [Examples](#examples)
 * [Status](#status)
 * [Screenshots](#screenshots)
 
@@ -103,7 +104,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Countries endpoint (GET, OPTIONS)
 - Cities endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Provinces endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Groups endpoint(GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Groups endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups Events endpoint (GET, POST, DELETE, OPTIONS)
 - Bulk operations using Spring Bulk API
 - Documentation created using Swagger 2
@@ -114,7 +115,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - More endpoints
 - Monitoring using Prometheus and Grafana
 
-## Routes List:
+## Endpoints List:
 
 ### Security
 
@@ -122,6 +123,24 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 |------------|-----------------------------------|----------------------------------------------------------------------|
 | `POST`      | `/api/v1/registration`           | `Create an account to use the API`                                   |
 | `POST`      | `/api/v1/authentication`         | `Generate JWT`                                                       |
+
+### Countries
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/regions`                 | `Get a list of regions`                                            |
+| `GET`      | `/api/v1/regions/{id}`            | `Get information about a region`                                    |
+| `OPTIONS`  | `/api/v1/regions`                 | `Find all supported request methods for list of regions`           |
+| `OPTIONS`  | `/api/v1/regions/{id}`            | `Find all supported request methods for region`                     |
+
+### Countries
+
+| Method     | URI                               | Action                                                               |
+|------------|-----------------------------------|----------------------------------------------------------------------|
+| `GET`      | `/api/v1/countries`               | `Get a list of countries`                                            |
+| `GET`      | `/api/v1/countries/{id}`          | `Get information about a country`                                    |
+| `OPTIONS`  | `/api/v1/countries`               | `Find all supported request methods for list of countries`           |
+| `OPTIONS`  | `/api/v1/countries/{id}`          | `Find all supported request methods for country`                     |
 
 ### Targets
 
@@ -135,15 +154,6 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `DELETE`   | `/api/v1/targets/{id}`            | `Remove a target`                                                    |
 | `OPTIONS`  | `/api/v1/targets`                 | `Find all supported request methods for list of targets`             |
 | `OPTIONS`  | `/api/v1/targets/{id}`            | `Find all supported request methods for target`                      |
-
-### Countries
-
-| Method     | URI                               | Action                                                               |
-|------------|-----------------------------------|----------------------------------------------------------------------|
-| `GET`      | `/api/v1/countries`               | `Get a list of countries`                                            |
-| `GET`      | `/api/v1/countries/{id}`          | `Get information about a country`                                    |
-| `OPTIONS`  | `/api/v1/countries`               | `Find all supported request methods for list of countries`           |
-| `OPTIONS`  | `/api/v1/countries/{id}`          | `Find all supported request methods for country`                     |
 
 ### Cities
 
@@ -209,6 +219,8 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 |------------|-----------------------------------|----------------------------------------------------------------------|
 | `POST`      | `/api/v1/bulk`                   | `Bulk operations`                                                    |
 
+## Examples
+
 ### Bulk Request JSON example
 
 The previously generated token should be placed in the header. In the example, marked as JWT_TOKEN.
@@ -221,6 +233,26 @@ The previously generated token should be placed in the header. In the example, m
     {"method": "GET", "url": "/api/v1/groups", "headers": {"Authentication" : "Bearer TOKEN"}},
     {"method": "POST", "url": "/api/v1/targets", "headers": {"Authentication" : "Bearer TOKEN"}}
   ]
+}
+```
+
+### Json Patch Request JSON example
+```json
+# PATCH /api/v1/targets/id
+# Content-Type: application/json-patch+json
+[
+  { "op": "replace", "path": "/target", "value": "Updated target" },
+  { "op": "replace", "path": "/countryOfOrigin/name", "value": "United States" }
+]
+```
+
+### Json Merge Patch Request JSON example
+```json
+# PATCH /api/v1/targets/id
+# Content-Type: application/merge-patch+json
+{
+  "target" : "updated target", 
+    "countryOfOrigin" : { "name" : "United States" }
 }
 ```
 
