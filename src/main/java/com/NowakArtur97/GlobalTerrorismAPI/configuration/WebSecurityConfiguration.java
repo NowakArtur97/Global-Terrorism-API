@@ -21,7 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -33,13 +33,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String[] ignoredAntMatchers;
 
     @Bean
-    public BCryptPasswordEncoder getBCryptPasswordEncoder() {
+    BCryptPasswordEncoder getBCryptPasswordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider getDaoAuthenticationProvider() {
+    DaoAuthenticationProvider getDaoAuthenticationProvider() {
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 

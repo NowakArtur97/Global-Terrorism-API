@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.AuthenticationResponse;
@@ -34,7 +34,8 @@ public class AuthenticationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully generated API key", response = AuthenticationResponse.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody @ApiParam(value = "User credentials", name = "user", required = true) AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody @ApiParam(value = "User credentials", name = "user",
+            required = true) AuthenticationRequest authenticationRequest) {
 
         String userNameOrEmail = authenticationRequest.getUserName() != null
                 ? authenticationRequest.getUserName()

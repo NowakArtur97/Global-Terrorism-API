@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.region.RegionController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.RegionController;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;

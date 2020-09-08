@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.event.EventTargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.EventTargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;

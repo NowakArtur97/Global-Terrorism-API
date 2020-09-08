@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.UserRegistrationController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;

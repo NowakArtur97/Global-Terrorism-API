@@ -12,7 +12,7 @@ class RegionServiceImpl extends BasicGenericServiceImpl<RegionNode> implements R
 
     private final RegionRepository repository;
 
-    public RegionServiceImpl(RegionRepository repository) {
+    RegionServiceImpl(RegionRepository repository) {
         super(repository);
         this.repository = repository;
     }

@@ -7,10 +7,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-public class ValidationMessagesSourceConfiguration {
+class ValidationMessagesSourceConfiguration {
 
 	@Bean
-	public MessageSource getMessageSource() {
+	MessageSource getMessageSource() {
 
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 
@@ -21,7 +21,7 @@ public class ValidationMessagesSourceConfiguration {
 	}
 
 	@Bean
-	public LocalValidatorFactoryBean getValidator() {
+	LocalValidatorFactoryBean getValidator() {
 
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
 

@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.country;
 
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.CountryController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;

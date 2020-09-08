@@ -12,7 +12,7 @@ class CountryServiceImpl extends BasicGenericServiceImpl<CountryNode> implements
 
     private final CountryRepository repository;
 
-    public CountryServiceImpl(CountryRepository repository) {
+    CountryServiceImpl(CountryRepository repository) {
         super(repository);
         this.repository = repository;
     }

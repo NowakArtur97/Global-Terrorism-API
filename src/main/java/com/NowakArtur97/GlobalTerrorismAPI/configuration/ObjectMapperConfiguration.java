@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
-public class ObjectMapperConfiguration {
+class ObjectMapperConfiguration {
 
 	@Bean
-	public ObjectMapper getObjectMapper() {
+	ObjectMapper getObjectMapper() {
 
 		return new ObjectMapper()
 				.setDefaultPropertyInclusion(Include.NON_NULL)

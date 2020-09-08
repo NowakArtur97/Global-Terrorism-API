@@ -62,7 +62,7 @@ class OnApplicationStartupEventListener {
     private Workbook workbook;
 
     @EventListener
-    public void onApplicationStartup(ContextRefreshedEvent event) {
+    void onApplicationStartup(ContextRefreshedEvent event) {
 
         if (targetService.isDatabaseEmpty()) {
 

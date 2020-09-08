@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.constraintGroup.BasicUserValidationConstraints;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
@@ -31,8 +31,8 @@ public class UserRegistrationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully created a new account", response = String.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
-    public ResponseEntity<String> registerUser(@ApiParam(value = "User data", name = "user", required = true) @RequestBody
-                                       @Valid UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(@ApiParam(value = "User data", name = "user", required = true)
+                                               @RequestBody @Valid UserDTO userDTO) {
 
         userService.register(userDTO);
 

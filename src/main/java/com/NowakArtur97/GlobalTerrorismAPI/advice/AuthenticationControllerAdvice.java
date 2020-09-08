@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.security.AuthenticationController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.AuthenticationController;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class AuthenticationControllerAdvice {
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
+    ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value());
 
@@ -25,7 +25,7 @@ public class AuthenticationControllerAdvice {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException exception) {
+    ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value());
 

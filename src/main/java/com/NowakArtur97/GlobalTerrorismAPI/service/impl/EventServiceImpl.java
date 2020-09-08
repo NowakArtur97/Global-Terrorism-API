@@ -23,7 +23,8 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
     private final CityService cityService;
 
-    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper, GenericService<TargetNode, TargetDTO> targetService, CityService cityService) {
+    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper,
+                     GenericService<TargetNode, TargetDTO> targetService, CityService cityService) {
         super(repository, objectMapper);
         this.targetService = targetService;
         this.cityService = cityService;

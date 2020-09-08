@@ -20,7 +20,7 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
 
     private final CountryService countryService;
 
-    public ProvinceServiceImpl(ProvinceRepository provinceRepository, ObjectMapper objectMapper, CountryService countryService) {
+    ProvinceServiceImpl(ProvinceRepository provinceRepository, ObjectMapper objectMapper, CountryService countryService) {
         super(provinceRepository, objectMapper);
         this.countryService = countryService;
         this.provinceRepository = provinceRepository;

@@ -1,8 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.client.LinkDiscoverer;
@@ -10,11 +7,14 @@ import org.springframework.hateoas.client.LinkDiscoverers;
 import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
 import org.springframework.plugin.core.SimplePluginRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
-public class HATEOASConfiguration {
+class HATEOASConfiguration {
 
 	@Bean
-	public LinkDiscoverers discoverers() {
+	LinkDiscoverers discoverers() {
 
 		List<LinkDiscoverer> plugins = new ArrayList<>();
 

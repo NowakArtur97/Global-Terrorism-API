@@ -47,7 +47,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception) {
+    ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
@@ -57,7 +57,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler({InvalidFormatException.class, MismatchedInputException.class})
-    public ResponseEntity<Object> handlerIllegalArgumentException(JsonProcessingException exception) {
+    ResponseEntity<Object> handlerIllegalArgumentException(JsonProcessingException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
         HttpStatus status = HttpStatus.BAD_REQUEST;
@@ -71,7 +71,7 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler({JsonException.class})
-    public ResponseEntity<Object> handleJsonException(JsonException exception) {
+    ResponseEntity<Object> handleJsonException(JsonException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 

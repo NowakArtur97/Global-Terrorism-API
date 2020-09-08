@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class BulkApiControllerAdvice {
 
     @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException exception) {
+    ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException exception) {
 
         return new ResponseEntity<>(exception.getResponseBodyAsString(), exception.getResponseHeaders(), exception.getStatusCode());
     }

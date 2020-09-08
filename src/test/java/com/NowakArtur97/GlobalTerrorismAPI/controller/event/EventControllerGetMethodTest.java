@@ -3,6 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.EventController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;

@@ -1,7 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
@@ -34,7 +33,7 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
-    TargetController(GenericService<TargetNode, TargetDTO> service,
+    public TargetController(GenericService<TargetNode, TargetDTO> service,
                      RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler,
                      PagedResourcesAssembler<TargetNode> pagedResourcesAssembler,
                      PatchHelper patchHelper, ViolationHelper<TargetNode, TargetDTO> violationHelper) {
@@ -58,7 +57,8 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
             @ApiResponse(code = 400, message = "Invalid Target's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> findById(
-            @ApiParam(value = "Target's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Target's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id) {
         return super.findById(id);
     }
 
@@ -82,19 +82,22 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
             @ApiResponse(code = 201, message = "Successfully added a new Target", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> update(
-            @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO dto) {
         return super.update(id, dto);
     }
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Target's fields using Json Patch", notes = "Update Target's fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @ApiOperation(value = "Update Target's fields using Json Patch", notes = "Update Target's fields using Json Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Target's fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> updateFields(
-            @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Id of the Target being updated", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "Target's fields to update", name = "target", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
         return super.updateFields(id, objectAsJsonPatch);
     }
@@ -104,13 +107,16 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
 //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Target's fields using Json Merge Patch", notes = "Update Target's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Target's fields using Json Merge Patch", notes = "Update Target's fields using Json Merge Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Target's fields", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> updateFields(
-            @ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
-            @ApiParam(value = "Target's fields to update", name = "target", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
+            @ApiParam(value = "Id of the Target being updated", name = "id2", type = "integer", required = true, example = "1")
+            @PathVariable("id2") Long id,
+            @ApiParam(value = "Target's fields to update", name = "target", required = true)
+            @RequestBody JsonMergePatch objectAsJsonMergePatch) {
         return super.updateFields(id, objectAsJsonMergePatch);
     }
 
@@ -123,7 +129,8 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
             @ApiResponse(code = 400, message = "Invalid Target's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Target with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> delete(
-            @ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Target id value needed to delete Target", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id) {
         return super.delete(id);
     }
 

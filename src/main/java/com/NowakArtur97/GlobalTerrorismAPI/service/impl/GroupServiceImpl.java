@@ -19,7 +19,8 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
     private final GenericService<EventNode, EventDTO> eventService;
 
-    GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper objectMapper, GenericService<EventNode, EventDTO> eventService) {
+    GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper objectMapper,
+                     GenericService<EventNode, EventDTO> eventService) {
         super(repository, objectMapper);
         this.eventService = eventService;
     }

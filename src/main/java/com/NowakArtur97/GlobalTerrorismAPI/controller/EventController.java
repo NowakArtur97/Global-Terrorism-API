@@ -1,7 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
@@ -34,7 +33,7 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 public class EventController extends GenericRestControllerImpl<EventModel, EventDTO, EventNode> {
 
-    EventController(GenericService<EventNode, EventDTO> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<EventNode, EventDTO> violationHelper) {
+    public EventController(GenericService<EventNode, EventDTO> service, RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler, PagedResourcesAssembler<EventNode> pagedResourcesAssembler, PatchHelper patchHelper, ViolationHelper<EventNode, EventDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 
@@ -55,7 +54,8 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> findById(
-            @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id) {
         return super.findById(id);
     }
 
@@ -79,19 +79,22 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
             @ApiResponse(code = 201, message = "Successfully added new Event", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> update(
-            @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "Event to update", name = "event", required = true) @RequestBody @Valid EventDTO dto) {
         return super.update(id, dto);
     }
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update an Event's fields using Json Patch", notes = "Update Event's fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @ApiOperation(value = "Update an Event's fields using Json Patch", notes = "Update Event's fields using Json Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Event's fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> updateFields(
-            @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Id of the Event being updated", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "Event's fields to update", name = "event", required = true) @RequestBody JsonPatch objectAsJsonPatch) {
         return super.updateFields(id, objectAsJsonPatch);
     }
@@ -101,12 +104,14 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
 //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Event's fields using Json Merge Patch", notes = "Update Event's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Event's fields using Json Merge Patch", notes = "Update Event's fields using Json Merge Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Event's fields", response = EventModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<EventModel> updateFields(
-            @ApiParam(value = "Id of the Event being updated", name = "id2", type = "integer", required = true, example = "1") @PathVariable("id2") Long id,
+            @ApiParam(value = "Id of the Event being updated", name = "id2", type = "integer", required = true, example = "1")
+            @PathVariable("id2") Long id,
             @ApiParam(value = "Event's fields to update", name = "event", required = true) @RequestBody JsonMergePatch objectAsJsonMergePatch) {
         return super.updateFields(id, objectAsJsonMergePatch);
     }
@@ -120,7 +125,8 @@ public class EventController extends GenericRestControllerImpl<EventModel, Event
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
     public ResponseEntity<Void> delete(
-            @ApiParam(value = "Event id value needed to delete Event", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+            @ApiParam(value = "Event id value needed to delete Event", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id) {
         return super.delete(id);
     }
 

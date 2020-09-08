@@ -21,7 +21,7 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
 
     private final ProvinceService provinceService;
 
-    public CityServiceImpl(CityRepository repository, ObjectMapper objectMapper, ProvinceService provinceService) {
+    CityServiceImpl(CityRepository repository, ObjectMapper objectMapper, ProvinceService provinceService) {
         super(repository, objectMapper);
         this.repository = repository;
         this.provinceService = provinceService;

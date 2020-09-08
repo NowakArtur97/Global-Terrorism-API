@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
@@ -54,7 +54,8 @@ public class GroupEventsController {
             @ApiResponse(code = 400, message = "Invalid Group's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     @ApiPageable
-    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<PagedModel<EventModel>> findGroupEvents(@ApiParam(value = "Group's id value needed to retrieve events",
+            name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id, Pageable pageable) {
 
         List<EventNode> eventsCausedByGroup = groupService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
@@ -74,7 +75,8 @@ public class GroupEventsController {
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
     public ResponseEntity<GroupModel> addGroupEvent(
-            @ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Group's id value needed to retrieve events", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "New Group's Event", name = "event", required = true) @RequestBody @Valid EventDTO dto) {
 
         GroupNode groupNode = groupService.addEventToGroup(id, dto)
@@ -92,7 +94,8 @@ public class GroupEventsController {
             @ApiResponse(code = 204, message = "Successfully deleted Group's Event"),
             @ApiResponse(code = 400, message = "Invalid Group's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Group with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group's id value needed to delete events", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Group's id value needed to delete events", name = "id",
+            type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         groupService.deleteAllGroupEvents(id).orElseThrow(() -> new ResourceNotFoundException("GroupModel", id));
 

@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.ProvinceController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;

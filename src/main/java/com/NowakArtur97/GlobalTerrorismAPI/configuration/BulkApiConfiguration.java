@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableBulkApi
-public class BulkApiConfiguration {
+class BulkApiConfiguration {
 }

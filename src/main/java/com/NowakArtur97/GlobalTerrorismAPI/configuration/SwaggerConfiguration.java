@@ -23,10 +23,10 @@ import java.util.List;
 @EnableSwagger2
 @EnableConfigurationProperties(value = SwaggerConfigurationProperties.class)
 @Import({BeanValidatorPluginsConfiguration.class, BulkApiConfiguration.class})
-public class SwaggerConfiguration {
+class SwaggerConfiguration {
 
     @Bean
-    public Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+    Docket docket(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)

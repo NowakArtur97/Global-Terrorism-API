@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import javax.json.JsonValue;
 
 @Configuration
-public class ModelMapperConfiguration {
+class ModelMapperConfiguration {
 
 	@Bean
-	public ModelMapper getModelMapper() {
+	ModelMapper getModelMapper() {
 
 		ModelMapper modelMapper = new ModelMapper();
 

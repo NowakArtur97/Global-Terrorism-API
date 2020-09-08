@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.CityModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.CityController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;

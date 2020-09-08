@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
@@ -38,7 +38,8 @@ public class EventTargetController {
             @ApiResponse(code = 200, message = "Event's Target found by provided id", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+    public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id",
+            type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         TargetNode targetNode = eventService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("EventModel", id))
@@ -58,7 +59,8 @@ public class EventTargetController {
             @ApiResponse(code = 201, message = "Successfully added a new Event's Target", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<TargetModel> updateEventTarget(
-            @ApiParam(value = "Id of the Target's Event being updated", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id,
+            @ApiParam(value = "Id of the Target's Event being updated", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
             @ApiParam(value = "Events's Target to update", name = "target", required = true) @RequestBody @Valid TargetDTO targetDTO) {
 
         EventNode eventNode = eventService.findById(id)
@@ -85,7 +87,8 @@ public class EventTargetController {
             @ApiResponse(code = 204, message = "Successfully deleted Event's Target"),
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Event's id value needed to delete target", name = "id", type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteAllGroupEvents(@ApiParam(value = "Event's id value needed to delete target", name = "id",
+            type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         eventService.deleteEventTarget(id).orElseThrow(() -> new ResourceNotFoundException("EventModel", id));
 

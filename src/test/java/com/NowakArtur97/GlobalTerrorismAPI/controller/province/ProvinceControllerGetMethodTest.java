@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.assembler.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Province;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.ProvinceController;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
