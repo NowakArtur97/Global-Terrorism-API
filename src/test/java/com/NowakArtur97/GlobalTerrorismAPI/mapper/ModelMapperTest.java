@@ -121,6 +121,92 @@ class ModelMapperTest {
     }
 
     @Nested
+    @Tag("RegionModelMapper_Tests")
+    class RegionModelMapperTest {
+
+        @Test
+        void when_map_region_node_to_model_should_return_valid_model() {
+
+            RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+
+            RegionModel regionModelActual = modelMapper.map(regionNodeExpected, RegionModel.class);
+
+            assertAll(
+                    () -> assertNotNull(regionModelActual,
+                            () -> "should return region model with not null region, but was: null"),
+                    () -> assertEquals(regionNodeExpected.getId(), regionModelActual.getId(),
+                            () -> "should return region model with region id: " + regionNodeExpected.getId()
+                                    + ", but was: " + regionModelActual.getId()),
+                    () -> assertEquals(regionNodeExpected.getName(), regionModelActual.getName(),
+                            () -> "should return region model with region name: " + regionNodeExpected.getName()
+                                    + ", but was: " + regionModelActual));
+        }
+    }
+    
+    @Nested
+    @Tag("CountryModelMapper_Tests")
+    class CountryModelMapperTest {
+
+        @Test
+        void when_map_country_dto_to_node_should_return_valid_node() {
+
+            CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
+
+            CountryNode countryNodeActual = modelMapper.map(countryDTOExpected, CountryNode.class);
+
+            assertAll(
+                    () -> assertNotNull(countryNodeActual, () -> "should return not null country, but was: null"),
+                    () -> assertEquals(countryDTOExpected.getName(), countryNodeActual.getName(),
+                            () -> "should return country node name: " + countryDTOExpected.getName() + ", but was: "
+                                    + countryNodeActual.getName()),
+                    () -> assertNull(countryNodeActual.getRegion(),
+                            () -> "should return country node with null region, but was: "
+                                    + countryNodeActual.getRegion()));
+        }
+
+        @Test
+        void when_map_country_node_to_dto_should_return_valid_dto() {
+
+            CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
+
+            CountryDTO countryDTOActual = modelMapper.map(countryNodeExpected, CountryDTO.class);
+
+            assertAll(
+                    () -> assertNotNull(countryDTOActual, () -> "should return null country, but was: null"),
+                    () -> assertEquals(countryNodeExpected.getName(), countryDTOActual.getName(),
+                            () -> "should return country dto name: " + countryNodeExpected.getName() + ", but was: "
+                                    + countryDTOActual.getName()));
+        }
+
+        @Test
+        void when_map_country_node_to_model_should_return_valid_model() {
+
+            RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+            CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+
+            CountryModel countryModelActual = modelMapper.map(countryNodeExpected, CountryModel.class);
+
+            assertAll(
+                    () -> assertNotNull(countryModelActual,
+                            () -> "should return country model with not null country, but was: null"),
+                    () -> assertEquals(countryNodeExpected.getId(), countryModelActual.getId(),
+                            () -> "should return country model with country id: " + countryNodeExpected.getId()
+                                    + ", but was: " + countryModelActual.getId()),
+                    () -> assertEquals(countryNodeExpected.getName(), countryModelActual.getName(),
+                            () -> "should return country model with country name: " + countryNodeExpected.getName()
+                                    + ", but was: " + countryModelActual),
+                    () -> assertNotNull(countryModelActual.getRegion(),
+                            () -> "should return country model with not null region, but was: null"),
+                    () -> assertEquals(regionNodeExpected.getId(), countryModelActual.getRegion().getId(),
+                            () -> "should return country model with region id: " + regionNodeExpected.getId()
+                                    + ", but was: " + countryModelActual.getRegion().getId()),
+                    () -> assertEquals(regionNodeExpected.getName(), countryModelActual.getRegion().getName(),
+                            () -> "should return country model with region name: " + regionNodeExpected.getName() + ", but was: "
+                                    + countryModelActual.getRegion().getName()));
+        }
+    }
+    
+    @Nested
     @Tag("ProvinceModelMapper_Tests")
     class ProvinceModelMapperTest {
 
