@@ -12,7 +12,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,11 +51,68 @@ class CountryServiceImplTest {
     }
 
     @Test
+    void when_countries_exist_and_return_all_countries_should_return_countries() {
+
+        List<CountryNode> countriesListExpected = new ArrayList<>();
+
+        CountryNode country1 = (CountryNode) countryBuilder.withName("country1").build(ObjectType.NODE);
+        CountryNode country2 = (CountryNode) countryBuilder.withName("country2").build(ObjectType.NODE);
+        CountryNode country3 = (CountryNode) countryBuilder.withName("country2").build(ObjectType.NODE);
+
+        countriesListExpected.add(country1);
+        countriesListExpected.add(country2);
+        countriesListExpected.add(country3);
+
+        Page<CountryNode> countriesExpected = new PageImpl<>(countriesListExpected);
+
+        Pageable pageable = PageRequest.of(0, 100);
+
+        when(countryRepository.findAll(pageable)).thenReturn(countriesExpected);
+
+        Page<CountryNode> countriesActual = countryService.findAll(pageable);
+
+        assertAll(() -> assertNotNull(countriesActual, () -> "shouldn't return null"),
+                () -> assertEquals(countriesListExpected, countriesActual.getContent(),
+                        () -> "should contain: " + countriesListExpected + ", but was: " + countriesActual.getContent()),
+                () -> assertEquals(countriesExpected.getNumberOfElements(), countriesActual.getNumberOfElements(),
+                        () -> "should return page with: " + countriesExpected.getNumberOfElements()
+                                + " elements, but was: " + countriesActual.getNumberOfElements()),
+                () -> verify(countryRepository, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(countryRepository));
+    }
+
+    @Test
+    void when_countries_not_exist_and_return_all_countries_should_not_return_any_countries() {
+
+        List<CountryNode> countriesListExpected = new ArrayList<>();
+
+        Page<CountryNode> countriesExpected = new PageImpl<>(countriesListExpected);
+
+        Pageable pageable = PageRequest.of(0, 100);
+
+        when(countryRepository.findAll(pageable)).thenReturn(countriesExpected);
+
+        Page<CountryNode> countriesActual = countryService.findAll(pageable);
+
+        assertAll(() -> assertNotNull(countriesActual, () -> "shouldn't return null"),
+                () -> assertEquals(countriesListExpected, countriesActual.getContent(),
+                        () -> "should contain empty list, but was: " + countriesActual.getContent()),
+                () -> assertEquals(countriesListExpected, countriesActual.getContent(),
+                        () -> "should contain: " + countriesListExpected + ", but was: " + countriesActual.getContent()),
+                () -> assertEquals(countriesExpected.getNumberOfElements(), countriesActual.getNumberOfElements(),
+                        () -> "should return empty page, but was: " + countriesActual.getNumberOfElements()),
+                () -> verify(countryRepository, times(1)).findAll(pageable),
+                () -> verifyNoMoreInteractions(countryRepository));
+    }
+    
+    @Test
     void when_find_existing_country_by_name_should_return_country() {
 
         String countryName = "country";
 
-        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(countryName)  .build(ObjectType.NODE);
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withName(countryName).withRegion(regionNodeExpected)
+                .build(ObjectType.NODE);
 
         when(countryRepository.findByName(countryName)).thenReturn(Optional.of(countryNodeExpected));
 
@@ -63,12 +126,20 @@ class CountryServiceImplTest {
                 () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
                         () -> "should return country node with name: " + countryNodeExpected.getName()
                                 + ", but was: " + countryNodeActual.getName()),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        countryNodeActual.getRegion().getId(),
+                        () -> "should return country node with region id: " +
+                                regionNodeExpected.getId()
+                                + ", but was: " + countryNodeActual.getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), countryNodeActual.getRegion().getName(),
+                        () -> "should return country node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + countryNodeActual.getRegion().getName()),
                 () -> verify(countryRepository, times(1)).findByName(countryName),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
 
     @Test
-    void when_target_not_exists_and_return_one_target_should_return_empty_optional() {
+    void when_country_not_exists_and_return_one_country_should_return_empty_optional() {
 
         String countryName = "country";
 
@@ -80,6 +151,54 @@ class CountryServiceImplTest {
                 () -> verify(countryRepository, times(1)).findByName(countryName),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
+
+    @Test
+    void when_find_existing_country_by_id_should_return_country() {
+
+        Long countryId = 2L;
+
+        RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNodeExpected = (CountryNode) countryBuilder.withId(countryId).withRegion(regionNodeExpected)
+                .build(ObjectType.NODE);
+
+        when(countryRepository.findById(countryId)).thenReturn(Optional.of(countryNodeExpected));
+
+        Optional<CountryNode> countryNodeActualOptional = countryService.findById(countryId);
+
+        CountryNode countryNodeActual = countryNodeActualOptional.get();
+
+        assertAll(() -> assertEquals(countryNodeExpected.getId(), countryNodeActual.getId(),
+                () -> "should return country node with id: " + countryNodeExpected.getId()
+                        + ", but was: " + countryNodeActual.getId()),
+                () -> assertEquals(countryNodeExpected.getName(), countryNodeActual.getName(),
+                        () -> "should return country node with name: " + countryNodeExpected.getName()
+                                + ", but was: " + countryNodeActual.getName()),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        countryNodeActual.getRegion().getId(),
+                        () -> "should return country node with region id: " +
+                                regionNodeExpected.getId()
+                                + ", but was: " + countryNodeActual.getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(), countryNodeActual.getRegion().getName(),
+                        () -> "should return country node with region name: " + regionNodeExpected.getName()
+                                + ", but was: " + countryNodeActual.getRegion().getName()),
+                () -> verify(countryRepository, times(1)).findById(countryId),
+                () -> verifyNoMoreInteractions(countryRepository));
+    }
+
+    @Test
+    void when_find_not_existing_country_by_id_should_return_empty_optional() {
+
+        Long countryId = 1L;
+
+        when(countryRepository.findById(countryId)).thenReturn(Optional.empty());
+
+        Optional<CountryNode> countryNodeActualOptional = countryService.findById(countryId);
+
+        assertAll(() -> assertTrue(countryNodeActualOptional.isEmpty(), () -> "should return empty optional"),
+                () -> verify(countryRepository, times(1)).findById(countryId),
+                () -> verifyNoMoreInteractions(countryRepository));
+    }
+
 
     @Test
     void when_check_by_name_if_existing_country_exists_should_return_true() {
