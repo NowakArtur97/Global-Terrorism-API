@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

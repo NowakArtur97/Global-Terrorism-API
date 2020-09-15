@@ -4,7 +4,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
@@ -24,7 +23,7 @@ import javax.validation.Valid;
         @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 @RequiredArgsConstructor
-public class EventTargetController {
+class EventTargetController {
 
     private final EventService eventService;
 
@@ -36,7 +35,7 @@ public class EventTargetController {
             @ApiResponse(code = 200, message = "Event's Target found by provided id", response = TargetModel.class),
             @ApiResponse(code = 400, message = "Invalid Event's id supplied"),
             @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
-    public ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id",
+    ResponseEntity<TargetModel> findEventTarget(@ApiParam(value = "Event's id value needed to retrieve target", name = "id",
             type = "integer", required = true, example = "1") @PathVariable("id") Long id) {
 
         TargetNode targetNode = eventService.findById(id)

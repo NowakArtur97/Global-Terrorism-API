@@ -1,7 +1,8 @@
-package com.NowakArtur97.GlobalTerrorismAPI.node;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
+import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,8 @@ public class EventNode extends Node implements Event {
     @Relationship("LOCATED_IN")
     private CityNode city;
 
-    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal, TargetNode target, CityNode city) {
+    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,
+                     Boolean isSuicidal, TargetNode target, CityNode city) {
         this.summary = summary;
         this.motive = motive;
         this.date = date;
@@ -45,7 +47,8 @@ public class EventNode extends Node implements Event {
     }
 
     @Builder
-    public EventNode(Long id, String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal, TargetNode target, CityNode city) {
+    public EventNode(Long id, String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,
+                     Boolean isSuicidal, TargetNode target, CityNode city) {
 
         super(id);
         this.summary = summary;
@@ -58,7 +61,8 @@ public class EventNode extends Node implements Event {
         this.city = city;
     }
 
-    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful, Boolean isSuicidal) {
+    public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,
+                     Boolean isSuicidal) {
         this.summary = summary;
         this.motive = motive;
         this.date = date;

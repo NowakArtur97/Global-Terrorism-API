@@ -2,8 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupEventsController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import org.springframework.data.domain.Pageable;

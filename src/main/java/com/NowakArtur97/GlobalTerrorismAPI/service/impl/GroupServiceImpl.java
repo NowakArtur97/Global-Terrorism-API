@@ -1,9 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;

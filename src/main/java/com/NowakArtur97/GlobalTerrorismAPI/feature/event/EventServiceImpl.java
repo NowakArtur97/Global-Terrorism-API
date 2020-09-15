@@ -6,7 +6,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;

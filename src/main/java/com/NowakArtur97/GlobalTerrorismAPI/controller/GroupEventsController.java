@@ -1,12 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupEventsTag;

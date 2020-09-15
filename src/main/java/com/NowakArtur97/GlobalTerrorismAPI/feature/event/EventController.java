@@ -4,7 +4,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
