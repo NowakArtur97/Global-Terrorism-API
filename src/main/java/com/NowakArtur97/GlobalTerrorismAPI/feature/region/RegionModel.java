@@ -1,7 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.model.response;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Region;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

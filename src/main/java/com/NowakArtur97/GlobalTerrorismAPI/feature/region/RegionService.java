@@ -1,6 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service.api;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
+import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
 
 import java.util.Optional;
 

@@ -1,11 +1,9 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.RegionTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class RegionController extends BasicGenericRestControllerImpl<RegionModel, RegionNode> {
+class RegionController extends BasicGenericRestControllerImpl<RegionModel, RegionNode> {
 
     public RegionController(BasicGenericService<RegionNode> service,
                      RepresentationModelAssemblerSupport<RegionNode, RegionModel> modelAssembler,

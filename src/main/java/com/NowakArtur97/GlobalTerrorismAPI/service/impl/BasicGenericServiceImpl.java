@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-abstract class BasicGenericServiceImpl<T extends Node> implements BasicGenericService<T> {
+public abstract class BasicGenericServiceImpl<T extends Node> implements BasicGenericService<T> {
 
-    protected final BaseRepository<T> repository;
+    final BaseRepository<T> repository;
 
-    BasicGenericServiceImpl(BaseRepository<T> repository) {
+    public BasicGenericServiceImpl(BaseRepository<T> repository) {
         this.repository = repository;
     }
 

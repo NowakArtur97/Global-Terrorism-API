@@ -1,6 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
-
-import com.NowakArtur97.GlobalTerrorismAPI.validator.RegionExistsConstraintValidator;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -16,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = RegionExistsConstraintValidator.class)
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface RegionExists {
+@interface RegionExists {
 
     String message() default "A region with the given name does not exist.";
 

@@ -7,7 +7,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.ProvinceService;

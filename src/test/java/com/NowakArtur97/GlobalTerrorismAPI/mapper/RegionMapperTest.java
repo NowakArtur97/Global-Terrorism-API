@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RegionNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
