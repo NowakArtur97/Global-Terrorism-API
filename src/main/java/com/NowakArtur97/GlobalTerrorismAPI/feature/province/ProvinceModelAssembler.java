@@ -15,7 +15,7 @@ public class ProvinceModelAssembler extends RepresentationModelAssemblerSupport<
 
     private final ObjectMapper objectMapper;
 
-    public ProvinceModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
+    ProvinceModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
 
         super(ProvinceController.class, ProvinceModel.class);
         this.objectMapper = objectMapper;

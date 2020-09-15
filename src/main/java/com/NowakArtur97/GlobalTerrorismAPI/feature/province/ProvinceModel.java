@@ -19,7 +19,7 @@ public class ProvinceModel extends RepresentationModel<ProvinceModel> implements
     private Long id;
 
     @ApiModelProperty(notes = "The province's name")
-    private String name;    
+    private String name;
 
     @ApiModelProperty(notes = "The province's country")
     private CountryModel country;

@@ -1,14 +1,12 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
@@ -42,7 +40,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -50,13 +48,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("CityController_Tests")
-class CityControllerPutMethodTest {
+class CityControllerPostMethodTest {
 
     private final String REGION_BASE_PATH = "http://localhost:8080/api/v1/regions";
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
-    private final String LINK_WITH_PARAMETER = CITY_BASE_PATH + "/" + "{id}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,15 +69,10 @@ class CityControllerPutMethodTest {
             Set.of(new RoleNode("user")));
 
     private final static RegionNode regionNode = new RegionNode("region name");
-    private final static RegionNode anotherRegionNode = new RegionNode("another region name");
 
     private final static CountryNode countryNode = new CountryNode("country name", regionNode);
-    private final static CountryNode anotherCountryNode = new CountryNode("another country name", anotherRegionNode);
 
     private final static ProvinceNode provinceNode = new ProvinceNode("province name", countryNode);
-    private final static ProvinceNode anotherProvinceNode = new ProvinceNode("province name 2", anotherCountryNode);
-
-    private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -88,18 +80,14 @@ class CityControllerPutMethodTest {
         countryBuilder = new CountryBuilder();
         provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
-        cityBuilder = new CityBuilder();
     }
 
     @BeforeAll
-    private static void setUp(@Autowired UserRepository userRepository, @Autowired ProvinceRepository provinceRepository,
-                              @Autowired CityRepository cityRepository) {
+    private static void setUp(@Autowired UserRepository userRepository, @Autowired ProvinceRepository provinceRepository) {
 
         userRepository.save(userNode);
 
-        provinceRepository.save(anotherProvinceNode);
-
-        cityRepository.save(cityNode);
+        provinceRepository.save(provinceNode);
     }
 
     @AfterAll
@@ -109,107 +97,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_valid_city_should_return_updated_city() {
-
-        String updatedCityName = "new city name";
-        Double updatedCityLatitude = 12.0;
-        Double updatedCityLongitude = -12.0;
-
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
-        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName()).withCountry(countryDTO)
-                .build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName)
-                .withLatitude(updatedCityLatitude).withLongitude(updatedCityLongitude)
-                .withProvince(provinceDTO).build(ObjectType.DTO);
-
-        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
-        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
-        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
-        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(ObjectTestMapper.asJsonString(cityDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToCityLink)))
-                        .andExpect(jsonPath("links[1].href").doesNotExist())
-                        .andExpect(jsonPath("id", is(cityNode.getId().intValue())))
-                        .andExpect(jsonPath("name", is(updatedCityName)))
-                        .andExpect(jsonPath("latitude", is(updatedCityLatitude)))
-                        .andExpect(jsonPath("longitude", is(updatedCityLongitude)))
-                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
-                        .andExpect(jsonPath("province.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
-                        .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
-                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
-                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
-                        .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("province.country.region.links[0].href", is(pathToRegionLink)))
-                        .andExpect(jsonPath("province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("province.country.region.name", is(regionNode.getName()))));
-    }
-
-    @Test
-    void when_update_city_province_should_return_updated_city() {
-
-        String updatedProvinceName = "new province name";
-
-        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(anotherCountryNode.getName()).build(ObjectType.DTO);
-        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(updatedProvinceName).withCountry(countryDTO)
-                .build(ObjectType.DTO);
-        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName())
-                .withLatitude(cityNode.getLatitude()).withLongitude(cityNode.getLongitude())
-                .withProvince(provinceDTO).build(ObjectType.DTO);
-
-        String pathToRegionLink = REGION_BASE_PATH + "/" + anotherRegionNode.getId().intValue();
-        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
-        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
-        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
-
-        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertAll(
-                () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
-                                .content(ObjectTestMapper.asJsonString(cityDTO))
-                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("links[0].href", is(pathToCityLink)))
-                        .andExpect(jsonPath("links[1].href").doesNotExist())
-                        .andExpect(jsonPath("id", is(cityNode.getId().intValue())))
-                        .andExpect(jsonPath("name", is(cityNode.getName())))
-                        .andExpect(jsonPath("latitude", is(cityNode.getLatitude())))
-                        .andExpect(jsonPath("longitude", is(cityNode.getLongitude())))
-                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
-                        .andExpect(jsonPath("province.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
-                        .andExpect(jsonPath("province.name", is(provinceDTO.getName())))
-                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
-                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.country.id", is(anotherCountryNode.getId().intValue())))
-                        .andExpect(jsonPath("province.country.name", is(anotherCountryNode.getName())))
-                        .andExpect(jsonPath("province.country.region.links[0].href", is(pathToRegionLink)))
-                        .andExpect(jsonPath("province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("province.country.region.id", is(anotherRegionNode.getId().intValue())))
-                        .andExpect(jsonPath("province.country.region.name", is(anotherRegionNode.getName()))));
-    }
-
-    @Test
-    void when_update_valid_city_with_not_existing_id_should_return_new_city() {
-
-        Long notExistingId = 10000L;
+    void when_add_valid_city_should_return_new_city() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -223,8 +111,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, notExistingId)
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
@@ -250,7 +137,50 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_null_fields_should_return_errors() {
+    void when_add_valid_city_with_existing_province_should_return_new_city_with_existing_province() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName())
+                .withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(cityDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", notNullValue()))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
+                        .andExpect(jsonPath("id", notNullValue()))
+                        .andExpect(jsonPath("name", is(cityDTO.getName())))
+                        .andExpect(jsonPath("latitude", is(cityDTO.getLatitude())))
+                        .andExpect(jsonPath("longitude", is(cityDTO.getLongitude())))
+                        .andExpect(jsonPath("province.links[0].href", is(pathToProvinceLink)))
+                        .andExpect(jsonPath("province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("province.country.region.name", is(regionNode.getName()))));
+    }
+
+    @Test
+    void when_add_city_with_null_fields_should_return_errors() {
 
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(null).withLatitude(null).withLongitude(null).withProvince(null)
                 .build(ObjectType.DTO);
@@ -260,8 +190,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -277,7 +206,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City Country name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_city_with_not_existing_country_should_return_errors(String invalidCountryName) {
+    void when_add_city_with_not_existing_country_should_return_errors(String invalidCountryName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(invalidCountryName).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -288,8 +217,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -302,7 +230,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_city_with_invalid_city_name_should_return_errors(String invalidCityName) {
+    void when_add_city_with_invalid_city_name_should_return_errors(String invalidCityName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -314,8 +242,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -326,7 +253,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_invalid_geographical_location_of_city_should_return_errors() {
+    void when_add_city_with_invalid_geographical_location_of_city_should_return_errors() {
 
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(null)
                 .build(ObjectType.DTO);
@@ -336,8 +263,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -350,7 +276,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_too_small_city_latitude_should_return_errors() {
+    void when_add_city_with_too_small_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = -91.0;
 
@@ -364,8 +290,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -376,7 +301,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_too_big_city_latitude_should_return_errors() {
+    void when_add_city_with_too_big_city_latitude_should_return_errors() {
 
         Double invalidCityLatitude = 91.0;
 
@@ -390,8 +315,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -402,7 +326,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_too_small_city_longitude_should_return_errors() {
+    void when_add_city_with_too_small_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = -181.0;
 
@@ -416,8 +340,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -428,7 +351,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_with_too_big_city_longitude_should_return_errors() {
+    void when_add_city_with_too_big_city_longitude_should_return_errors() {
 
         Double invalidCityLongitude = 181.0;
 
@@ -442,8 +365,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -456,7 +378,7 @@ class CityControllerPutMethodTest {
     @ParameterizedTest(name = "{index}: For City Province name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
-    void when_update_city_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
+    void when_add_city_with_invalid_province_name_should_return_errors(String invalidProvinceName) {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(invalidProvinceName)
@@ -468,8 +390,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
@@ -480,7 +401,7 @@ class CityControllerPutMethodTest {
     }
 
     @Test
-    void when_update_city_without_province_country_should_return_errors() {
+    void when_add_city_without_province_country_should_return_errors() {
 
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(null).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
@@ -490,8 +411,7 @@ class CityControllerPutMethodTest {
 
         assertAll(
                 () -> mockMvc
-                        .perform(put(LINK_WITH_PARAMETER, cityNode.getId())
-                                .header("Authorization", "Bearer " + token)
+                        .perform(post(CITY_BASE_PATH).header("Authorization", "Bearer " + token)
                                 .content(ObjectTestMapper.asJsonString(cityDTO))
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())

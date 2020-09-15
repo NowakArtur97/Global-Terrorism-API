@@ -15,7 +15,7 @@ public class CountryModelAssembler extends RepresentationModelAssemblerSupport<C
 
     private final ObjectMapper objectMapper;
 
-    public CountryModelAssembler(RegionModelAssembler regionModelAssembler, ObjectMapper objectMapper) {
+    CountryModelAssembler(RegionModelAssembler regionModelAssembler, ObjectMapper objectMapper) {
 
         super(CountryController.class, CountryModel.class);
         this.objectMapper = objectMapper;

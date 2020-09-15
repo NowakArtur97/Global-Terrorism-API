@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 class CountryController extends BasicGenericRestControllerImpl<CountryModel, CountryNode> {
 
     CountryController(BasicGenericService<CountryNode> service,
-                             RepresentationModelAssemblerSupport<CountryNode, CountryModel> modelAssembler,
-                             PagedResourcesAssembler<CountryNode> pagedResourcesAssembler) {
+                      RepresentationModelAssemblerSupport<CountryNode, CountryModel> modelAssembler,
+                      PagedResourcesAssembler<CountryNode> pagedResourcesAssembler) {
         super(service, modelAssembler, pagedResourcesAssembler);
     }
 

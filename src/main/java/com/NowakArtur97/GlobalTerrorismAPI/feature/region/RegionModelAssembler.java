@@ -12,7 +12,7 @@ public class RegionModelAssembler extends RepresentationModelAssemblerSupport<Re
 
     private final ObjectMapper objectMapper;
 
-    public RegionModelAssembler(ObjectMapper objectMapper) {
+    RegionModelAssembler(ObjectMapper objectMapper) {
 
         super(RegionController.class, RegionModel.class);
         this.objectMapper = objectMapper;

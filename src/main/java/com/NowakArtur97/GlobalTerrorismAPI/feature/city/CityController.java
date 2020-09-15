@@ -31,9 +31,9 @@ import javax.validation.Valid;
 class CityController extends GenericRestControllerImpl<CityModel, CityDTO, CityNode> {
 
     CityController(GenericService<CityNode, CityDTO> service,
-                          RepresentationModelAssemblerSupport<CityNode, CityModel> modelAssembler,
-                          PagedResourcesAssembler<CityNode> pagedResourcesAssembler,
-                          PatchHelper patchHelper, ViolationHelper<CityNode, CityDTO> violationHelper) {
+                   RepresentationModelAssemblerSupport<CityNode, CityModel> modelAssembler,
+                   PagedResourcesAssembler<CityNode> pagedResourcesAssembler,
+                   PatchHelper patchHelper, ViolationHelper<CityNode, CityDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

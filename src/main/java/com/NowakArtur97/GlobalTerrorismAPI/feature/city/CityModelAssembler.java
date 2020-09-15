@@ -2,8 +2,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +15,7 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
 
     private final ObjectMapper objectMapper;
 
-    public CityModelAssembler(ProvinceModelAssembler provinceModelAssembler, ObjectMapper objectMapper) {
+    CityModelAssembler(ProvinceModelAssembler provinceModelAssembler, ObjectMapper objectMapper) {
 
         super(CityController.class, CityModel.class);
         this.provinceModelAssembler = provinceModelAssembler;
