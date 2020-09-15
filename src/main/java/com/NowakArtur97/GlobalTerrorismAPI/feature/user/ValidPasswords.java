@@ -1,6 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
-
-import com.NowakArtur97.GlobalTerrorismAPI.validator.PasswordsMatchConstraintValidator;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -13,12 +11,12 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = PasswordsMatchConstraintValidator.class)
+@Constraint(validatedBy = PasswordsConstraintValidator.class)
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface PasswordsMatch {
+@interface ValidPasswords {
 
-    String message() default "Passwords don't match";
+    String message() default "Invalid Password";
 
     Class<?>[] groups() default {};
 

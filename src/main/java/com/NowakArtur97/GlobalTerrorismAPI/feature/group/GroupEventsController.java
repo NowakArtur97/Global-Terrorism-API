@@ -6,7 +6,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupEventsTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;

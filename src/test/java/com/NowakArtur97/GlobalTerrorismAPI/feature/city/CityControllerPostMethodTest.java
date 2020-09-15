@@ -1,14 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;

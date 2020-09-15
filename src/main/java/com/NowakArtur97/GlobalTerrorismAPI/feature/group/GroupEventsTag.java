@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.tag;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 public final class GroupEventsTag {
 

@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;

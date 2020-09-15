@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
@@ -12,9 +11,9 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;

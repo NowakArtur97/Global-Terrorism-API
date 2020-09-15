@@ -1,11 +1,5 @@
-package com.NowakArtur97.GlobalTerrorismAPI.dto;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.PasswordsMatch;
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.UniqueEmail;
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.UniqueUserName;
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPasswords;
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.User;
-import com.NowakArtur97.GlobalTerrorismAPI.constraintGroup.BasicUserValidationConstraints;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

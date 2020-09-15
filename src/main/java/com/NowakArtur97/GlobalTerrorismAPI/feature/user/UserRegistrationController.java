@@ -1,10 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.constraintGroup.BasicUserValidationConstraints;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.UserRegistrationTag;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +18,7 @@ import javax.validation.Valid;
 @Api(tags = {UserRegistrationTag.RESOURCE})
 @RequiredArgsConstructor
 @Validated(BasicUserValidationConstraints.class)
-public class UserRegistrationController {
+class UserRegistrationController {
 
     private final UserService userService;
 

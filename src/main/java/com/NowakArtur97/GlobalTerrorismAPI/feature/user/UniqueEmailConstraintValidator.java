@@ -1,14 +1,12 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validator;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.UniqueEmail;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @RequiredArgsConstructor
-public class UniqueEmailConstraintValidator implements ConstraintValidator<UniqueEmail, String> {
+class UniqueEmailConstraintValidator implements ConstraintValidator<UniqueEmail, String> {
 
     private final UserService userService;
 

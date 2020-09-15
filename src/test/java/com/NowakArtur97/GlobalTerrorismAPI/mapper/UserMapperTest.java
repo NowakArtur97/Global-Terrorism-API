@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

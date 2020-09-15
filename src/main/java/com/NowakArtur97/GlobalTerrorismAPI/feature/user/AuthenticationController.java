@@ -1,10 +1,7 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.AuthenticationResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.AuthenticationTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/authentication")
 @Api(tags = {AuthenticationTag.RESOURCE})
 @RequiredArgsConstructor
-public class AuthenticationController {
+class AuthenticationController {
 
     private final CustomUserDetailsService customUserDetailsService;
 

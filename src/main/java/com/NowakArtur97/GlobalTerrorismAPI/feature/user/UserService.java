@@ -1,11 +1,8 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service.api;
-
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
 import java.util.Optional;
 
-public interface UserService {
+interface UserService {
 
     UserNode register(UserDTO userDTO);
 

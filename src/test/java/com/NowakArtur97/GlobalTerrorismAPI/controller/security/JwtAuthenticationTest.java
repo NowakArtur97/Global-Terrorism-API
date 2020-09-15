@@ -1,8 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

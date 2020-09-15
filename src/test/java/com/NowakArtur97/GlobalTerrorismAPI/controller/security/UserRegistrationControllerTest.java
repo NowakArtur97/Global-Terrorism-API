@@ -1,10 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.UserRegistrationController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.UserService;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRegistrationController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;

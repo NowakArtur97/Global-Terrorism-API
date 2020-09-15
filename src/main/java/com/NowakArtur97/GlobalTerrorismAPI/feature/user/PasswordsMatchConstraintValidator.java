@@ -1,12 +1,9 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validator;
-
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.PasswordsMatch;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordsMatchConstraintValidator implements ConstraintValidator<PasswordsMatch, Object> {
+class PasswordsMatchConstraintValidator implements ConstraintValidator<PasswordsMatch, Object> {
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {

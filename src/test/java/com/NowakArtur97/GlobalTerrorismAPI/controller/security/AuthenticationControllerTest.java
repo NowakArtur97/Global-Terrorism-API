@@ -2,8 +2,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.AuthenticationControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.AuthenticationController;
-import com.NowakArtur97.GlobalTerrorismAPI.model.request.AuthenticationRequest;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.AuthenticationController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.AuthenticationRequest;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

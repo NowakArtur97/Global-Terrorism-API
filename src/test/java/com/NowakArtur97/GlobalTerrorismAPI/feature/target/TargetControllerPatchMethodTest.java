@@ -2,12 +2,11 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
-import com.NowakArtur97.GlobalTerrorismAPI.node.*;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

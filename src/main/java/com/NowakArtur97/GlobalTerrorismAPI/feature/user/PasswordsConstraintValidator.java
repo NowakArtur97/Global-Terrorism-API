@@ -1,7 +1,5 @@
-package com.NowakArtur97.GlobalTerrorismAPI.validator;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ValidPasswords;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.UserDTO;
 import org.passay.*;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
@@ -17,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords, Object> {
+class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords, Object> {
 
     private static final String PASSAY_PROPERTIES_FILE = "/validation/passay.properties";
     private static final String COMMON_PASSWORDS_LIST = "/validation/common-passwords-list.txt";
