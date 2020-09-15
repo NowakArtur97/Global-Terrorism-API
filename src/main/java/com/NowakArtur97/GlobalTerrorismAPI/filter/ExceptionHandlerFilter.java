@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.filter;
 
-import com.NowakArtur97.GlobalTerrorismAPI.exception.JwtTokenMissingException;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.common.exception.JwtTokenMissingException;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;

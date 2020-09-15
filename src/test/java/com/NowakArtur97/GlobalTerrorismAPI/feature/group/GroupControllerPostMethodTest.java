@@ -20,7 +20,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.JwtUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;

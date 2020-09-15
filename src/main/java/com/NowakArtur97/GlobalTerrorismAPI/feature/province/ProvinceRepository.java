@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.common.repository.BaseRepository;
 import org.springframework.data.neo4j.annotation.Depth;
 
 import java.util.Optional;

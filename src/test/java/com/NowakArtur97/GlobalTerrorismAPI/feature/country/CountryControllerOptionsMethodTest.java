@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.common.controller.BasicGenericRestController;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.BasicGenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;

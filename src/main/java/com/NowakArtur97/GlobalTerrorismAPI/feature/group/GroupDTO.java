@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.DTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDTO implements DTONode, Group {
+public class GroupDTO implements DTO, Group {
 
     @ApiModelProperty(notes = "The group's name", required = true, example = "Group")
     @NotBlank(message = "{group.name.notBlank}")

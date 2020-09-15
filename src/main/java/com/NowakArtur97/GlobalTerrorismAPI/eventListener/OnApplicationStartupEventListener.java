@@ -2,7 +2,6 @@ package com.NowakArtur97.GlobalTerrorismAPI.eventListener;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.enums.XlsxColumnType;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
@@ -15,7 +14,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserService;
 import com.monitorjbl.xlsx.StreamingReader;

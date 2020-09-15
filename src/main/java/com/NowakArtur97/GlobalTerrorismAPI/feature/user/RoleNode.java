@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.Node;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

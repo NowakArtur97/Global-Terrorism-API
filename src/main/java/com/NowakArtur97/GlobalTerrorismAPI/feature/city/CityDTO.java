@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.DTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityDTO implements DTONode, City {
+public class CityDTO implements DTO, City {
 
     @ApiModelProperty(notes = "The city's name", required = true, example = "City")
     @NotBlank(message = "{city.name.notBlank}")

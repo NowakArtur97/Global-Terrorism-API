@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;

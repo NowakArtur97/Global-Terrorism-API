@@ -3,7 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.GenericServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

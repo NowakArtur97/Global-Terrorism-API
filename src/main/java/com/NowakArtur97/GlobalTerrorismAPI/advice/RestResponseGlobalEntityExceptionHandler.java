@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;

@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.BasicGenericService;
 
 import java.util.Optional;
 

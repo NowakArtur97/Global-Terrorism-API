@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.BasicGenericServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.BasicGenericServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

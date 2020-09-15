@@ -1,9 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestControllerImpl;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
+import com.NowakArtur97.GlobalTerrorismAPI.common.annotation.ApiPageable;
+import com.NowakArtur97.GlobalTerrorismAPI.common.controller.BasicGenericRestControllerImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.BasicGenericService;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;

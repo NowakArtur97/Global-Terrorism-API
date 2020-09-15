@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
 import com.NowakArtur97.GlobalTerrorismAPI.filter.ExceptionHandlerFilter;
 import com.NowakArtur97.GlobalTerrorismAPI.filter.JwtRequestFilter;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CustomUserDetailsService;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

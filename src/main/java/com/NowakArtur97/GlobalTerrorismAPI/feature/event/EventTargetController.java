@@ -1,10 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
+import com.NowakArtur97.GlobalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;

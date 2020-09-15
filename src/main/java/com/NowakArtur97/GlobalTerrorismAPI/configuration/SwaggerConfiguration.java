@@ -11,7 +11,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.AuthenticationTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRegistrationTag;
-import com.NowakArtur97.GlobalTerrorismAPI.property.SwaggerConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

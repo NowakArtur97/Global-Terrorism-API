@@ -1,8 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
+import com.NowakArtur97.GlobalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.common.service.GenericServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
