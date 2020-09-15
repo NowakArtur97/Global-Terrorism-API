@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +40,7 @@ class ProvinceServiceImplTest {
     private ProvinceRepository provinceRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private CountryService countryService;
@@ -60,7 +60,7 @@ class ProvinceServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        provinceService = new ProvinceServiceImpl(provinceRepository, objectMapper, countryService);
+        provinceService = new ProvinceServiceImpl(provinceRepository, modelMapper, countryService);
     }
 
     @Test
@@ -92,7 +92,7 @@ class ProvinceServiceImplTest {
                                 + " elements, but was: " + provincesActual.getNumberOfElements()),
                 () -> verify(provinceRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -118,7 +118,7 @@ class ProvinceServiceImplTest {
                         () -> "should return empty page, but was: " + provincesActual.getNumberOfElements()),
                 () -> verify(provinceRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -156,7 +156,7 @@ class ProvinceServiceImplTest {
                                 + provinceNodeActual.getCountry().getRegion()),
                 () -> verify(provinceRepository, times(1)).findById(expectedProvinceId),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -172,7 +172,7 @@ class ProvinceServiceImplTest {
         assertAll(() -> assertTrue(provinceActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(provinceRepository, times(1)).findById(expectedProvinceId),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -223,7 +223,7 @@ class ProvinceServiceImplTest {
                 () -> verify(provinceRepository, times(1))
                         .findById(provinceId, DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -240,7 +240,7 @@ class ProvinceServiceImplTest {
                 () -> verify(provinceRepository, times(1))
                         .findById(provinceId, DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -292,7 +292,7 @@ class ProvinceServiceImplTest {
                         provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(),
                         DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -319,7 +319,7 @@ class ProvinceServiceImplTest {
                                 provinceNodeExpected.getName(), provinceNodeExpected.getCountry().getName(),
                                 DEFAULT_DEPTH_FOR_PROVINCE_NODE),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -372,7 +372,7 @@ class ProvinceServiceImplTest {
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verify(provinceRepository, times(1)).save(provinceNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -393,7 +393,7 @@ class ProvinceServiceImplTest {
                 () -> verify(countryService, times(1)).findByName(countryNodeExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(provinceRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -410,7 +410,7 @@ class ProvinceServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
 
-        when(objectMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
+        when(modelMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
         when(countryService.findByName(countryDTO.getName())).thenReturn(Optional.of(countryNodeExpected));
         when(provinceRepository.save(provinceNodeExpectedBeforeSave)).thenReturn(provinceNodeExpected);
 
@@ -441,8 +441,8 @@ class ProvinceServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), provinceNodeActual.getCountry().getRegion().getName(),
                         () -> "should return province node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + provinceNodeActual.getCountry().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(provinceDTO, ProvinceNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(provinceDTO, ProvinceNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTO.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verify(provinceRepository, times(1)).save(provinceNodeExpectedBeforeSave),
@@ -461,15 +461,15 @@ class ProvinceServiceImplTest {
         ProvinceNode provinceNodeExpectedBeforeSave = (ProvinceNode) provinceBuilder.withId(null)
                 .withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
+        when(modelMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
         when(countryService.findByName(countryDTO.getName())).thenReturn(Optional.empty());
 
         assertAll(
                 () -> assertThrows(ResourceNotFoundException.class,
                         () -> provinceService.saveNew(provinceDTO),
                         () -> "should throw ResourceNotFoundException but wasn't"),
-                () -> verify(objectMapper, times(1)).map(provinceDTO, ProvinceNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(provinceDTO, ProvinceNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTO.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(provinceRepository));
@@ -494,7 +494,7 @@ class ProvinceServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withName(updatedProvinceName)
                 .withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
+        when(modelMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
         when(countryService.findByName(countryDTO.getName())).thenReturn(Optional.of(countryNodeExpected));
         when(provinceRepository.save(provinceNodeExpectedBeforeSave)).thenReturn(provinceNodeExpected);
 
@@ -529,8 +529,8 @@ class ProvinceServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), provinceNodeActual.getCountry().getRegion().getName(),
                         () -> "should return province node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + provinceNodeActual.getCountry().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(provinceDTO, ProvinceNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(provinceDTO, ProvinceNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTO.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verify(provinceRepository, times(1)).save(provinceNodeExpectedBeforeSave),
@@ -549,15 +549,15 @@ class ProvinceServiceImplTest {
         ProvinceNode provinceNodeExpectedBeforeSave = (ProvinceNode) provinceBuilder.withId(null)
                 .withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
+        when(modelMapper.map(provinceDTO, ProvinceNode.class)).thenReturn(provinceNodeExpectedBeforeSave);
         when(countryService.findByName(countryDTO.getName())).thenReturn(Optional.empty());
 
         assertAll(
                 () -> assertThrows(ResourceNotFoundException.class,
                         () -> provinceService.update(provinceNodeExpectedBeforeSave, provinceDTO),
                         () -> "should throw ResourceNotFoundException but wasn't"),
-                () -> verify(objectMapper, times(1)).map(provinceDTO, ProvinceNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(provinceDTO, ProvinceNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTO.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(provinceRepository));

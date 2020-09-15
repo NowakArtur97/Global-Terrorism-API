@@ -3,11 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
@@ -18,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
@@ -40,7 +37,7 @@ class GroupModelAssemblerTest {
     private EventModelAssembler eventModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static GroupBuilder groupBuilder;
     private static EventBuilder eventBuilder;
@@ -57,7 +54,7 @@ class GroupModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new GroupModelAssembler(eventModelAssembler, objectMapper);
+        modelAssembler = new GroupModelAssembler(eventModelAssembler, modelMapper);
     }
 
     @Test
@@ -84,7 +81,7 @@ class GroupModelAssemblerTest {
 
         GroupModel groupModel = (GroupModel) groupBuilder.withEventsCaused(List.of(eventModel)).build(ObjectType.MODEL);
 
-        when(objectMapper.map(groupNode, GroupModel.class)).thenReturn(groupModel);
+        when(modelMapper.map(groupNode, GroupModel.class)).thenReturn(groupModel);
         when(eventModelAssembler.toModel(eventNode)).thenReturn(eventModel);
 
         GroupModel groupModelActual = modelAssembler.toModel(groupNode);
@@ -158,8 +155,8 @@ class GroupModelAssemblerTest {
                         () -> "should return model with target with links, but was: " + groupModelActual.getEventsCaused().get(0)),
                 () -> assertFalse(groupModelActual.getEventsCaused().get(0).getTarget().getLinks().isEmpty(),
                         () -> "should return model with event with links, but was: " + groupModelActual.getEventsCaused().get(0)),
-                () -> verify(objectMapper, times(1)).map(groupNode, GroupModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupNode, GroupModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(eventModelAssembler, times(1)).toModel(eventNode),
                 () -> verifyNoMoreInteractions(eventModelAssembler));
     }
@@ -174,7 +171,7 @@ class GroupModelAssemblerTest {
         String pathToGroupLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue();
         String pathToGroupEventsLink = GROUP_BASE_PATH + "/" + groupNode.getId().intValue() + "/events";
 
-        when(objectMapper.map(groupNode, GroupModel.class)).thenReturn(groupModel);
+        when(modelMapper.map(groupNode, GroupModel.class)).thenReturn(groupModel);
 
         GroupModel groupModelActual = modelAssembler.toModel(groupNode);
 
@@ -198,8 +195,8 @@ class GroupModelAssemblerTest {
                 () -> assertNotNull(groupModelActual.getLinks(), () -> "should return model with links, but was: " + groupModelActual),
                 () -> assertFalse(groupModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + groupModelActual),
-                () -> verify(objectMapper, times(1)).map(groupNode, GroupModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupNode, GroupModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verifyNoInteractions(eventModelAssembler));
     }
 }

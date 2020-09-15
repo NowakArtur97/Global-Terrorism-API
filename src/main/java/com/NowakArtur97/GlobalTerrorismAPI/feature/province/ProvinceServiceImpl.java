@@ -2,8 +2,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,8 +17,8 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
 
     private final CountryService countryService;
 
-    ProvinceServiceImpl(ProvinceRepository provinceRepository, ObjectMapper objectMapper, CountryService countryService) {
-        super(provinceRepository, objectMapper);
+    ProvinceServiceImpl(ProvinceRepository provinceRepository, ModelMapper modelMapper, CountryService countryService) {
+        super(provinceRepository, modelMapper);
         this.countryService = countryService;
         this.provinceRepository = provinceRepository;
     }
@@ -35,7 +35,7 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
     @Override
     public ProvinceNode saveNew(ProvinceDTO provinceDTO) {
 
-        ProvinceNode provinceNode = objectMapper.map(provinceDTO, ProvinceNode.class);
+        ProvinceNode provinceNode = modelMapper.map(provinceDTO, ProvinceNode.class);
 
         provinceNode.setCountry(countryService.findByName(provinceDTO.getCountry().getName())
                 .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
@@ -48,7 +48,7 @@ class ProvinceServiceImpl extends GenericServiceImpl<ProvinceNode, ProvinceDTO> 
 
         Long id = provinceNode.getId();
 
-        provinceNode = objectMapper.map(provinceDTO, ProvinceNode.class);
+        provinceNode = modelMapper.map(provinceDTO, ProvinceNode.class);
 
         provinceNode.setId(id);
 

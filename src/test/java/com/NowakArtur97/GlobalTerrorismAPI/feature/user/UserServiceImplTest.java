@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -8,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -43,7 +43,7 @@ class UserServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        userService = new UserServiceImpl(userRepository, objectMapper, bCryptPasswordEncoder);
+        userService = new UserServiceImpl(userRepository, modelMapper, bCryptPasswordEncoder);
     }
 
     @Test
@@ -58,7 +58,7 @@ class UserServiceImplTest {
         UserNode userExpected = (UserNode) userBuilder.withId(1L).withPassword(passwordEncoded)
                 .withRoles(Set.of(new RoleNode("user"))).build(ObjectType.NODE);
 
-        when(objectMapper.map(userDTOExpected, UserNode.class)).thenReturn(userExpectedAfterObjectMapping);
+        when(modelMapper.map(userDTOExpected, UserNode.class)).thenReturn(userExpectedAfterObjectMapping);
         when(bCryptPasswordEncoder.encode(userDTOExpected.getPassword())).thenReturn(passwordEncoded);
         when(userRepository.save(userExpectedAfterPasswordEncodingAndSetRoles)).thenReturn(userExpected);
 
@@ -74,8 +74,8 @@ class UserServiceImplTest {
                         () -> "should return user with user email: " + userExpected.getEmail() + ", but was" + userActual.getEmail()),
                 () -> assertEquals(userExpected.getRoles(), userActual.getRoles(),
                         () -> "should return user with user roles: " + userExpected.getRoles() + ", but was" + userActual.getRoles()),
-                () -> verify(objectMapper, times(1)).map(userDTOExpected, UserNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(userDTOExpected, UserNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(bCryptPasswordEncoder, times(1)).encode(userDTOExpected.getPassword()),
                 () -> verifyNoMoreInteractions(bCryptPasswordEncoder),
                 () -> verify(userRepository, times(1)).save(userExpectedAfterObjectMapping),
@@ -111,7 +111,7 @@ class UserServiceImplTest {
                         () -> "should return user with user roles: " + userExpected.getRoles() + ", but was" + userActual.getRoles()),
                 () -> verify(userRepository, times(1)).findByUserName(expectedUserName),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 
@@ -127,7 +127,7 @@ class UserServiceImplTest {
         assertAll(() -> assertTrue(userActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(userRepository, times(1)).findByUserName(notExistingUserName),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 
@@ -160,7 +160,7 @@ class UserServiceImplTest {
                         () -> "should return user with user roles: " + userExpected.getRoles() + ", but was" + userActual.getRoles()),
                 () -> verify(userRepository, times(1)).findByEmail(expectedUserEmail),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 
@@ -176,7 +176,7 @@ class UserServiceImplTest {
         assertAll(() -> assertTrue(userActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(userRepository, times(1)).findByEmail(notExistingUserEmail),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 
@@ -210,7 +210,7 @@ class UserServiceImplTest {
                         () -> "should return user with user roles: " + userExpected.getRoles() + ", but was" + userActual.getRoles()),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(expectedUseName, expectedUserEmail),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 
@@ -227,7 +227,7 @@ class UserServiceImplTest {
         assertAll(() -> assertTrue(userActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(notExistingUserName, notExistingUserEmail),
                 () -> verifyNoMoreInteractions(userRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
 }

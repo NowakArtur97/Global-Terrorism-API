@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,14 @@ class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserNode register(UserDTO userDTO) {
 
-        UserNode userNode = objectMapper.map(userDTO, UserNode.class);
+        UserNode userNode = modelMapper.map(userDTO, UserNode.class);
 
         userNode.setPassword(bCryptPasswordEncoder.encode(userNode.getPassword()));
 

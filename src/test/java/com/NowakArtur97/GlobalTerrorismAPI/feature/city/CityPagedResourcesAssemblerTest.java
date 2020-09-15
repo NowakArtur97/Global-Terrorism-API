@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ class CityPagedResourcesAssemblerTest {
     private ProvinceModelAssembler provinceModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void init() {
@@ -57,7 +57,7 @@ class CityPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        cityModelAssembler = new CityModelAssembler(provinceModelAssembler, objectMapper);
+        cityModelAssembler = new CityModelAssembler(provinceModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -255,7 +255,7 @@ class CityPagedResourcesAssemblerTest {
 
             CityNode cityNode = (CityNode) cityBuilder.build(ObjectType.NODE);
 
-            when(objectMapper.map(cityNode, CityModel.class)).thenReturn((CityModel) cityBuilder.build(ObjectType.MODEL));
+            when(modelMapper.map(cityNode, CityModel.class)).thenReturn((CityModel) cityBuilder.build(ObjectType.MODEL));
 
             citiesListExpected.add(cityNode);
 

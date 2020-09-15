@@ -1,9 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -11,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,7 +22,7 @@ class RegionModelAssemblerTest {
     private RegionModelAssembler modelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static RegionBuilder regionBuilder;
 
@@ -38,7 +35,7 @@ class RegionModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new RegionModelAssembler(objectMapper);
+        modelAssembler = new RegionModelAssembler(modelMapper);
     }
 
     @Test
@@ -51,7 +48,7 @@ class RegionModelAssemblerTest {
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionId.intValue();
 
-        when(objectMapper.map(regionNode, RegionModel.class)).thenReturn(regionModelExpected);
+        when(modelMapper.map(regionNode, RegionModel.class)).thenReturn(regionModelExpected);
 
         RegionModel regionModelActual = modelAssembler.toModel(regionNode);
 
@@ -70,7 +67,7 @@ class RegionModelAssemblerTest {
 
                 () -> assertFalse(regionModelActual.getLinks().isEmpty(),
                         () -> "should return region model with links, but wasn't"),
-                () -> verify(objectMapper, times(1)).map(regionNode, RegionModel.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verify(modelMapper, times(1)).map(regionNode, RegionModel.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 }

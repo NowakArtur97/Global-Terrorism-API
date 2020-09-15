@@ -3,8 +3,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceService;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,8 +18,8 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
 
     private final ProvinceService provinceService;
 
-    CityServiceImpl(CityRepository repository, ObjectMapper objectMapper, ProvinceService provinceService) {
-        super(repository, objectMapper);
+    CityServiceImpl(CityRepository repository, ModelMapper modelMapper, ProvinceService provinceService) {
+        super(repository, modelMapper);
         this.repository = repository;
         this.provinceService = provinceService;
     }
@@ -44,7 +44,7 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
     @Override
     public CityNode saveNew(CityDTO cityDTO) {
 
-        CityNode cityNode = objectMapper.map(cityDTO, CityNode.class);
+        CityNode cityNode = modelMapper.map(cityDTO, CityNode.class);
 
         ProvinceDTO provinceDTO = cityDTO.getProvince();
 
@@ -78,7 +78,7 @@ class CityServiceImpl extends GenericServiceImpl<CityNode, CityDTO> implements C
             updatedProvince = provinceService.update(cityNode.getProvince(), cityDTO.getProvince());
         }
 
-        cityNode = objectMapper.map(cityDTO, CityNode.class);
+        cityNode = modelMapper.map(cityDTO, CityNode.class);
 
         cityNode.setId(id);
         cityNode.setProvince(updatedProvince);

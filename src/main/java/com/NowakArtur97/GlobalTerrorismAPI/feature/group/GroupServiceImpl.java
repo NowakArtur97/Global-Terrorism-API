@@ -2,10 +2,10 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +17,9 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
     private final GenericService<EventNode, EventDTO> eventService;
 
-    GroupServiceImpl(BaseRepository<GroupNode> repository, ObjectMapper objectMapper,
+    GroupServiceImpl(BaseRepository<GroupNode> repository, ModelMapper modelMapper,
                      GenericService<EventNode, EventDTO> eventService) {
-        super(repository, objectMapper);
+        super(repository, modelMapper);
         this.eventService = eventService;
     }
 
@@ -34,7 +34,7 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
     @Override
     public GroupNode saveNew(GroupDTO groupDTO) {
 
-        GroupNode groupNode = objectMapper.map(groupDTO, GroupNode.class);
+        GroupNode groupNode = modelMapper.map(groupDTO, GroupNode.class);
 
         List<EventNode> eventsCaused = saveNewEvents(groupDTO);
 
@@ -52,7 +52,7 @@ class GroupServiceImpl extends GenericServiceImpl<GroupNode, GroupDTO> implement
 
         List<EventNode> eventsCaused = saveNewEvents(groupDTO);
 
-        groupNode = objectMapper.map(groupDTO, GroupNode.class);
+        groupNode = modelMapper.map(groupDTO, GroupNode.class);
 
         groupNode.setId(id);
         groupNode.setEventsCaused(eventsCaused);

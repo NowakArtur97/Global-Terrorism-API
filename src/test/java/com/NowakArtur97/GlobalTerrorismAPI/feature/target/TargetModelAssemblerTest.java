@@ -1,14 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -18,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +38,7 @@ class TargetModelAssemblerTest {
     private CountryModelAssembler countryModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -54,7 +51,7 @@ class TargetModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        targetModelAssembler = new TargetModelAssembler(countryModelAssembler, objectMapper);
+        targetModelAssembler = new TargetModelAssembler(countryModelAssembler, modelMapper);
     }
 
     @Test
@@ -75,7 +72,7 @@ class TargetModelAssemblerTest {
         TargetModel targetModel = (TargetModel) targetBuilder.withId(targetId).withCountry(countryModel).build(ObjectType.MODEL);
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetId.intValue();
 
-        when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(targetModel);
+        when(modelMapper.map(targetNode, TargetModel.class)).thenReturn(targetModel);
         when(countryModelAssembler.toModel(countryNode)).thenReturn(countryModel);
 
         TargetModel targetModelActual = targetModelAssembler.toModel(targetNode);
@@ -119,8 +116,8 @@ class TargetModelAssemblerTest {
                 () -> assertTrue(targetModelActual.getCountryOfOrigin().getRegion().getLinks().isEmpty(),
                         () -> "should return target with region model without links, but was: " +
                                 targetModelActual.getCountryOfOrigin().getRegion().getLinks()),
-                () -> verify(objectMapper, times(1)).map(targetNode, TargetModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetNode, TargetModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryModelAssembler, times(1)).toModel(countryNode),
                 () -> verifyNoMoreInteractions(countryModelAssembler)
         );

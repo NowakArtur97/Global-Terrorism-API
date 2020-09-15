@@ -1,11 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
@@ -15,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +31,7 @@ class CityModelAssemblerTest {
     private ProvinceModelAssembler provinceModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
@@ -49,7 +46,7 @@ class CityModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new CityModelAssembler(provinceModelAssembler, objectMapper);
+        modelAssembler = new CityModelAssembler(provinceModelAssembler, modelMapper);
     }
 
     @Test
@@ -66,7 +63,7 @@ class CityModelAssemblerTest {
                 .build(ObjectType.MODEL);
         String pathToCityLink = CITY_BASE_PATH + "/" + cityId.intValue();
 
-        when(objectMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
+        when(modelMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
         when(provinceModelAssembler.toModel(provinceNode)).thenReturn(provinceModelExpected);
 
         CityModel cityModelActual = modelAssembler.toModel(cityNode);
@@ -109,8 +106,8 @@ class CityModelAssemblerTest {
                         () -> "should return city model with links, but wasn't"),
                 () -> assertFalse(cityModelActual.getProvince().getLinks().isEmpty(),
                         () -> "should return city model with province model with links, but wasn't"),
-                () -> verify(objectMapper, times(1)).map(cityNode, CityModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(cityNode, CityModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(provinceModelAssembler, times(1)).toModel(provinceNode),
                 () -> verifyNoMoreInteractions(provinceModelAssembler));
     }
@@ -124,7 +121,7 @@ class CityModelAssemblerTest {
         String pathToCityLink = CITY_BASE_PATH + "/" + cityId.intValue();
         cityModelExpected.add(new Link("self", pathToCityLink));
 
-        when(objectMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
+        when(modelMapper.map(cityNode, CityModel.class)).thenReturn(cityModelExpected);
 
         CityModel cityModelActual = modelAssembler.toModel(cityNode);
 
@@ -152,8 +149,8 @@ class CityModelAssemblerTest {
 
                 () -> assertFalse(cityModelActual.getLinks().isEmpty(),
                         () -> "should return city model with links, but wasn't"),
-                () -> verify(objectMapper, times(1)).map(cityNode, CityModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(cityNode, CityModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceModelAssembler));
     }
 }

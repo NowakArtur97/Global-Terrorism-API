@@ -1,10 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +17,12 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> exte
 
     private final Class<T> typeParameterClass;
 
-    protected final ObjectMapper objectMapper;
+    protected final ModelMapper modelMapper;
 
-    public GenericServiceImpl(BaseRepository<T> repository, ObjectMapper objectMapper) {
+    public GenericServiceImpl(BaseRepository<T> repository, ModelMapper modelMapper) {
         super(repository);
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
-        this.objectMapper = objectMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -35,7 +35,7 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> exte
     @Override
     public T saveNew(D dto) {
 
-        T node = objectMapper.map(dto, typeParameterClass);
+        T node = modelMapper.map(dto, typeParameterClass);
 
         return repository.save(node);
     }
@@ -45,7 +45,7 @@ public abstract class GenericServiceImpl<T extends Node, D extends DTONode> exte
 
         Long id = node.getId();
 
-        node = objectMapper.map(dto, typeParameterClass);
+        node = modelMapper.map(dto, typeParameterClass);
 
         node.setId(id);
 

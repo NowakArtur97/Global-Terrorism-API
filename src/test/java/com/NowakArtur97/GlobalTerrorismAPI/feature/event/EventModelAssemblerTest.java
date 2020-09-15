@@ -1,11 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,19 +26,24 @@ import static org.mockito.Mockito.*;
 @Tag("EventModelAssembler_Tests")
 class EventModelAssemblerTest {
 
-    private static TargetBuilder targetBuilder;
-    private static CityBuilder cityBuilder;
-    private static EventBuilder eventBuilder;
     private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
     private final String CITY_BASE_PATH = "http://localhost/api/v1/cities";
     private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
+    
+    private static TargetBuilder targetBuilder;
+    private static CityBuilder cityBuilder;
+    private static EventBuilder eventBuilder;
+  
     private EventModelAssembler modelAssembler;
+   
     @Mock
     private TargetModelAssembler targetModelAssembler;
+   
     @Mock
     private CityModelAssembler cityModelAssembler;
+   
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void setUpBuilders() {
@@ -51,7 +56,7 @@ class EventModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, objectMapper);
+        modelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, modelMapper);
     }
 
     @Test
@@ -77,7 +82,7 @@ class EventModelAssemblerTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
 
-        when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
+        when(modelMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
         when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
         when(cityModelAssembler.toModel(eventNode.getCity())).thenReturn(cityModel);
 
@@ -150,8 +155,8 @@ class EventModelAssemblerTest {
                 () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " + eventModelActual),
                 () -> assertFalse(eventModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + eventModelActual),
-                () -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(targetModelAssembler, times(1)).toModel(eventNode.getTarget()),
                 () -> verifyNoMoreInteractions(targetModelAssembler),
                 () -> verify(cityModelAssembler, times(1)).toModel(eventNode.getCity()),
@@ -172,7 +177,7 @@ class EventModelAssemblerTest {
         EventModel eventModel = (EventModel) eventBuilder.withId(eventId).withCity(cityModel).build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
 
-        when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
+        when(modelMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
         when(cityModelAssembler.toModel(eventNode.getCity())).thenReturn(cityModel);
 
         EventModel eventModelActual = modelAssembler.toModel(eventNode);
@@ -232,8 +237,8 @@ class EventModelAssemblerTest {
                 () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " + eventModelActual),
                 () -> assertFalse(eventModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + eventModelActual),
-                () -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(cityModelAssembler, times(1)).toModel(eventNode.getCity()),
                 () -> verifyNoMoreInteractions(cityModelAssembler),
                 () -> verifyNoInteractions(targetModelAssembler));
@@ -254,7 +259,7 @@ class EventModelAssemblerTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
 
-        when(objectMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
+        when(modelMapper.map(eventNode, EventModel.class)).thenReturn(eventModel);
         when(targetModelAssembler.toModel(eventNode.getTarget())).thenReturn(targetModel);
 
         EventModel eventModelActual = modelAssembler.toModel(eventNode);
@@ -309,8 +314,8 @@ class EventModelAssemblerTest {
                 () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " + eventModelActual),
                 () -> assertFalse(eventModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + eventModelActual),
-                () -> verify(objectMapper, times(1)).map(eventNode, EventModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(targetModelAssembler, times(1)).toModel(eventNode.getTarget()),
                 () -> verifyNoMoreInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(cityModelAssembler));

@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -8,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +39,7 @@ class RegionPagedResourcesAssemblerTest {
     private RegionModelAssembler regionModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void init() {
@@ -53,7 +53,7 @@ class RegionPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        regionModelAssembler = new RegionModelAssembler(objectMapper);
+        regionModelAssembler = new RegionModelAssembler(modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -251,7 +251,7 @@ class RegionPagedResourcesAssemblerTest {
 
             RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
 
-            when(objectMapper.map(regionNode, RegionModel.class))
+            when(modelMapper.map(regionNode, RegionModel.class))
                     .thenReturn((RegionModel) regionBuilder.build(ObjectType.MODEL));
 
             regionsListExpected.add(regionNode);

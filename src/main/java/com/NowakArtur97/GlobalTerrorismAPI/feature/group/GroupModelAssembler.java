@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -18,19 +18,19 @@ class GroupModelAssembler extends RepresentationModelAssemblerSupport<GroupNode,
 
     private final EventModelAssembler eventModelAssembler;
 
-    private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
-    GroupModelAssembler(EventModelAssembler eventModelAssembler, ObjectMapper objectMapper) {
+    GroupModelAssembler(EventModelAssembler eventModelAssembler, ModelMapper modelMapper) {
 
         super(GroupController.class, GroupModel.class);
         this.eventModelAssembler = eventModelAssembler;
-        this.objectMapper = objectMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public GroupModel toModel(GroupNode groupNode) {
 
-        GroupModel groupModel = objectMapper.map(groupNode, GroupModel.class);
+        GroupModel groupModel = modelMapper.map(groupNode, GroupModel.class);
 
         List<EventModel> eventsCaused = groupNode.getEventsCaused()
                 .stream().map(eventModelAssembler::toModel)

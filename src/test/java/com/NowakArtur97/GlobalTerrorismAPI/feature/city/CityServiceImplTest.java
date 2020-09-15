@@ -6,7 +6,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +42,7 @@ class CityServiceImplTest {
     private CityRepository cityRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private ProvinceService provinceService;
@@ -64,7 +64,7 @@ class CityServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        cityService = new CityServiceImpl(cityRepository, objectMapper, provinceService);
+        cityService = new CityServiceImpl(cityRepository, modelMapper, provinceService);
     }
 
     @Test
@@ -96,7 +96,7 @@ class CityServiceImplTest {
                                 + " elements, but was: " + citiesActual.getNumberOfElements()),
                 () -> verify(cityRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -122,7 +122,7 @@ class CityServiceImplTest {
                         () -> "should return empty page, but was: " + citiesActual.getNumberOfElements()),
                 () -> verify(cityRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -169,7 +169,7 @@ class CityServiceImplTest {
                         () -> "should return city node with null region, but was: " + cityNodeActual.getProvince().getCountry()),
                 () -> verify(cityRepository, times(1)).findById(cityId),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -185,7 +185,7 @@ class CityServiceImplTest {
         assertAll(() -> assertTrue(cityNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(cityRepository, times(1)).findById(cityId),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -253,7 +253,7 @@ class CityServiceImplTest {
                                 + cityNodeActual.getProvince().getCountry().getRegion().getName()),
                 () -> verify(cityRepository, times(1)).findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -269,7 +269,7 @@ class CityServiceImplTest {
         assertAll(() -> assertTrue(cityNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(cityRepository, times(1)).findById(cityId, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -343,7 +343,7 @@ class CityServiceImplTest {
                 () -> verify(cityRepository, times(1))
                         .findByNameAndLatitudeAndLongitude(cityName, cityLatitude, cityLongitude, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -364,7 +364,7 @@ class CityServiceImplTest {
                 () -> verify(cityRepository, times(1))
                         .findByNameAndLatitudeAndLongitude(cityName, cityLatitude, cityLongitude, DEFAULT_DEPTH_FOR_CITY_NODE),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -438,7 +438,7 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -507,7 +507,7 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -526,7 +526,7 @@ class CityServiceImplTest {
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
+        when(modelMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
         when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
                 .thenReturn(Optional.empty());
         when(provinceService.saveNew(provinceDTO)).thenReturn(provinceNodeExpected);
@@ -583,8 +583,8 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verify(objectMapper, times(1)).map(cityDTO, CityNode.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verify(modelMapper, times(1)).map(cityDTO, CityNode.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -603,7 +603,7 @@ class CityServiceImplTest {
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
+        when(modelMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
         when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
                 .thenReturn(Optional.of(provinceNodeExpected));
         when(cityRepository.save(cityNodeExpectedBeforeSave)).thenReturn(cityNodeExpected);
@@ -658,8 +658,8 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verify(objectMapper, times(1)).map(cityDTO, CityNode.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verify(modelMapper, times(1)).map(cityDTO, CityNode.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -688,7 +688,7 @@ class CityServiceImplTest {
                 .withLatitude(updatedCityLatitude).withLongitude(updatedCityLongitude)
                 .withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
+        when(modelMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
         when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
                 .thenReturn(Optional.empty());
         when(provinceService.update(provinceNodeExpected, provinceDTO)).thenReturn(provinceNodeExpected);
@@ -745,8 +745,8 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verify(objectMapper, times(1)).map(cityDTO, CityNode.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verify(modelMapper, times(1)).map(cityDTO, CityNode.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -775,7 +775,7 @@ class CityServiceImplTest {
                 .withLatitude(updatedCityLatitude).withLongitude(updatedCityLongitude)
                 .withProvince(provinceNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
+        when(modelMapper.map(cityDTO, CityNode.class)).thenReturn(cityNodeExpectedBeforeSave);
         when(provinceService.findByNameAndCountryName(provinceNodeExpected.getName(), countryNodeExpected.getName()))
                 .thenReturn(Optional.of(provinceNodeExpected));
         when(cityRepository.save(cityNodeExpectedBeforeSave)).thenReturn(cityNodeExpected);
@@ -830,8 +830,8 @@ class CityServiceImplTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(cityRepository, times(1)).save(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verify(objectMapper, times(1)).map(cityDTO, CityNode.class),
-                () -> verifyNoMoreInteractions(objectMapper));
+                () -> verify(modelMapper, times(1)).map(cityDTO, CityNode.class),
+                () -> verifyNoMoreInteractions(modelMapper));
     }
 
     @Test
@@ -839,7 +839,7 @@ class CityServiceImplTest {
 
         Long cityId = 1L;
 
-        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder .build(ObjectType.NODE);
+        ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withId(cityId).withProvince(provinceNodeExpected)
                 .build(ObjectType.NODE);
 
@@ -878,7 +878,7 @@ class CityServiceImplTest {
                 () -> verify(cityRepository, times(1)).findById(cityId),
                 () -> verify(cityRepository, times(1)).delete(cityNodeExpected),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 
@@ -894,7 +894,7 @@ class CityServiceImplTest {
         assertAll(() -> assertTrue(cityNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(cityRepository, times(1)).findById(cityId),
                 () -> verifyNoMoreInteractions(cityRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(provinceService));
     }
 }

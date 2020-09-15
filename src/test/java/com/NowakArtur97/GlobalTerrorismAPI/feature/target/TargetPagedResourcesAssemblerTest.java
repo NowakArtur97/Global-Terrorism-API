@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ class TargetPagedResourcesAssemblerTest {
     private CountryModelAssembler countryModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static TargetBuilder targetBuilder;
 
@@ -65,7 +65,7 @@ class TargetPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        targetModelAssembler = new TargetModelAssembler(countryModelAssembler, objectMapper);
+        targetModelAssembler = new TargetModelAssembler(countryModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -252,7 +252,7 @@ class TargetPagedResourcesAssemblerTest {
 
             targetsListExpected.add(targetNode);
 
-            when(objectMapper.map(targetNode, TargetModel.class)).thenReturn(
+            when(modelMapper.map(targetNode, TargetModel.class)).thenReturn(
                     (TargetModel) targetBuilder.withId((long) count).withTarget(targetName)
                             .build(ObjectType.MODEL));
 

@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ class GroupPagedResourcesAssemblerTest {
     private EventModelAssembler eventModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static GroupBuilder groupBuilder;
 
@@ -64,7 +64,7 @@ class GroupPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        groupModelAssembler = new GroupModelAssembler(eventModelAssembler, objectMapper);
+        groupModelAssembler = new GroupModelAssembler(eventModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -246,7 +246,7 @@ class GroupPagedResourcesAssemblerTest {
 
             GroupNode groupNode = (GroupNode) groupBuilder.build(ObjectType.NODE);
 
-            when(objectMapper.map(groupNode, GroupModel.class)).thenReturn((GroupModel) groupBuilder.build(ObjectType.MODEL));
+            when(modelMapper.map(groupNode, GroupModel.class)).thenReturn((GroupModel) groupBuilder.build(ObjectType.MODEL));
 
             groupsListExpected.add(groupNode);
 

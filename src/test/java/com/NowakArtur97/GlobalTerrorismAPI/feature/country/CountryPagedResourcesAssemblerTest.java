@@ -1,7 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ class CountryPagedResourcesAssemblerTest {
     private RegionModelAssembler regionModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void init() {
@@ -57,7 +57,7 @@ class CountryPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        countryModelAssembler = new CountryModelAssembler(regionModelAssembler, objectMapper);
+        countryModelAssembler = new CountryModelAssembler(regionModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -255,7 +255,7 @@ class CountryPagedResourcesAssemblerTest {
 
             CountryNode countryNode = (CountryNode) countryBuilder.build(ObjectType.NODE);
 
-            when(objectMapper.map(countryNode, CountryModel.class))
+            when(modelMapper.map(countryNode, CountryModel.class))
                     .thenReturn((CountryModel) countryBuilder.build(ObjectType.MODEL));
 
             countriesListExpected.add(countryNode);

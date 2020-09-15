@@ -1,8 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -47,7 +47,7 @@ class EventPagedResourcesAssemblerTest {
     private CityModelAssembler cityModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @BeforeAll
     private static void init() {
@@ -61,7 +61,7 @@ class EventPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        eventModelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, objectMapper);
+        eventModelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }
@@ -245,7 +245,7 @@ class EventPagedResourcesAssemblerTest {
 
             EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
 
-            when(objectMapper.map(eventNode, EventModel.class)).thenReturn((EventModel) eventBuilder.build(ObjectType.MODEL));
+            when(modelMapper.map(eventNode, EventModel.class)).thenReturn((EventModel) eventBuilder.build(ObjectType.MODEL));
 
             eventsListExpected.add(eventNode);
 

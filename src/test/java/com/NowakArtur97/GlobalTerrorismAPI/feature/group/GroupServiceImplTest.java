@@ -1,7 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.*;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
@@ -11,7 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
@@ -21,6 +19,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +45,7 @@ class GroupServiceImplTest {
     private GroupRepository groupRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private GenericService<EventNode, EventDTO> eventService;
@@ -74,7 +73,7 @@ class GroupServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        groupService = new GroupServiceImpl(groupRepository, objectMapper, eventService);
+        groupService = new GroupServiceImpl(groupRepository, modelMapper, eventService);
     }
 
     @Test
@@ -106,7 +105,7 @@ class GroupServiceImplTest {
                                 + " elements, but was: " + groupsActual.getNumberOfElements()),
                 () -> verify(groupRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -132,7 +131,7 @@ class GroupServiceImplTest {
                         () -> "should return empty page, but was: " + groupsActual.getNumberOfElements()),
                 () -> verify(groupRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -170,7 +169,7 @@ class GroupServiceImplTest {
                         () -> "should return group node with event node with null city, but was: " + groupNodeActual.getEventsCaused().get(0).getCity()),
                 () -> verify(groupRepository, times(1)).findById(expectedGroupId),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -186,7 +185,7 @@ class GroupServiceImplTest {
         assertAll(() -> assertTrue(groupActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(groupRepository, times(1)).findById(expectedGroupId),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -311,7 +310,7 @@ class GroupServiceImplTest {
                 () -> verify(groupRepository, times(1))
                         .findById(expectedGroupId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -440,7 +439,7 @@ class GroupServiceImplTest {
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -467,7 +466,7 @@ class GroupServiceImplTest {
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
                 .build(ObjectType.NODE);
 
-        when(objectMapper.map(groupDTOExpected, GroupNode.class)).thenReturn(groupNodeExpectedBeforeSave);
+        when(modelMapper.map(groupDTOExpected, GroupNode.class)).thenReturn(groupNodeExpectedBeforeSave);
         when(eventService.saveNew(eventDTO)).thenReturn(eventNodeExpected);
         when(groupRepository.save(groupNodeExpectedBeforeSave)).thenReturn(groupNodeExpected);
 
@@ -571,8 +570,8 @@ class GroupServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(groupDTOExpected, GroupNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupDTOExpected, GroupNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
@@ -656,7 +655,7 @@ class GroupServiceImplTest {
 
         when(eventService.saveNew(eventDTO)).thenReturn(updatedEventNode);
         when(eventService.saveNew(eventDTO2)).thenReturn(updatedEventNode2);
-        when(objectMapper.map(groupDTOExpected, GroupNode.class)).thenReturn(groupNodeExpectedBeforeSetId);
+        when(modelMapper.map(groupDTOExpected, GroupNode.class)).thenReturn(groupNodeExpectedBeforeSetId);
         when(groupRepository.save(groupNodeExpectedBeforeSetId)).thenReturn(groupNodeExpected);
 
         GroupNode groupNodeActual = groupService.update(groupNodeExpectedBeforeMethod, groupDTOExpected);
@@ -851,8 +850,8 @@ class GroupServiceImplTest {
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verify(eventService, times(1)).saveNew(eventDTO2),
                 () -> verifyNoMoreInteractions(eventService),
-                () -> verify(objectMapper, times(1)).map(groupDTOExpected, GroupNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupDTOExpected, GroupNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSetId),
                 () -> verifyNoMoreInteractions(groupRepository));
     }
@@ -1086,7 +1085,7 @@ class GroupServiceImplTest {
                 () -> verify(eventService, times(1)).delete(eventId),
                 () -> verify(eventService, times(1)).delete(eventId2),
                 () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -1103,7 +1102,7 @@ class GroupServiceImplTest {
                         () -> "should return empty group node optional, but was: " + groupNodeOptional.get()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -1336,7 +1335,7 @@ class GroupServiceImplTest {
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -1355,7 +1354,7 @@ class GroupServiceImplTest {
                         () -> "should return empty group node optional, but was: " + groupNodeOptional.get()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 
@@ -1508,7 +1507,7 @@ class GroupServiceImplTest {
                 () -> verify(eventService, times(1)).delete(eventId),
                 () -> verify(eventService, times(1)).delete(eventId2),
                 () -> verifyNoMoreInteractions(eventService),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -1525,7 +1524,7 @@ class GroupServiceImplTest {
                         () -> "should return empty group node optional, but was: " + groupNodeOptional.get()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(eventService));
     }
 }

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.mapper;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;

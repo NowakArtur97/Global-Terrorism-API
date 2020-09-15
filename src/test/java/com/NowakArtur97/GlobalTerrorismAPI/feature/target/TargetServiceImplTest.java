@@ -5,7 +5,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +40,7 @@ class TargetServiceImplTest {
     private TargetRepository targetRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private CountryService countryService;
@@ -60,7 +60,7 @@ class TargetServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        targetService = new TargetServiceImpl(targetRepository, objectMapper, countryService);
+        targetService = new TargetServiceImpl(targetRepository, modelMapper, countryService);
     }
 
     @Test
@@ -92,7 +92,7 @@ class TargetServiceImplTest {
                                 + " elements, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -118,7 +118,7 @@ class TargetServiceImplTest {
                         () -> "should return empty page, but was: " + targetsActual.getNumberOfElements()),
                 () -> verify(targetRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -150,7 +150,7 @@ class TargetServiceImplTest {
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -166,7 +166,7 @@ class TargetServiceImplTest {
         assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -213,7 +213,7 @@ class TargetServiceImplTest {
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -229,7 +229,7 @@ class TargetServiceImplTest {
         assertAll(() -> assertTrue(targetActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -245,7 +245,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedBeforeSave = (TargetNode) targetBuilder.withId(null).withCountry(countryNodeExpected).build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
         when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.of(countryNodeExpected));
         when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
@@ -276,8 +276,8 @@ class TargetServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
                         () -> "should return target node with region name: " + regionNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
@@ -294,15 +294,15 @@ class TargetServiceImplTest {
 
         TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).build(ObjectType.NODE);
 
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
         when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.empty());
 
         assertAll(
                 () -> assertThrows(ResourceNotFoundException.class,
                         () -> targetService.saveNew(targetDTOExpected),
                         () -> "should throw ResourceNotFoundException but wasn't"),
-                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(targetRepository));
@@ -333,7 +333,7 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withTarget(updatedTargetName)
                 .withCountry(countryNodeExpected).build(ObjectType.NODE);
 
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
         when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.of(countryNodeExpected));
         when(targetRepository.save(targetNodeExpectedBeforeSave)).thenReturn(targetNodeExpected);
 
@@ -361,8 +361,8 @@ class TargetServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), targetNodeActual.getCountryOfOrigin().getRegion().getName(),
                         () -> "should return target node with region name: " + regionNodeExpected.getName()
                                 + ", but was: " + targetNodeActual.getCountryOfOrigin().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verify(targetRepository, times(1)).save(targetNodeExpectedBeforeSave),
@@ -386,15 +386,15 @@ class TargetServiceImplTest {
         TargetNode targetNodeExpectedBeforeSetCountry = (TargetNode) targetBuilder.withId(null).withTarget(updatedTargetName)
                 .build(ObjectType.NODE);
 
-        when(objectMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
+        when(modelMapper.map(targetDTOExpected, TargetNode.class)).thenReturn(targetNodeExpectedBeforeSetCountry);
         when(countryService.findByName(countryDTOExpected.getName())).thenReturn(Optional.empty());
 
         assertAll(
                 () -> assertThrows(ResourceNotFoundException.class,
                         () -> targetService.update(targetNodeToUpdate, targetDTOExpected),
                         () -> "should throw ResourceNotFoundException but wasn't"),
-                () -> verify(objectMapper, times(1)).map(targetDTOExpected, TargetNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetDTOExpected, TargetNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(countryService, times(1)).findByName(countryDTOExpected.getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(targetRepository));
@@ -443,7 +443,7 @@ class TargetServiceImplTest {
                 () -> verify(countryService, times(1))
                         .findByName(targetNodeExpectedBeforeSave.getCountryOfOrigin().getName()),
                 () -> verifyNoMoreInteractions(countryService),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -468,7 +468,7 @@ class TargetServiceImplTest {
                         .findByName(targetNodeExpectedBeforeSave.getCountryOfOrigin().getName()),
                 () -> verifyNoMoreInteractions(countryService),
                 () -> verifyNoInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -504,7 +504,7 @@ class TargetServiceImplTest {
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verify(targetRepository, times(1)).delete(targetNodeActual),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -522,7 +522,7 @@ class TargetServiceImplTest {
                         () -> "should return empty target node optional, but was: " + targetNodeOptional.get()),
                 () -> verify(targetRepository, times(1)).findById(expectedTargetId),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -538,7 +538,7 @@ class TargetServiceImplTest {
         assertAll(() -> assertTrue(isDatabaseEmpty, () -> "should database be empty, but that was: " + isDatabaseEmpty),
                 () -> verify(targetRepository, times(1)).count(),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 
@@ -556,7 +556,7 @@ class TargetServiceImplTest {
                         () -> "should not database be empty, but that was: " + isDatabaseEmpty),
                 () -> verify(targetRepository, times(1)).count(),
                 () -> verifyNoMoreInteractions(targetRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(countryService));
     }
 }

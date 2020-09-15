@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -16,21 +16,21 @@ public class EventModelAssembler extends RepresentationModelAssemblerSupport<Eve
 
     private final CityModelAssembler cityModelAssembler;
 
-    private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
     EventModelAssembler(TargetModelAssembler targetModelAssembler, CityModelAssembler cityModelAssembler,
-                        ObjectMapper objectMapper) {
+                        ModelMapper modelMapper) {
 
         super(EventController.class, EventModel.class);
         this.targetModelAssembler = targetModelAssembler;
         this.cityModelAssembler = cityModelAssembler;
-        this.objectMapper = objectMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public EventModel toModel(EventNode eventNode) {
 
-        EventModel eventModel = objectMapper.map(eventNode, EventModel.class);
+        EventModel eventModel = modelMapper.map(eventNode, EventModel.class);
 
         eventModel.add(linkTo(methodOn(EventController.class).findById(eventModel.getId())).withSelfRel());
 

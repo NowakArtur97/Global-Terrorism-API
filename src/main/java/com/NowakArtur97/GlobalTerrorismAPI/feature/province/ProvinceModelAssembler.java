@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +13,19 @@ public class ProvinceModelAssembler extends RepresentationModelAssemblerSupport<
 
     private final CountryModelAssembler countryModelAssembler;
 
-    private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
-    ProvinceModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
+    ProvinceModelAssembler(CountryModelAssembler countryModelAssembler, ModelMapper modelMapper) {
 
         super(ProvinceController.class, ProvinceModel.class);
-        this.objectMapper = objectMapper;
+        this.modelMapper = modelMapper;
         this.countryModelAssembler = countryModelAssembler;
     }
 
     @Override
     public ProvinceModel toModel(ProvinceNode provinceNode) {
 
-        ProvinceModel provinceModel = objectMapper.map(provinceNode, ProvinceModel.class);
+        ProvinceModel provinceModel = modelMapper.map(provinceNode, ProvinceModel.class);
 
         if (provinceNode.getCountry() != null) {
             provinceModel.setCountry(countryModelAssembler.toModel(provinceNode.getCountry()));

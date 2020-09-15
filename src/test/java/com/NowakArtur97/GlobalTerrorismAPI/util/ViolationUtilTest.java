@@ -6,7 +6,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -38,7 +38,7 @@ class ViolationUtilTest {
     private Validator validator;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     @SuppressWarnings("rawtypes")
@@ -59,7 +59,7 @@ class ViolationUtilTest {
     @BeforeEach
     private void setUp() {
 
-        violationUtil = new ViolationUtil(validator, objectMapper);
+        violationUtil = new ViolationUtil(validator, modelMapper);
     }
 
     @Test
@@ -70,14 +70,14 @@ class ViolationUtilTest {
 
         Set<ConstraintViolation<TargetDTO>> violationsExpected = new HashSet<>();
 
-        when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
+        when(modelMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
         when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertDoesNotThrow(() -> violationUtil.violate(targetNode, TargetDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
-                () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetNode, TargetDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(targetDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
@@ -95,14 +95,14 @@ class ViolationUtilTest {
 
         Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
 
-        when(objectMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
+        when(modelMapper.map(targetNode, TargetDTO.class)).thenReturn(targetDTO);
         when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertThrows(expectedException, () -> violationUtil.violate(targetNode, TargetDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
-                () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(targetNode, TargetDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(targetDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
@@ -117,14 +117,14 @@ class ViolationUtilTest {
 
         Set<ConstraintViolation<EventDTO>> violationsExpected = new HashSet<>();
 
-        when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
+        when(modelMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
         when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertDoesNotThrow(() -> violationUtil.violate(eventNode, EventDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
-                () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(eventDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
@@ -144,14 +144,14 @@ class ViolationUtilTest {
 
         Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
 
-        when(objectMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
+        when(modelMapper.map(eventNode, EventDTO.class)).thenReturn(eventDTO);
         when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertThrows(expectedException, () -> violationUtil.violate(eventNode, EventDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
-                () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventNode, EventDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(eventDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
@@ -169,14 +169,14 @@ class ViolationUtilTest {
 
         Set<ConstraintViolation<GroupDTO>> violationsExpected = new HashSet<>();
 
-        when(objectMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
+        when(modelMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
         when(validator.validate(groupDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertDoesNotThrow(() -> violationUtil.violate(groupNode, GroupDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
-                () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupNode, GroupDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(groupDTO),
                 () -> verifyNoMoreInteractions(validator));
     }
@@ -199,14 +199,14 @@ class ViolationUtilTest {
 
         Class<ConstraintViolationException> expectedException = ConstraintViolationException.class;
 
-        when(objectMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
+        when(modelMapper.map(groupNode, GroupDTO.class)).thenReturn(groupDTO);
         when(validator.validate(groupDTO)).thenReturn(violationsExpected);
 
         assertAll(
                 () -> assertThrows(expectedException, () -> violationUtil.violate(groupNode, GroupDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
-                () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(groupNode, GroupDTO.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(validator, times(1)).validate(groupDTO),
                 () -> verifyNoMoreInteractions(validator));
     }

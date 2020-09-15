@@ -1,11 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
@@ -15,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +31,7 @@ class CountryModelAssemblerTest {
     private RegionModelAssembler regionModelAssembler;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
@@ -49,7 +46,7 @@ class CountryModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new CountryModelAssembler(regionModelAssembler, objectMapper);
+        modelAssembler = new CountryModelAssembler(regionModelAssembler, modelMapper);
     }
 
     @Test
@@ -70,7 +67,7 @@ class CountryModelAssemblerTest {
 
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryId.intValue();
 
-        when(objectMapper.map(countryNode, CountryModel.class)).thenReturn(countryModelExpected);
+        when(modelMapper.map(countryNode, CountryModel.class)).thenReturn(countryModelExpected);
         when(regionModelAssembler.toModel(regionNode)).thenReturn(regionModelExpected);
 
         CountryModel countryModelActual = modelAssembler.toModel(countryNode);
@@ -108,8 +105,8 @@ class CountryModelAssemblerTest {
                 () -> assertFalse(countryModelActual.getRegion().getLinks().isEmpty(),
                         () -> "should return country model with region model with links, but was: " +
                                 countryModelActual.getRegion().getLinks()),
-                () -> verify(objectMapper, times(1)).map(countryNode, CountryModel.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(countryNode, CountryModel.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(regionModelAssembler, times(1)).toModel(regionNode),
                 () -> verifyNoMoreInteractions(regionModelAssembler));
     }

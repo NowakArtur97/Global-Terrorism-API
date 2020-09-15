@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
@@ -10,7 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -48,7 +48,7 @@ class EventServiceImplTest {
     private EventRepository eventRepository;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ModelMapper modelMapper;
 
     @Mock
     private TargetService targetService;
@@ -77,7 +77,7 @@ class EventServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        eventService = new EventServiceImpl(eventRepository, objectMapper, targetService, cityService);
+        eventService = new EventServiceImpl(eventRepository, modelMapper, targetService, cityService);
     }
 
     @Test
@@ -101,7 +101,7 @@ class EventServiceImplTest {
                                 + " elements, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -128,7 +128,7 @@ class EventServiceImplTest {
                         () -> "should return empty page, but was: " + eventsActual.getNumberOfElements()),
                 () -> verify(eventRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -200,7 +200,7 @@ class EventServiceImplTest {
                                 + eventNodeActual.getCity().getLongitude()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -217,7 +217,7 @@ class EventServiceImplTest {
         assertAll(() -> assertTrue(eventNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -347,7 +347,7 @@ class EventServiceImplTest {
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -364,7 +364,7 @@ class EventServiceImplTest {
         assertAll(() -> assertTrue(eventNodeActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -499,7 +499,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper));
+                () -> verifyNoInteractions(modelMapper));
     }
 
     @Test
@@ -522,7 +522,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
                 .build(ObjectType.NODE);
 
-        when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
+        when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(targetService.saveNew(targetDTO)).thenReturn(targetNodeExpected);
         when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()))
                 .thenReturn(Optional.of(cityNodeExpected));
@@ -630,10 +630,10 @@ class EventServiceImplTest {
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
                 () -> verify(targetService, times(1)).saveNew(targetDTO),
-                () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
@@ -661,7 +661,7 @@ class EventServiceImplTest {
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
                 .build(ObjectType.NODE);
 
-        when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
+        when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(targetService.saveNew(eventDTOExpected.getTarget())).thenReturn(targetNodeExpected);
         when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()))
                 .thenReturn(Optional.empty());
@@ -769,10 +769,10 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
-                () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
@@ -833,7 +833,7 @@ class EventServiceImplTest {
                 .withCity(updatedCityNode).build(ObjectType.NODE);
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(updatedTargetNode);
-        when(objectMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
+        when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
         when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()))
                 .thenReturn(Optional.empty());
         when(cityService.saveNew(cityDTO)).thenReturn(updatedCityNode);
@@ -942,8 +942,8 @@ class EventServiceImplTest {
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
                 () -> verify(targetService, times(1)).update(targetNode, targetDTO),
                 () -> verifyNoMoreInteractions(targetService),
-                () -> verify(objectMapper, times(1)).map(eventDTOExpected, EventNode.class),
-                () -> verifyNoMoreInteractions(objectMapper),
+                () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
+                () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
@@ -1075,7 +1075,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
 
@@ -1171,7 +1171,7 @@ class EventServiceImplTest {
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
 
@@ -1264,7 +1264,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(targetService, times(1)).delete(targetId),
                 () -> verifyNoMoreInteractions(targetService),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
 
@@ -1282,7 +1282,7 @@ class EventServiceImplTest {
                         () -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -1375,7 +1375,7 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(targetService, times(1)).delete(targetId),
                 () -> verifyNoMoreInteractions(targetService),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
 
@@ -1393,7 +1393,7 @@ class EventServiceImplTest {
                         () -> eventService.deleteEventTarget(eventId), "should throw ResourceNotFoundException but wasn't"),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }
@@ -1412,7 +1412,7 @@ class EventServiceImplTest {
                         () -> "should return empty event node optional, but was: " + eventNodeOptional.get()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventRepository),
-                () -> verifyNoInteractions(objectMapper),
+                () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(cityService));
     }

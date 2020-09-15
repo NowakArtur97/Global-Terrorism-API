@@ -6,10 +6,10 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityService;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,9 +21,9 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
     private final CityService cityService;
 
-    EventServiceImpl(BaseRepository<EventNode> repository, ObjectMapper objectMapper,
+    EventServiceImpl(BaseRepository<EventNode> repository, ModelMapper modelMapper,
                      GenericService<TargetNode, TargetDTO> targetService, CityService cityService) {
-        super(repository, objectMapper);
+        super(repository, modelMapper);
         this.targetService = targetService;
         this.cityService = cityService;
     }
@@ -50,7 +50,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
     @Override
     public EventNode saveNew(EventDTO eventDTO) {
 
-        EventNode eventNode = objectMapper.map(eventDTO, EventNode.class);
+        EventNode eventNode = modelMapper.map(eventDTO, EventNode.class);
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
 
@@ -75,7 +75,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         TargetNode updatedTarget = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
 
-        eventNode = objectMapper.map(eventDTO, EventNode.class);
+        eventNode = modelMapper.map(eventDTO, EventNode.class);
 
         setEventCityForUpdate(eventNode, eventDTO);
 

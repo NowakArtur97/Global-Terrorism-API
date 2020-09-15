@@ -2,9 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +12,8 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
 
     private final CountryService countryService;
 
-    TargetServiceImpl(BaseRepository<TargetNode> repository, ObjectMapper objectMapper, CountryService countryService) {
-        super(repository, objectMapper);
+    TargetServiceImpl(BaseRepository<TargetNode> repository, ModelMapper modelMapper, CountryService countryService) {
+        super(repository, modelMapper);
         this.countryService = countryService;
     }
 
@@ -29,7 +29,7 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
     @Override
     public TargetNode saveNew(TargetDTO targetDTO) {
 
-        TargetNode targetNode = objectMapper.map(targetDTO, TargetNode.class);
+        TargetNode targetNode = modelMapper.map(targetDTO, TargetNode.class);
 
         targetNode.setCountryOfOrigin(countryService.findByName(targetDTO.getCountryOfOrigin().getName())
                 .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
@@ -42,7 +42,7 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
 
         Long id = targetNode.getId();
 
-        targetNode = objectMapper.map(targetDTO, TargetNode.class);
+        targetNode = modelMapper.map(targetDTO, TargetNode.class);
 
         targetNode.setId(id);
 
