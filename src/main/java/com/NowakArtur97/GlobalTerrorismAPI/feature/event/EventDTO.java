@@ -1,9 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ProvinceAndTargetAreInSameCountry;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

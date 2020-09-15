@@ -1,10 +1,7 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +15,7 @@ public class TargetModelAssembler extends RepresentationModelAssemblerSupport<Ta
 
     private final ObjectMapper objectMapper;
 
-    public TargetModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
+    TargetModelAssembler(CountryModelAssembler countryModelAssembler, ObjectMapper objectMapper) {
 
         super(TargetController.class, TargetModel.class);
         this.countryModelAssembler = countryModelAssembler;

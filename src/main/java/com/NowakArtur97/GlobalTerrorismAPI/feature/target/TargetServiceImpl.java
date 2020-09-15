@@ -1,12 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +21,7 @@ class TargetServiceImpl extends GenericServiceImpl<TargetNode, TargetDTO> implem
     public TargetNode save(TargetNode targetNode) {
 
         targetNode.setCountryOfOrigin(countryService.findByName(targetNode.getCountryOfOrigin().getName())
-                        .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
+                .orElseThrow(() -> new ResourceNotFoundException("CountryModel")));
 
         return repository.save(targetNode);
     }

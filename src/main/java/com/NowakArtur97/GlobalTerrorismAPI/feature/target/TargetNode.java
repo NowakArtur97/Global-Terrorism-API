@@ -1,7 +1,7 @@
-package com.NowakArtur97.GlobalTerrorismAPI.node;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;

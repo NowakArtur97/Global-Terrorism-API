@@ -1,13 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.TargetTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import com.github.wnameless.spring.bulkapi.Bulkable;
@@ -34,9 +31,9 @@ import javax.validation.Valid;
 public class TargetController extends GenericRestControllerImpl<TargetModel, TargetDTO, TargetNode> {
 
     public TargetController(GenericService<TargetNode, TargetDTO> service,
-                     RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler,
-                     PagedResourcesAssembler<TargetNode> pagedResourcesAssembler,
-                     PatchHelper patchHelper, ViolationHelper<TargetNode, TargetDTO> violationHelper) {
+                            RepresentationModelAssemblerSupport<TargetNode, TargetModel> modelAssembler,
+                            PagedResourcesAssembler<TargetNode> pagedResourcesAssembler,
+                            PatchHelper patchHelper, ViolationHelper<TargetNode, TargetDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 

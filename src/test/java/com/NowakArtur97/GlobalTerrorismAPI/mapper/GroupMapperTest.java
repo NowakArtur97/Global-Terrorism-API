@@ -1,19 +1,25 @@
 package com.NowakArtur97.GlobalTerrorismAPI.mapper;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.*;
-import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -131,14 +137,14 @@ class GroupMapperTest {
                 () -> assertEquals(eventModelExpected.getId(), groupModelActual.getEventsCaused().get(0).getId(), () -> "should return group event node with id: " + eventModelExpected.getId() + ", but was: "
                         + groupModelActual.getEventsCaused().get(0).getId()),
                 () -> assertEquals(eventModelExpected.getSummary(), groupModelActual.getEventsCaused().get(0).getSummary(), () -> "should return group event node with summary: " + eventModelExpected.getSummary() + ", but was: " + groupModelActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventModelExpected.getMotive(), groupModelActual.getEventsCaused().get(0).getMotive(), 
+                () -> assertEquals(eventModelExpected.getMotive(), groupModelActual.getEventsCaused().get(0).getMotive(),
                         () -> "should return group event node with motive: " + eventModelExpected.getMotive() + ", but was: " + groupModelActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventModelExpected.getDate(), groupModelActual.getEventsCaused().get(0).getDate(), 
-                        () -> "should return group event node with date: " + eventModelExpected.getDate() + 
-                        ", but was: " + groupModelActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventModelExpected.getDate(), groupModelActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventModelExpected.getDate() +
+                                ", but was: " + groupModelActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventModelExpected.getIsPartOfMultipleIncidents(),
-                        groupModelActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), 
-                        () -> "should return group event node which was part of multiple incidents: " + eventModelExpected.getIsPartOfMultipleIncidents() + 
+                        groupModelActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: " + eventModelExpected.getIsPartOfMultipleIncidents() +
                                 ", but was was: " + groupModelActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
                 () -> assertEquals(eventModelExpected.getIsSuccessful(), groupModelActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group event node which was successful: " + eventModelExpected.getIsSuccessful() + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuccessful()),
                 () -> assertEquals(eventModelExpected.getIsSuicidal(), groupModelActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventModelExpected.getIsSuicidal() + ", but was: " + groupModelActual.getEventsCaused().get(0).getIsSuicidal()),
@@ -343,7 +349,7 @@ class GroupMapperTest {
         GroupDTO groupDTO = (GroupDTO) groupBuilder
                 .withEventsCaused(List.of(eventDTO, eventDTO2))
                 .build(ObjectType.DTO);
-        
+
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.withId(null).build(ObjectType.NODE);
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.withId(null).withRegion(regionNodeExpected)
                 .build(ObjectType.NODE);
@@ -604,7 +610,7 @@ class GroupMapperTest {
         GroupNode groupNode = (GroupNode) groupBuilder.
                 withEventsCaused(List.of(eventNode, eventNode2))
                 .build(ObjectType.NODE);
-        
+
         CountryDTO countryDTOExpected = (CountryDTO) countryBuilder.build(ObjectType.DTO);
         TargetDTO targetDTOExpected = (TargetDTO) targetBuilder.withCountry(countryDTOExpected).build(ObjectType.DTO);
         ProvinceDTO provinceDTOExpected = (ProvinceDTO) provinceBuilder.withCountry(countryDTOExpected)

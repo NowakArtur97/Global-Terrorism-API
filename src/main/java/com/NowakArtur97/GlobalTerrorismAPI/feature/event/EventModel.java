@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

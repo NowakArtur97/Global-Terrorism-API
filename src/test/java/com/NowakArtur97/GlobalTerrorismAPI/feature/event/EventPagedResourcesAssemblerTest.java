@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;

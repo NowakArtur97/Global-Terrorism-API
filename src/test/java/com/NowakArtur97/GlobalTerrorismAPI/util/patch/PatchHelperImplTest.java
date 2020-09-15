@@ -2,9 +2,11 @@ package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.*;
+import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

@@ -1,11 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.TargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;

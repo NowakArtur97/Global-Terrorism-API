@@ -1,6 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.annotation.validation;
-
-import com.NowakArtur97.GlobalTerrorismAPI.validator.CountriesMatchConstraintValidator;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

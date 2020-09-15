@@ -9,7 +9,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.GroupRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;

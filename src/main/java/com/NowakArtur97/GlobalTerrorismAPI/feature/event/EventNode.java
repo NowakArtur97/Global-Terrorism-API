@@ -1,8 +1,8 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,15 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
