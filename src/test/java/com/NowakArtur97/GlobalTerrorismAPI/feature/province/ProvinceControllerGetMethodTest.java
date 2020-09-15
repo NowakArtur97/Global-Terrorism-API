@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
