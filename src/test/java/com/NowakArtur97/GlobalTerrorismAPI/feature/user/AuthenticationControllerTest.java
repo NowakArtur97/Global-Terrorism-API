@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.security;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.AuthenticationControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
