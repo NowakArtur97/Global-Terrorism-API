@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public abstract class BasicGenericServiceImpl<T extends Node> implements BasicGenericService<T> {
 
-    final BaseRepository<T> repository;
+    protected final BaseRepository<T> repository;
 
     public BasicGenericServiceImpl(BaseRepository<T> repository) {
         this.repository = repository;
