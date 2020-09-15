@@ -1,6 +1,5 @@
 package com.NowakArtur97.GlobalTerrorismAPI.advice;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(basePackageClasses = GenericRestControllerImpl.class)
+@RestControllerAdvice(basePackages = "com.NowakArtur97.GlobalTerrorismAPI.feature")
 public class GenericRestControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)

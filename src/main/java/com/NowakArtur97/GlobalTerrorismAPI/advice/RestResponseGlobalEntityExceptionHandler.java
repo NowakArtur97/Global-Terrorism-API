@@ -18,7 +18,7 @@ import javax.json.JsonException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.NowakArtur97.GlobalTerrorismAPI.feature")
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
