@@ -1,11 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;

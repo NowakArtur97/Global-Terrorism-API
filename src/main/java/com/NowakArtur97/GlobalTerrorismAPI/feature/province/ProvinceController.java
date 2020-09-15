@@ -1,13 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.ProvinceTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import com.github.wnameless.spring.bulkapi.Bulkable;
@@ -31,7 +28,7 @@ import javax.validation.Valid;
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class ProvinceController extends GenericRestControllerImpl<ProvinceModel, ProvinceDTO, ProvinceNode> {
+class ProvinceController extends GenericRestControllerImpl<ProvinceModel, ProvinceDTO, ProvinceNode> {
 
     public ProvinceController(GenericService<ProvinceNode, ProvinceDTO> service,
                        RepresentationModelAssemblerSupport<ProvinceNode, ProvinceModel> modelAssembler,

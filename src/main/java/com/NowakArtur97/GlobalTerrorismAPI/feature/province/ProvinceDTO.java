@@ -1,6 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.dto;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Province;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

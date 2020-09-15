@@ -4,7 +4,6 @@ import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.CountryTag;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;

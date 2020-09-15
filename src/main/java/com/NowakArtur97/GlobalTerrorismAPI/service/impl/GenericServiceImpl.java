@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BasicGenericServiceImpl<T>
+public abstract class GenericServiceImpl<T extends Node, D extends DTONode> extends BasicGenericServiceImpl<T>
         implements GenericService<T, D> {
 
     private final Class<T> typeParameterClass;
 
     protected final ObjectMapper objectMapper;
 
-    GenericServiceImpl(BaseRepository<T> repository, ObjectMapper objectMapper) {
+    public GenericServiceImpl(BaseRepository<T> repository, ObjectMapper objectMapper) {
         super(repository);
         this.typeParameterClass = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), GenericServiceImpl.class)[0];
         this.objectMapper = objectMapper;

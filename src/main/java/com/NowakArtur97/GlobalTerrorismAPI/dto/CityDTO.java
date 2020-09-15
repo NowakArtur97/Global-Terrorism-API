@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.dto;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

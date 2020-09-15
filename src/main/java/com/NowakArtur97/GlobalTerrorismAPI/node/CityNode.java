@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.node;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

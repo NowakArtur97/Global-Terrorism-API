@@ -1,11 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.ProvinceModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.ProvinceController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;

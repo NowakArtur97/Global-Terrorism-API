@@ -1,12 +1,9 @@
-package com.NowakArtur97.GlobalTerrorismAPI.service.impl;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;
-import com.NowakArtur97.GlobalTerrorismAPI.repository.ProvinceRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.ProvinceService;
+import com.NowakArtur97.GlobalTerrorismAPI.service.impl.GenericServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

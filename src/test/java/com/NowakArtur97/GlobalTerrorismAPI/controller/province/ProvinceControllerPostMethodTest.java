@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.ProvinceDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
