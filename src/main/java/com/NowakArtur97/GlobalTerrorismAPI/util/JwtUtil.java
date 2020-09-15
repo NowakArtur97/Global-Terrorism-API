@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.jwt;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,14 +13,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtUtilImpl implements JwtUtil {
+public class JwtUtil {
 
     private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
 
     @Value("${jwt.secretKey:secret}")
     private String secretKey;
 
-    @Override
     public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
@@ -28,25 +27,21 @@ public class JwtUtilImpl implements JwtUtil {
         return createToken(claims, userDetails.getUsername());
     }
 
-    @Override
     public Boolean isTokenValid(String token, UserDetails userDetail) {
 
         return (extractUserName(token).equals(userDetail.getUsername()) && !isTokenExpired(token));
     }
 
-    @Override
     public String extractUserName(String token) {
 
         return extractClaim(token, Claims::getSubject);
     }
 
-    @Override
     public Date extractExpirationDate(String token) {
 
         return extractClaim(token, Claims::getExpiration);
     }
 
-    @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
 
         Claims claim = extractAllClaims(token);

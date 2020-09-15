@@ -5,8 +5,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +33,8 @@ class CityController extends GenericRestControllerImpl<CityModel, CityDTO, CityN
     CityController(GenericService<CityNode, CityDTO> service,
                    RepresentationModelAssemblerSupport<CityNode, CityModel> modelAssembler,
                    PagedResourcesAssembler<CityNode> pagedResourcesAssembler,
-                   PatchHelper patchHelper, ViolationHelper<CityNode, CityDTO> violationHelper) {
-        super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
+                   PatchUtil patchUtil, ViolationUtil<CityNode, CityDTO> violationUtil) {
+        super(service, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
     }
 
     @GetMapping

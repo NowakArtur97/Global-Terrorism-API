@@ -6,7 +6,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PageUtil;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ class GroupEventsController {
 
     private final PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
-    private final PageHelper pageHelper;
+    private final PageUtil pageUtil;
 
     @GetMapping("/{id}/events")
     @ApiOperation(value = "Find Group's Events by id", notes = "Provide an id to look up specific Group's Events")
@@ -56,7 +56,7 @@ class GroupEventsController {
         List<EventNode> eventsCausedByGroup = groupService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("GroupModel", id)).getEventsCaused();
 
-        PageImpl<EventNode> pages = pageHelper.convertListToPage(pageable, eventsCausedByGroup);
+        PageImpl<EventNode> pages = pageUtil.convertListToPage(pageable, eventsCausedByGroup);
 
         PagedModel<EventModel> pagedModel = eventsPagedResourcesAssembler.toModel(pages, eventModelAssembler);
 

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +11,10 @@ import javax.json.JsonValue;
 
 @Component
 @RequiredArgsConstructor
-class PatchHelperImpl implements PatchHelper {
+public class PatchUtil {
 
     private final ObjectMapper objectMapper;
 
-    @Override
     public <T> T patch(JsonPatch jsonPatch, T targetBean, Class<T> beanClass) {
 
         JsonStructure target = objectMapper.convertValue(targetBean, JsonStructure.class);
@@ -27,7 +26,6 @@ class PatchHelperImpl implements PatchHelper {
         return targetBean;
     }
 
-    @Override
     public <T> T mergePatch(JsonMergePatch jsonMergePatch, T targetBean, Class<T> beanClass) {
 
         JsonValue target = objectMapper.convertValue(targetBean, JsonValue.class);

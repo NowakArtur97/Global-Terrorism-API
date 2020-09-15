@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.violation;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
@@ -13,13 +13,12 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-class ViolationHelperImpl<T extends Node, D extends DTONode> implements ViolationHelper<T, D> {
+public class ViolationUtil<T extends Node, D extends DTONode> {
 
     private final Validator validator;
 
     private final ObjectMapper objectMapper;
 
-    @Override
     public void violate(T entity, Class<D> dtoType) {
 
         D dto = objectMapper.map(entity, dtoType);

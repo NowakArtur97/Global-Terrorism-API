@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.page;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PageHelperImpl implements PageHelper {
+public class PageUtil {
 
-    @Override
     public <T> PageImpl<T> convertListToPage(Pageable pageable, List<T> list) {
 
         int startIndex = (int) pageable.getOffset();

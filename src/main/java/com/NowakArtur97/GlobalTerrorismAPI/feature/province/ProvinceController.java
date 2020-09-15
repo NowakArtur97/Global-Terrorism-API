@@ -5,8 +5,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +33,8 @@ class ProvinceController extends GenericRestControllerImpl<ProvinceModel, Provin
     ProvinceController(GenericService<ProvinceNode, ProvinceDTO> service,
                        RepresentationModelAssemblerSupport<ProvinceNode, ProvinceModel> modelAssembler,
                        PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler,
-                       PatchHelper patchHelper, ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper) {
-        super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
+                       PatchUtil patchUtil, ViolationUtil<ProvinceNode, ProvinceDTO> violationUtil) {
+        super(service, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
     }
 
     @GetMapping

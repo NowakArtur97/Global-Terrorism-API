@@ -5,8 +5,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
@@ -32,14 +32,14 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
 
     protected final GenericService<T, D> service;
 
-    protected final PatchHelper patchHelper;
+    protected final PatchUtil patchUtil;
 
-    protected final ViolationHelper<T, D> violationHelper;
+    protected final ViolationUtil<T, D> violationUtil;
 
     protected GenericRestControllerImpl(GenericService<T, D> service,
                                         RepresentationModelAssemblerSupport<T, M> modelAssembler,
                                         PagedResourcesAssembler<T> pagedResourcesAssembler,
-                                        PatchHelper patchHelper, ViolationHelper<T, D> violationHelper) {
+                                        PatchUtil patchUtil, ViolationUtil<T, D> violationUtil) {
 
         super(service, modelAssembler, pagedResourcesAssembler);
 
@@ -48,8 +48,8 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
         this.dtoTypeParameterClass = (Class<D>) GenericTypeResolver.resolveTypeArguments(getClass(),
                 GenericRestControllerImpl.class)[1];
         this.service = service;
-        this.patchHelper = patchHelper;
-        this.violationHelper = violationHelper;
+        this.patchUtil = patchUtil;
+        this.violationUtil = violationUtil;
     }
 
     @PostMapping
@@ -90,9 +90,9 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
         T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH)
                 .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
-        T nodePatched = patchHelper.patch(objectAsJsonPatch, node, nodeTypeParameterClass);
+        T nodePatched = patchUtil.patch(objectAsJsonPatch, node, nodeTypeParameterClass);
 
-        violationHelper.violate(nodePatched, dtoTypeParameterClass);
+        violationUtil.violate(nodePatched, dtoTypeParameterClass);
 
         service.save(nodePatched);
 
@@ -108,9 +108,9 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
         T node = service.findById(id, DEFAULT_DEPTH_FOR_JSON_PATCH)
                 .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
-        T nodePatched = patchHelper.mergePatch(objectAsJsonMergePatch, node, nodeTypeParameterClass);
+        T nodePatched = patchUtil.mergePatch(objectAsJsonMergePatch, node, nodeTypeParameterClass);
 
-        violationHelper.violate(nodePatched, dtoTypeParameterClass);
+        violationUtil.violate(nodePatched, dtoTypeParameterClass);
 
         nodePatched = service.save(nodePatched);
 
