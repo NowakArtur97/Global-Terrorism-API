@@ -1,10 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;

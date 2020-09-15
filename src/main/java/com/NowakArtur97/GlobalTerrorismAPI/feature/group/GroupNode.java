@@ -1,7 +1,7 @@
-package com.NowakArtur97.GlobalTerrorismAPI.node;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.Node;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

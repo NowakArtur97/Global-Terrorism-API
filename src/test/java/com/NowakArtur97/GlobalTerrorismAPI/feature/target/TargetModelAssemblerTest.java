@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;

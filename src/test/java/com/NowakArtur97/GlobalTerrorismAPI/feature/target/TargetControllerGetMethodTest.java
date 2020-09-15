@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;

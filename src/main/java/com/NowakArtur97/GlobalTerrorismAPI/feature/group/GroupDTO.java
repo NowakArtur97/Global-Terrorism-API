@@ -1,6 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.dto;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Group;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

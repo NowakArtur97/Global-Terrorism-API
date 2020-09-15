@@ -4,6 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventTargetTag;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionTag;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetTag;

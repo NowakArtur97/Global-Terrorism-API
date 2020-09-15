@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.target;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;

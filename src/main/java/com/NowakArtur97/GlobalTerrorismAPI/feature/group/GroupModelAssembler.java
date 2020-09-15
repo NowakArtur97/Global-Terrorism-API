@@ -1,12 +1,8 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupController;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -18,13 +14,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class GroupModelAssembler extends RepresentationModelAssemblerSupport<GroupNode, GroupModel> {
+class GroupModelAssembler extends RepresentationModelAssemblerSupport<GroupNode, GroupModel> {
 
     private final EventModelAssembler eventModelAssembler;
 
     private final ObjectMapper objectMapper;
 
-    public GroupModelAssembler(EventModelAssembler eventModelAssembler, ObjectMapper objectMapper) {
+    GroupModelAssembler(EventModelAssembler eventModelAssembler, ObjectMapper objectMapper) {
 
         super(GroupController.class, GroupModel.class);
         this.eventModelAssembler = eventModelAssembler;

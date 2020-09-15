@@ -1,13 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.swagger.ApiPageable;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.GroupDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestControllerImpl;
 import com.NowakArtur97.GlobalTerrorismAPI.mediaType.PatchMediaType;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ErrorResponse;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
-import com.NowakArtur97.GlobalTerrorismAPI.tag.GroupTag;
 import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
 import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
 import com.github.wnameless.spring.bulkapi.Bulkable;
@@ -31,12 +28,12 @@ import javax.validation.Valid;
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Permission to the resource is prohibited"),
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
-public class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, GroupNode> {
+class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, GroupNode> {
 
-    public GroupController(GenericService<GroupNode, GroupDTO> service,
-                           RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler,
-                           PagedResourcesAssembler<GroupNode> pagedResourcesAssembler,
-                           PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
+    GroupController(GenericService<GroupNode, GroupDTO> service,
+                    RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler,
+                    PagedResourcesAssembler<GroupNode> pagedResourcesAssembler,
+                    PatchHelper patchHelper, ViolationHelper<GroupNode, GroupDTO> violationHelper) {
         super(service, modelAssembler, pagedResourcesAssembler, patchHelper, violationHelper);
     }
 
