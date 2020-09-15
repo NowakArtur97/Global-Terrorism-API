@@ -1,6 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.repository;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 import org.springframework.data.neo4j.annotation.Depth;
 
 import java.util.Optional;

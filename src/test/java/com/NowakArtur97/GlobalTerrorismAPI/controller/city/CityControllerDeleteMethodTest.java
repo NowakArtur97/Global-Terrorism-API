@@ -1,12 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.CityModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.CityController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 class CountryController extends BasicGenericRestControllerImpl<CountryModel, CountryNode> {
 
-    public CountryController(BasicGenericService<CountryNode> service,
+    CountryController(BasicGenericService<CountryNode> service,
                              RepresentationModelAssemblerSupport<CountryNode, CountryModel> modelAssembler,
                              PagedResourcesAssembler<CountryNode> pagedResourcesAssembler) {
         super(service, modelAssembler, pagedResourcesAssembler);

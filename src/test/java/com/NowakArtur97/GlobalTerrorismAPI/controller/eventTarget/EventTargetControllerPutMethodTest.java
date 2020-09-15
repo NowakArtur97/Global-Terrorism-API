@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
 
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;

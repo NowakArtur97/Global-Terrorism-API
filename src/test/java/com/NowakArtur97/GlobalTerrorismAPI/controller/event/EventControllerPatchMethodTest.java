@@ -1,5 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
 
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceRepository;

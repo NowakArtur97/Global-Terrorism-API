@@ -30,7 +30,7 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 class ProvinceController extends GenericRestControllerImpl<ProvinceModel, ProvinceDTO, ProvinceNode> {
 
-    public ProvinceController(GenericService<ProvinceNode, ProvinceDTO> service,
+    ProvinceController(GenericService<ProvinceNode, ProvinceDTO> service,
                        RepresentationModelAssemblerSupport<ProvinceNode, ProvinceModel> modelAssembler,
                        PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler,
                        PatchHelper patchHelper, ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper) {

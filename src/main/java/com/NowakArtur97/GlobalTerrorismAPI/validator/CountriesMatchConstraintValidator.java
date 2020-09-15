@@ -1,7 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.validator;
 
 import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.ProvinceAndTargetAreInSameCountry;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CityDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 

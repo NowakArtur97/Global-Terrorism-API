@@ -1,7 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.model.response;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.City;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
