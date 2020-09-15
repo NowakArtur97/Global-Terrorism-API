@@ -1,12 +1,12 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.violation;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -29,10 +29,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("ViolationHelperImpl_Tests")
-class ViolationHelperImplTest {
+@Tag("ViolationUtil_Tests")
+class ViolationUtilTest {
 
-    private ViolationHelper violationHelper;
+    private ViolationUtil violationUtil;
 
     @Mock
     private Validator validator;
@@ -59,7 +59,7 @@ class ViolationHelperImplTest {
     @BeforeEach
     private void setUp() {
 
-        violationHelper = new ViolationHelperImpl(validator, objectMapper);
+        violationUtil = new ViolationUtil(validator, objectMapper);
     }
 
     @Test
@@ -74,7 +74,7 @@ class ViolationHelperImplTest {
         when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertDoesNotThrow(() -> violationHelper.violate(targetNode, TargetDTO.class),
+                () -> assertDoesNotThrow(() -> violationUtil.violate(targetNode, TargetDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -99,7 +99,7 @@ class ViolationHelperImplTest {
         when(validator.validate(targetDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertThrows(expectedException, () -> violationHelper.violate(targetNode, TargetDTO.class),
+                () -> assertThrows(expectedException, () -> violationUtil.violate(targetNode, TargetDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(targetNode, TargetDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -121,7 +121,7 @@ class ViolationHelperImplTest {
         when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertDoesNotThrow(() -> violationHelper.violate(eventNode, EventDTO.class),
+                () -> assertDoesNotThrow(() -> violationUtil.violate(eventNode, EventDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -148,7 +148,7 @@ class ViolationHelperImplTest {
         when(validator.validate(eventDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertThrows(expectedException, () -> violationHelper.violate(eventNode, EventDTO.class),
+                () -> assertThrows(expectedException, () -> violationUtil.violate(eventNode, EventDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(eventNode, EventDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -173,7 +173,7 @@ class ViolationHelperImplTest {
         when(validator.validate(groupDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertDoesNotThrow(() -> violationHelper.violate(groupNode, GroupDTO.class),
+                () -> assertDoesNotThrow(() -> violationUtil.violate(groupNode, GroupDTO.class),
                         () -> "should not throw Constraint Violation Exception, but was thrown"),
                 () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),
@@ -203,7 +203,7 @@ class ViolationHelperImplTest {
         when(validator.validate(groupDTO)).thenReturn(violationsExpected);
 
         assertAll(
-                () -> assertThrows(expectedException, () -> violationHelper.violate(groupNode, GroupDTO.class),
+                () -> assertThrows(expectedException, () -> violationUtil.violate(groupNode, GroupDTO.class),
                         () -> "should throw Constraint Violation Exception, but nothing was thrown"),
                 () -> verify(objectMapper, times(1)).map(groupNode, GroupDTO.class),
                 () -> verifyNoMoreInteractions(objectMapper),

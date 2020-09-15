@@ -1,22 +1,16 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.Province;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -69,10 +63,10 @@ class ProvinceControllerGetMethodTest {
     private PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper;
+    private ViolationUtil<ProvinceNode, ProvinceDTO> violationUtil;
 
     private static CountryBuilder countryBuilder;
     private static ProvinceBuilder provinceBuilder;
@@ -87,8 +81,8 @@ class ProvinceControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(provinceController)
                 .setControllerAdvice(new GenericRestControllerAdvice())
@@ -184,8 +178,8 @@ class ProvinceControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(provincesExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -269,8 +263,8 @@ class ProvinceControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(provincesExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -327,8 +321,8 @@ class ProvinceControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(provincesExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -366,8 +360,8 @@ class ProvinceControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verify(modelAssembler, times(1)).toModel(provinceNode),
                 () -> verifyNoMoreInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -392,8 +386,8 @@ class ProvinceControllerGetMethodTest {
                 () -> verify(provinceService, times(1)).findById(provinceId),
                 () -> verifyNoMoreInteractions(provinceService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 

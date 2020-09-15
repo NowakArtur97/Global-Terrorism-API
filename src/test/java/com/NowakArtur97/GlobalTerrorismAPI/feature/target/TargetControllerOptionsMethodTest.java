@@ -1,15 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -48,16 +43,16 @@ class TargetControllerOptionsMethodTest {
     private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    private ViolationUtil<TargetNode, TargetDTO> violationUtil;
 
     @BeforeEach
     private void setUp() {
 
         targetController = new TargetController(targetService, modelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
+                patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).build();
     }
@@ -79,8 +74,8 @@ class TargetControllerOptionsMethodTest {
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -104,7 +99,7 @@ class TargetControllerOptionsMethodTest {
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 }

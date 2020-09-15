@@ -1,12 +1,9 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtilImpl;
+import com.NowakArtur97.GlobalTerrorismAPI.util.JwtUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -47,7 +44,7 @@ class JwtAuthenticationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JwtUtilImpl jwtUtil;
+    private JwtUtil jwtUtil;
 
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));

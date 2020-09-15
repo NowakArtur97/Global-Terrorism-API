@@ -3,8 +3,8 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.province;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -43,16 +43,16 @@ class ProvinceControllerOptionsMethodTest {
     private PagedResourcesAssembler<ProvinceNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<ProvinceNode, ProvinceDTO> violationHelper;
+    private ViolationUtil<ProvinceNode, ProvinceDTO> violationUtil;
 
     @BeforeEach
     private void setUp() {
 
-        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(provinceController).build();
     }
@@ -72,8 +72,8 @@ class ProvinceControllerOptionsMethodTest {
                 () -> verifyNoInteractions(provinceService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -97,7 +97,7 @@ class ProvinceControllerOptionsMethodTest {
                 () -> verifyNoInteractions(provinceService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 }

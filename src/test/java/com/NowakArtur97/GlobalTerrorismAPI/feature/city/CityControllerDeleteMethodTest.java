@@ -1,20 +1,15 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityController;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.ProvinceBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -55,10 +50,10 @@ class CityControllerDeleteMethodTest {
     private PagedResourcesAssembler<CityNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<CityNode, CityDTO> violationHelper;
+    private ViolationUtil<CityNode, CityDTO> violationUtil;
 
     private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
@@ -73,8 +68,8 @@ class CityControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(cityController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
@@ -96,8 +91,8 @@ class CityControllerDeleteMethodTest {
                 () -> verify(cityService, times(1)).delete(cityId),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -118,8 +113,8 @@ class CityControllerDeleteMethodTest {
                 () -> verify(cityService, times(1)).delete(cityId),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -140,8 +135,8 @@ class CityControllerDeleteMethodTest {
                 () -> verify(cityService, times(1)).delete(cityId),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 }

@@ -3,7 +3,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PageUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -46,12 +46,12 @@ class GroupEventsControllerOptionsMethodTest {
     private PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     @Mock
-    private PageHelper pageHelper;
+    private PageUtil pageUtil;
 
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageHelper);
+        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).build();
@@ -75,7 +75,7 @@ class GroupEventsControllerOptionsMethodTest {
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
                 () -> verifyNoInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(pageHelper),
+                () -> verifyNoInteractions(pageUtil),
                 () -> verifyNoInteractions(eventModelAssembler),
                 () -> verifyNoInteractions(eventsPagedResourcesAssembler));
     }

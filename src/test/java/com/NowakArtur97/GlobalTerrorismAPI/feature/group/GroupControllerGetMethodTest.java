@@ -1,21 +1,16 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.Group;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,10 +68,10 @@ class GroupControllerGetMethodTest {
     private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<GroupNode, GroupDTO> violationHelper;
+    private ViolationUtil<GroupNode, GroupDTO> violationUtil;
 
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
@@ -92,7 +87,7 @@ class GroupControllerGetMethodTest {
     private void setUp() {
 
         groupController = new GroupController(groupService, groupModelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
+                patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
@@ -186,8 +181,8 @@ class GroupControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -274,8 +269,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -329,8 +324,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -390,8 +385,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(groupModelAssembler, times(1)).toModel(groupNode),
                 () -> verifyNoMoreInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -414,8 +409,8 @@ class GroupControllerGetMethodTest {
                 () -> verify(groupService, times(1)).findById(groupId), () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     private Group createGroupWithEvents(ObjectType type) {

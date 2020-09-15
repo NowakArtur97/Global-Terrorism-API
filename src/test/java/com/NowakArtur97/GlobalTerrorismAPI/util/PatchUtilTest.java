@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.patch;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
@@ -10,6 +10,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +28,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PatchHelperImpl_Tests")
-class PatchHelperImplTest {
+@Tag("PatchUtilImpl_Tests")
+class PatchUtilTest {
 
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -58,7 +59,7 @@ class PatchHelperImplTest {
     @BeforeEach
     private void setUp() {
 
-        patchHelper = new PatchHelperImpl(objectMapper);
+        patchUtil = new PatchUtil(objectMapper);
     }
 
     @Nested
@@ -85,7 +86,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(targetNode, JsonStructure.class)).thenReturn(target);
             when(objectMapper.convertValue(patched, TargetNode.class)).thenReturn(targetNodeExpected);
 
-            TargetNode targetNodeActual = patchHelper.patch(targetAsJsonPatch, targetNode, TargetNode.class);
+            TargetNode targetNodeActual = patchUtil.patch(targetAsJsonPatch, targetNode, TargetNode.class);
 
             assertAll(
                     () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
@@ -138,7 +139,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(targetNode, JsonStructure.class)).thenReturn(target);
             when(objectMapper.convertValue(patched, TargetNode.class)).thenReturn(targetNodeExpected);
 
-            TargetNode targetNodeActual = patchHelper.patch(targetAsJsonPatch, targetNode, TargetNode.class);
+            TargetNode targetNodeActual = patchUtil.patch(targetAsJsonPatch, targetNode, TargetNode.class);
 
             assertAll(
                     () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
@@ -188,7 +189,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(targetNode, JsonValue.class)).thenReturn(target);
             when(objectMapper.convertValue(patched, TargetNode.class)).thenReturn(targetNodeExpected);
 
-            TargetNode targetNodeActual = patchHelper.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
+            TargetNode targetNodeActual = patchUtil.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
 
             assertAll(
                     () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
@@ -243,7 +244,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(targetNode, JsonValue.class)).thenReturn(target);
             when(objectMapper.convertValue(patched, TargetNode.class)).thenReturn(targetNodeExpected);
 
-            TargetNode targetNodeActual = patchHelper.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
+            TargetNode targetNodeActual = patchUtil.mergePatch(targetAsJsonMergePatch, targetNode, TargetNode.class);
 
             assertAll(
                     () -> assertEquals(targetNodeExpected.getId(), targetNodeActual.getId(),
@@ -319,7 +320,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(eventNode, JsonStructure.class)).thenReturn(event);
             when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
 
-            EventNode eventNodeActual = patchHelper.patch(eventAsJsonPatch, eventNode, EventNode.class);
+            EventNode eventNodeActual = patchUtil.patch(eventAsJsonPatch, eventNode, EventNode.class);
 
             assertAll(
                     () -> assertNotNull(eventNodeActual.getId(),
@@ -480,7 +481,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(eventNode, JsonStructure.class)).thenReturn(event);
             when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
 
-            EventNode eventNodeActual = patchHelper.patch(eventAsJsonPatch, eventNode, EventNode.class);
+            EventNode eventNodeActual = patchUtil.patch(eventAsJsonPatch, eventNode, EventNode.class);
 
             assertAll(
                     () -> assertNotNull(eventNodeActual.getId(),
@@ -627,7 +628,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(eventNode, JsonValue.class)).thenReturn(event);
             when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(updatedEventNodeExpected);
 
-            EventNode eventNodeActual = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+            EventNode eventNodeActual = patchUtil.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
 
             assertAll(
                     () -> assertNotNull(eventNodeActual.getId(),
@@ -792,7 +793,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(eventNode, JsonValue.class)).thenReturn(event);
             when(objectMapper.convertValue(patched, EventNode.class)).thenReturn(eventNodeExpected);
 
-            EventNode eventNodeActual = patchHelper.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
+            EventNode eventNodeActual = patchUtil.mergePatch(eventAsJsonMergePatch, eventNode, EventNode.class);
 
             assertAll(
                     () -> assertNotNull(eventNodeActual.getId(),
@@ -933,7 +934,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(groupNode, JsonStructure.class)).thenReturn(group);
             when(objectMapper.convertValue(patched, GroupNode.class)).thenReturn(groupNodeExpected);
 
-            GroupNode groupNodeActual = patchHelper.patch(groupAsJsonPatch, groupNode, GroupNode.class);
+            GroupNode groupNodeActual = patchUtil.patch(groupAsJsonPatch, groupNode, GroupNode.class);
 
             assertAll(
                     () -> assertNotNull(groupNodeActual.getId(),
@@ -1124,7 +1125,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(groupNode, JsonStructure.class)).thenReturn(group);
             when(objectMapper.convertValue(patched, GroupNode.class)).thenReturn(groupNodeExpected);
 
-            GroupNode groupNodeActual = patchHelper.patch(groupAsJsonPatch, groupNode, GroupNode.class);
+            GroupNode groupNodeActual = patchUtil.patch(groupAsJsonPatch, groupNode, GroupNode.class);
 
             assertAll(
                     () -> assertNotNull(groupNodeActual.getId(),
@@ -1258,7 +1259,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(groupNode, JsonValue.class)).thenReturn(group);
             when(objectMapper.convertValue(patched, GroupNode.class)).thenReturn(groupNodeExpected);
 
-            GroupNode groupNodeActual = patchHelper.mergePatch(groupAsJsonMergePatch, groupNode, GroupNode.class);
+            GroupNode groupNodeActual = patchUtil.mergePatch(groupAsJsonMergePatch, groupNode, GroupNode.class);
 
             assertAll(
                     () -> assertNotNull(groupNodeActual.getId(),
@@ -1446,7 +1447,7 @@ class PatchHelperImplTest {
             when(objectMapper.convertValue(groupNode, JsonValue.class)).thenReturn(group);
             when(objectMapper.convertValue(patched, GroupNode.class)).thenReturn(groupNodeExpected);
 
-            GroupNode groupNodeActual = patchHelper.mergePatch(groupAsJsonMergePatch, groupNode, GroupNode.class);
+            GroupNode groupNodeActual = patchUtil.mergePatch(groupAsJsonMergePatch, groupNode, GroupNode.class);
 
             assertAll(
                     () -> assertNotNull(groupNodeActual.getId(),

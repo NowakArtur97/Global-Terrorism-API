@@ -8,8 +8,8 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -50,10 +50,10 @@ class EventControllerDeleteMethodTest {
     private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
+    private ViolationUtil<EventNode, EventDTO> violationUtil;
 
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
@@ -68,8 +68,8 @@ class EventControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
@@ -91,8 +91,8 @@ class EventControllerDeleteMethodTest {
                 () -> verify(eventService, times(1)).delete(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -113,8 +113,8 @@ class EventControllerDeleteMethodTest {
                 () -> verify(eventService, times(1)).delete(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -135,8 +135,8 @@ class EventControllerDeleteMethodTest {
                 () -> verify(eventService, times(1)).delete(eventId),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 }

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.jwt;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +15,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("JwtUtilImpl_Tests")
-class JwtUtilImplTest {
+@Tag("JwtUtil_Tests")
+class JwtUtilTest {
 
     private JwtUtil jwtUtilI;
 
@@ -25,7 +25,7 @@ class JwtUtilImplTest {
     @BeforeEach
     private void setUp() {
 
-        jwtUtilI = new JwtUtilImpl();
+        jwtUtilI = new JwtUtil();
 
         ReflectionTestUtils.setField(jwtUtilI, "secretKey", SECRET_KEY);
     }

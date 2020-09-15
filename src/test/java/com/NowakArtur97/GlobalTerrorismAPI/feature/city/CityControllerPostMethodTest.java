@@ -1,13 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.city;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.user.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
@@ -17,7 +17,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.jwt.JwtUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.JwtUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;

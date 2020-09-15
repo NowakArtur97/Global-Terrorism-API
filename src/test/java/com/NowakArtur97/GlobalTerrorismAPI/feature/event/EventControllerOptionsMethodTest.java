@@ -1,11 +1,10 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.event.*;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -44,16 +43,16 @@ class EventControllerOptionsMethodTest {
     private PagedResourcesAssembler<EventNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<EventNode, EventDTO> violationHelper;
+    private ViolationUtil<EventNode, EventDTO> violationUtil;
 
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchHelper,
-                violationHelper);
+        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
     }
@@ -73,8 +72,8 @@ class EventControllerOptionsMethodTest {
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -98,7 +97,7 @@ class EventControllerOptionsMethodTest {
                 () -> verifyNoInteractions(eventService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 }

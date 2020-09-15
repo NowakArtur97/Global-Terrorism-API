@@ -1,18 +1,14 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PageUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -70,7 +66,7 @@ class GroupEventsControllerGetMethodTest {
     private PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     @Mock
-    private PageHelper pageHelper;
+    private PageUtil pageUtil;
 
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
@@ -85,7 +81,7 @@ class GroupEventsControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageHelper);
+        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
@@ -137,7 +133,7 @@ class GroupEventsControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
-        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(pageUtil.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
@@ -212,8 +208,8 @@ class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
-                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(pageUtil, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageUtil),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
                 () -> verifyNoInteractions(eventModelAssembler),
@@ -265,7 +261,7 @@ class GroupEventsControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
-        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(pageUtil.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
@@ -328,8 +324,8 @@ class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
-                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(pageUtil, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageUtil),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
                 () -> verifyNoInteractions(eventModelAssembler),
@@ -372,7 +368,7 @@ class GroupEventsControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findById(groupId)).thenReturn(Optional.of(groupNodeExpected));
-        when(pageHelper.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
+        when(pageUtil.convertListToPage(pageable, groupEventNodesListExpected)).thenReturn(pageImpl);
         when(eventsPagedResourcesAssembler.toModel(pageImpl, eventModelAssembler)).thenReturn(resources);
 
         assertAll(
@@ -389,8 +385,8 @@ class GroupEventsControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pageHelper, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
-                () -> verifyNoMoreInteractions(pageHelper),
+                () -> verify(pageUtil, times(1)).convertListToPage(pageable, groupEventNodesListExpected),
+                () -> verifyNoMoreInteractions(pageUtil),
                 () -> verify(eventsPagedResourcesAssembler, times(1)).toModel(pageImpl, eventModelAssembler),
                 () -> verifyNoMoreInteractions(eventsPagedResourcesAssembler),
                 () -> verifyNoInteractions(eventModelAssembler),
@@ -416,7 +412,7 @@ class GroupEventsControllerGetMethodTest {
                 () -> verify(groupService, times(1)).findById(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(pageHelper),
+                () -> verifyNoInteractions(pageUtil),
                 () -> verifyNoInteractions(eventModelAssembler),
                 () -> verifyNoInteractions(eventsPagedResourcesAssembler));
     }

@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.util.page;
+package com.NowakArtur97.GlobalTerrorismAPI.util;
 
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,15 +15,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PageHelperImpl_Tests")
-class PageHelperImplTest {
+@Tag("PageUtilImpl_Tests")
+class PageUtilTest {
 
-    private PageHelper pageHelper;
+    private PageUtil pageUtil;
 
     @BeforeEach
     private void setUp() {
 
-        pageHelper = new PageHelperImpl();
+        pageUtil = new PageUtil();
     }
 
     @Test
@@ -39,7 +39,7 @@ class PageHelperImplTest {
         List<String> listToConvert = List.of(string1, string2, string3, string4);
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
 
-        PageImpl pageImplActual = pageHelper.convertListToPage(pageable, listToConvert);
+        PageImpl pageImplActual = pageUtil.convertListToPage(pageable, listToConvert);
 
         assertAll(
                 () -> assertFalse(pageImplActual.getContent().contains(string1), () -> "should not contain: " + string1 + ", but was: " + pageImplActual.getContent()),
@@ -65,7 +65,7 @@ class PageHelperImplTest {
         List<String> listToConvert = List.of(string1, string2, string3, string4);
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
 
-        PageImpl pageImplActual = pageHelper.convertListToPage(pageable, listToConvert);
+        PageImpl pageImplActual = pageUtil.convertListToPage(pageable, listToConvert);
 
         assertAll(
                 () -> assertTrue(pageImplActual.getContent().contains(string1), () -> "should contain: " + string1 + ", but was: " + pageImplActual.getContent()),
@@ -87,7 +87,7 @@ class PageHelperImplTest {
         List<String> listToConvert = new ArrayList<>();
         Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
 
-        PageImpl pageImplActual = pageHelper.convertListToPage(pageable, listToConvert);
+        PageImpl pageImplActual = pageUtil.convertListToPage(pageable, listToConvert);
 
         assertAll(
                 () -> assertTrue(pageImplActual.getContent().isEmpty(), () -> "should not contain any element, but was: " + pageImplActual.getContent()),

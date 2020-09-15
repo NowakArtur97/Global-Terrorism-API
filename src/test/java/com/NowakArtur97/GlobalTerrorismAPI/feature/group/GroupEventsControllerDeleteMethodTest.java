@@ -1,16 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PageUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -55,7 +51,7 @@ class GroupEventsControllerDeleteMethodTest {
     private PagedResourcesAssembler<EventNode> eventsPagedResourcesAssembler;
 
     @Mock
-    private PageHelper pageHelper;
+    private PageUtil pageUtil;
 
     private static GroupBuilder groupBuilder;
 
@@ -68,7 +64,7 @@ class GroupEventsControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageHelper);
+        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
@@ -90,7 +86,7 @@ class GroupEventsControllerDeleteMethodTest {
                 () -> verify(groupService, times(1)).deleteAllGroupEvents(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(pageHelper),
+                () -> verifyNoInteractions(pageUtil),
                 () -> verifyNoInteractions(eventModelAssembler),
                 () -> verifyNoInteractions(eventsPagedResourcesAssembler));
     }
@@ -112,7 +108,7 @@ class GroupEventsControllerDeleteMethodTest {
                 () -> verify(groupService, times(1)).deleteAllGroupEvents(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(groupModelAssembler),
-                () -> verifyNoInteractions(pageHelper),
+                () -> verifyNoInteractions(pageUtil),
                 () -> verifyNoInteractions(eventModelAssembler),
                 () -> verifyNoInteractions(eventsPagedResourcesAssembler));
     }

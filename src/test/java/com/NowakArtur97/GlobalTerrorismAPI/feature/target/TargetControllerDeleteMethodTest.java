@@ -1,18 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -53,10 +48,10 @@ class TargetControllerDeleteMethodTest {
     private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    private ViolationUtil<TargetNode, TargetDTO> violationUtil;
 
     private static TargetBuilder targetBuilder;
 
@@ -70,7 +65,7 @@ class TargetControllerDeleteMethodTest {
     private void setUp() {
 
         targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
+                patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
@@ -92,8 +87,8 @@ class TargetControllerDeleteMethodTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -115,7 +110,7 @@ class TargetControllerDeleteMethodTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 }

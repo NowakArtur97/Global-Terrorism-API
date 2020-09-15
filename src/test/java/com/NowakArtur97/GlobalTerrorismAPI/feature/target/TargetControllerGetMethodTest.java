@@ -1,25 +1,19 @@
 package com.NowakArtur97.GlobalTerrorismAPI.feature.target;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.Target;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.target.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.RegionBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -72,10 +66,10 @@ class TargetControllerGetMethodTest {
     private PagedResourcesAssembler<TargetNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<TargetNode, TargetDTO> violationHelper;
+    private ViolationUtil<TargetNode, TargetDTO> violationUtil;
 
     private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
@@ -93,7 +87,7 @@ class TargetControllerGetMethodTest {
     private void setUp() {
 
         targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
+                patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
@@ -208,8 +202,8 @@ class TargetControllerGetMethodTest {
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -311,8 +305,8 @@ class TargetControllerGetMethodTest {
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -368,8 +362,8 @@ class TargetControllerGetMethodTest {
                 () -> verify(pagedResourcesAssembler, times(1)).toModel(targetsExpected, targetModelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(targetModelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -418,8 +412,8 @@ class TargetControllerGetMethodTest {
                 () -> verify(targetModelAssembler, times(1)).toModel(targetNode),
                 () -> verifyNoMoreInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     @Test
@@ -444,8 +438,8 @@ class TargetControllerGetMethodTest {
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(targetModelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper));
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
     }
 
     private Target createTarget(ObjectType type) {

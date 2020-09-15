@@ -2,16 +2,12 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.NowakArtur97.GlobalTerrorismAPI.util.patch.PatchHelper;
-import com.NowakArtur97.GlobalTerrorismAPI.util.violation.ViolationHelper;
+import com.NowakArtur97.GlobalTerrorismAPI.util.PatchUtil;
+import com.NowakArtur97.GlobalTerrorismAPI.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -52,10 +48,10 @@ class GroupControllerDeleteMethodTest {
     private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;
 
     @Mock
-    private PatchHelper patchHelper;
+    private PatchUtil patchUtil;
 
     @Mock
-    private ViolationHelper<GroupNode, GroupDTO> violationHelper;
+    private ViolationUtil<GroupNode, GroupDTO> violationUtil;
 
     private static GroupBuilder groupBuilder;
 
@@ -69,7 +65,7 @@ class GroupControllerDeleteMethodTest {
     private void setUp() {
 
         groupController = new GroupController(groupService, modelAssembler, pagedResourcesAssembler,
-                patchHelper, violationHelper);
+                patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();
@@ -93,8 +89,8 @@ class GroupControllerDeleteMethodTest {
                 () -> verify(groupService, times(1)).delete(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 
@@ -117,8 +113,8 @@ class GroupControllerDeleteMethodTest {
                 () -> verify(groupService, times(1)).delete(groupId),
                 () -> verifyNoMoreInteractions(groupService),
                 () -> verifyNoInteractions(modelAssembler),
-                () -> verifyNoInteractions(patchHelper),
-                () -> verifyNoInteractions(violationHelper),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
                 () -> verifyNoInteractions(pagedResourcesAssembler));
     }
 }
