@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = UniqueUserNameConstraintValidator.class)
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@interface UniqueUserName {
+public @interface UniqueUserName {
 
     String message() default "User name is already taken";
 

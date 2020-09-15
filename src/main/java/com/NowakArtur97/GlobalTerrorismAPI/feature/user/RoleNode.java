@@ -10,7 +10,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class RoleNode extends Node {
+public class RoleNode extends Node {
 
     private String name;
 }

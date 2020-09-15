@@ -2,7 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.feature.user;
 
 import java.util.Optional;
 
-interface UserService {
+public interface UserService {
 
     UserNode register(UserDTO userDTO);
 

@@ -4,7 +4,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
 
 import java.util.Optional;
 
-interface UserRepository extends BaseRepository<UserNode> {
+public interface UserRepository extends BaseRepository<UserNode> {
 
     Optional<UserNode> findByUserName(String userName);
 

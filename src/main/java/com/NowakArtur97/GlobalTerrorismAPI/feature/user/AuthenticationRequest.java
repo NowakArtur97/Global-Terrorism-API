@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class AuthenticationRequest implements User {
+public class AuthenticationRequest implements User {
 
     @ApiModelProperty(notes = "The user's name")
     private String userName;
