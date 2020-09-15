@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.bulk;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.bulk;
 
 import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;

@@ -1,11 +1,7 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.group;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupEventsController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.group.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.NowakArtur97.GlobalTerrorismAPI.util.page.PageHelper;
 import lombok.SneakyThrows;
