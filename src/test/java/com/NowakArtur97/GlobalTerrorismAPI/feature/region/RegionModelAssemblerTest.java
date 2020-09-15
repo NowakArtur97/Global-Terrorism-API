@@ -1,4 +1,4 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.region;
 
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
