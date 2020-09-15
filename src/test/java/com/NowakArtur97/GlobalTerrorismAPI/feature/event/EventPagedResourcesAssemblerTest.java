@@ -1,9 +1,8 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

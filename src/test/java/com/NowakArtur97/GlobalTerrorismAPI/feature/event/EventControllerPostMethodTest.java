@@ -1,16 +1,18 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.event;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.dto.*;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.province.ProvinceNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.*;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryRepository;
+import com.NowakArtur97.GlobalTerrorismAPI.node.RoleNode;
+import com.NowakArtur97.GlobalTerrorismAPI.node.UserNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.UserRepository;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.*;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -237,7 +239,7 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
                         .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
                         .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("city.province.id",  is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("city.province.country.links[1].href").doesNotExist())

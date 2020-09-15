@@ -1,12 +1,14 @@
-package com.NowakArtur97.GlobalTerrorismAPI.assembler;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.assembler.TargetModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
@@ -27,24 +29,19 @@ import static org.mockito.Mockito.*;
 @Tag("EventModelAssembler_Tests")
 class EventModelAssemblerTest {
 
-    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
-    private final String CITY_BASE_PATH = "http://localhost/api/v1/cities";
-    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
-
-    private EventModelAssembler modelAssembler;
-
-    @Mock
-    private TargetModelAssembler targetModelAssembler;
-
-    @Mock
-    private CityModelAssembler cityModelAssembler;
-
-    @Mock
-    private ObjectMapper objectMapper;
-
     private static TargetBuilder targetBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
+    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
+    private final String CITY_BASE_PATH = "http://localhost/api/v1/cities";
+    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
+    private EventModelAssembler modelAssembler;
+    @Mock
+    private TargetModelAssembler targetModelAssembler;
+    @Mock
+    private CityModelAssembler cityModelAssembler;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @BeforeAll
     private static void setUpBuilders() {

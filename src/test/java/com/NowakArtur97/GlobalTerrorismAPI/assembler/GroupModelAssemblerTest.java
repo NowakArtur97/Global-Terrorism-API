@@ -1,10 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
@@ -148,11 +149,11 @@ class GroupModelAssemblerTest {
                 () -> assertNotNull(groupModelActual.getLinks(), () -> "should return model with links, but was: " + groupModelActual),
                 () -> assertFalse(groupModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + groupModelActual),
-                () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getLinks(), 
+                () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getLinks(),
                         () -> "should return model with event with links, but was: " + groupModelActual.getEventsCaused().get(0)),
                 () -> assertFalse(groupModelActual.getEventsCaused().get(0).getLinks().isEmpty(),
                         () -> "should return model with event with links, but was: " + groupModelActual.getEventsCaused().get(0)),
-                () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getTarget().getLinks(), 
+                () -> assertNotNull(groupModelActual.getEventsCaused().get(0).getTarget().getLinks(),
                         () -> "should return model with target with links, but was: " + groupModelActual.getEventsCaused().get(0)),
                 () -> assertFalse(groupModelActual.getEventsCaused().get(0).getTarget().getLinks().isEmpty(),
                         () -> "should return model with event with links, but was: " + groupModelActual.getEventsCaused().get(0)),

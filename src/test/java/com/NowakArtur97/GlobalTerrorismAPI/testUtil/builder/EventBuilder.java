@@ -1,16 +1,16 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.City;
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.EventDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.City;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.city.CityNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.Event;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.ibm.icu.util.Calendar;

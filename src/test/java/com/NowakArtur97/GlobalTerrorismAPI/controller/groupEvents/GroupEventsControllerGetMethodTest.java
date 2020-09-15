@@ -1,11 +1,11 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.groupEvents;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Event;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.GroupEventsController;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.Event;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.GroupModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.GroupNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.GroupService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;

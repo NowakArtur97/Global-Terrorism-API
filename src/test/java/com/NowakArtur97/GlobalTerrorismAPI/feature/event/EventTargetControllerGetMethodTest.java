@@ -1,13 +1,10 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.event;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.EventTargetController;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
-import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
+import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.event.EventService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.TargetBuilder;
