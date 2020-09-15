@@ -1,10 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.controller.country;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryController;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
-import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import lombok.SneakyThrows;

@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = CountryExistsConstraintValidator.class)
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@interface CountryExists {
+public @interface CountryExists {
 
     String message() default "A country with the given name does not exist.";
 
