@@ -1,7 +1,6 @@
-package com.NowakArtur97.GlobalTerrorismAPI.dto;
+package com.NowakArtur97.GlobalTerrorismAPI.feature.country;
 
-import com.NowakArtur97.GlobalTerrorismAPI.annotation.validation.CountryExists;
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.dto.DTONode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

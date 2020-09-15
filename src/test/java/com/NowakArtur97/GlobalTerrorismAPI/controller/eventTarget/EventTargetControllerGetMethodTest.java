@@ -2,9 +2,9 @@ package com.NowakArtur97.GlobalTerrorismAPI.controller.eventTarget;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.EventTargetController;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.EventNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.EventService;

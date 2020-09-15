@@ -1,5 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;

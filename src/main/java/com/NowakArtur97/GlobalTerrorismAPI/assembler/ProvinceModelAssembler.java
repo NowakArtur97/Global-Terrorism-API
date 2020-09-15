@@ -1,6 +1,7 @@
 package com.NowakArtur97.GlobalTerrorismAPI.assembler;
 
 import com.NowakArtur97.GlobalTerrorismAPI.controller.ProvinceController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.ProvinceModel;
 import com.NowakArtur97.GlobalTerrorismAPI.node.ProvinceNode;

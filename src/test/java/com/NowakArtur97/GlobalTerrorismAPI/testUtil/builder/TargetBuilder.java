@@ -1,12 +1,12 @@
 package com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder;
 
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.Country;
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Target;
-import com.NowakArtur97.GlobalTerrorismAPI.dto.CountryDTO;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryDTO;
 import com.NowakArtur97.GlobalTerrorismAPI.dto.TargetDTO;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.model.response.TargetModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.enums.ObjectType;
 

@@ -2,6 +2,7 @@ package com.NowakArtur97.GlobalTerrorismAPI.model.response;
 
 
 import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Province;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

@@ -1,13 +1,13 @@
 package com.NowakArtur97.GlobalTerrorismAPI.controller.country;
 
 import com.NowakArtur97.GlobalTerrorismAPI.advice.GenericRestControllerAdvice;
-import com.NowakArtur97.GlobalTerrorismAPI.assembler.CountryModelAssembler;
-import com.NowakArtur97.GlobalTerrorismAPI.baseModel.Country;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModelAssembler;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.Country;
 import com.NowakArtur97.GlobalTerrorismAPI.controller.BasicGenericRestController;
-import com.NowakArtur97.GlobalTerrorismAPI.controller.CountryController;
-import com.NowakArtur97.GlobalTerrorismAPI.model.response.CountryModel;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryController;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryModel;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionModel;
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import com.NowakArtur97.GlobalTerrorismAPI.feature.region.RegionNode;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.BasicGenericService;
 import com.NowakArtur97.GlobalTerrorismAPI.testUtil.builder.CountryBuilder;

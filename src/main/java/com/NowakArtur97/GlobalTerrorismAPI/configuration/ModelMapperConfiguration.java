@@ -1,6 +1,6 @@
 package com.NowakArtur97.GlobalTerrorismAPI.configuration;
 
-import com.NowakArtur97.GlobalTerrorismAPI.node.CountryNode;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryNode;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

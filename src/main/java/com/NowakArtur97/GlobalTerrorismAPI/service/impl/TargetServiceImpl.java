@@ -5,7 +5,7 @@ import com.NowakArtur97.GlobalTerrorismAPI.exception.ResourceNotFoundException;
 import com.NowakArtur97.GlobalTerrorismAPI.mapper.ObjectMapper;
 import com.NowakArtur97.GlobalTerrorismAPI.node.TargetNode;
 import com.NowakArtur97.GlobalTerrorismAPI.repository.BaseRepository;
-import com.NowakArtur97.GlobalTerrorismAPI.service.api.CountryService;
+import com.NowakArtur97.GlobalTerrorismAPI.feature.country.CountryService;
 import com.NowakArtur97.GlobalTerrorismAPI.service.api.TargetService;
 import org.springframework.stereotype.Service;
 
