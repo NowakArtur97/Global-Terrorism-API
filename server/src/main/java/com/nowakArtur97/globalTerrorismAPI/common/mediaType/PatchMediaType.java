@@ -1,0 +1,26 @@
+package com.nowakArtur97.globalTerrorismAPI.common.mediaType;
+
+import org.springframework.http.MediaType;
+
+public final class PatchMediaType {
+
+	public static final String APPLICATION_JSON_PATCH_VALUE = "application/json-patch+json";
+
+	public static final String APPLICATION_JSON_MERGE_PATCH_VALUE = "application/merge-patch+json";
+
+	public static final MediaType APPLICATION_JSON_PATCH;
+
+	public static final MediaType APPLICATION_JSON_MERGE_PATCH;
+
+	static {
+
+		APPLICATION_JSON_PATCH = MediaType.valueOf(APPLICATION_JSON_PATCH_VALUE);
+
+		APPLICATION_JSON_MERGE_PATCH = MediaType.valueOf(APPLICATION_JSON_MERGE_PATCH_VALUE);
+	}
+
+	private PatchMediaType() {
+
+		throw new AssertionError("No instances of PatchMediaType needed");
+	}
+}
