@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 **/test/resources/screenshots/**
 GlobalTerrorismAPI.iml
 .idea
+.mvn
