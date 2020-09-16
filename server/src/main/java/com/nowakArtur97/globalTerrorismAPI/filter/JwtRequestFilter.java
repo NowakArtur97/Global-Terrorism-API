@@ -1,8 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.filter;
 
 import com.nowakArtur97.globalTerrorismAPI.common.exception.JwtTokenMissingException;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.CustomUserDetailsService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +31,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private List<String> ignoredEndpointsList;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -52,7 +53,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.isTokenValid(jwt, userDetails)) {
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

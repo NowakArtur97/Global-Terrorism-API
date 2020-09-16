@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(basePackages = "com.NowakArtur97.GlobalTerrorismAPI.feature.user")
+@RestControllerAdvice(basePackages = "com.nowakArtur97.globalTerrorismAPI.feature.user")
 public class AuthenticationControllerAdvice {
 
-    @ExceptionHandler(BadCredentialsException.class)
+    @ExceptionHandler({BadCredentialsException.class})
     ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value());

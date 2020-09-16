@@ -1,9 +1,9 @@
 package com.nowakArtur97.globalTerrorismAPI.advice;
 
-import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import javax.json.JsonException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(basePackages = "com.NowakArtur97.GlobalTerrorismAPI.feature")
+@RestControllerAdvice(basePackages = "com.nowakArtur97.globalTerrorismAPI.feature")
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
