@@ -11,12 +11,11 @@ jobs:
         NEO4J_USER: neo4j
         NEO4J_PASSWORD: secret
         NEO4J_HOST: localhost
-    working_directory: ~/server/global_terrorism_api
+    working_directory: ~/server
     environment:
       MAVEN_OPTS: -Xmx3200m
     steps:
-    - checkout:
-        path: ~/server
+    - checkout
     - setup_remote_docker
     - restore_cache:
         keys:
