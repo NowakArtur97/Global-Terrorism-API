@@ -17,7 +17,7 @@ REST API providing information on terrorist attacks
 The data was downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
 
 ## Setup
-To start the application, enter the following commands in command line:
+To start the application, in the "server" folder, enter the following commands in command line:
 - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
 - `docker-compose up`
 Go to: `http://YOUR_DOCKER_IP:8080/swagger-ui.html`,
