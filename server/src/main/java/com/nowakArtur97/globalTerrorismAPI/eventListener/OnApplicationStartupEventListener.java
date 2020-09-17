@@ -1,7 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.eventListener;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityService;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
@@ -16,7 +16,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetService;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserService;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserService;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

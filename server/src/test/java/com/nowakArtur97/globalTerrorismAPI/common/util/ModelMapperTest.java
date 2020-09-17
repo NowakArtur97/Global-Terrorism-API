@@ -2,7 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.common.util;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
@@ -21,7 +21,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

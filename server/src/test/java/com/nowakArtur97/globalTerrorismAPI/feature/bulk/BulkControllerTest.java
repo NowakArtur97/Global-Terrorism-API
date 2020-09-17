@@ -1,8 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.bulk;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.user.RoleNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;

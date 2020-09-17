@@ -2,7 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.filter;
 
 import com.nowakArtur97.globalTerrorismAPI.common.exception.JwtTokenMissingException;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.CustomUserDetailsService;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,10 +1,10 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.user.User;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.AuthenticationRequest;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.RoleNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.UserNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.AuthenticationRequest;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
 import java.util.HashSet;
