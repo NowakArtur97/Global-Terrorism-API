@@ -9,7 +9,7 @@ const initialState: CitiesStoreState = {
 
 const _citiesReducer = createReducer(
   initialState,
-  on(CityActions.setCitites, (state, action) => ({
+  on(CityActions.setCities, (state, action) => ({
     ...state,
     cities: [...action.citites],
   }))
