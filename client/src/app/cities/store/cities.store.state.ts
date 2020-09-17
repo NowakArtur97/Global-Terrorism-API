@@ -1,5 +1,5 @@
 import City from '../models/city.model';
 
-export interface State {
+export default interface CitiesStoreState {
   cities: City[];
 }
