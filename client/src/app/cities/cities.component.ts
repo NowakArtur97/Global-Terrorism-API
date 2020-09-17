@@ -22,10 +22,7 @@ export class CitiesComponent implements OnInit, OnDestroy {
     this.citiesSubscription = this.store
       .select('cities')
       .pipe(map((citiesState) => citiesState.cities))
-      .subscribe((cities: City[]) => {
-        this.cities = cities;
-        console.log('CitiesComponent: ' + this.cities);
-      });
+      .subscribe((cities: City[]) => (this.cities = cities));
   }
 
   ngOnDestroy() {

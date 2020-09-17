@@ -7,7 +7,7 @@ import citiesReducer from './store/cities.reducer';
 
 @NgModule({
   declarations: [CitiesComponent],
-  imports: [HttpClientModule, StoreModule.forFeature('recipes', citiesReducer)],
+  imports: [HttpClientModule, StoreModule.forFeature('cities', citiesReducer)],
   exports: [CitiesComponent],
 })
 export default class CitiesModule {}
