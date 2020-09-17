@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { CititesModule } from './city/city.module';
+import { CitiesModule } from './cities/cities.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, CititesModule],
+  imports: [BrowserModule, CitiesModule],
   providers: [],
   bootstrap: [AppComponent],
 })
