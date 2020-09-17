@@ -11,7 +11,7 @@ const _citiesReducer = createReducer(
   initialState,
   on(CityActions.setCities, (state, action) => ({
     ...state,
-    cities: [...action.citites],
+    cities: [...action.cities],
   }))
 );
 

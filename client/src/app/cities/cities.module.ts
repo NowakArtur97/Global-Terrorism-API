@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 
@@ -6,7 +7,7 @@ import citiesReducer from './store/cities.reducer';
 
 @NgModule({
   declarations: [CitiesComponent],
-  imports: [StoreModule.forFeature('recipes', citiesReducer)],
+  imports: [HttpClientModule, StoreModule.forFeature('recipes', citiesReducer)],
   exports: [CitiesComponent],
 })
 export default class CitiesModule {}

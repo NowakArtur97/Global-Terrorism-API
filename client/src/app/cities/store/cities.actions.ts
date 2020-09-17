@@ -4,7 +4,9 @@ import City from '../models/city.model';
 
 export const setCities = createAction(
   '[City] Set Cities',
-  props<{ citites: City[] }>()
+  props<{
+    cities: City[];
+  }>()
 );
 
 export const fetchCitites = createAction('[City] Fetch Cities');
