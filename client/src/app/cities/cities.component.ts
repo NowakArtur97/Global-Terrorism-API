@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { latLng, tileLayer } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -15,6 +16,15 @@ import * as CitiesActions from './store/cities.actions';
 export class CitiesComponent implements OnInit, OnDestroy {
   cities: City[] = [];
   citiesSubscription: Subscription;
+  options = {
+    layers: [
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }),
+    ],
+    zoom: 7,
+    center: latLng([46.879966, -121.726909]),
+  };
 
   constructor(private store: Store<AppStoreState>) {}
 
