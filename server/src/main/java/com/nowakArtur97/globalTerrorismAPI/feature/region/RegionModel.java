@@ -6,11 +6,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.Objects;
+
 @ApiModel(description = "Details about the Region")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Builder
 public class RegionModel extends RepresentationModel<RegionModel> implements Region {
 
@@ -22,5 +24,21 @@ public class RegionModel extends RepresentationModel<RegionModel> implements Reg
 
     public RegionModel(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof RegionModel)) return false;
+
+        RegionModel that = (RegionModel) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getName());
     }
 }
