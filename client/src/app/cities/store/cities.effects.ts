@@ -16,11 +16,11 @@ export default class CitiesEffects {
       switchMap(() => {
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTYwMDQ0NzM3NSwiaWF0IjoxNjAwNDExMzc1fQ.fDcE1CgkB0NPAlnRQWGh1u5DGB2azs8p1pjlTWaZv3I`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTYwMDQ3MDYzNiwiaWF0IjoxNjAwNDM0NjM2fQ.ETbkXCn1wRD6gDG0lWnwIb9Zji9jWyPmkZ6HRcpHpX8`,
         });
 
         return this.httpClient.get<CitiesGetResponse>(
-          'http://localhost:8080/api/v1/cities?page=0&size=200',
+          'http://localhost:8080/api/v1/cities?page=0&size=50',
           { headers: headers }
         );
       }),

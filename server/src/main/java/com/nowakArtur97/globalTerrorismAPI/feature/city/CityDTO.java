@@ -5,8 +5,9 @@ import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -15,7 +16,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @ApiModel(description = "Model responsible for City validation")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CityDTO implements DTO, City {
