@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import CitiesModule from './cities/cities.module';
 import CitiesEffects from './cities/store/cities.effects';
 import appReducer from './store/app.reducer';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import appReducer from './store/app.reducer';
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     EffectsModule.forRoot([CitiesEffects]),
     CitiesModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
