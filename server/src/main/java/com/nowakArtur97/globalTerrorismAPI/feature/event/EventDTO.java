@@ -1,15 +1,12 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.DTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -18,7 +15,8 @@ import javax.validation.constraints.Past;
 import java.util.Date;
 
 @ApiModel(description = "Model responsible for Event validation")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
