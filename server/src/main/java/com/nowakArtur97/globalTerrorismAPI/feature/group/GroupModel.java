@@ -7,12 +7,13 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
+import java.util.Objects;
 
 @ApiModel(description = "Details about the Target")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Builder
 public class GroupModel extends RepresentationModel<GroupModel> implements Group {
 
@@ -28,5 +29,21 @@ public class GroupModel extends RepresentationModel<GroupModel> implements Group
     public void addEvent(EventModel eventModel) {
 
         eventsCaused.add(eventModel);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof GroupModel)) return false;
+
+        GroupModel that = (GroupModel) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getName());
     }
 }
