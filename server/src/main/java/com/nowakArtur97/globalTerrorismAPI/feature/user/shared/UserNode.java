@@ -1,19 +1,16 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.shared;
 
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Objects;
 import java.util.Set;
 
 @NodeEntity(label = "User")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserNode extends Node implements User {
@@ -34,5 +31,22 @@ public class UserNode extends Node implements User {
         this.password = password;
         this.email = email;
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof UserNode)) return false;
+
+        UserNode userNode = (UserNode) o;
+        return Objects.equals(getUserName(), userNode.getUserName()) &&
+                Objects.equals(getPassword(), userNode.getPassword()) &&
+                Objects.equals(getEmail(), userNode.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserName(), getPassword(), getEmail());
     }
 }
