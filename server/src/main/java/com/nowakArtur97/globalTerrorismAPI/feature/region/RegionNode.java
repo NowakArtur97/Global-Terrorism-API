@@ -17,7 +17,6 @@ public class RegionNode extends Node implements Region {
     private String name;
 
     public RegionNode(String name) {
-
         this.name = name;
     }
 

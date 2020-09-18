@@ -22,14 +22,12 @@ public class TargetNode extends Node implements Target {
     private CountryNode countryOfOrigin;
 
     public TargetNode(Long id, String target, CountryNode countryOfOrigin) {
-
         super(id);
         this.target = target;
         this.countryOfOrigin = countryOfOrigin;
     }
 
     public TargetNode(String target, CountryNode countryOfOrigin) {
-
         this.target = target;
         this.countryOfOrigin = countryOfOrigin;
     }

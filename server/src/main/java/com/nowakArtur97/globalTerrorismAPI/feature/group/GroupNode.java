@@ -23,13 +23,11 @@ public class GroupNode extends Node implements Group {
     private List<EventNode> eventsCaused = new ArrayList<>();
 
     public GroupNode(String name) {
-
         this.name = name;
     }
 
     public GroupNode(Long id, String name, List<EventNode> eventsCaused) {
-
-        this.id = id;
+        super(id);
         this.name = name;
         this.eventsCaused = eventsCaused;
     }
