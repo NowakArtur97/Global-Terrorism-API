@@ -3,14 +3,17 @@ package com.nowakArtur97.globalTerrorismAPI.common.baseModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @ApiModel(description = "Details about the Error")
-@Data
+@Getter
+@Setter
 public class ErrorResponse {
 
     @ApiModelProperty(notes = "Error time")
@@ -32,5 +35,22 @@ public class ErrorResponse {
     public void addError(String error) {
 
         errors.add(error);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof ErrorResponse)) return false;
+
+        ErrorResponse that = (ErrorResponse) o;
+        return getStatus() == that.getStatus() &&
+                Objects.equals(getTimestamp(), that.getTimestamp()) &&
+                Objects.equals(getErrors(), that.getErrors());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTimestamp(), getStatus(), getErrors());
     }
 }
