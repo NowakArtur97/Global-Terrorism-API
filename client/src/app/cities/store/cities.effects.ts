@@ -20,7 +20,7 @@ export default class CitiesEffects {
         });
 
         return this.httpClient.get<CitiesGetResponse>(
-          'http://localhost:8080/api/v1/cities?page=0&size=20',
+          'http://localhost:8080/api/v1/cities?page=0&size=200',
           { headers: headers }
         );
       }),
