@@ -1,14 +1,18 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.target;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
-import lombok.Data;
+import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Objects;
+
 @NodeEntity(label = "Target")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class TargetNode extends Node implements Target {
 
@@ -28,5 +32,20 @@ public class TargetNode extends Node implements Target {
 
         this.target = target;
         this.countryOfOrigin = countryOfOrigin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof TargetNode)) return false;
+
+        TargetNode that = (TargetNode) o;
+        return Objects.equals(getTarget(), that.getTarget());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getTarget());
     }
 }

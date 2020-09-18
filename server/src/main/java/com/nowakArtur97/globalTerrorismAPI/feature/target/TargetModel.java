@@ -6,11 +6,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.Objects;
+
 @ApiModel(description = "Details about the Target")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Builder
 public class TargetModel extends RepresentationModel<TargetModel> implements Target {
 
@@ -22,4 +24,20 @@ public class TargetModel extends RepresentationModel<TargetModel> implements Tar
 
     @ApiModelProperty(notes = "The target's country of origin")
     private CountryModel countryOfOrigin;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof TargetModel)) return false;
+
+        TargetModel that = (TargetModel) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getTarget(), that.getTarget());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getTarget());
+    }
 }
