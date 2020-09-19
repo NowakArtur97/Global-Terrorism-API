@@ -22,6 +22,7 @@ import appReducer from './store/app.reducer';
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     EffectsModule.forRoot([CitiesEffects]),
+
     AppRoutingModule,
 
     BrowserAnimationsModule,
