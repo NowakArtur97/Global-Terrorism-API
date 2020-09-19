@@ -7,7 +7,6 @@ const appRoutes: Routes = [
   {
     path: 'map',
     component: MapComponent,
-    pathMatch: 'full',
   },
 ];
 
