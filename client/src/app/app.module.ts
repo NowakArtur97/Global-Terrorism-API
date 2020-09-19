@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import AuthModule from './auth/auth.module';
 import CitiesModule from './cities/cities.module';
 import CitiesEffects from './cities/store/cities.effects';
 import MapModule from './map/map.module';
@@ -28,6 +29,7 @@ import appReducer from './store/app.reducer';
 
     CitiesModule,
     MapModule,
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
