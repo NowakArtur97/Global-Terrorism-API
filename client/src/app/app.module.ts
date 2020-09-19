@@ -6,9 +6,11 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import CitiesModule from './cities/cities.module';
 import CitiesEffects from './cities/store/cities.effects';
+import MapModule from './map/map.module';
 import { MaterialModule } from './material/material.module';
 import appReducer from './store/app.reducer';
 
@@ -19,11 +21,13 @@ import appReducer from './store/app.reducer';
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     EffectsModule.forRoot([CitiesEffects]),
+    AppRoutingModule,
 
     BrowserAnimationsModule,
     MaterialModule,
 
     CitiesModule,
+    MapModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

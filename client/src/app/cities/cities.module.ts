@@ -5,10 +5,9 @@ import { StoreModule } from '@ngrx/store';
 
 import { CitiesComponent } from './cities.component';
 import citiesReducer from './store/cities.reducer';
-import { CitiesMapComponent } from './cities-map/cities-map.component';
 
 @NgModule({
-  declarations: [CitiesComponent, CitiesMapComponent],
+  declarations: [CitiesComponent],
   imports: [
     HttpClientModule,
     StoreModule.forFeature('cities', citiesReducer),

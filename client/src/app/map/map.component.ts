@@ -1,21 +1,21 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { icon } from 'leaflet';
 import * as L from 'leaflet';
+import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import City from '../cities/models/city.model';
+import * as CitiesActions from '../cities/store/cities.actions';
 
-import AppStoreState from '../../store/app.store.state';
-import City from '../models/city.model';
-import MarkerService from '../services/marker.service';
-import * as CitiesActions from '../store/cities.actions';
+import AppStoreState from '../store/app.store.state';
+import MarkerService from './services/marker.service';
 
 @Component({
-  selector: 'app-cities-map',
-  templateUrl: './cities-map.component.html',
-  styleUrls: ['./cities-map.component.css'],
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.css'],
 })
-export class CitiesMapComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapComponent implements OnInit {
   cities: City[] = [];
   citiesSubscription: Subscription;
   private map: L.Map;
