@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-authentication',
@@ -6,5 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./authentication.component.css'],
 })
 export class AuthenticationComponent implements OnInit {
-  ngOnInit(): void {}
+  loginForm: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm() {
+    this.loginForm = new FormGroup({
+      userNameOrEmail: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
+    });
+  }
+
+  onLogin() {}
 }

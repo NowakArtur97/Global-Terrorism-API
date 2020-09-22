@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../material/material.module';
 import AuthRoutingModule from './auth-routing.module';
@@ -7,7 +7,7 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 
 @NgModule({
   declarations: [AuthenticationComponent],
-  imports: [FormsModule, AuthRoutingModule, MaterialModule],
+  imports: [ReactiveFormsModule, AuthRoutingModule, MaterialModule],
   exports: [AuthenticationComponent],
 })
 export default class AuthModule {}

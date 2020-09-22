@@ -1,12 +1,12 @@
 export default class LoginData {
-  constructor(private _userOrEmail: string, private _password: string) {}
+  constructor(private _userNameOrEmail: string, private _password: string) {}
 
-  public get userOrEmail(): string {
-    return this._userOrEmail;
+  public get userNameOrEmail(): string {
+    return this._userNameOrEmail;
   }
 
-  public set userOrEmail(userOrEmail: string) {
-    this._userOrEmail = userOrEmail;
+  public set userNameOrEmail(userNameOrEmail: string) {
+    this._userNameOrEmail = userNameOrEmail;
   }
 
   public get password(): string {
