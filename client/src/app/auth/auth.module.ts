@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -7,7 +8,12 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 
 @NgModule({
   declarations: [AuthenticationComponent],
-  imports: [ReactiveFormsModule, AuthRoutingModule, MaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AuthRoutingModule,
+    MaterialModule,
+  ],
   exports: [AuthenticationComponent],
 })
 export default class AuthModule {}

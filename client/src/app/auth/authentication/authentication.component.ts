@@ -22,8 +22,8 @@ export class AuthenticationComponent implements OnInit {
 
   initForm() {
     this.loginForm = new FormGroup({
-      userNameOrEmail: new FormControl(null, Validators.required),
-      password: new FormControl(null, Validators.required),
+      userNameOrEmail: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
     });
   }
 
@@ -34,5 +34,13 @@ export class AuthenticationComponent implements OnInit {
         loginData: new LoginData(userNameOrEmail, password),
       })
     );
+  }
+
+  get userNameOrEmail() {
+    return this.loginForm.get('userNameOrEmail');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 }

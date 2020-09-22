@@ -10,7 +10,6 @@ import * as AuthActions from './auth.actions';
 
 const handleAuthentication = (responseData: AuthResponse) => {
   const user = new User(responseData.token);
-  console.log(user);
   return AuthActions.authenticateUserSuccess({
     user,
   });

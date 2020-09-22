@@ -12,6 +12,16 @@
               formControlName="userNameOrEmail"
               matInput
             />
+            <mat-error
+              *ngIf="
+                userNameOrEmail.invalid &&
+                (userNameOrEmail.touched || userNameOrEmail.dirty)
+              "
+            >
+              <div *ngIf="userNameOrEmail.errors.required">
+                User Name or Email is <strong>required</strong>
+              </div>
+            </mat-error>
           </mat-form-field>
         </p>
 
@@ -24,6 +34,13 @@
               formControlName="password"
               matInput
             />
+            <mat-error
+              *ngIf="password.invalid && (password.touched || password.dirty)"
+            >
+              <div *ngIf="password.errors.required">
+                Password is <strong>required</strong>
+              </div>
+            </mat-error>
           </mat-form-field>
         </p>
 
