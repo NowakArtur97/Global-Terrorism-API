@@ -9,7 +9,9 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" routerLink="/auth">Login</a>
+      <a mat-list-item href="#" [routerLink]="" (click)="onOpenAuthPopUp()"
+        >Login</a
+      >
       <a mat-list-item href="#" routerLink="/map">Map</a>
       <a mat-list-item href="#">Statistics</a>
       <a mat-list-item href="#">Add</a>

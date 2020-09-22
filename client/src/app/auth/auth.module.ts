@@ -3,12 +3,11 @@ import { FormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../material/material.module';
 import AuthRoutingModule from './auth-routing.module';
-import { AuthComponent } from './auth.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 
 @NgModule({
-  declarations: [AuthComponent, AuthenticationComponent],
+  declarations: [AuthenticationComponent],
   imports: [FormsModule, AuthRoutingModule, MaterialModule],
-  exports: [],
+  exports: [AuthenticationComponent],
 })
 export default class AuthModule {}

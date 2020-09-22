@@ -16,7 +16,7 @@ export default class CitiesEffects {
       switchMap(() => {
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTYwMDUzMjA4MCwiaWF0IjoxNjAwNDk2MDgwfQ.ap00r3Oc-N42iFCOwXSN7nP3jCGaoHO1oSZaZDNni74`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTYwMDc4ODE5MCwiaWF0IjoxNjAwNzUyMTkwfQ.JkuLhO4ZT66zoBe54WhfrOY3lpWBNOZChmDGb6NIFUw`,
         });
 
         return this.httpClient.get<CitiesGetResponse>(
