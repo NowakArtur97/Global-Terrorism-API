@@ -13,4 +13,11 @@ export const authenticateUserSuccess = createAction(
   props<{ user: User }>()
 );
 
+export const authenticateUserFailure = createAction(
+  '[User] Authenticate User Failure',
+  props<{
+    authErrorMessages: string[];
+  }>()
+);
+
 export const logoutUser = createAction('[User] Logout User');

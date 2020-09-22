@@ -5,6 +5,7 @@ import AuthStoreState from './auth.store.state';
 
 const initialState: AuthStoreState = {
   user: null,
+  authErrorMessages: [],
 };
 
 const _authReducer = createReducer(
@@ -16,11 +17,18 @@ const _authReducer = createReducer(
   on(AuthActions.authenticateUserSuccess, (state, action) => ({
     ...state,
     user: action.user,
+    authErrorMessages: [],
+  })),
+
+  on(AuthActions.authenticateUserFailure, (state, action) => ({
+    ...state,
+    authErrorMessages: action.authErrorMessages,
   })),
 
   on(AuthActions.logoutUser, (state, action) => ({
     ...state,
     user: null,
+    authErrorMessages: [],
   }))
 );
 

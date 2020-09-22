@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
 import AuthResponse from '../models/AuthResponseData';
 import User from '../models/User';
@@ -15,13 +16,12 @@ const handleAuthentication = (responseData: AuthResponse) => {
   });
 };
 
-const handleError = (errorResponse: any) => {
-  console.log(errorResponse);
+const handleError = (errorResponse: ErrorResponse) => {
+  const authErrorMessages = errorResponse.errors;
 
-  const user = new User('dummy');
   return of(
-    AuthActions.authenticateUserSuccess({
-      user,
+    AuthActions.authenticateUserFailure({
+      authErrorMessages,
     })
   );
 };
@@ -46,7 +46,7 @@ export default class AuthEffects {
               console.log(responseData);
             }),
             map((responseData) => handleAuthentication(responseData)),
-            catchError((errorResponse) => handleError(errorResponse))
+            catchError((errorResponse) => handleError(errorResponse.error))
           );
       })
     )

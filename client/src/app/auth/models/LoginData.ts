@@ -5,15 +5,7 @@ export default class LoginData {
     return this._userNameOrEmail;
   }
 
-  public set userNameOrEmail(userNameOrEmail: string) {
-    this._userNameOrEmail = userNameOrEmail;
-  }
-
   public get password(): string {
     return this._password;
-  }
-
-  public set password(password: string) {
-    this._password = password;
   }
 }
