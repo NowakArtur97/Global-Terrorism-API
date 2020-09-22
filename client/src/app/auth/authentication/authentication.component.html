@@ -44,6 +44,10 @@
           </mat-form-field>
         </p>
 
+        <mat-error *ngFor="let errorMessage of authErrors">
+          <div>{{ errorMessage }}</div>
+        </mat-error>
+
         <mat-dialog-actions align="end">
           <button type="submit" mat-raised-button [disabled]="!loginForm.valid">
             Login

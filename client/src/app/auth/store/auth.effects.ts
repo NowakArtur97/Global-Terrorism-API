@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
 import AuthResponse from '../models/AuthResponseData';
@@ -18,7 +18,7 @@ const handleAuthentication = (responseData: AuthResponse) => {
 
 const handleError = (errorResponse: ErrorResponse) => {
   const authErrorMessages = errorResponse.errors;
-
+  console.log(authErrorMessages);
   return of(
     AuthActions.authenticateUserFailure({
       authErrorMessages,
@@ -34,7 +34,6 @@ export default class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
       switchMap((action) => {
-        console.log(action.loginData.userNameOrEmail);
         return this.httpClient
           .post<AuthResponse>('http://localhost:8080/api/v1/authentication', {
             user: action.loginData.userNameOrEmail,
@@ -42,9 +41,6 @@ export default class AuthEffects {
             password: action.loginData.password,
           })
           .pipe(
-            tap((responseData) => {
-              console.log(responseData);
-            }),
             map((responseData) => handleAuthentication(responseData)),
             catchError((errorResponse) => handleError(errorResponse.error))
           );

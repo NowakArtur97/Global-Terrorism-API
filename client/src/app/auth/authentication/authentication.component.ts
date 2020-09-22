@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import LoginData from '../models/LoginData';
@@ -11,13 +13,24 @@ import * as AuthActions from '../store/auth.actions';
   templateUrl: './authentication.component.html',
   styleUrls: ['./authentication.component.css'],
 })
-export class AuthenticationComponent implements OnInit {
+export class AuthenticationComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
+  authErrors: string[] = [];
+  private authErrorsSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
+
+    this.authErrorsSubscription = this.store
+      .select('auth')
+      .pipe(map((authState) => authState.authErrorMessages))
+      .subscribe((authErrorMessages) => (this.authErrors = authErrorMessages));
+  }
+
+  ngOnDestroy(): void {
+    this.authErrorsSubscription.unsubscribe();
   }
 
   initForm() {
