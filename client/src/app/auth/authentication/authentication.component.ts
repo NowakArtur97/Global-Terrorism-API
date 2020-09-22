@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import AppStoreState from 'src/app/store/app.store.state';
+
+import * as AuthActions from '../store/auth.actions';
 
 @Component({
   selector: 'app-authentication',
@@ -9,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class AuthenticationComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor() {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -22,5 +26,7 @@ export class AuthenticationComponent implements OnInit {
     });
   }
 
-  onLogin() {}
+  onLogin() {
+    this.store.dispatch(AuthActions.loginUserStart(this.loginForm.value));
+  }
 }

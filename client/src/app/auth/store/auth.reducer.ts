@@ -9,7 +9,11 @@ const initialState: AuthStoreState = {
 
 const _authReducer = createReducer(
   initialState,
-  on(AuthActions.loginUser, (state, action) => ({
+  on(AuthActions.loginUserStart, (state, action) => ({
+    ...state,
+  })),
+
+  on(AuthActions.authenticateUserSuccess, (state, action) => ({
     ...state,
     user: action.user,
   })),
