@@ -1,7 +1,31 @@
-AuthenticationComponent
 <h2 mat-dialog-title>Login</h2>
-<mat-dialog-content class="mat-typography">Login Form</mat-dialog-content>
+<mat-dialog-content class="mat-typography">
+  <form>
+    <mat-card>
+      <mat-card-content>
+        <form>
+          <p>
+            <mat-form-field>
+              <mat-label>User name/Email</mat-label>
+              <input type="type" required matInput />
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input type="password" required matInput />
+            </mat-form-field>
+          </p>
+
+          <div class="button">
+            <button type="submit" mat-raised-button>Login</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button mat-dialog-close>Login</button>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
 </mat-dialog-actions>
