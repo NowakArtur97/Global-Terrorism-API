@@ -7,6 +7,8 @@ import { map, shareReplay } from 'rxjs/operators';
 import { AuthenticationComponent } from 'src/app/auth/authentication/authentication.component';
 import AppStoreState from 'src/app/store/app.store.state';
 
+import * as AuthActions from '../../auth/store/auth.actions';
+
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -47,5 +49,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     dialogConfig.autoFocus = true;
 
     this.dialog.open(AuthenticationComponent, dialogConfig);
+  }
+
+  onLogout() {
+    this.store.dispatch(AuthActions.logoutUser());
   }
 }

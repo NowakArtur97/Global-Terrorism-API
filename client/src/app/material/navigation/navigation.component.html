@@ -22,6 +22,14 @@
       >
       <a mat-list-item href="#" *ngIf="isAuthenticated">Statistics</a>
       <a mat-list-item href="#" *ngIf="isAuthenticated">Add</a>
+      <a
+        mat-list-item
+        href="#"
+        [routerLink]=""
+        (click)="onLogout()"
+        *ngIf="isAuthenticated"
+        >Logout</a
+      >
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
