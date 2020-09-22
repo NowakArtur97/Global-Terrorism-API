@@ -1,16 +1,21 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthenticationComponent } from 'src/app/auth/authentication/authentication.component';
+import AppStoreState from 'src/app/store/app.store.state';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit, OnDestroy {
+  isAuthenticated = false;
+  private userSubscription: Subscription;
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -20,8 +25,20 @@ export class NavigationComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private store: Store<AppStoreState>
   ) {}
+
+  ngOnInit(): void {
+    this.userSubscription = this.store
+      .select('auth')
+      .pipe(map((authState) => authState.user))
+      .subscribe((user) => (this.isAuthenticated = !!user));
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
+  }
 
   onOpenAuthPopUp() {
     const dialogConfig = new MatDialogConfig();
