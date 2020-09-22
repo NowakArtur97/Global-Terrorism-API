@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import AppStoreState from 'src/app/store/app.store.state';
 
+import LoginData from '../models/LoginData';
 import * as AuthActions from '../store/auth.actions';
 
 @Component({
@@ -27,6 +28,11 @@ export class AuthenticationComponent implements OnInit {
   }
 
   onLogin() {
-    this.store.dispatch(AuthActions.loginUserStart(this.loginForm.value));
+    const { userNameOrEmail, password } = this.loginForm.value;
+    this.store.dispatch(
+      AuthActions.loginUserStart({
+        loginData: new LoginData(userNameOrEmail, password),
+      })
+    );
   }
 }

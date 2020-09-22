@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import AuthModule from './auth/auth.module';
+import AuthEffects from './auth/store/auth.effects';
 import CitiesModule from './cities/cities.module';
 import CitiesEffects from './cities/store/cities.effects';
 import MapModule from './map/map.module';
@@ -26,7 +27,7 @@ import appReducer from './store/app.reducer';
 
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([CitiesEffects]),
+    EffectsModule.forRoot([CitiesEffects, AuthEffects]),
 
     AppRoutingModule,
 
