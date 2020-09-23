@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("CustomUserDetailsServiceImpl_Tests")
-class CustomUserDetailsServiceImplTest {
+class CustomUserDetailsServiceTest {
 
     private CustomUserDetailsService customUserDetailsService;
 
@@ -41,7 +41,7 @@ class CustomUserDetailsServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        customUserDetailsService = new CustomUserDetailsServiceImpl(userRepository);
+        customUserDetailsService = new CustomUserDetailsService(userRepository);
     }
 
     @Test
