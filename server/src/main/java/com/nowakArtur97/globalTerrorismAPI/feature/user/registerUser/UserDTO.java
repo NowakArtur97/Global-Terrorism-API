@@ -8,15 +8,18 @@ import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @ApiModel(description = "Model responsible for User validation during registration")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @PasswordsMatch(message = "{user.password.notMatch}", groups = BasicUserValidationConstraints.class)
@@ -42,4 +45,22 @@ public class UserDTO implements User {
     @NotBlank(message = "{user.email.notBlank}")
     @UniqueEmail(message = "{user.email.unique}", groups = BasicUserValidationConstraints.class)
     private String email;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof UserDTO)) return false;
+
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(getUserName(), userDTO.getUserName()) &&
+                Objects.equals(getPassword(), userDTO.getPassword()) &&
+                Objects.equals(getMatchingPassword(), userDTO.getMatchingPassword()) &&
+                Objects.equals(getEmail(), userDTO.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserName(), getPassword(), getMatchingPassword(), getEmail());
+    }
 }
