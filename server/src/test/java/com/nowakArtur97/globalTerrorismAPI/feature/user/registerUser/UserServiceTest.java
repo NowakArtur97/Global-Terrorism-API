@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("UserServiceImpl_Tests")
-class UserServiceImplTest {
+class UserServiceTest {
 
     private UserService userService;
 
@@ -46,7 +46,7 @@ class UserServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        userService = new UserServiceImpl(userRepository, modelMapper, bCryptPasswordEncoder);
+        userService = new UserService(userRepository, modelMapper, bCryptPasswordEncoder);
     }
 
     @Test

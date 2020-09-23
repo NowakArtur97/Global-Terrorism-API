@@ -1,16 +1,51 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
-public interface UserService {
+@Service
+@RequiredArgsConstructor
+public class UserService {
 
-    UserNode register(UserDTO userDTO);
+    private final static RoleNode DEFAULT_USER_ROLE = new RoleNode("user");
 
-    Optional<UserNode> findByUserName(String userName);
+    private final UserRepository userRepository;
 
-    Optional<UserNode> findByEmail(String email);
+    private final ModelMapper modelMapper;
 
-    Optional<UserNode> findByUserNameOrEmail(String userName, String email);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserNode register(UserDTO userDTO) {
+
+        UserNode userNode = modelMapper.map(userDTO, UserNode.class);
+
+        userNode.setPassword(bCryptPasswordEncoder.encode(userNode.getPassword()));
+
+        userNode.setRoles(Set.of(DEFAULT_USER_ROLE));
+
+        return userRepository.save(userNode);
+    }
+
+    public Optional<UserNode> findByUserName(String userName) {
+
+        return userRepository.findByUserName(userName);
+    }
+
+    public Optional<UserNode> findByEmail(String email) {
+
+        return userRepository.findByEmail(email);
+    }
+
+    public Optional<UserNode> findByUserNameOrEmail(String userName, String email) {
+
+        return userRepository.findByUserNameOrEmail(userName, email);
+    }
 }
