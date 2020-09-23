@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
+import RegistrationData from '../models/RegistrationData';
+import * as AuthActions from '../store/auth.actions';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -46,10 +49,16 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    console.log(userName);
-    console.log(email);
-    console.log(password);
-    console.log(matchingPassword);
+    this.store.dispatch(
+      AuthActions.registerUserStart({
+        registrationData: new RegistrationData(
+          userName,
+          email,
+          password,
+          matchingPassword
+        ),
+      })
+    );
   }
 
   get userName() {

@@ -30,6 +30,9 @@
               <div *ngIf="email.errors.required">
                 Email is <strong>required</strong>
               </div>
+              <div *ngIf="email.errors.email">
+                Email must be a <strong>valid</strong> email address
+              </div>
             </mat-error>
           </mat-form-field>
         </p>
