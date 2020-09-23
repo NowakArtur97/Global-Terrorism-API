@@ -43,22 +43,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  onOpenLoginPopUp() {
+  onOpenPopUp(type: string) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    this.dialog.open(AuthenticationComponent, dialogConfig);
-  }
-
-  onOpenRegistrationPopUp() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    this.dialog.open(RegistrationComponent, dialogConfig);
+    switch (type) {
+      case 'login': {
+        this.dialog.open(AuthenticationComponent, dialogConfig);
+        break;
+      }
+      case 'registration': {
+        this.dialog.open(RegistrationComponent, dialogConfig);
+        break;
+      }
+    }
   }
 
   onLogout() {

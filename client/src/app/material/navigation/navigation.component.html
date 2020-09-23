@@ -13,7 +13,7 @@
         mat-list-item
         href="#"
         [routerLink]=""
-        (click)="onOpenLoginPopUp()"
+        (click)="onOpenPopUp('login')"
         *ngIf="!isAuthenticated"
         >Login</a
       >
@@ -21,7 +21,7 @@
         mat-list-item
         href="#"
         [routerLink]=""
-        (click)="onOpenRegistrationPopUp()"
+        (click)="onOpenPopUp('registration')"
         *ngIf="!isAuthenticated"
         >Register</a
       >
