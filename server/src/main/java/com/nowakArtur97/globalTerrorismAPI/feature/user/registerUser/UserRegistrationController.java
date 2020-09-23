@@ -2,7 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.CustomUserDetailsService;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.CustomUserDetailsService;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.AuthenticationResponse;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import io.swagger.annotations.*;
@@ -37,11 +37,12 @@ class UserRegistrationController {
             @ApiResponse(code = 200, message = "Successfully created a new account", response = String.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<AuthenticationResponse> registerUser(@ApiParam(value = "User data", name = "user", required = true)
-                                               @RequestBody @Valid UserDTO userDTO) {
+                                                               @RequestBody @Valid UserDTO userDTO) {
 
         UserNode newUser = userService.register(userDTO);
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(newUser.getUserName());
+        UserDetails userDetails = new User(newUser.getUserName(), newUser.getPassword(),
+                customUserDetailsService.getAuthorities(newUser.getRoles()));
 
         String token = jwtUtil.generateToken(userDetails);
 

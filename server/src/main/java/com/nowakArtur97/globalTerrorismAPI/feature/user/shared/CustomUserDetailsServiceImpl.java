@@ -1,8 +1,5 @@
-package com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser;
+package com.nowakArtur97.globalTerrorismAPI.feature.user.shared;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +27,8 @@ class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         return new User(userNode.getUserName(), userNode.getPassword(), getAuthorities(userNode.getRoles()));
     }
 
-    private List<GrantedAuthority> getAuthorities(Set<RoleNode> userRoles) {
+    @Override
+    public List<GrantedAuthority> getAuthorities(Set<RoleNode> userRoles) {
 
         List<GrantedAuthority> userAuthorities = new ArrayList<>();
 

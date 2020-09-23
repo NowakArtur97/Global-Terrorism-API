@@ -1,6 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.configuration;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.CustomUserDetailsService;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.CustomUserDetailsService;
 import com.nowakArtur97.globalTerrorismAPI.filter.ExceptionHandlerFilter;
 import com.nowakArtur97.globalTerrorismAPI.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
