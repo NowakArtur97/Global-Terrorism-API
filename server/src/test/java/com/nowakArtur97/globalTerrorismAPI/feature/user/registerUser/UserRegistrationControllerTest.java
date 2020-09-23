@@ -1,6 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.CustomUserDetailsService;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -15,8 +17,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -41,6 +48,12 @@ class UserRegistrationControllerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Mock
+    private JwtUtil jwtUtil;
+
     private static UserBuilder userBuilder;
 
     @BeforeAll
@@ -52,7 +65,7 @@ class UserRegistrationControllerTest {
     @BeforeEach
     private void setUp() {
 
-        userRegistrationController = new UserRegistrationController(userService);
+        userRegistrationController = new UserRegistrationController(userService, customUserDetailsService, jwtUtil);
 
         restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
 
@@ -66,7 +79,15 @@ class UserRegistrationControllerTest {
         UserDTO userDTO = (UserDTO) userBuilder.build(ObjectType.DTO);
         UserNode userNode = (UserNode) userBuilder.build(ObjectType.NODE);
 
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("user"));
+        User userDetails = new User(userNode.getUserName(), userNode.getPassword(),
+                authorities);
+
+        String token = "generatedToken";
+
         when(userService.register(userDTO)).thenReturn(userNode);
+        when(customUserDetailsService.getAuthorities(userNode.getRoles())).thenReturn(authorities);
+        when(jwtUtil.generateToken(userDetails)).thenReturn(token);
 
         assertAll(
                 () -> mockMvc
@@ -75,16 +96,20 @@ class UserRegistrationControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string("Account created successfully")),
+                        .andExpect(jsonPath("token", is(token))),
                 () -> verify(userService, times(1)).register(userDTO),
-                () -> verifyNoMoreInteractions(userService));
+                () -> verifyNoMoreInteractions(userService),
+                () -> verify(customUserDetailsService, times(1)).getAuthorities(userNode.getRoles()),
+                () -> verifyNoMoreInteractions(customUserDetailsService),
+                () -> verify(jwtUtil, times(1)).generateToken(userDetails),
+                () -> verifyNoMoreInteractions(jwtUtil));
     }
 
     @Test
     void when_register_user_with_null_fields_should_return_error_response() {
 
-        UserDTO userDTO = (UserDTO) userBuilder.withUserName(null).withPassword(null).withMatchingPassword(null).withEmail(null)
-                .build(ObjectType.DTO);
+        UserDTO userDTO = (UserDTO) userBuilder.withUserName(null).withPassword(null).withMatchingPassword(null)
+                .withEmail(null).build(ObjectType.DTO);
 
         assertAll(
                 () -> mockMvc

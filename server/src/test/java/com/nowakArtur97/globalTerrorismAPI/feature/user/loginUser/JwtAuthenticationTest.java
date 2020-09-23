@@ -49,8 +49,8 @@ class JwtAuthenticationTest {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
-            Set.of(new RoleNode("user")));
+    private final static UserNode userNode = new UserNode("user1234", "Password1234!",
+            "user1234email@.com", Set.of(new RoleNode("user")));
 
     @BeforeAll
     private static void setUpUser(@Autowired UserRepository userRepository) {

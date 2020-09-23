@@ -1,5 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
@@ -14,7 +15,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -33,6 +38,9 @@ class UserRegistrationControllerWithCustomValidationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private static UserBuilder userBuilder;
 
@@ -55,6 +63,9 @@ class UserRegistrationControllerWithCustomValidationTest {
         UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser").withEmail("validUser123@email.com")
                 .withPassword("ValidPassword123!").withMatchingPassword("ValidPassword123!").build(ObjectType.DTO);
 
+        String token = jwtUtil.generateToken(new User(userDTO.getUserName(), userDTO.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
         assertAll(
                 () -> mockMvc
                         .perform(post(REGISTRATION_BASE_PATH)
@@ -62,7 +73,7 @@ class UserRegistrationControllerWithCustomValidationTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string("Account created successfully")));
+                        .andExpect(jsonPath("token", is(token))));
     }
 
     @Test
