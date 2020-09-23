@@ -18,7 +18,6 @@ const handleAuthentication = (responseData: AuthResponse) => {
 
 const handleError = (errorResponse: ErrorResponse) => {
   const authErrorMessages = errorResponse.errors;
-  console.log(authErrorMessages);
   return of(
     AuthActions.authenticateUserFailure({
       authErrorMessages,
@@ -30,15 +29,42 @@ const handleError = (errorResponse: ErrorResponse) => {
 export default class AuthEffects {
   constructor(private actions$: Actions, private httpClient: HttpClient) {}
 
-  authLogin$ = createEffect(() =>
+  loginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
       switchMap((action) => {
+        const { userNameOrEmail, password } = action.loginData;
+
         return this.httpClient
           .post<AuthResponse>('http://localhost:8080/api/v1/authentication', {
-            user: action.loginData.userNameOrEmail,
-            email: action.loginData.userNameOrEmail,
-            password: action.loginData.password,
+            user: userNameOrEmail,
+            email: userNameOrEmail,
+            password,
+          })
+          .pipe(
+            map((responseData) => handleAuthentication(responseData)),
+            catchError((errorResponse) => handleError(errorResponse.error))
+          );
+      })
+    )
+  );
+
+  registerUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.registerUserStart),
+      switchMap((action) => {
+        const {
+          userName,
+          email,
+          password,
+          matchingPassword,
+        } = action.registrationData;
+        return this.httpClient
+          .post<AuthResponse>('http://localhost:8080/api/v1/registration', {
+            userName,
+            email,
+            password,
+            matchingPassword,
           })
           .pipe(
             map((responseData) => handleAuthentication(responseData)),
