@@ -1,10 +1,5 @@
-package com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser;
+package com.nowakArtur97.globalTerrorismAPI.feature.user.shared;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.CustomUserDetailsService;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.CustomUserDetailsServiceImpl;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.UserBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -12,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -101,7 +97,7 @@ class CustomUserDetailsServiceImplTest {
     }
 
     @Test
-    void when_load_user_by_user_name_or_email_but_user_not_exists_should_return_throw_exception() {
+    void when_load_user_by_user_name_or_email_but_user_not_exists_should_throw_exception() {
 
         String userName = "user";
 
@@ -113,5 +109,25 @@ class CustomUserDetailsServiceImplTest {
                         () -> "should throw UsernameNotFoundException but wasn't"),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(userName, userName),
                 () -> verifyNoMoreInteractions(userRepository));
+    }
+
+    @Test
+    void when_get_user_authorities_should_return_list_of_authorities() {
+
+        String email = "user@email.com";
+
+        Set<RoleNode> authoritiesExpected = Set.of(new RoleNode("user"));
+        UserNode userNodeExpected = (UserNode) userBuilder.withEmail(email)
+                .withRoles(authoritiesExpected)
+                .build(ObjectType.NODE);
+
+        List<GrantedAuthority> authoritiesActual = customUserDetailsService.getAuthorities(userNodeExpected.getRoles());
+
+        assertAll(
+                () -> assertEquals(authoritiesExpected.size(), authoritiesActual.size(),
+                        () -> "should return: " + authoritiesExpected.size() + " authorities, but was: " + authoritiesActual.size()),
+                () -> assertEquals(authoritiesActual.get(0).getAuthority(), "user",
+                        () -> "should return user authority, but was: " + authoritiesActual.get(0).getAuthority()),
+                () -> verifyNoInteractions(userRepository));
     }
 }
