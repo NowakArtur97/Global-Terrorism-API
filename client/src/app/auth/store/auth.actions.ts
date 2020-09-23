@@ -1,11 +1,17 @@
 import { createAction, props } from '@ngrx/store';
 
 import LoginData from '../models/LoginData';
+import RegistrationData from '../models/RegistrationData';
 import User from '../models/User';
 
 export const loginUserStart = createAction(
   '[User] Login User Start',
   props<{ loginData: LoginData }>()
+);
+
+export const registerUserStart = createAction(
+  '[User] Register User Start',
+  props<{ registrationData: RegistrationData }>()
 );
 
 export const authenticateUserSuccess = createAction(

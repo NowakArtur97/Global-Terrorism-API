@@ -15,19 +15,21 @@
         [routerLink]=""
         (click)="onOpenPopUp('login')"
         *ngIf="!isAuthenticated"
-        >Login</a
       >
+        Login
+      </a>
       <a
         mat-list-item
         href="#"
         [routerLink]=""
         (click)="onOpenPopUp('registration')"
         *ngIf="!isAuthenticated"
-        >Register</a
       >
-      <a mat-list-item href="#" routerLink="/map" *ngIf="isAuthenticated"
-        >Map</a
-      >
+        Register
+      </a>
+      <a mat-list-item href="#" routerLink="/map" *ngIf="!isAuthenticated">
+        Map
+      </a>
       <a mat-list-item href="#" *ngIf="isAuthenticated">Statistics</a>
       <a mat-list-item href="#" *ngIf="isAuthenticated">Add</a>
       <a
