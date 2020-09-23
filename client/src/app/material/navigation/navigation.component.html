@@ -13,9 +13,17 @@
         mat-list-item
         href="#"
         [routerLink]=""
-        (click)="onOpenAuthPopUp()"
+        (click)="onOpenLoginPopUp()"
         *ngIf="!isAuthenticated"
         >Login</a
+      >
+      <a
+        mat-list-item
+        href="#"
+        [routerLink]=""
+        (click)="onOpenRegistrationPopUp()"
+        *ngIf="!isAuthenticated"
+        >Register</a
       >
       <a mat-list-item href="#" routerLink="/map" *ngIf="isAuthenticated"
         >Map</a

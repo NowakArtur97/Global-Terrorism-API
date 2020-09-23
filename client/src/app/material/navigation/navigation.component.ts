@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthenticationComponent } from 'src/app/auth/authentication/authentication.component';
+import { RegistrationComponent } from 'src/app/auth/registration/registration.component';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
@@ -42,13 +43,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  onOpenAuthPopUp() {
+  onOpenLoginPopUp() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
     this.dialog.open(AuthenticationComponent, dialogConfig);
+  }
+
+  onOpenRegistrationPopUp() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.dialog.open(RegistrationComponent, dialogConfig);
   }
 
   onLogout() {
