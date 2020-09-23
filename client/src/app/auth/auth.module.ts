@@ -5,9 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import AuthRoutingModule from './auth-routing.module';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
-  declarations: [AuthenticationComponent],
+  declarations: [AuthenticationComponent, RegistrationComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
