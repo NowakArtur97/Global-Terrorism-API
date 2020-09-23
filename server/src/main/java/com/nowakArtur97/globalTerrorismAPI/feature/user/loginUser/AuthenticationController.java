@@ -2,6 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser;
 
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.AuthenticationResponse;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

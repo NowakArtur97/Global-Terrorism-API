@@ -30,7 +30,7 @@ class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         return new User(userNode.getUserName(), userNode.getPassword(), getAuthorities(userNode.getRoles()));
     }
 
-    private static List<GrantedAuthority> getAuthorities(Set<RoleNode> userRoles) {
+    private List<GrantedAuthority> getAuthorities(Set<RoleNode> userRoles) {
 
         List<GrantedAuthority> userAuthorities = new ArrayList<>();
 
