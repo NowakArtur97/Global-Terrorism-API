@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -6,7 +6,8 @@ import { exhaustMap, map, take } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
 @Injectable()
-export class AuthenticationInterceptorService implements HttpInterceptor {
+export default class AuthenticationInterceptorService
+  implements HttpInterceptor {
   constructor(private store: Store<AppStoreState>) {}
 
   intercept(
@@ -22,13 +23,13 @@ export class AuthenticationInterceptorService implements HttpInterceptor {
         if (!user) {
           return next.handle(req);
         }
-        const modifiedReq = req.clone({
-          params: new HttpParams().set(
+        const modifiedRequest = req.clone({
+          headers: new HttpHeaders().set(
             'Authorization',
-            `Bearer  ${user.token}`
+            `Bearer ${user.token}`
           ),
         });
-        return next.handle(modifiedReq);
+        return next.handle(modifiedRequest);
       })
     );
   }

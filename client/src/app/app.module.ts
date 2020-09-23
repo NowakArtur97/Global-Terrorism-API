@@ -14,6 +14,7 @@ import AuthModule from './auth/auth.module';
 import AuthEffects from './auth/store/auth.effects';
 import CitiesModule from './cities/cities.module';
 import CitiesEffects from './cities/store/cities.effects';
+import { CoreModule } from './core.module';
 import MapModule from './map/map.module';
 import { MaterialModule } from './material/material.module';
 import appReducer from './store/app.reducer';
@@ -34,6 +35,7 @@ import appReducer from './store/app.reducer';
     BrowserAnimationsModule,
     MaterialModule,
 
+    CoreModule,
     CitiesModule,
     MapModule,
     AuthModule,
