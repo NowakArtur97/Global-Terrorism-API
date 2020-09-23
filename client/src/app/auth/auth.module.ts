@@ -15,6 +15,6 @@ import { RegistrationComponent } from './registration/registration.component';
     AuthRoutingModule,
     MaterialModule,
   ],
-  exports: [AuthenticationComponent],
+  exports: [AuthenticationComponent, RegistrationComponent],
 })
 export default class AuthModule {}
