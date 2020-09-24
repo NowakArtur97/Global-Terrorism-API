@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
 import AuthResponse from '../models/AuthResponseData';
@@ -72,5 +72,16 @@ export default class AuthEffects {
           );
       })
     )
+  );
+
+  logoutUser$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.logoutUser),
+        tap((action) => {
+          localStorage.removeItem('userData');
+        })
+      ),
+    { dispatch: false }
   );
 }
