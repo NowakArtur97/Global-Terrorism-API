@@ -18,9 +18,7 @@ export default class CitiesEffects {
           'http://localhost:8080/api/v1/cities?page=0&size=50'
         );
       }),
-      map((response) => {
-        return response.content;
-      }),
+      map((response) => response.content),
       map((cities) => CitiesActions.setCities({ cities }))
     )
   );

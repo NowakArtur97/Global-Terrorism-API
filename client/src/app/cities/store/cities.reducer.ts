@@ -12,6 +12,11 @@ const _citiesReducer = createReducer(
   on(CityActions.setCities, (state, action) => ({
     ...state,
     cities: [...action.cities],
+  })),
+
+  on(CityActions.resetCities, (state, action) => ({
+    ...state,
+    cities: [],
   }))
 );
 
