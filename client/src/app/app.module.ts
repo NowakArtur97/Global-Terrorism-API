@@ -11,13 +11,10 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import AuthModule from './auth/auth.module';
-import AuthEffects from './auth/store/auth.effects';
 import CitiesModule from './cities/cities.module';
-import CitiesEffects from './cities/store/cities.effects';
 import { CoreModule } from './core.module';
 import MapModule from './map/map.module';
 import { MaterialModule } from './material/material.module';
-import appReducer from './store/app.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,9 +23,10 @@ import appReducer from './store/app.reducer';
     HttpClientModule,
     ReactiveFormsModule,
 
-    StoreModule.forRoot(appReducer),
+    StoreModule.forRoot([]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([CitiesEffects, AuthEffects]),
+    // EffectsModule.forRoot([CitiesEffects, AuthEffects]),
+    EffectsModule.forRoot([]),
 
     AppRoutingModule,
 

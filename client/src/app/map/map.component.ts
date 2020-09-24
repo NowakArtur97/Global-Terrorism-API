@@ -5,10 +5,9 @@ import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import City from '../cities/models/city.model';
-import * as CitiesActions from '../cities/store/cities.actions';
 
 import AppStoreState from '../store/app.store.state';
-import MarkerService from './services/marker.service';
+import MarkerService from './marker.service';
 
 @Component({
   selector: 'app-map',
