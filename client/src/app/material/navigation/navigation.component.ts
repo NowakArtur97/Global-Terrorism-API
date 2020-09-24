@@ -36,7 +36,12 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.userSubscription = this.store
       .select('auth')
       .pipe(map((authState) => authState.user))
-      .subscribe((user) => (this.isAuthenticated = !!user));
+      .subscribe((user) => {
+        this.isAuthenticated = !!user;
+        if (this.isAuthenticated) {
+          this.dialog.closeAll();
+        }
+      });
   }
 
   ngOnDestroy(): void {
