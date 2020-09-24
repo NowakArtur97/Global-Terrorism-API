@@ -14,7 +14,7 @@ const _citiesReducer = createReducer(
     cities: [...action.cities],
   })),
 
-  on(CityActions.resetCities, (state, action) => ({
+  on(CityActions.resetCities, (state) => ({
     ...state,
     cities: [],
   }))
