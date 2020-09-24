@@ -38,7 +38,6 @@ export class MapComponent implements OnInit {
       .pipe(map((citiesState) => citiesState.cities))
       .subscribe((cities: City[]) => {
         this.cities = cities;
-        this.markerService.showMarkers(this.cities, this.map);
       });
   }
 
@@ -66,9 +65,7 @@ export class MapComponent implements OnInit {
     );
 
     tiles.addTo(this.map);
-  }
 
-  onFetchCities() {
-    this.store.dispatch(CitiesActions.fetchCitites());
+    this.markerService.showMarkers(this.cities, this.map);
   }
 }
