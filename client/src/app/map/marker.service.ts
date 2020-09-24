@@ -5,9 +5,11 @@ import City from 'src/app/cities/models/city.model';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
-  showMarkers(cities: City[] = [], map: L.Map) {
+  showMarkers(cities: City[] = [], map: L.Map): L.Marker[] {
+    const markers: L.Marker[] = [];
     for (const city of cities) {
-      marker([city.latitude, city.longitude]).addTo(map);
+      markers.push(marker([city.latitude, city.longitude]).addTo(map));
     }
+    return markers;
   }
 }

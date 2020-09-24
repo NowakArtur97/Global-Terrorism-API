@@ -18,6 +18,7 @@ export class MapComponent implements OnInit {
   cities: City[] = [];
   citiesSubscription: Subscription;
   private map: L.Map;
+  private markers: L.Marker[] = [];
 
   icon = icon({
     iconSize: [25, 41],
@@ -37,6 +38,9 @@ export class MapComponent implements OnInit {
       .pipe(map((citiesState) => citiesState.cities))
       .subscribe((cities: City[]) => {
         this.cities = cities;
+        if (this.map && cities.length === 0) {
+          this.markers.forEach((marker) => this.map.removeLayer(marker));
+        }
       });
   }
 
@@ -65,6 +69,6 @@ export class MapComponent implements OnInit {
 
     tiles.addTo(this.map);
 
-    this.markerService.showMarkers(this.cities, this.map);
+    this.markers = this.markerService.showMarkers(this.cities, this.map);
   }
 }
