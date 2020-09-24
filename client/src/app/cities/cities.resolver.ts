@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import AppStoreState from '../store/app.store.state';
 import City from './models/city.model';
@@ -14,11 +14,14 @@ export class CitiesResolver implements Resolve<{ cities: City[] }> {
   constructor(private actions$: Actions, private store: Store<AppStoreState>) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.store.select('cities').pipe(
+    return this.store.select('auth').pipe(
+      withLatestFrom(this.store.select('cities')),
       take(1),
-      map((citiesState) => citiesState.cities),
-      switchMap((cities) => {
-        if (cities.length === 0) {
+      switchMap((stores) => {
+        const isAuth = !!stores[0].user;
+        const cities = stores[1].cities;
+
+        if (isAuth && cities.length === 0) {
           this.store.dispatch(CitiesActions.fetchCitites());
           return this.actions$.pipe(ofType(CitiesActions.setCities), take(1));
         } else {
