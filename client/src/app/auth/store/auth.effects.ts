@@ -30,6 +30,8 @@ const handleError = (errorResponse: ErrorResponse) => {
 export default class AuthEffects {
   constructor(private actions$: Actions, private httpClient: HttpClient) {}
 
+  private BASE_URL = 'http://localhost:8080/api/v1';
+
   loginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
@@ -37,7 +39,7 @@ export default class AuthEffects {
         const { userNameOrEmail, password } = action.loginData;
 
         return this.httpClient
-          .post<AuthResponse>('http://localhost:8080/api/v1/authentication', {
+          .post<AuthResponse>(`${this.BASE_URL}/authentication`, {
             user: userNameOrEmail,
             email: userNameOrEmail,
             password,
@@ -61,7 +63,7 @@ export default class AuthEffects {
           matchingPassword,
         } = action.registrationData;
         return this.httpClient
-          .post<AuthResponse>('http://localhost:8080/api/v1/registration', {
+          .post<AuthResponse>(`${this.BASE_URL}/registration`, {
             userName,
             email,
             password,
@@ -71,6 +73,26 @@ export default class AuthEffects {
             map((responseData) => handleAuthentication(responseData)),
             catchError((errorResponse) => handleError(errorResponse.error))
           );
+      })
+    )
+  );
+
+  autoUserLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.autoUserLogin),
+      map(() => {
+        const userData: {
+          _token: string;
+        } = JSON.parse(localStorage.getItem('userData'));
+
+        if (userData?._token) {
+          const user = new User(userData._token);
+          return AuthActions.authenticateUserSuccess({
+            user,
+          });
+        }
+
+        return { type: 'DUMMY' };
       })
     )
   );

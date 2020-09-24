@@ -26,6 +26,6 @@ export const authenticateUserFailure = createAction(
   }>()
 );
 
-export const autoLoginUser = createAction('[User] Auto Login User');
+export const autoUserLogin = createAction('[User] Auto User Login');
 
 export const logoutUser = createAction('[User] Logout User');
