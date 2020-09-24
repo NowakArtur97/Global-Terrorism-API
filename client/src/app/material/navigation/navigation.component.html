@@ -27,7 +27,7 @@
       >
         Register
       </a>
-      <a mat-list-item href="#" routerLink="/map" *ngIf="!isAuthenticated">
+      <a mat-list-item href="#" routerLink="/map" *ngIf="isAuthenticated">
         Map
       </a>
       <a mat-list-item href="#" *ngIf="isAuthenticated">Statistics</a>

@@ -1,13 +1,13 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
-import AuthenticationInterceptorService from './auth/services/authentication-interceptor.service';
+import JwtInterceptor from './auth/jwt.interceptor';
 
 @NgModule({
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationInterceptorService,
+      useClass: JwtInterceptor,
       multi: true,
     },
   ],

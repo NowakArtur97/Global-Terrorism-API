@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import AuthGuard from './auth/auth.guard';
-
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/map', pathMatch: 'full', canActivate: [AuthGuard] },
+  // { path: '', redirectTo: '/map', pathMatch: 'full' }
 ];
 
 @NgModule({

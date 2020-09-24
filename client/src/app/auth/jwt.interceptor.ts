@@ -6,8 +6,7 @@ import { exhaustMap, map, take } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
 @Injectable()
-export default class AuthenticationInterceptorService
-  implements HttpInterceptor {
+export default class JwtInterceptor implements HttpInterceptor {
   constructor(private store: Store<AppStoreState>) {}
 
   intercept(
@@ -16,9 +15,7 @@ export default class AuthenticationInterceptorService
   ): Observable<HttpEvent<any>> {
     return this.store.select('auth').pipe(
       take(1),
-      map((authState) => {
-        return authState.user;
-      }),
+      map((authState) => authState.user),
       exhaustMap((user) => {
         if (!user) {
           return next.handle(req);
