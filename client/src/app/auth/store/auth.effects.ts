@@ -11,6 +11,7 @@ import * as AuthActions from './auth.actions';
 
 const handleAuthentication = (responseData: AuthResponse) => {
   const user = new User(responseData.token);
+  localStorage.setItem('userData', JSON.stringify(user));
   return AuthActions.authenticateUserSuccess({
     user,
   });
