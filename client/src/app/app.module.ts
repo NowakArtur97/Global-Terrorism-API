@@ -25,7 +25,6 @@ import { MaterialModule } from './material/material.module';
 
     StoreModule.forRoot([]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    // EffectsModule.forRoot([CitiesEffects, AuthEffects]),
     EffectsModule.forRoot([]),
 
     AppRoutingModule,
