@@ -59,13 +59,11 @@ export default class AuthEffects {
       ofType(AuthActions.autoUserLogin),
       map(() => {
         const user = this.authService.getUserFromLocalStorage();
-
-        if (user?.token) {
+        if (user) {
           return AuthActions.authenticateUserSuccess({
             user,
           });
         }
-
         return { type: 'DUMMY' };
       })
     )

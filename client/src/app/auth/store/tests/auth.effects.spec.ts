@@ -4,7 +4,6 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
-import AuthResponse from '../../models/AuthResponseData';
 import LoginData from '../../models/LoginData';
 import RegistrationData from '../../models/RegistrationData';
 import User from '../../models/User';
@@ -19,7 +18,6 @@ const mockRegistrationData = new RegistrationData(
   'pass',
   'pass'
 );
-const mockUserData = new AuthResponse('secret token');
 const mockUser = new User('secret token');
 const mockErrorResponse = new HttpErrorResponse({
   error: {
@@ -46,6 +44,7 @@ describe('AuthEffects', () => {
           useValue: jasmine.createSpyObj('authService', [
             'loginUser',
             'registerUser',
+            'getUserFromLocalStorage',
           ]),
         },
       ],
@@ -53,8 +52,8 @@ describe('AuthEffects', () => {
   );
 
   beforeEach(() => {
-    authEffects = TestBed.get(AuthEffects);
-    authService = TestBed.get(AuthService);
+    authEffects = TestBed.inject(AuthEffects);
+    authService = TestBed.inject(AuthService);
   });
 
   describe('loginUser$', () => {
@@ -65,6 +64,7 @@ describe('AuthEffects', () => {
 
     it('should return a authenticateUserSuccess action', () => {
       (authService.loginUser as jasmine.Spy).and.returnValue(of(mockUser));
+
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
@@ -99,6 +99,7 @@ describe('AuthEffects', () => {
 
     it('should return a authenticateUserSuccess action', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(of(mockUser));
+
       authEffects.registerUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
@@ -117,6 +118,30 @@ describe('AuthEffects', () => {
             authErrorMessages: mockErrorResponse.error.errors,
           })
         );
+      });
+    });
+  });
+
+  describe('autoUserLogin$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+      actions$.next(AuthActions.autoUserLogin());
+    });
+
+    it('should return a authenticateUserSuccess action', () => {
+      (authService.getUserFromLocalStorage as jasmine.Spy).and.returnValue(
+        of(mockUser)
+      );
+
+      authEffects.autoUserLogin$.subscribe((resultAction) => {
+        console.log(resultAction.type);
+        expect(resultAction.type).toEqual('[User] Authenticate User Success');
+      });
+    });
+
+    it('should return a dummy action', () => {
+      authEffects.autoUserLogin$.subscribe((resultAction) => {
+        expect(resultAction.type).toEqual('DUMMY');
       });
     });
   });
