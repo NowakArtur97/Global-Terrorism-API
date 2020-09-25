@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -7,6 +6,7 @@ import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
 import AuthResponse from '../models/AuthResponseData';
 import User from '../models/User';
+import AuthService from '../services/auth.service';
 import * as AuthActions from './auth.actions';
 
 const handleAuthentication = (responseData: AuthResponse) => {
@@ -28,52 +28,29 @@ const handleError = (errorResponse: ErrorResponse) => {
 
 @Injectable()
 export default class AuthEffects {
-  constructor(private actions$: Actions, private httpClient: HttpClient) {}
-
-  private BASE_URL = 'http://localhost:8080/api/v1';
+  constructor(private actions$: Actions, private authService: AuthService) {}
 
   loginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
-      switchMap((action) => {
-        const { userNameOrEmail, password } = action.loginData;
-
-        return this.httpClient
-          .post<AuthResponse>(`${this.BASE_URL}/authentication`, {
-            user: userNameOrEmail,
-            email: userNameOrEmail,
-            password,
-          })
-          .pipe(
-            map((responseData) => handleAuthentication(responseData)),
-            catchError((errorResponse) => handleError(errorResponse.error))
-          );
-      })
+      switchMap((action) =>
+        this.authService.loginUser(action.loginData).pipe(
+          map((responseData) => handleAuthentication(responseData)),
+          catchError((errorResponse) => handleError(errorResponse.error))
+        )
+      )
     )
   );
 
   registerUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.registerUserStart),
-      switchMap((action) => {
-        const {
-          userName,
-          email,
-          password,
-          matchingPassword,
-        } = action.registrationData;
-        return this.httpClient
-          .post<AuthResponse>(`${this.BASE_URL}/registration`, {
-            userName,
-            email,
-            password,
-            matchingPassword,
-          })
-          .pipe(
-            map((responseData) => handleAuthentication(responseData)),
-            catchError((errorResponse) => handleError(errorResponse.error))
-          );
-      })
+      switchMap((action) =>
+        this.authService.registerUser(action.registrationData).pipe(
+          map((responseData) => handleAuthentication(responseData)),
+          catchError((errorResponse) => handleError(errorResponse.error))
+        )
+      )
     )
   );
 
@@ -101,9 +78,7 @@ export default class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.logoutUser),
-        tap((action) => {
-          localStorage.removeItem('userData');
-        })
+        tap(() => localStorage.removeItem('userData'))
       ),
     { dispatch: false }
   );
