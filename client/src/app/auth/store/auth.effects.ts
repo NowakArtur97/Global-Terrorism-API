@@ -9,34 +9,34 @@ import User from '../models/User';
 import AuthService from '../services/auth.service';
 import * as AuthActions from './auth.actions';
 
-const handleAuthentication = (responseData: AuthResponse) => {
-  const user = new User(responseData.token);
-  localStorage.setItem('userData', JSON.stringify(user));
-  return AuthActions.authenticateUserSuccess({
-    user,
-  });
-};
-
-const handleError = (errorResponse: ErrorResponse) => {
-  const authErrorMessages = errorResponse.errors;
-  return of(
-    AuthActions.authenticateUserFailure({
-      authErrorMessages,
-    })
-  );
-};
-
 @Injectable()
 export default class AuthEffects {
   constructor(private actions$: Actions, private authService: AuthService) {}
+
+  private handleAuthentication = (responseData: AuthResponse) => {
+    const user = new User(responseData.token);
+    this.authService.saveUserInLocalStorage(user);
+    return AuthActions.authenticateUserSuccess({
+      user,
+    });
+  };
+
+  private handleError = (errorResponse: ErrorResponse) => {
+    const authErrorMessages = errorResponse.errors;
+    return of(
+      AuthActions.authenticateUserFailure({
+        authErrorMessages,
+      })
+    );
+  };
 
   loginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
       switchMap((action) =>
         this.authService.loginUser(action.loginData).pipe(
-          map((responseData) => handleAuthentication(responseData)),
-          catchError((errorResponse) => handleError(errorResponse.error))
+          map((responseData) => this.handleAuthentication(responseData)),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
@@ -47,8 +47,8 @@ export default class AuthEffects {
       ofType(AuthActions.registerUserStart),
       switchMap((action) =>
         this.authService.registerUser(action.registrationData).pipe(
-          map((responseData) => handleAuthentication(responseData)),
-          catchError((errorResponse) => handleError(errorResponse.error))
+          map((responseData) => this.handleAuthentication(responseData)),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
@@ -58,12 +58,9 @@ export default class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.autoUserLogin),
       map(() => {
-        const userData: {
-          _token: string;
-        } = JSON.parse(localStorage.getItem('userData'));
+        const user = this.authService.getUserFromLocalStorage();
 
-        if (userData?._token) {
-          const user = new User(userData._token);
+        if (user?.token) {
           return AuthActions.authenticateUserSuccess({
             user,
           });
@@ -78,7 +75,7 @@ export default class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.logoutUser),
-        tap(() => localStorage.removeItem('userData'))
+        tap(() => this.authService.removeUserFromLocalStorage())
       ),
     { dispatch: false }
   );

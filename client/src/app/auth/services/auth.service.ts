@@ -5,10 +5,12 @@ import { Observable } from 'rxjs';
 import AuthResponse from '../models/AuthResponseData';
 import LoginData from '../models/LoginData';
 import RegistrationData from '../models/RegistrationData';
+import User from '../models/User';
 
 @Injectable({ providedIn: 'root' })
 export default class AuthService {
   private BASE_URL = 'http://localhost:8080/api/v1';
+  private userLocaleStorageKey = 'userData';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -33,5 +35,20 @@ export default class AuthService {
       password,
       matchingPassword,
     });
+  }
+
+  getUserFromLocalStorage(): User {
+    const userData: {
+      _token: string;
+    } = JSON.parse(localStorage.getItem(this.userLocaleStorageKey));
+    return new User(userData._token);
+  }
+
+  removeUserFromLocalStorage(): void {
+    localStorage.removeItem(this.userLocaleStorageKey);
+  }
+
+  saveUserInLocalStorage(user: User): void {
+    localStorage.setItem(this.userLocaleStorageKey, JSON.stringify(user));
   }
 }
