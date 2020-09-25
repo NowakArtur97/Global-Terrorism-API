@@ -6,12 +6,19 @@ import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
 import AuthResponse from '../../models/AuthResponseData';
 import LoginData from '../../models/LoginData';
+import RegistrationData from '../../models/RegistrationData';
 import User from '../../models/User';
 import AuthService from '../../services/auth.service';
 import * as AuthActions from '../auth.actions';
 import AuthEffects from '../auth.effects';
 
 const mockLoginData = new LoginData('username', 'password');
+const mockRegistrationData = new RegistrationData(
+  'username',
+  'email@email.com',
+  'pass',
+  'pass'
+);
 const mockUserData = new AuthResponse('secret token');
 const mockUser = new User('secret token');
 const mockErrorResponse = new HttpErrorResponse({
@@ -36,7 +43,10 @@ describe('AuthEffects', () => {
         provideMockActions(() => actions$),
         {
           provide: AuthService,
-          useValue: jasmine.createSpyObj('authService', ['loginUser']),
+          useValue: jasmine.createSpyObj('authService', [
+            'loginUser',
+            'registerUser',
+          ]),
         },
       ],
     })
@@ -45,7 +55,6 @@ describe('AuthEffects', () => {
   beforeEach(() => {
     authEffects = TestBed.get(AuthEffects);
     authService = TestBed.get(AuthService);
-    (authService.loginUser as jasmine.Spy).and.returnValue(of(mockUser));
   });
 
   describe('loginUser$', () => {
@@ -55,6 +64,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return a authenticateUserSuccess action', () => {
+      (authService.loginUser as jasmine.Spy).and.returnValue(of(mockUser));
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
@@ -68,6 +78,40 @@ describe('AuthEffects', () => {
       );
 
       authEffects.loginUser$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          AuthActions.authenticateUserFailure({
+            authErrorMessages: mockErrorResponse.error.errors,
+          })
+        );
+      });
+    });
+  });
+
+  describe('registerUser$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+      actions$.next(
+        AuthActions.registerUserStart({
+          registrationData: mockRegistrationData,
+        })
+      );
+    });
+
+    it('should return a authenticateUserSuccess action', () => {
+      (authService.registerUser as jasmine.Spy).and.returnValue(of(mockUser));
+      authEffects.registerUser$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          AuthActions.authenticateUserSuccess({ user: mockUser })
+        );
+      });
+    });
+
+    it('should return authenticateUserFailure action on failure', () => {
+      (authService.registerUser as jasmine.Spy).and.returnValue(
+        throwError(mockErrorResponse)
+      );
+
+      authEffects.registerUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserFailure({
             authErrorMessages: mockErrorResponse.error.errors,
