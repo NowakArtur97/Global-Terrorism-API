@@ -41,7 +41,7 @@ export default class AuthService {
     const userData: {
       _token: string;
     } = JSON.parse(localStorage.getItem(this.userLocaleStorageKey));
-    return new User(userData._token);
+    return userData?._token ? new User(userData._token) : null;
   }
 
   removeUserFromLocalStorage(): void {
