@@ -50,6 +50,8 @@ describe('authReducer', () => {
       const expectedState = { ...initialState, user, authErrorMessages };
 
       expect(actualState).toEqual(expectedState);
+      expect(actualState.user).toEqual(user);
+      expect(actualState.authErrorMessages.length).toBe(0);
     });
 
     it('should authenticate user and remove error messages', () => {
@@ -64,6 +66,7 @@ describe('authReducer', () => {
       };
 
       expect(actualState).toEqual(expectedState);
+      expect(actualState.user).toEqual(user);
       expect(actualState.authErrorMessages.length).toBe(0);
     });
   });
@@ -79,6 +82,7 @@ describe('authReducer', () => {
       };
 
       expect(actualState).toEqual(expectedState);
+      expect(actualState.authErrorMessages).toEqual(authErrorMessages);
     });
   });
 
@@ -95,7 +99,8 @@ describe('authReducer', () => {
       };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.user).toBeNull(expectedState);
+      expect(actualState.user).toBeNull();
+      expect(actualState.authErrorMessages.length).toBe(0);
     });
 
     it('should logout user and remove error messages', () => {
@@ -110,7 +115,7 @@ describe('authReducer', () => {
       };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.user).toBeNull(expectedState);
+      expect(actualState.user).toBeNull();
       expect(actualState.authErrorMessages.length).toBe(0);
     });
   });

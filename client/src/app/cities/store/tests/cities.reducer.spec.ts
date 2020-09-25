@@ -16,6 +16,7 @@ describe('citiesReducer', () => {
       const expectedState = { ...initialState, cities };
 
       expect(actualState).toEqual(expectedState);
+      expect(actualState.cities.length).toBe(1);
     });
 
     it('should store empty cities list', () => {
