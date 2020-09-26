@@ -1,36 +1,63 @@
 version: 2
 jobs:
-  build:
+  test-backend:
     docker:
-    - image: circleci/openjdk:11.0.3-jdk-stretch
-      environment:
-        NEO4J_USER: neo4j
-        NEO4J_PASSWORD: secret
-    - image: bitnami/neo4j:latest
-      environment:
-        NEO4J_USER: neo4j
-        NEO4J_PASSWORD: secret
-        NEO4J_HOST: localhost
+      - image: circleci/openjdk:11.0.3-jdk-stretch
+        environment:
+          NEO4J_USER: neo4j
+          NEO4J_PASSWORD: secret
+      - image: bitnami/neo4j:latest
+        environment:
+          NEO4J_USER: neo4j
+          NEO4J_PASSWORD: secret
+          NEO4J_HOST: localhost
     working_directory: ~/global_terrorism_api/server
     environment:
       MAVEN_OPTS: -Xmx3200m
     steps:
-    - checkout:
-        path: ~/global_terrorism_api
-    - setup_remote_docker
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "pom.xml" }}
-        - v1-dependencies-
-    - run: mvn dependency:go-offline
-    - save_cache:
-        paths:
-        - ~/.m2
-        key: v1-dependencies-{{ checksum "pom.xml" }}
-    - run:
-        name: Install Neo4j
-        command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
-    - run:
-        name: Wait for Neo4j
-        command: dockerize -wait tcp://localhost:7474 -timeout 1m
-    - run: mvn test -Dspring-boot.run.profiles=ci
+      - checkout:
+          path: ~/global_terrorism_api
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run:
+          name: Install Neo4j
+          command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
+      - run:
+          name: Wait for Neo4j
+          command: dockerize -wait tcp://localhost:7474 -timeout 1m
+      - run:
+          name: Testing
+          command: mvn test -Dspring-boot.run.profiles=ci
+  test-frontend:
+    working_directory: ~/global_terrorism_api/client
+    docker:
+      - image: circleci/node:10-browsers
+    steps:
+      - checkout:
+          path: ~/global_terrorism_api
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run:
+          name: Install local dependencies
+          command: npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Testing
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - run:
+          name: End to End Test
+          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
