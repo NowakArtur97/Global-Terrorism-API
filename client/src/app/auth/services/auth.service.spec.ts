@@ -96,4 +96,16 @@ describe('AuthService', () => {
       expect(localStorage.removeItem).toHaveBeenCalled();
     });
   });
+
+  describe('saveUserInLocalStorage$', () => {
+    it('should save user in local storage', () => {
+      const user = new User('secret token');
+
+      spyOn(localStorage, 'setItem').and.callFake(() => JSON.stringify(user));
+
+      authService.saveUserInLocalStorage(user);
+
+      expect(localStorage.setItem).toHaveBeenCalled();
+    });
+  });
 });
