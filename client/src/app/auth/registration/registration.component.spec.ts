@@ -51,14 +51,14 @@ describe('RegistrationComponent', () => {
         'password'
       );
 
-      component.registerForm.controls['userName'].setValue(
+      component.registerForm.controls.userName.setValue(
         registrationData.userName
       );
-      component.registerForm.controls['email'].setValue(registrationData.email);
-      component.registerForm.controls['password'].setValue(
+      component.registerForm.controls.email.setValue(registrationData.email);
+      component.registerForm.controls.password.setValue(
         registrationData.password
       );
-      component.registerForm.controls['matchingPassword'].setValue(
+      component.registerForm.controls.matchingPassword.setValue(
         registrationData.matchingPassword
       );
 

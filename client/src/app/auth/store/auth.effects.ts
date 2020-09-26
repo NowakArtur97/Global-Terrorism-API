@@ -13,23 +13,6 @@ import * as AuthActions from './auth.actions';
 export default class AuthEffects {
   constructor(private actions$: Actions, private authService: AuthService) {}
 
-  private handleAuthentication = (responseData: AuthResponse) => {
-    const user = new User(responseData.token);
-    this.authService.saveUserInLocalStorage(user);
-    return AuthActions.authenticateUserSuccess({
-      user,
-    });
-  };
-
-  private handleError = (errorResponse: ErrorResponse) => {
-    const authErrorMessages = errorResponse?.errors || ['Unknown error.'];
-    return of(
-      AuthActions.authenticateUserFailure({
-        authErrorMessages,
-      })
-    );
-  };
-
   loginUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginUserStart),
@@ -77,4 +60,21 @@ export default class AuthEffects {
       ),
     { dispatch: false }
   );
+
+  private handleAuthentication = (responseData: AuthResponse) => {
+    const user = new User(responseData.token);
+    this.authService.saveUserInLocalStorage(user);
+    return AuthActions.authenticateUserSuccess({
+      user,
+    });
+  };
+
+  private handleError = (errorResponse: ErrorResponse) => {
+    const authErrorMessages = errorResponse?.errors || ['Unknown error.'];
+    return of(
+      AuthActions.authenticateUserFailure({
+        authErrorMessages,
+      })
+    );
+  };
 }

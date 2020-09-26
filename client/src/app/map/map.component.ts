@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
 import { icon } from 'leaflet';
@@ -14,7 +14,7 @@ import MarkerService from './marker.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   cities: City[] = [];
   citiesSubscription: Subscription;
   private map: L.Map;

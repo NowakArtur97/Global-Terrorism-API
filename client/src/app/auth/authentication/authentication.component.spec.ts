@@ -45,10 +45,10 @@ describe('AuthenticationComponent', () => {
 
       const loginData = new LoginData('login', ' password');
 
-      component.loginForm.controls['userNameOrEmail'].setValue(
+      component.loginForm.controls.userNameOrEmail.setValue(
         loginData.userNameOrEmail
       );
-      component.loginForm.controls['password'].setValue(loginData.password);
+      component.loginForm.controls.password.setValue(loginData.password);
 
       expect(component.loginForm.valid).toBeTruthy();
 

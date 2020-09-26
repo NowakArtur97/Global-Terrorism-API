@@ -49,7 +49,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  onOpenPopUp(type: string) {
+  onOpenPopUp(type: string): void {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -67,7 +67,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
 
-  onLogout() {
+  onLogout(): void {
     this.store.dispatch(AuthActions.logoutUser());
     this.store.dispatch(CitiesActions.resetCities());
   }

@@ -20,6 +20,9 @@ const _citiesReducer = createReducer(
   }))
 );
 
-export default function citiesReducer(state: CitiesStoreState, action: Action) {
+export default function citiesReducer(
+  state: CitiesStoreState,
+  action: Action
+): CitiesStoreState {
   return _citiesReducer(state, action);
 }
