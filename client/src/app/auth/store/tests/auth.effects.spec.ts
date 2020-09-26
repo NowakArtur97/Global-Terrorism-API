@@ -45,6 +45,7 @@ describe('AuthEffects', () => {
             'loginUser',
             'registerUser',
             'getUserFromLocalStorage',
+            'removeUserFromLocalStorage',
           ]),
         },
       ],
@@ -62,7 +63,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.loginUserStart({ loginData: mockLoginData }));
     });
 
-    it('should return a authenticateUserSuccess action', () => {
+    it('should return an authenticateUserSuccess action on success', () => {
       (authService.loginUser as jasmine.Spy).and.returnValue(of(mockUser));
 
       authEffects.loginUser$.subscribe((resultAction) => {
@@ -97,7 +98,7 @@ describe('AuthEffects', () => {
       );
     });
 
-    it('should return a authenticateUserSuccess action', () => {
+    it('should return an authenticateUserSuccess action on success', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(of(mockUser));
 
       authEffects.registerUser$.subscribe((resultAction) => {
@@ -107,7 +108,7 @@ describe('AuthEffects', () => {
       });
     });
 
-    it('should return authenticateUserFailure action on failure', () => {
+    it('should return an authenticateUserFailure action on failure', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(
         throwError(mockErrorResponse)
       );
@@ -128,20 +129,32 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.autoUserLogin());
     });
 
-    it('should return a authenticateUserSuccess action', () => {
+    it('should return an authenticateUserSuccess action when user data stored in local storage', () => {
       (authService.getUserFromLocalStorage as jasmine.Spy).and.returnValue(
         of(mockUser)
       );
 
       authEffects.autoUserLogin$.subscribe((resultAction) => {
-        console.log(resultAction.type);
         expect(resultAction.type).toEqual('[User] Authenticate User Success');
       });
     });
 
-    it('should return a dummy action', () => {
+    it('should return a dummy action when user data is not stored in local storage', () => {
       authEffects.autoUserLogin$.subscribe((resultAction) => {
         expect(resultAction.type).toEqual('DUMMY');
+      });
+    });
+  });
+
+  describe('logoutUser$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+      actions$.next(AuthActions.logoutUser());
+    });
+
+    it('should logout user and remove user data from local storage', () => {
+      authEffects.logoutUser$.subscribe(() => {
+        expect(authService.removeUserFromLocalStorage).toHaveBeenCalled();
       });
     });
   });

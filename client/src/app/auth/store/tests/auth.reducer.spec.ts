@@ -26,7 +26,7 @@ const initialStateWithUserAndErrors: AuthStoreState = {
 
 describe('authReducer', () => {
   describe('AuthStoreState.loginUserStart', () => {
-    it('should remove error messages on login start', () => {
+    it('should remove error messages when login started', () => {
       const authErrorMessages = [];
       const loginData = new LoginData('user', 'password');
       const action = AuthActions.loginUserStart({ loginData });
@@ -42,7 +42,7 @@ describe('authReducer', () => {
   });
 
   describe('AuthStoreState.authenticateUserSuccess', () => {
-    it('should authenticate user', () => {
+    it('should authenticate user on success', () => {
       const user = new User('token');
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
@@ -54,7 +54,7 @@ describe('authReducer', () => {
       expect(actualState.authErrorMessages.length).toBe(0);
     });
 
-    it('should authenticate user and remove error messages', () => {
+    it('should authenticate user and remove error messages on success', () => {
       const user = new User('token');
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
@@ -72,7 +72,7 @@ describe('authReducer', () => {
   });
 
   describe('AuthStoreState.authenticateUserFailure', () => {
-    it('should store error messages', () => {
+    it('should store error messages on failure', () => {
       const authErrorMessages = ['error'];
       const action = AuthActions.authenticateUserFailure({ authErrorMessages });
       const actualState = authReducer(initialState, action);
