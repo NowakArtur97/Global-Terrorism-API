@@ -37,6 +37,7 @@ describe('RegistrationComponent', () => {
 
   describe('when register form is submitted', () => {
     it('form invalid when empty', () => {
+      expect(store.select).toHaveBeenCalled();
       expect(component.registerForm.valid).toBeFalsy();
     });
 
@@ -65,6 +66,7 @@ describe('RegistrationComponent', () => {
 
       component.onRegister();
 
+      expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(
         AuthActions.registerUserStart({ registrationData })
       );
