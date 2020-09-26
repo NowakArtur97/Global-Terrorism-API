@@ -86,4 +86,14 @@ describe('AuthService', () => {
       expect(userActual).toBeNull();
     });
   });
+
+  describe('removeUserFromLocalStorage$', () => {
+    it('should remove user from local storage', () => {
+      spyOn(localStorage, 'removeItem').and.callThrough();
+
+      authService.removeUserFromLocalStorage();
+
+      expect(localStorage.removeItem).toHaveBeenCalled();
+    });
+  });
 });
