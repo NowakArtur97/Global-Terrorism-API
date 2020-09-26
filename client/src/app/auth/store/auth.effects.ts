@@ -22,7 +22,7 @@ export default class AuthEffects {
   };
 
   private handleError = (errorResponse: ErrorResponse) => {
-    const authErrorMessages = errorResponse.errors;
+    const authErrorMessages = errorResponse.errors || ['Unknown error'];
     return of(
       AuthActions.authenticateUserFailure({
         authErrorMessages,

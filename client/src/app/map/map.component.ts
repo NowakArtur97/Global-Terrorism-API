@@ -38,7 +38,7 @@ export class MapComponent implements OnInit {
       .pipe(map((citiesState) => citiesState.cities))
       .subscribe((cities: City[]) => {
         this.cities = cities;
-        if (this.map && cities.length === 0) {
+        if (this.map && cities && cities.length === 0) {
           this.markers.forEach((marker) => this.map.removeLayer(marker));
         }
       });
