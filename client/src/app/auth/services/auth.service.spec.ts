@@ -3,6 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import AuthResponse from '../models/AuthResponseData';
 import LoginData from '../models/LoginData';
+import RegistrationData from '../models/RegistrationData';
 import AuthService from './auth.service';
 
 describe('AuthService', () => {
@@ -37,6 +38,26 @@ describe('AuthService', () => {
       });
 
       const req = httpMock.expectOne(`${BASE_URL}/authentication`);
+      expect(req.request.method).toBe('POST');
+      req.flush(authResponse);
+    });
+  });
+
+  describe('registerUser$', () => {
+    it('should register user', () => {
+      const registrationData = new RegistrationData(
+        'username',
+        'email@email.com',
+        'pass',
+        'pass'
+      );
+      const authResponse = new AuthResponse('token');
+
+      authService.registerUser(registrationData).subscribe((res) => {
+        expect(res).toEqual(authResponse);
+      });
+
+      const req = httpMock.expectOne(`${BASE_URL}/registration`);
       expect(req.request.method).toBe('POST');
       req.flush(authResponse);
     });
