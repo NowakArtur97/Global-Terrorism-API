@@ -133,7 +133,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.autoUserLogin());
     });
 
-    it('should return an authenticateUserSuccess action when user data stored in local storage', () => {
+    it('should return an authenticateUserSuccess action when user data is stored in local storage', () => {
       (authService.getUserFromLocalStorage as jasmine.Spy).and.returnValue(
         of(mockUser)
       );

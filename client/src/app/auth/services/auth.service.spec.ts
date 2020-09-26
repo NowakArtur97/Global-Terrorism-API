@@ -4,6 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import AuthResponse from '../models/AuthResponseData';
 import LoginData from '../models/LoginData';
 import RegistrationData from '../models/RegistrationData';
+import User from '../models/User';
 import AuthService from './auth.service';
 
 describe('AuthService', () => {
@@ -60,6 +61,29 @@ describe('AuthService', () => {
       const req = httpMock.expectOne(`${BASE_URL}/registration`);
       expect(req.request.method).toBe('POST');
       req.flush(authResponse);
+    });
+  });
+
+  describe('getUserFromLocalStorage$', () => {
+    it('should get user from local storage when user data is stored in local storage', () => {
+      const userData: {
+        _token: string;
+      } = { _token: 'secret token' };
+      const userExpected = new User('secret token');
+
+      spyOn(localStorage, 'getItem').and.callFake(() =>
+        JSON.stringify(userData)
+      );
+      const userActual = authService.getUserFromLocalStorage();
+
+      expect(userActual).toEqual(userExpected);
+      expect(localStorage.getItem).toHaveBeenCalled();
+    });
+
+    it('should return null when user data is not stored in local storage', () => {
+      const userActual = authService.getUserFromLocalStorage();
+
+      expect(userActual).toBeNull();
     });
   });
 });
