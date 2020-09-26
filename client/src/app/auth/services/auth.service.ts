@@ -16,7 +16,6 @@ export default class AuthService {
 
   loginUser(loginData: LoginData): Observable<AuthResponse> {
     const { userNameOrEmail, password } = loginData;
-
     return this.httpClient.post<AuthResponse>(
       `${this.BASE_URL}/authentication`,
       {

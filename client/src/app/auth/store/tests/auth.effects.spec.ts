@@ -4,6 +4,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import ErrorResponse from 'src/app/shared/models/ErrorResponse';
 
+import AuthResponse from '../../models/AuthResponseData';
 import LoginData from '../../models/LoginData';
 import RegistrationData from '../../models/RegistrationData';
 import User from '../../models/User';
@@ -15,10 +16,11 @@ const mockLoginData = new LoginData('username', 'password');
 const mockRegistrationData = new RegistrationData(
   'username',
   'email@email.com',
-  'pass',
-  'pass'
+  'password',
+  'password'
 );
 const mockUser = new User('secret token');
+const mockAuthResponse = new AuthResponse('secret token');
 const mockErrorResponse = new HttpErrorResponse({
   error: {
     errors: [new ErrorResponse(['Error message.'], 401, new Date())],
@@ -46,6 +48,7 @@ describe('AuthEffects', () => {
             'registerUser',
             'getUserFromLocalStorage',
             'removeUserFromLocalStorage',
+            'saveUserInLocalStorage',
           ]),
         },
       ],
@@ -64,13 +67,16 @@ describe('AuthEffects', () => {
     });
 
     it('should return an authenticateUserSuccess action on success', () => {
-      (authService.loginUser as jasmine.Spy).and.returnValue(of(mockUser));
+      (authService.loginUser as jasmine.Spy).and.returnValue(
+        of(mockAuthResponse)
+      );
 
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
         expect(authService.loginUser).toHaveBeenCalled();
+        expect(authService.saveUserInLocalStorage).toHaveBeenCalled();
       });
     });
 
@@ -78,6 +84,7 @@ describe('AuthEffects', () => {
       (authService.loginUser as jasmine.Spy).and.returnValue(
         throwError(mockErrorResponse)
       );
+      (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
 
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
@@ -101,13 +108,17 @@ describe('AuthEffects', () => {
     });
 
     it('should return an authenticateUserSuccess action on success', () => {
-      (authService.registerUser as jasmine.Spy).and.returnValue(of(mockUser));
+      (authService.registerUser as jasmine.Spy).and.returnValue(
+        of(mockAuthResponse)
+      );
+      (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
 
       authEffects.registerUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
         expect(authService.registerUser).toHaveBeenCalled();
+        expect(authService.saveUserInLocalStorage).toHaveBeenCalled();
       });
     });
 

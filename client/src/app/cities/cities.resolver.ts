@@ -21,7 +21,7 @@ export class CitiesResolver implements Resolve<{ cities: City[] }> {
         const isAuth = !!stores[0].user;
         const cities = stores[1].cities;
 
-        if (isAuth && cities.length === 0) {
+        if (isAuth && cities?.length === 0) {
           this.store.dispatch(CitiesActions.fetchCitites());
           return this.actions$.pipe(ofType(CitiesActions.setCities), take(1));
         } else {

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -33,14 +33,14 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     this.authErrorsSubscription.unsubscribe();
   }
 
-  initForm() {
+  initForm(): void {
     this.loginForm = new FormGroup({
       userNameOrEmail: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
     });
   }
 
-  onLogin() {
+  onLogin(): void {
     const { userNameOrEmail, password } = this.loginForm.value;
     this.store.dispatch(
       AuthActions.loginUserStart({
@@ -49,11 +49,11 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     );
   }
 
-  get userNameOrEmail() {
+  get userNameOrEmail(): AbstractControl {
     return this.loginForm.get('userNameOrEmail');
   }
 
-  get password() {
+  get password(): AbstractControl {
     return this.loginForm.get('password');
   }
 }

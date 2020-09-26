@@ -31,8 +31,8 @@ describe('CitiesEffects', () => {
   );
 
   beforeEach(() => {
-    citiesEffects = TestBed.get(CitiesEffects);
-    citiesService = TestBed.get(CitiesService);
+    citiesEffects = TestBed.inject(CitiesEffects);
+    citiesService = TestBed.inject(CitiesService);
   });
 
   describe('fetchCities$', () => {

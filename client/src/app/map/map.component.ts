@@ -44,7 +44,7 @@ export class MapComponent implements OnInit {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.citiesSubscription.unsubscribe();
   }
 
