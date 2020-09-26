@@ -59,6 +59,9 @@ jobs:
           name: Testing
           command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run:
+          name: Linting
+          command: npm run lint
+      - run:
           name: End to End Test
           command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 workflows:
