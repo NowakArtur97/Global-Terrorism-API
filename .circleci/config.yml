@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test-backend:
+  build:
     docker:
       - image: circleci/openjdk:11.0.3-jdk-stretch
         environment:
@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Testing
           command: mvn test -Dspring-boot.run.profiles=ci
-  test-frontend:
+  test:
     working_directory: ~/global_terrorism_api/client
     docker:
       - image: circleci/node:10-browsers
