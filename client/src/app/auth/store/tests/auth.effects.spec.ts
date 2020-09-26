@@ -70,6 +70,7 @@ describe('AuthEffects', () => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
+        expect(authService.loginUser).toHaveBeenCalled();
       });
     });
 
@@ -84,6 +85,7 @@ describe('AuthEffects', () => {
             authErrorMessages: mockErrorResponse.error.errors,
           })
         );
+        expect(authService.loginUser).toHaveBeenCalled();
       });
     });
   });
@@ -105,6 +107,7 @@ describe('AuthEffects', () => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
+        expect(authService.registerUser).toHaveBeenCalled();
       });
     });
 
@@ -119,6 +122,7 @@ describe('AuthEffects', () => {
             authErrorMessages: mockErrorResponse.error.errors,
           })
         );
+        expect(authService.registerUser).toHaveBeenCalled();
       });
     });
   });
@@ -136,12 +140,14 @@ describe('AuthEffects', () => {
 
       authEffects.autoUserLogin$.subscribe((resultAction) => {
         expect(resultAction.type).toEqual('[User] Authenticate User Success');
+        expect(authService.getUserFromLocalStorage).toHaveBeenCalled();
       });
     });
 
     it('should return a dummy action when user data is not stored in local storage', () => {
       authEffects.autoUserLogin$.subscribe((resultAction) => {
         expect(resultAction.type).toEqual('DUMMY');
+        expect(authService.getUserFromLocalStorage).toHaveBeenCalled();
       });
     });
   });

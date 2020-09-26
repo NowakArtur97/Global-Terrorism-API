@@ -33,13 +33,13 @@ describe('CitiesEffects', () => {
   beforeEach(() => {
     citiesEffects = TestBed.get(CitiesEffects);
     citiesService = TestBed.get(CitiesService);
-    (citiesService.getCities as jasmine.Spy).and.returnValue(of(mockCities));
   });
 
   describe('fetchCities$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(CitiesActions.fetchCitites());
+      (citiesService.getCities as jasmine.Spy).and.returnValue(of(mockCities));
     });
 
     it('should return a setCities action', () => {
@@ -47,6 +47,7 @@ describe('CitiesEffects', () => {
         expect(resultAction).toEqual(
           CitiesActions.setCities({ cities: mockCities.content })
         );
+        expect(citiesService.getCities).toHaveBeenCalled();
       });
     });
   });
