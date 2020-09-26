@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  backend-tests:
     docker:
       - image: circleci/openjdk:11.0.3-jdk-stretch
         environment:
@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Testing
           command: mvn test -Dspring-boot.run.profiles=ci
-  test:
+  frontend-tests:
     working_directory: ~/global_terrorism_api/client
     docker:
       - image: circleci/node:10-browsers
@@ -61,3 +61,9 @@ jobs:
       - run:
           name: End to End Test
           command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - frontend-tests
+      - backend-tests
