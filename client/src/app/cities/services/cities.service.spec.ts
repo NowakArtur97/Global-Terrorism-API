@@ -29,7 +29,7 @@ describe('citiesService', () => {
     httpMock.verify();
   });
 
-  describe('getCities$', () => {
+  describe('when get cities', () => {
     it('should return cities', () => {
       const cities: CitiesGetResponse = {
         content: [new City(1, 'city1', 10, 12), new City(2, 'city2', 20, 22)],

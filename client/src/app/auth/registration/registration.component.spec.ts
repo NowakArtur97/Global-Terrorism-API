@@ -13,6 +13,13 @@ describe('RegistrationComponent', () => {
   let fixture: ComponentFixture<RegistrationComponent>;
   let store: Store<AppStoreState>;
 
+  const registrationData = new RegistrationData(
+    'username',
+    'email@email.com',
+    'password',
+    'password'
+  );
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}), ReactiveFormsModule],
@@ -37,21 +44,61 @@ describe('RegistrationComponent', () => {
     component.ngOnInit();
   });
 
+  describe('form valdiation', () => {
+    beforeEach(() => {
+      component.registerForm.controls.userName.setValue(
+        registrationData.userName
+      );
+      component.registerForm.controls.email.setValue(registrationData.email);
+      component.registerForm.controls.password.setValue(
+        registrationData.password
+      );
+      component.registerForm.controls.matchingPassword.setValue(
+        registrationData.matchingPassword
+      );
+    });
+
+    it('with empty username should be invalid', () => {
+      component.registerForm.controls.userName.setValue('');
+
+      const userName = component.registerForm.controls.userName;
+      const errors = userName.errors;
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('with empty username should be invalid', () => {
+      component.registerForm.controls.email.setValue('');
+
+      const email = component.registerForm.controls.email;
+      const errors = email.errors;
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('with empty password should be invalid', () => {
+      component.registerForm.controls.password.setValue('');
+
+      const password = component.registerForm.controls.password;
+      const errors = password.errors;
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('with empty matching password should be invalid', () => {
+      component.registerForm.controls.matchingPassword.setValue('');
+
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const errors = matchingPassword.errors;
+      expect(errors['required']).toBeTruthy();
+    });
+  });
+
   describe('when register form is submitted', () => {
-    it('form invalid when empty', () => {
+    it('should be invalid by default', () => {
       expect(store.select).toHaveBeenCalled();
       expect(component.registerForm.valid).toBeFalsy();
     });
 
     it('should dispatch registerUserStart action when register form is valid', () => {
       expect(component.registerForm.valid).toBeFalsy();
-
-      const registrationData = new RegistrationData(
-        'username',
-        'email@email.com',
-        'password',
-        'password'
-      );
 
       component.registerForm.controls.userName.setValue(
         registrationData.userName

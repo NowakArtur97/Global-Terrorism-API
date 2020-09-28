@@ -31,7 +31,7 @@ describe('AuthService', () => {
     httpMock.verify();
   });
 
-  describe('loginUser$', () => {
+  describe('when login user', () => {
     it('should login user', () => {
       const loginData = new LoginData('username', 'password');
       const authResponse = new AuthResponse('token');
@@ -46,7 +46,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('registerUser$', () => {
+  describe('when register user', () => {
     it('should register user', () => {
       const registrationData = new RegistrationData(
         'username',
@@ -66,7 +66,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('getUserFromLocalStorage$', () => {
+  describe('when get user from local storage', () => {
     it('should get user from local storage when user data is stored in local storage', () => {
       const userData: {
         _token: string;
@@ -89,7 +89,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('removeUserFromLocalStorage$', () => {
+  describe('when remove user from local storage', () => {
     it('should remove user from local storage', () => {
       spyOn(localStorage, 'removeItem').and.callThrough();
 
@@ -99,7 +99,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('saveUserInLocalStorage$', () => {
+  describe('when save user in local storage', () => {
     it('should save user in local storage', () => {
       const user = new User('secret token');
 
