@@ -21,8 +21,8 @@
               <div
                 *ngIf="userName.errors.minlength || userName.errors.maxlength"
               >
-                User name must be between <strong>7</strong> and
-                <strong>30</strong> characters.
+                User name must be between <strong>5</strong> and
+                <strong>20</strong> characters.
               </div>
             </mat-error>
           </mat-form-field>
@@ -34,7 +34,7 @@
             <input id="email" type="email" formControlName="email" matInput />
             <mat-error *ngIf="email.invalid && (email.touched || email.dirty)">
               <div *ngIf="email.errors.email">
-                Email must be a <strong>valid</strong> email address
+                Email must be a <strong>valid</strong> email address.
               </div>
               <div *ngIf="email.errors.notBlank">
                 Email cannot be <strong>empty</strong>.
@@ -53,18 +53,23 @@
               matInput
             />
             <mat-error
-              *ngIf="password.invalid && (password.touched || password.dirty)"
+              *ngIf="
+                registerForm.invalid && (password.touched || password.dirty)
+              "
             >
               <div *ngIf="password.errors.notBlank">
                 Password cannot be <strong>empty</strong>.
               </div>
               <div
                 *ngIf="
-                  password?.errors?.mustMatch &&
-                  matchingPassword?.errors?.mustMatch
+                  password.errors?.mustMatch &&
+                  matchingPassword?.errors.mustMatch
                 "
               >
                 Passwords <strong>don't match</strong>.
+              </div>
+              <div *ngIf="password.errors.notInclude">
+                Password <strong>mustn't contain User Name</strong>.
               </div>
             </mat-error>
           </mat-form-field>
@@ -81,7 +86,7 @@
             />
             <mat-error
               *ngIf="
-                matchingPassword.invalid &&
+                registerForm.invalid &&
                 (matchingPassword.touched || matchingPassword.dirty)
               "
             >
@@ -90,10 +95,14 @@
               </div>
               <div
                 *ngIf="
-                  password.errors.mustMatch && matchingPassword.errors.mustMatch
+                  password.errors?.mustMatch &&
+                  matchingPassword?.errors.mustMatch
                 "
               >
                 Passwords <strong>don't match</strong>.
+              </div>
+              <div *ngIf="matchingPassword.errors.notInclude">
+                Password <strong>mustn't contain User Name</strong>.
               </div>
             </mat-error>
           </mat-form-field>
@@ -104,11 +113,16 @@
         </mat-error>
 
         <mat-dialog-actions align="end">
-          <button type="submit" mat-raised-button>Register</button>
+          <button
+            type="submit"
+            mat-raised-button
+            [disabled]="!registerForm.valid"
+          >
+            Register
+          </button>
           <button mat-raised-button mat-dialog-close>Cancel</button>
         </mat-dialog-actions>
       </form>
     </mat-card-content>
   </mat-card>
 </mat-dialog-content>
-[disabled]="!registerForm.valid"

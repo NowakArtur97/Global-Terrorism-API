@@ -6,9 +6,6 @@ import { map } from 'rxjs/operators';
 import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import RegistrationData from '../models/RegistrationData';
-import * as AuthActions from '../store/auth.actions';
-
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -18,6 +15,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   authErrors: string[] = [];
   private authErrorsSubscription: Subscription;
+  private passwordChangesSubscription: Subscription;
+  private matchingPasswordChangesSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
 
@@ -32,13 +31,15 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authErrorsSubscription.unsubscribe();
+    this.passwordChangesSubscription.unsubscribe();
+    this.matchingPasswordChangesSubscription.unsubscribe();
   }
 
   initForm(): void {
     this.registerForm = new FormGroup({
       userName: new FormControl('', [
-        Validators.minLength(7),
-        Validators.maxLength(30),
+        Validators.minLength(5),
+        Validators.maxLength(20),
         CommonValidators.notBlank,
       ]),
       email: new FormControl('', [Validators.email, CommonValidators.notBlank]),
@@ -46,8 +47,23 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       matchingPassword: new FormControl('', [CommonValidators.notBlank]),
     });
     this.registerForm.setValidators([
+      CommonValidators.notInclude('password', 'userName'),
+      CommonValidators.notInclude('matchingPassword', 'userName'),
       CommonValidators.mustMatch('password', 'matchingPassword'),
     ]);
+
+    // this.passwordChangesSubscription = this.password.valueChanges.subscribe(
+    //   () => {
+    //     console.log(1);
+    //     this.matchingPassword.updateValueAndValidity();
+    //   }
+    // );
+    // this.matchingPasswordChangesSubscription = this.matchingPassword.valueChanges.subscribe(
+    //   () => {
+    //     console.log(2);
+    //     this.password.updateValueAndValidity();
+    //   }
+    // );
   }
 
   onRegister(): void {

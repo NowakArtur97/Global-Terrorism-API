@@ -9,7 +9,6 @@
 * [Endpoints List](#endpoints-list)
 * [Examples](#examples)
 * [Status](#status)
-* [Screenshots](#screenshots)
 
 ## General info
 REST API providing information on terrorist attacks
@@ -48,7 +47,7 @@ or create new account by sending the appropriate request:
 ```
 
 The password must meet the following requirements:
-- Must be between 7 and 30 characters long
+- Must be between 5 and 20 characters long
 - Passwords must match
 - Mustn't contain the user name
 - Mustn't contain spaces
@@ -258,7 +257,3 @@ The previously generated token should be placed in the header. In the example, m
 
 ## Status
 Project is: in progress
-
-## Screenshots
-![Documentation](./src/main/resources/screenshots/documentation.png)
-<p style="text-align: center">Documentation using Swagger 2</p>

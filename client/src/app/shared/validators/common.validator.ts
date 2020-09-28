@@ -15,10 +15,28 @@ export default class CommonValidators {
     return (formGroup: FormGroup): ValidationErrors => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
-
       if (control.value !== matchingControl.value) {
         control.setErrors({ ...control.errors, mustMatch: true });
         matchingControl.setErrors({ ...control.errors, mustMatch: true });
+      }
+      return;
+    };
+  }
+
+  static notInclude(
+    controlNameToCheck: string,
+    controlNameToNotBeIncluded: string
+  ): ValidatorFn {
+    return (formGroup: FormGroup): ValidationErrors => {
+      const controlToCheck = formGroup.controls[controlNameToCheck];
+      const controlToNotBeIncluded =
+        formGroup.controls[controlNameToNotBeIncluded];
+
+      if (controlToCheck.value.includes(controlToNotBeIncluded.value)) {
+        controlToCheck.setErrors({
+          ...controlToCheck.errors,
+          notInclude: true,
+        });
       }
       return;
     };
