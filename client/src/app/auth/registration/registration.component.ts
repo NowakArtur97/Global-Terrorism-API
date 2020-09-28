@@ -1,10 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -42,25 +37,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   initForm(): void {
     this.registerForm = new FormGroup({
       userName: new FormControl('', [
-        Validators.required,
         Validators.minLength(7),
         Validators.maxLength(30),
         CommonValidators.notBlank,
       ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-        CommonValidators.notBlank,
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        CommonValidators.notBlank,
-      ]),
-      matchingPassword: new FormControl('', [
-        Validators.required,
-        CommonValidators.notBlank,
-      ]),
+      email: new FormControl('', [Validators.email, CommonValidators.notBlank]),
+      password: new FormControl('', [CommonValidators.notBlank]),
+      matchingPassword: new FormControl('', [CommonValidators.notBlank]),
     });
+    this.registerForm.setValidators([
+      CommonValidators.mustMatch('password', 'matchingPassword'),
+    ]);
   }
 
   onRegister(): void {
@@ -70,17 +57,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    console.log(userName.errors);
-    // this.store.dispatch(
-    //   AuthActions.registerUserStart({
-    //     registrationData: new RegistrationData(
-    //       userName,
-    //       email,
-    //       password,
-    //       matchingPassword
-    //     ),
-    //   })
-    // );
+
+    this.store.dispatch(
+      AuthActions.registerUserStart({
+        registrationData: new RegistrationData(
+          userName,
+          email,
+          password,
+          matchingPassword
+        ),
+      })
+    );
   }
 
   get userName(): AbstractControl {
