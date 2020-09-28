@@ -1,8 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationData from '../models/RegistrationData';
@@ -35,10 +41,25 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     this.registerForm = new FormGroup({
-      userName: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
-      matchingPassword: new FormControl('', Validators.required),
+      userName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(30),
+        CommonValidators.notBlank,
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        CommonValidators.notBlank,
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        CommonValidators.notBlank,
+      ]),
+      matchingPassword: new FormControl('', [
+        Validators.required,
+        CommonValidators.notBlank,
+      ]),
     });
   }
 
@@ -49,16 +70,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    this.store.dispatch(
-      AuthActions.registerUserStart({
-        registrationData: new RegistrationData(
-          userName,
-          email,
-          password,
-          matchingPassword
-        ),
-      })
-    );
+    console.log(userName.errors);
+    // this.store.dispatch(
+    //   AuthActions.registerUserStart({
+    //     registrationData: new RegistrationData(
+    //       userName,
+    //       email,
+    //       password,
+    //       matchingPassword
+    //     ),
+    //   })
+    // );
   }
 
   get userName(): AbstractControl {
