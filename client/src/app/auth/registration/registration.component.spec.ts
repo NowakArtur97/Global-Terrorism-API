@@ -63,7 +63,7 @@ describe('RegistrationComponent', () => {
 
       const userName = component.registerForm.controls.userName;
       const errors = userName.errors;
-      expect(errors['required']).toBeTruthy();
+      expect(errors.required).toBeTruthy();
     });
 
     it('with empty username should be invalid', () => {
@@ -71,7 +71,7 @@ describe('RegistrationComponent', () => {
 
       const email = component.registerForm.controls.email;
       const errors = email.errors;
-      expect(errors['required']).toBeTruthy();
+      expect(errors.required).toBeTruthy();
     });
 
     it('with empty password should be invalid', () => {
@@ -79,7 +79,7 @@ describe('RegistrationComponent', () => {
 
       const password = component.registerForm.controls.password;
       const errors = password.errors;
-      expect(errors['required']).toBeTruthy();
+      expect(errors.required).toBeTruthy();
     });
 
     it('with empty matching password should be invalid', () => {
@@ -87,7 +87,7 @@ describe('RegistrationComponent', () => {
 
       const matchingPassword = component.registerForm.controls.matchingPassword;
       const errors = matchingPassword.errors;
-      expect(errors['required']).toBeTruthy();
+      expect(errors.required).toBeTruthy();
     });
   });
 
