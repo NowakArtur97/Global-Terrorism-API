@@ -16,7 +16,9 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       providers: [Store],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
 

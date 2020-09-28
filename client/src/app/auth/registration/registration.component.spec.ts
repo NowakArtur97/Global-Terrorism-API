@@ -19,7 +19,9 @@ describe('RegistrationComponent', () => {
       declarations: [RegistrationComponent],
       providers: [Store],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
 

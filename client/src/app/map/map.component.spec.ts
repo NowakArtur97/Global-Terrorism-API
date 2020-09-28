@@ -16,7 +16,9 @@ describe('MapComponent', () => {
       declarations: [MapComponent],
       providers: [Store],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(MapComponent);
     component = fixture.componentInstance;
 

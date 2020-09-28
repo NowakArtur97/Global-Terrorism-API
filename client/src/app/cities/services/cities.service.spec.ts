@@ -17,7 +17,9 @@ describe('citiesService', () => {
       imports: [HttpClientTestingModule],
       providers: [CitiesService],
     });
+  });
 
+  beforeEach(() => {
     injector = getTestBed();
     citiesService = injector.inject(CitiesService);
     httpMock = injector.inject(HttpTestingController);

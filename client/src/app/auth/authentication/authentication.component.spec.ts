@@ -19,7 +19,9 @@ describe('AuthenticationComponent', () => {
       declarations: [AuthenticationComponent],
       providers: [Store],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(AuthenticationComponent);
     component = fixture.componentInstance;
 

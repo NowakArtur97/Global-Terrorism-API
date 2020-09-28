@@ -19,7 +19,9 @@ describe('AuthService', () => {
       imports: [HttpClientTestingModule],
       providers: [AuthService],
     });
+  });
 
+  beforeEach(() => {
     injector = getTestBed();
     authService = injector.inject(AuthService);
     httpMock = injector.inject(HttpTestingController);
