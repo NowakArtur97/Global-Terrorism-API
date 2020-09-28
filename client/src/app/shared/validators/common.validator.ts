@@ -17,8 +17,8 @@ export default class CommonValidators {
       const matchingControl = formGroup.controls[matchingControlName];
 
       if (control.value !== matchingControl.value) {
-        control.setErrors({ mustMatch: true });
-        matchingControl.setErrors({ mustMatch: true });
+        control.setErrors({ ...control.errors, mustMatch: true });
+        matchingControl.setErrors({ ...control.errors, mustMatch: true });
       }
       return;
     };
