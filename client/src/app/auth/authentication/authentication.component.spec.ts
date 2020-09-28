@@ -12,6 +12,7 @@ describe('AuthenticationComponent', () => {
   let component: AuthenticationComponent;
   let fixture: ComponentFixture<AuthenticationComponent>;
   let store: Store<AppStoreState>;
+  const loginData = new LoginData('login', ' password');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,6 +38,31 @@ describe('AuthenticationComponent', () => {
     component.ngOnInit();
   });
 
+  describe('form valdiation', () => {
+    beforeEach(() => {
+      component.loginForm.controls.userNameOrEmail.setValue(
+        loginData.userNameOrEmail
+      );
+      component.loginForm.controls.password.setValue(loginData.password);
+    });
+
+    it('with empty username/email should be invalid', () => {
+      component.loginForm.controls.userNameOrEmail.setValue('');
+
+      const userNameOrEmail = component.loginForm.controls.userNameOrEmail;
+      const errors = userNameOrEmail.errors;
+      expect(errors.required).toBeTruthy();
+    });
+
+    it('with empty password should be invalid', () => {
+      component.loginForm.controls.password.setValue('');
+
+      const password = component.loginForm.controls.password;
+      const errors = password.errors;
+      expect(errors.required).toBeTruthy();
+    });
+  });
+
   describe('when login form is submitted', () => {
     it('form invalid when empty', () => {
       expect(component.loginForm.valid).toBeFalsy();
@@ -44,8 +70,6 @@ describe('AuthenticationComponent', () => {
 
     it('should dispatch loginUserStart action when login form is valid', () => {
       expect(component.loginForm.valid).toBeFalsy();
-
-      const loginData = new LoginData('login', ' password');
 
       component.loginForm.controls.userNameOrEmail.setValue(
         loginData.userNameOrEmail
