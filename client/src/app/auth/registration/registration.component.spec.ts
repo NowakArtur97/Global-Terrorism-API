@@ -44,6 +44,12 @@ describe('RegistrationComponent', () => {
     component.ngOnInit();
   });
 
+  describe('when initialize component', () => {
+    it('should select error messages from store', () => {
+      expect(store.select).toHaveBeenCalled();
+    });
+  });
+
   describe('form valdiation', () => {
     beforeEach(() => {
       component.registerForm.controls.userName.setValue(
@@ -59,33 +65,56 @@ describe('RegistrationComponent', () => {
     });
 
     it('with empty username should be invalid', () => {
-      component.registerForm.controls.userName.setValue('');
-
       const userName = component.registerForm.controls.userName;
+
+      userName.setValue('');
+
       const errors = userName.errors;
       expect(errors.required).toBeTruthy();
     });
 
-    it('with empty username should be invalid', () => {
-      component.registerForm.controls.email.setValue('');
-
+    it('with empty email should be invalid', () => {
       const email = component.registerForm.controls.email;
+
+      email.setValue('');
+
       const errors = email.errors;
       expect(errors.required).toBeTruthy();
     });
 
-    it('with empty password should be invalid', () => {
-      component.registerForm.controls.password.setValue('');
+    it('with incorrect email format should be invalid', () => {
+      const email = component.registerForm.controls.email;
 
+      email.setValue('wrongemailformat');
+
+      let errors = email.errors;
+      expect(errors.email).toBeTruthy();
+
+      email.setValue('wrong@emailformat.');
+
+      errors = email.errors;
+      expect(errors.email).toBeTruthy();
+
+      email.setValue('wrongemailformat.com');
+
+      errors = email.errors;
+      expect(errors.email).toBeTruthy();
+    });
+
+    it('with empty password should be invalid', () => {
       const password = component.registerForm.controls.password;
+
+      password.setValue('');
+
       const errors = password.errors;
       expect(errors.required).toBeTruthy();
     });
 
     it('with empty matching password should be invalid', () => {
-      component.registerForm.controls.matchingPassword.setValue('');
-
       const matchingPassword = component.registerForm.controls.matchingPassword;
+
+      matchingPassword.setValue('');
+
       const errors = matchingPassword.errors;
       expect(errors.required).toBeTruthy();
     });
@@ -93,23 +122,23 @@ describe('RegistrationComponent', () => {
 
   describe('when register form is submitted', () => {
     it('should be invalid by default', () => {
-      expect(store.select).toHaveBeenCalled();
       expect(component.registerForm.valid).toBeFalsy();
     });
 
     it('should dispatch registerUserStart action when register form is valid', () => {
       expect(component.registerForm.valid).toBeFalsy();
 
-      component.registerForm.controls.userName.setValue(
-        registrationData.userName
-      );
-      component.registerForm.controls.email.setValue(registrationData.email);
-      component.registerForm.controls.password.setValue(
-        registrationData.password
-      );
-      component.registerForm.controls.matchingPassword.setValue(
-        registrationData.matchingPassword
-      );
+      const {
+        userName,
+        email,
+        password,
+        matchingPassword,
+      } = component.registerForm.controls;
+
+      userName.setValue(registrationData.userName);
+      email.setValue(registrationData.email);
+      password.setValue(registrationData.password);
+      matchingPassword.setValue(registrationData.matchingPassword);
 
       expect(component.registerForm.valid).toBeTruthy();
 
