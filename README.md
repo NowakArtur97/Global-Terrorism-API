@@ -47,7 +47,7 @@ or create new account by sending the appropriate request:
 ```
 
 The password must meet the following requirements:
-- Must be between 5 and 20 characters long
+- Must be between 7 and 30 characters long
 - Passwords must match
 - Mustn't contain the user name
 - Mustn't contain spaces

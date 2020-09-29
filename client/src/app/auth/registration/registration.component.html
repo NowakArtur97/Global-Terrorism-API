@@ -55,14 +55,23 @@
             <mat-error
               *ngIf="password.invalid && (password.touched || password.dirty)"
             >
-              <div *ngIf="password.errors?.notBlank">
+              <div *ngIf="password.errors.notBlank">
                 Password cannot be <strong>empty</strong>.
               </div>
-              <div *ngIf="password.errors?.notInclude">
+              <div *ngIf="password.errors.notInclude">
                 Password <strong>mustn't contain User Name</strong>.
               </div>
-              <div *ngIf="password.errors?.withoutSpaces">
+              <div *ngIf="password.errors.withoutSpaces">
                 Password <strong>mustn't contain spaces</strong>.
+              </div>
+              <div
+                *ngIf="
+                  !password.errors.notBlank &&
+                  (password.errors.minlength || password.errors.maxlength)
+                "
+              >
+                Password must be between <strong>7</strong> and
+                <strong>30</strong> characters.
               </div>
             </mat-error>
           </mat-form-field>
@@ -94,6 +103,16 @@
               </div>
               <div *ngIf="matchingPassword.errors.withoutSpaces">
                 Password <strong>mustn't contain spaces</strong>.
+              </div>
+              <div
+                *ngIf="
+                  !matchingPassword.errors.notBlank &&
+                  (matchingPassword.errors.minlength ||
+                    matchingPassword.errors.maxlength)
+                "
+              >
+                Password must be between <strong>7</strong> and
+                <strong>30</strong> characters.
               </div>
             </mat-error>
           </mat-form-field>

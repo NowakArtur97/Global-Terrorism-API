@@ -45,17 +45,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       ]),
       email: new FormControl('', [Validators.email, CommonValidators.notBlank]),
       password: new FormControl('', [
+        Validators.minLength(7),
+        Validators.maxLength(30),
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
       ]),
       matchingPassword: new FormControl('', [
+        Validators.minLength(7),
+        Validators.maxLength(30),
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
       ]),
     });
     this.registerForm.setValidators([
-      CommonValidators.notInclude('password', 'userName'),
-      CommonValidators.notInclude('matchingPassword', 'userName'),
+      // CommonValidators.notInclude('password', 'userName'),
+      // CommonValidators.notInclude('matchingPassword', 'userName'),
       CommonValidators.notMatch('password', 'matchingPassword'),
     ]);
 
