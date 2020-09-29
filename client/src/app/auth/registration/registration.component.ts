@@ -6,6 +6,9 @@ import { map } from 'rxjs/operators';
 import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
+import RegistrationData from '../models/RegistrationData';
+import * as AuthActions from '../store/auth.actions';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -43,13 +46,19 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.notBlank,
       ]),
       email: new FormControl('', [Validators.email, CommonValidators.notBlank]),
-      password: new FormControl('', [CommonValidators.notBlank]),
-      matchingPassword: new FormControl('', [CommonValidators.notBlank]),
+      password: new FormControl('', [
+        CommonValidators.notBlank,
+        CommonValidators.withoutSpaces,
+      ]),
+      matchingPassword: new FormControl('', [
+        CommonValidators.notBlank,
+        CommonValidators.withoutSpaces,
+      ]),
     });
     this.registerForm.setValidators([
       CommonValidators.notInclude('password', 'userName'),
       CommonValidators.notInclude('matchingPassword', 'userName'),
-      CommonValidators.mustMatch('password', 'matchingPassword'),
+      CommonValidators.notMatch('password', 'matchingPassword'),
     ]);
 
     // this.passwordChangesSubscription = this.password.valueChanges.subscribe(

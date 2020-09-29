@@ -2,13 +2,20 @@ import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/
 
 export default class CommonValidators {
   static notBlank(formControl: FormControl): ValidationErrors {
-    if (formControl?.value?.trim().length > 0) {
+    if (formControl.value?.trim().length > 0) {
       return null;
     }
     return { notBlank: true };
   }
 
-  static mustMatch(
+  static withoutSpaces(formControl: FormControl): ValidationErrors {
+    if (formControl.value?.includes(' ')) {
+      return { withoutSpaces: true };
+    }
+    return null;
+  }
+
+  static notMatch(
     controlName: string,
     matchingControlName: string
   ): ValidatorFn {
@@ -16,8 +23,8 @@ export default class CommonValidators {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
       if (control.value !== matchingControl.value) {
-        control.setErrors({ ...control.errors, mustMatch: true });
-        matchingControl.setErrors({ ...control.errors, mustMatch: true });
+        control.setErrors({ ...control.errors, notMatch: true });
+        matchingControl.setErrors({ ...control.errors, notMatch: true });
       }
       return;
     };

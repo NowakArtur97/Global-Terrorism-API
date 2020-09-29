@@ -62,14 +62,16 @@
               </div>
               <div
                 *ngIf="
-                  password.errors?.mustMatch &&
-                  matchingPassword?.errors.mustMatch
+                  password.errors?.notMatch && matchingPassword?.errors.notMatch
                 "
               >
                 Passwords <strong>don't match</strong>.
               </div>
               <div *ngIf="password.errors.notInclude">
                 Password <strong>mustn't contain User Name</strong>.
+              </div>
+              <div *ngIf="matchingPassword.errors.withoutSpaces">
+                Password <strong>mustn't contain spaces</strong>.
               </div>
             </mat-error>
           </mat-form-field>
@@ -95,14 +97,16 @@
               </div>
               <div
                 *ngIf="
-                  password.errors?.mustMatch &&
-                  matchingPassword?.errors.mustMatch
+                  password.errors?.notMatch && matchingPassword?.errors.notMatch
                 "
               >
                 Passwords <strong>don't match</strong>.
               </div>
               <div *ngIf="matchingPassword.errors.notInclude">
                 Password <strong>mustn't contain User Name</strong>.
+              </div>
+              <div *ngIf="matchingPassword.errors.withoutSpaces">
+                Password <strong>mustn't contain spaces</strong>.
               </div>
             </mat-error>
           </mat-form-field>
