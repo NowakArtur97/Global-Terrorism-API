@@ -23,7 +23,10 @@ export default class CommonValidators {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
       if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ ...control.errors, notMatch: true });
+        matchingControl.setErrors({
+          ...matchingControl.errors,
+          notMatch: true,
+        });
       }
       return;
     };
