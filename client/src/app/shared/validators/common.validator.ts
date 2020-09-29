@@ -21,15 +21,13 @@ export default class CommonValidators {
     const characters = formControl.value.split('');
     const maxRepetitiveCharacters = 2;
     let hasRepetetiveCharacters = false;
-    for (let i = 0; i < characters.length - maxRepetitiveCharacters; ) {
+    for (let i = 0; i < characters.length - maxRepetitiveCharacters; i++) {
       if (
         characters[i] === characters[i + 1] &&
         characters[i] === characters[i + 2]
       ) {
         hasRepetetiveCharacters = true;
         break;
-      } else {
-        i += maxRepetitiveCharacters;
       }
     }
     if (hasRepetetiveCharacters) {
@@ -46,6 +44,10 @@ export default class CommonValidators {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
       if (control.value !== matchingControl.value) {
+        control.setErrors({
+          ...control.errors,
+          notMatch: true,
+        });
         matchingControl.setErrors({
           ...matchingControl.errors,
           notMatch: true,

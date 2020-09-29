@@ -19,6 +19,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   authErrors: string[] = [];
   private authErrorsSubscription: Subscription;
   private passwordChangesSubscription: Subscription;
+  private matchingPasswordChangesSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
 
@@ -34,6 +35,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.authErrorsSubscription?.unsubscribe();
     this.passwordChangesSubscription?.unsubscribe();
+    this.matchingPasswordChangesSubscription?.unsubscribe();
   }
 
   initForm(): void {
@@ -67,7 +69,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
     this.passwordChangesSubscription = this.registerForm.controls.password.valueChanges.subscribe(
       () => {
-        this.registerForm.controls.matchingPassword.updateValueAndValidity();
+        this.registerForm.updateValueAndValidity();
+      }
+    );
+    this.matchingPasswordChangesSubscription = this.registerForm.controls.matchingPassword.valueChanges.subscribe(
+      () => {
+        this.registerForm.updateValueAndValidity();
       }
     );
   }

@@ -1,3 +1,9 @@
 mat-dialog-content {
   overflow: hidden;
 }
+
+.registration__form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

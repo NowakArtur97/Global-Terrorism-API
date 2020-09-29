@@ -2,138 +2,140 @@
 <mat-dialog-content class="mat-typography">
   <mat-card>
     <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-        <p>
-          <mat-form-field>
-            <mat-label for="userName">User Name</mat-label>
-            <input
-              id="userName"
-              type="type"
-              formControlName="userName"
-              matInput
-            />
-            <mat-error
-              *ngIf="userName.invalid && (userName.touched || userName.dirty)"
-            >
-              <div *ngIf="userName.errors.notBlank">
-                User name cannot be <strong>empty</strong>.
-              </div>
-              <div
-                *ngIf="userName.errors.minlength || userName.errors.maxlength"
-              >
-                User name must be between <strong>5</strong> and
-                <strong>20</strong> characters.
-              </div>
-            </mat-error>
-          </mat-form-field>
-        </p>
+      <form
+        class="registration__form"
+        [formGroup]="registerForm"
+        (ngSubmit)="onRegister()"
+      >
+        <mat-form-field>
+          <mat-label for="userName">User Name</mat-label>
+          <input
+            id="userName"
+            type="type"
+            formControlName="userName"
+            matInput
+          />
+          <mat-error
+            *ngIf="userName.invalid && (userName.touched || userName.dirty)"
+          >
+            <p *ngIf="userName.errors.notBlank">
+              User name cannot be <strong>empty</strong>.
+            </p>
+            <p *ngIf="userName.errors.minlength || userName.errors.maxlength">
+              User name must be between <strong>5</strong> and
+              <strong>20</strong> characters.
+            </p>
+          </mat-error>
+        </mat-form-field>
 
-        <p>
-          <mat-form-field>
-            <mat-label for="email">Email</mat-label>
-            <input id="email" type="email" formControlName="email" matInput />
-            <mat-error *ngIf="email.invalid && (email.touched || email.dirty)">
-              <div *ngIf="email.errors.email">
-                Email must be a <strong>valid</strong> email address.
-              </div>
-              <div *ngIf="email.errors.notBlank">
-                Email cannot be <strong>empty</strong>.
-              </div>
-            </mat-error>
-          </mat-form-field>
-        </p>
+        <mat-form-field>
+          <mat-label for="email">Email</mat-label>
+          <input id="email" type="email" formControlName="email" matInput />
+          <mat-error *ngIf="email.invalid && (email.touched || email.dirty)">
+            <p *ngIf="email.errors.email">
+              Email must be a <strong>valid</strong> email address.
+            </p>
+            <p *ngIf="email.errors.notBlank">
+              Email cannot be <strong>empty</strong>.
+            </p>
+          </mat-error>
+        </mat-form-field>
 
-        <p>
-          <mat-form-field>
-            <mat-label for="password">Password</mat-label>
-            <input
-              id="password"
-              type="password"
-              formControlName="password"
-              matInput
-            />
-            <mat-error
-              *ngIf="password.invalid && (password.touched || password.dirty)"
-            >
-              <div *ngIf="password.errors.notBlank">
-                Password cannot be <strong>empty</strong>.
-              </div>
-              <div *ngIf="password.errors.notInclude">
-                Password <strong>mustn't contain User Name</strong>.
-              </div>
-              <div *ngIf="password.errors.withoutSpaces">
-                Password <strong>mustn't contain spaces</strong>.
-              </div>
-              <div *ngIf="password.errors.repetitiveCharacters">
-                Password
-                <strong
-                  >mustn't contain a repetitive string of characters longer than
-                  two characters</strong
-                >.
-              </div>
-              <div
-                *ngIf="
-                  !password.errors.notBlank &&
-                  (password.errors.minlength || password.errors.maxlength)
-                "
-              >
-                Password must be between <strong>7</strong> and
-                <strong>30</strong> characters.
-              </div>
-            </mat-error>
-          </mat-form-field>
-        </p>
-
-        <p>
-          <mat-form-field>
-            <mat-label for="matchingPassword">Matching Password</mat-label>
-            <input
-              id="matchingPassword"
-              type="password"
-              formControlName="matchingPassword"
-              matInput
-            />
-            <mat-error
+        <mat-form-field>
+          <mat-label for="password">Password</mat-label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            matInput
+          />
+          <mat-error
+            *ngIf="password.invalid && (password.touched || password.dirty)"
+          >
+            <p *ngIf="password.errors.notBlank">
+              Password cannot be <strong>empty</strong>.
+            </p>
+            <p *ngIf="matchingPassword.errors.notMatch">
+              Passwords <strong>don't match</strong>.
+            </p>
+            <p *ngIf="!password.errors.notBlank && password.errors.notInclude">
+              Password <strong>mustn't contain User Name</strong>.
+            </p>
+            <p *ngIf="password.errors.withoutSpaces">
+              Password <strong>mustn't contain spaces</strong>.
+            </p>
+            <p *ngIf="password.errors.repetitiveCharacters">
+              Password
+              <strong
+                >mustn't contain a repetitive string of characters longer than
+                two characters</strong
+              >.
+            </p>
+            <p
               *ngIf="
-                matchingPassword.invalid &&
-                (matchingPassword.touched || matchingPassword.dirty)
+                !password.errors.notBlank &&
+                (password.errors.minlength || password.errors.maxlength)
               "
             >
-              <div *ngIf="matchingPassword.errors.notBlank">
-                Password cannot be <strong>empty</strong>.
-              </div>
-              <div *ngIf="matchingPassword.errors.notMatch">
-                Passwords <strong>don't match</strong>.
-              </div>
-              <div *ngIf="matchingPassword.errors.notInclude">
-                Password <strong>mustn't contain User Name</strong>.
-              </div>
-              <div *ngIf="matchingPassword.errors.withoutSpaces">
-                Password <strong>mustn't contain spaces</strong>.
-              </div>
-              <div *ngIf="matchingPassword.errors.repetitiveCharacters">
-                Password
-                <strong
-                  >mustn't contain a repetitive string of characters longer than
-                  two characters</strong
-                >.
-              </div>
-              <div
-                *ngIf="
-                  !matchingPassword.errors.notBlank &&
-                  (matchingPassword.errors.minlength ||
-                    matchingPassword.errors.maxlength)
-                "
-              >
-                Password must be between <strong>7</strong> and
-                <strong>30</strong> characters.
-              </div>
-            </mat-error>
-          </mat-form-field>
-        </p>
+              Password must be between <strong>7</strong> and
+              <strong>30</strong> characters.
+            </p>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label for="matchingPassword">Matching Password</mat-label>
+          <input
+            id="matchingPassword"
+            type="password"
+            formControlName="matchingPassword"
+            matInput
+          />
+          <mat-error
+            *ngIf="
+              matchingPassword.invalid &&
+              (matchingPassword.touched || matchingPassword.dirty)
+            "
+          >
+            <p *ngIf="matchingPassword.errors.notBlank">
+              Password cannot be <strong>empty</strong>.
+            </p>
+            <p *ngIf="matchingPassword.errors.notMatch">
+              Passwords <strong>don't match</strong>.
+            </p>
+            <p
+              *ngIf="
+                !matchingPassword.errors.notBlank &&
+                matchingPassword.errors.notInclude
+              "
+            >
+              Password <strong>mustn't contain User Name</strong>.
+            </p>
+            <p *ngIf="matchingPassword.errors.withoutSpaces">
+              Password <strong>mustn't contain spaces</strong>.
+            </p>
+            <p *ngIf="matchingPassword.errors.repetitiveCharacters">
+              Password
+              <strong
+                >mustn't contain a repetitive string of characters longer than
+                two characters</strong
+              >.
+            </p>
+            <p
+              *ngIf="
+                !matchingPassword.errors.notBlank &&
+                (matchingPassword.errors.minlength ||
+                  matchingPassword.errors.maxlength)
+              "
+            >
+              Password must be between <strong>7</strong> and
+              <strong>30</strong> characters.
+            </p>
+          </mat-error>
+        </mat-form-field>
 
         <mat-error *ngFor="let errorMessage of authErrors">
-          <div>{{ errorMessage }}</div>
+          <p>{{ errorMessage }}</p>
         </mat-error>
 
         <mat-dialog-actions align="end">
