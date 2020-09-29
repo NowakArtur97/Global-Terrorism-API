@@ -49,12 +49,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         Validators.maxLength(30),
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
+        CommonValidators.notThreeRepetitiveCharacters,
       ]),
       matchingPassword: new FormControl('', [
         Validators.minLength(7),
         Validators.maxLength(30),
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
+        CommonValidators.notThreeRepetitiveCharacters,
       ]),
     });
     this.registerForm.setValidators([

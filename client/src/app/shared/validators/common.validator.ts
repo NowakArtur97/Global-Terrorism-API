@@ -15,6 +15,29 @@ export default class CommonValidators {
     return null;
   }
 
+  static notThreeRepetitiveCharacters(
+    formControl: FormControl
+  ): ValidationErrors {
+    const characters = formControl.value.split('');
+    const maxRepetitiveCharacters = 2;
+    let hasRepetetiveCharacters = false;
+    for (let i = 0; i < characters.length - maxRepetitiveCharacters; ) {
+      if (
+        characters[i] === characters[i + 1] &&
+        characters[i] === characters[i + 2]
+      ) {
+        hasRepetetiveCharacters = true;
+        break;
+      } else {
+        i += maxRepetitiveCharacters;
+      }
+    }
+    if (hasRepetetiveCharacters) {
+      return { repetitiveCharacters: true };
+    }
+    return null;
+  }
+
   static notMatch(
     controlName: string,
     matchingControlName: string

@@ -64,6 +64,13 @@
               <div *ngIf="password.errors.withoutSpaces">
                 Password <strong>mustn't contain spaces</strong>.
               </div>
+              <div *ngIf="password.errors.repetitiveCharacters">
+                Password
+                <strong
+                  >mustn't contain a repetitive string of characters longer than
+                  two characters</strong
+                >.
+              </div>
               <div
                 *ngIf="
                   !password.errors.notBlank &&
@@ -103,6 +110,13 @@
               </div>
               <div *ngIf="matchingPassword.errors.withoutSpaces">
                 Password <strong>mustn't contain spaces</strong>.
+              </div>
+              <div *ngIf="matchingPassword.errors.repetitiveCharacters">
+                Password
+                <strong
+                  >mustn't contain a repetitive string of characters longer than
+                  two characters</strong
+                >.
               </div>
               <div
                 *ngIf="
