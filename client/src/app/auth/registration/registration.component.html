@@ -53,24 +53,15 @@
               matInput
             />
             <mat-error
-              *ngIf="
-                registerForm.invalid && (password.touched || password.dirty)
-              "
+              *ngIf="password.invalid && (password.touched || password.dirty)"
             >
-              <div *ngIf="password.errors.notBlank">
+              <div *ngIf="password.errors?.notBlank">
                 Password cannot be <strong>empty</strong>.
               </div>
-              <div
-                *ngIf="
-                  password.errors?.notMatch && matchingPassword?.errors.notMatch
-                "
-              >
-                Passwords <strong>don't match</strong>.
-              </div>
-              <div *ngIf="password.errors.notInclude">
+              <div *ngIf="password.errors?.notInclude">
                 Password <strong>mustn't contain User Name</strong>.
               </div>
-              <div *ngIf="matchingPassword.errors.withoutSpaces">
+              <div *ngIf="password.errors?.withoutSpaces">
                 Password <strong>mustn't contain spaces</strong>.
               </div>
             </mat-error>
@@ -88,18 +79,14 @@
             />
             <mat-error
               *ngIf="
-                registerForm.invalid &&
+                matchingPassword.invalid &&
                 (matchingPassword.touched || matchingPassword.dirty)
               "
             >
               <div *ngIf="matchingPassword.errors.notBlank">
                 Password cannot be <strong>empty</strong>.
               </div>
-              <div
-                *ngIf="
-                  password.errors?.notMatch && matchingPassword?.errors.notMatch
-                "
-              >
+              <div *ngIf="matchingPassword.errors.notMatch">
                 Passwords <strong>don't match</strong>.
               </div>
               <div *ngIf="matchingPassword.errors.notInclude">

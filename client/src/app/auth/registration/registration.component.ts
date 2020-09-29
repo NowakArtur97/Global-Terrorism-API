@@ -19,7 +19,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   authErrors: string[] = [];
   private authErrorsSubscription: Subscription;
   private passwordChangesSubscription: Subscription;
-  private matchingPasswordChangesSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
 
@@ -33,9 +32,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.authErrorsSubscription.unsubscribe();
-    this.passwordChangesSubscription.unsubscribe();
-    this.matchingPasswordChangesSubscription.unsubscribe();
+    this.authErrorsSubscription?.unsubscribe();
+    this.passwordChangesSubscription?.unsubscribe();
   }
 
   initForm(): void {
@@ -61,18 +59,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       CommonValidators.notMatch('password', 'matchingPassword'),
     ]);
 
-    // this.passwordChangesSubscription = this.password.valueChanges.subscribe(
-    //   () => {
-    //     console.log(1);
-    //     this.matchingPassword.updateValueAndValidity();
-    //   }
-    // );
-    // this.matchingPasswordChangesSubscription = this.matchingPassword.valueChanges.subscribe(
-    //   () => {
-    //     console.log(2);
-    //     this.password.updateValueAndValidity();
-    //   }
-    // );
+    this.passwordChangesSubscription = this.registerForm.controls.password.valueChanges.subscribe(
+      () => {
+        this.registerForm.controls.matchingPassword.updateValueAndValidity();
+      }
+    );
   }
 
   onRegister(): void {
@@ -82,7 +73,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-
     this.store.dispatch(
       AuthActions.registerUserStart({
         registrationData: new RegistrationData(
