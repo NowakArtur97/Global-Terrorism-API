@@ -67,8 +67,12 @@
             <p *ngIf="password.errors.notPopular">
               Password is on the list of <strong>common passwords</strong>.
             </p>
-            <p *ngIf="password.errors.withoutUpperCase">
+            <p *ngIf="password.errors.withoutUppercase">
               Password must contain <strong>one or more</strong> uppercase
+              characters.
+            </p>
+            <p *ngIf="password.errors.withoutLowercase">
+              Password must contain <strong>one or more</strong> lowercase
               characters.
             </p>
             <p *ngIf="password.errors.repetitiveCharacters">
@@ -124,8 +128,12 @@
             <p *ngIf="matchingPassword.errors.notPopular">
               Password is on the list of <strong>common passwords</strong>.
             </p>
-            <p *ngIf="matchingPassword.errors.withoutUpperCase">
+            <p *ngIf="matchingPassword.errors.withoutUppercase">
               Password must contain <strong>one or more</strong> uppercase
+              characters.
+            </p>
+            <p *ngIf="matchingPassword.errors.withoutLowercase">
+              Password must contain <strong>one or more</strong> lowercase
               characters.
             </p>
             <p *ngIf="matchingPassword.errors.repetitiveCharacters">

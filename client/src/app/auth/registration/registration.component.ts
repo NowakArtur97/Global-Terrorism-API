@@ -57,7 +57,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
         PasswordValidators.notPopular,
-        PasswordValidators.withoutUpperCase,
+        PasswordValidators.withoutUppercase,
+        PasswordValidators.withoutLowercase,
       ]),
       matchingPassword: new FormControl('', [
         Validators.minLength(7),
@@ -66,7 +67,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
         PasswordValidators.notPopular,
-        PasswordValidators.withoutUpperCase,
+        PasswordValidators.withoutUppercase,
+        PasswordValidators.withoutLowercase,
       ]),
     });
 

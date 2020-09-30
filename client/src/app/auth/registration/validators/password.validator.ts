@@ -34,6 +34,9 @@ export default class PasswordValidators {
       ? { notPopular: true }
       : null;
 
-  static withoutUpperCase = (formControl: FormControl): ValidationErrors =>
-    /[A-Z]+/.test(formControl.value) ? null : { withoutUpperCase: true };
+  static withoutUppercase = (formControl: FormControl): ValidationErrors =>
+    /[A-Z]+/.test(formControl.value) ? null : { withoutUppercase: true };
+
+  static withoutLowercase = (formControl: FormControl): ValidationErrors =>
+    /[a-z]+/.test(formControl.value) ? null : { withoutLowercase: true };
 }
