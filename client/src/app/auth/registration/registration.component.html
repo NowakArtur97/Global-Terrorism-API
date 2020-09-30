@@ -55,41 +55,6 @@
             <p *ngIf="password.errors.notBlank">
               Password cannot be <strong>empty</strong>.
             </p>
-            <p *ngIf="password.errors.notMatch">
-              Passwords <strong>don't match</strong>.
-            </p>
-            <p *ngIf="!password.errors.notBlank && password.errors.notInclude">
-              Password <strong>mustn't contain User Name</strong>.
-            </p>
-            <p *ngIf="password.errors.withoutSpaces">
-              Password <strong>mustn't contain spaces</strong>.
-            </p>
-            <p *ngIf="password.errors.notPopular">
-              Password is on the list of <strong>common passwords</strong>.
-            </p>
-            <p *ngIf="password.errors.withoutUppercase">
-              Password must contain <strong>one or more</strong> uppercase
-              characters.
-            </p>
-            <p *ngIf="password.errors.withoutLowercase">
-              Password must contain <strong>one or more</strong> lowercase
-              characters.
-            </p>
-            <p *ngIf="password.errors.withoutDigits">
-              Password must contain <strong>one or more</strong> digit
-              characters.
-            </p>
-            <p *ngIf="password.errors.withoutSpecial">
-              Password must contain <strong>one or more</strong> special
-              characters.
-            </p>
-            <p *ngIf="password.errors.repetitiveCharacters">
-              Password
-              <strong
-                >mustn't contain a repetitive string of characters longer than
-                two characters</strong
-              >.
-            </p>
             <p
               *ngIf="
                 !password.errors.notBlank &&
@@ -99,6 +64,51 @@
               Password must be between <strong>7</strong> and
               <strong>30</strong> characters.
             </p>
+            <p *ngIf="password.errors.notMatch">
+              Passwords <strong>don't match</strong>.
+            </p>
+            <p *ngIf="!password.errors.notBlank && password.errors.notInclude">
+              Password <strong>mustn't contain User Name</strong>.
+            </p>
+            <p *ngIf="password.errors.withoutSpaces">
+              Password <strong>mustn't contain spaces</strong>.
+            </p>
+            <p *ngIf="password.errors.repetitiveCharacters">
+              Password
+              <strong
+                >mustn't contain a repetitive string of characters longer than
+                two characters</strong
+              >.
+            </p>
+            <div
+              *ngIf="
+                password.errors.notPopular ||
+                password.errors.withoutUppercase ||
+                password.errors.withoutDigits ||
+                password.errors.withoutSpecial
+              "
+            >
+              <p>Password must meet at least two of the four rules below:</p>
+              <p *ngIf="password.errors.notPopular">
+                Password is on the list of <strong>common passwords</strong>.
+              </p>
+              <p *ngIf="password.errors.withoutUppercase">
+                Password must contain <strong>one or more</strong> uppercase
+                characters.
+              </p>
+              <p *ngIf="password.errors.withoutLowercase">
+                Password must contain <strong>one or more</strong> lowercase
+                characters.
+              </p>
+              <p *ngIf="password.errors.withoutDigits">
+                Password must contain <strong>one or more</strong> digit
+                characters.
+              </p>
+              <p *ngIf="password.errors.withoutSpecial">
+                Password must contain <strong>one or more</strong> special
+                characters.
+              </p>
+            </div>
           </mat-error>
         </mat-form-field>
 
@@ -119,6 +129,16 @@
             <p *ngIf="matchingPassword.errors.notBlank">
               Password cannot be <strong>empty</strong>.
             </p>
+            <p
+              *ngIf="
+                !matchingPassword.errors.notBlank &&
+                (matchingPassword.errors.minlength ||
+                  matchingPassword.errors.maxlength)
+              "
+            >
+              Password must be between <strong>7</strong> and
+              <strong>30</strong> characters.
+            </p>
             <p *ngIf="matchingPassword.errors.notMatch">
               Passwords <strong>don't match</strong>.
             </p>
@@ -133,25 +153,6 @@
             <p *ngIf="matchingPassword.errors.withoutSpaces">
               Password <strong>mustn't contain spaces</strong>.
             </p>
-            <p *ngIf="matchingPassword.errors.notPopular">
-              Password is on the list of <strong>common passwords</strong>.
-            </p>
-            <p *ngIf="matchingPassword.errors.withoutUppercase">
-              Password must contain <strong>one or more</strong> uppercase
-              characters.
-            </p>
-            <p *ngIf="matchingPassword.errors.withoutLowercase">
-              Password must contain <strong>one or more</strong> lowercase
-              characters.
-            </p>
-            <p *ngIf="matchingPassword.errors.withoutDigits">
-              Password must contain <strong>one or more</strong> digit
-              characters.
-            </p>
-            <p *ngIf="matchingPassword.errors.withoutSpecial">
-              Password must contain <strong>one or more</strong> special
-              characters.
-            </p>
             <p *ngIf="matchingPassword.errors.repetitiveCharacters">
               Password
               <strong
@@ -159,16 +160,35 @@
                 two characters</strong
               >.
             </p>
-            <p
+            <div
               *ngIf="
-                !matchingPassword.errors.notBlank &&
-                (matchingPassword.errors.minlength ||
-                  matchingPassword.errors.maxlength)
+                matchingPassword.errors.notPopular ||
+                matchingPassword.errors.withoutUppercase ||
+                matchingPassword.errors.withoutDigits ||
+                matchingPassword.errors.withoutSpecial
               "
             >
-              Password must be between <strong>7</strong> and
-              <strong>30</strong> characters.
-            </p>
+              <p>Password must meet at least two of the four rules below:</p>
+              <p *ngIf="matchingPassword.errors.notPopular">
+                Password is on the list of <strong>common passwords</strong>.
+              </p>
+              <p *ngIf="matchingPassword.errors.withoutUppercase">
+                Password must contain <strong>one or more</strong> uppercase
+                characters.
+              </p>
+              <p *ngIf="matchingPassword.errors.withoutLowercase">
+                Password must contain <strong>one or more</strong> lowercase
+                characters.
+              </p>
+              <p *ngIf="matchingPassword.errors.withoutDigits">
+                Password must contain <strong>one or more</strong> digit
+                characters.
+              </p>
+              <p *ngIf="matchingPassword.errors.withoutSpecial">
+                Password must contain <strong>one or more</strong> special
+                characters.
+              </p>
+            </div>
           </mat-error>
         </mat-form-field>
 

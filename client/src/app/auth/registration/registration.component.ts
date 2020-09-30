@@ -57,6 +57,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
         PasswordValidators.notPopular,
+        PasswordValidators.characteristicRule,
       ]),
       matchingPassword: new FormControl('', [
         Validators.minLength(7),
