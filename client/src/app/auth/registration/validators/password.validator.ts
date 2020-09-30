@@ -33,4 +33,7 @@ export default class PasswordValidators {
     PasswordValidators.commonPasswords.includes(formControl.value)
       ? { notPopular: true }
       : null;
+
+  static withoutUpperCase = (formControl: FormControl): ValidationErrors =>
+    /[A-Z]+/.test(formControl.value) ? null : { withoutUpperCase: true };
 }

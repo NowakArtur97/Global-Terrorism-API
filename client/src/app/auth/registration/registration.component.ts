@@ -57,6 +57,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
         PasswordValidators.notPopular,
+        PasswordValidators.withoutUpperCase,
       ]),
       matchingPassword: new FormControl('', [
         Validators.minLength(7),
@@ -65,6 +66,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
         PasswordValidators.notPopular,
+        PasswordValidators.withoutUpperCase,
       ]),
     });
 
@@ -77,7 +79,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.setupFormSubscriptions();
   }
 
-  setupFormSubscriptions() {
+  setupFormSubscriptions(): void {
     this.userNameSubscription = this.registerForm.controls.userName.valueChanges.subscribe(
       () => {
         this.password.updateValueAndValidity({
