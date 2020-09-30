@@ -55,7 +55,7 @@
             <p *ngIf="password.errors.notBlank">
               Password cannot be <strong>empty</strong>.
             </p>
-            <p *ngIf="matchingPassword.errors.notMatch">
+            <p *ngIf="password.errors.notMatch">
               Passwords <strong>don't match</strong>.
             </p>
             <p *ngIf="!password.errors.notBlank && password.errors.notInclude">

@@ -98,7 +98,6 @@ class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords
         );
     }
 
-
     private void loadCustomPassayMessages() {
 
         Properties props = new Properties();

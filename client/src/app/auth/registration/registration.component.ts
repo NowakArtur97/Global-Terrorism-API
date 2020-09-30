@@ -18,24 +18,27 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   authErrors: string[] = [];
   private authErrorsSubscription: Subscription;
+  private userNameSubscription: Subscription;
   private passwordChangesSubscription: Subscription;
   private matchingPasswordChangesSubscription: Subscription;
+  validityCycleFired = false;
 
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.initForm();
-
     this.authErrorsSubscription = this.store
       .select('auth')
       .pipe(map((authState) => authState.authErrorMessages))
       .subscribe((authErrorMessages) => (this.authErrors = authErrorMessages));
+
+    this.initForm();
   }
 
   ngOnDestroy(): void {
     this.authErrorsSubscription?.unsubscribe();
-    this.passwordChangesSubscription?.unsubscribe();
+    this.userNameSubscription?.unsubscribe();
     this.matchingPasswordChangesSubscription?.unsubscribe();
+    this.passwordChangesSubscription?.unsubscribe();
   }
 
   initForm(): void {
@@ -67,15 +70,27 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       CommonValidators.notMatch('password', 'matchingPassword'),
     ]);
 
-    this.passwordChangesSubscription = this.registerForm.controls.password.valueChanges.subscribe(
+    this.userNameSubscription = this.registerForm.controls.userName.valueChanges.subscribe(
       () => {
-        this.registerForm.updateValueAndValidity();
+        this.password.updateValueAndValidity({
+          emitEvent: false,
+        });
+        this.matchingPassword.updateValueAndValidity({
+          emitEvent: false,
+        });
       }
     );
+    this.passwordChangesSubscription = this.registerForm.controls.password.valueChanges.subscribe(
+      () =>
+        this.matchingPassword.updateValueAndValidity({
+          emitEvent: false,
+        })
+    );
     this.matchingPasswordChangesSubscription = this.registerForm.controls.matchingPassword.valueChanges.subscribe(
-      () => {
-        this.registerForm.updateValueAndValidity();
-      }
+      () =>
+        this.password.updateValueAndValidity({
+          emitEvent: false,
+        })
     );
   }
 
