@@ -39,4 +39,7 @@ export default class PasswordValidators {
 
   static withoutLowercase = (formControl: FormControl): ValidationErrors =>
     /[a-z]+/.test(formControl.value) ? null : { withoutLowercase: true };
+
+  static withoutDigits = (formControl: FormControl): ValidationErrors =>
+    /[0-9]+/.test(formControl.value) ? null : { withoutDigits: true };
 }
