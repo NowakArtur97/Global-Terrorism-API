@@ -29,22 +29,66 @@ export default class PasswordValidators {
     '666666',
   ];
 
+  private static withoutUppercase = (
+    formControl: FormControl
+  ): ValidationErrors =>
+    /[A-Z]+/.test(formControl.value) ? null : { withoutUppercase: true };
+
+  private static withoutLowercase = (
+    formControl: FormControl
+  ): ValidationErrors =>
+    /[a-z]+/.test(formControl.value) ? null : { withoutLowercase: true };
+
+  private static withoutDigit = (formControl: FormControl): ValidationErrors =>
+    /[0-9]+/.test(formControl.value) ? null : { withoutDigits: true };
+
+  private static withoutSpecial = (
+    formControl: FormControl
+  ): ValidationErrors =>
+    /[\\!"#\$%&'()*\+,-.\/:;<=>?@\[\]^_`{|}~]/.test(formControl.value)
+      ? null
+      : { withoutSpecial: true };
+
   static notPopular = (formControl: FormControl): ValidationErrors =>
     PasswordValidators.commonPasswords.includes(formControl.value)
       ? { notPopular: true }
       : null;
 
-  static withoutUppercase = (formControl: FormControl): ValidationErrors =>
-    /[A-Z]+/.test(formControl.value) ? null : { withoutUppercase: true };
+  static characteristicRule(formControl: FormControl): ValidationErrors {
+    const characteristicRules = [
+      PasswordValidators.withoutUppercase,
+      PasswordValidators.withoutLowercase,
+      PasswordValidators.withoutDigit,
+      PasswordValidators.withoutSpecial,
+    ];
+    const numberOfRequirementsToMeet = 2;
 
-  static withoutLowercase = (formControl: FormControl): ValidationErrors =>
-    /[a-z]+/.test(formControl.value) ? null : { withoutLowercase: true };
+    if (formControl.errors) {
+      const formControlErrors = { ...formControl.errors };
 
-  static withoutDigits = (formControl: FormControl): ValidationErrors =>
-    /[0-9]+/.test(formControl.value) ? null : { withoutDigits: true };
+      const characteristicRulesErrors: ValidationErrors[] = [];
+      characteristicRules.forEach((test) => {
+        const result = test(formControl);
+        if (result) {
+          characteristicRulesErrors.push(result);
+        }
+      });
 
-  static withoutSpecial = (formControl: FormControl): ValidationErrors =>
-    /[\\!"#\$%&'()*\+,-.\/:;<=>?@\[\]^_`{|}~]/.test(formControl.value)
-      ? null
-      : { withoutSpecial: true };
+      const numberOfFulfilledRequirements =
+        characteristicRules.length -
+        characteristicRulesErrors.filter((value) => value).length;
+
+      if (numberOfRequirementsToMeet > numberOfFulfilledRequirements) {
+        const errors = Object.assign(
+          {},
+          formControlErrors,
+          ...characteristicRulesErrors
+        );
+        console.log(formControlErrors);
+        console.log(characteristicRulesErrors);
+        return errors;
+      }
+    }
+    return null;
+  }
 }
