@@ -79,6 +79,10 @@
               Password must contain <strong>one or more</strong> digit
               characters.
             </p>
+            <p *ngIf="password.errors.withoutSpecial">
+              Password must contain <strong>one or more</strong> special
+              characters.
+            </p>
             <p *ngIf="password.errors.repetitiveCharacters">
               Password
               <strong
@@ -142,6 +146,10 @@
             </p>
             <p *ngIf="matchingPassword.errors.withoutDigits">
               Password must contain <strong>one or more</strong> digit
+              characters.
+            </p>
+            <p *ngIf="matchingPassword.errors.withoutSpecial">
+              Password must contain <strong>one or more</strong> special
               characters.
             </p>
             <p *ngIf="matchingPassword.errors.repetitiveCharacters">

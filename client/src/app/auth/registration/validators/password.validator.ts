@@ -42,4 +42,9 @@ export default class PasswordValidators {
 
   static withoutDigits = (formControl: FormControl): ValidationErrors =>
     /[0-9]+/.test(formControl.value) ? null : { withoutDigits: true };
+
+  static withoutSpecial = (formControl: FormControl): ValidationErrors =>
+    /[\\!"#\$%&'()*\+,-.\/:;<=>?@\[\]^_`{|}~]/.test(formControl.value)
+      ? null
+      : { withoutSpecial: true };
 }
