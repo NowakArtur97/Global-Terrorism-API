@@ -1,19 +1,11 @@
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export default class CommonValidators {
-  static notBlank(formControl: FormControl): ValidationErrors {
-    if (formControl.value?.trim().length > 0) {
-      return null;
-    }
-    return { notBlank: true };
-  }
+  static notBlank = (formControl: FormControl): ValidationErrors =>
+    formControl.value?.trim().length > 0 ? null : { notBlank: true };
 
-  static withoutSpaces(formControl: FormControl): ValidationErrors {
-    if (formControl.value?.includes(' ')) {
-      return { withoutSpaces: true };
-    }
-    return null;
-  }
+  static withoutSpaces = (formControl: FormControl): ValidationErrors =>
+    formControl.value?.includes(' ') ? { withoutSpaces: true } : null;
 
   static notThreeRepetitiveCharacters(
     formControl: FormControl
@@ -53,7 +45,7 @@ export default class CommonValidators {
           notMatch: true,
         });
       }
-      return;
+      return null;
     };
   }
 
@@ -66,13 +58,16 @@ export default class CommonValidators {
       const controlToNotBeIncluded =
         formGroup.controls[controlNameToNotBeIncluded];
 
-      if (controlToCheck.value.includes(controlToNotBeIncluded.value)) {
+      if (
+        controlToNotBeIncluded.value &&
+        controlToCheck.value.includes(controlToNotBeIncluded.value)
+      ) {
         controlToCheck.setErrors({
           ...controlToCheck.errors,
           notInclude: true,
         });
       }
-      return;
+      return null;
     };
   }
 }

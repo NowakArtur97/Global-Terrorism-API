@@ -8,6 +8,7 @@ import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationData from '../models/RegistrationData';
 import * as AuthActions from '../store/auth.actions';
+import PasswordValidators from './validators/password.validator';
 
 @Component({
   selector: 'app-registration',
@@ -55,6 +56,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
+        PasswordValidators.notPopular,
       ]),
       matchingPassword: new FormControl('', [
         Validators.minLength(7),
@@ -62,14 +64,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         CommonValidators.notBlank,
         CommonValidators.withoutSpaces,
         CommonValidators.notThreeRepetitiveCharacters,
+        PasswordValidators.notPopular,
       ]),
     });
+
     this.registerForm.setValidators([
       CommonValidators.notInclude('password', 'userName'),
       CommonValidators.notInclude('matchingPassword', 'userName'),
       CommonValidators.notMatch('password', 'matchingPassword'),
     ]);
 
+    this.setupFormSubscriptions();
+  }
+
+  setupFormSubscriptions() {
     this.userNameSubscription = this.registerForm.controls.userName.valueChanges.subscribe(
       () => {
         this.password.updateValueAndValidity({

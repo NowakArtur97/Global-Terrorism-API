@@ -64,6 +64,9 @@
             <p *ngIf="password.errors.withoutSpaces">
               Password <strong>mustn't contain spaces</strong>.
             </p>
+            <p *ngIf="password.errors.notPopular">
+              Password is on the list of <strong>common passwords</strong>.
+            </p>
             <p *ngIf="password.errors.repetitiveCharacters">
               Password
               <strong
@@ -113,6 +116,9 @@
             </p>
             <p *ngIf="matchingPassword.errors.withoutSpaces">
               Password <strong>mustn't contain spaces</strong>.
+            </p>
+            <p *ngIf="matchingPassword.errors.notPopular">
+              Password is on the list of <strong>common passwords</strong>.
             </p>
             <p *ngIf="matchingPassword.errors.repetitiveCharacters">
               Password

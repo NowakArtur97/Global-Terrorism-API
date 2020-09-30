@@ -29,10 +29,8 @@ export default class PasswordValidators {
     '666666',
   ];
 
-  static notPopular(formControl: FormControl): ValidationErrors {
-    if (PasswordValidators.commonPasswords.includes(formControl.value)) {
-      return { notPopular: true };
-    }
-    return null;
-  }
+  static notPopular = (formControl: FormControl): ValidationErrors =>
+    PasswordValidators.commonPasswords.includes(formControl.value)
+      ? { notPopular: true }
+      : null;
 }
