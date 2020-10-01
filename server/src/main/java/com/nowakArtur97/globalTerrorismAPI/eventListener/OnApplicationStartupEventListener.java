@@ -136,7 +136,8 @@ class OnApplicationStartupEventListener {
 
     private void saveUser() {
 
-        userService.register(new UserDTO("testuser", "Password123!", "Password123!", "testuser123@email.com"));
+        userService.register(new UserDTO("testuser", "Password123!", "Password123!",
+                "testuser123@email.com"));
     }
 
     private void manageGroup(String groupName, EventNode event) {
