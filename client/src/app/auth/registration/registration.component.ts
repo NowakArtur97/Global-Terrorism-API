@@ -84,9 +84,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           CommonValidators.notInclude('matchingPassword', 'userName'),
           CommonValidators.notMatch('password', 'matchingPassword'),
         ],
-        asyncValidators: [
-          this.userDataValidators.userDataAlreadyTaken.bind(this),
-        ],
+        asyncValidators: [this.userDataValidators.userDataAlreadyTaken()],
       }
     );
 

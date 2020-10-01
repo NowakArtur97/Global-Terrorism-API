@@ -14,7 +14,6 @@ export default class UserDataValidators {
     return (formGroup: FormGroup): Observable<ValidationErrors> => {
       const userNameControl = formGroup.controls.userName;
       const emailControl = formGroup.controls.email;
-      console.log('userDataAlreadyTaken');
       return this.authService
         .checkUserData(
           new RegistrationCheckRequest(
@@ -31,7 +30,6 @@ export default class UserDataValidators {
                 userNameAlreadyTaken: true,
               });
             }
-            console.log(isUserNameAvailable);
             if (!isEmailAvailable) {
               emailControl.setErrors({
                 ...emailControl.errors,
