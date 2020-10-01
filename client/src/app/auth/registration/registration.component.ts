@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import AppStoreState from 'src/app/store/app.store.state';
 import RegistrationData from '../models/registration-data.model';
 import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
+import UserDataValidators from './validators/user-data.validator';
 
 @Component({
   selector: 'app-registration',
@@ -24,7 +25,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private matchingPasswordChangesSubscription: Subscription;
   validityCycleFired = false;
 
-  constructor(private store: Store<AppStoreState>) {}
+  constructor(
+    private store: Store<AppStoreState>,
+    private formBuilder: FormBuilder,
+    private userDataValidators: UserDataValidators
+  ) {}
 
   ngOnInit(): void {
     this.authErrorsSubscription = this.store
@@ -43,38 +48,47 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   initForm(): void {
-    this.registerForm = new FormGroup({
-      userName: new FormControl('', [
-        Validators.minLength(5),
-        Validators.maxLength(20),
-        CommonValidators.notBlank,
-      ]),
-      email: new FormControl('', [Validators.email, CommonValidators.notBlank]),
-      password: new FormControl('', [
-        Validators.minLength(7),
-        Validators.maxLength(30),
-        CommonValidators.notBlank,
-        CommonValidators.withoutSpaces,
-        CommonValidators.notThreeRepetitiveCharacters,
-        PasswordValidators.notPopular,
-        PasswordValidators.characteristicRule,
-      ]),
-      matchingPassword: new FormControl('', [
-        Validators.minLength(7),
-        Validators.maxLength(30),
-        CommonValidators.notBlank,
-        CommonValidators.withoutSpaces,
-        CommonValidators.notThreeRepetitiveCharacters,
-        PasswordValidators.notPopular,
-        PasswordValidators.characteristicRule,
-      ]),
-    });
-
-    this.registerForm.setValidators([
-      CommonValidators.notInclude('password', 'userName'),
-      CommonValidators.notInclude('matchingPassword', 'userName'),
-      CommonValidators.notMatch('password', 'matchingPassword'),
-    ]);
+    this.registerForm = this.formBuilder.group(
+      {
+        userName: new FormControl('', [
+          Validators.minLength(5),
+          Validators.maxLength(20),
+          CommonValidators.notBlank,
+        ]),
+        email: new FormControl('', [
+          Validators.email,
+          CommonValidators.notBlank,
+        ]),
+        password: new FormControl('', [
+          Validators.minLength(7),
+          Validators.maxLength(30),
+          CommonValidators.notBlank,
+          CommonValidators.withoutSpaces,
+          CommonValidators.notThreeRepetitiveCharacters,
+          PasswordValidators.notPopular,
+          PasswordValidators.characteristicRule,
+        ]),
+        matchingPassword: new FormControl('', [
+          Validators.minLength(7),
+          Validators.maxLength(30),
+          CommonValidators.notBlank,
+          CommonValidators.withoutSpaces,
+          CommonValidators.notThreeRepetitiveCharacters,
+          PasswordValidators.notPopular,
+          PasswordValidators.characteristicRule,
+        ]),
+      },
+      {
+        validators: [
+          CommonValidators.notInclude('password', 'userName'),
+          CommonValidators.notInclude('matchingPassword', 'userName'),
+          CommonValidators.notMatch('password', 'matchingPassword'),
+        ],
+        asyncValidators: [
+          this.userDataValidators.userDataAlreadyTaken.bind(this),
+        ],
+      }
+    );
 
     this.setupFormSubscriptions();
   }

@@ -21,6 +21,9 @@
             <p *ngIf="userName.errors.notBlank">
               User name cannot be <strong>empty</strong>.
             </p>
+            <p *ngIf="userName.errors.userNameAlreadyTaken">
+              User name <strong>is already taken</strong>.
+            </p>
             <p *ngIf="userName.errors.minlength || userName.errors.maxlength">
               User name must be between <strong>5</strong> and
               <strong>20</strong> characters.
@@ -34,6 +37,9 @@
           <mat-error *ngIf="email.invalid && (email.touched || email.dirty)">
             <p *ngIf="email.errors.email">
               Email must be a <strong>valid</strong> email address.
+            </p>
+            <p *ngIf="email.errors.emailAlreadyTaken">
+              Email <strong>is already taken</strong>.
             </p>
             <p *ngIf="email.errors.notBlank">
               Email cannot be <strong>empty</strong>.
