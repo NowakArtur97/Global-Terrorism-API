@@ -34,16 +34,6 @@ public class UserService {
         return userRepository.save(userNode);
     }
 
-    public Optional<UserNode> findByUserName(String userName) {
-
-        return userRepository.findByUserName(userName);
-    }
-
-    public Optional<UserNode> findByEmail(String email) {
-
-        return userRepository.findByEmail(email);
-    }
-
     public Optional<UserNode> findByUserNameOrEmail(String userName, String email) {
 
         return userRepository.findByUserNameOrEmail(userName, email);
