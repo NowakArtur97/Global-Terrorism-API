@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PatchUtilImpl_Tests")
+@Tag("PatchUtil_Tests")
 class PatchUtilTest {
 
     private PatchUtil patchUtil;

@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("PageUtilImpl_Tests")
+@Tag("PageUtil_Tests")
 class PageUtilTest {
 
     private PageUtil pageUtil;

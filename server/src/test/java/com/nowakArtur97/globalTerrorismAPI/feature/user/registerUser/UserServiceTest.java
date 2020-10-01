@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("UserServiceImpl_Tests")
+@Tag("UserService_Tests")
 class UserServiceTest {
 
     private UserService userService;
@@ -230,6 +230,38 @@ class UserServiceTest {
 
         assertAll(() -> assertTrue(userActualOptional.isEmpty(), () -> "should return empty optional"),
                 () -> verify(userRepository, times(1)).findByUserNameOrEmail(notExistingUserName, notExistingUserEmail),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
+
+    @Test
+    void when_check_by_user_name_existing_user_should_return_true() {
+
+        String userName = "user";
+
+        when(userRepository.existsByUserName(userName)).thenReturn(true);
+
+        boolean isUserExisting = userService.existsByUserName(userName);
+
+        assertAll(() -> assertTrue(isUserExisting, () -> "should return true"),
+                () -> verify(userRepository, times(1)).existsByUserName(userName),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
+
+    @Test
+    void when_check_by_user_name_not_existing_user_should_return_false() {
+
+        String userName = "user";
+
+        when(userRepository.existsByUserName(userName)).thenReturn(false);
+
+        boolean isUserExisting = userService.existsByUserName(userName);
+
+        assertAll(() -> assertFalse(isUserExisting, () -> "should return false"),
+                () -> verify(userRepository, times(1)).existsByUserName(userName),
                 () -> verifyNoMoreInteractions(userRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));

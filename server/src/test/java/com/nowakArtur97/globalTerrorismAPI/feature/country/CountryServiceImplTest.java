@@ -101,7 +101,7 @@ class CountryServiceImplTest {
                 () -> verify(countryRepository, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
-    
+
     @Test
     void when_find_existing_country_by_name_should_return_country() {
 
@@ -195,7 +195,6 @@ class CountryServiceImplTest {
                 () -> verify(countryRepository, times(1)).findById(countryId),
                 () -> verifyNoMoreInteractions(countryRepository));
     }
-
 
     @Test
     void when_check_by_name_if_existing_country_exists_should_return_true() {
