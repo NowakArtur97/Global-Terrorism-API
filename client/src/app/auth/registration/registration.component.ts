@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import RegistrationData from '../models/RegistrationData';
+import RegistrationData from '../models/registration-data.model';
 import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
 

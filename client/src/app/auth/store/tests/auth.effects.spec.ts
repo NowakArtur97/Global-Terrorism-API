@@ -2,12 +2,12 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
-import ErrorResponse from 'src/app/shared/models/ErrorResponse';
+import ErrorResponse from 'src/app/shared/models/error-response.model';
 
-import AuthResponse from '../../models/AuthResponseData';
-import LoginData from '../../models/LoginData';
-import RegistrationData from '../../models/RegistrationData';
-import User from '../../models/User';
+import AuthResponse from '../../models/auth-response.model';
+import LoginData from '../../models/login-data.model';
+import RegistrationData from '../../models/registration-data.model';
+import User from '../../models/user.model';
 import AuthService from '../../services/auth.service';
 import * as AuthActions from '../auth.actions';
 import AuthEffects from '../auth.effects';

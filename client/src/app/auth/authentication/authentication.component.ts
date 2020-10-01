@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import LoginData from '../models/LoginData';
+import LoginData from '../models/login-data.model';
 import * as AuthActions from '../store/auth.actions';
 
 @Component({

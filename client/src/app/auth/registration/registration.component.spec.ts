@@ -4,7 +4,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import RegistrationData from '../models/RegistrationData';
+import RegistrationData from '../models/registration-data.model';
 import * as AuthActions from '../store/auth.actions';
 import { RegistrationComponent } from './registration.component';
 

@@ -1,5 +1,5 @@
-import LoginData from '../../models/LoginData';
-import User from '../../models/User';
+import LoginData from '../../models/login-data.model';
+import User from '../../models/user.model';
 import * as AuthActions from '../auth.actions';
 import authReducer from '../auth.reducer';
 import AuthStoreState from '../auth.store.state';

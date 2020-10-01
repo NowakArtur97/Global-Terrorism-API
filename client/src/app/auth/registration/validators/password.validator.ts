@@ -84,8 +84,7 @@ export default class PasswordValidators {
           formControlErrors,
           ...characteristicRulesErrors
         );
-        console.log(formControlErrors);
-        console.log(characteristicRulesErrors);
+
         return errors;
       }
     }

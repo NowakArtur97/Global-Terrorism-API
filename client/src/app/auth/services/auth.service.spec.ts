@@ -1,10 +1,10 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import AuthResponse from '../models/AuthResponseData';
-import LoginData from '../models/LoginData';
-import RegistrationData from '../models/RegistrationData';
-import User from '../models/User';
+import AuthResponse from '../models/auth-response.model';
+import LoginData from '../models/login-data.model';
+import RegistrationData from '../models/registration-data.model';
+import User from '../models/user.model';
 import AuthService from './auth.service';
 
 describe('AuthService', () => {

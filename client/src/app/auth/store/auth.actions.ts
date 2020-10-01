@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-import LoginData from '../models/LoginData';
-import RegistrationData from '../models/RegistrationData';
-import User from '../models/User';
+import LoginData from '../models/login-data.model';
+import RegistrationData from '../models/registration-data.model';
+import User from '../models/user.model';
 
 export const loginUserStart = createAction(
   '[User] Login User Start',

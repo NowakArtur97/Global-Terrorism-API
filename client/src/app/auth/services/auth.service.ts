@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import AuthResponse from '../models/AuthResponseData';
-import LoginData from '../models/LoginData';
-import RegistrationData from '../models/RegistrationData';
-import User from '../models/User';
+import AuthResponse from '../models/auth-response.model';
+import LoginData from '../models/login-data.model';
+import RegistrationData from '../models/registration-data.model';
+import User from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export default class AuthService {
@@ -28,12 +28,15 @@ export default class AuthService {
 
   registerUser(registrationData: RegistrationData): Observable<AuthResponse> {
     const { userName, email, password, matchingPassword } = registrationData;
-    return this.httpClient.post<AuthResponse>(`${this.BASE_URL}/registration`, {
-      userName,
-      email,
-      password,
-      matchingPassword,
-    });
+    return this.httpClient.post<AuthResponse>(
+      `${this.BASE_URL}/registration/register`,
+      {
+        userName,
+        email,
+        password,
+        matchingPassword,
+      }
+    );
   }
 
   getUserFromLocalStorage(): User {
