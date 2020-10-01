@@ -48,7 +48,7 @@ class UserRegistrationController {
 
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
-    
+
     @PostMapping("/checkUserData")
     @ApiOperation(value = "Check User data before registration", notes = "Check User data before registration.")
     @ApiResponses({
@@ -56,7 +56,7 @@ class UserRegistrationController {
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
     public ResponseEntity<UserDataStatusCheckResponse> checkUserData(
             @ApiParam(value = "User data", name = "userData", required = true)
-            @RequestBody @Valid UserDataStatusCheckRequest userData) {
+            @RequestBody UserDataStatusCheckRequest userData) {
 
         return ResponseEntity.ok(userService.checkUserData(userData));
     }

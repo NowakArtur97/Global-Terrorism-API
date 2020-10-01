@@ -29,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("UserRegistrationController_Tests")
 class UserRegistrationControllerWithCustomValidationTest {
 
-    private final String REGISTRATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
+    private final String AUTHENTICATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
+    private final String REGISTRATION_BASE_PATH = AUTHENTICATION_BASE_PATH + "/register";
 
     @Autowired
     private MockMvc mockMvc;
