@@ -3,7 +3,6 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,25 +34,25 @@ public class UserService {
         return userRepository.save(userNode);
     }
 
+    public Optional<UserNode> findByUserName(String userName) {
+
+        return userRepository.findByUserName(userName);
+    }
+
+    public Optional<UserNode> findByEmail(String email) {
+
+        return userRepository.findByEmail(email);
+    }
+
     public Optional<UserNode> findByUserNameOrEmail(String userName, String email) {
 
         return userRepository.findByUserNameOrEmail(userName, email);
     }
 
-    public boolean existsByUserName(String userName) {
-
-        return userRepository.existsByUserName(userName);
-    }
-
-    public boolean existsByEmail(String email) {
-
-        return userRepository.existsByEmail(email);
-    }
-
     public UserDataStatusCheckResponse checkUserData(UserDataStatusCheckRequest userData) {
 
-        boolean isUserNameAvailable = existsByUserName(userData.getUserName());
-        boolean isEmailAvailable = existsByEmail(userData.getEmail());
+        boolean isUserNameAvailable = findByUserName(userData.getUserName()).isEmpty();
+        boolean isEmailAvailable = findByEmail(userData.getEmail()).isEmpty();
 
         return new UserDataStatusCheckResponse(isUserNameAvailable, isEmailAvailable);
     }

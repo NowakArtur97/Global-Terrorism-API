@@ -31,7 +31,7 @@ class UserRegistrationController {
 
     private final JwtUtil jwtUtil;
 
-    @PostMapping
+    @PostMapping("/register")
     @ApiOperation(value = "Create an account", notes = "Create an account. Required for generating API key.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully created a new account", response = String.class),
