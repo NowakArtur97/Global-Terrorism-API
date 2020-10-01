@@ -3,6 +3,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,5 +48,13 @@ public class UserService {
     public boolean existsByEmail(String email) {
 
         return userRepository.existsByEmail(email);
+    }
+
+    public UserDataStatusCheckResponse checkUserData(UserDataStatusCheckRequest userData) {
+
+        boolean isUserNameAvailable = existsByUserName(userData.getUserName());
+        boolean isEmailAvailable = existsByEmail(userData.getEmail());
+
+        return new UserDataStatusCheckResponse(isUserNameAvailable, isEmailAvailable);
     }
 }

@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(description = "Model responsible for User status response registration")
+@ApiModel(description = "Model responsible for User status response before registration")
 @Getter
 @Setter
 @AllArgsConstructor
