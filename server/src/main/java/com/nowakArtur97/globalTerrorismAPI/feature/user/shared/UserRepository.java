@@ -13,4 +13,6 @@ public interface UserRepository extends BaseRepository<UserNode> {
     Optional<UserNode> findByUserNameOrEmail(String userName, String email);
 
     boolean existsByUserName(String userName);
+
+    boolean existsByEmail(String email);
 }
