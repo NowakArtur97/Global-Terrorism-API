@@ -17,26 +17,37 @@ export default class AuthService {
   constructor(private httpClient: HttpClient) {}
 
   loginUser(loginData: LoginData): Observable<AuthResponse> {
+    const { userNameOrEmail, password } = loginData;
     return this.httpClient.post<AuthResponse>(
       `${this.BASE_URL}/authentication`,
-      loginData
+      {
+        user: userNameOrEmail,
+        email: userNameOrEmail,
+        password,
+      }
     );
   }
 
   registerUser(registrationData: RegistrationData): Observable<AuthResponse> {
+    const { userName, email, password, matchingPassword } = registrationData;
     return this.httpClient.post<AuthResponse>(
       `${this.BASE_URL}/registration/register`,
-      registrationData
+      {
+        userName,
+        email,
+        password,
+        matchingPassword,
+      }
     );
   }
 
   checkUserData(
     dataToCheck: RegistrationCheckRequest
   ): Observable<RegistrationCheckResponse> {
-    console.log('auth ser');
+    const { userName, email } = dataToCheck;
     return this.httpClient.post<RegistrationCheckResponse>(
       `${this.BASE_URL}/registration/checkUserData`,
-      dataToCheck
+      { userName, email }
     );
   }
 
