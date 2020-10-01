@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import AuthResponse from '../models/auth-response.model';
 import LoginData from '../models/login-data.model';
+import RegistrationCheckRequest from '../models/registration-check-request.model';
+import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import User from '../models/user.model';
 
@@ -35,6 +37,19 @@ export default class AuthService {
         email,
         password,
         matchingPassword,
+      }
+    );
+  }
+
+  checkUserData(
+    dataToCheck: RegistrationCheckRequest
+  ): Observable<RegistrationCheckResponse> {
+    const { userName, email } = dataToCheck;
+    return this.httpClient.post<RegistrationCheckResponse>(
+      `${this.BASE_URL}/registration/checkUserData`,
+      {
+        userName,
+        email,
       }
     );
   }
