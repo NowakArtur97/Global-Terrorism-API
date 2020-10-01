@@ -234,4 +234,70 @@ class UserServiceTest {
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
+
+    @Test
+    void when_check_existing_user_data_should_return_response_with_false_statuses() {
+
+        String existingUserName = "user123";
+        String existingUserEmail = "user123@email.com";
+
+        UserDataStatusCheckRequest userData = new UserDataStatusCheckRequest(existingUserName, existingUserEmail);
+
+        Set<RoleNode> roles = Set.of(new RoleNode("user"));
+        UserNode user = (UserNode) userBuilder.withUserName(existingUserName).withEmail(existingUserEmail)
+                .withRoles(roles).build(ObjectType.NODE);
+
+        UserDataStatusCheckResponse userDataResponseExpected = new UserDataStatusCheckResponse(false, false);
+
+        when(userRepository.findByUserName(existingUserName)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(existingUserEmail)).thenReturn(Optional.of(user));
+
+        UserDataStatusCheckResponse userDataResponseActual = userService.checkUserData(userData);
+
+        assertAll(
+                () -> assertFalse(userDataResponseActual.isUserNameAvailable(),
+                        () -> "should return user response with user name status: " + userDataResponseExpected.isUserNameAvailable() +
+                                ", but was" + userDataResponseActual.isUserNameAvailable()),
+                () -> assertFalse(userDataResponseActual.isEmailAvailable(),
+                        () -> "should return user response with email status: " + userDataResponseExpected.isEmailAvailable() +
+                                ", but was" + userDataResponseActual.isUserNameAvailable()),
+                () -> verify(userRepository, times(1)).findByUserName(existingUserName),
+                () -> verify(userRepository, times(1)).findByEmail(existingUserEmail),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
+
+    @Test
+    void when_check_not_existing_user_data_should_return_response_with_true_statuses() {
+
+        String notExistingUserEmail = "user123";
+        String existingUserEmail = "user123@email.com";
+
+        UserDataStatusCheckRequest userData = new UserDataStatusCheckRequest(notExistingUserEmail, existingUserEmail);
+
+        Set<RoleNode> roles = Set.of(new RoleNode("user"));
+        UserNode user = (UserNode) userBuilder.withUserName(notExistingUserEmail).withEmail(existingUserEmail)
+                .withRoles(roles).build(ObjectType.NODE);
+
+        UserDataStatusCheckResponse userDataResponseExpected = new UserDataStatusCheckResponse(false, false);
+
+        when(userRepository.findByUserName(notExistingUserEmail)).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(existingUserEmail)).thenReturn(Optional.empty());
+
+        UserDataStatusCheckResponse userDataResponseActual = userService.checkUserData(userData);
+
+        assertAll(
+                () -> assertTrue(userDataResponseActual.isUserNameAvailable(),
+                        () -> "should return user response with user name status: " + userDataResponseExpected.isUserNameAvailable() +
+                                ", but was" + userDataResponseActual.isUserNameAvailable()),
+                () -> assertTrue(userDataResponseActual.isEmailAvailable(),
+                        () -> "should return user response with email status: " + userDataResponseExpected.isEmailAvailable() +
+                                ", but was" + userDataResponseActual.isUserNameAvailable()),
+                () -> verify(userRepository, times(1)).findByUserName(notExistingUserEmail),
+                () -> verify(userRepository, times(1)).findByEmail(existingUserEmail),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
 }

@@ -273,8 +273,8 @@ class UserRegistrationControllerTest {
 
             String existingUserName = "user";
             String existingEmail = "email@email.com";
-            boolean isUserNameAvailable = true;
-            boolean isEmailAvailable = true;
+            boolean isUserNameAvailable = false;
+            boolean isEmailAvailable = false;
             UserDataStatusCheckRequest userData = new UserDataStatusCheckRequest(existingUserName, existingEmail);
             UserDataStatusCheckResponse userDataStatus = new UserDataStatusCheckResponse(isUserNameAvailable, isEmailAvailable);
 
@@ -296,12 +296,12 @@ class UserRegistrationControllerTest {
         }
 
         @Test
-        void when_check_not_existing_user_data_should_response_with_false_statuses() {
+        void when_check_not_existing_user_data_should_response_with_true_statuses() {
 
             String notExistingUserName = "user";
             String notExistingEmail = "email@email.com";
-            boolean isUserNameAvailable = false;
-            boolean isEmailAvailable = false;
+            boolean isUserNameAvailable = true;
+            boolean isEmailAvailable = true;
             UserDataStatusCheckRequest userData = new UserDataStatusCheckRequest(notExistingUserName, notExistingEmail);
             UserDataStatusCheckResponse userDataStatus = new UserDataStatusCheckResponse(isUserNameAvailable, isEmailAvailable);
 
