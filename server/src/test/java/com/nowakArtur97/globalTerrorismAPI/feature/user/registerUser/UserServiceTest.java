@@ -266,4 +266,36 @@ class UserServiceTest {
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(bCryptPasswordEncoder));
     }
+
+    @Test
+    void when_check_by_email_existing_user_should_return_true() {
+
+        String email = "user";
+
+        when(userRepository.existsByEmail(email)).thenReturn(true);
+
+        boolean isUserExisting = userService.existsByEmail(email);
+
+        assertAll(() -> assertTrue(isUserExisting, () -> "should return true"),
+                () -> verify(userRepository, times(1)).existsByEmail(email),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
+
+    @Test
+    void when_check_by_email_not_existing_user_should_return_false() {
+
+        String email = "user";
+
+        when(userRepository.existsByEmail(email)).thenReturn(false);
+
+        boolean isUserExisting = userService.existsByEmail(email);
+
+        assertAll(() -> assertFalse(isUserExisting, () -> "should return false"),
+                () -> verify(userRepository, times(1)).existsByEmail(email),
+                () -> verifyNoMoreInteractions(userRepository),
+                () -> verifyNoInteractions(modelMapper),
+                () -> verifyNoInteractions(bCryptPasswordEncoder));
+    }
 }
