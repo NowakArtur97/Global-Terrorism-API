@@ -6,9 +6,7 @@ import { map } from 'rxjs/operators';
 import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
-import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
 import UserDataValidators from './validators/user-data.validator';
 
@@ -90,7 +88,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         ],
       }
     );
-    console.log(this.registerForm.valid);
     this.setupFormSubscriptions();
   }
 
@@ -136,16 +133,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    this.store.dispatch(
-      AuthActions.registerUserStart({
-        registrationData: new RegistrationData(
-          userName,
-          email,
-          password,
-          matchingPassword
-        ),
-      })
-    );
+    console.log(this.registerForm);
+    // this.store.dispatch(
+    //   AuthActions.registerUserStart({
+    //     registrationData: new RegistrationData(
+    //       userName,
+    //       email,
+    //       password,
+    //       matchingPassword
+    //     ),
+    //   })
+    // );
   }
 
   get userName(): AbstractControl {
