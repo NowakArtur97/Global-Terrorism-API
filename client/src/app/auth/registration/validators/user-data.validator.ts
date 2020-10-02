@@ -8,13 +8,11 @@ import AuthService from '../../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export default class UserDataValidators {
-  constructor(private authService: AuthService) {}
-
-  userDataAlreadyTaken(): AsyncValidatorFn {
+  static userDataAlreadyTaken(authService: AuthService): AsyncValidatorFn {
     return (formGroup: FormGroup): Observable<ValidationErrors> => {
       const userNameControl = formGroup.controls.userName;
       const emailControl = formGroup.controls.email;
-      return this.authService
+      return authService
         .checkUserData(
           new RegistrationCheckRequest(
             userNameControl.value,

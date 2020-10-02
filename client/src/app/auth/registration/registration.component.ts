@@ -7,6 +7,7 @@ import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationData from '../models/registration-data.model';
+import AuthService from '../services/auth.service';
 import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
 import UserDataValidators from './validators/user-data.validator';
@@ -23,11 +24,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private userNameSubscription: Subscription;
   private passwordChangesSubscription: Subscription;
   private matchingPasswordChangesSubscription: Subscription;
-  validityCycleFired = false;
+  private userEmailSubscription: Subscription;
 
   constructor(
     private store: Store<AppStoreState>,
-    private userDataValidators: UserDataValidators
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +45,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.userNameSubscription?.unsubscribe();
     this.matchingPasswordChangesSubscription?.unsubscribe();
     this.passwordChangesSubscription?.unsubscribe();
+    this.userEmailSubscription?.unsubscribe();
   }
 
   initForm(): void {
@@ -83,7 +85,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           CommonValidators.notInclude('matchingPassword', 'userName'),
           CommonValidators.notMatch('password', 'matchingPassword'),
         ],
-        asyncValidators: [this.userDataValidators.userDataAlreadyTaken()],
+        asyncValidators: [
+          UserDataValidators.userDataAlreadyTaken(this.authService),
+        ],
       }
     );
 
@@ -93,10 +97,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   setupFormSubscriptions(): void {
     this.userNameSubscription = this.registerForm.controls.userName.valueChanges.subscribe(
       () => {
+        this.email.updateValueAndValidity({
+          emitEvent: false,
+        });
         this.password.updateValueAndValidity({
           emitEvent: false,
         });
         this.matchingPassword.updateValueAndValidity({
+          emitEvent: false,
+        });
+      }
+    );
+    this.userEmailSubscription = this.registerForm.controls.email.valueChanges.subscribe(
+      () => {
+        this.userName.updateValueAndValidity({
           emitEvent: false,
         });
       }
