@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,7 +27,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStoreState>,
-    private formBuilder: FormBuilder,
     private userDataValidators: UserDataValidators
   ) {}
 
@@ -48,7 +47,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   initForm(): void {
-    this.registerForm = this.formBuilder.group(
+    this.registerForm = new FormGroup(
       {
         userName: new FormControl('', [
           Validators.minLength(5),
