@@ -1,8 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { MaterialModule } from 'src/app/material/material.module';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationData from '../models/registration-data.model';
@@ -30,6 +32,8 @@ describe('RegistrationComponent', () => {
         StoreModule.forRoot({}),
         HttpClientTestingModule,
         ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule,
       ],
       declarations: [RegistrationComponent],
       providers: [Store, AuthService, UserDataValidators],
@@ -203,6 +207,16 @@ describe('RegistrationComponent', () => {
       expect(errors.notPopular).toBeTruthy();
     });
 
+    it('with password including user name should be invalid', () => {
+      const userName = component.registerForm.controls.userName;
+      const password = component.registerForm.controls.password;
+      userName.setValue('userName123');
+      password.setValue('someTextuserName123123');
+      const errors = password.errors;
+
+      expect(errors.notInclude).toBeTruthy();
+    });
+
     it('with empty matching password should be invalid', () => {
       const matchingPassword = component.registerForm.controls.matchingPassword;
       matchingPassword.setValue('');
@@ -259,6 +273,69 @@ describe('RegistrationComponent', () => {
       const errors = matchingPassword.errors;
 
       expect(errors.notPopular).toBeTruthy();
+    });
+
+    it('with matching password including user name should be invalid', () => {
+      const userName = component.registerForm.controls.userName;
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      userName.setValue('userName123');
+      matchingPassword.setValue('someTextuserName123123');
+      const errors = matchingPassword.errors;
+
+      expect(errors.notInclude).toBeTruthy();
+    });
+
+    it('with passwords not meeting any characteristic rules should be invalid', () => {
+      const password = component.registerForm.controls.password;
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      password.setValue('');
+      matchingPassword.setValue('');
+      const errors = password.errors;
+
+      expect(errors.withoutUppercase).toBeTruthy();
+      expect(errors.withoutLowercase).toBeTruthy();
+      expect(errors.withoutDigits).toBeTruthy();
+      expect(errors.withoutSpecial).toBeTruthy();
+    });
+
+    it('with passwords meeting only one characteristic rules should be invalid', () => {
+      const password = component.registerForm.controls.password;
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      password.setValue('A');
+      matchingPassword.setValue('A');
+      const errors = password.errors;
+
+      expect(errors.withoutLowercase).toBeTruthy();
+      expect(errors.withoutDigits).toBeTruthy();
+      expect(errors.withoutSpecial).toBeTruthy();
+    });
+
+    it('with passwords meeting two characteristic rules should be valid', () => {
+      const password = component.registerForm.controls.password;
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      password.setValue('Password');
+      matchingPassword.setValue('Password');
+      const errors = password.errors;
+      const invalid = [];
+      const controls = component.registerForm.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+
+      expect(errors).toBeNull();
+      // expect(component.registerForm.valid).toBeTruthy();
+    });
+
+    it('with passwords not matching should be invalid', () => {
+      const password = component.registerForm.controls.password;
+      const matchingPassword = component.registerForm.controls.matchingPassword;
+      password.setValue('PASSWORD!@#1');
+      matchingPassword.setValue('password!@#1');
+      const errors = password.errors;
+
+      expect(errors.notMatch).toBeTruthy();
     });
   });
 
