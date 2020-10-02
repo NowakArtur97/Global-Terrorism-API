@@ -10,7 +10,6 @@ import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
 import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
-import UserDataValidators from './validators/user-data.validator';
 
 @Component({
   selector: 'app-registration',
@@ -85,9 +84,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           CommonValidators.notInclude('matchingPassword', 'userName'),
           CommonValidators.notMatch('password', 'matchingPassword'),
         ],
-        asyncValidators: [
-          UserDataValidators.userDataAlreadyTaken(this.authService),
-        ],
+        // asyncValidators: [
+        //   UserDataValidators.userDataAlreadyTaken(this.authService),
+        // ],
       }
     );
 
