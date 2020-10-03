@@ -3,6 +3,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import AuthResponse from '../models/auth-response.model';
 import LoginData from '../models/login-data.model';
+import RegistrationCheckRequest from '../models/registration-check-request.model';
+import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import User from '../models/user.model';
 import AuthService from './auth.service';
@@ -63,6 +65,27 @@ describe('AuthService', () => {
       const req = httpMock.expectOne(`${BASE_URL}/registration/register`);
       expect(req.request.method).toBe('POST');
       req.flush(authResponse);
+    });
+  });
+
+  describe('when check user data', () => {
+    it('should return user data statuses', () => {
+      const dataToCheck = new RegistrationCheckRequest(
+        'username',
+        'email@email.com'
+      );
+      const registrationCheckResponse = new RegistrationCheckResponse(
+        true,
+        true
+      );
+
+      authService.checkUserData(dataToCheck).subscribe((res) => {
+        expect(res).toEqual(registrationCheckResponse);
+      });
+
+      const req = httpMock.expectOne(`${BASE_URL}/registration/checkUserData`);
+      expect(req.request.method).toBe('POST');
+      req.flush(registrationCheckResponse);
     });
   });
 
