@@ -1,5 +1,6 @@
 import { BreakpointObserver, LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -10,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import AuthService from 'src/app/auth/services/auth.service';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
@@ -37,9 +39,10 @@ describe('NavigationComponent', () => {
         OverlayModule,
         MatDialogModule,
 
+        HttpClientTestingModule,
         StoreModule.forRoot({}),
       ],
-      providers: [Store, BreakpointObserver, MatDialog],
+      providers: [Store, BreakpointObserver, MatDialog, AuthService],
     }).compileComponents();
   });
 

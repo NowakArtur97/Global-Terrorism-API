@@ -52,7 +52,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   onOpenPopUp(type: string): void {
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
 
     switch (type) {
