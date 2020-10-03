@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/registration")
@@ -45,8 +46,9 @@ class UserRegistrationController {
                 customUserDetailsService.getAuthorities(newUser.getRoles()));
 
         String token = jwtUtil.generateToken(userDetails);
+        Date expirationDate = jwtUtil.extractExpirationDate(token);
 
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return ResponseEntity.ok(new AuthenticationResponse(token, expirationDate));
     }
 
     @PostMapping("/checkUserData")
