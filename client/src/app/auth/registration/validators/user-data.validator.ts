@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, first, map } from 'rxjs/operators';
 
 import RegistrationCheckRequest from '../../models/registration-check-request.model';
 import AuthService from '../../services/auth.service';
@@ -36,6 +36,14 @@ export default class UserDataValidators {
             }
 
             return null;
+          }),
+          first(),
+          catchError((error) => {
+            console.log(error);
+            return of({
+              ...formGroup.errors,
+              unknownError: true,
+            });
           })
         );
     };

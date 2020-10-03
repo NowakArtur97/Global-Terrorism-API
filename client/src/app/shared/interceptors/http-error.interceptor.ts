@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export default class HttpErrorInterceptor implements HttpInterceptor {
@@ -10,9 +10,12 @@ export default class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
+      retry(1),
       catchError((err) => {
-        const error = err.error.message || err.statusText;
-        return throwError(error);
+        const error = err.error.message || err.statusText || err;
+        console.log('HttpError');
+        console.log(error);
+        return throwError(err);
       })
     );
   }
