@@ -54,10 +54,10 @@ export default class AuthService {
   getUserFromLocalStorage(): User {
     const userData: {
       _token: string;
-      _expirationDate: Date;
+      _expirationDateInMiliseconds: number;
     } = JSON.parse(localStorage.getItem(this.userLocaleStorageKey));
     return userData?._token
-      ? new User(userData._token, userData._expirationDate)
+      ? new User(userData._token, userData._expirationDateInMiliseconds)
       : null;
   }
 

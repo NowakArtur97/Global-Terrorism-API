@@ -46,9 +46,8 @@ class UserRegistrationController {
                 customUserDetailsService.getAuthorities(newUser.getRoles()));
 
         String token = jwtUtil.generateToken(userDetails);
-        Date expirationDate = jwtUtil.extractExpirationDate(token);
 
-        return ResponseEntity.ok(new AuthenticationResponse(token, expirationDate));
+        return ResponseEntity.ok(new AuthenticationResponse(token, JwtUtil.JWT_TOKEN_VALIDITY));
     }
 
     @PostMapping("/checkUserData")

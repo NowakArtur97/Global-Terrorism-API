@@ -17,6 +17,6 @@ public class AuthenticationResponse {
     @ApiModelProperty(notes = "Generated token")
     private String token;
 
-    @ApiModelProperty(notes = "Generated token")
-    private Date expirationDate;
+    @ApiModelProperty(notes = "Expiration date on milliseconds")
+    private long expirationDateInMilliseconds;
 }
