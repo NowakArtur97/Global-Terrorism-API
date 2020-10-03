@@ -36,7 +36,7 @@ describe('AuthService', () => {
   describe('when login user', () => {
     it('should login user', () => {
       const loginData = new LoginData('username', 'password');
-      const authResponse = new AuthResponse('token');
+      const authResponse = new AuthResponse('token', new Date());
 
       authService.loginUser(loginData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -56,7 +56,7 @@ describe('AuthService', () => {
         'pass',
         'pass'
       );
-      const authResponse = new AuthResponse('token');
+      const authResponse = new AuthResponse('token', new Date());
 
       authService.registerUser(registrationData).subscribe((res) => {
         expect(res).toEqual(authResponse);
