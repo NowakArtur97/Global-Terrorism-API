@@ -54,9 +54,6 @@ describe('RegistrationComponent', () => {
       }
     });
     spyOn(store, 'dispatch');
-    spyOn(authService, 'checkUserData').and.callFake(() =>
-      of(new RegistrationCheckResponse(true, true))
-    );
 
     fixture.detectChanges();
     component.ngOnInit();
@@ -108,12 +105,24 @@ describe('RegistrationComponent', () => {
       expect(errors.minlength).toBeTruthy();
     });
 
-    it('with too long matching password should be invalid', () => {
+    it('with too long user name should be invalid', () => {
       const userName = component.registerForm.controls.userName;
       userName.setValue('1234567890123456789012345678901');
       const errors = userName.errors;
 
       expect(errors.maxlength).toBeTruthy();
+    });
+
+    it('with user name already taken should be invalid', () => {
+      spyOn(authService, 'checkUserData').and.callFake(() =>
+        of(new RegistrationCheckResponse(false, true))
+      );
+
+      const userName = component.registerForm.controls.userName;
+      userName.setValue('usernameTaken');
+      const errors = userName.errors;
+
+      expect(errors.userNameAlreadyTaken).toBeTruthy();
     });
 
     it('with empty email should be invalid', () => {
@@ -150,6 +159,18 @@ describe('RegistrationComponent', () => {
       errors = email.errors;
 
       expect(errors.email).toBeTruthy();
+    });
+
+    it('with email already taken should be invalid', () => {
+      spyOn(authService, 'checkUserData').and.callFake(() =>
+        of(new RegistrationCheckResponse(true, false))
+      );
+
+      const email = component.registerForm.controls.email;
+      email.setValue('emailTaken@email.com');
+      const errors = email.errors;
+
+      expect(errors.emailAlreadyTaken).toBeTruthy();
     });
 
     it('with empty password should be invalid', () => {
@@ -314,6 +335,10 @@ describe('RegistrationComponent', () => {
     });
 
     it('with passwords meeting two characteristic rules should be valid', () => {
+      spyOn(authService, 'checkUserData').and.callFake(() =>
+        of(new RegistrationCheckResponse(true, true))
+      );
+
       const password = component.registerForm.controls.password;
       const matchingPassword = component.registerForm.controls.matchingPassword;
       password.setValue('Password');
@@ -342,6 +367,10 @@ describe('RegistrationComponent', () => {
 
     it('should dispatch registerUserStart action when register form is valid', () => {
       expect(component.registerForm.valid).toBeFalsy();
+
+      spyOn(authService, 'checkUserData').and.callFake(() =>
+        of(new RegistrationCheckResponse(true, true))
+      );
 
       const {
         userName,
