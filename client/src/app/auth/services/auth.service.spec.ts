@@ -60,7 +60,7 @@ describe('AuthService', () => {
         expect(res).toEqual(authResponse);
       });
 
-      const req = httpMock.expectOne(`${BASE_URL}/registration`);
+      const req = httpMock.expectOne(`${BASE_URL}/registration/register`);
       expect(req.request.method).toBe('POST');
       req.flush(authResponse);
     });
