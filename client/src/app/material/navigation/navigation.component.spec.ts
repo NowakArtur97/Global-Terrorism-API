@@ -9,6 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import AuthService from 'src/app/auth/services/auth.service';
@@ -39,6 +40,7 @@ describe('NavigationComponent', () => {
         OverlayModule,
         MatDialogModule,
 
+        RouterTestingModule,
         HttpClientTestingModule,
         StoreModule.forRoot({}),
       ],
