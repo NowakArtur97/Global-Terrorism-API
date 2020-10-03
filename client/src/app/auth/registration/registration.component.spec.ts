@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/material/material.module';
 import AppStoreState from 'src/app/store/app.store.state';
 
+import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
 import * as AuthActions from '../store/auth.actions';
@@ -53,7 +54,9 @@ describe('RegistrationComponent', () => {
       }
     });
     spyOn(store, 'dispatch');
-    spyOn(authService, 'checkUserData').and.callThrough();
+    spyOn(authService, 'checkUserData').and.callFake(() =>
+      of(new RegistrationCheckResponse(true, true))
+    );
 
     fixture.detectChanges();
     component.ngOnInit();
@@ -316,16 +319,9 @@ describe('RegistrationComponent', () => {
       password.setValue('Password');
       matchingPassword.setValue('Password');
       const errors = password.errors;
-      const invalid = [];
-      const controls = component.registerForm.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
 
       expect(errors).toBeNull();
-      // expect(component.registerForm.valid).toBeTruthy();
+      expect(component.registerForm.valid).toBeTruthy();
     });
 
     it('with passwords not matching should be invalid', () => {
@@ -344,7 +340,7 @@ describe('RegistrationComponent', () => {
       expect(component.registerForm.valid).toBeFalsy();
     });
 
-    it('should dispatch registerUserStart action when register form is valid', fakeAsync(() => {
+    it('should dispatch registerUserStart action when register form is valid', () => {
       expect(component.registerForm.valid).toBeFalsy();
 
       const {
@@ -358,14 +354,17 @@ describe('RegistrationComponent', () => {
       password.setValue(registrationData.password);
       matchingPassword.setValue(registrationData.matchingPassword);
 
-      // expect(component.registerForm.valid).toBeTruthy();
+      expect(component.registerForm.valid).toBeTruthy();
 
       component.onRegister();
 
+      expect(authService.checkUserData).toHaveBeenCalled();
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(
-        AuthActions.registerUserStart({ registrationData })
+        AuthActions.registerUserStart({
+          registrationData,
+        })
       );
-    }));
+    });
   });
 });
