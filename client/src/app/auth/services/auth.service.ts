@@ -81,4 +81,11 @@ export default class AuthService {
       this.store.dispatch(AuthActions.logoutUser());
     }, expirationDateInMilliseconds);
   }
+
+  clearLogoutTimer(): void {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+  }
 }

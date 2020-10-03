@@ -43,6 +43,8 @@ export default class AuthEffects {
       map(() => {
         const user = this.authService.getUserFromLocalStorage();
         if (user) {
+          console.log(user);
+          this.authService.setLogoutTimer(user.expirationDateInMilliseconds);
           return AuthActions.authenticateUserSuccess({
             user,
           });
@@ -56,7 +58,10 @@ export default class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.logoutUser),
-        tap(() => this.authService.removeUserFromLocalStorage())
+        tap(() => {
+          this.authService.clearLogoutTimer();
+          this.authService.removeUserFromLocalStorage();
+        })
       ),
     { dispatch: false }
   );
