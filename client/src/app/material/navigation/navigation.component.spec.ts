@@ -95,7 +95,7 @@ describe('NavigationComponent', () => {
     });
 
     it('with registration option should open registration component', () => {
-      spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+      spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
 
       component.onOpenPopUp('registration');
 
