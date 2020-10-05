@@ -23,8 +23,12 @@ describe('NavigationComponent', () => {
   let component: NavigationComponent;
   let fixture: ComponentFixture<NavigationComponent>;
   let store: Store<AppStoreState>;
-  let breakpointObserver: BreakpointObserver;
   let dialog: MatDialog;
+  const dialogRefSpyObj = jasmine.createSpyObj({
+    afterClosed: of({}),
+    close: null,
+  });
+  dialogRefSpyObj.componentInstance = { body: '' };
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -53,7 +57,6 @@ describe('NavigationComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
-    breakpointObserver = TestBed.inject(BreakpointObserver);
     dialog = TestBed.inject(MatDialog);
 
     spyOn(store, 'select').and.callFake((selector) => {
@@ -62,7 +65,6 @@ describe('NavigationComponent', () => {
       }
     });
     spyOn(store, 'dispatch');
-    spyOn(dialog, 'open');
 
     fixture.detectChanges();
     component.ngOnInit();
@@ -85,7 +87,7 @@ describe('NavigationComponent', () => {
 
   describe('when open popup', () => {
     it('with login option should open login component', () => {
-      (dialog.open as jasmine.Spy).and.callFake(() => {});
+      spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
 
       component.onOpenPopUp('login');
 
@@ -93,7 +95,7 @@ describe('NavigationComponent', () => {
     });
 
     it('with registration option should open registration component', () => {
-      (dialog.open as jasmine.Spy).and.callFake(() => {});
+      spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
 
       component.onOpenPopUp('registration');
 
