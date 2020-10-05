@@ -2,7 +2,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { fakeAsync, getTestBed, TestBed, tick } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import AppStoreState from 'src/app/store/app.store.state';
 
@@ -13,6 +13,7 @@ import RegistrationCheckResponse from '../models/registration-check-response.mod
 import RegistrationData from '../models/registration-data.model';
 import User from '../models/user.model';
 import AuthService from './auth.service';
+import * as AuthActions from '../store/auth.actions';
 
 describe('AuthService', () => {
   let injector: TestBed;
@@ -34,6 +35,8 @@ describe('AuthService', () => {
     store = TestBed.inject(Store);
     authService = injector.inject(AuthService);
     httpMock = injector.inject(HttpTestingController);
+
+    spyOn(store, 'dispatch');
   });
 
   afterEach(() => {
@@ -139,6 +142,42 @@ describe('AuthService', () => {
       authService.saveUserInLocalStorage(user);
 
       expect(localStorage.setItem).toHaveBeenCalled();
+    });
+  });
+
+  describe('when set logout timer', () => {
+    it('should dispact logoutUser action after some time', fakeAsync(() => {
+      const expirationDateInMilliseconds = 2000;
+      spyOn(window, 'setTimeout').and.callThrough();
+
+      authService.setLogoutTimer(expirationDateInMilliseconds);
+
+      tick(3000);
+
+      expect(setTimeout).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(AuthActions.logoutUser());
+    }));
+  });
+
+  describe('when clear logout timer', () => {
+    it('should clear timeout', fakeAsync(() => {
+      const expirationDateInMilliseconds = 2000;
+      spyOn(window, 'setTimeout').and.callThrough();
+      spyOn(window, 'clearTimeout').and.callThrough();
+
+      authService.setLogoutTimer(expirationDateInMilliseconds);
+
+      tick(3000);
+
+      authService.clearLogoutTimer();
+
+      expect(clearTimeout).toHaveBeenCalled();
+    }));
+
+    it('should not clear timeout if was not setted before', () => {
+      authService.clearLogoutTimer();
+
+      expect(clearTimeout).not.toHaveBeenCalled();
     });
   });
 });
