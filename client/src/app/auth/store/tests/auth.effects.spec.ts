@@ -50,6 +50,7 @@ describe('AuthEffects', () => {
             'removeUserFromLocalStorage',
             'saveUserInLocalStorage',
             'setLogoutTimer',
+            'clearLogoutTimer',
           ]),
         },
       ],
@@ -59,6 +60,8 @@ describe('AuthEffects', () => {
   beforeEach(() => {
     authEffects = TestBed.inject(AuthEffects);
     authService = TestBed.inject(AuthService);
+
+    (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
   });
 
   describe('loginUser$', () => {
