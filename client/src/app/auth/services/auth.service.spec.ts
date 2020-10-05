@@ -175,6 +175,8 @@ describe('AuthService', () => {
     }));
 
     it('should not clear timeout if was not setted before', () => {
+      spyOn(window, 'clearTimeout').and.callThrough();
+
       authService.clearLogoutTimer();
 
       expect(clearTimeout).not.toHaveBeenCalled();
