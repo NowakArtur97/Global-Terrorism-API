@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import AuthResponse from '../models/auth-response.model';
@@ -36,7 +39,7 @@ describe('AuthService', () => {
   describe('when login user', () => {
     it('should login user', () => {
       const loginData = new LoginData('username', 'password');
-      const authResponse = new AuthResponse('token', new Date());
+      const authResponse = new AuthResponse('token', 36000);
 
       authService.loginUser(loginData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -56,7 +59,7 @@ describe('AuthService', () => {
         'pass',
         'pass'
       );
-      const authResponse = new AuthResponse('token', new Date());
+      const authResponse = new AuthResponse('token', 36000);
 
       authService.registerUser(registrationData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -94,7 +97,7 @@ describe('AuthService', () => {
       const userData: {
         _token: string;
       } = { _token: 'secret token' };
-      const userExpected = new User('secret token');
+      const userExpected = new User('token', 36000);
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
         JSON.stringify(userData)
@@ -124,7 +127,7 @@ describe('AuthService', () => {
 
   describe('when save user in local storage', () => {
     it('should save user in local storage', () => {
-      const user = new User('secret token');
+      const user = new User('token', 36000);
 
       spyOn(localStorage, 'setItem').and.callFake(() => JSON.stringify(user));
 

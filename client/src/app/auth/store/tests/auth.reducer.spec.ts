@@ -15,12 +15,12 @@ const initialStateWithErrors: AuthStoreState = {
 };
 
 const initialStateWithUser: AuthStoreState = {
-  user: new User('token'),
+  user: new User('token', 36000),
   authErrorMessages: [],
 };
 
 const initialStateWithUserAndErrors: AuthStoreState = {
-  user: new User('token'),
+  user: new User('token', 36000),
   authErrorMessages: ['ERROR'],
 };
 
@@ -43,7 +43,7 @@ describe('authReducer', () => {
 
   describe('AuthStoreState.authenticateUserSuccess', () => {
     it('should authenticate user on success', () => {
-      const user = new User('token');
+      const user = new User('token', 36000);
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
       const actualState = authReducer(initialState, action);
@@ -55,7 +55,7 @@ describe('authReducer', () => {
     });
 
     it('should authenticate user and remove error messages on success', () => {
-      const user = new User('token');
+      const user = new User('token', 36000);
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
       const actualState = authReducer(initialStateWithErrors, action);
