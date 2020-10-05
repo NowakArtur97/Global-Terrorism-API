@@ -85,7 +85,7 @@ describe('NavigationComponent', () => {
 
   describe('when open popup', () => {
     it('with login option should open login component', () => {
-      (dialog.open as jasmine.Spy).and.callThrough();
+      (dialog.open as jasmine.Spy).and.callFake(() => {});
 
       component.onOpenPopUp('login');
 
@@ -93,7 +93,7 @@ describe('NavigationComponent', () => {
     });
 
     it('with registration option should open registration component', () => {
-      (dialog.open as jasmine.Spy).and.callThrough();
+      (dialog.open as jasmine.Spy).and.callFake(() => {});
 
       component.onOpenPopUp('registration');
 
