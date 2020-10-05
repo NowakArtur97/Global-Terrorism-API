@@ -49,6 +49,7 @@ describe('AuthEffects', () => {
             'getUserFromLocalStorage',
             'removeUserFromLocalStorage',
             'saveUserInLocalStorage',
+            'setLogoutTimer',
           ]),
         },
       ],
@@ -76,6 +77,7 @@ describe('AuthEffects', () => {
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
         expect(authService.loginUser).toHaveBeenCalled();
+        expect(authService.setLogoutTimer).toHaveBeenCalled();
         expect(authService.saveUserInLocalStorage).toHaveBeenCalled();
       });
     });
@@ -84,6 +86,7 @@ describe('AuthEffects', () => {
       (authService.loginUser as jasmine.Spy).and.returnValue(
         throwError(mockErrorResponse)
       );
+      (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
       (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
 
       authEffects.loginUser$.subscribe((resultAction) => {
@@ -111,6 +114,7 @@ describe('AuthEffects', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(
         of(mockAuthResponse)
       );
+      (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
       (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
 
       authEffects.registerUser$.subscribe((resultAction) => {
@@ -118,6 +122,7 @@ describe('AuthEffects', () => {
           AuthActions.authenticateUserSuccess({ user: mockUser })
         );
         expect(authService.registerUser).toHaveBeenCalled();
+        expect(authService.setLogoutTimer).toHaveBeenCalled();
         expect(authService.saveUserInLocalStorage).toHaveBeenCalled();
       });
     });
