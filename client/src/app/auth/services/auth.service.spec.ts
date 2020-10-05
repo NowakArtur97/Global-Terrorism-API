@@ -3,6 +3,8 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
+import AppStoreState from 'src/app/store/app.store.state';
 
 import AuthResponse from '../models/auth-response.model';
 import LoginData from '../models/login-data.model';
@@ -15,19 +17,21 @@ import AuthService from './auth.service';
 describe('AuthService', () => {
   let injector: TestBed;
   let authService: AuthService;
+  let store: Store<AppStoreState>;
   let httpMock: HttpTestingController;
 
   const BASE_URL = 'http://localhost:8080/api/v1';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [StoreModule.forRoot({}), HttpClientTestingModule],
       providers: [AuthService],
     });
   });
 
   beforeEach(() => {
     injector = getTestBed();
+    store = TestBed.inject(Store);
     authService = injector.inject(AuthService);
     httpMock = injector.inject(HttpTestingController);
   });
@@ -96,7 +100,8 @@ describe('AuthService', () => {
     it('should get user from local storage when user data is stored in local storage', () => {
       const userData: {
         _token: string;
-      } = { _token: 'secret token' };
+        _expirationDateInMilliseconds: number;
+      } = { _token: 'token', _expirationDateInMilliseconds: 36000 };
       const userExpected = new User('token', 36000);
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
