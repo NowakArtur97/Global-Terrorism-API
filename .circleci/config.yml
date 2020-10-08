@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout:
           path: ~/global_terrorism_api
-      - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
+      # - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
       - run:
           name: Deploy app on heroku
           command: |
