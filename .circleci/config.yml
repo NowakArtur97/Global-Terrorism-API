@@ -46,18 +46,18 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     steps:
       - checkout:
-          path: ~/global_terrorism_api
-      - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
-      - run: mvn dependency:go-offline
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
+      #     path: ~/global_terrorism_api
+      # - setup_remote_docker
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum "pom.xml" }}
+      #       - v1-dependencies-
+      # - run: mvn dependency:go-offline
+      # - save_cache:
+      #     paths:
+      #       - ~/.m2
+      #     key: v1-dependencies-{{ checksum "pom.xml" }}
+      # - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
       - run:
           name: Deploy app on heroku
           command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
