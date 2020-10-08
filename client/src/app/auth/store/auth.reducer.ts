@@ -19,6 +19,7 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
 
   on(AuthActions.registerUserStart, (state) => ({
     ...state,
+    authErrorMessages: [],
     isLoading: true,
   })),
 
@@ -32,7 +33,7 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
   on(AuthActions.authenticateUserFailure, (state, action) => ({
     ...state,
     authErrorMessages: action.authErrorMessages,
-    isLoading: true,
+    isLoading: false,
   })),
 
   on(AuthActions.logoutUser, (state) => ({
