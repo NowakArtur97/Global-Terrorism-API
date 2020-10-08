@@ -34,9 +34,9 @@ jobs:
       - run:
           name: Wait for Neo4j
           command: dockerize -wait tcp://localhost:7474 -timeout 1m
-      # - run:
-      #     name: Testing
-      #     command: mvn test -Dspring-boot.run.profiles=ci
+      - run:
+          name: Testing
+          command: mvn test -Dspring-boot.run.profiles=ci
   deploy:
     docker:
       - image: circleci/openjdk:11.0.3-jdk-stretch
@@ -46,25 +46,9 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     steps:
       - checkout:
-      #     path: ~/global_terrorism_api
-      # - setup_remote_docker
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "pom.xml" }}
-      #       - v1-dependencies-
-      # - run: mvn dependency:go-offline
-      # - save_cache:
-      #     paths:
-      #       - ~/.m2
-      #     key: v1-dependencies-{{ checksum "pom.xml" }}
-      # - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
       - run:
           name: Deploy app on heroku
           command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-      # - run:
-      #     name: Deploy app on heroku
-      #     command: |
-      #       git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   # frontend-tests:
   #   working_directory: ~/global_terrorism_api/client
   #   docker:
