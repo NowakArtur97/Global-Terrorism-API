@@ -36,6 +36,15 @@ jobs:
       - run:
           name: Testing
           command: mvn test -Dspring-boot.run.profiles=ci
+  deploy:
+    docker:
+      - image: circleci/buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy app on heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   frontend-tests:
     working_directory: ~/global_terrorism_api/client
     docker:
@@ -70,3 +79,9 @@ workflows:
     jobs:
       - frontend-tests
       - backend-tests
+      - deploy:
+        requires:
+          - backend-tests
+        # filters:
+        #   branches:
+        #     only: master
