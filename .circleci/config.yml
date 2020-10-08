@@ -60,8 +60,11 @@ jobs:
       - run: mvn -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
       - run:
           name: Deploy app on heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+          command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+      # - run:
+      #     name: Deploy app on heroku
+      #     command: |
+      #       git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   # frontend-tests:
   #   working_directory: ~/global_terrorism_api/client
   #   docker:
