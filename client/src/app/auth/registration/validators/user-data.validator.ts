@@ -38,13 +38,12 @@ export default class UserDataValidators {
             return null;
           }),
           first(),
-          catchError((error) => {
-            console.log(error);
-            return of({
+          catchError((error) =>
+            of({
               ...formGroup.errors,
               unknownError: true,
-            });
-          })
+            })
+          )
         );
     };
   }

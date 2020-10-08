@@ -2,6 +2,10 @@ mat-dialog-content {
   overflow: hidden;
 }
 
+mat-spinner {
+  margin: 0 auto;
+}
+
 .registration__form {
   display: flex;
   flex-direction: column;

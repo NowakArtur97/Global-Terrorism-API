@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import CommonValidators from 'src/app/shared/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
@@ -18,13 +17,14 @@ import UserDataValidators from './validators/user-data.validator';
   styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  registerForm: FormGroup;
-  authErrors: string[] = [];
   private authErrorsSubscription: Subscription;
   private userNameSubscription: Subscription;
   private passwordChangesSubscription: Subscription;
   private matchingPasswordChangesSubscription: Subscription;
   private userEmailSubscription: Subscription;
+  registerForm: FormGroup;
+  authErrors: string[] = [];
+  isLoading = false;
 
   constructor(
     private store: Store<AppStoreState>,
@@ -34,8 +34,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authErrorsSubscription = this.store
       .select('auth')
-      .pipe(map((authState) => authState.authErrorMessages))
-      .subscribe((authErrorMessages) => (this.authErrors = authErrorMessages));
+      .subscribe((authState) => {
+        this.authErrors = authState.authErrorMessages;
+        this.isLoading = authState.isLoading;
+      });
 
     this.initForm();
   }

@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import LoginData from '../models/login-data.model';
@@ -16,6 +15,7 @@ import * as AuthActions from '../store/auth.actions';
 export class AuthenticationComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   authErrors: string[] = [];
+  isLoading = false;
   private authErrorsSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
@@ -25,8 +25,10 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
     this.authErrorsSubscription = this.store
       .select('auth')
-      .pipe(map((authState) => authState.authErrorMessages))
-      .subscribe((authErrorMessages) => (this.authErrors = authErrorMessages));
+      .subscribe((authState) => {
+        this.authErrors = authState.authErrorMessages;
+        this.isLoading = authState.isLoading;
+      });
   }
 
   ngOnDestroy(): void {
