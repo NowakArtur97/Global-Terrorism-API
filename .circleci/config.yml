@@ -36,14 +36,14 @@ jobs:
           command: dockerize -wait tcp://localhost:7474 -timeout 1m
       - run:
           name: Testing
-          # command: mvn test -Dspring-boot.run.profiles=ci
-          command: mvn test -Ptest
+          command: mvn test -Dspring-boot.run.profiles=ci
   deploy:
     docker:
       - image: circleci/buildpack-deps:trusty
     steps:
       - checkout:
           path: ~/global_terrorism_api
+      - run: ./mvnw -Dmaven.test.skip=true -Dspring-boot.run.profiles=prod package
       - run:
           name: Deploy app on heroku
           command: |
