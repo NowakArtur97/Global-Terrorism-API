@@ -81,6 +81,12 @@
             <artifactId>neo4j-ogm-bolt-driver</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-ogm-http-driver -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-http-driver</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>
