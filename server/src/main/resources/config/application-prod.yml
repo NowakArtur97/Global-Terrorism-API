@@ -4,6 +4,9 @@
 spring:
   data:
     neo4j:
-      password: ${NEO4J_PASSWORD}
-      uri: ${NEO4J_BOLT}
-      username: ${NEO4J_USER}
+      password: ${GRAPHENEDB_BOLT_PASSWORD}
+      uri: ${GRAPHENEDB_BOLT_URL}
+      username: ${GRAPHENEDB_BOLT_USER}
+#      password: ${NEO4J_PASSWORD}
+#      uri: ${NEO4J_BOLT}
+#      username: ${NEO4J_USER}
