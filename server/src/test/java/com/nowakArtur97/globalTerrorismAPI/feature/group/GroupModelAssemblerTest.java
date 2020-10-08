@@ -11,6 +11,8 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("GroupModelAssembler_Tests")
+@DisabledOnOs(OS.LINUX)
 class GroupModelAssemblerTest {
 
     private final String GROUP_BASE_PATH = "http://localhost/api/v1/groups";
