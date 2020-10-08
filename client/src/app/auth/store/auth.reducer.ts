@@ -6,6 +6,7 @@ import AuthStoreState from './auth.store.state';
 const initialState: AuthStoreState = {
   user: null,
   authErrorMessages: [],
+  isLoading: false,
 };
 
 const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
@@ -13,17 +14,20 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
   on(AuthActions.loginUserStart, (state) => ({
     ...state,
     authErrorMessages: [],
+    loading: true,
   })),
 
   on(AuthActions.authenticateUserSuccess, (state, action) => ({
     ...state,
     user: action.user,
     authErrorMessages: [],
+    loading: false,
   })),
 
   on(AuthActions.authenticateUserFailure, (state, action) => ({
     ...state,
     authErrorMessages: action.authErrorMessages,
+    loading: false,
   })),
 
   on(AuthActions.logoutUser, (state) => ({
