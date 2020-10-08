@@ -31,8 +31,6 @@ class EventControllerOptionsMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
-
     @Mock
     private GenericService<EventNode, EventDTO> eventService;
 
@@ -51,8 +49,8 @@ class EventControllerOptionsMethodTest {
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil,
-                violationUtil);
+        GenericRestController<EventModel, EventDTO> eventController
+                = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
     }

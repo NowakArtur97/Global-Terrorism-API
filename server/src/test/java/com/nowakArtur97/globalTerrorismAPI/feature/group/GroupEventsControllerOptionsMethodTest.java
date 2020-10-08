@@ -31,8 +31,6 @@ class GroupEventsControllerOptionsMethodTest {
 
     private MockMvc mockMvc;
 
-    private GroupEventsController groupEventsController;
-
     @Mock
     private GroupService groupService;
 
@@ -51,7 +49,8 @@ class GroupEventsControllerOptionsMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
+        GroupEventsController groupEventsController = new GroupEventsController(groupService, groupModelAssembler,
+                eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).build();

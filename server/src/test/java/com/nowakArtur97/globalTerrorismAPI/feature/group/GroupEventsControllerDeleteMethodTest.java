@@ -36,8 +36,6 @@ class GroupEventsControllerDeleteMethodTest {
 
     private MockMvc mockMvc;
 
-    private GroupEventsController groupEventsController;
-
     @Mock
     private GroupService groupService;
 
@@ -64,7 +62,8 @@ class GroupEventsControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
+        GroupEventsController groupEventsController = new GroupEventsController(groupService, groupModelAssembler,
+                eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();

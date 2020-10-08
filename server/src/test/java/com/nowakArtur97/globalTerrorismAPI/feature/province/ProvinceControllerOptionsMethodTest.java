@@ -31,8 +31,6 @@ class ProvinceControllerOptionsMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<ProvinceModel, ProvinceDTO> provinceController;
-
     @Mock
     private GenericService<ProvinceNode, ProvinceDTO> provinceService;
 
@@ -51,7 +49,8 @@ class ProvinceControllerOptionsMethodTest {
     @BeforeEach
     private void setUp() {
 
-        provinceController = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchUtil,
+        GenericRestController<ProvinceModel, ProvinceDTO> provinceController
+                = new ProvinceController(provinceService, modelAssembler, pagedResourcesAssembler, patchUtil,
                 violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(provinceController).build();

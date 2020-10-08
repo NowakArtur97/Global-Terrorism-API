@@ -39,8 +39,6 @@ class EventTargetControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private EventTargetController eventTargetController;
-
     @Mock
     private EventService eventService;
 
@@ -62,7 +60,7 @@ class EventTargetControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        eventTargetController = new EventTargetController(eventService, targetModelAssembler);
+        EventTargetController eventTargetController = new EventTargetController(eventService, targetModelAssembler);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventTargetController)
                 .setControllerAdvice(new GenericRestControllerAdvice())

@@ -31,7 +31,6 @@ class TargetControllerOptionsMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<TargetModel, TargetDTO> targetController;
 
     @Mock
     private GenericService<TargetNode, TargetDTO> targetService;
@@ -51,8 +50,8 @@ class TargetControllerOptionsMethodTest {
     @BeforeEach
     private void setUp() {
 
-        targetController = new TargetController(targetService, modelAssembler, pagedResourcesAssembler,
-                patchUtil, violationUtil);
+        GenericRestController<TargetModel, TargetDTO> targetController = new TargetController(targetService, modelAssembler,
+                pagedResourcesAssembler, patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).build();
     }

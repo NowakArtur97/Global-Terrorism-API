@@ -41,10 +41,6 @@ class AuthenticationControllerTest {
 
     private MockMvc mockMvc;
 
-    private AuthenticationController authenticationController;
-
-    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
     @Mock
     private CustomUserDetailsService customUserDetailsService;
 
@@ -57,9 +53,11 @@ class AuthenticationControllerTest {
     @BeforeEach
     private void setUp() {
 
-        authenticationController = new AuthenticationController(customUserDetailsService, authenticationManager, jwtUtil);
+        AuthenticationController authenticationController
+                = new AuthenticationController(customUserDetailsService, authenticationManager, jwtUtil);
 
-        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+        RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler
+                = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(authenticationController, restResponseGlobalEntityExceptionHandler)
                 .setControllerAdvice(new AuthenticationControllerAdvice())

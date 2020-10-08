@@ -51,8 +51,6 @@ class GroupEventsControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private GroupEventsController groupEventsController;
-
     @Mock
     private GroupService groupService;
 
@@ -81,7 +79,8 @@ class GroupEventsControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupEventsController = new GroupEventsController(groupService, groupModelAssembler, eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
+        GroupEventsController groupEventsController = new GroupEventsController(groupService, groupModelAssembler,
+                eventModelAssembler, eventsPagedResourcesAssembler, pageUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupEventsController).setControllerAdvice(new GenericRestControllerAdvice())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();

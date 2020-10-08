@@ -36,8 +36,6 @@ class TargetControllerDeleteMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<TargetModel, TargetDTO> targetController;
-
     @Mock
     private GenericService<TargetNode, TargetDTO> targetService;
 
@@ -64,8 +62,9 @@ class TargetControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
-                patchUtil, violationUtil);
+        GenericRestController<TargetModel, TargetDTO> targetController
+                = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler, patchUtil,
+                violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();

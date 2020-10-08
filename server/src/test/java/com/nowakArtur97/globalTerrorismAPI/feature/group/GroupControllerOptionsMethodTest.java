@@ -31,9 +31,7 @@ class GroupControllerOptionsMethodTest {
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
 
     private MockMvc mockMvc;
-
-    private GenericRestController<GroupModel, GroupDTO> groupController;
-
+    
     @Mock
     private GenericService<GroupNode, GroupDTO> groupService;
 
@@ -52,7 +50,8 @@ class GroupControllerOptionsMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupController = new GroupController(groupService, modelAssembler, pagedResourcesAssembler,
+        GenericRestController<GroupModel, GroupDTO> groupController
+                = new GroupController(groupService, modelAssembler, pagedResourcesAssembler,
                 patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).build();

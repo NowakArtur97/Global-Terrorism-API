@@ -2,15 +2,15 @@ package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestController;
+import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
+import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
-import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,13 +56,11 @@ class GroupControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<GroupModel, GroupDTO> groupController;
-
     @Mock
     private GenericService<GroupNode, GroupDTO> groupService;
 
     @Mock
-    private RepresentationModelAssemblerSupport<GroupNode, GroupModel> groupModelAssembler;
+    private RepresentationModelAssemblerSupport<GroupNode, GroupModel> modelAssembler;
 
     @Mock
     private PagedResourcesAssembler<GroupNode> pagedResourcesAssembler;
@@ -86,7 +84,8 @@ class GroupControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        groupController = new GroupController(groupService, groupModelAssembler, pagedResourcesAssembler,
+        GenericRestController<GroupModel, GroupDTO> groupController
+                = new GroupController(groupService, modelAssembler, pagedResourcesAssembler,
                 patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(groupController).setControllerAdvice(new GenericRestControllerAdvice())
@@ -136,7 +135,7 @@ class GroupControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findAll(pageable)).thenReturn(groupsExpected);
-        when(pagedResourcesAssembler.toModel(groupsExpected, groupModelAssembler)).thenReturn(resources);
+        when(pagedResourcesAssembler.toModel(groupsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink)).andExpect(status().isOk())
@@ -179,9 +178,9 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler), () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(modelAssembler), () -> verifyNoInteractions(patchUtil),
                 () -> verifyNoInteractions(violationUtil));
     }
 
@@ -228,7 +227,7 @@ class GroupControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findAll(pageable)).thenReturn(groupsExpected);
-        when(pagedResourcesAssembler.toModel(groupsExpected, groupModelAssembler)).thenReturn(resources);
+        when(pagedResourcesAssembler.toModel(groupsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink))
@@ -266,9 +265,9 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findAll(pageable),
                 () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchUtil),
                 () -> verifyNoInteractions(violationUtil));
     }
@@ -306,7 +305,7 @@ class GroupControllerGetMethodTest {
                 pageLink3, pageLink4);
 
         when(groupService.findAll(pageable)).thenReturn(groupsExpected);
-        when(pagedResourcesAssembler.toModel(groupsExpected, groupModelAssembler)).thenReturn(resources);
+        when(pagedResourcesAssembler.toModel(groupsExpected, modelAssembler)).thenReturn(resources);
 
         assertAll(
                 () -> mockMvc.perform(get(firstPageLink))
@@ -321,9 +320,9 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
                         .andExpect(jsonPath("page.number", is(numberExpected))),
                 () -> verify(groupService, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(groupService),
-                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, groupModelAssembler),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(groupsExpected, modelAssembler),
                 () -> verifyNoMoreInteractions(pagedResourcesAssembler),
-                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchUtil),
                 () -> verifyNoInteractions(violationUtil));
     }
@@ -342,7 +341,7 @@ class GroupControllerGetMethodTest {
         String linkWithParameter = GROUP_BASE_PATH + "/" + "{id}";
 
         when(groupService.findById(groupModel.getId())).thenReturn(Optional.of(groupNode));
-        when(groupModelAssembler.toModel(groupNode)).thenReturn(groupModel);
+        when(modelAssembler.toModel(groupNode)).thenReturn(groupModel);
 
         assertAll(() -> mockMvc.perform(get(linkWithParameter, groupModel.getId()))
                         .andExpect(status().isOk())
@@ -382,8 +381,8 @@ class GroupControllerGetMethodTest {
                         .andExpect(
                                 jsonPath("eventsCaused[1].links[1].href", is(groupModel.getEventsCaused().get(1).getLink("target").get().getHref()))),
                 () -> verify(groupService, times(1)).findById(groupModel.getId()), () -> verifyNoMoreInteractions(groupService),
-                () -> verify(groupModelAssembler, times(1)).toModel(groupNode),
-                () -> verifyNoMoreInteractions(groupModelAssembler),
+                () -> verify(modelAssembler, times(1)).toModel(groupNode),
+                () -> verifyNoMoreInteractions(modelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(patchUtil),
                 () -> verifyNoInteractions(violationUtil));
@@ -407,7 +406,7 @@ class GroupControllerGetMethodTest {
                         .andExpect(jsonPath("errors[0]", is("Could not find GroupModel with id: " + groupId + ".")))
                         .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(1))),
                 () -> verify(groupService, times(1)).findById(groupId), () -> verifyNoMoreInteractions(groupService),
-                () -> verifyNoInteractions(groupModelAssembler),
+                () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(patchUtil),
                 () -> verifyNoInteractions(violationUtil));

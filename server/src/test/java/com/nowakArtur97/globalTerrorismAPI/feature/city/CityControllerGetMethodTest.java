@@ -52,8 +52,6 @@ class CityControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<CityModel, CityDTO> cityController;
-
     @Mock
     private GenericService<CityNode, CityDTO> cityService;
 
@@ -82,8 +80,8 @@ class CityControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        cityController = new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchUtil,
-                violationUtil);
+        GenericRestController<CityModel, CityDTO> cityController =
+                new CityController(cityService, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(cityController)
                 .setControllerAdvice(new GenericRestControllerAdvice())

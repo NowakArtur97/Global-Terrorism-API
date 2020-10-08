@@ -38,8 +38,6 @@ class EventControllerDeleteMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<EventModel, EventDTO> eventController;
-
     @Mock
     private GenericService<EventNode, EventDTO> eventService;
 
@@ -68,8 +66,8 @@ class EventControllerDeleteMethodTest {
     @BeforeEach
     private void setUp() {
 
-        eventController = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil,
-                violationUtil);
+        GenericRestController<EventModel, EventDTO> eventController
+                = new EventController(eventService, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(eventController).setControllerAdvice(new GenericRestControllerAdvice())
                 .build();

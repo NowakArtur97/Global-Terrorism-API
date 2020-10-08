@@ -54,8 +54,6 @@ class TargetControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private GenericRestController<TargetModel, TargetDTO> targetController;
-
     @Mock
     private GenericService<TargetNode, TargetDTO> targetService;
 
@@ -86,7 +84,8 @@ class TargetControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        targetController = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
+        GenericRestController<TargetModel, TargetDTO> targetController
+                = new TargetController(targetService, targetModelAssembler, pagedResourcesAssembler,
                 patchUtil, violationUtil);
 
         mockMvc = MockMvcBuilders.standaloneSetup(targetController).setControllerAdvice(new GenericRestControllerAdvice())

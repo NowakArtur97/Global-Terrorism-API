@@ -43,10 +43,6 @@ class UserRegistrationControllerTest {
 
     private MockMvc mockMvc;
 
-    private UserRegistrationController userRegistrationController;
-
-    private RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler;
-
     @Mock
     private UserService userService;
 
@@ -67,9 +63,11 @@ class UserRegistrationControllerTest {
     @BeforeEach
     private void setUp() {
 
-        userRegistrationController = new UserRegistrationController(userService, customUserDetailsService, jwtUtil);
+        UserRegistrationController userRegistrationController
+                = new UserRegistrationController(userService, customUserDetailsService, jwtUtil);
 
-        restResponseGlobalEntityExceptionHandler = new RestResponseGlobalEntityExceptionHandler();
+        RestResponseGlobalEntityExceptionHandler restResponseGlobalEntityExceptionHandler
+                = new RestResponseGlobalEntityExceptionHandler();
 
         mockMvc = MockMvcBuilders.standaloneSetup(userRegistrationController, restResponseGlobalEntityExceptionHandler)
                 .build();

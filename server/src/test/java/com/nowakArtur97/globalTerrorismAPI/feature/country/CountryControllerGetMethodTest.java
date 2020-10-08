@@ -49,8 +49,6 @@ class CountryControllerGetMethodTest {
 
     private MockMvc mockMvc;
 
-    private BasicGenericRestController<CountryModel> countryController;
-
     @Mock
     private BasicGenericService<CountryNode> countryService;
 
@@ -73,7 +71,8 @@ class CountryControllerGetMethodTest {
     @BeforeEach
     private void setUp() {
 
-        countryController = new CountryController(countryService, modelAssembler, pagedResourcesAssembler);
+        BasicGenericRestController<CountryModel> countryController
+                = new CountryController(countryService, modelAssembler, pagedResourcesAssembler);
 
         mockMvc = MockMvcBuilders.standaloneSetup(countryController)
                 .setControllerAdvice(new GenericRestControllerAdvice())
