@@ -20,4 +20,3 @@ public class AuthenticationResponse {
     @ApiModelProperty(notes = "Expiration date on milliseconds")
     private long expirationDateInMilliseconds;
 }
-g
