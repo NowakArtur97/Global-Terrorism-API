@@ -17,6 +17,7 @@
     "@angular/cli": "~10.1.1",
     "@angular/common": "~10.1.1",
     "@angular/compiler": "~10.1.1",
+    "@angular/compiler-cli": "~10.1.1",
     "@angular/core": "~10.1.1",
     "@angular/forms": "~10.1.1",
     "@angular/material": "^10.2.1",
@@ -34,7 +35,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.1",
-    "@angular/compiler-cli": "~10.1.1",
     "@ngrx/store-devtools": "^10.0.0",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
