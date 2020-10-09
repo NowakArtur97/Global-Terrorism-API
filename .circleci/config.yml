@@ -28,15 +28,15 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run:
-          name: Install Neo4j
-          command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
-      - run:
-          name: Wait for Neo4j
-          command: dockerize -wait tcp://localhost:7474 -timeout 1m
-      - run:
-          name: Testing
-          command: mvn test -Dspring-boot.run.profiles=ci
+      # - run:
+      #     name: Install Neo4j
+      #     command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
+      # - run:
+      #     name: Wait for Neo4j
+      #     command: dockerize -wait tcp://localhost:7474 -timeout 1m
+      # - run:
+      #     name: Testing
+      #     command: mvn test -Dspring-boot.run.profiles=ci
   deploy:
     docker:
       - image: circleci/openjdk:11.0.3-jdk-stretch
