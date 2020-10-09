@@ -14,7 +14,8 @@ import * as AuthActions from '../store/auth.actions';
 
 @Injectable({ providedIn: 'root' })
 export default class AuthService {
-  private BASE_URL = 'http://localhost:8080/api/v1';
+  private BASE_URL = 'https://global-terrorism-api.herokuapp.com/api/v1';
+  // private BASE_URL = 'http://localhost:8080/api/v1';
   private userLocaleStorageKey = 'userData';
   private tokenExpirationTimer: any;
 
