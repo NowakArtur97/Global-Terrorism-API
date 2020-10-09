@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, getTestBed, TestBed, tick } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import AppStoreState from 'src/app/store/app.store.state';
@@ -12,8 +9,8 @@ import RegistrationCheckRequest from '../models/registration-check-request.model
 import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import User from '../models/user.model';
-import AuthService from './auth.service';
 import * as AuthActions from '../store/auth.actions';
+import AuthService from './auth.service';
 
 describe('AuthService', () => {
   let injector: TestBed;
@@ -21,7 +18,8 @@ describe('AuthService', () => {
   let store: Store<AppStoreState>;
   let httpMock: HttpTestingController;
 
-  const BASE_URL = 'http://localhost:8080/api/v1';
+  // const BASE_URL = 'http://localhost:8080/api/v1';
+  const BASE_URL = 'https://global-terrorism-api.herokuapp.com/api/v1';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

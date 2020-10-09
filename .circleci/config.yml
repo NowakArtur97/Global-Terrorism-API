@@ -68,15 +68,15 @@ jobs:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      # - run:
-      #     name: Testing
-      #     command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      # - run:
-      #     name: Linting
-      #     command: npm run lint
-      # - run:
-      #     name: End to End Test
-      #     command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      - run:
+          name: Testing
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - run:
+          name: Linting
+          command: npm run lint
+      - run:
+          name: End to End Test
+          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
   frontend-deploy:
     docker:
       - image: circleci/buildpack-deps:trusty
@@ -85,7 +85,7 @@ jobs:
       - checkout:
       - run:
           name: Deploy app on heroku
-          command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_FRONTEND.git master
+          command: git subtree push --prefix client https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_FRONTEND.git master
 workflows:
   version: 2
   build_test_deploy:
