@@ -7,8 +7,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --target=production -e ${NODE_ENV:-production} --aot",
-    "start": "node server.js"
+    "start": "node server.js",
+    "heroku-postbuild": "npm run build:prod"
   },
   "private": true,
   "dependencies": {
