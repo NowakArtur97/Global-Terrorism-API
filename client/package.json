@@ -8,7 +8,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start": "node server.js",
-    "postinstall": "ng build --aot -prod"
+    "preinstall": "npm i -g http-server && npm i -g @angular/cli",
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
