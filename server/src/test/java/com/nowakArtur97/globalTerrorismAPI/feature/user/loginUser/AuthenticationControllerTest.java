@@ -76,6 +76,7 @@ class AuthenticationControllerTest {
                 userName, password);
         User userDetails = new User(userName, password, List.of(new SimpleGrantedAuthority("user")));
         String token = "generated token";
+        int expirationTimeInMilliseconds = 36000000;
 
         when(customUserDetailsService.loadUserByUsername(userName)).thenReturn(userDetails);
         when(jwtUtil.generateToken(userDetails)).thenReturn(token);
@@ -87,7 +88,8 @@ class AuthenticationControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("token", is(token))),
+                        .andExpect(jsonPath("token", is(token)))
+                        .andExpect(jsonPath("expirationTimeInMilliseconds", is(expirationTimeInMilliseconds))),
                 () -> verify(customUserDetailsService, times(1)).loadUserByUsername(userName),
                 () -> verifyNoMoreInteractions(customUserDetailsService),
                 () -> verify(authenticationManager, times(1)).authenticate(usernamePasswordAuthenticationToken),

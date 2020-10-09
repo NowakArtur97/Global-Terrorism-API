@@ -44,7 +44,7 @@ describe('AuthService', () => {
   describe('when login user', () => {
     it('should login user', () => {
       const loginData = new LoginData('username', 'password');
-      const authResponse = new AuthResponse('token', 36000);
+      const authResponse = new AuthResponse('token', 36000000);
 
       authService.loginUser(loginData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -64,7 +64,7 @@ describe('AuthService', () => {
         'pass',
         'pass'
       );
-      const authResponse = new AuthResponse('token', 36000);
+      const authResponse = new AuthResponse('token', 36000000);
 
       authService.registerUser(registrationData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -102,8 +102,8 @@ describe('AuthService', () => {
       const userData: {
         _token: string;
         _expirationDateInMilliseconds: number;
-      } = { _token: 'token', _expirationDateInMilliseconds: 36000 };
-      const userExpected = new User('token', 36000);
+      } = { _token: 'token', _expirationDateInMilliseconds: 36000000 };
+      const userExpected = new User('token', 36000000);
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
         JSON.stringify(userData)
@@ -133,7 +133,7 @@ describe('AuthService', () => {
 
   describe('when save user in local storage', () => {
     it('should save user in local storage', () => {
-      const user = new User('token', 36000);
+      const user = new User('token', 36000000);
 
       spyOn(localStorage, 'setItem').and.callFake(() => JSON.stringify(user));
 

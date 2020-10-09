@@ -77,10 +77,10 @@ export default class AuthService {
     localStorage.setItem(this.userLocaleStorageKey, JSON.stringify(user));
   }
 
-  setLogoutTimer(expirationDateInMilliseconds: number): void {
+  setLogoutTimer(expirationTimeInMilliseconds: number): void {
     this.tokenExpirationTimer = setTimeout(() => {
       this.store.dispatch(AuthActions.logoutUser());
-    }, expirationDateInMilliseconds);
+    }, expirationTimeInMilliseconds);
   }
 
   clearLogoutTimer(): void {

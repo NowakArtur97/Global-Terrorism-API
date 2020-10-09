@@ -19,8 +19,8 @@ const mockRegistrationData = new RegistrationData(
   'password',
   'password'
 );
-const mockUser = new User('secret token', 36000);
-const mockAuthResponse = new AuthResponse('secret token', 36000);
+const mockUser = new User('secret token', 36000000);
+const mockAuthResponse = new AuthResponse('secret token', 36000000);
 const mockErrorResponse = new HttpErrorResponse({
   error: {
     errors: [new ErrorResponse(['Error message.'], 401, new Date())],

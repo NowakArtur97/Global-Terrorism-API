@@ -56,6 +56,8 @@ class UserRegistrationControllerWithCustomValidationTest {
         UserDTO userDTO = (UserDTO) userBuilder.withUserName("validUser").withEmail("validUser123@email.com")
                 .withPassword("ValidPassword123!").withMatchingPassword("ValidPassword123!").build(ObjectType.DTO);
 
+        int expirationTimeInMilliseconds = 36000000;
+
         assertAll(
                 () -> mockMvc
                         .perform(post(REGISTRATION_BASE_PATH)
@@ -63,7 +65,8 @@ class UserRegistrationControllerWithCustomValidationTest {
                                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("token", notNullValue())));
+                        .andExpect(jsonPath("token", notNullValue()))
+                        .andExpect(jsonPath("expirationTimeInMilliseconds", is(expirationTimeInMilliseconds))));
     }
 
     @Test

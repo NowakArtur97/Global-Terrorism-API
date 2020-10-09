@@ -1,14 +1,14 @@
 export default class AuthResponse {
   constructor(
     private readonly _token: string,
-    private readonly _expirationDateInMilliseconds: number
+    private readonly _expirationTimeInMilliseconds: number
   ) {}
 
   public get token(): string {
     return this._token;
   }
 
-  public get expirationDateInMilliseconds(): number {
-    return this._expirationDateInMilliseconds;
+  public get expirationTimeInMilliseconds(): number {
+    return this._expirationTimeInMilliseconds;
   }
 }

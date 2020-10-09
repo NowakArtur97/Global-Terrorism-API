@@ -87,6 +87,7 @@ class UserRegistrationControllerTest {
                     authorities);
 
             String token = "generatedToken";
+            int expirationTimeInMilliseconds = 36000000;
 
             when(userService.register(userDTO)).thenReturn(userNode);
             when(customUserDetailsService.getAuthorities(userNode.getRoles())).thenReturn(authorities);
@@ -99,7 +100,8 @@ class UserRegistrationControllerTest {
                                     .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                             .andExpect(status().isOk())
                             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                            .andExpect(jsonPath("token", is(token))),
+                            .andExpect(jsonPath("token", is(token)))
+                            .andExpect(jsonPath("expirationTimeInMilliseconds", is(expirationTimeInMilliseconds))),
                     () -> verify(userService, times(1)).register(userDTO),
                     () -> verifyNoMoreInteractions(userService),
                     () -> verify(customUserDetailsService, times(1)).getAuthorities(userNode.getRoles()),
