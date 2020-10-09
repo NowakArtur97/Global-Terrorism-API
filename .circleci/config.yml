@@ -28,27 +28,27 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-      # - run:
-      #     name: Install Neo4j
-      #     command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
-      # - run:
-      #     name: Wait for Neo4j
-      #     command: dockerize -wait tcp://localhost:7474 -timeout 1m
-      # - run:
-      #     name: Testing
-      #     command: mvn test -Dspring-boot.run.profiles=ci
-  # backend-deploy:
-  #   docker:
-  #     - image: circleci/openjdk:11.0.3-jdk-stretch
-  #     - image: circleci/buildpack-deps:trusty
-  #   working_directory: ~/global_terrorism_api/server
-  #   environment:
-  #     MAVEN_OPTS: -Xmx3200m
-  #   steps:
-  #     - checkout:
-  #     - run:
-  #         name: Deploy app on heroku
-  #         command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_BACKEND.git master
+      - run:
+          name: Install Neo4j
+          command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
+      - run:
+          name: Wait for Neo4j
+          command: dockerize -wait tcp://localhost:7474 -timeout 1m
+      - run:
+          name: Testing
+          command: mvn test -Dspring-boot.run.profiles=ci
+  backend-deploy:
+    docker:
+      - image: circleci/openjdk:11.0.3-jdk-stretch
+      - image: circleci/buildpack-deps:trusty
+    working_directory: ~/global_terrorism_api/server
+    environment:
+      MAVEN_OPTS: -Xmx3200m
+    steps:
+      - checkout:
+      - run:
+          name: Deploy app on heroku
+          command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_BACKEND.git master
   frontend-tests:
     working_directory: ~/global_terrorism_api/client
     docker:
@@ -86,19 +86,21 @@ jobs:
       - run:
           name: Deploy app on heroku
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_FRONTEND.git master
-          # command: git subtree push --prefix client https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_FRONTEND.git master
 workflows:
   version: 2
   build_test_deploy:
     jobs:
       - backend-tests
       - frontend-tests
-      # - backend-deploy:
-      #     requires:
-      #       - backend-tests
+      - backend-deploy:
+          requires:
+            - backend-tests
+          filters:
+            branches:
+              only: master
       - frontend-deploy:
           requires:
             - frontend-tests
-        # filters:
-        #   branches:
-        #     only: master
+          filters:
+            branches:
+              only: master
