@@ -7,6 +7,8 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("UserRegistrationController_Tests")
+@DisabledOnOs(OS.LINUX)
 class UserRegistrationControllerWithCustomValidationTest {
 
     private final String AUTHENTICATION_BASE_PATH = "http://localhost:8080/api/v1/registration";
