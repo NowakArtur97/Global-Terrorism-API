@@ -20,9 +20,11 @@ An application that allows you to track terrorist attacks around the world, crea
 The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/ 
 It may take a while for the application to start.
 
-# Setup
+To log in as a user please provide:
+- User name: testuser
+- Password: Password123!
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.1.
+# Setup
 
 ## Development server
 
@@ -42,16 +44,16 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 
 ## Built With
 
-- angular: - 10.1.1
-- ngrx/store - 10.0.0
-- ngrx/effects - 10.0.0
-- ngrx/store-devtools - 10.0.0
-- leaflet - 1.7.1
-- rxjs - 6.6.0
-- typescript - 4.0.2
-- jasmine
-- karma
-- protractor
+- AngularJS: - 10.1.1
+- NgRx Store - 10.0.0
+- NgRx Effects - 10.0.0
+- NgRx Store-Devtools - 10.0.0
+- Leaflet - 1.7.1
+- Rxjs - 6.6.0
+- Typescript - 4.0.2
+- Jasmine - 3.6.0
+- Karma - 5.0.0
+- Protractor - 7.0.0
 
 ## Features
 
@@ -60,7 +62,7 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 
 ## To Do
 
-- Adding events / goals / groups
+- Adding events/goals/groups
 - Sorting and searching for events
 - Viewing charts and statistics about events
 
@@ -70,6 +72,6 @@ Project is: in progress
 
 ## Screenshots
 
-![Documentation](./screenshots/map.JPG)
+![Map](./screenshots/map.JPG)
 
 Main view with marked cities

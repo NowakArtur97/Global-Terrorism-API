@@ -26,6 +26,8 @@ The application demo is available on the Heroku platform: https://global-terrori
 To access the endpoints you must have an account. You can use the previously prepared account:
 
 ```json
+# POST /api/v1/authentication
+# Content-Type: application/json
 {
   "userName": "testuser",
   "password": "Password123!",
