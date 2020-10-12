@@ -38,8 +38,10 @@ To access the API endpoints use the previously prepared account:
 It may take a while for the applications to start.
 
 Please see the README for specific applications for more information.
-Backend: https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server
-Frontend: https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
+Backend: 
+https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server
+Frontend: 
+https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
 
 ## Built With
 
@@ -81,7 +83,7 @@ Project is: in progress
 
 ## Screenshots
 
-![Map](./client/screenshots/map.JPG)
+![Map](./client/screenshots/map.jpg)
 
 Main view with marked cities
 

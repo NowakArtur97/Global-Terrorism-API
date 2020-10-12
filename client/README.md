@@ -72,6 +72,6 @@ Project is: in progress
 
 ## Screenshots
 
-![Map](./screenshots/map.JPG)
+![Map](./screenshots/map.jpg)
 
 Main view with marked cities
