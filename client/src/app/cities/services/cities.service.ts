@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import CitiesGetResponse from '../models/cities-get-response.model';
 
@@ -10,7 +11,7 @@ export default class CitiesService {
 
   getCities(): Observable<CitiesGetResponse> {
     return this.httpClient.get<CitiesGetResponse>(
-      'http://localhost:8080/api/v1/cities?page=0&size=50'
+      `${environment.baseApiUrl}/cities?page=0&size=50`
     );
   }
 }
