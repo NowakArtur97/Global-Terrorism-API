@@ -12,6 +12,7 @@
           <input
             id="userName"
             type="type"
+            autocomplete="on"
             formControlName="userName"
             matInput
           />
@@ -33,7 +34,13 @@
 
         <mat-form-field>
           <mat-label for="email">Email</mat-label>
-          <input id="email" type="email" formControlName="email" matInput />
+          <input
+            id="email"
+            type="email"
+            autocomplete="on"
+            formControlName="email"
+            matInput
+          />
           <mat-error *ngIf="email.invalid && (email.touched || email.dirty)">
             <p *ngIf="email.errors.email">
               Email must be a <strong>valid</strong> email address.
@@ -52,6 +59,7 @@
           <input
             id="password"
             type="password"
+            autocomplete="on"
             formControlName="password"
             matInput
           />
@@ -123,6 +131,7 @@
           <input
             id="matchingPassword"
             type="password"
+            autocomplete="on"
             formControlName="matchingPassword"
             matInput
           />
