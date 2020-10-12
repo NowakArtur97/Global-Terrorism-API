@@ -4,6 +4,7 @@
 
 - [General info](#general-info)
 - [Demo](#demo)
+- [Setup](#setup)
 - [Built With](#built-with)
 - [Features](#features)
 - [To Do](#to-do)
@@ -282,4 +283,4 @@ Project is: in progress
 
 ![Documentation](./screenshots/documentation.png)
 
-<p style="text-align: center">Documentation using Swagger 2</p>
+Documentation using Swagger 2

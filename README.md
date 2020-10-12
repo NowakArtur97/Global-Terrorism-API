@@ -4,6 +4,7 @@
 
 - [General info](#general-info)
 - [Demo](#demo)
+- [Setup](#setup)
 - [Built With](#built-with)
 - [Features](#features)
 - [To Do](#to-do)
