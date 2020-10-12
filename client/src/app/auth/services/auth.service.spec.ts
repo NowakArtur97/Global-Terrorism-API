@@ -18,8 +18,7 @@ describe('AuthService', () => {
   let store: Store<AppStoreState>;
   let httpMock: HttpTestingController;
 
-  // const BASE_URL = 'http://localhost:8080/api/v1';
-  const BASE_URL = 'https://global-terrorism-api.herokuapp.com/api/v1';
+  const BASE_URL = 'http://localhost:8080/api/v1';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
