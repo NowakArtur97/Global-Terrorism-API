@@ -22,13 +22,13 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
     @ApiModelProperty(notes = "The unique id of the Event")
     private Long id;
 
-    @ApiModelProperty(notes = "The events's summary")
+    @ApiModelProperty(notes = "The event's summary")
     private String summary;
 
-    @ApiModelProperty(notes = "The events's motive")
+    @ApiModelProperty(notes = "The event's motive")
     private String motive;
 
-    @ApiModelProperty(notes = "The events's date")
+    @ApiModelProperty(notes = "The event's date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
 
