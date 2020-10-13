@@ -68,7 +68,7 @@ Backend:
 Frontend:
 - AngularJS - 10.1.1
 - Typescript - 4.0.2
-- Rxjs - 6.6.0
+- RxJS - 6.6.0
 - NgRx Store - 10.0.0
 - NgRx Effects - 10.0.0
 - NgRx Store-Devtools - 10.0.0
