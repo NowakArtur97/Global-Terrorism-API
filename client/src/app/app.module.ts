@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import AuthModule from './auth/auth.module';
 import CitiesModule from './cities/cities.module';
 import { CoreModule } from './core.module';
+import { EventsModule } from './events/events.module';
 import MapModule from './map/map.module';
 import { MaterialModule } from './material/material.module';
 
@@ -34,6 +35,7 @@ import { MaterialModule } from './material/material.module';
 
     CoreModule,
     CitiesModule,
+    EventsModule,
     MapModule,
     AuthModule,
   ],
