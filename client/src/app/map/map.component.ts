@@ -34,7 +34,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.citiesSubscription = this.store
-      .select('cities')
+      .select('city')
       .pipe(map((citiesState) => citiesState.cities))
       .subscribe((cities: City[]) => {
         this.cities = cities;

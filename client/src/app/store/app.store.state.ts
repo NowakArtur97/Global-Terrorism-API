@@ -1,7 +1,9 @@
 import AuthStoreState from '../auth/store/auth.store.state';
-import CitiesStoreState from '../cities/store/cities.store.state';
+import CityStoreState from '../cities/store/city.store.state';
+import EventStoreState from '../events/store/event.store.state';
 
 export default interface AppStoreState {
-  cities: CitiesStoreState;
   auth: AuthStoreState;
+  city: CityStoreState;
+  event: EventStoreState;
 }

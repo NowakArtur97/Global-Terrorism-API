@@ -11,9 +11,9 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import AuthModule from './auth/auth.module';
-import CitiesModule from './cities/cities.module';
+import CityModule from './cities/city.module';
 import { CoreModule } from './core.module';
-import { EventsModule } from './events/events.module';
+import EventModule from './events/event.module';
 import MapModule from './map/map.module';
 import { MaterialModule } from './material/material.module';
 
@@ -34,8 +34,8 @@ import { MaterialModule } from './material/material.module';
     MaterialModule,
 
     CoreModule,
-    CitiesModule,
-    EventsModule,
+    CityModule,
+    EventModule,
     MapModule,
     AuthModule,
   ],

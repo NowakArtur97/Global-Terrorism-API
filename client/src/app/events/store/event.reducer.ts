@@ -20,7 +20,7 @@ const _eventReducer = createReducer(
   }))
 );
 
-export default function citiesReducer(
+export default function eventReducer(
   state: EventStoreState,
   action: Action
 ): EventStoreState {

@@ -2,7 +2,7 @@ import City from 'src/app/cities/models/city.model';
 
 export default class Event {
   constructor(
-    private _id: number,
+    private readonly _id: number,
     private _summary: string,
     private _motive: string,
     private _date: Date,

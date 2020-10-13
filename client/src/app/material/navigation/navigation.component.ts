@@ -8,7 +8,7 @@ import { RegistrationComponent } from 'src/app/auth/registration/registration.co
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
-import * as CitiesActions from '../../cities/store/cities.actions';
+import * as CitiesActions from '../../cities/store/city.actions';
 
 @Component({
   selector: 'app-navigation',

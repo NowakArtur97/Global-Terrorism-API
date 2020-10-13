@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import CitiesGetResponse from '../models/cities-get-response.model';
 
 @Injectable({ providedIn: 'root' })
-export default class CitiesService {
+export default class CityService {
   constructor(private httpClient: HttpClient) {}
 
   getCities(): Observable<CitiesGetResponse> {

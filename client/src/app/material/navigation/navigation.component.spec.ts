@@ -16,7 +16,7 @@ import AuthService from 'src/app/auth/services/auth.service';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
-import * as CitiesActions from '../../cities/store/cities.actions';
+import * as CitiesActions from '../../cities/store/city.actions';
 import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {

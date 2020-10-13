@@ -3,11 +3,11 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import CitiesGetResponse from '../models/cities-get-response.model';
 import City from '../models/city.model';
-import CitiesService from './cities.service';
+import CityService from './city.service';
 
-describe('citiesService', () => {
+describe('cityService', () => {
   let injector: TestBed;
-  let citiesService: CitiesService;
+  let citService: CityService;
   let httpMock: HttpTestingController;
 
   const BASE_URL = 'http://localhost:8080/api/v1/cities';
@@ -15,13 +15,13 @@ describe('citiesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [CitiesService],
+      providers: [CityService],
     });
   });
 
   beforeEach(() => {
     injector = getTestBed();
-    citiesService = injector.inject(CitiesService);
+    citService = injector.inject(CityService);
     httpMock = injector.inject(HttpTestingController);
   });
 
@@ -35,7 +35,7 @@ describe('citiesService', () => {
         content: [new City(1, 'city1', 10, 12), new City(2, 'city2', 20, 22)],
       };
 
-      citiesService.getCities().subscribe((res) => {
+      citService.getCities().subscribe((res) => {
         expect(res).toEqual(cities);
       });
 

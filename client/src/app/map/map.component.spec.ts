@@ -24,7 +24,7 @@ describe('MapComponent', () => {
 
     store = TestBed.inject(Store);
     spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === 'cities') {
+      if (selector === 'city') {
         return of([]);
       }
     });
