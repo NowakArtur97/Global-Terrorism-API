@@ -1,25 +1,25 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="(isHandset$ | async) === false"
-  >
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
+<div class="app-content">
+  <mat-toolbar color="primary">
+    <div fxShow="true" fxHide.gt-sm="true">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <a mat-button class="app-name" routerLink="/">
+      <span>Global Terrorism Tracker</span>
+    </a>
+    <span class="spacer"></span>
+    <div fxShow="true" fxHide.lt-md="true">
       <a
-        mat-list-item
+        mat-button
         href="#"
         [routerLink]=""
         (click)="onOpenPopUp('login')"
         *ngIf="!isAuthenticated"
+        >Login</a
       >
-        Login
-      </a>
       <a
-        mat-list-item
+        mat-button
         href="#"
         [routerLink]=""
         (click)="onOpenPopUp('registration')"
@@ -27,32 +27,59 @@
       >
         Register
       </a>
-      <a mat-list-item href="#" routerLink="/map">Map</a>
-      <a mat-list-item href="#" *ngIf="isAuthenticated">Statistics</a>
-      <a mat-list-item href="#" *ngIf="isAuthenticated">Add</a>
+      <a mat-button href="#" routerLink="map">Map</a>
       <a
-        mat-list-item
+        mat-button
         href="#"
         [routerLink]=""
         (click)="onLogout()"
         *ngIf="isAuthenticated"
-        >Logout</a
       >
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
-      >
-        <mat-icon aria-label="Side nav toggle icon">Menu</mat-icon>
-      </button>
-      <span>Map</span>
-    </mat-toolbar>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+        Logout
+      </a>
+    </div>
+  </mat-toolbar>
+  <mat-sidenav-container fxFlexFill class="example-container">
+    <mat-sidenav
+      color="primary"
+      #sidenav
+      fxLayout="column"
+      mode="over"
+      opened="false"
+      fxHide.gt-sm="true"
+    >
+      <div fxLayout="column">
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onOpenPopUp('login')"
+          *ngIf="!isAuthenticated"
+          >Login</a
+        >
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onOpenPopUp('registration')"
+          *ngIf="!isAuthenticated"
+        >
+          Register
+        </a>
+        <a mat-button href="#" routerLink="map">Map</a>
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onLogout()"
+          *ngIf="isAuthenticated"
+        >
+          Logout
+        </a>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content fxFlexFill>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
