@@ -1,5 +1,0 @@
-[1008/082731.442:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie mo¿e odnaleŸæ okreœlonej œcie¿ki. (0x3)
-[1013/170004.077:ERROR:process_reader_win.cc(151)] SuspendThread: Odmowa dostêpu. (0x5)
-[1013/170004.078:ERROR:process_reader_win.cc(151)] SuspendThread: Odmowa dostêpu. (0x5)
-[1013/170004.078:ERROR:process_reader_win.cc(151)] SuspendThread: Odmowa dostêpu. (0x5)
-[1013/170004.078:ERROR:exception_snapshot_win.cc(99)] thread ID 9044 not found in process
