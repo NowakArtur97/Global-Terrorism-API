@@ -12,6 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
+import { NavComponent } from './nav/nav.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
 const materialComponents = [
@@ -28,8 +29,8 @@ const materialComponents = [
 ];
 
 @NgModule({
-  declarations: [NavigationComponent],
+  declarations: [NavigationComponent, NavComponent],
   imports: [CommonModule, RouterModule, materialComponents],
-  exports: [NavigationComponent, materialComponents],
+  exports: [NavComponent, materialComponents],
 })
 export class MaterialModule {}

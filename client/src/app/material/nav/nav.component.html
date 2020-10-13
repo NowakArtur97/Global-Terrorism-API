@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <h1>Global Terrorism Tracker</h1>
+    <span class="menu-spacer"></span>
+    <div>
+      <a
+        mat-button
+        href="#"
+        [routerLink]="'/'"
+        (click)="onOpenPopUp('login')"
+        *ngIf="!isAuthenticated"
+      >
+        Login
+      </a>
+      <a
+        mat-button
+        href="#"
+        [routerLink]="'/'"
+        (click)="onOpenPopUp('registration')"
+        *ngIf="!isAuthenticated"
+      >
+        Register
+      </a>
+      <a mat-button href="#" [routerLink]="'/map'"> Map </a>
+      <a
+        mat-button
+        href="#"
+        [routerLink]=""
+        (click)="onLogout()"
+        *ngIf="isAuthenticated"
+      >
+        Logout
+      </a>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
