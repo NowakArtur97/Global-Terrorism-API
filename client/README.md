@@ -44,13 +44,14 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 
 ## Built With
 
-- AngularJS: - 10.1.1
+- AngularJS - 10.1.1
+- Typescript - 4.0.2
+- Rxjs - 6.6.0
 - NgRx Store - 10.0.0
 - NgRx Effects - 10.0.0
 - NgRx Store-Devtools - 10.0.0
+- Angular Material  - 10.2.1
 - Leaflet - 1.7.1
-- Rxjs - 6.6.0
-- Typescript - 4.0.2
 - Jasmine - 3.6.0
 - Karma - 5.0.0
 - Protractor - 7.0.0
