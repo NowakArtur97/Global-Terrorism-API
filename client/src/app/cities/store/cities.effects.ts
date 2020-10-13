@@ -14,7 +14,7 @@ export default class CitiesEffects {
 
   fetchCities$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CitiesActions.fetchCitites),
+      ofType(CitiesActions.fetchCities),
       switchMap(() => this.citiesService.getCities()),
       map((response) => response.content),
       map((cities) => CitiesActions.setCities({ cities }))

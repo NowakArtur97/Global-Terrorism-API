@@ -11,4 +11,4 @@ export const setCities = createAction(
 
 export const resetCities = createAction('[City] Reset Cities');
 
-export const fetchCitites = createAction('[City] Fetch Cities');
+export const fetchCities = createAction('[City] Fetch Cities');

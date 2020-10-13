@@ -38,7 +38,7 @@ describe('CitiesEffects', () => {
   describe('fetchCities$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
-      actions$.next(CitiesActions.fetchCitites());
+      actions$.next(CitiesActions.fetchCities());
       (citiesService.getCities as jasmine.Spy).and.returnValue(of(mockCities));
     });
 
