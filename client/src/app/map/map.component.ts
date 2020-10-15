@@ -1,24 +1,33 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import User from '../auth/models/user.model';
 import City from '../city/models/city.model';
 
 import AppStoreState from '../store/app.store.state';
 import MarkerService from './marker.service';
-
+import * as CityActions from '../city/store/city.actions';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
-  cities: City[] = [];
-  citiesSubscription$: Subscription;
   private map: L.Map;
   private markers: L.Marker[] = [];
+  cities: City[] = [];
+  citiesSubscription$: Subscription;
+  userSubscription$: Subscription;
 
   icon = icon({
     iconSize: [25, 41],
@@ -38,16 +47,32 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         map((cityState) => cityState.cities),
         tap((cities) => {
-          if (this.map && cities?.length === 0) {
+          if (this.map && cities.length === 0) {
             this.markers.forEach((marker) => this.map.removeLayer(marker));
           }
         })
       )
-      .subscribe((cities: City[]) => (this.cities = cities));
+      .subscribe((cities: City[]) => {
+        this.cities = cities;
+
+        if (this.map && cities.length !== 0) {
+          this.showMarkers();
+        }
+      });
+
+    this.userSubscription$ = this.store
+      .select('auth')
+      .pipe(map((authState) => authState.user))
+      .subscribe((user: User) => {
+        if (user) {
+          this.store.dispatch(CityActions.fetchCities());
+        }
+      });
   }
 
   ngOnDestroy(): void {
-    this.citiesSubscription$.unsubscribe();
+    this.citiesSubscription$?.unsubscribe();
+    this.userSubscription$?.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -68,8 +93,10 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
     );
-
     tiles.addTo(this.map);
+  }
+
+  private showMarkers(): void {
     this.markers = this.markerService.showMarkers(this.cities, this.map);
   }
 }
