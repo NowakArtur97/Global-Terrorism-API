@@ -16,7 +16,8 @@ import AuthService from 'src/app/auth/services/auth.service';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
-import * as CitiesActions from '../../city/store/city.actions';
+import * as CityActions from '../../city/store/city.actions';
+import * as EventActions from '../../event/store/event.actions';
 import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
@@ -77,11 +78,12 @@ describe('NavigationComponent', () => {
   });
 
   describe('when logout user', () => {
-    it('should dispatch logoutUser and resetCities actions', () => {
+    it('should dispatch logoutUser, resetCities and resetEvents actions', () => {
       component.onLogout();
 
       expect(store.dispatch).toHaveBeenCalledWith(AuthActions.logoutUser());
-      expect(store.dispatch).toHaveBeenCalledWith(CitiesActions.resetCities());
+      expect(store.dispatch).toHaveBeenCalledWith(CityActions.resetCities());
+      expect(store.dispatch).toHaveBeenCalledWith(EventActions.resetEvents());
     });
   });
 
