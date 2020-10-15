@@ -17,7 +17,7 @@ describe('cityReducer', () => {
   describe('CityActions.setCities', () => {
     it('should store cities', () => {
       const action = CityActions.setCities({ cities });
-      const actualState = cityReducer(initialStateWithCities, action);
+      const actualState = cityReducer(initialState, action);
       const expectedState = { ...initialStateWithCities };
 
       expect(actualState).toEqual(expectedState);
