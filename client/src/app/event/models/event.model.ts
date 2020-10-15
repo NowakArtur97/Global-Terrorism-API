@@ -1,4 +1,4 @@
-import City from 'src/app/cities/models/city.model';
+import City from 'src/app/city/models/city.model';
 
 export default class Event {
   constructor(

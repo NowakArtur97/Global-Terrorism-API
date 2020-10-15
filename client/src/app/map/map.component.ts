@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import City from '../cities/models/city.model';
+import City from '../city/models/city.model';
 
 import AppStoreState from '../store/app.store.state';
 import MarkerService from './marker.service';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { marker } from 'leaflet';
 import * as L from 'leaflet';
-import City from 'src/app/cities/models/city.model';
+import City from 'src/app/city/models/city.model';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {

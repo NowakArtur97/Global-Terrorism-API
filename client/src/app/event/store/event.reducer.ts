@@ -16,7 +16,7 @@ const _eventReducer = createReducer(
 
   on(EventActions.resetEvents, (state) => ({
     ...state,
-    cities: [],
+    events: [],
   }))
 );
 

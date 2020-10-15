@@ -8,7 +8,8 @@ import { RegistrationComponent } from 'src/app/auth/registration/registration.co
 import AppStoreState from 'src/app/store/app.store.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
-import * as CitiesActions from '../../cities/store/city.actions';
+import * as CityActions from '../../city/store/city.actions';
+import * as EventActions from '../../event/store/event.actions';
 
 @Component({
   selector: 'app-navigation',
@@ -57,6 +58,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logoutUser());
-    this.store.dispatch(CitiesActions.resetCities());
+    this.store.dispatch(CityActions.resetCities());
+    this.store.dispatch(EventActions.resetEvents());
   }
 }
