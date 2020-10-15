@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import City from '../city/models/city.model';
 
 import AppStoreState from '../store/app.store.state';
@@ -16,7 +16,7 @@ import MarkerService from './marker.service';
 })
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   cities: City[] = [];
-  citiesSubscription: Subscription;
+  citiesSubscription$: Subscription;
   private map: L.Map;
   private markers: L.Marker[] = [];
 
@@ -33,19 +33,21 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.citiesSubscription = this.store
+    this.citiesSubscription$ = this.store
       .select('city')
-      .pipe(map((citiesState) => citiesState.cities))
-      .subscribe((cities: City[]) => {
-        this.cities = cities;
-        if (this.map && cities && cities.length === 0) {
-          this.markers.forEach((marker) => this.map.removeLayer(marker));
-        }
-      });
+      .pipe(
+        map((cityState) => cityState.cities),
+        tap((cities) => {
+          if (this.map && cities?.length === 0) {
+            this.markers.forEach((marker) => this.map.removeLayer(marker));
+          }
+        })
+      )
+      .subscribe((cities: City[]) => (this.cities = cities));
   }
 
   ngOnDestroy(): void {
-    this.citiesSubscription.unsubscribe();
+    this.citiesSubscription$.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -68,7 +70,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     tiles.addTo(this.map);
-
     this.markers = this.markerService.showMarkers(this.cities, this.map);
   }
 }

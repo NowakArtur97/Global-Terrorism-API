@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import AppStoreState from 'src/app/store/app.store.state';
@@ -13,17 +18,17 @@ import * as AuthActions from '../store/auth.actions';
   styleUrls: ['./authentication.component.css'],
 })
 export class AuthenticationComponent implements OnInit, OnDestroy {
+  private authErrorsSubscription$: Subscription;
   loginForm: FormGroup;
   authErrors: string[] = [];
   isLoading = false;
-  private authErrorsSubscription: Subscription;
 
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
 
-    this.authErrorsSubscription = this.store
+    this.authErrorsSubscription$ = this.store
       .select('auth')
       .subscribe((authState) => {
         this.authErrors = authState.authErrorMessages;
@@ -32,7 +37,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.authErrorsSubscription.unsubscribe();
+    this.authErrorsSubscription$.unsubscribe();
   }
 
   initForm(): void {

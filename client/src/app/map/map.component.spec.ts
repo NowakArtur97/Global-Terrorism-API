@@ -34,7 +34,7 @@ describe('MapComponent', () => {
   });
 
   describe('when initialize component', () => {
-    it('should select citites from store', () => {
+    it('should select cities from store', () => {
       expect(store.select).toHaveBeenCalled();
     });
   });

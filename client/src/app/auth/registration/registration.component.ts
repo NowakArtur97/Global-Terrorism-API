@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import CommonValidators from 'src/app/shared/validators/common.validator';
@@ -17,11 +22,8 @@ import UserDataValidators from './validators/user-data.validator';
   styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  private authErrorsSubscription: Subscription;
-  private userNameSubscription: Subscription;
-  private passwordChangesSubscription: Subscription;
-  private matchingPasswordChangesSubscription: Subscription;
-  private userEmailSubscription: Subscription;
+  private authErrorsSubscription$: Subscription;
+  private registerFormSubscriptions$: Subscription;
   registerForm: FormGroup;
   authErrors: string[] = [];
   isLoading = false;
@@ -32,7 +34,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.authErrorsSubscription = this.store
+    this.authErrorsSubscription$ = this.store
       .select('auth')
       .subscribe((authState) => {
         this.authErrors = authState.authErrorMessages;
@@ -43,11 +45,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.authErrorsSubscription?.unsubscribe();
-    this.userNameSubscription?.unsubscribe();
-    this.matchingPasswordChangesSubscription?.unsubscribe();
-    this.passwordChangesSubscription?.unsubscribe();
-    this.userEmailSubscription?.unsubscribe();
+    this.authErrorsSubscription$?.unsubscribe();
+    this.registerFormSubscriptions$?.unsubscribe();
   }
 
   initForm(): void {
@@ -96,8 +95,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   setupFormSubscriptions(): void {
-    this.userNameSubscription = this.registerForm.controls.userName.valueChanges.subscribe(
-      () => {
+    this.registerFormSubscriptions$.add(
+      this.registerForm.controls.userName.valueChanges.subscribe(() => {
         this.email.updateValueAndValidity({
           emitEvent: false,
         });
@@ -107,26 +106,28 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.matchingPassword.updateValueAndValidity({
           emitEvent: false,
         });
-      }
+      })
     );
-    this.userEmailSubscription = this.registerForm.controls.email.valueChanges.subscribe(
-      () => {
+    this.registerFormSubscriptions$.add(
+      this.registerForm.controls.email.valueChanges.subscribe(() => {
         this.userName.updateValueAndValidity({
           emitEvent: false,
         });
-      }
+      })
     );
-    this.passwordChangesSubscription = this.registerForm.controls.password.valueChanges.subscribe(
-      () =>
+    this.registerFormSubscriptions$.add(
+      this.registerForm.controls.password.valueChanges.subscribe(() =>
         this.matchingPassword.updateValueAndValidity({
           emitEvent: false,
         })
+      )
     );
-    this.matchingPasswordChangesSubscription = this.registerForm.controls.matchingPassword.valueChanges.subscribe(
-      () =>
+    this.registerFormSubscriptions$.add(
+      this.registerForm.controls.matchingPassword.valueChanges.subscribe(() =>
         this.password.updateValueAndValidity({
           emitEvent: false,
         })
+      )
     );
   }
 
