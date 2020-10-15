@@ -24,7 +24,7 @@ describe('CityEffects', () => {
         provideMockActions(() => actions$),
         {
           provide: CityService,
-          useValue: jasmine.createSpyObj('cityService', ['getCities']),
+          useValue: jasmine.createSpyObj('cityService', ['getAll']),
         },
       ],
     })
@@ -39,7 +39,7 @@ describe('CityEffects', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(CityActions.fetchCities());
-      (cityService.getCities as jasmine.Spy).and.returnValue(of(mockCities));
+      (cityService.getAll as jasmine.Spy).and.returnValue(of(mockCities));
     });
 
     it('should return a setCities action', () => {
@@ -47,7 +47,7 @@ describe('CityEffects', () => {
         expect(resultAction).toEqual(
           CityActions.setCities({ cities: mockCities.content })
         );
-        expect(cityService.getCities).toHaveBeenCalled();
+        expect(cityService.getAll).toHaveBeenCalled();
       });
     });
   });

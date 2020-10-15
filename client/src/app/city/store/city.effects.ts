@@ -12,7 +12,7 @@ export default class CityEffects {
   fetchCities$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CityActions.fetchCities),
-      switchMap(() => this.cityService.getCities()),
+      switchMap(() => this.cityService.getAll()),
       map((response) => response.content),
       map((cities) => CityActions.setCities({ cities }))
     )

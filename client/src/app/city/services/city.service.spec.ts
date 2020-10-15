@@ -35,7 +35,7 @@ describe('cityService', () => {
         content: [new City(1, 'city1', 10, 12), new City(2, 'city2', 20, 22)],
       };
 
-      citService.getCities().subscribe((res) => {
+      citService.getAll().subscribe((res) => {
         expect(res).toEqual(cities);
       });
 
