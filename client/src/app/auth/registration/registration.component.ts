@@ -23,7 +23,7 @@ import UserDataValidators from './validators/user-data.validator';
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
   private authErrorsSubscription$: Subscription;
-  private registerFormSubscriptions$: Subscription;
+  private registerFormSubscriptions$ = new Subscription();
   registerForm: FormGroup;
   authErrors: string[] = [];
   isLoading = false;
@@ -46,7 +46,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authErrorsSubscription$?.unsubscribe();
-    this.registerFormSubscriptions$?.unsubscribe();
+    this.registerFormSubscriptions$.unsubscribe();
   }
 
   initForm(): void {
