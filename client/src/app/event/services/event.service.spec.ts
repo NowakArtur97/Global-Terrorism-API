@@ -57,7 +57,7 @@ describe('eventsService', () => {
         ],
       };
 
-      eventService.getEvents().subscribe((res) => {
+      eventService.getAll().subscribe((res) => {
         expect(res).toEqual(events);
       });
 

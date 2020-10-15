@@ -46,7 +46,7 @@ describe('EventEffects', () => {
         provideMockActions(() => actions$),
         {
           provide: EventService,
-          useValue: jasmine.createSpyObj('eventService', ['getEvents']),
+          useValue: jasmine.createSpyObj('eventService', ['getAll']),
         },
       ],
     })
@@ -61,7 +61,7 @@ describe('EventEffects', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(EventActions.fetchEvents);
-      (eventService.getEvents as jasmine.Spy).and.returnValue(of(mockEvents));
+      (eventService.getAll as jasmine.Spy).and.returnValue(of(mockEvents));
     });
 
     it('should return a setEvents action', () => {
@@ -69,7 +69,7 @@ describe('EventEffects', () => {
         expect(resultAction).toEqual(
           EventActions.setEvents({ events: mockEvents.content })
         );
-        expect(eventService.getEvents).toHaveBeenCalled();
+        expect(eventService.getAll).toHaveBeenCalled();
       });
     });
   });
