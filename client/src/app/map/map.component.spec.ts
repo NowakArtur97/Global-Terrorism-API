@@ -5,7 +5,7 @@ import AppStoreState from 'src/app/store/app.store.state';
 
 import User from '../auth/models/user.model';
 import AuthStoreState from '../auth/store/auth.store.state';
-import * as CityActions from '../city/store/city.actions';
+import * as EventActions from '../event/store/event.actions';
 import { MapComponent } from './map.component';
 
 describe('MapComponent', () => {
@@ -32,7 +32,7 @@ describe('MapComponent', () => {
 
     store = TestBed.inject(Store);
     spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === 'city') {
+      if (selector === 'event') {
         return of([]);
       }
       if (selector === 'auth') {
@@ -45,9 +45,9 @@ describe('MapComponent', () => {
   });
 
   describe('when initialize component', () => {
-    it('should select and dispatch cities', () => {
+    it('should select and dispatch events', () => {
       expect(store.select).toHaveBeenCalled();
-      expect(store.dispatch).toHaveBeenCalledWith(CityActions.fetchCities());
+      expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
     });
   });
 });

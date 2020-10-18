@@ -1,11 +1,4 @@
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
 import { icon } from 'leaflet';
@@ -16,7 +9,7 @@ import Event from '../event/models/event.model';
 
 import AppStoreState from '../store/app.store.state';
 import MarkerService from './marker.service';
-import * as CityActions from '../city/store/city.actions';
+import * as EventActions from '../event/store/event.actions';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -59,7 +52,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(map((authState) => authState.user))
       .subscribe((user: User) => {
         if (user) {
-          this.store.dispatch(CityActions.fetchCities());
+          this.store.dispatch(EventActions.fetchEvents());
         }
       });
   }
