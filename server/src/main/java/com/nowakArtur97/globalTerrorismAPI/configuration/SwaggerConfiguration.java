@@ -11,6 +11,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.AuthenticationTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserRegistrationTag;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimTag;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,6 +54,7 @@ class SwaggerConfiguration {
                         new Tag(ProvinceTag.RESOURCE, ProvinceTag.DESCRIPTION),
                         new Tag(CountryTag.RESOURCE, CountryTag.DESCRIPTION),
                         new Tag(RegionTag.RESOURCE, RegionTag.DESCRIPTION),
+                        new Tag(VictimTag.RESOURCE, VictimTag.DESCRIPTION),
                         new Tag(UserRegistrationTag.RESOURCE, UserRegistrationTag.DESCRIPTION),
                         new Tag(AuthenticationTag.RESOURCE, AuthenticationTag.DESCRIPTION)
                 )
