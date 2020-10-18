@@ -6,6 +6,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModelAssembler;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModelAssembler;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.CityBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.TargetBuilder;
@@ -44,7 +45,10 @@ class EventModelAssemblerTest {
    
     @Mock
     private CityModelAssembler cityModelAssembler;
-   
+
+    @Mock
+    private VictimModelAssembler victimModelAssembler;
+
     @Mock
     private ModelMapper modelMapper;
 
@@ -59,7 +63,7 @@ class EventModelAssemblerTest {
     @BeforeEach
     private void setUp() {
 
-        modelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, modelMapper);
+        modelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, victimModelAssembler, modelMapper);
     }
 
     @Test

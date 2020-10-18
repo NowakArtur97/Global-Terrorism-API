@@ -11,6 +11,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
 import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -89,14 +90,16 @@ class GroupControllerJsonPatchMethodTest {
     private final static CityNode cityNode2 = new CityNode("city name 2", 15.0, -45.0, provinceNode);
     private final static CityNode cityNode3 = new CityNode("city name 3", 35.0, -35.0, provinceNode2);
 
+    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
+
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true,
-            true, true, targetNode, cityNode);
+            true, true, targetNode, cityNode, victimNode);
     private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(),
-            false, false, false, targetNode2, cityNode);
+            false, false, false, targetNode2, cityNode, victimNode);
     private final static EventNode eventNode3 = new EventNode("summary 3", "motive 3", new Date(),
-            true, false, true, targetNode3, cityNode2);
+            true, false, true, targetNode3, cityNode2, victimNode);
     private final static EventNode eventNode4 = new EventNode("summary 4", "motive 4", new Date(),
-            true, false, true, targetNode4, cityNode3);
+            true, false, true, targetNode4, cityNode3, victimNode);
 
     private final static GroupNode groupNode = new GroupNode("group name", List.of(eventNode));
     private final static GroupNode groupNode2 = new GroupNode("group name 2", List.of(eventNode4));

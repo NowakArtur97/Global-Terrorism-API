@@ -11,6 +11,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.CountryBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -81,10 +82,12 @@ class EventTargetControllerPutMethodTest {
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
 
+    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
+
     private final static EventNode eventNodeWithoutTarget = new EventNode("summary", "motive", new Date(),
             true, true, true);
     private final static EventNode eventNodeWithTarget = new EventNode("summary", "motive", new Date(),
-            true, false, false, targetNode, cityNode);
+            true, false, false, targetNode, cityNode, victimNode);
 
     @BeforeAll
     private static void setUpBuilders() {

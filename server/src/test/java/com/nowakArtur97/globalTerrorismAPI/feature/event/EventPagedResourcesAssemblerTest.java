@@ -2,6 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModelAssembler;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModelAssembler;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModelAssembler;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -47,6 +48,9 @@ class EventPagedResourcesAssemblerTest {
     private CityModelAssembler cityModelAssembler;
 
     @Mock
+    private VictimModelAssembler victimModelAssembler;
+
+    @Mock
     private ModelMapper modelMapper;
 
     @BeforeAll
@@ -61,7 +65,7 @@ class EventPagedResourcesAssemblerTest {
 
         resolver = new HateoasPageableHandlerMethodArgumentResolver();
 
-        eventModelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, modelMapper);
+        eventModelAssembler = new EventModelAssembler(targetModelAssembler, cityModelAssembler, victimModelAssembler, modelMapper);
 
         pagedResourcesAssembler = new PagedResourcesAssembler<>(resolver, null);
     }

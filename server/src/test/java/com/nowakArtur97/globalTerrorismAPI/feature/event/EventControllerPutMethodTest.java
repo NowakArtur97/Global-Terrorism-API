@@ -13,6 +13,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
@@ -95,8 +96,10 @@ class EventControllerPutMethodTest {
     private final static CityNode anotherCityNode = new CityNode("city name 2", 15.0, -15.0,
             anotherProvinceNode);
 
+    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
+
     private final static EventNode eventNode = new EventNode("event summary", "event motive", new Date(),
-            true, true, true, targetNode, cityNode);
+            true, true, true, targetNode, cityNode, victimNode);
 
     @BeforeAll
     private static void setUpBuilders() {

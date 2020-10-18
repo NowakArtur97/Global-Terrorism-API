@@ -1,5 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
+import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityRepository;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
@@ -11,11 +13,10 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetRepository;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
-import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -88,14 +89,16 @@ class EventControllerPatchMethodTest {
     private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
     private final static CityNode anotherCityNode2 = new CityNode("city 3", 11.0, -32.0, anotherProvinceNode3);
 
+    private final static VictimNode victimNode = new VictimNode(10L, 0L, 10L, 0L, 1000L);
+
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
-            true, true, true, targetNode, cityNode);
+            true, true, true, targetNode, cityNode, victimNode);
     private final static EventNode anotherEventNode = new EventNode("summary2", "motive2", new Date(),
-            false, false, false, anotherTargetNode, cityNode);
+            false, false, false, anotherTargetNode, cityNode, victimNode);
     private final static EventNode anotherEventNode2 = new EventNode("summary3", "motive3", new Date(),
-            true, false, true, anotherTargetNode2, anotherCityNode);
+            true, false, true, anotherTargetNode2, anotherCityNode, victimNode);
     private final static EventNode anotherEventNode3 = new EventNode("summary4", "motive4", new Date(),
-            false, false, true, anotherTargetNode3, anotherCityNode2);
+            false, false, true, anotherTargetNode3, anotherCityNode2, victimNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,

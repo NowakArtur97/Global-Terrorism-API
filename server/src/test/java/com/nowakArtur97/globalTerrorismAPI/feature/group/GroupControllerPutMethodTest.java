@@ -1,5 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
+import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryDTO;
@@ -16,6 +17,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
@@ -97,10 +99,12 @@ class GroupControllerPutMethodTest {
     private final static CityNode cityNode = new CityNode("city name", 25.0, 41.0, provinceNode);
     private final static CityNode anotherCityNode = new CityNode("city name 2", 11.0, 25.0, provinceNode);
 
+    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
+
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
-            true, true, true, targetNode, cityNode);
+            true, true, true, targetNode, cityNode, victimNode);
     private final static EventNode eventNode2 = new EventNode("summary 2", "motive 2", new Date(),
-            false, false, false, targetNode2, anotherCityNode);
+            false, false, false, targetNode2, anotherCityNode, victimNode);
 
     private final static GroupNode groupNode = new GroupNode("group name", List.of(eventNode, eventNode2));
 
