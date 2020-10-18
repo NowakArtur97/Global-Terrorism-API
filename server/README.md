@@ -116,13 +116,15 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - User registration
 - JWT authorization
 - Targets endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Events endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Events Target endpoint (GET, PUT, DELETE)
-- Countries endpoint (GET, OPTIONS)
-- Cities endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-- Provinces endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
 - Groups Events endpoint (GET, POST, DELETE, OPTIONS)
+- Events endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Events Target endpoint (GET, PUT, DELETE)
+- Victims endpoint (GET, OPTIONS)
+- Cities endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Provinces endpoint (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+- Countries endpoint (GET, OPTIONS)
+- Regions endpoint (GET, OPTIONS)
 - Bulk operations using Spring Bulk API
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
@@ -142,23 +144,38 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `POST` | `/api/v1/registration`   | `Create an account to use the API` |
 | `POST` | `/api/v1/authentication` | `Generate JWT`                     |
 
-### Countries
+### Groups
 
-| Method    | URI                    | Action                                                   |
-| --------- | ---------------------- | -------------------------------------------------------- |
-| `GET`     | `/api/v1/regions`      | `Get a list of regions`                                  |
-| `GET`     | `/api/v1/regions/{id}` | `Get information about a region`                         |
-| `OPTIONS` | `/api/v1/regions`      | `Find all supported request methods for list of regions` |
-| `OPTIONS` | `/api/v1/regions/{id}` | `Find all supported request methods for region`          |
+| Method    | URI                          | Action                                                              |
+| --------- | ---------------------------- | ------------------------------------------------------------------- |
+| `GET`     | `/api/v1/groups`             | `Get a list of groups`                                              |
+| `GET`     | `/api/v1/groups/{id}`        | `Get information about a group`                                     |
+| `GET`     | `/api/v1/groups/{id}/events` | `Get information about a group's related events`                    |
+| `POST`    | `/api/v1/groups`             | `Add a new group`                                                   |
+| `POST`    | `/api/v1/groups/{id}/events` | `Add a new event to an existing group`                              |
+| `PUT`     | `/api/v1/groups/{id}`        | `Update or add a group`                                             |
+| `PATCH`   | `/api/v1/groups/{id}`        | `Partially update a group(consume Json Patch and Json Merge Patch)` |
+| `DELETE`  | `/api/v1/groups/{id}`        | `Remove a group`                                                    |
+| `DELETE`  | `/api/v1/groups/{id}/events` | `Remove all group's related events`                                 |
+| `OPTIONS` | `/api/v1/groups`             | `Find all supported request methods for list of groups`             |
+| `OPTIONS` | `/api/v1/groups/{id}`        | `Find all supported request methods for a group`                    |
+| `OPTIONS` | `/api/v1/groups/{id}/events` | `Find all supported request methods for a group's events`           |
 
-### Countries
+### Events
 
-| Method    | URI                      | Action                                                     |
-| --------- | ------------------------ | ---------------------------------------------------------- |
-| `GET`     | `/api/v1/countries`      | `Get a list of countries`                                  |
-| `GET`     | `/api/v1/countries/{id}` | `Get information about a country`                          |
-| `OPTIONS` | `/api/v1/countries`      | `Find all supported request methods for list of countries` |
-| `OPTIONS` | `/api/v1/countries/{id}` | `Find all supported request methods for country`           |
+| Method    | URI                           | Action                                                               |
+| --------- | ----------------------------- | -------------------------------------------------------------------- |
+| `GET`     | `/api/v1/events`              | `Get a list of events`                                               |
+| `GET`     | `/api/v1/events/{id}`         | `Get information about an event`                                     |
+| `GET`     | `/api/v1/events/{id}/targets` | `Get information about event's related target`                       |
+| `POST`    | `/api/v1/events`              | `Add a new event`                                                    |
+| `PUT`     | `/api/v1/events/{id}`         | `Update or add an event`                                             |
+| `PUT`     | `/api/v1/events/{id}/targets` | `Update or add an event's target`                                    |
+| `PATCH`   | `/api/v1/events/{id}`         | `Partially update an event(consume Json Patch and Json Merge Patch)` |
+| `DELETE`  | `/api/v1/events/{id}`         | `Remove an event`                                                    |
+| `DELETE`  | `/api/v1/events/{id}/targets` | `Remove events's related target`                                     |
+| `OPTIONS` | `/api/v1/events`              | `Find all supported request methods for list of events`              |
+| `OPTIONS` | `/api/v1/events/{id}`         | `Find all supported request methods for event`                       |
 
 ### Targets
 
@@ -172,6 +189,15 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `DELETE`  | `/api/v1/targets/{id}` | `Remove a target`                                                    |
 | `OPTIONS` | `/api/v1/targets`      | `Find all supported request methods for list of targets`             |
 | `OPTIONS` | `/api/v1/targets/{id}` | `Find all supported request methods for target`                      |
+
+### Victims
+
+| Method    | URI                    | Action                                                   |
+| --------- | ---------------------- | -------------------------------------------------------- |
+| `GET`     | `/api/v1/victims`      | `Get a list of victims`                                  |
+| `GET`     | `/api/v1/victims/{id}` | `Get information about a victim`                         |
+| `OPTIONS` | `/api/v1/victims`      | `Find all supported request methods for list of victims` |
+| `OPTIONS` | `/api/v1/victims/{id}` | `Find all supported request methods for victim`          |
 
 ### Cities
 
@@ -199,38 +225,23 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `OPTIONS` | `/api/v1/provinces`      | `Find all supported request methods for list of provinces`             |
 | `OPTIONS` | `/api/v1/provinces/{id}` | `Find all supported request methods for province`                      |
 
-### Events
+### Countries
 
-| Method    | URI                           | Action                                                               |
-| --------- | ----------------------------- | -------------------------------------------------------------------- |
-| `GET`     | `/api/v1/events`              | `Get a list of events`                                               |
-| `GET`     | `/api/v1/events/{id}`         | `Get information about an event`                                     |
-| `GET`     | `/api/v1/events/{id}/targets` | `Get information about event's related target`                       |
-| `POST`    | `/api/v1/events`              | `Add a new event`                                                    |
-| `PUT`     | `/api/v1/events/{id}`         | `Update or add an event`                                             |
-| `PUT`     | `/api/v1/events/{id}/targets` | `Update or add an event's target`                                    |
-| `PATCH`   | `/api/v1/events/{id}`         | `Partially update an event(consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/events/{id}`         | `Remove an event`                                                    |
-| `DELETE`  | `/api/v1/events/{id}/targets` | `Remove events's related target`                                     |
-| `OPTIONS` | `/api/v1/events`              | `Find all supported request methods for list of events`              |
-| `OPTIONS` | `/api/v1/events/{id}`         | `Find all supported request methods for event`                       |
+| Method    | URI                      | Action                                                     |
+| --------- | ------------------------ | ---------------------------------------------------------- |
+| `GET`     | `/api/v1/countries`      | `Get a list of countries`                                  |
+| `GET`     | `/api/v1/countries/{id}` | `Get information about a country`                          |
+| `OPTIONS` | `/api/v1/countries`      | `Find all supported request methods for list of countries` |
+| `OPTIONS` | `/api/v1/countries/{id}` | `Find all supported request methods for country`           |
 
-### Groups
+### Regions
 
-| Method    | URI                          | Action                                                              |
-| --------- | ---------------------------- | ------------------------------------------------------------------- |
-| `GET`     | `/api/v1/groups`             | `Get a list of groups`                                              |
-| `GET`     | `/api/v1/groups/{id}`        | `Get information about a group`                                     |
-| `GET`     | `/api/v1/groups/{id}/events` | `Get information about a group's related events`                    |
-| `POST`    | `/api/v1/groups`             | `Add a new group`                                                   |
-| `POST`    | `/api/v1/groups/{id}/events` | `Add a new event to an existing group`                              |
-| `PUT`     | `/api/v1/groups/{id}`        | `Update or add a group`                                             |
-| `PATCH`   | `/api/v1/groups/{id}`        | `Partially update a group(consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/groups/{id}`        | `Remove a group`                                                    |
-| `DELETE`  | `/api/v1/groups/{id}/events` | `Remove all group's related events`                                 |
-| `OPTIONS` | `/api/v1/groups`             | `Find all supported request methods for list of groups`             |
-| `OPTIONS` | `/api/v1/groups/{id}`        | `Find all supported request methods for a group`                    |
-| `OPTIONS` | `/api/v1/groups/{id}/events` | `Find all supported request methods for a group's events`           |
+| Method    | URI                    | Action                                                   |
+| --------- | ---------------------- | -------------------------------------------------------- |
+| `GET`     | `/api/v1/regions`      | `Get a list of regions`                                  |
+| `GET`     | `/api/v1/regions/{id}` | `Get information about a region`                         |
+| `OPTIONS` | `/api/v1/regions`      | `Find all supported request methods for list of regions` |
+| `OPTIONS` | `/api/v1/regions/{id}` | `Find all supported request methods for region`          |
 
 ### Bulk
 
