@@ -12,13 +12,13 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @NoArgsConstructor
 public class VictimNode extends Node implements Victim {
 
-    private long totalNumberOfFatalities;
+    private Long totalNumberOfFatalities;
 
-    private long numberOfPerpetratorFatalities;
+    private Long numberOfPerpetratorFatalities;
 
-    private long totalNumberOfInjured;
+    private Long totalNumberOfInjured;
 
-    private long numberOfPerpetratorInjured;
+    private Long numberOfPerpetratorInjured;
 
-    private long valueOfPropertyDamage;
+    private Long valueOfPropertyDamage;
 }
