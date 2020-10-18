@@ -1,23 +1,25 @@
 package com.nowakArtur97.globalTerrorismAPI.eventListener;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
+import com.monitorjbl.xlsx.StreamingReader;
+import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityService;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryService;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionService;
-import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetService;
-import com.monitorjbl.xlsx.StreamingReader;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserService;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -65,6 +67,8 @@ class OnApplicationStartupEventListener {
     private final RegionService regionService;
 
     private final CityService cityService;
+
+    private final VictimService victimService;
 
     private final UserService userService;
 
@@ -124,7 +128,9 @@ class OnApplicationStartupEventListener {
 
             TargetNode target = saveTarget(row, country);
 
-            EventNode event = saveEvent(row, target, city);
+            VictimNode victim = saveVictim(row);
+
+            EventNode event = saveEvent(row, target, city, victim);
 
             String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
 
@@ -171,7 +177,7 @@ class OnApplicationStartupEventListener {
         }
     }
 
-    private EventNode saveEvent(Row row, TargetNode target, CityNode city) {
+    private EventNode saveEvent(Row row, TargetNode target, CityNode city, VictimNode victim) {
 
         String cellValue;
 
@@ -211,6 +217,42 @@ class OnApplicationStartupEventListener {
         String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
 
         return targetService.save(new TargetNode(targetName, country));
+    }
+
+
+    private VictimNode saveVictim(Row row) {
+
+        String cellValue;
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_FATALITIES.getIndex());
+        long totalNumberOfFatalities = 0;
+        totalNumberOfFatalities = getPositiveValue(cellValue, totalNumberOfFatalities);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_FATALITIES.getIndex());
+        long numberOfPerpetratorFatalities = 0;
+        numberOfPerpetratorFatalities = getPositiveValue(cellValue, numberOfPerpetratorFatalities);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_INJURED.getIndex());
+        long totalNumberOfInjured = 0;
+        totalNumberOfInjured = getPositiveValue(cellValue, totalNumberOfInjured);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_INJURED.getIndex());
+        long numberOfPerpetratorInjured = 0;
+        numberOfPerpetratorInjured = getPositiveValue(cellValue, numberOfPerpetratorInjured);
+
+        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.VALUE_OF_PROPERTY_DAMAGE.getIndex());
+        long valueOfPropertyDamage = 0;
+        valueOfPropertyDamage = getPositiveValue(cellValue, valueOfPropertyDamage);
+
+        VictimNode victim = VictimNode.builder()
+                .totalNumberOfFatalities(totalNumberOfFatalities)
+                .numberOfPerpetratorFatalities(numberOfPerpetratorFatalities)
+                .totalNumberOfInjured(totalNumberOfInjured)
+                .numberOfPerpetratorInjured(numberOfPerpetratorInjured)
+                .valueOfPropertyDamage(valueOfPropertyDamage)
+                .build();
+
+        return victimService.save(victim);
     }
 
     private CountryNode saveCountry(Row row, RegionNode regionNode) {
@@ -281,10 +323,10 @@ class OnApplicationStartupEventListener {
         String name = cellValue;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LATITUDE.getIndex());
-        double latitude = isNumeric(cellValue) ? parseDouble(cellValue) : 0;
+        double latitude = isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LONGITUDE.getIndex());
-        double longitude = isNumeric(cellValue) ? parseDouble(cellValue) : 0;
+        double longitude = isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
 
         CityNode city = new CityNode(name, latitude, longitude, province);
 
@@ -376,14 +418,19 @@ class OnApplicationStartupEventListener {
         return NumberUtils.isParsable(number);
     }
 
+    private long getPositiveValue(String cellValue, long value) {
+
+        if (isNumeric(cellValue)) {
+            value = (long) Double.parseDouble(cellValue);
+            value = value >= 0 ? value : 0;
+        }
+
+        return value;
+    }
+
     private int parseInt(String stringToParse) {
 
         return (int) Double.parseDouble(stringToParse);
-    }
-
-    private double parseDouble(String stringToParse) {
-
-        return Double.parseDouble(stringToParse);
     }
 
     private boolean parseBoolean(String stringToParse) {

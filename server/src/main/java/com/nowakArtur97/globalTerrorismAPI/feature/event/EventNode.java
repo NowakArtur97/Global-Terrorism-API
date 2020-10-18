@@ -3,6 +3,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.event;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +38,11 @@ public class EventNode extends Node implements Event {
     @Relationship("LOCATED_IN")
     private CityNode city;
 
+    @Relationship("CASUALTIES")
+    private VictimNode victim;
+
     public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,
-                     Boolean isSuicidal, TargetNode target, CityNode city) {
+                     Boolean isSuicidal, TargetNode target, CityNode city, VictimNode victim) {
         this.summary = summary;
         this.motive = motive;
         this.date = date;
@@ -47,11 +51,12 @@ public class EventNode extends Node implements Event {
         this.isSuicidal = isSuicidal;
         this.target = target;
         this.city = city;
+        this.victim = victim;
     }
 
     @Builder
     public EventNode(Long id, String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,
-                     Boolean isSuicidal, TargetNode target, CityNode city) {
+                     Boolean isSuicidal, TargetNode target, CityNode city, VictimNode victim) {
         super(id);
         this.summary = summary;
         this.motive = motive;
@@ -61,6 +66,7 @@ public class EventNode extends Node implements Event {
         this.isSuicidal = isSuicidal;
         this.target = target;
         this.city = city;
+        this.victim = victim;
     }
 
     public EventNode(String summary, String motive, Date date, Boolean isPartOfMultipleIncidents, Boolean isSuccessful,

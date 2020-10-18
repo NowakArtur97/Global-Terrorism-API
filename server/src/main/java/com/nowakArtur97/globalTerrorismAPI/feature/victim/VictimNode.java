@@ -1,9 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.victim;
 
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 import java.util.Objects;
@@ -12,6 +10,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class VictimNode extends Node implements Victim {
 
     private Long totalNumberOfFatalities;
