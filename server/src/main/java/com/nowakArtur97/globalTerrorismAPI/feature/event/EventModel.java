@@ -3,6 +3,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -46,6 +47,9 @@ public class EventModel extends RepresentationModel<EventModel> implements Event
 
     @ApiModelProperty(notes = "The event's city")
     private CityModel city;
+
+    @ApiModelProperty(notes = "The event's casualties")
+    private VictimModel victim;
 
     @Override
     public boolean equals(Object o) {

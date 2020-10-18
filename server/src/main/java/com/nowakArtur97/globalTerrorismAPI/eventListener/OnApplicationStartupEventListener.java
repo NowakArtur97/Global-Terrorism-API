@@ -209,7 +209,8 @@ class OnApplicationStartupEventListener {
 
         return eventService.save(EventNode.builder().date(date).summary(eventSummary)
                 .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                .isSuicidal(isSuicidal).motive(motive).target(target).city(city).build());
+                .isSuicidal(isSuicidal).motive(motive).target(target).city(city).victim(victim).
+                        build());
     }
 
     private TargetNode saveTarget(Row row, CountryNode country) {

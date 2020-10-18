@@ -15,6 +15,9 @@ import java.util.Objects;
 @Builder
 public class VictimModel extends RepresentationModel<VictimModel> implements Victim {
 
+    @ApiModelProperty(notes = "The unique id of the Victim")
+    private Long id;
+
     @ApiModelProperty(notes = "The event's total number of fatalities")
     private Long totalNumberOfFatalities;
 
