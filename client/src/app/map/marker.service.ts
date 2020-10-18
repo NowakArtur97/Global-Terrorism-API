@@ -7,7 +7,12 @@ import Event from '../event/models/event.model';
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
   private createMarkerPopup(event: Event): string {
-    return `` + `<div>Summary: ${event.summary}</div>`;
+    return `<div>
+    <p>Summary: ${event.summary}</p>
+    <p>Motive: ${event.motive}</p>
+    <p>Date: ${event.date}</p>
+    </div>
+    `;
   }
 
   showMarkers(events: Event[] = [], map: L.Map): L.Marker[] {
