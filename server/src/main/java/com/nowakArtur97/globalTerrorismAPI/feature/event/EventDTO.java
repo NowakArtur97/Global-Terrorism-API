@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.DTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -58,4 +59,11 @@ public class EventDTO implements DTO, Event {
     @Valid
     @NotNull(message = "{city.name.notBlank}")
     private CityDTO city;
+
+    @ApiModelProperty(notes = "The event's casualties", required = true)
+    @Valid
+    @NotNull(message = "{victim.name.notBlank}")
+    private VictimDTO victim;
+
+
 }
