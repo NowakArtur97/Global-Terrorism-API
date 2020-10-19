@@ -9,6 +9,8 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.common.repository.BaseRepository;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericServiceImpl;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,22 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
     private final CityService cityService;
 
+    private final VictimService victimService;
+
     EventServiceImpl(BaseRepository<EventNode> repository, ModelMapper modelMapper,
-                     GenericService<TargetNode, TargetDTO> targetService, CityService cityService) {
+                     GenericService<TargetNode, TargetDTO> targetService, CityService cityService,
+                     VictimService victimService) {
         super(repository, modelMapper);
         this.targetService = targetService;
         this.cityService = cityService;
+        this.victimService = victimService;
     }
 
     @Override
     public EventNode save(EventNode eventNode) {
 
         eventNode.setTarget(targetService.save(eventNode.getTarget()));
+        eventNode.setVictim(victimService.save(eventNode.getVictim()));
 
         CityNode cityNode = eventNode.getCity();
 
@@ -53,6 +60,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         EventNode eventNode = modelMapper.map(eventDTO, EventNode.class);
 
         eventNode.setTarget(targetService.saveNew(eventDTO.getTarget()));
+        eventNode.setVictim(victimService.saveNew(eventDTO.getVictim()));
 
         CityDTO cityDTO = eventDTO.getCity();
 
@@ -74,6 +82,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
         Long id = eventNode.getId();
 
         TargetNode updatedTarget = targetService.update(eventNode.getTarget(), eventDTO.getTarget());
+        VictimNode updatedVictim = victimService.update(eventNode.getVictim(), eventDTO.getVictim());
 
         eventNode = modelMapper.map(eventDTO, EventNode.class);
 
@@ -81,6 +90,7 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
         eventNode.setId(id);
         eventNode.setTarget(updatedTarget);
+        eventNode.setVictim(updatedVictim);
 
         return repository.save(eventNode);
     }
@@ -96,6 +106,10 @@ class EventServiceImpl extends GenericServiceImpl<EventNode, EventDTO> implement
 
             if (eventNode.getTarget() != null) {
                 targetService.delete(eventNode.getTarget().getId());
+            }
+
+            if (eventNode.getVictim() != null) {
+                victimService.delete(eventNode.getVictim().getId());
             }
 
             repository.delete(eventNode);
