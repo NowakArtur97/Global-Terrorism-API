@@ -1,12 +1,12 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.country.Country;
-import com.nowakArtur97.globalTerrorismAPI.feature.target.Target;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryModel;
-import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.Target;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
@@ -74,10 +74,8 @@ public final class TargetBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.targetName = "target";
-
-        this.country = null;
+        id = 1L;
+        targetName = "target";
+        country = null;
     }
 }

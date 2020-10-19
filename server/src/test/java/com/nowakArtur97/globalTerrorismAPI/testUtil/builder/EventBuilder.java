@@ -138,22 +138,14 @@ public final class EventBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.summary = "summary";
-
-        this.motive = "motive";
-
-        this.date = startDate;
-
-        this.isPartOfMultipleIncidents = true;
-
-        this.isSuccessful = true;
-
-        this.isSuicidal = true;
-
-        this.target = null;
-
-        this.city = null;
+        id = 1L;
+        summary = "summary";
+        motive = "motive";
+        date = startDate;
+        isPartOfMultipleIncidents = true;
+        isSuccessful = true;
+        isSuicidal = true;
+        target = null;
+        city = null;
     }
 }

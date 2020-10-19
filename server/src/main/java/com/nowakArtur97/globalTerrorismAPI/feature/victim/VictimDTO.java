@@ -3,10 +3,7 @@ package com.nowakArtur97.globalTerrorismAPI.feature.victim;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class VictimDTO implements DTO, Victim {
 
     @ApiModelProperty(notes = "The event's total number of fatalities", required = true, example = "100")

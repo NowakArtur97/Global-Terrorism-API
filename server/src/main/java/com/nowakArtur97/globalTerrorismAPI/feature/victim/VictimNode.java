@@ -24,6 +24,17 @@ public class VictimNode extends Node implements Victim {
 
     private Long valueOfPropertyDamage;
 
+    @Builder
+    public VictimNode(Long id, Long totalNumberOfFatalities, Long numberOfPerpetratorFatalities, Long totalNumberOfInjured,
+                      Long numberOfPerpetratorInjured, Long valueOfPropertyDamage) {
+        super(id);
+        this.totalNumberOfFatalities = totalNumberOfFatalities;
+        this.numberOfPerpetratorFatalities = numberOfPerpetratorFatalities;
+        this.totalNumberOfInjured = totalNumberOfInjured;
+        this.numberOfPerpetratorInjured = numberOfPerpetratorInjured;
+        this.valueOfPropertyDamage = valueOfPropertyDamage;
+    }
+
     @Override
     public boolean equals(Object o) {
 

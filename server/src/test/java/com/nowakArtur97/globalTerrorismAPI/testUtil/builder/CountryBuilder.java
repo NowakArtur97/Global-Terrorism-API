@@ -73,10 +73,8 @@ public final class CountryBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.name = "country";
-
-        this.region = null;
+        id = 1L;
+        name = "country";
+        region = null;
     }
 }

@@ -1,12 +1,12 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.country.Country;
-import com.nowakArtur97.globalTerrorismAPI.feature.province.Province;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryModel;
-import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.province.Province;
+import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
@@ -74,10 +74,8 @@ public final class ProvinceBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.name = "province";
-
-        this.country = null;
+        id = 1L;
+        name = "province";
+        country = null;
     }
 }

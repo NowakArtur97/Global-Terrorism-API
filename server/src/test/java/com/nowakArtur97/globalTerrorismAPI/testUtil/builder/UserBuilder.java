@@ -1,9 +1,9 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser.AuthenticationRequest;
-import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 
@@ -101,16 +101,11 @@ public final class UserBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.userName = "user123";
-
-        this.password = "SecretPassword123!@";
-
-        this.matchingPassword = "SecretPassword123!@";
-
-        this.email = "user@email.com";
-
-        this.roles = new HashSet<>();
+        id = 1L;
+        userName = "user123";
+        password = "SecretPassword123!@";
+        matchingPassword = "SecretPassword123!@";
+        email = "user@email.com";
+        roles = new HashSet<>();
     }
 }

@@ -54,8 +54,7 @@ public final class RegionBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.name = "region";
+        id = 1L;
+        name = "region";
     }
 }

@@ -94,10 +94,8 @@ public final class GroupBuilder {
 
     private void resetProperties() {
 
-        this.id = 1L;
-
-        this.name = "group";
-
-        this.eventsCaused = new ArrayList<>();
+        id = 1L;
+        name = "group";
+        eventsCaused = new ArrayList<>();
     }
 }
