@@ -54,6 +54,7 @@ class EventControllerPatchMethodTest {
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
+    private final String VICTIM_BASE_PATH = "http://localhost:8080/api/v1/victims";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String LINK_WITH_PARAMETER_FOR_JSON_PATCH = EVENT_BASE_PATH + "/" + "{id}";
     private final String LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH = EVENT_BASE_PATH + "/" + "{id2}";
@@ -89,7 +90,7 @@ class EventControllerPatchMethodTest {
     private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
     private final static CityNode anotherCityNode2 = new CityNode("city 3", 11.0, -32.0, anotherProvinceNode3);
 
-    private final static VictimNode victimNode = new VictimNode(10L, 0L, 10L, 0L, 1000L);
+    private final static VictimNode victimNode = new VictimNode(10L, 2L, 13L, 3L, 1000L);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
             true, true, true, targetNode, cityNode, victimNode);
@@ -143,6 +144,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -204,7 +206,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -217,6 +232,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
@@ -272,7 +288,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -289,6 +318,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode2.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
 
@@ -349,7 +379,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(anotherRegionNode2.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -362,6 +405,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode3.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode3.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode2.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode3.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode3.getId().intValue() + "/targets";
 
@@ -419,7 +463,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -914,6 +971,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -973,7 +1031,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -986,6 +1057,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode.getId().intValue() + "/targets";
 
@@ -1040,7 +1112,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -1056,6 +1141,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode2.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode2.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode2.getId().intValue() + "/targets";
 
@@ -1122,7 +1208,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(anotherRegionNode2.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode2.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
@@ -1135,6 +1234,7 @@ class EventControllerPatchMethodTest {
             String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode3.getId().intValue();
             String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode3.getId().intValue();
             String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode2.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
             String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode3.getId().intValue();
             String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode3.getId().intValue() + "/targets";
 
@@ -1199,7 +1299,20 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                             .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                             .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(victimNode.getTotalNumberOfFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(victimNode.getTotalNumberOfInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
 
         @Test
