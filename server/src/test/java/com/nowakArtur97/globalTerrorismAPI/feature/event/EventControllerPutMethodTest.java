@@ -13,6 +13,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -22,6 +23,7 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -48,6 +50,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -77,6 +80,7 @@ class EventControllerPutMethodTest {
     private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static EventBuilder eventBuilder;
+    private static VictimBuilder victimBuilder;
 
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
             Set.of(new RoleNode("user")));
@@ -96,7 +100,7 @@ class EventControllerPutMethodTest {
     private final static CityNode anotherCityNode = new CityNode("city name 2", 15.0, -15.0,
             anotherProvinceNode);
 
-    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
+    private final static VictimNode victimNode = new VictimNode(10L, 2L, 13L, 3L, 1000L);
 
     private final static EventNode eventNode = new EventNode("event summary", "event motive", new Date(),
             true, true, true, targetNode, cityNode, victimNode);
@@ -109,6 +113,7 @@ class EventControllerPutMethodTest {
         provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
         eventBuilder = new EventBuilder();
+        victimBuilder = new VictimBuilder();
     }
 
     @BeforeAll
@@ -982,5 +987,293 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", hasSize(2))));
+    }
+
+
+    @Test
+    void when_update_event_without_total_number_of_fatalities_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfFatalities(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_with_negative_total_number_of_fatalities_should_return_errors() {
+
+        long negativeTotalNumberOfFatalities = -10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfFatalities(negativeTotalNumberOfFatalities)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_without_number_of_perpetrator_fatalities_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorFatalities(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_with_negative_number_of_perpetrator_fatalities_should_return_errors() {
+
+        long negativeNumberOfPerpetratorFatalities = -10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder
+                .withNumberOfPerpetratorFatalities(negativeNumberOfPerpetratorFatalities)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_without_total_number_of_injured_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfInjured(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_with_negative_total_number_of_injured_should_return_errors() {
+
+        long negativeTotalNumberOfInjured = -10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfInjured(negativeTotalNumberOfInjured)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_without_number_of_perpetrator_injured_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorInjured(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_with_negative_number_of_perpetrator_injured_should_return_errors() {
+
+        long negativeNumberOfPerpetratorInjured = -10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder
+                .withNumberOfPerpetratorInjured(negativeNumberOfPerpetratorInjured)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_without_value_of_property_damage_should_return_errors() {
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withValueOfPropertyDamage(null).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_update_event_with_negative_value_of_property_damage_should_return_errors() {
+
+        long negativeValueOfPropertyDamage = -100L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withValueOfPropertyDamage(negativeValueOfPropertyDamage)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }
