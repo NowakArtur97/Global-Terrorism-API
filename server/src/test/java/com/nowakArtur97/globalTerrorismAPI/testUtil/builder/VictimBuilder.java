@@ -78,6 +78,8 @@ public final class VictimBuilder {
                         .valueOfPropertyDamage(valueOfPropertyDamage)
                         .build();
 
+                break;
+
             case NODE:
 
                 victim = VictimNode.builder()
