@@ -25,6 +25,6 @@ public class VictimModelAssembler extends RepresentationModelAssemblerSupport<Vi
 
         victimModel.add(linkTo(methodOn(VictimController.class).findById(victimModel.getId())).withSelfRel());
 
-        return modelMapper.map(victimNode, VictimModel.class);
+        return victimModel;
     }
 }
