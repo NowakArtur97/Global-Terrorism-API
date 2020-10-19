@@ -12,6 +12,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetService;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -56,6 +57,9 @@ class EventServiceImplTest {
     @Mock
     private CityService cityService;
 
+    @Mock
+    private VictimService victimService;
+
     private static RegionBuilder regionBuilder;
     private static CountryBuilder countryBuilder;
     private static ProvinceBuilder provinceBuilder;
@@ -77,7 +81,7 @@ class EventServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        eventService = new EventServiceImpl(eventRepository, modelMapper, targetService, cityService);
+        eventService = new EventServiceImpl(eventRepository, modelMapper, targetService, cityService, victimService);
     }
 
     @Test

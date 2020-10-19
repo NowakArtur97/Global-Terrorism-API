@@ -66,6 +66,7 @@ class EventControllerPutMethodTest {
     private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
+    private final String VICTIM_BASE_PATH = "http://localhost:8080/api/v1/victims";
     private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
     private final String LINK_WITH_PARAMETER = EVENT_BASE_PATH + "/" + "{id}";
 
@@ -147,14 +148,16 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive).withDate(updatedDate)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
-                .withIsSuicidal(updatedIsSuccessful).withTarget(targetDTO).withCity(cityDTO)
+                .withIsSuicidal(updatedIsSuccessful).withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -207,7 +210,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -220,13 +236,16 @@ class EventControllerPutMethodTest {
                 .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(anotherCityNode.getName()).withLatitude(anotherCityNode.getLatitude())
                 .withLongitude(anotherCityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + anotherRegionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + anotherCountryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
         String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -279,7 +298,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(anotherRegionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(anotherRegionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -290,13 +322,15 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
                 .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
         String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -349,7 +383,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -365,13 +412,15 @@ class EventControllerPutMethodTest {
                 .build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityName).withLatitude(cityLatitude)
                 .withLongitude(cityLongitude).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -424,7 +473,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -438,7 +500,8 @@ class EventControllerPutMethodTest {
                 .build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
                 .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
@@ -446,6 +509,7 @@ class EventControllerPutMethodTest {
         String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
         String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
 
@@ -498,7 +562,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -510,7 +587,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
@@ -564,7 +643,20 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", notNullValue()))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -572,7 +664,7 @@ class EventControllerPutMethodTest {
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
                 .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null)
-                .withTarget(null).withCity(null)
+                .withTarget(null).withCity(null).withVictim(null)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -598,7 +690,8 @@ class EventControllerPutMethodTest {
                                 hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(8))));
+                        .andExpect(jsonPath("errors", hasItem("Victim data cannot be empty.")))
+                        .andExpect(jsonPath("errors", IsCollectionWithSize.hasSize(9))));
     }
 
     @ParameterizedTest(name = "{index}: Event Target Country: {0}")
@@ -610,7 +703,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -638,7 +733,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(invalidTarget).withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -665,8 +762,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -693,8 +791,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -722,8 +821,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -751,7 +851,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -776,7 +878,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(null)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -807,7 +911,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -835,7 +941,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -863,7 +971,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -891,7 +1001,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -917,7 +1029,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO2).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -945,7 +1059,9 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(invalidProvinceName)
                 .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -970,7 +1086,9 @@ class EventControllerPutMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(null).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));

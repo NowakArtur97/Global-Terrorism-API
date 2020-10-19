@@ -195,7 +195,8 @@ class EventControllerPostMethodTest {
                                 is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue())))
-                        .andExpect(jsonPath("victim.links[0].href", notNullValue())));
+                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist()));
     }
 
     @Test
@@ -278,7 +279,8 @@ class EventControllerPostMethodTest {
                                 is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue())))
-                        .andExpect(jsonPath("victim.links[0].href", notNullValue())));
+                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist()));
     }
 
     @Test
