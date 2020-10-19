@@ -11,7 +11,6 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class VictimNode extends Node implements Victim {
 
     private Long totalNumberOfFatalities;

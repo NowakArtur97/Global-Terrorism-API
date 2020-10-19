@@ -60,8 +60,8 @@ public class EventDTO implements DTO, Event {
     @NotNull(message = "{city.name.notBlank}")
     private CityDTO city;
 
-//    @ApiModelProperty(notes = "The event's casualties", required = true)
-//    @Valid
-//    @NotNull(message = "{victim.name.notBlank}")
-//    private VictimDTO victim;
+    @ApiModelProperty(notes = "The event's casualties", required = true)
+    @Valid
+    @NotNull(message = "{victim.name.notBlank}")
+    private VictimDTO victim;
 }

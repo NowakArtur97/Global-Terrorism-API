@@ -1,7 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.target.Target;
-import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
+import com.ibm.icu.util.Calendar;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.City;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModel;
@@ -10,10 +9,15 @@ import com.nowakArtur97.globalTerrorismAPI.feature.event.Event;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.Target;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.Victim;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModel;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
-import com.ibm.icu.util.Calendar;
 
 import java.util.Date;
 
@@ -38,6 +42,8 @@ public final class EventBuilder {
     private Target target = null;
 
     private City city = null;
+
+    private Victim victim = null;
 
     public EventBuilder withId(Long id) {
 
@@ -102,6 +108,13 @@ public final class EventBuilder {
         return this;
     }
 
+    public EventBuilder withVictim(Victim victim) {
+
+        this.victim = victim;
+
+        return this;
+    }
+
     public Event build(ObjectType type) {
 
         Event event;
@@ -111,20 +124,23 @@ public final class EventBuilder {
             case DTO:
                 event = EventDTO.builder().summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetDTO) target).city((CityDTO) city).build();
+                        .isSuicidal(isSuicidal).target((TargetDTO) target).city((CityDTO) city).victim((VictimDTO) victim)
+                        .build();
                 break;
 
             case NODE:
                 event = EventNode.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetNode) target).city((CityNode) city).build();
+                        .isSuicidal(isSuicidal).target((TargetNode) target).city((CityNode) city).victim((VictimNode) victim)
+                        .build();
                 break;
 
             case MODEL:
 
                 event = EventModel.builder().id(id).summary(summary).motive(motive).date(date)
                         .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
-                        .isSuicidal(isSuicidal).target((TargetModel) target).city((CityModel) city).build();
+                        .isSuicidal(isSuicidal).target((TargetModel) target).city((CityModel) city).victim((VictimModel) victim)
+                        .build();
                 break;
 
             default:
@@ -147,5 +163,6 @@ public final class EventBuilder {
         isSuicidal = true;
         target = null;
         city = null;
+        victim = null;
     }
 }
