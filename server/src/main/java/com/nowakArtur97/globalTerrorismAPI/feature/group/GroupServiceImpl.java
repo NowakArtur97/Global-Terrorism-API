@@ -1,10 +1,10 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
-import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
 import com.nowakArtur97.globalTerrorismAPI.common.repository.BaseRepository;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericServiceImpl;
+import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

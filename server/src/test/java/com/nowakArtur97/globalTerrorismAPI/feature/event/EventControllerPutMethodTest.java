@@ -1,5 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityRepository;
@@ -21,7 +22,6 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.*;
@@ -50,7 +50,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -1106,7 +1105,6 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", hasSize(2))));
     }
-
 
     @Test
     void when_update_event_without_total_number_of_fatalities_should_return_errors() {

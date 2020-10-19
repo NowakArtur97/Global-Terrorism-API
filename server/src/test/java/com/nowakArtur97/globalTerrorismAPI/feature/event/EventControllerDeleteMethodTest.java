@@ -2,14 +2,14 @@ package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestController;
-import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
+import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
+import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.EventBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.TargetBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
-import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

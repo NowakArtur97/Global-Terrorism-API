@@ -1,8 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+
+import java.lang.reflect.Method;
 
 public class NameWithSpacesGenerator extends ReplaceUnderscores {
 

@@ -1,5 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
+import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryDTO;
@@ -11,7 +12,6 @@ import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;

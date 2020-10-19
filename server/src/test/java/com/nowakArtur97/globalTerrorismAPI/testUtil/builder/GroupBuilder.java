@@ -1,11 +1,11 @@
 package com.nowakArtur97.globalTerrorismAPI.testUtil.builder;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.group.Group;
-import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.Event;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.group.Group;
+import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.group.GroupNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;

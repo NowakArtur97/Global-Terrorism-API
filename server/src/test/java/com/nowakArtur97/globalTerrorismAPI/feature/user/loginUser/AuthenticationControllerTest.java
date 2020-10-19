@@ -2,10 +2,10 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.AuthenticationControllerAdvice;
 import com.nowakArtur97.globalTerrorismAPI.advice.RestResponseGlobalEntityExceptionHandler;
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.CustomUserDetailsService;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

@@ -1,7 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
+import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 
 import java.util.Optional;
 

@@ -1,5 +1,6 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityRepository;
@@ -20,7 +21,6 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;

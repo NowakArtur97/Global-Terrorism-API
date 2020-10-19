@@ -1,5 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.bulk;
 
+import com.github.wnameless.spring.bulkapi.BulkOperation;
+import com.github.wnameless.spring.bulkapi.BulkRequest;
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
@@ -7,9 +10,6 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.mapper.ObjectTestMapper;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
-import com.github.wnameless.spring.bulkapi.BulkOperation;
-import com.github.wnameless.spring.bulkapi.BulkRequest;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;

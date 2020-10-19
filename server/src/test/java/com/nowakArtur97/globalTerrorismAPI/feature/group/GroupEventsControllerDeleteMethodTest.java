@@ -1,12 +1,12 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.GenericRestControllerAdvice;
+import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.GroupBuilder;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

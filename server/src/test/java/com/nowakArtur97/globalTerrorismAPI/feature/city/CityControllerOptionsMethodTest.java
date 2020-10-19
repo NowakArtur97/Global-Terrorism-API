@@ -2,9 +2,9 @@ package com.nowakArtur97.globalTerrorismAPI.feature.city;
 
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestController;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
-import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
+import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

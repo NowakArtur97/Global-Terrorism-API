@@ -1,7 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.common.controller;
 
-import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
+import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericService;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;

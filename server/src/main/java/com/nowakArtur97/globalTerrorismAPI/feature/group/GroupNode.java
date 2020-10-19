@@ -1,8 +1,11 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
-import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
-import lombok.*;
+import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 

@@ -1,9 +1,9 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
+import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

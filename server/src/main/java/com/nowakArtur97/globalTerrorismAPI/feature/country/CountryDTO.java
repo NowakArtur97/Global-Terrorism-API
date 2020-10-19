@@ -3,7 +3,10 @@ package com.nowakArtur97.globalTerrorismAPI.feature.country;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @ApiModel(description = "Model responsible for Country validation")
 @Getter

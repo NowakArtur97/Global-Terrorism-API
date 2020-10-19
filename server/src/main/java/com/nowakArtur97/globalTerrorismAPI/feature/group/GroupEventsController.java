@@ -1,13 +1,13 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
+import com.github.wnameless.spring.bulkapi.Bulkable;
 import com.nowakArtur97.globalTerrorismAPI.common.annotation.ApiPageable;
+import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
+import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventNode;
-import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
-import com.nowakArtur97.globalTerrorismAPI.common.util.PageUtil;
-import com.github.wnameless.spring.bulkapi.Bulkable;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;

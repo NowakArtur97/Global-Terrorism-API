@@ -1,5 +1,7 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.group;
 
+import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
+import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryRepository;
@@ -10,12 +12,10 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
-import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;

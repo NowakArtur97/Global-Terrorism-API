@@ -3,7 +3,10 @@ package com.nowakArtur97.globalTerrorismAPI.feature.user.loginUser;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @ApiModel(description = "User data required for Authentication")
 @Getter

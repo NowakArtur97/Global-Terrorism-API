@@ -1,9 +1,9 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.target;
 
 import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
-import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryService;
 import com.nowakArtur97.globalTerrorismAPI.common.repository.BaseRepository;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericServiceImpl;
+import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

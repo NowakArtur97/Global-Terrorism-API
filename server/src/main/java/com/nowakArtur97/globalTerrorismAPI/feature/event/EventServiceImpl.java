@@ -1,14 +1,14 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
 import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
+import com.nowakArtur97.globalTerrorismAPI.common.repository.BaseRepository;
+import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.service.GenericServiceImpl;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityService;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
-import com.nowakArtur97.globalTerrorismAPI.common.repository.BaseRepository;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericServiceImpl;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import org.modelmapper.ModelMapper;

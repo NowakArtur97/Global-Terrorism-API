@@ -1,8 +1,8 @@
 package com.nowakArtur97.globalTerrorismAPI.filter;
 
-import com.nowakArtur97.globalTerrorismAPI.common.exception.JwtTokenMissingException;
-import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
+import com.nowakArtur97.globalTerrorismAPI.common.exception.JwtTokenMissingException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

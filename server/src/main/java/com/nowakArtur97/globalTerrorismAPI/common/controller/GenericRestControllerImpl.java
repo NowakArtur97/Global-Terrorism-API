@@ -1,9 +1,9 @@
 package com.nowakArtur97.globalTerrorismAPI.common.controller;
 
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.DTO;
+import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
 import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
-import com.nowakArtur97.globalTerrorismAPI.common.baseModel.Node;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
