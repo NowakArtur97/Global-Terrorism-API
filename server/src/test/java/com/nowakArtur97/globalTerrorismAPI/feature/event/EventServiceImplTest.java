@@ -12,6 +12,8 @@ import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetService;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -65,6 +67,7 @@ class EventServiceImplTest {
     private static ProvinceBuilder provinceBuilder;
     private static TargetBuilder targetBuilder;
     private static CityBuilder cityBuilder;
+    private static VictimBuilder victimBuilder;
     private static EventBuilder eventBuilder;
 
     @BeforeAll
@@ -75,6 +78,7 @@ class EventServiceImplTest {
         targetBuilder = new TargetBuilder();
         provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
+        victimBuilder = new VictimBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -107,7 +111,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -134,7 +139,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -143,8 +149,9 @@ class EventServiceImplTest {
         Long expectedEventId = 1L;
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(eventRepository.findById(expectedEventId)).thenReturn(Optional.of(eventNodeExpected));
 
@@ -202,11 +209,36 @@ class EventServiceImplTest {
                 () -> assertEquals(cityNodeExpected.getLongitude(), eventNodeActual.getCity().getLongitude(),
                         () -> "should return event node with city longitude: " + cityNodeExpected.getLongitude() + ", but was: "
                                 + eventNodeActual.getCity().getLongitude()),
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -223,11 +255,12 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
-    void when_event_exists_and_return_one_event_with_depth_should_return_one_event_with_target_and_country() {
+    void when_event_exists_and_return_one_event_with_depth_should_return_one_event_with_all_nested_nodes() {
 
         Long expectedEventId = 1L;
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
@@ -238,8 +271,9 @@ class EventServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(eventRepository.findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH)).thenReturn(Optional.of(eventNodeExpected));
 
@@ -349,11 +383,37 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -370,7 +430,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -384,12 +445,14 @@ class EventServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).withCity(cityNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(targetService.save(eventNodeExpectedBeforeSave.getTarget())).thenReturn(targetNodeExpected);
+        when(victimService.save(eventNodeExpectedBeforeSave.getVictim())).thenReturn(victimNodeExpected);
         when(cityService.findByNameAndLatitudeAndLongitude(eventNodeExpectedBeforeSave.getCity().getName(),
                 cityNodeExpected.getLatitude(), eventNodeExpectedBeforeSave.getCity().getLongitude()))
                 .thenReturn(Optional.of(cityNodeExpected));
@@ -496,8 +559,35 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
-                () -> verify(targetService, times(1)).save(eventNodeExpectedBeforeSave.getTarget()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> verify(targetService, times(1)).save(targetNodeExpected),
                 () -> verifyNoMoreInteractions(targetService),
+                () -> verify(victimService, times(1)).save(victimNodeExpected),
+                () -> verifyNoMoreInteractions(victimService),
                 () -> verify(cityService, times(1))
                         .findByNameAndLatitudeAndLongitude(cityNodeExpected.getName(), cityNodeExpected.getLatitude(), cityNodeExpected.getLongitude()),
                 () -> verifyNoMoreInteractions(cityService),
@@ -513,7 +603,9 @@ class EventServiceImplTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+                .withVictim(victimDTO).build(ObjectType.DTO);
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
                 .build(ObjectType.NODE);
@@ -521,13 +613,15 @@ class EventServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
         when(targetService.saveNew(targetDTO)).thenReturn(targetNodeExpected);
+        when(victimService.saveNew(victimDTO)).thenReturn(victimNodeExpected);
         when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()))
                 .thenReturn(Optional.of(cityNodeExpected));
         when(eventRepository.save(eventNodeExpectedBeforeSave)).thenReturn(eventNodeExpected);
@@ -633,12 +727,39 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(targetService, times(1)).saveNew(targetDTO),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(victimService, times(1)).saveNew(victimDTO),
+                () -> verifyNoMoreInteractions(victimService),
                 () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
-                () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
-                () -> verifyNoMoreInteractions(modelMapper),
-                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
+                () -> verify(cityService, times(1))
+                        .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(eventRepository));
@@ -651,7 +772,9 @@ class EventServiceImplTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
@@ -660,13 +783,15 @@ class EventServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeSave = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSave);
-        when(targetService.saveNew(eventDTOExpected.getTarget())).thenReturn(targetNodeExpected);
+        when(targetService.saveNew(targetDTO)).thenReturn(targetNodeExpected);
+        when(victimService.saveNew(victimDTO)).thenReturn(victimNodeExpected);
         when(cityService.findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()))
                 .thenReturn(Optional.empty());
         when(cityService.saveNew(cityDTO)).thenReturn(cityNodeExpected);
@@ -773,11 +898,39 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
-                () -> verify(targetService, times(1)).saveNew(eventDTOExpected.getTarget()),
-                () -> verifyNoMoreInteractions(modelMapper),
-                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
+                () -> verify(targetService, times(1)).saveNew(targetDTO),
+                () -> verifyNoMoreInteractions(targetService),
+                () -> verify(victimService, times(1)).saveNew(victimDTO),
+                () -> verifyNoMoreInteractions(victimService),
+                () -> verify(cityService, times(1))
+                        .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSave),
@@ -793,11 +946,23 @@ class EventServiceImplTest {
         String updatedProvinceName = "province2";
         double updatedCityLatitude = 13.0;
         double updatedCityLongitude = -11.0;
+        Long updatedVictimTotalNumberOfFatalities = 20L;
+        Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+        Long updatedVictimTotalNumberOfInjured = 14L;
+        Long updatedVictimNumberOfPerpetratorInjured = 3L;
+        Long updatedVictimValueOfPropertyDamage = 10000L;
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(updatedProvinceName).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
                 .withLongitude(updatedCityLongitude).withProvince(provinceDTO).build(ObjectType.DTO);
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(updatedCountryName).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
+                .build(ObjectType.DTO);
 
         String updatedSummary = "summary updated";
         String updatedMotive = "motive updated";
@@ -808,7 +973,7 @@ class EventServiceImplTest {
         EventDTO eventDTOExpected = (EventDTO) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
                 .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
@@ -825,16 +990,23 @@ class EventServiceImplTest {
         CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
         CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
                 .withLongitude(updatedCityLongitude).withProvince(updatedProvinceNode).build(ObjectType.NODE);
+        VictimNode victimNode = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        VictimNode updatedVictimNode = (VictimNode) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage).build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeMethod = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode)
-                .build(ObjectType.NODE);
+                .withVictim(victimNode).build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeSetIdAndTarget = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
                 .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(targetNode).withCity(cityNode)
-                .build(ObjectType.NODE);
+                .withVictim(victimNode).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withDate(updatedDate).withSummary(updatedSummary)
                 .withIsPartOfMultipleIncidents(updatedIsPartOfMultipleIncidents).withIsSuccessful(updatedIsSuccessful)
                 .withIsSuicidal(updatedIsSuicidal).withMotive(updatedMotive).withTarget(updatedTargetNode)
-                .withCity(updatedCityNode).build(ObjectType.NODE);
+                .withCity(updatedCityNode).withVictim(updatedVictimNode).build(ObjectType.NODE);
 
         when(targetService.update(targetNode, targetDTO)).thenReturn(updatedTargetNode);
         when(modelMapper.map(eventDTOExpected, EventNode.class)).thenReturn(eventNodeExpectedBeforeSetIdAndTarget);
@@ -944,11 +1116,39 @@ class EventServiceImplTest {
                 () -> assertEquals(updatedRegionNode.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + updatedRegionNode.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(updatedVictimNode.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + updatedVictimNode.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(updatedVictimNode.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + updatedVictimNode.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + updatedVictimNode.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + updatedVictimNode.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(targetService, times(1)).update(targetNode, targetDTO),
                 () -> verifyNoMoreInteractions(targetService),
+                () -> verify(victimService, times(1)).update(victimNode, victimDTO),
+                () -> verifyNoMoreInteractions(victimService),
                 () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
-                () -> verify(cityService, times(1)).findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
+                () -> verify(cityService, times(1))
+                        .findByNameAndLatitudeAndLongitude(cityDTO.getName(), cityDTO.getLatitude(), cityDTO.getLongitude()),
                 () -> verify(cityService, times(1)).saveNew(cityDTO),
                 () -> verifyNoMoreInteractions(cityService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpectedBeforeSetIdAndTarget),
@@ -966,10 +1166,12 @@ class EventServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
 
-        EventNode eventNodeExpectedBeforeSetTarget = (EventNode) eventBuilder.withCity(cityNodeExpected).build(ObjectType.NODE);
+        EventNode eventNodeExpectedBeforeSetTarget = (EventNode) eventBuilder.withCity(cityNodeExpected)
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(newTargetNode).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(targetService.saveNew(targetDTOExpected)).thenReturn(newTargetNode);
         when(eventRepository.save(eventNodeExpectedBeforeSetTarget)).thenReturn(eventNodeExpected);
@@ -1075,27 +1277,57 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(targetService, times(1)).saveNew(targetDTOExpected),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
-    void when_delete_event_without_target_should_delete_event() {
+    void when_delete_event_without_target_should_delete_event_and_victim() {
 
-        Long eventId = 1L;
+        Long victimId = 1L;
+        Long eventId = 2L;
 
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
-        EventNode eventNodeExpected = (EventNode) eventBuilder.withCity(cityNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.withId(victimId).build(ObjectType.NODE);
+        EventNode eventNodeExpected = (EventNode) eventBuilder.withCity(cityNodeExpected).withVictim(victimNodeExpected)
+                .build(ObjectType.NODE);
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
+        when(victimService.delete(victimId)).thenReturn(Optional.of(victimNodeExpected));
 
         Optional<EventNode> eventNodeOptionalActual = eventService.delete(eventId);
 
@@ -1171,29 +1403,59 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
+                () -> verify(victimService, times(1)).delete(victimId),
+                () -> verifyNoMoreInteractions(victimService),
                 () -> verifyNoInteractions(targetService),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
 
     @Test
-    void when_delete_event_should_delete_event_and_target() {
+    void when_delete_event_should_delete_event_target_and_victim() {
 
-        Long eventId = 2L;
+        Long eventId = 3L;
         Long targetId = 1L;
+        Long victimId = 2L;
 
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(targetId).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.withId(victimId).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
         when(targetService.delete(targetId)).thenReturn(Optional.of(targetNodeExpected));
+        when(victimService.delete(victimId)).thenReturn(Optional.of(victimNodeExpected));
 
         Optional<EventNode> eventNodeOptionalActual = eventService.delete(eventId);
 
@@ -1263,11 +1525,38 @@ class EventServiceImplTest {
 
                 () -> assertNull(eventNodeActual.getCity().getProvince(),
                         () -> "should return event node with null province, but was: " + eventNodeActual.getCity().getProvince()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(targetService, times(1)).delete(targetId),
                 () -> verifyNoMoreInteractions(targetService),
+                () -> verify(victimService, times(1)).delete(victimId),
+                () -> verifyNoMoreInteractions(victimService),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(cityService));
     }
@@ -1288,7 +1577,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -1301,8 +1591,9 @@ class EventServiceImplTest {
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withId(targetId).withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId)
-                .withTarget(targetNodeExpected).withCity(cityNodeExpected)
+                .withTarget(targetNodeExpected).withCity(cityNodeExpected).withVictim(victimNodeExpected)
                 .build(ObjectType.NODE);
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventNodeExpected));
@@ -1375,12 +1666,38 @@ class EventServiceImplTest {
                 () -> assertNull(eventNodeActual.getCity().getProvince(),
                         () -> "should return event node with null province, but was: " +
                                 eventNodeActual.getCity().getProvince()),
+
+                () -> assertNotNull(eventNodeActual.getVictim(),
+                        () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
+                        () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + eventNodeActual.getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        eventNodeActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(targetService, times(1)).delete(targetId),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verifyNoInteractions(modelMapper),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -1399,7 +1716,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     @Test
@@ -1418,7 +1736,8 @@ class EventServiceImplTest {
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
                 () -> verifyNoInteractions(targetService),
-                () -> verifyNoInteractions(cityService));
+                () -> verifyNoInteractions(cityService),
+                () -> verifyNoInteractions(victimService));
     }
 
     private List<EventNode> createEventNodeList(int listSize) {

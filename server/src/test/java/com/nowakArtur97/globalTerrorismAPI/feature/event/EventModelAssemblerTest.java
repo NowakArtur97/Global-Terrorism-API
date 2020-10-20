@@ -33,10 +33,10 @@ import static org.mockito.Mockito.*;
 @DisabledOnOs(OS.LINUX)
 class EventModelAssemblerTest {
 
-    private final String TARGET_BASE_PATH = "/api/v1/targets";
-    private final String CITY_BASE_PATH = "/api/v1/cities";
-    private final String VICTIM_BASE_PATH = "/api/v1/victims";
-    private final String EVENT_BASE_PATH = "/api/v1/events";
+    private final String TARGET_BASE_PATH = "http://localhost/api/v1/targets";
+    private final String CITY_BASE_PATH = "http://localhost/api/v1/cities";
+    private final String VICTIM_BASE_PATH = "http://localhost/api/v1/victims";
+    private final String EVENT_BASE_PATH = "http://localhost/api/v1/events";
 
     private static TargetBuilder targetBuilder;
     private static CityBuilder cityBuilder;
