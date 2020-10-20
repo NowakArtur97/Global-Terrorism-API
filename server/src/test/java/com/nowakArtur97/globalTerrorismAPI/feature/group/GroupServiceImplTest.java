@@ -12,6 +12,8 @@ import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
@@ -55,6 +57,7 @@ class GroupServiceImplTest {
     private static TargetBuilder targetBuilder;
     private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
+    private static VictimBuilder victimBuilder;
     private static EventBuilder eventBuilder;
     private static GroupBuilder groupBuilder;
 
@@ -66,6 +69,7 @@ class GroupServiceImplTest {
         targetBuilder = new TargetBuilder();
         provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
+        victimBuilder = new VictimBuilder();
         eventBuilder = new EventBuilder();
         groupBuilder = new GroupBuilder();
     }
@@ -155,18 +159,35 @@ class GroupServiceImplTest {
                         () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was"
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNode.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group node with event node with id: " + eventNode.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNode.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group node with event node with summary: " + eventNode.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNode.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group node with event node with motive: " + eventNode.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNode.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group node with event node with date: " + eventNode.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNode.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group node with event node with id: " + eventNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNode.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group node with event node with summary: " + eventNode.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNode.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group node with event node with motive: " + eventNode.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNode.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group node with event node with date: " + eventNode.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNode.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + eventNode.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNode.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group node with event node which was successful: " + eventNode.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNode.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + eventNode.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group node with event node which was part of multiple incidents: "
+                                + eventNode.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNode.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group node with event node which was successful: " + eventNode.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNode.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group node with event node which was suicidal: " + eventNode.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event node with null target, but was: " + groupNodeActual.getEventsCaused().get(0).getTarget()),
+                        () -> "should return group node with event node with null target, but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget()),
                 () -> assertNull(groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event node with null city, but was: " + groupNodeActual.getEventsCaused().get(0).getCity()),
+                        () -> "should return group node with event node with null city, but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity()),
                 () -> verify(groupRepository, times(1)).findById(expectedGroupId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verifyNoInteractions(modelMapper),
@@ -200,8 +221,9 @@ class GroupServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
                 .build(ObjectType.NODE);
 
@@ -212,69 +234,96 @@ class GroupServiceImplTest {
 
         GroupNode groupNodeActual = groupActualOptional.get();
 
-        assertAll(() -> assertEquals(groupNodeExpected.getId(), groupNodeActual.getId(),
-                () -> "should return group node with id: " + expectedGroupId + ", but was" + groupNodeActual.getId()),
+        assertAll(
+                () -> assertNotNull(groupNodeActual.getId(),
+                        () -> "should return group node with id, but was: " + groupNodeActual.getId()),
                 () -> assertEquals(groupNodeExpected.getName(), groupNodeActual.getName(),
-                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was"
+                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group node with event node with id: " + eventNodeExpected.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group node with event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group node with event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group node with event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group node with event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
-
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -282,31 +331,64 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(groupRepository, times(1))
                         .findById(expectedGroupId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -323,10 +405,11 @@ class GroupServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeBeforeSave = (EventNode) eventBuilder.withId(null).withTarget(targetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).withCity(cityNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
                 .build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
@@ -339,70 +422,94 @@ class GroupServiceImplTest {
 
         assertAll(
                 () -> assertNotNull(groupNodeActual.getId(),
-                        () -> "should return group node with id, but was null"),
-                () -> assertEquals(groupNodeExpected.getId(), groupNodeActual.getId(),
-                        () -> "should return group node with id: " + groupNodeExpected.getId() + ", but was" + groupNodeActual.getId()),
+                        () -> "should return group node with id, but was: " + groupNodeActual.getId()),
                 () -> assertEquals(groupNodeExpected.getName(), groupNodeActual.getName(),
-                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was"
+                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group node with event node with id: " + eventNodeExpected.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group node with event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group node with event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group node with event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group node with event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
-
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -410,31 +517,64 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventService, times(1)).save(eventNodeBeforeSave),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
@@ -450,7 +590,9 @@ class GroupServiceImplTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO)
                 .build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO)
+                .withVictim(victimDTO).build(ObjectType.DTO);
         GroupDTO groupDTOExpected = (GroupDTO) groupBuilder.withEventsCaused(List.of(eventDTO)).build(ObjectType.DTO);
 
         RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
@@ -459,8 +601,9 @@ class GroupServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(targetNodeExpected).withCity(cityNodeExpected)
-                .build(ObjectType.NODE);
+                .withVictim(victimNodeExpected).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
                 .build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withEventsCaused(List.of(eventNodeExpected))
@@ -474,70 +617,94 @@ class GroupServiceImplTest {
 
         assertAll(
                 () -> assertNotNull(groupNodeActual.getId(),
-                        () -> "should return group node with id, but was null"),
-                () -> assertEquals(groupNodeExpected.getId(), groupNodeActual.getId(),
-                        () -> "should return group node with id: " + groupNodeExpected.getId() + ", but was" + groupNodeActual.getId()),
+                        () -> "should return group node with id, but was: " + groupNodeActual.getId()),
                 () -> assertEquals(groupNodeExpected.getName(), groupNodeActual.getName(),
-                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was"
+                        () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group node with event node with id: " + eventNodeExpected.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group node with event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group node with event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group node with event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group node with event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
-
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -545,31 +712,64 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(modelMapper, times(1)).map(groupDTOExpected, GroupNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
@@ -587,6 +787,11 @@ class GroupServiceImplTest {
         String updatedCityName = "city2";
         double updatedCityLatitude = 13.0;
         double updatedCityLongitude = -11.0;
+        Long updatedVictimTotalNumberOfFatalities = 20L;
+        Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+        Long updatedVictimTotalNumberOfInjured = 14L;
+        Long updatedVictimNumberOfPerpetratorInjured = 3L;
+        Long updatedVictimValueOfPropertyDamage = 10000L;
 
         RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
@@ -603,16 +808,33 @@ class GroupServiceImplTest {
                 .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
                 .withLongitude(updatedCityLongitude).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
         ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.withCountry(countryNode)
                 .build(ObjectType.NODE);
         CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
-        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).build(ObjectType.NODE);
+        VictimNode victimNode = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).withVictim(victimNode)
+                .build(ObjectType.NODE);
         ProvinceNode updatedProvinceNode = (ProvinceNode) provinceBuilder.withName(updatedProvinceName)
                 .withCountry(updatedCountryNode).build(ObjectType.NODE);
         CityNode updatedCityNode = (CityNode) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
                 .withLongitude(updatedCityLongitude).withProvince(updatedProvinceNode).build(ObjectType.NODE);
-        EventNode updatedEventNode = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(updatedCityNode).build(ObjectType.NODE);
+        VictimNode updatedVictimNode = (VictimNode) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage).build(ObjectType.NODE);
+        EventNode updatedEventNode = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(updatedCityNode)
+                .withVictim(updatedVictimNode).build(ObjectType.NODE);
 
         String updatedCountryName2 = "country updated 2";
         String updatedTargetName2 = "target3";
@@ -620,6 +842,12 @@ class GroupServiceImplTest {
         String updatedCityName2 = "city2";
         double updatedCityLatitude2 = 23.0;
         double updatedCityLongitude2 = -21.0;
+        Long updatedVictimTotalNumberOfFatalities2 = 21L;
+        Long updatedVictimNumberOfPerpetratorFatalities2 = 11L;
+        Long updatedVictimTotalNumberOfInjured2 = 11L;
+        Long updatedVictimNumberOfPerpetratorInjured2 = 1L;
+        Long updatedVictimValueOfPropertyDamage2 = 10100L;
+
         RegionNode regionNode2 = (RegionNode) regionBuilder.build(ObjectType.NODE);
         CountryNode countryNode2 = (CountryNode) countryBuilder.withRegion(regionNode2).build(ObjectType.NODE);
         TargetNode targetNode2 = (TargetNode) targetBuilder.withCountry(countryNode2).build(ObjectType.NODE);
@@ -629,19 +857,38 @@ class GroupServiceImplTest {
         TargetNode updatedTargetNode2 = (TargetNode) targetBuilder.withTarget(updatedTargetName2)
                 .withCountry(updatedCountryNode2).build(ObjectType.NODE);
         CountryDTO countryDTO2 = (CountryDTO) countryBuilder.withName(updatedCountryName2).build(ObjectType.DTO);
-        TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget(updatedTargetName2).withCountry(countryDTO2).build(ObjectType.DTO);
+        TargetDTO targetDTO2 = (TargetDTO) targetBuilder.withTarget(updatedTargetName2).withCountry(countryDTO2)
+                .build(ObjectType.DTO);
         ProvinceDTO provinceDTO2 = (ProvinceDTO) provinceBuilder.withName(updatedProvinceName2)
                 .withCountry(countryDTO2).build(ObjectType.DTO);
         CityDTO cityDTO2 = (CityDTO) cityBuilder.withName(updatedCityName2).withLatitude(updatedCityLatitude2)
                 .withLongitude(updatedCityLongitude2).withProvince(provinceDTO2).build(ObjectType.DTO);
-        EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).withCity(cityDTO2).build(ObjectType.DTO);
+        VictimDTO victimDTO2 = (VictimDTO) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities2)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities2)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured2)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured2)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage2)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).withCity(cityDTO2).withVictim(victimDTO2)
+                .build(ObjectType.DTO);
         CityNode cityNode2 = (CityNode) cityBuilder.build(ObjectType.NODE);
-        EventNode eventNode2 = (EventNode) eventBuilder.withTarget(targetNode2).withCity(cityNode2).build(ObjectType.NODE);
+        VictimNode victimNode2 = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode2 = (EventNode) eventBuilder.withTarget(targetNode2).withCity(cityNode2).withVictim(victimNode2)
+                .build(ObjectType.NODE);
         ProvinceNode updatedProvinceNode2 = (ProvinceNode) provinceBuilder.withName(updatedProvinceName2)
                 .withCountry(updatedCountryNode2).build(ObjectType.NODE);
         CityNode updatedCityNode2 = (CityNode) cityBuilder.withName(updatedCityName2).withLatitude(updatedCityLatitude2)
                 .withLongitude(updatedCityLongitude2).withProvince(updatedProvinceNode2).build(ObjectType.NODE);
-        EventNode updatedEventNode2 = (EventNode) eventBuilder.withTarget(updatedTargetNode2).withCity(updatedCityNode2).build(ObjectType.NODE);
+        VictimNode updatedVictimNode2 = (VictimNode) victimBuilder
+                .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities2)
+                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities2)
+                .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured2)
+                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured2)
+                .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage2)
+                .build(ObjectType.NODE);
+        EventNode updatedEventNode2 = (EventNode) eventBuilder.withTarget(updatedTargetNode2).withCity(updatedCityNode2)
+                .withVictim(updatedVictimNode2).build(ObjectType.NODE);
 
         String updatedGroupName = "new group name";
         GroupDTO groupDTOExpected = (GroupDTO) groupBuilder.withName(updatedGroupName)
@@ -664,37 +911,61 @@ class GroupServiceImplTest {
                 () -> assertNotNull(groupNodeActual.getId(),
                         () -> "should return group node with id, but was null"),
                 () -> assertEquals(groupNodeExpected.getId(), groupNodeActual.getId(),
-                        () -> "should return group node with id: " + groupNodeExpected.getId() + ", but was" + groupNodeActual.getId()),
+                        () -> "should return group node with id: " + groupNodeExpected.getId() + ", but was"
+                                + groupNodeActual.getId()),
                 () -> assertEquals(groupNodeExpected.getName(), groupNodeActual.getName(),
                         () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was"
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(updatedEventNode.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group node with event node with id: " + updatedEventNode.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(updatedEventNode.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group node with event node with summary: " + updatedEventNode.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(updatedEventNode.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group node with event node with motive: " + updatedEventNode.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(updatedEventNode.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group node with event node with date: " + updatedEventNode.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(updatedEventNode.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group node with event node with id: " + updatedEventNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(updatedEventNode.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group node with event node with summary: " + updatedEventNode.getSummary()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(updatedEventNode.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group node with event node with motive: " + updatedEventNode.getMotive()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(updatedEventNode.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group node with event node with date: " + updatedEventNode.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(updatedEventNode.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + updatedEventNode.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(updatedEventNode.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group node with event node which was successful: " + updatedEventNode.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(updatedEventNode.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + updatedEventNode.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group node with event node which was part of multiple incidents: "
+                                + updatedEventNode.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(updatedEventNode.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group node with event node which was successful: "
+                                + updatedEventNode.getIsSuccessful() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(updatedEventNode.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group node with event node which was suicidal: "
+                                + updatedEventNode.getIsSuicidal() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(updatedTargetNode, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
+                        () -> "should return group node with event target: " +
+                                groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
                                 + updatedTargetNode),
                 () -> assertEquals(updatedTargetNode.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + updatedTargetNode.getId()),
                 () -> assertEquals(updatedTargetNode.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + updatedTargetNode.getTarget()),
 
                 () -> assertEquals(updatedCountryNode, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + updatedCountryNode + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(updatedCountryNode.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + updatedCountryNode + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(updatedCountryNode.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + updatedCountryNode.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(updatedCountryNode.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(updatedCountryNode.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + updatedCountryNode.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
@@ -702,29 +973,35 @@ class GroupServiceImplTest {
                 () -> assertEquals(regionNode, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + updatedRegionNode + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(updatedRegionNode.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + updatedRegionNode.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(updatedRegionNode.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(updatedRegionNode.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + updatedRegionNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(updatedRegionNode.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + updatedRegionNode.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(updatedCityNode, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + updatedCityNode),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + updatedCityNode),
                 () -> assertEquals(updatedCityNode.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + updatedCityNode.getId()),
                 () -> assertEquals(updatedCityNode.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + updatedCityNode.getName()),
                 () -> assertEquals(updatedCityNode.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + updatedCityNode.getLatitude()),
                 () -> assertEquals(updatedCityNode.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + updatedCityNode.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -732,88 +1009,154 @@ class GroupServiceImplTest {
                 () -> assertEquals(updatedProvinceNode, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + updatedProvinceNode + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(updatedProvinceNode.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(updatedProvinceNode.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + updatedProvinceNode.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(updatedProvinceNode.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(updatedProvinceNode.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + updatedProvinceNode.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(updatedCountryNode, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + updatedCountryNode + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(updatedCountryNode.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + updatedCountryNode.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(updatedCountryNode.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + updatedCountryNode + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(updatedCountryNode.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + updatedCountryNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(updatedCountryNode.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + updatedCountryNode.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(updatedRegionNode, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(updatedRegionNode,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + updatedRegionNode + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(updatedRegionNode.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + updatedRegionNode.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(updatedRegionNode.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(updatedRegionNode.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + updatedRegionNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(updatedRegionNode.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + updatedRegionNode.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
 
-                () -> assertEquals(updatedEventNode2.getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group node with event node with id: " + updatedEventNode2.getId() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getId()),
-                () -> assertEquals(updatedEventNode2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group node with event node with summary: " + updatedEventNode2.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
-                () -> assertEquals(updatedEventNode2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(), () -> "should return group node with event node with motive: " + updatedEventNode2.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
-                () -> assertEquals(updatedEventNode2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(), () -> "should return group node with event node with date: " + updatedEventNode2.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getDate()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(updatedVictimNode.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + updatedVictimNode.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(updatedVictimNode.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + updatedVictimNode.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + updatedVictimNode.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + updatedVictimNode.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+
+                () -> assertEquals(updatedEventNode2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
+                        () -> "should return group node with event node with id: " + updatedEventNode2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getId()),
+                () -> assertEquals(updatedEventNode2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(),
+                        () -> "should return group node with event node with summary: " + updatedEventNode2.getSummary()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(updatedEventNode2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(),
+                        () -> "should return group node with event node with motive: " + updatedEventNode2.getMotive()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(updatedEventNode2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(),
+                        () -> "should return group node with event node with date: " + updatedEventNode2.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getDate()),
                 () -> assertEquals(updatedEventNode2.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(), () -> "should return group node with event node which was part of multiple incidents: " + updatedEventNode2.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(updatedEventNode2.getIsSuccessful(), groupNodeActual.getEventsCaused().get(1).getIsSuccessful(), () -> "should return group node with event node which was successful: " + updatedEventNode2.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
-                () -> assertEquals(updatedEventNode2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(), () -> "should return group node with event node which was suicidal: " + updatedEventNode2.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        () -> "should return group node with event node which was part of multiple incidents: "
+                                + updatedEventNode2.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(updatedEventNode2.getIsSuccessful()
+                        , groupNodeActual.getEventsCaused().get(1).getIsSuccessful(),
+                        () -> "should return group node with event node which was successful: "
+                                + updatedEventNode2.getIsSuccessful() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(updatedEventNode2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(),
+                        () -> "should return group node with event node which was suicidal: " + updatedEventNode2.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(updatedTargetNode2, groupNodeActual.getEventsCaused().get(1).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: "
+                        () -> "should return group node with event target: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: "
                                 + updatedTargetNode2),
                 () -> assertEquals(updatedTargetNode2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
                                 + updatedTargetNode2.getId()),
                 () -> assertEquals(updatedTargetNode2.getTarget(), groupNodeActual.getEventsCaused().get(1).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
                                 + updatedTargetNode2.getTarget()),
 
                 () -> assertEquals(updatedCountryNode2, groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + updatedCountryNode2 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(updatedCountryNode2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + updatedCountryNode2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(updatedCountryNode2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + updatedCountryNode2.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId()),
-                () -> assertEquals(updatedCountryNode2.getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(updatedCountryNode2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + updatedCountryNode2.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(updatedRegionNode2, groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(updatedRegionNode2,
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + updatedRegionNode2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(updatedRegionNode2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId(),
+                () -> assertEquals(updatedRegionNode2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId(),
                         () -> "should return group node with region id: " + updatedRegionNode2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(updatedRegionNode2.getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName(),
+                                + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(updatedRegionNode2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + updatedRegionNode2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(updatedCityNode2, groupNodeActual.getEventsCaused().get(1).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
-                                + updatedCityNode2),
+                        () -> "should return group node with event city: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: " + updatedCityNode2),
                 () -> assertEquals(updatedCityNode2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
                                 + updatedCityNode2.getId()),
                 () -> assertEquals(updatedCityNode2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
                                 + updatedCityNode2.getName()),
                 () -> assertEquals(updatedCityNode2.getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
                                 + updatedCityNode2.getLatitude()),
-                () -> assertEquals(updatedCityNode2.getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                () -> assertEquals(updatedCityNode2.getLongitude(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
                                 + updatedCityNode2.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity().getProvince(),
@@ -821,31 +1164,67 @@ class GroupServiceImplTest {
                 () -> assertEquals(updatedProvinceNode2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince(),
                         () -> "should return group node with province: " + updatedProvinceNode2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince()),
-                () -> assertEquals(updatedProvinceNode2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId(),
+                () -> assertEquals(updatedProvinceNode2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + updatedProvinceNode2.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId()),
-                () -> assertEquals(updatedProvinceNode2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName(),
+                () -> assertEquals(updatedProvinceNode2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + updatedProvinceNode2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName()),
-                () -> assertEquals(updatedCountryNode2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + updatedCountryNode2 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
-                () -> assertEquals(updatedCountryNode2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + updatedCountryNode2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(updatedCountryNode2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getName(),
+                () -> assertEquals(updatedCountryNode2,
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry(),
+                        () -> "should return group node with country: " + updatedCountryNode2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
+                () -> assertEquals(updatedCountryNode2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + updatedCountryNode2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(updatedCountryNode2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + updatedCountryNode2.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(updatedRegionNode2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(updatedRegionNode2,
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + updatedRegionNode2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(updatedRegionNode2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId(),
+                () -> assertEquals(updatedRegionNode2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId(),
                         () -> "should return group node with region id: " + updatedRegionNode2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(updatedRegionNode2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName(),
+                                + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(updatedRegionNode2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + updatedRegionNode2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(updatedVictimNode2.getId(), groupNodeActual.getEventsCaused().get(1).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + updatedVictimNode2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getId()),
+                () -> assertEquals(updatedVictimNode2.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + updatedVictimNode2.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + updatedVictimNode2.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode2.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + updatedVictimNode2.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + updatedVictimNode2.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(eventService, times(1)).delete(eventNode.getId()),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verify(eventService, times(1)).saveNew(eventDTO2),
@@ -875,10 +1254,12 @@ class GroupServiceImplTest {
         ProvinceNode provinceNodeExpected2 = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected2)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected2 = (CityNode) cityBuilder.withProvince(provinceNodeExpected2).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withCity(cityNodeExpected).withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNodeExpected2)
-                .withCity(cityNodeExpected2).build(ObjectType.NODE);
+                .withCity(cityNodeExpected2).withVictim(victimNodeExpected2).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId)
                 .withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
 
@@ -897,63 +1278,89 @@ class GroupServiceImplTest {
                         () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -961,92 +1368,155 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
 
-                () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(1).getId()),
-                () -> assertEquals(eventNodeExpected2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + eventNodeExpected2.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
-                () -> assertEquals(eventNodeExpected2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(), () -> "should return group event node with motive: " + eventNodeExpected2.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
-                () -> assertEquals(eventNodeExpected2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(), () -> "should return group event node with date: " + eventNodeExpected2.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getDate()),
+                () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getId()),
+                () -> assertEquals(eventNodeExpected2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected2.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(eventNodeExpected2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected2.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(eventNodeExpected2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected2.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getDate()),
                 () -> assertEquals(eventNodeExpected2.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + eventNodeExpected2.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected2.getIsSuccessful(), groupNodeActual.getEventsCaused().get(1).getIsSuccessful(), () -> "should return group event node which was successful: " + eventNodeExpected2.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventNodeExpected2.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected2.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected2.getIsSuccessful(),
+                        groupNodeActual.getEventsCaused().get(1).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected2.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected2.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
                 () -> assertNotNull(targetNodeExpected2,
                         () -> "should return group event node with not null target, but was: null"),
-                () -> assertEquals(targetNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget(), () -> "should return group event node with target: " + targetNodeExpected2 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget()),
+                () -> assertEquals(targetNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget(),
+                        () -> "should return group event node with target: " + targetNodeExpected2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: "
-                                + targetNodeExpected2),
+                        () -> "should return group node with event target: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: " + targetNodeExpected2),
                 () -> assertEquals(targetNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
                                 + targetNodeExpected2.getId()),
                 () -> assertEquals(targetNodeExpected2.getTarget(), groupNodeActual.getEventsCaused().get(1).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected2.getTarget()),
 
                 () -> assertEquals(countryNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected2 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected2.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected2.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected2,
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected2, groupNodeActual.getEventsCaused().get(1).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
-                                + cityNodeExpected2),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity()
+                                + ", but was: " + cityNodeExpected2),
                 () -> assertEquals(cityNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
                                 + cityNodeExpected2.getId()),
                 () -> assertEquals(cityNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
-                                + cityNodeExpected2.getName()),
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getName()
+                                + ", but was: " + cityNodeExpected2.getName()),
                 () -> assertEquals(cityNodeExpected2.getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected2.getLatitude()),
-                () -> assertEquals(cityNodeExpected2.getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                () -> assertEquals(cityNodeExpected2.getLongitude(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected2.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity().getProvince(),
@@ -1054,31 +1524,65 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected2.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getName()),
-                () -> assertEquals(countryNodeExpected2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected2 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getName(),
+                () -> assertEquals(countryNodeExpected2,
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry(),
+                        () -> "should return group node with country: " + countryNodeExpected2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected2.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected2, groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected2,
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected2 + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected2.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected2.getId() + ", but was: " +
+                                groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected2.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected2.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verify(groupRepository, times(1)).delete(groupNodeExpected),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -1109,9 +1613,9 @@ class GroupServiceImplTest {
     @Test
     void when_add_event_to_group_should_return_group_with_new_event() {
 
-        Long groupId = 1L;
         Long eventId = 1L;
         Long eventId2 = 2L;
+        Long groupId = 3L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName("new country").build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
@@ -1127,10 +1631,12 @@ class GroupServiceImplTest {
         ProvinceNode provinceNodeExpected = (ProvinceNode) provinceBuilder.withCountry(countryNodeExpected)
                 .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.withProvince(provinceNodeExpected).build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        VictimNode newVictimNodeExpected = (VictimNode) victimBuilder.withTotalNumberOfFatalities(110L).build(ObjectType.NODE);
         EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withCity(cityNodeExpected).withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode newEventNodeExpected = (EventNode) eventBuilder.withId(eventId2).withTarget(newTargetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withCity(cityNodeExpected).withVictim(newVictimNodeExpected).build(ObjectType.NODE);
         GroupNode groupNodeExpectedBeforeSave = (GroupNode) groupBuilder.withId(groupId)
                 .withEventsCaused(List.of(eventNodeExpected)).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId)
@@ -1151,63 +1657,89 @@ class GroupServiceImplTest {
                         () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -1215,89 +1747,160 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
 
-                () -> assertEquals(newEventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + newEventNodeExpected.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(1).getId()),
-                () -> assertEquals(newEventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + newEventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
-                () -> assertEquals(newEventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(), () -> "should return group event node with motive: " + newEventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
-                () -> assertEquals(newEventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(), () -> "should return group event node with date: " + newEventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getDate()),
+                () -> assertEquals(newEventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
+                        () -> "should return group event node with id: " + newEventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getId()),
+                () -> assertEquals(newEventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(),
+                        () -> "should return group event node with summary: " + newEventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(newEventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(),
+                        () -> "should return group event node with motive: " + newEventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(newEventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(),
+                        () -> "should return group event node with date: " + newEventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getDate()),
                 () -> assertEquals(newEventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + newEventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(newEventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(1).getIsSuccessful(), () -> "should return group event node which was successful: " + newEventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
-                () -> assertEquals(newEventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(), () -> "should return group event node which was suicidal: " + newEventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + newEventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(newEventNodeExpected.getIsSuccessful(),
+                        groupNodeActual.getEventsCaused().get(1).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + newEventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(newEventNodeExpected.getIsSuicidal(),
+                        groupNodeActual.getEventsCaused().get(1).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + newEventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(newTargetNodeExpected, groupNodeActual.getEventsCaused().get(1).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: "
-                                + newTargetNodeExpected),
+                        () -> "should return group node with event target: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: " + newTargetNodeExpected),
                 () -> assertEquals(newTargetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
                                 + newTargetNodeExpected.getId()),
-                () -> assertEquals(newTargetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(1).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
+                () -> assertEquals(newTargetNodeExpected.getTarget(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getTarget(),
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
                                 + newTargetNodeExpected.getTarget()),
 
-                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + newTargetNodeExpected.getCountryOfOrigin() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin().getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
-                        () -> "should return group node with event node with country id: " + newTargetNodeExpected.getCountryOfOrigin().getId()
+                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
+                        () -> "should return group node with event node with country: "
+                                + newTargetNodeExpected.getCountryOfOrigin() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin().getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country id: "
+                                + newTargetNodeExpected.getCountryOfOrigin().getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId()),
-                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
-                        () -> "should return group node with event node with country name: " + newTargetNodeExpected.getCountryOfOrigin().getName()
+                () -> assertEquals(newTargetNodeExpected.getCountryOfOrigin().getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return group node with event node with country name: "
+                                + newTargetNodeExpected.getCountryOfOrigin().getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: " +
+                                groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion().getName()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(newEventNodeExpected.getCity(), groupNodeActual.getEventsCaused().get(1).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
+                        () -> "should return group node with event city: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
                                 + newEventNodeExpected.getCity()),
-                () -> assertEquals(newEventNodeExpected.getCity().getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                () -> assertEquals(newEventNodeExpected.getCity().getId(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getId(),
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
                                 + newEventNodeExpected.getCity().getId()),
-                () -> assertEquals(newEventNodeExpected.getCity().getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
+                () -> assertEquals(newEventNodeExpected.getCity().getName(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getName(),
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
                                 + newEventNodeExpected.getCity().getName()),
-                () -> assertEquals(newEventNodeExpected.getCity().getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                () -> assertEquals(newEventNodeExpected.getCity().getLatitude(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
                                 + newEventNodeExpected.getCity().getLatitude()),
-                () -> assertEquals(newEventNodeExpected.getCity().getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                () -> assertEquals(newEventNodeExpected.getCity().getLongitude(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
                                 + newEventNodeExpected.getCity().getLongitude()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
@@ -1305,31 +1908,65 @@ class GroupServiceImplTest {
                 () -> assertEquals(provinceNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
                         () -> "should return group node with province: " + provinceNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
-                () -> assertEquals(provinceNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
+                () -> assertEquals(provinceNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId(),
                         () -> "should return group node with province id: " + provinceNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getId()),
-                () -> assertEquals(provinceNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
+                () -> assertEquals(provinceNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName(),
                         () -> "should return group node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getName()),
-                () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
-                        () -> "should return group node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
-                        () -> "should return group node with country id: " + countryNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
+                () -> assertEquals(countryNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry(),
+                        () -> "should return group node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId(),
+                        () -> "should return group node with country id: " + countryNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getId()),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getName(),
                         () -> "should return group node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with not null region, but was: null"),
-                () -> assertEquals(regionNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
+                () -> assertEquals(regionNodeExpected,
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion(),
                         () -> "should return group node with region: " + regionNodeExpected + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
-                        () -> "should return group node with region id: " + regionNodeExpected.getId()
-                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId(),
+                        () -> "should return group node with region id: " + regionNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getId()),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return group node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getCity().getProvince().getCountry().getRegion().getName()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(newVictimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(1).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + newVictimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getId()),
+                () -> assertEquals(newVictimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + newVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + newVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(newVictimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + newVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + newVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -1367,15 +2004,18 @@ class GroupServiceImplTest {
 
         CountryNode countryNodeExpected = (CountryNode) countryBuilder.build(ObjectType.NODE);
         TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
-        CountryNode countryNodeExpected2 = (CountryNode) countryBuilder.build(ObjectType.NODE);
-        TargetNode targetNodeExpected2 = (TargetNode) targetBuilder.withCountry(countryNodeExpected2).build(ObjectType.NODE);
-
+        CountryNode countryNodeExpected2 = (CountryNode) countryBuilder.withName("country2").build(ObjectType.NODE);
+        TargetNode targetNodeExpected2 = (TargetNode) targetBuilder.withTarget("target2").withCountry(countryNodeExpected2)
+                .build(ObjectType.NODE);
         CityNode cityNodeExpected = (CityNode) cityBuilder.build(ObjectType.NODE);
-        CityNode cityNodeExpected2 = (CityNode) cityBuilder.build(ObjectType.NODE);
+        CityNode cityNodeExpected2 = (CityNode) cityBuilder.withName("city2").build(ObjectType.NODE);
+        VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.withTotalNumberOfFatalities(1003L).build(ObjectType.NODE);
+
         EventNode eventNodeExpected = (EventNode) eventBuilder.withId(eventId).withTarget(targetNodeExpected)
-                .withCity(cityNodeExpected).build(ObjectType.NODE);
+                .withCity(cityNodeExpected).withVictim(victimNodeExpected).build(ObjectType.NODE);
         EventNode eventNodeExpected2 = (EventNode) eventBuilder.withId(eventId2).withTarget(targetNodeExpected2)
-                .withCity(cityNodeExpected2).build(ObjectType.NODE);
+                .withCity(cityNodeExpected2).withVictim(victimNodeExpected2).build(ObjectType.NODE);
         GroupNode groupNodeExpected = (GroupNode) groupBuilder.withId(groupId)
                 .withEventsCaused(List.of(eventNodeExpected, eventNodeExpected2)).build(ObjectType.NODE);
 
@@ -1394,114 +2034,220 @@ class GroupServiceImplTest {
                         () -> "should return group node with name: " + groupNodeExpected.getName() + ", but was: "
                                 + groupNodeActual.getName()),
 
-                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(), () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(0).getId()),
-                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(), () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getSummary()),
-                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(), () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getMotive()),
-                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(), () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getDate()),
+                () -> assertEquals(eventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getId()),
+                () -> assertEquals(eventNodeExpected.getSummary(), groupNodeActual.getEventsCaused().get(0).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getSummary()),
+                () -> assertEquals(eventNodeExpected.getMotive(), groupNodeActual.getEventsCaused().get(0).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getMotive()),
+                () -> assertEquals(eventNodeExpected.getDate(), groupNodeActual.getEventsCaused().get(0).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getDate()),
                 () -> assertEquals(eventNodeExpected.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(), () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(0).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected.getIsSuccessful(), groupNodeActual.getEventsCaused().get(0).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected.getIsSuicidal(), groupNodeActual.getEventsCaused().get(0).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(0).getIsSuicidal()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
                 () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget() + ", but was: "
-                                + targetNodeExpected),
+                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(0).getTarget()
+                                + ", but was: " + targetNodeExpected),
                 () -> assertEquals(targetNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getId() + ", but was: "
                                 + targetNodeExpected.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), groupNodeActual.getEventsCaused().get(0).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected.getTarget()),
 
                 () -> assertEquals(countryNodeExpected, groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(countryNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected.getId(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getId(),
                         () -> "should return group node with event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getId()),
-                () -> assertEquals(countryNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(countryNodeExpected.getName(),
+                        groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getName(),
                         () -> "should return group node with event node with country name: " + countryNodeExpected.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin()),
                 () -> assertNull(groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion(),
-                        () -> "should return group node with null region, but was: " + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
+                        () -> "should return group node with null region, but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getTarget().getCountryOfOrigin().getRegion()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected, groupNodeActual.getEventsCaused().get(0).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity() + ", but was: "
-                                + cityNodeExpected),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(0).getCity()
+                                + ", but was: " + cityNodeExpected),
                 () -> assertEquals(cityNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getId() + ", but was: "
                                 + cityNodeExpected.getId()),
                 () -> assertEquals(cityNodeExpected.getName(), groupNodeActual.getEventsCaused().get(0).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getName() + ", but was: "
                                 + cityNodeExpected.getName()),
                 () -> assertEquals(cityNodeExpected.getLatitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected.getLatitude()),
                 () -> assertEquals(cityNodeExpected.getLongitude(), groupNodeActual.getEventsCaused().get(0).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected.getLongitude()),
 
                 () -> assertNull(groupNodeActual.getEventsCaused().get(0).getCity().getProvince(),
-                        () -> "should return group node with null province, but was: " +
-                                groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
+                        () -> "should return group node with null province, but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getCity().getProvince()),
 
-                () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(), () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
-                        + groupNodeActual.getEventsCaused().get(1).getId()),
-                () -> assertEquals(eventNodeExpected2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(), () -> "should return group event node with summary: " + eventNodeExpected2.getSummary() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getSummary()),
-                () -> assertEquals(eventNodeExpected2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(), () -> "should return group event node with motive: " + eventNodeExpected2.getMotive() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getMotive()),
-                () -> assertEquals(eventNodeExpected2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(), () -> "should return group event node with date: " + eventNodeExpected2.getDate() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getDate()),
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(0).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected.getId(), groupNodeActual.getEventsCaused().get(0).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+
+                () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
+                        () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getId()),
+                () -> assertEquals(eventNodeExpected2.getSummary(), groupNodeActual.getEventsCaused().get(1).getSummary(),
+                        () -> "should return group event node with summary: " + eventNodeExpected2.getSummary() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getSummary()),
+                () -> assertEquals(eventNodeExpected2.getMotive(), groupNodeActual.getEventsCaused().get(1).getMotive(),
+                        () -> "should return group event node with motive: " + eventNodeExpected2.getMotive() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getMotive()),
+                () -> assertEquals(eventNodeExpected2.getDate(), groupNodeActual.getEventsCaused().get(1).getDate(),
+                        () -> "should return group event node with date: " + eventNodeExpected2.getDate() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getDate()),
                 () -> assertEquals(eventNodeExpected2.getIsPartOfMultipleIncidents(),
-                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(), () -> "should return group event node which was part of multiple incidents: " + eventNodeExpected2.getIsPartOfMultipleIncidents() + ", but was was: " + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
-                () -> assertEquals(eventNodeExpected2.getIsSuccessful(), groupNodeActual.getEventsCaused().get(1).getIsSuccessful(), () -> "should return group event node which was successful: " + eventNodeExpected2.getIsSuccessful() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
-                () -> assertEquals(eventNodeExpected2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(), () -> "should return group event node which was suicidal: " + eventNodeExpected2.getIsSuicidal() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
+                        groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents(),
+                        () -> "should return group event node which was part of multiple incidents: "
+                                + eventNodeExpected2.getIsPartOfMultipleIncidents() + ", but was was: "
+                                + groupNodeActual.getEventsCaused().get(1).getIsPartOfMultipleIncidents()),
+                () -> assertEquals(eventNodeExpected2.getIsSuccessful(),
+                        groupNodeActual.getEventsCaused().get(1).getIsSuccessful(),
+                        () -> "should return group event node which was successful: " + eventNodeExpected2.getIsSuccessful()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuccessful()),
+                () -> assertEquals(eventNodeExpected2.getIsSuicidal(), groupNodeActual.getEventsCaused().get(1).getIsSuicidal(),
+                        () -> "should return group event node which was suicidal: " + eventNodeExpected2.getIsSuicidal()
+                                + ", but was: " + groupNodeActual.getEventsCaused().get(1).getIsSuicidal()),
+                () -> assertNotNull(targetNodeExpected2,
+                        () -> "should return group event node with not null target, but was: null"),
+                () -> assertEquals(targetNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget(),
+                        () -> "should return group event node with target: " + targetNodeExpected2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget()),
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getTarget(),
                         () -> "should return group node with event node with not null target, but was: null"),
-                () -> assertEquals(targetNodeExpected, groupNodeActual.getEventsCaused().get(1).getTarget(),
-                        () -> "should return group node with event target: " + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: "
-                                + targetNodeExpected2),
+                () -> assertEquals(targetNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget(),
+                        () -> "should return group node with event target: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget() + ", but was: " + targetNodeExpected2),
                 () -> assertEquals(targetNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getId(),
-                        () -> "should return group node with event target id: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
+                        () -> "should return group node with event target id: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getId() + ", but was: "
                                 + targetNodeExpected2.getId()),
                 () -> assertEquals(targetNodeExpected2.getTarget(), groupNodeActual.getEventsCaused().get(1).getTarget().getTarget(),
-                        () -> "should return group node with event target name: " + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
+                        () -> "should return group node with event target name: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getTarget() + ", but was: "
                                 + targetNodeExpected2.getTarget()),
 
-                () -> assertEquals(targetNodeExpected2.getCountryOfOrigin(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
-                        () -> "should return group node with event node with country: " + targetNodeExpected2.getCountryOfOrigin() + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
-                () -> assertEquals(targetNodeExpected2.getCountryOfOrigin().getId(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
-                        () -> "should return group node with event node with country id: " + targetNodeExpected2.getCountryOfOrigin().getId()
+                () -> assertEquals(countryNodeExpected2, groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin(),
+                        () -> "should return group node with event node with country: " + countryNodeExpected2 + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
+                () -> assertEquals(countryNodeExpected2.getId(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return group node with event node with country id: " + countryNodeExpected2.getId()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getId()),
-                () -> assertEquals(targetNodeExpected2.getCountryOfOrigin().getName(), groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
-                        () -> "should return group node with event node with country name: " + targetNodeExpected2.getCountryOfOrigin().getName()
+                () -> assertEquals(countryNodeExpected2.getName(),
+                        groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getName(),
+                        () -> "should return group node with event node with country name: " + countryNodeExpected2.getName()
                                 + ", but was: " + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin()),
                 () -> assertNull(groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion(),
-                        () -> "should return group node with not null region, but was: " +
-                                groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion()),
+                        () -> "should return group node with null region, but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getTarget().getCountryOfOrigin().getRegion()),
 
                 () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getCity(),
                         () -> "should return group node with event node with not null city, but was: null"),
                 () -> assertEquals(cityNodeExpected2, groupNodeActual.getEventsCaused().get(1).getCity(),
-                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity() + ", but was: "
-                                + cityNodeExpected2),
+                        () -> "should return group node with event city: " + groupNodeActual.getEventsCaused().get(1).getCity()
+                                + ", but was: " + cityNodeExpected2),
                 () -> assertEquals(cityNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getCity().getId(),
-                        () -> "should return group node with event city id: " + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
+                        () -> "should return group node with event city id: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getId() + ", but was: "
                                 + cityNodeExpected2.getId()),
                 () -> assertEquals(cityNodeExpected2.getName(), groupNodeActual.getEventsCaused().get(1).getCity().getName(),
-                        () -> "should return group node with event city name: " + groupNodeActual.getEventsCaused().get(1).getCity().getName() + ", but was: "
-                                + cityNodeExpected2.getName()),
+                        () -> "should return group node with event city name: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getName()
+                                + ", but was: " + cityNodeExpected2.getName()),
                 () -> assertEquals(cityNodeExpected2.getLatitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLatitude(),
-                        () -> "should return group node with event city latitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
+                        () -> "should return group node with event city latitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLatitude() + ", but was: "
                                 + cityNodeExpected2.getLatitude()),
-                () -> assertEquals(cityNodeExpected2.getLongitude(), groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
-                        () -> "should return group node with event city longitude: " + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
+                () -> assertEquals(cityNodeExpected2.getLongitude(),
+                        groupNodeActual.getEventsCaused().get(1).getCity().getLongitude(),
+                        () -> "should return group node with event city longitude: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getLongitude() + ", but was: "
                                 + cityNodeExpected2.getLongitude()),
 
                 () -> assertNull(groupNodeActual.getEventsCaused().get(1).getCity().getProvince(),
-                        () -> "should return group node with null province, but was: " +
-                                groupNodeActual.getEventsCaused().get(1).getCity().getProvince()),
+                        () -> "should return group node with null province, but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getCity().getProvince()),
+
+                () -> assertNotNull(groupNodeActual.getEventsCaused().get(1).getVictim(),
+                        () -> "should return group node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getVictim().getId(),
+                        () -> "should return group node with victim node id: " + victimNodeExpected2.getId() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getId()),
+                () -> assertEquals(victimNodeExpected2.getTotalNumberOfFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return group node with victim total number of fatalities: "
+                                + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return group node with victim number of perpetrator fatalities: "
+                                + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
+                        () -> "should return group node with victim total number of injured: "
+                                + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return group node with victim number of perpetrator injured: "
+                                + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verify(eventService, times(1)).delete(eventId),
