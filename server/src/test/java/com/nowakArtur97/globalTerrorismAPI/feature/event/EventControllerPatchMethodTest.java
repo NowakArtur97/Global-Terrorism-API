@@ -80,17 +80,21 @@ class EventControllerPatchMethodTest {
     private final static TargetNode anotherTargetNode = new TargetNode("target2", countryNode);
     private final static TargetNode anotherTargetNode2 = new TargetNode("target 3", anotherCountryNode2);
     private final static TargetNode anotherTargetNode3 = new TargetNode("target 4", countryNode);
+    private final static TargetNode anotherTargetNode4 = new TargetNode("target 5", countryNode);
 
     private final static ProvinceNode provinceNode = new ProvinceNode("province", countryNode);
     private final static ProvinceNode anotherProvinceNode = new ProvinceNode("province 2", anotherCountryNode);
     private final static ProvinceNode anotherProvinceNode2 = new ProvinceNode("province 3", anotherCountryNode2);
     private final static ProvinceNode anotherProvinceNode3 = new ProvinceNode("province 4", countryNode);
+    private final static ProvinceNode anotherProvinceNode4 = new ProvinceNode("province 5", countryNode);
 
     private final static CityNode cityNode = new CityNode("city", 45.0, 45.0, provinceNode);
     private final static CityNode anotherCityNode = new CityNode("city 2", 15.0, -35.0, anotherProvinceNode2);
     private final static CityNode anotherCityNode2 = new CityNode("city 3", 11.0, -32.0, anotherProvinceNode3);
+    private final static CityNode anotherCityNode3 = new CityNode("city 4", 41.0, -12.0, anotherProvinceNode4);
 
     private final static VictimNode victimNode = new VictimNode(10L, 2L, 13L, 3L, 1000L);
+    private final static VictimNode anotherVictimNode = new VictimNode(20L, 12L, 14L, 4L, 2000L);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
             true, true, true, targetNode, cityNode, victimNode);
@@ -100,6 +104,8 @@ class EventControllerPatchMethodTest {
             true, false, true, anotherTargetNode2, anotherCityNode, victimNode);
     private final static EventNode anotherEventNode3 = new EventNode("summary4", "motive4", new Date(),
             false, false, true, anotherTargetNode3, anotherCityNode2, victimNode);
+    private final static EventNode anotherEventNode4 = new EventNode("summary5", "motive5", new Date(),
+            false, true, true, anotherTargetNode4, anotherCityNode3, anotherVictimNode);
 
     @BeforeAll
     private static void setUp(@Autowired UserRepository userRepository, @Autowired EventRepository eventRepository,
@@ -118,6 +124,7 @@ class EventControllerPatchMethodTest {
         eventRepository.save(anotherEventNode);
         eventRepository.save(anotherEventNode2);
         eventRepository.save(anotherEventNode3);
+        eventRepository.save(anotherEventNode4);
     }
 
     @AfterAll
@@ -480,9 +487,100 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
+        void when_partial_update_event_victim_using_json_patch_should_return_partially_updated_node() {
+
+            Long updatedTotalNumberOfFatalities = 20L;
+            Long updatedNumberOfPerpetratorFatalities = 10L;
+            Long updatedTotalNumberOfInjured = 14L;
+            Long updatedNumberOfPerpetratorInjured = 3L;
+            Long updatedValueOfPropertyDamage = 10000L;
+
+            String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
+            String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode4.getId().intValue();
+            String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode4.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + anotherVictimNode.getId().intValue();
+            String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode4.getId().intValue();
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode4.getId().intValue() + "/targets";
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfFatalities\", \"value\": \"" +
+                    updatedTotalNumberOfFatalities + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": \"" +
+                    updatedNumberOfPerpetratorFatalities + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfInjured\", \"value\": \"" +
+                    updatedTotalNumberOfInjured + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": \"" +
+                    updatedNumberOfPerpetratorInjured + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/valueOfPropertyDamage\", \"value\": \"" +
+                    updatedValueOfPropertyDamage + "\" }" +
+                    "]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, anotherEventNode4.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                            .andExpect(jsonPath("id", is(anotherEventNode4.getId().intValue())))
+                            .andExpect(jsonPath("summary", is(anotherEventNode4.getSummary())))
+                            .andExpect(jsonPath("motive", is(anotherEventNode4.getMotive())))
+                            .andExpect(jsonPath("date", is(notNullValue())))
+                            .andExpect(jsonPath("isSuicidal", is(anotherEventNode4.getIsSuicidal())))
+                            .andExpect(jsonPath("isSuccessful", is(anotherEventNode4.getIsSuccessful())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode4.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                            .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.id", is(anotherTargetNode4.getId().intValue())))
+                            .andExpect(jsonPath("target.target", is(anotherTargetNode4.getTarget())))
+                            .andExpect(jsonPath("target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                            .andExpect(jsonPath("target.countryOfOrigin.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.id", is(anotherCityNode3.getId().intValue())))
+                            .andExpect(jsonPath("city.name", is(anotherCityNode3.getName())))
+                            .andExpect(jsonPath("city.latitude", is(anotherCityNode3.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.id", is(anotherProvinceNode4.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(anotherProvinceNode4.getName())))
+                            .andExpect(jsonPath("city.province.country.links[0].href", is(pathToCountryLink)))
+                            .andExpect(jsonPath("city.province.country.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
+                            .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
+        }
+
+        @Test
         void when_partial_update_valid_event_but_event_not_exist_using_json_patch_should_return_error_response() {
 
-            Long notExistingId = 1000L;
+            Long notExistingId = 2000L;
 
             String updatedSummary = "summary updated";
             String updatedMotive = "motive updated";
@@ -1556,9 +1654,95 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
+        void when_partial_update_event_victim_using_json_merge_patch_should_return_partially_updated_node() {
+
+            Long updatedTotalNumberOfFatalities = 20L;
+            Long updatedNumberOfPerpetratorFatalities = 10L;
+            Long updatedTotalNumberOfInjured = 14L;
+            Long updatedNumberOfPerpetratorInjured = 3L;
+            Long updatedValueOfPropertyDamage = 10000L;
+
+            String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
+            String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+            String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + anotherProvinceNode4.getId().intValue();
+            String pathToTargetLink = TARGET_BASE_PATH + "/" + anotherTargetNode4.getId().intValue();
+            String pathToCityLink = CITY_BASE_PATH + "/" + anotherCityNode3.getId().intValue();
+            String pathToVictimLink = VICTIM_BASE_PATH + "/" + anotherVictimNode.getId().intValue();
+            String pathToEventLink = EVENT_BASE_PATH + "/" + anotherEventNode4.getId().intValue();
+            String pathToTargetEventLink = EVENT_BASE_PATH + "/" + anotherEventNode4.getId().intValue() + "/targets";
+
+            String jsonMergePatch = "{\"victim\" : {" +
+                    "\"totalNumberOfFatalities\" : " + updatedTotalNumberOfFatalities + "," +
+                    "\"numberOfPerpetratorFatalities\" : " + updatedNumberOfPerpetratorFatalities + "," +
+                    "\"totalNumberOfInjured\" : " + updatedTotalNumberOfInjured + "," +
+                    "\"numberOfPerpetratorInjured\" : " + updatedNumberOfPerpetratorInjured + "," +
+                    "\"valueOfPropertyDamage\" : " + updatedValueOfPropertyDamage + "}" +
+                    "}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, anotherEventNode4.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                            .andExpect(status().isOk())
+                            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                            .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                            .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                            .andExpect(jsonPath("id", is(anotherEventNode4.getId().intValue())))
+                            .andExpect(jsonPath("summary", is(anotherEventNode4.getSummary())))
+                            .andExpect(jsonPath("motive", is(anotherEventNode4.getMotive())))
+                            .andExpect(jsonPath("date", is(notNullValue())))
+                            .andExpect(jsonPath("isSuicidal", is(anotherEventNode4.getIsSuicidal())))
+                            .andExpect(jsonPath("isSuccessful", is(anotherEventNode4.getIsSuccessful())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode4.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                            .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.id", is(anotherTargetNode4.getId().intValue())))
+                            .andExpect(jsonPath("target.target", is(anotherTargetNode4.getTarget())))
+                            .andExpect(jsonPath("target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                            .andExpect(jsonPath("target.countryOfOrigin.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                            .andExpect(jsonPath("city.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.id", is(anotherCityNode3.getId().intValue())))
+                            .andExpect(jsonPath("city.name", is(anotherCityNode3.getName())))
+                            .andExpect(jsonPath("city.latitude", is(anotherCityNode3.getLatitude())))
+                            .andExpect(jsonPath("city.longitude", is(anotherCityNode3.getLongitude())))
+                            .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                            .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.id", is(anotherProvinceNode4.getId().intValue())))
+                            .andExpect(jsonPath("city.province.name", is(anotherProvinceNode4.getName())))
+                            .andExpect(jsonPath("city.province.country.links[0].href", is(pathToCountryLink)))
+                            .andExpect(jsonPath("city.province.country.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                            .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
+                            .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                            .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                            .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                            .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                            .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
+        }
+
+        @Test
         void when_partial_update_valid_event_but_event_not_exist_using_json_merge_patch_should_return_error_response() {
 
-            Long notExistingId = 1000L;
+            Long notExistingId = 2000L;
 
             String updatedSummary = "summary updated";
             String updatedMotive = "motive updated";

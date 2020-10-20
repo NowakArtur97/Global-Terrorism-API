@@ -578,6 +578,100 @@ class EventControllerPutMethodTest {
     }
 
     @Test
+    void when_update_event_victim_should_return_event_with_updated_victim() {
+
+        Long updatedTotalNumberOfFatalities = 20L;
+        Long updatedNumberOfPerpetratorFatalities = 10L;
+        Long updatedTotalNumberOfInjured = 14L;
+        Long updatedNumberOfPerpetratorInjured = 3L;
+        Long updatedValueOfPropertyDamage = 10000L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(provinceNode.getName()).withCountry(countryDTO)
+                .build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
+                .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder
+                .withTotalNumberOfFatalities(updatedTotalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(updatedNumberOfPerpetratorFatalities)
+                .withTotalNumberOfInjured(updatedTotalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(updatedNumberOfPerpetratorInjured)
+                .withValueOfPropertyDamage(updatedValueOfPropertyDamage)
+                .build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode.getId().intValue();
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode.getId().intValue();
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue();
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventNode.getId().intValue() + "/targets";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(put(LINK_WITH_PARAMETER, eventNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                        .andExpect(jsonPath("id", is(eventNode.getId().intValue())))
+                        .andExpect(jsonPath("summary", is(eventDTO.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventDTO.getMotive())))
+                        .andExpect(jsonPath("date", is(notNullValue())))
+                        .andExpect(jsonPath("isSuicidal", is(eventDTO.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventDTO.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventDTO.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", is(targetNode.getId().intValue())))
+                        .andExpect(jsonPath("target.target", is(targetDTO.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.id", is(cityNode.getId().intValue())))
+                        .andExpect(jsonPath("city.name", is(cityNode.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityNode.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityNode.getLongitude())))
+                        .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                        .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.id", is(provinceNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.name", is(provinceNode.getName())))
+                        .andExpect(jsonPath("city.province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
+    }
+
+    @Test
     void when_update_event_with_not_existing_id_should_return_new_event() {
 
         Long notExistingId = 10000L;
