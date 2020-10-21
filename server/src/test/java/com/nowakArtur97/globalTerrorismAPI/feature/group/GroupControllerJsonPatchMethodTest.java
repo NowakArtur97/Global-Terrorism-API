@@ -692,7 +692,8 @@ class GroupControllerJsonPatchMethodTest {
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/isSuccessful\", \"value\": " + null + "}," +
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/isSuicidal\", \"value\": " + null + "}," +
                 "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/target\", \"value\": " + null + "}," +
-                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city\", \"value\": " + null + "}" +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/city\", \"value\": " + null + "}," +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim\", \"value\": " + null + "}" +
                 "]";
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -715,7 +716,8 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(8))));
+                        .andExpect(jsonPath("errors", hasItem("Victim data cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(9))));
     }
 
     @ParameterizedTest(name = "{index}: For Group Event summary: {0}")
