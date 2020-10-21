@@ -1320,7 +1320,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
@@ -1391,7 +1391,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City latitude must be greater or equal to -90.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1461,7 +1461,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City latitude must be less or equal to 90.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1531,7 +1531,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be greater or equal to -180.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1601,7 +1601,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("City longitude must be less or equal to 180.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1669,7 +1669,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1730,11 +1730,11 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @ParameterizedTest(name = "{index}: For Group Event Province name: {0}")
@@ -1801,7 +1801,7 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
@@ -1862,10 +1862,720 @@ class GroupControllerJsonMergePatchMethodTest {
                                 .content(jsonMergePatch)
                                 .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_total_number_of_fatalities_using_json_merge_patch_should_return_errors() {
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + null + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_total_number_of_fatalities_using_json_merge_patch_should_return_errors() {
+
+        long negativeTotalNumberOfFatalities = -10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + negativeTotalNumberOfFatalities + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + null + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
+
+        long negativeNumberOfPerpetratorFatalities = -10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + negativeNumberOfPerpetratorFatalities + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_total_number_of_injured_using_json_merge_patch_should_return_errors() {
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + null + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_total_number_of_injured_using_json_merge_patch_should_return_errors() {
+
+        long negativeTotalNumberOfInjured = -10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + negativeTotalNumberOfInjured + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + null + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
+
+        long negativeNumberOfPerpetratorInjured = -10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + negativeNumberOfPerpetratorInjured + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_value_of_property_damage_using_json_merge_patch_should_return_errors() {
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + null + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_value_of_property_damage_using_json_merge_patch_should_return_errors() {
+
+        long negativeValueOfPropertyDamage = -100L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + negativeValueOfPropertyDamage + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }
