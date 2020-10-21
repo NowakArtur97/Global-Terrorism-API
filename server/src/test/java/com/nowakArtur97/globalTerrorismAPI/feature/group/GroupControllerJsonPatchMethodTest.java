@@ -18,7 +18,6 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -92,10 +91,10 @@ class GroupControllerJsonPatchMethodTest {
     private final static CityNode cityNode2 = new CityNode("city name 2", 15.0, -45.0, provinceNode);
     private final static CityNode cityNode3 = new CityNode("city name 3", 35.0, -35.0, provinceNode2);
 
-    private final static VictimNode victimNode = new VictimNode(10L,0L,10L,0L, 1000L);
-    private final static VictimNode victimNode2 = new VictimNode(11L,1L,11L,1L, 1100L);
-    private final static VictimNode victimNode3 = new VictimNode(20L,2L,20L,2L, 1200L);
-    private final static VictimNode victimNode4 = new VictimNode(24L,4L,24L,4L, 1400L);
+    private final static VictimNode victimNode = new VictimNode(10L, 0L, 10L, 0L, 1000L);
+    private final static VictimNode victimNode2 = new VictimNode(11L, 1L, 11L, 1L, 1100L);
+    private final static VictimNode victimNode3 = new VictimNode(20L, 2L, 20L, 2L, 1200L);
+    private final static VictimNode victimNode4 = new VictimNode(24L, 4L, 24L, 4L, 1400L);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(), true,
             true, true, targetNode, cityNode, victimNode);
@@ -341,7 +340,7 @@ class GroupControllerJsonPatchMethodTest {
                                 is(victimNode2.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(victimNode2.getValueOfPropertyDamage().intValue())))
-                        
+
                         .andExpect(jsonPath("eventsCaused[1].links[0].href", is(pathToEventLink2)))
                         .andExpect(jsonPath("eventsCaused[1].links[1].href", is(pathToEventTargetLink2)))
                         .andExpect(jsonPath("eventsCaused[1].id", is(eventNode3.getId().intValue())))
@@ -1029,5 +1028,245 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_total_number_of_fatalities_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfFatalities\", \"value\": "
+                + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_total_number_of_fatalities_using_json_patch_should_return_errors() {
+
+        long negativeTotalNumberOfFatalities = -10L;
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfFatalities\", \"value\": "
+                + negativeTotalNumberOfFatalities + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_number_of_perpetrator_fatalities_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorFatalities\", \"value\": "
+                + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_number_of_perpetrator_fatalities_using_json_patch_should_return_errors() {
+
+        long negativeNumberOfPerpetratorFatalities = -10L;
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorFatalities\", \"value\": "
+                + negativeNumberOfPerpetratorFatalities + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_total_number_of_injured_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfInjured\", \"value\": "
+                + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_total_number_of_injured_using_json_patch_should_return_errors() {
+
+        long negativeTotalNumberOfInjured = -10L;
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfInjured\", \"value\": "
+                + negativeTotalNumberOfInjured + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_number_of_perpetrator_injured_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorInjured\", \"value\": "
+                + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_number_of_perpetrator_injured_using_json_patch_should_return_errors() {
+
+        long negativeNumberOfPerpetratorInjured = -10L;
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorInjured\", \"value\": "
+                + negativeNumberOfPerpetratorInjured + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_without_value_of_property_damage_using_json_patch_should_return_errors() {
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/valueOfPropertyDamage\", \"value\": "
+                + null + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_negative_value_of_property_damage_using_json_patch_should_return_errors() {
+
+        long negativeValueOfPropertyDamage = -100L;
+
+        String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/valueOfPropertyDamage\", \"value\": "
+                + negativeValueOfPropertyDamage + " }]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
     }
 }
