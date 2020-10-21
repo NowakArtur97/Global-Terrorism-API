@@ -601,7 +601,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event Target: {0}")
+    @ParameterizedTest(name = "{index}: For Group Event Target: {0}")
     @EmptySource
     @ValueSource(strings = {" "})
     void when_partial_update_invalid_group_events_target_using_json_patch_should_have_errors(String invalidTarget) {

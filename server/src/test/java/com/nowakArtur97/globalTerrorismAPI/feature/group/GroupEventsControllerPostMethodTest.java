@@ -15,6 +15,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.RoleNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserRepository;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
@@ -75,6 +76,7 @@ class GroupEventsControllerPostMethodTest {
     private static TargetBuilder targetBuilder;
     private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
+    private static VictimBuilder victimBuilder;
     private static EventBuilder eventBuilder;
 
     private final static UserNode userNode = new UserNode("user1234", "Password1234!", "user1234email@.com",
@@ -99,6 +101,7 @@ class GroupEventsControllerPostMethodTest {
         targetBuilder = new TargetBuilder();
         provinceBuilder = new ProvinceBuilder();
         cityBuilder = new CityBuilder();
+        victimBuilder = new VictimBuilder();
         eventBuilder = new EventBuilder();
     }
 
@@ -129,7 +132,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
@@ -170,11 +175,14 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
+                                is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id",
+                                is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", notNullValue()))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
@@ -190,10 +198,26 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryDTO.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name",
+                                is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].victim.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -205,7 +229,9 @@ class GroupEventsControllerPostMethodTest {
                 .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(cityNode.getName()).withLatitude(cityNode.getLatitude())
                 .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
@@ -248,12 +274,16 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
+                                is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id",
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name",
+                                is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode.getId().intValue())))
@@ -268,10 +298,26 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryDTO.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName()))));
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name",
+                                is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].victim.id", notNullValue()))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
+                                is(victimDTO.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
+                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
+                                is(victimDTO.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
+                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -279,7 +325,7 @@ class GroupEventsControllerPostMethodTest {
 
         EventDTO eventDTO = (EventDTO) eventBuilder.withId(null).withSummary(null).withMotive(null).withDate(null)
                 .withIsPartOfMultipleIncidents(null).withIsSuccessful(null).withIsSuicidal(null)
-                .withTarget(null).withCity(null)
+                .withTarget(null).withCity(null).withVictim(null)
                 .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -302,7 +348,8 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasSize(8))));
+                        .andExpect(jsonPath("errors", hasItem("Victim data cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(9))));
     }
 
     @ParameterizedTest(name = "{index}: Event Group Target Country: {0}")
@@ -314,8 +361,10 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
-
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+        
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
@@ -343,8 +392,10 @@ class GroupEventsControllerPostMethodTest {
                 .build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
-
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+        
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
 
@@ -360,7 +411,7 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event summary: {0}")
+    @ParameterizedTest(name = "{index}: For Group Event summary: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_summary_should_return_errors(String invalidSummary) {
@@ -369,8 +420,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withSummary(invalidSummary).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -388,7 +440,7 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event motive: {0}")
+    @ParameterizedTest(name = "{index}: For Group Event motive: {0}")
     @EmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_motive_should_return_errors(String invalidMotive) {
@@ -397,8 +449,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withMotive(invalidMotive).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -426,8 +479,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withDate(invalidDate).withTarget(targetDTO).withCity(cityDTO)
-                .build(ObjectType.DTO);
+                .withVictim(victimDTO).build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -444,7 +498,7 @@ class GroupEventsControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
-    @ParameterizedTest(name = "{index}: For Event City name: {0}")
+    @ParameterizedTest(name = "{index}: For Group Event City name: {0}")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n"})
     void when_add_event_to_group_with_invalid_city_name_should_return_errors(String invalidCityName) {
@@ -454,7 +508,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(invalidCityName).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -478,7 +534,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(null).withLongitude(null).withProvince(null)
                 .withProvince(null).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -509,7 +567,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -536,7 +596,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLatitude(invalidCityLatitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -563,7 +625,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -590,7 +654,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withLongitude(invalidCityLongitude).withProvince(provinceDTO)
                 .build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -616,7 +682,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO2).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -643,7 +711,9 @@ class GroupEventsControllerPostMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(invalidProvinceName)
                 .withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -667,7 +737,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(null).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
@@ -694,7 +766,9 @@ class GroupEventsControllerPostMethodTest {
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
 
         String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                 List.of(new SimpleGrantedAuthority("user"))));
