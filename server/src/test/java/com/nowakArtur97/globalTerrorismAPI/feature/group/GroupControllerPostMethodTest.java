@@ -59,7 +59,6 @@ class GroupControllerPostMethodTest {
     private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
     private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
     private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
-    private final String VICTIM_BASE_PATH = "http://localhost:8080/api/v1/victims";
     private final String GROUP_BASE_PATH = "http://localhost:8080/api/v1/groups";
 
     @Autowired
