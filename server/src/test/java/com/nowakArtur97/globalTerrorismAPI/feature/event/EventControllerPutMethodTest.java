@@ -664,10 +664,13 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
                         .andExpect(jsonPath("victim.links[1].href").doesNotExist())
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
-                        .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(updatedTotalNumberOfFatalities.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(updatedNumberOfPerpetratorFatalities.intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(updatedNumberOfPerpetratorInjured.intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
     }
 

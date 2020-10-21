@@ -184,6 +184,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
                         .andExpect(jsonPath("victim.id", notNullValue()))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
@@ -194,9 +196,7 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
                                 is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
-                                is(victimDTO.getValueOfPropertyDamage().intValue())))
-                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
-                        .andExpect(jsonPath("victim.links[1].href").doesNotExist()));
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
@@ -268,6 +268,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("city.province.country.region.id", is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
                         .andExpect(jsonPath("victim.id", notNullValue()))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
@@ -278,9 +280,7 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
                                 is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
-                                is(victimDTO.getValueOfPropertyDamage().intValue())))
-                        .andExpect(jsonPath("victim.links[0].href", notNullValue()))
-                        .andExpect(jsonPath("victim.links[1].href").doesNotExist()));
+                                is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
 
     @Test
