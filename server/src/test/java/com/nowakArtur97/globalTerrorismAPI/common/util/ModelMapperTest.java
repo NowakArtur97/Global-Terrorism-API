@@ -23,6 +23,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.UserNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimDTO;
+import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
@@ -83,6 +84,8 @@ class ModelMapperTest {
             TargetNode targetNodeActual = modelMapper.map(targetDTOExpected, TargetNode.class);
 
             assertAll(
+                    () -> assertNotNull(targetNodeActual,
+                            () -> "should return not null target node, but was: null"),
                     () -> assertNull(targetNodeActual.getId(),
                             () -> "should return target node with id as null, but was: " + targetNodeActual.getId()),
                     () -> assertEquals(targetDTOExpected.getTarget(), targetNodeActual.getTarget(),
@@ -103,9 +106,12 @@ class ModelMapperTest {
 
             TargetDTO targetDTOActual = modelMapper.map(targetNodeExpected, TargetDTO.class);
 
-            assertAll(() -> assertEquals(targetNodeExpected.getTarget(), targetDTOActual.getTarget(),
-                    () -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
-                            + targetDTOActual.getTarget()),
+            assertAll(
+                    () -> assertNotNull(targetDTOActual,
+                            () -> "should return not null target dto, but was: null"),
+                    () -> assertEquals(targetNodeExpected.getTarget(), targetDTOActual.getTarget(),
+                            () -> "should return target dto with target: " + targetDTOActual.getTarget() + ", but was: "
+                                    + targetDTOActual.getTarget()),
 
                     () -> assertEquals(countryNodeExpected.getName(), targetDTOActual.getCountryOfOrigin().getName(),
                             () -> "should return target dto with country name: " + countryNodeExpected.getName()
@@ -116,12 +122,15 @@ class ModelMapperTest {
         void when_map_target_node_to_model_should_return_valid_model() {
 
             RegionNode regionNodeExpected = (RegionNode) regionBuilder.build(ObjectType.NODE);
-            CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected).build(ObjectType.NODE);
+            CountryNode countryNodeExpected = (CountryNode) countryBuilder.withRegion(regionNodeExpected)
+                    .build(ObjectType.NODE);
             TargetNode targetNodeExpected = (TargetNode) targetBuilder.withCountry(countryNodeExpected).build(ObjectType.NODE);
 
             TargetModel targetModelActual = modelMapper.map(targetNodeExpected, TargetModel.class);
 
             assertAll(
+                    () -> assertNotNull(targetModelActual,
+                            () -> "should return not null target model, but was: null"),
                     () -> assertEquals(targetNodeExpected.getTarget(), targetModelActual.getTarget(),
                             () -> "should return target model with target: " + targetNodeExpected.getTarget() + ", but was: "
                                     + targetModelActual.getTarget()),
@@ -156,7 +165,7 @@ class ModelMapperTest {
 
             assertAll(
                     () -> assertNotNull(regionModelActual,
-                            () -> "should return region model with not null region, but was: null"),
+                            () -> "should return not null region model, but was: null"),
                     () -> assertEquals(regionNodeExpected.getId(), regionModelActual.getId(),
                             () -> "should return region model with region id: " + regionNodeExpected.getId()
                                     + ", but was: " + regionModelActual.getId()),
@@ -178,7 +187,9 @@ class ModelMapperTest {
             CountryNode countryNodeActual = modelMapper.map(countryDTOExpected, CountryNode.class);
 
             assertAll(
-                    () -> assertNotNull(countryNodeActual, () -> "should return not null country, but was: null"),
+                    () -> assertNotNull(countryNodeActual, () -> "should return not null country node, but was: null"),
+                    () -> assertNull(countryNodeActual.getId(),
+                            () -> "should return country node with id as null, but was: " + countryNodeActual.getId()),
                     () -> assertEquals(countryDTOExpected.getName(), countryNodeActual.getName(),
                             () -> "should return country node name: " + countryDTOExpected.getName() + ", but was: "
                                     + countryNodeActual.getName()),
@@ -195,7 +206,7 @@ class ModelMapperTest {
             CountryDTO countryDTOActual = modelMapper.map(countryNodeExpected, CountryDTO.class);
 
             assertAll(
-                    () -> assertNotNull(countryDTOActual, () -> "should return null country, but was: null"),
+                    () -> assertNotNull(countryDTOActual, () -> "should return not null country dto, but was: null"),
                     () -> assertEquals(countryNodeExpected.getName(), countryDTOActual.getName(),
                             () -> "should return country dto name: " + countryNodeExpected.getName() + ", but was: "
                                     + countryDTOActual.getName()));
@@ -212,7 +223,7 @@ class ModelMapperTest {
 
             assertAll(
                     () -> assertNotNull(countryModelActual,
-                            () -> "should return country model with not null country, but was: null"),
+                            () -> "should return not null country model, but was: null"),
                     () -> assertEquals(countryNodeExpected.getId(), countryModelActual.getId(),
                             () -> "should return country model with country id: " + countryNodeExpected.getId()
                                     + ", but was: " + countryModelActual.getId()),
@@ -244,7 +255,9 @@ class ModelMapperTest {
             ProvinceNode provinceNodeActual = modelMapper.map(provinceDTOExpected, ProvinceNode.class);
 
             assertAll(
-                    () -> assertNotNull(provinceNodeActual, () -> "should return not null province, but was: null"),
+                    () -> assertNotNull(provinceNodeActual, () -> "should return not null province node, but was: null"),
+                    () -> assertNull(provinceNodeActual.getId(),
+                            () -> "should return province node with id as null, but was: " + provinceNodeActual.getId()),
                     () -> assertEquals(provinceDTOExpected.getName(), provinceNodeActual.getName(),
                             () -> "should return province node name: " + provinceDTOExpected.getName() + ", but was: "
                                     + provinceNodeActual.getName()),
@@ -267,7 +280,7 @@ class ModelMapperTest {
             ProvinceDTO provinceDTOActual = modelMapper.map(provinceNodeExpected, ProvinceDTO.class);
 
             assertAll(
-                    () -> assertNotNull(provinceDTOActual, () -> "should return null province, but was: null"),
+                    () -> assertNotNull(provinceDTOActual, () -> "should return not null province dto, but was: null"),
                     () -> assertEquals(provinceNodeExpected.getName(), provinceDTOActual.getName(),
                             () -> "should return province dto name: " + provinceNodeExpected.getName() + ", but was: "
                                     + provinceDTOActual.getName()),
@@ -290,7 +303,7 @@ class ModelMapperTest {
             ProvinceModel provinceModelActual = modelMapper.map(provinceNodeExpected, ProvinceModel.class);
 
             assertAll(
-                    () -> assertNotNull(provinceModelActual, () -> "should return not null province, but was: null"),
+                    () -> assertNotNull(provinceModelActual, () -> "should return not null province model, but was: null"),
                     () -> assertEquals(provinceNodeExpected.getId(), provinceModelActual.getId(),
                             () -> "should return province model id: " + provinceNodeExpected.getId()
                                     + ", but was: " + provinceModelActual.getId()),
@@ -333,9 +346,9 @@ class ModelMapperTest {
 
             assertAll(
                     () -> assertNotNull(cityNodeActual,
-                            () -> "should return city node with not null city, but was: null"),
+                            () -> "should return not null city node, but was: null"),
                     () -> assertNull(cityNodeActual.getId(),
-                            () -> "should return city city node with id as null, but was: " + cityNodeActual.getId()),
+                            () -> "should return city node with id as null, but was: " + cityNodeActual.getId()),
                     () -> assertEquals(cityDTOExpected.getName(), cityNodeActual.getName(),
                             () -> "should return city node with name: " + cityDTOExpected.getName()
                                     + ", but was: " + cityNodeActual.getName()),
@@ -371,7 +384,7 @@ class ModelMapperTest {
             CityDTO cityDTOActual = modelMapper.map(cityNodeExpected, CityDTO.class);
 
             assertAll(() -> assertNotNull(cityDTOActual,
-                    () -> "should return city dto dto not null city, but was: null"),
+                    () -> "should return not null city dto, but was: null"),
                     () -> assertEquals(cityNodeExpected.getName(), cityDTOActual.getName(),
                             () -> "should return city dto with name: " + cityNodeExpected.getName()
                                     + ", but was: " + cityDTOActual.getName()),
@@ -408,7 +421,7 @@ class ModelMapperTest {
 
             assertAll(
                     () -> assertNotNull(cityModelActual,
-                            () -> "should return city model not null city, but was: null"),
+                            () -> "should return not null city model, but was: null"),
                     () -> assertEquals(cityNodeExpected.getId(), cityModelActual.getId(),
                             () -> "should return city model with id: " + cityNodeExpected.getId() + ", but was: "
                                     + cityModelActual.getId()),
@@ -452,6 +465,112 @@ class ModelMapperTest {
     }
 
     @Nested
+    @Tag("VictimModelMapper_Tests")
+    class VictimModelMapperTest {
+
+        @Test
+        void when_map_victim_dto_to_node_should_return_valid_node() {
+
+            VictimDTO victimDTOExpected = (VictimDTO) victimBuilder.build(ObjectType.DTO);
+
+            VictimNode victimNodeActual = modelMapper.map(victimDTOExpected, VictimNode.class);
+
+            assertAll(
+                    () -> assertNotNull(victimNodeActual,
+                            () -> "should return not null victim node, but was: null"),
+                    () -> assertNull(victimNodeActual.getId(),
+                            () -> "should return victim node with id as null, but was: " + victimNodeActual.getId()),
+                    () -> assertEquals(victimDTOExpected.getTotalNumberOfFatalities(),
+                            victimNodeActual.getTotalNumberOfFatalities(),
+                            () -> "should return victim node with total number of fatalities: "
+                                    + victimDTOExpected.getTotalNumberOfFatalities() + ", but was: "
+                                    + victimNodeActual.getTotalNumberOfFatalities()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorFatalities(),
+                            victimNodeActual.getNumberOfPerpetratorFatalities(),
+                            () -> "should return victim node with number of perpetrator fatalities: "
+                                    + victimDTOExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                    + victimNodeActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimDTOExpected.getTotalNumberOfInjured(),
+                            victimNodeActual.getTotalNumberOfInjured(),
+                            () -> "should return victim node with total number of injured: "
+                                    + victimDTOExpected.getTotalNumberOfInjured() + ", but was: "
+                                    + victimNodeActual.getTotalNumberOfInjured()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorInjured(),
+                            victimNodeActual.getNumberOfPerpetratorInjured(),
+                            () -> "should return victim node with number of perpetrator injured: "
+                                    + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                    + victimNodeActual.getNumberOfPerpetratorInjured()));
+        }
+
+        @Test
+        void when_map_victim_node_to_dto_should_return_valid_dto() {
+
+            VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
+
+            VictimDTO victimDTOActual = modelMapper.map(victimNodeExpected, VictimDTO.class);
+
+            assertAll(
+                    () -> assertNotNull(victimDTOActual,
+                            () -> "should return not null victim dto, but was: null"),
+                    () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                            victimDTOActual.getTotalNumberOfFatalities(),
+                            () -> "should return victim dto with total number of fatalities: "
+                                    + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                    + victimDTOActual.getTotalNumberOfFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                            victimDTOActual.getNumberOfPerpetratorFatalities(),
+                            () -> "should return victim dto with number of perpetrator fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                    + victimDTOActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                            victimDTOActual.getTotalNumberOfInjured(),
+                            () -> "should return victim dto with total number of injured: "
+                                    + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                    + victimDTOActual.getTotalNumberOfInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                            victimDTOActual.getNumberOfPerpetratorInjured(),
+                            () -> "should return victim dto with number of perpetrator injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                    + victimDTOActual.getNumberOfPerpetratorInjured()));
+        }
+
+        @Test
+        void when_map_victim_node_to_model_should_return_valid_model() {
+
+            VictimNode victimNodeExpected = (VictimNode) victimBuilder.build(ObjectType.NODE);
+
+            VictimModel victimModelActual = modelMapper.map(victimNodeExpected, VictimModel.class);
+
+            assertAll(
+                    () -> assertNotNull(victimModelActual,
+                            () -> "should return not null victim model, but was: null"),
+                    () -> assertEquals(victimNodeExpected.getId(), victimModelActual.getId(),
+                            () -> "should return victim model with node id: " + victimNodeExpected.getId() + ", but was: "
+                                    + victimModelActual.getId()),
+                    () -> assertEquals(victimNodeExpected.getTotalNumberOfFatalities(),
+                            victimModelActual.getTotalNumberOfFatalities(),
+                            () -> "should return victim model with total number of fatalities: "
+                                    + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
+                                    + victimModelActual.getTotalNumberOfFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
+                            victimModelActual.getNumberOfPerpetratorFatalities(),
+                            () -> "should return victim model with number of perpetrator fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
+                                    + victimModelActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                            victimModelActual.getTotalNumberOfInjured(),
+                            () -> "should return victim model with total number of injured: "
+                                    + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
+                                    + victimModelActual.getTotalNumberOfInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
+                            victimModelActual.getNumberOfPerpetratorInjured(),
+                            () -> "should return victim model with number of perpetrator injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
+                                    + victimModelActual.getNumberOfPerpetratorInjured()));
+        }
+    }
+
+    @Nested
     @Tag("EventModelMapper_Tests")
     class EventModelMapperTest {
 
@@ -468,90 +587,92 @@ class ModelMapperTest {
             EventDTO eventDTOExpected = (EventDTO) eventBuilder.withTarget(targetDTOExpected).withCity(cityDTOExpected)
                     .withVictim(victimDTOExpected).build(ObjectType.DTO);
 
-            EventNode eventDTOActual = modelMapper.map(eventDTOExpected, EventNode.class);
+            EventNode eventNodeActual = modelMapper.map(eventDTOExpected, EventNode.class);
 
             assertAll(
-                    () -> assertNull(eventDTOActual.getId(),
-                            () -> "should return event node with id, but was: " + eventDTOActual.getId()),
-                    () -> assertEquals(eventDTOExpected.getSummary(), eventDTOActual.getSummary(),
+                    () -> assertNotNull(eventNodeActual,
+                            () -> "should return not null event node, but was: null"),
+                    () -> assertNull(eventNodeActual.getId(),
+                            () -> "should return event node with id as null, but was: " + eventNodeActual.getId()),
+                    () -> assertEquals(eventDTOExpected.getSummary(), eventNodeActual.getSummary(),
                             () -> "should return event node with summary: " + eventDTOExpected.getSummary() + ", but was: "
-                                    + eventDTOActual.getSummary()),
-                    () -> assertEquals(eventDTOExpected.getMotive(), eventDTOActual.getMotive(),
+                                    + eventNodeActual.getSummary()),
+                    () -> assertEquals(eventDTOExpected.getMotive(), eventNodeActual.getMotive(),
                             () -> "should return event node with motive: " + eventDTOExpected.getMotive() + ", but was: "
-                                    + eventDTOActual.getMotive()),
-                    () -> assertEquals(eventDTOExpected.getDate(), eventDTOActual.getDate(),
+                                    + eventNodeActual.getMotive()),
+                    () -> assertEquals(eventDTOExpected.getDate(), eventNodeActual.getDate(),
                             () -> "should return event node with date: " + eventDTOExpected.getDate() + ", but was: "
-                                    + eventDTOActual.getDate()),
+                                    + eventNodeActual.getDate()),
                     () -> assertEquals(eventDTOExpected.getIsPartOfMultipleIncidents(),
-                            eventDTOActual.getIsPartOfMultipleIncidents(),
+                            eventNodeActual.getIsPartOfMultipleIncidents(),
                             () -> "should return event node which was part of multiple incidents: "
                                     + eventDTOExpected.getIsPartOfMultipleIncidents() + ", but was was: "
-                                    + eventDTOActual.getIsPartOfMultipleIncidents()),
-                    () -> assertEquals(eventDTOExpected.getIsSuccessful(), eventDTOActual.getIsSuccessful(),
+                                    + eventNodeActual.getIsPartOfMultipleIncidents()),
+                    () -> assertEquals(eventDTOExpected.getIsSuccessful(), eventNodeActual.getIsSuccessful(),
                             () -> "should return event node which was successful: " + eventDTOExpected.getIsSuccessful()
-                                    + ", but was: " + eventDTOActual.getIsSuccessful()),
-                    () -> assertEquals(eventDTOExpected.getIsSuicidal(), eventDTOActual.getIsSuicidal(),
+                                    + ", but was: " + eventNodeActual.getIsSuccessful()),
+                    () -> assertEquals(eventDTOExpected.getIsSuicidal(), eventNodeActual.getIsSuicidal(),
                             () -> "should return event node which was suicidal: " + eventDTOExpected.getIsSuicidal()
-                                    + ", but was: " + eventDTOActual.getIsSuicidal()),
-                    () -> assertNotNull(eventDTOActual.getTarget(),
+                                    + ", but was: " + eventNodeActual.getIsSuicidal()),
+                    () -> assertNotNull(eventNodeActual.getTarget(),
                             () -> "should return event node with not null target, but was: null"),
-                    () -> assertEquals(targetDTOExpected.getTarget(), eventDTOActual.getTarget().getTarget(),
+                    () -> assertEquals(targetDTOExpected.getTarget(), eventNodeActual.getTarget().getTarget(),
                             () -> "should return event node with target: " + targetDTOExpected.getTarget() + ", but was: "
-                                    + eventDTOActual.getTarget().getTarget()),
-                    () -> assertEquals(countryDTOExpected.getName(), eventDTOActual.getTarget().getCountryOfOrigin().getName(),
+                                    + eventNodeActual.getTarget().getTarget()),
+                    () -> assertEquals(countryDTOExpected.getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                             () -> "should return event node with country name: " + countryDTOExpected.getName()
-                                    + ", but was: " + eventDTOActual.getTarget().getCountryOfOrigin()),
-                    () -> assertNull(eventDTOActual.getTarget().getCountryOfOrigin().getRegion(),
+                                    + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
+                    () -> assertNull(eventNodeActual.getTarget().getCountryOfOrigin().getRegion(),
                             () -> "should return event node with null region, but was: "
-                                    + eventDTOActual.getTarget().getCountryOfOrigin().getRegion()),
+                                    + eventNodeActual.getTarget().getCountryOfOrigin().getRegion()),
 
-                    () -> assertNotNull(eventDTOActual.getCity(),
+                    () -> assertNotNull(eventNodeActual.getCity(),
                             () -> "should return event node with not null cty, but was: null"),
-                    () -> assertEquals(cityDTOExpected.getName(), eventDTOActual.getCity().getName(),
+                    () -> assertEquals(cityDTOExpected.getName(), eventNodeActual.getCity().getName(),
                             () -> "should return event node with city name: " + cityDTOExpected.getName() + ", but was: "
-                                    + eventDTOActual.getCity().getName()),
-                    () -> assertEquals(cityDTOExpected.getLatitude(), eventDTOActual.getCity().getLatitude(),
+                                    + eventNodeActual.getCity().getName()),
+                    () -> assertEquals(cityDTOExpected.getLatitude(), eventNodeActual.getCity().getLatitude(),
                             () -> "should return event node with city latitude: " + cityDTOExpected.getLatitude()
-                                    + ", but was: " + eventDTOActual.getCity().getLatitude()),
-                    () -> assertEquals(cityDTOExpected.getLongitude(), eventDTOActual.getCity().getLongitude(),
+                                    + ", but was: " + eventNodeActual.getCity().getLatitude()),
+                    () -> assertEquals(cityDTOExpected.getLongitude(), eventNodeActual.getCity().getLongitude(),
                             () -> "should return event node with city longitude: " + cityDTOExpected.getLongitude()
-                                    + ", but was: " + eventDTOActual.getCity().getLongitude()),
+                                    + ", but was: " + eventNodeActual.getCity().getLongitude()),
 
-                    () -> assertNotNull(eventDTOActual.getCity().getProvince(),
+                    () -> assertNotNull(eventNodeActual.getCity().getProvince(),
                             () -> "should return event node with not null province, but was: null"),
-                    () -> assertEquals(provinceDTOExpected.getName(), eventDTOActual.getCity().getProvince().getName(),
+                    () -> assertEquals(provinceDTOExpected.getName(), eventNodeActual.getCity().getProvince().getName(),
                             () -> "should return event node with province name: " + provinceDTOExpected.getName()
-                                    + ", but was: " + eventDTOActual.getCity().getProvince().getName()),
+                                    + ", but was: " + eventNodeActual.getCity().getProvince().getName()),
                     () -> assertEquals(countryDTOExpected.getName(),
-                            eventDTOActual.getCity().getProvince().getCountry().getName(),
+                            eventNodeActual.getCity().getProvince().getCountry().getName(),
                             () -> "should return event node with country name: " + countryDTOExpected.getName()
-                                    + ", but was: " + eventDTOActual.getCity().getProvince().getCountry()),
-                    () -> assertNull(eventDTOActual.getCity().getProvince().getCountry().getRegion(),
+                                    + ", but was: " + eventNodeActual.getCity().getProvince().getCountry()),
+                    () -> assertNull(eventNodeActual.getCity().getProvince().getCountry().getRegion(),
                             () -> "should return event node with null region, but was: "
-                                    + eventDTOActual.getCity().getProvince().getCountry().getRegion()),
+                                    + eventNodeActual.getCity().getProvince().getCountry().getRegion()),
 
-                    () -> assertNotNull(eventDTOActual.getVictim(),
+                    () -> assertNotNull(eventNodeActual.getVictim(),
                             () -> "should return event node with not null victim, but was: null"),
                     () -> assertEquals(victimDTOExpected.getTotalNumberOfFatalities(),
-                            eventDTOActual.getVictim().getTotalNumberOfFatalities(),
+                            eventNodeActual.getVictim().getTotalNumberOfFatalities(),
                             () -> "should return event node with victim total number of fatalities: "
                                     + victimDTOExpected.getTotalNumberOfFatalities() + ", but was: "
-                                    + eventDTOActual.getVictim().getTotalNumberOfFatalities()),
+                                    + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
                     () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorFatalities(),
-                            eventDTOActual.getVictim().getNumberOfPerpetratorFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
                             () -> "should return event node with victim number of perpetrator fatalities: "
                                     + victimDTOExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventDTOActual.getVictim().getNumberOfPerpetratorFatalities()),
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
                     () -> assertEquals(victimDTOExpected.getTotalNumberOfInjured(),
-                            eventDTOActual.getVictim().getTotalNumberOfInjured(),
+                            eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + victimDTOExpected.getTotalNumberOfInjured() + ", but was: "
-                                    + eventDTOActual.getVictim().getTotalNumberOfInjured()),
+                                    + eventNodeActual.getVictim().getTotalNumberOfInjured()),
                     () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorInjured(),
-                            eventDTOActual.getVictim().getNumberOfPerpetratorInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventDTOActual.getVictim().getNumberOfPerpetratorInjured()));
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()));
         }
 
         @Test
@@ -572,6 +693,8 @@ class ModelMapperTest {
             EventDTO eventDTOActual = modelMapper.map(eventNodeExpected, EventDTO.class);
 
             assertAll(
+                    () -> assertNotNull(eventDTOActual,
+                            () -> "should return not null event dto, but was: null"),
                     () -> assertEquals(eventNodeExpected.getSummary(), eventDTOActual.getSummary(),
                             () -> "should return event dto with summary: " + eventNodeExpected.getSummary() + ", but was: "
                                     + eventDTOActual.getSummary()),
@@ -665,6 +788,8 @@ class ModelMapperTest {
             EventModel eventModelActual = modelMapper.map(eventNodeExpected, EventModel.class);
 
             assertAll(
+                    () -> assertNotNull(eventModelActual,
+                            () -> "should return not null event model, but was: null"),
                     () -> assertNotNull(eventModelActual.getId(),
                             () -> "should return event model with id, but was: " + eventModelActual.getId()),
                     () -> assertEquals(eventNodeExpected.getSummary(), eventModelActual.getSummary(),
@@ -816,8 +941,10 @@ class ModelMapperTest {
             GroupNode groupNodeActual = modelMapper.map(groupDTOExpected, GroupNode.class);
 
             assertAll(
+                    () -> assertNotNull(groupNodeActual,
+                            () -> "should return not null group node, but was: null"),
                     () -> assertNull(groupNodeActual.getId(),
-                            () -> "should return group node with id, but was: " + groupNodeActual.getId()),
+                            () -> "should return group node with id as null, but was: " + groupNodeActual.getId()),
                     () -> assertEquals(groupDTOExpected.getName(), groupNodeActual.getName(),
                             () -> "should return group node with name: " + groupDTOExpected.getName() + ", but was: "
                                     + groupNodeActual.getName()),
@@ -1042,7 +1169,8 @@ class ModelMapperTest {
                     .withCountry(countryNodeExpected2).build(ObjectType.NODE);
             CityNode cityNodeExpected2 = (CityNode) cityBuilder.withName("city2").withProvince(provinceNodeExpected2)
                     .build(ObjectType.NODE);
-            VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.withTotalNumberOfFatalities(1001L).build(ObjectType.NODE);
+            VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.withTotalNumberOfFatalities(1001L)
+                    .build(ObjectType.NODE);
             EventNode eventNodeExpected2 = (EventNode) eventBuilder.withSummary("summary2").withTarget(targetNodeExpected2)
                     .withCity(cityNodeExpected2).withVictim(victimNodeExpected2)
                     .build(ObjectType.NODE);
@@ -1054,6 +1182,8 @@ class ModelMapperTest {
             GroupDTO groupDTOActual = modelMapper.map(groupNodeExpected, GroupDTO.class);
 
             assertAll(
+                    () -> assertNotNull(groupDTOActual,
+                            () -> "should return not null group dto, but was: null"),
                     () -> assertEquals(groupNodeExpected.getName(), groupDTOActual.getName(),
                             () -> "should return group dto with name: " + groupNodeExpected.getName() + ", but was: "
                                     + groupDTOActual.getName()),
@@ -1266,7 +1396,8 @@ class ModelMapperTest {
                     .withCountry(countryNodeExpected2).build(ObjectType.NODE);
             CityNode cityNodeExpected2 = (CityNode) cityBuilder.withName("city2").withProvince(provinceNodeExpected2)
                     .build(ObjectType.NODE);
-            VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.withTotalNumberOfFatalities(1001L).build(ObjectType.NODE);
+            VictimNode victimNodeExpected2 = (VictimNode) victimBuilder.withTotalNumberOfFatalities(1001L)
+                    .build(ObjectType.NODE);
             EventNode eventNodeExpected2 = (EventNode) eventBuilder.withSummary("summary2").withTarget(targetNodeExpected2)
                     .withCity(cityNodeExpected2).withVictim(victimNodeExpected2)
                     .build(ObjectType.NODE);
@@ -1278,6 +1409,8 @@ class ModelMapperTest {
             GroupModel groupModelActual = modelMapper.map(groupNodeExpected, GroupModel.class);
 
             assertAll(
+                    () -> assertNotNull(groupModelActual,
+                            () -> "should return not null group model, but was: null"),
                     () -> assertNotNull(groupModelActual.getId(),
                             () -> "should return group model with id, but was: " + groupModelActual.getId()),
                     () -> assertEquals(groupNodeExpected.getName(), groupModelActual.getName(),
@@ -1591,6 +1724,8 @@ class ModelMapperTest {
             UserNode userNodeActual = modelMapper.map(userDTO, UserNode.class);
 
             assertAll(
+                    () -> assertNotNull(userNodeActual,
+                            () -> "should return not null user model, but was: null"),
                     () -> assertEquals(userNodeExpected.getUserName(), userNodeActual.getUserName(),
                             () -> "should return user with user name: " + userNodeExpected.getUserName() + ", but was: "
                                     + userNodeActual.getUserName()),
@@ -1616,6 +1751,8 @@ class ModelMapperTest {
             UserDTO userDTOActual = modelMapper.map(userNode, UserDTO.class);
 
             assertAll(
+                    () -> assertNotNull(userDTOActual,
+                            () -> "should return not null user dto, but was: null"),
                     () -> assertEquals(userDTOExpected.getUserName(), userDTOActual.getUserName(),
                             () -> "should return user with user name: " + userDTOExpected.getUserName() + ", but was: "
                                     + userDTOActual.getUserName()),
