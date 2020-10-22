@@ -480,6 +480,11 @@ class PatchUtilTest {
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event node with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -721,6 +726,11 @@ class PatchUtilTest {
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
+                            eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event node with victim value of property damage: "
+                                    + updatedVictimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -913,6 +923,11 @@ class PatchUtilTest {
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event node with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -1152,6 +1167,11 @@ class PatchUtilTest {
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
+                            eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event node with victim value of property damage: "
+                                    + updatedVictimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(eventNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, EventNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -1353,6 +1373,11 @@ class PatchUtilTest {
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -1668,6 +1693,11 @@ class PatchUtilTest {
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + updatedVictimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonStructure.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -1866,6 +1896,11 @@ class PatchUtilTest {
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));
@@ -2177,6 +2212,11 @@ class PatchUtilTest {
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + updatedVictimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                     () -> verify(objectMapper, times(1)).convertValue(groupNode, JsonValue.class),
                     () -> verify(objectMapper, times(1)).convertValue(patched, GroupNode.class),
                     () -> verifyNoMoreInteractions(objectMapper));

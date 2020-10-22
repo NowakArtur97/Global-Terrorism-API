@@ -124,7 +124,7 @@ class EventModelAssemblerTest {
                 () -> assertEquals(pathToVictimLink, eventModelActual.getVictim().getLink("self").get().getHref(),
                         () -> "should return event victim model with self link: " + pathToVictimLink + ", but was: "
                                 + eventModelActual.getVictim().getLink("self").get().getHref()),
-                
+
                 () -> assertEquals(eventNode.getId(), eventModelActual.getId(),
                         () -> "should return event model with id: " + eventNode.getSummary() + ", but was: "
                                 + eventModelActual.getSummary()), () -> assertEquals(eventNode.getSummary(), eventModelActual.getSummary(),
@@ -194,6 +194,11 @@ class EventModelAssemblerTest {
                         () -> "should return event model with victim number of perpetrator injured: "
                                 + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getValueOfPropertyDamage(),
+                        eventModelActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event model with victim value of property damage: "
+                                + victimModel.getValueOfPropertyDamage() + ", but was: "
+                                + eventModelActual.getVictim().getValueOfPropertyDamage()),
 
                 () -> assertFalse(eventModelActual.getTarget().getLinks().isEmpty(),
                         () -> "should return event model with target model with links, but wasn't"),
@@ -255,7 +260,7 @@ class EventModelAssemblerTest {
                 () -> assertEquals(pathToVictimLink, eventModelActual.getVictim().getLink("self").get().getHref(),
                         () -> "should return event victim model with self link: " + pathToVictimLink + ", but was: "
                                 + eventModelActual.getVictim().getLink("self").get().getHref()),
-                
+
                 () -> assertNotNull(eventModelActual.getId(),
                         () -> "should return event model with id, but was null"),
                 () -> assertEquals(eventNode.getId(), eventModelActual.getId(),
@@ -294,6 +299,35 @@ class EventModelAssemblerTest {
                 () -> assertEquals(cityModel.getLongitude(), eventModelActual.getCity().getLongitude(),
                         () -> "should return event model with target city longitude: " + cityModel.getLongitude() + ", but was: "
                                 + eventModelActual.getCity().getLongitude()),
+
+                () -> assertNotNull(eventNode.getVictim(),
+                        () -> "should return event model with not null victim, but was: null"),
+                () -> assertEquals(victimModel.getId(), eventModelActual.getVictim().getId(),
+                        () -> "should return event model with victim model id: " + victimModel.getId() + ", but was: "
+                                + eventModelActual.getVictim().getId()),
+                () -> assertEquals(victimModel.getTotalNumberOfFatalities(), eventModelActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event model with victim total number of fatalities: "
+                                + victimModel.getTotalNumberOfFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorFatalities(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event model with victim number of perpetrator fatalities: "
+                                + victimModel.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimModel.getTotalNumberOfInjured(), eventModelActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event model with victim total number of injured: "
+                                + victimModel.getTotalNumberOfInjured() + ", but was: "
+                                + eventModelActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorInjured(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event model with victim number of perpetrator injured: "
+                                + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getValueOfPropertyDamage(),
+                        eventModelActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event model with victim value of property damage: "
+                                + victimModel.getValueOfPropertyDamage() + ", but was: "
+                                + eventModelActual.getVictim().getValueOfPropertyDamage()),
 
                 () -> assertFalse(eventModelActual.getCity().getLinks().isEmpty(),
                         () -> "should return event model with city model with links, but wasn't"),
@@ -388,11 +422,41 @@ class EventModelAssemblerTest {
                 () -> assertNull(eventNode.getCity(),
                         () -> "should return event model with null city, but was: " + eventNode.getCity()),
 
+                () -> assertNotNull(eventNode.getVictim(),
+                        () -> "should return event model with not null victim, but was: null"),
+                () -> assertEquals(victimModel.getId(), eventModelActual.getVictim().getId(),
+                        () -> "should return event model with victim model id: " + victimModel.getId() + ", but was: "
+                                + eventModelActual.getVictim().getId()),
+                () -> assertEquals(victimModel.getTotalNumberOfFatalities(), eventModelActual.getVictim().getTotalNumberOfFatalities(),
+                        () -> "should return event model with victim total number of fatalities: "
+                                + victimModel.getTotalNumberOfFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getTotalNumberOfFatalities()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorFatalities(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
+                        () -> "should return event model with victim number of perpetrator fatalities: "
+                                + victimModel.getNumberOfPerpetratorFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimModel.getTotalNumberOfInjured(), eventModelActual.getVictim().getTotalNumberOfInjured(),
+                        () -> "should return event model with victim total number of injured: "
+                                + victimModel.getTotalNumberOfInjured() + ", but was: "
+                                + eventModelActual.getVictim().getTotalNumberOfInjured()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorInjured(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
+                        () -> "should return event model with victim number of perpetrator injured: "
+                                + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getValueOfPropertyDamage(),
+                        eventModelActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event model with victim value of property damage: "
+                                + victimModel.getValueOfPropertyDamage() + ", but was: "
+                                + eventModelActual.getVictim().getValueOfPropertyDamage()),
+
                 () -> assertFalse(eventModelActual.getTarget().getLinks().isEmpty(),
                         () -> "should return event model with target model with links, but wasn't"),
                 () -> assertFalse(eventModelActual.getVictim().getLinks().isEmpty(),
                         () -> "should return event model with victim model with links, but wasn't"),
-                () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " + eventModelActual),
+                () -> assertNotNull(eventModelActual.getLinks(), () -> "should return model with links, but was: " 
+                        + eventModelActual),
                 () -> assertFalse(eventModelActual.getLinks().isEmpty(),
                         () -> "should return model with links, but was: " + eventModelActual),
                 () -> verify(modelMapper, times(1)).map(eventNode, EventModel.class),
@@ -403,7 +467,7 @@ class EventModelAssemblerTest {
                 () -> verifyNoMoreInteractions(victimModelAssembler),
                 () -> verifyNoInteractions(cityModelAssembler));
     }
-    
+
     @Test
     void when_map_event_node_without_victim_to_model_should_return_event_model_without_victim() {
 
@@ -423,7 +487,7 @@ class EventModelAssemblerTest {
         Link cityLink = new Link(pathToCityLink);
         cityModel.add(cityLink);
         EventModel eventModel = (EventModel) eventBuilder.withId(eventId).withTarget(targetModel).withCity(cityModel)
-               .build(ObjectType.MODEL);
+                .build(ObjectType.MODEL);
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventId.intValue() + "/targets";
 

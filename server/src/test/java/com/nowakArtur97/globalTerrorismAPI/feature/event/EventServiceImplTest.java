@@ -237,6 +237,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
@@ -415,6 +420,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventRepository, times(1)).findById(expectedEventId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verifyNoInteractions(modelMapper),
@@ -594,6 +604,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(targetService, times(1)).save(targetNodeExpected),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(victimService, times(1)).save(victimNodeExpected),
@@ -765,6 +780,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(targetService, times(1)).saveNew(targetDTO),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(victimService, times(1)).saveNew(victimDTO),
@@ -939,6 +959,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(modelMapper, times(1)).map(eventDTOExpected, EventNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(targetService, times(1)).saveNew(targetDTO),
@@ -1162,6 +1187,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + updatedVictimNode.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(targetService, times(1)).update(targetNode, targetDTO),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(victimService, times(1)).update(victimNode, victimDTO),
@@ -1335,6 +1365,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(targetService, times(1)).saveNew(targetDTOExpected),
                 () -> verifyNoMoreInteractions(targetService),
                 () -> verify(eventRepository, times(1)).save(eventNodeExpected),
@@ -1455,7 +1490,8 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator fatalities: "
                                 + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
-                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
@@ -1464,6 +1500,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
@@ -1589,6 +1630,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verify(eventRepository, times(1)).delete(eventNodeExpected),
                 () -> verifyNoMoreInteractions(eventRepository),
@@ -1724,7 +1770,8 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator fatalities: "
                                 + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
-                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
@@ -1733,6 +1780,11 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                        () -> "should return event node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + eventNodeActual.getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(eventRepository),
                 () -> verify(targetService, times(1)).delete(targetId),

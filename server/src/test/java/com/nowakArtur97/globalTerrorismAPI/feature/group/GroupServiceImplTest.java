@@ -392,6 +392,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                 () -> verify(groupRepository, times(1))
                         .findById(expectedGroupId, DEFAULT_DEPTH_FOR_JSON_PATCH),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -581,6 +586,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventService, times(1)).save(eventNodeBeforeSave),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
@@ -779,6 +789,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
                 () -> verify(modelMapper, times(1)).map(groupDTOExpected, GroupNode.class),
                 () -> verifyNoMoreInteractions(modelMapper),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
@@ -1080,6 +1095,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + updatedVictimNode.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                 () -> assertEquals(updatedEventNode2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
                         () -> "should return group node with event node with id: " + updatedEventNode2.getId() + ", but was: "
@@ -1240,6 +1260,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + updatedVictimNode2.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode2.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + updatedVictimNode2.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()),
                 () -> verify(eventService, times(1)).delete(eventNode.getId()),
                 () -> verify(eventService, times(1)).saveNew(eventDTO),
                 () -> verify(eventService, times(1)).saveNew(eventDTO2),
@@ -1444,6 +1469,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                 () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
                         () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
@@ -1604,6 +1634,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected2.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verify(groupRepository, times(1)).delete(groupNodeExpected),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -1829,6 +1864,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                 () -> assertEquals(newEventNodeExpected.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
                         () -> "should return group event node with id: " + newEventNodeExpected.getId() + ", but was: "
@@ -1994,6 +2034,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + newVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(newVictimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + newVictimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()),
                 () -> verify(groupRepository, times(1)).findById(groupId),
                 () -> verify(groupRepository, times(1)).save(groupNodeExpectedBeforeSave),
                 () -> verifyNoMoreInteractions(groupRepository),
@@ -2167,6 +2212,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                 () -> assertEquals(eventNodeExpected2.getId(), groupNodeActual.getEventsCaused().get(1).getId(),
                         () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
@@ -2281,6 +2331,11 @@ class GroupServiceImplTest {
                         () -> "should return group node with victim number of perpetrator injured: "
                                 + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                        () -> "should return group node with victim value of property damage: "
+                                + victimNodeExpected2.getValueOfPropertyDamage() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()),
                 () -> verify(groupRepository, times(1)).findById(eventId),
                 () -> verifyNoMoreInteractions(groupRepository),
                 () -> verify(eventService, times(1)).delete(eventId),

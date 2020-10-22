@@ -672,7 +672,12 @@ class ModelMapperTest {
                             eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return event node with victim number of perpetrator injured: "
                                     + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()));
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected.getValueOfPropertyDamage(),
+                            eventNodeActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event node with victim value of property damage: "
+                                    + victimDTOExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventNodeActual.getVictim().getValueOfPropertyDamage()));
         }
 
         @Test
@@ -767,7 +772,12 @@ class ModelMapperTest {
                             eventDTOActual.getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return event dto with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventDTOActual.getVictim().getNumberOfPerpetratorInjured()));
+                                    + eventDTOActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            eventDTOActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event dto with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventDTOActual.getVictim().getValueOfPropertyDamage()));
         }
 
         @Test
@@ -904,7 +914,12 @@ class ModelMapperTest {
                             eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return event model with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventModelActual.getVictim().getNumberOfPerpetratorInjured()));
+                                    + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            eventModelActual.getVictim().getValueOfPropertyDamage(),
+                            () -> "should return event model with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + eventModelActual.getVictim().getValueOfPropertyDamage()));
         }
     }
 
@@ -1044,6 +1059,11 @@ class ModelMapperTest {
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + victimDTOExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                     () -> assertEquals(eventDTOExpected2.getSummary(),
                             groupNodeActual.getEventsCaused().get(1).getSummary(),
@@ -1142,7 +1162,12 @@ class ModelMapperTest {
                             groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return group node with victim number of perpetrator injured: "
                                     + victimDTOExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()));
+                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected2.getValueOfPropertyDamage(),
+                            groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group node with victim value of property damage: "
+                                    + victimDTOExpected2.getValueOfPropertyDamage() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()));
         }
 
         @Test
@@ -1277,7 +1302,11 @@ class ModelMapperTest {
                             () -> "should return group dto with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
-
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            groupDTOActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group dto with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                     () -> assertEquals(eventNodeExpected2.getSummary(),
                             groupDTOActual.getEventsCaused().get(1).getSummary(),
@@ -1369,7 +1398,12 @@ class ModelMapperTest {
                             groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return group dto with victim number of perpetrator injured: "
                                     + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()));
+                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
+                            groupDTOActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group dto with victim value of property damage: "
+                                    + victimNodeExpected2.getValueOfPropertyDamage() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()));
         }
 
         @Test
@@ -1560,6 +1594,11 @@ class ModelMapperTest {
                             () -> "should return group model with victim number of perpetrator injured: "
                                     + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
                                     + groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
+                            groupModelActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group model with victim value of property damage: "
+                                    + victimNodeExpected.getValueOfPropertyDamage() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage()),
 
                     () -> assertEquals(eventNodeExpected2.getId(), groupModelActual.getEventsCaused().get(1).getId(),
                             () -> "should return group event node with id: " + eventNodeExpected2.getId() + ", but was: "
@@ -1707,7 +1746,12 @@ class ModelMapperTest {
                             groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
                             () -> "should return group model with victim number of perpetrator injured: "
                                     + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()));
+                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
+                            groupModelActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
+                            () -> "should return group model with victim value of property damage: "
+                                    + victimNodeExpected2.getValueOfPropertyDamage() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage()));
         }
     }
 
