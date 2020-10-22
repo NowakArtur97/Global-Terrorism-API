@@ -65,7 +65,7 @@ public abstract class BasicGenericRestControllerImpl<M extends RepresentationMod
 
         return ResponseEntity
                 .ok()
-                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
+                .allow(HttpMethod.GET, HttpMethod.OPTIONS)
                 .build();
     }
 
@@ -75,7 +75,7 @@ public abstract class BasicGenericRestControllerImpl<M extends RepresentationMod
 
         return ResponseEntity
                 .ok()
-                .allow(HttpMethod.GET, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.OPTIONS)
+                .allow(HttpMethod.GET, HttpMethod.OPTIONS)
                 .build();
     }
 }

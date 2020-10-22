@@ -11,6 +11,7 @@ import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -126,5 +127,25 @@ public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>
         service.delete(id).orElseThrow(() -> new ResourceNotFoundException(modelType, id));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    @Override
+    public ResponseEntity<?> collectionOptions() {
+
+        return ResponseEntity
+                .ok()
+                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
+                .build();
+    }
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.OPTIONS)
+    @Override
+    public ResponseEntity<?> singularOptions() {
+
+        return ResponseEntity
+                .ok()
+                .allow(HttpMethod.GET, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.OPTIONS)
+                .build();
     }
 }
