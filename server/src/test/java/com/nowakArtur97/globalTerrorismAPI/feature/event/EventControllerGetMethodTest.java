@@ -679,10 +679,10 @@ class EventControllerGetMethodTest {
                 counterForUtilMethodsNode++;
 
                 CityNode cityNode = (CityNode) cityBuilder
-                        .withId((long) counterForUtilMethodsModel)
-                        .withName("city" + counterForUtilMethodsModel)
-                        .withLatitude((double) (20 + counterForUtilMethodsModel))
-                        .withLongitude((double) (40 + counterForUtilMethodsModel))
+                        .withId((long) counterForUtilMethodsNode)
+                        .withName("city" + counterForUtilMethodsNode)
+                        .withLatitude((double) (20 + counterForUtilMethodsNode))
+                        .withLongitude((double) (40 + counterForUtilMethodsNode))
                         .build(ObjectType.NODE);
 
                 TargetNode targetNode = (TargetNode) targetBuilder.withId((long) counterForUtilMethodsNode)
@@ -721,12 +721,12 @@ class EventControllerGetMethodTest {
                 String pathToTargetLink = TARGET_BASE_PATH + "/" + counterForUtilMethodsModel;
                 targetModel.add(new Link(pathToTargetLink));
 
-                VictimModel victimModel = (VictimModel) victimBuilder.withId((long) counterForUtilMethodsNode)
-                        .withTotalNumberOfFatalities(20L + counterForUtilMethodsNode)
-                        .withNumberOfPerpetratorFatalities(11L + counterForUtilMethodsNode)
-                        .withTotalNumberOfInjured(21L + counterForUtilMethodsNode)
-                        .withNumberOfPerpetratorInjured(10L + counterForUtilMethodsNode)
-                        .withValueOfPropertyDamage(1000L + counterForUtilMethodsNode)
+                VictimModel victimModel = (VictimModel) victimBuilder.withId((long) counterForUtilMethodsModel)
+                        .withTotalNumberOfFatalities(20L + counterForUtilMethodsModel)
+                        .withNumberOfPerpetratorFatalities(11L + counterForUtilMethodsModel)
+                        .withTotalNumberOfInjured(21L + counterForUtilMethodsModel)
+                        .withNumberOfPerpetratorInjured(10L + counterForUtilMethodsModel)
+                        .withValueOfPropertyDamage(1000L + counterForUtilMethodsModel)
                         .build(ObjectType.MODEL);
 
                 String pathToVictimLink = VICTIM_BASE_PATH + "/" + counterForUtilMethodsModel;
