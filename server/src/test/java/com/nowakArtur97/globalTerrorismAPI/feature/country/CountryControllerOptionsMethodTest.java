@@ -57,7 +57,6 @@ class CountryControllerOptionsMethodTest {
         assertAll(
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
-                () -> assertTrue(allowedMethods.contains("POST"), () -> "should contain POST option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
                 () -> verifyNoInteractions(countryService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
@@ -78,9 +77,6 @@ class CountryControllerOptionsMethodTest {
         assertAll(
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
-                () -> assertTrue(allowedMethods.contains("PUT"), () -> "should contain PUT option, but was: " + allowedMethods),
-                () -> assertTrue(allowedMethods.contains("PATCH"), () -> "should contain PATCH option, but was: " + allowedMethods),
-                () -> assertTrue(allowedMethods.contains("DELETE"), () -> "should contain DELETE option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
                 () -> verifyNoInteractions(countryService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
