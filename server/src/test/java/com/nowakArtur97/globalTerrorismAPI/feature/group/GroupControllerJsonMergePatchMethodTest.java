@@ -80,18 +80,22 @@ class GroupControllerJsonMergePatchMethodTest {
     private final static TargetNode targetNode2 = new TargetNode("target name 2", countryNode);
     private final static TargetNode targetNode3 = new TargetNode("target name 3", countryNode);
     private final static TargetNode targetNode4 = new TargetNode("target name 4", countryNode);
+    private final static TargetNode targetNode5 = new TargetNode("target name 5", countryNode);
 
     private final static ProvinceNode provinceNode = new ProvinceNode("province name", countryNode);
     private final static ProvinceNode provinceNode2 = new ProvinceNode("province name 2", countryNode);
+    private final static ProvinceNode provinceNode3 = new ProvinceNode("province name 3", countryNode);
 
     private final static CityNode cityNode = new CityNode("city name", 45.0, 45.0, provinceNode);
     private final static CityNode cityNode2 = new CityNode("city name 2", 15.0, -45.0, provinceNode);
-    private final static CityNode cityNode3 = new CityNode("city name 3", 15.0, -45.0, provinceNode2);
+    private final static CityNode cityNode3 = new CityNode("city name 3", 5.0, -55.0, provinceNode2);
+    private final static CityNode cityNode4 = new CityNode("city name 4", 35.0, -25.0, provinceNode3);
 
     private final static VictimNode victimNode = new VictimNode(10L, 0L, 10L, 0L, 1000L);
     private final static VictimNode victimNode2 = new VictimNode(11L, 1L, 11L, 1L, 1100L);
     private final static VictimNode victimNode3 = new VictimNode(20L, 2L, 20L, 2L, 1200L);
     private final static VictimNode victimNode4 = new VictimNode(24L, 4L, 24L, 4L, 1400L);
+    private final static VictimNode victimNode5 = new VictimNode(25L, 5L, 54L, 5L, 1500L);
 
     private final static EventNode eventNode = new EventNode("summary", "motive", new Date(),
             true, true, true, targetNode, cityNode, victimNode);
@@ -101,9 +105,12 @@ class GroupControllerJsonMergePatchMethodTest {
             true, false, true, targetNode3, cityNode2, victimNode3);
     private final static EventNode eventNode4 = new EventNode("summary 4", "motive 4", new Date(),
             false, false, true, targetNode4, cityNode3, victimNode4);
+    private final static EventNode eventNode5 = new EventNode("summary 5", "motive 5", new Date(),
+            true, true, true, targetNode5, cityNode4, victimNode5);
 
     private final static GroupNode groupNode = new GroupNode("group name", List.of(eventNode));
     private final static GroupNode groupNode2 = new GroupNode("group name 2", List.of(eventNode4));
+    private final static GroupNode groupNode3 = new GroupNode("group name 4", List.of(eventNode5));
     private final static GroupNode groupNodeWithMultipleEvents = new GroupNode("group name 3",
             List.of(eventNode2, eventNode3));
 
@@ -117,6 +124,7 @@ class GroupControllerJsonMergePatchMethodTest {
 
         groupRepository.save(groupNode);
         groupRepository.save(groupNode2);
+        groupRepository.save(groupNode3);
         groupRepository.save(groupNodeWithMultipleEvents);
     }
 
@@ -388,7 +396,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.id", is(targetNode2.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.target", is(updatedTargetName)))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", 
+                                is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
                                 is(countryNode.getId().intValue())))
@@ -420,7 +429,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
                                 is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", 
+                                is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", is(pathToVictimLink)))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode2.getId().intValue())))
@@ -449,7 +459,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.id", is(targetNode3.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.target", is(targetNode3.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[0].href",
+                                is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id",
                                 is(countryNode.getId().intValue())))
@@ -592,19 +603,25 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].date", is(updatedEventDateString)))
                         .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventNode4.getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventNode4.getIsSuccessful())))
-                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", is(eventNode4.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", 
+                                is(eventNode4.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("eventsCaused[0].target.links[0].href", is(pathToTargetLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.id", is(targetNode4.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.target", is(targetNode4.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href",
+                                is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", 
+                                is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", 
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", 
+                                is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode3.getId().intValue())))
@@ -617,11 +634,14 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode2.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", 
+                                is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
+                                is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", 
+                                is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", is(pathToVictimLink)))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
@@ -636,6 +656,161 @@ class GroupControllerJsonMergePatchMethodTest {
                                 is(victimNode4.getNumberOfPerpetratorInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(victimNode4.getValueOfPropertyDamage().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
+    }
+
+    @Test
+    void when_partial_update_group_event_victim_using_json_patch_should_return_partially_updated_node() {
+
+        Long updatedTotalNumberOfFatalities = 20L;
+        Long updatedNumberOfPerpetratorFatalities = 10L;
+        Long updatedTotalNumberOfInjured = 14L;
+        Long updatedNumberOfPerpetratorInjured = 3L;
+        Long updatedValueOfPropertyDamage = 10000L;
+
+        String updatedEventDateString = "2011-01-15";
+
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode5.getId().intValue();
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceNode3.getId().intValue();
+        String pathToCityLink = CITY_BASE_PATH + "/" + cityNode4.getId().intValue();
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + victimNode5.getId().intValue();
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventNode5.getId().intValue();
+        String pathToEventTargetLink = EVENT_BASE_PATH + "/" + eventNode5.getId().intValue() + "/targets";
+        String pathToGroupLink = GROUP_BASE_PATH + "/" + groupNode3.getId().intValue();
+        String pathToEventsLink = GROUP_BASE_PATH + "/" + groupNode3.getId().intValue() + "/events";
+
+        String jsonMergePatch =
+                "{\"eventsCaused\" : [" +
+                        "{" +
+                        "\"id\" : \"" + eventNode5.getId().intValue() + "\", " +
+                        "\"summary\" : \"" + eventNode5.getSummary() + "\", " +
+                        "\"motive\" : \"" + eventNode5.getMotive() + "\", " +
+                        "\"date\" : \"" + updatedEventDateString + "\", " +
+                        "\"isPartOfMultipleIncidents\" : \"" + eventNode5.getIsPartOfMultipleIncidents() + "\", " +
+                        "\"isSuccessful\" : \"" + eventNode5.getIsSuccessful() + "\", " +
+                        "\"isSuicidal\" : \"" + eventNode5.getIsSuicidal() + "\", " +
+                        "\"target\" : " +
+                        "{" +
+                        "\"id\" : \"" + targetNode5.getId().intValue() + "\", " +
+                        "\"target\" : \"" + targetNode5.getTarget() + "\", " +
+                        "\"countryOfOrigin\" : " +
+                        "{ " +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"," +
+                        "\"region\" : " +
+                        "{ " +
+                        "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + regionNode.getName() + "\"" +
+                        "}" +
+                        "}" +
+                        "}," +
+                        "\"city\" : { " +
+                        "\"id\" : \"" + cityNode4.getId().intValue() + "\", " +
+                        "\"name\" : \"" + cityNode4.getName() + "\"," +
+                        "\"latitude\" : " + cityNode4.getLatitude() + "," +
+                        "\"longitude\" : " + cityNode4.getLongitude() + "," +
+                        "\"province\" : { " +
+                        "\"id\" : \"" + provinceNode3.getId().intValue() + "\", " +
+                        "\"name\" : \"" + provinceNode3.getName() + "\"," +
+                        "\"country\" : {" +
+                        "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + countryNode.getName() + "\"," +
+                        "\"region\" : {" +
+                        "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                        "\"name\" : \"" + regionNode.getName() + "\"" +
+                        "}" +
+                        "}" +
+                        "}" +
+                        "}," +
+                        "\"victim\" : " +
+                        "{" +
+                        "\"id\" : \"" + victimNode5.getId().intValue() + "\", " +
+                        "\"totalNumberOfFatalities\" : \"" + updatedTotalNumberOfFatalities + "\", " +
+                        "\"numberOfPerpetratorFatalities\" : \"" + updatedNumberOfPerpetratorFatalities + "\", " +
+                        "\"totalNumberOfInjured\" : \"" + updatedTotalNumberOfInjured + "\", " +
+                        "\"numberOfPerpetratorInjured\" : \"" + updatedNumberOfPerpetratorInjured + "\", " +
+                        "\"valueOfPropertyDamage\" : \"" + updatedValueOfPropertyDamage + "\"" +
+                        "}" +
+                        "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode3.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToGroupLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToEventsLink)))
+                        .andExpect(jsonPath("id", is(groupNode3.getId().intValue())))
+                        .andExpect(jsonPath("name", is(groupNode3.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("eventsCaused[0].links[1].href", is(pathToEventTargetLink)))
+                        .andExpect(jsonPath("eventsCaused[0].id", is(eventNode5.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].summary", is(eventNode5.getSummary())))
+                        .andExpect(jsonPath("eventsCaused[0].motive", is(eventNode5.getMotive())))
+                        .andExpect(jsonPath("eventsCaused[0].date", is(updatedEventDateString)))
+                        .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventNode5.getIsSuicidal())))
+                        .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventNode5.getIsSuccessful())))
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
+                                is(eventNode5.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].target.id", is(targetNode5.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.target", is(targetNode5.getTarget())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href",
+                                is(pathToCountryLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
+                                is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id",
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name",
+                                is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].city.id", is(cityNode4.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.name", is(cityNode4.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.latitude", is(cityNode4.getLatitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.longitude", is(cityNode4.getLongitude())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links[0].href", is(pathToProvinceLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.id", is(provinceNode3.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode3.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id",
+                                is(countryNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
+                                is(pathToRegionLink)))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
+                                is(regionNode.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode5.getId().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
+                                is(updatedTotalNumberOfFatalities.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
+                                is(updatedNumberOfPerpetratorFatalities.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
+                                is(updatedTotalNumberOfInjured.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
+                                is(updatedNumberOfPerpetratorInjured.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
+                                is(updatedValueOfPropertyDamage.intValue())))
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
     }
 
