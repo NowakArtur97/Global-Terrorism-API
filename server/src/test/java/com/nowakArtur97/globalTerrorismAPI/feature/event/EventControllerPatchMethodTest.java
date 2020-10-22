@@ -536,7 +536,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("date", is(notNullValue())))
                             .andExpect(jsonPath("isSuicidal", is(anotherEventNode4.getIsSuicidal())))
                             .andExpect(jsonPath("isSuccessful", is(anotherEventNode4.getIsSuccessful())))
-                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode4.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents",
+                                    is(anotherEventNode4.getIsPartOfMultipleIncidents())))
                             .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode4.getId().intValue())))
@@ -570,11 +571,16 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
                             .andExpect(jsonPath("victim.links[1].href").doesNotExist())
                             .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
-                            .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
-                            .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
-                            .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(updatedTotalNumberOfFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(updatedTotalNumberOfInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(updatedValueOfPropertyDamage.intValue()))));
         }
 
         @Test
@@ -593,7 +599,8 @@ class EventControllerPatchMethodTest {
                     "{ \"op\": \"replace\", \"path\": \"/summary\", \"value\": \"" + updatedSummary + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/motive\", \"value\": \"" + updatedMotive + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/date\", \"value\": \"" + updatedEventDateString + "\" }," +
-                    "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \"" + updatedIsPartOfMultipleIncidents + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/isPartOfMultipleIncidents\", \"value\": \"" +
+                    updatedIsPartOfMultipleIncidents + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuccessful\", \"value\": \"" + updatedIsSuccessful + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/isSuicidal\", \"value\": \"" + updatedIsSuicidal + "\" }]";
 
@@ -1698,7 +1705,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("date", is(notNullValue())))
                             .andExpect(jsonPath("isSuicidal", is(anotherEventNode4.getIsSuicidal())))
                             .andExpect(jsonPath("isSuccessful", is(anotherEventNode4.getIsSuccessful())))
-                            .andExpect(jsonPath("isPartOfMultipleIncidents", is(anotherEventNode4.getIsPartOfMultipleIncidents())))
+                            .andExpect(jsonPath("isPartOfMultipleIncidents",
+                                    is(anotherEventNode4.getIsPartOfMultipleIncidents())))
                             .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
                             .andExpect(jsonPath("target.links[1].href").doesNotExist())
                             .andExpect(jsonPath("target.id", is(anotherTargetNode4.getId().intValue())))
@@ -1732,11 +1740,16 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
                             .andExpect(jsonPath("victim.links[1].href").doesNotExist())
                             .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
-                            .andExpect(jsonPath("victim.totalNumberOfFatalities", is(updatedTotalNumberOfFatalities.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities", is(updatedNumberOfPerpetratorFatalities.intValue())))
-                            .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured", is(updatedNumberOfPerpetratorInjured.intValue())))
-                            .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
+                            .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                    is(updatedTotalNumberOfFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                    is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                    is(updatedTotalNumberOfInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                    is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                    is(updatedValueOfPropertyDamage.intValue()))));
         }
 
         @Test

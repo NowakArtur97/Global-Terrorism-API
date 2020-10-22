@@ -211,6 +211,9 @@ class EventServiceImplTest {
                                 + eventNodeActual.getCity().getLongitude()),
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -386,6 +389,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -562,6 +568,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -730,6 +739,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -901,6 +913,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -1119,6 +1134,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(updatedVictimNode, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + updatedVictimNode + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(updatedVictimNode.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + updatedVictimNode.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -1132,7 +1150,8 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator fatalities: "
                                 + updatedVictimNode.getNumberOfPerpetratorFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
-                () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(),
+                        eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + updatedVictimNode.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
@@ -1213,11 +1232,14 @@ class EventServiceImplTest {
                         () -> "should return event node with target: " + newTargetNode.getTarget() + ", but was: "
                                 + eventNodeActual.getTarget().getTarget()),
                 () -> assertEquals(newTargetNode.getCountryOfOrigin(), eventNodeActual.getTarget().getCountryOfOrigin(),
-                        () -> "should return event node with country: " + newTargetNode.getCountryOfOrigin() + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
-                () -> assertEquals(newTargetNode.getCountryOfOrigin().getId(), eventNodeActual.getTarget().getCountryOfOrigin().getId(),
+                        () -> "should return event node with country: " + newTargetNode.getCountryOfOrigin() + ", but was: "
+                                + eventNodeActual.getTarget().getCountryOfOrigin()),
+                () -> assertEquals(newTargetNode.getCountryOfOrigin().getId(),
+                        eventNodeActual.getTarget().getCountryOfOrigin().getId(),
                         () -> "should return event node with country id: " + newTargetNode.getCountryOfOrigin().getId()
                                 + ", but was: " + eventNodeActual.getTarget().getId()),
-                () -> assertEquals(newTargetNode.getCountryOfOrigin().getName(), eventNodeActual.getTarget().getCountryOfOrigin().getName(),
+                () -> assertEquals(newTargetNode.getCountryOfOrigin().getName(),
+                        eventNodeActual.getTarget().getCountryOfOrigin().getName(),
                         () -> "should return event node with country name: " + newTargetNode.getCountryOfOrigin().getName()
                                 + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin()),
                 () -> assertNotNull(eventNodeActual.getTarget().getCountryOfOrigin().getRegion(),
@@ -1225,10 +1247,12 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected, eventNodeActual.getTarget().getCountryOfOrigin().getRegion(),
                         () -> "should return event node with region: " + regionNodeExpected + ", but was: "
                                 + eventNodeActual.getTarget().getCountryOfOrigin().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getId(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getId(),
                         () -> "should return event node with region id: " + regionNodeExpected.getId()
                                 + ", but was: " + eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getTarget().getCountryOfOrigin().getRegion().getName()),
 
@@ -1259,7 +1283,8 @@ class EventServiceImplTest {
                         () -> "should return event node with province name: " + provinceNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getName()),
                 () -> assertEquals(countryNodeExpected, eventNodeActual.getCity().getProvince().getCountry(),
-                        () -> "should return event node with country: " + countryNodeExpected + ", but was: " + eventNodeActual.getCity().getProvince().getCountry()),
+                        () -> "should return event node with country: " + countryNodeExpected + ", but was: "
+                                + eventNodeActual.getCity().getProvince().getCountry()),
                 () -> assertEquals(countryNodeExpected.getId(), eventNodeActual.getCity().getProvince().getCountry().getId(),
                         () -> "should return event node with country id: " + countryNodeExpected.getId()
                                 + ", but was: " + eventNodeActual.getCity().getProvince().getCountry().getId()),
@@ -1271,15 +1296,20 @@ class EventServiceImplTest {
                 () -> assertEquals(regionNodeExpected, eventNodeActual.getCity().getProvince().getCountry().getRegion(),
                         () -> "should return event node with region: " + regionNodeExpected + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion()),
-                () -> assertEquals(regionNodeExpected.getId(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getId(),
+                () -> assertEquals(regionNodeExpected.getId(),
+                        eventNodeActual.getCity().getProvince().getCountry().getRegion().getId(),
                         () -> "should return event node with region id: " + regionNodeExpected.getId()
                                 + ", but was: " + eventNodeActual.getCity().getProvince().getCountry().getRegion().getId()),
-                () -> assertEquals(regionNodeExpected.getName(), eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
+                () -> assertEquals(regionNodeExpected.getName(),
+                        eventNodeActual.getCity().getProvince().getCountry().getRegion().getName(),
                         () -> "should return event node with region name: " + regionNodeExpected.getName() + ", but was: "
                                 + eventNodeActual.getCity().getProvince().getCountry().getRegion().getName()),
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -1293,7 +1323,8 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator fatalities: "
                                 + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
-                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
@@ -1406,6 +1437,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -1528,6 +1562,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
@@ -1669,6 +1706,9 @@ class EventServiceImplTest {
 
                 () -> assertNotNull(eventNodeActual.getVictim(),
                         () -> "should return event node with not null victim, but was: null"),
+                () -> assertEquals(victimNodeExpected, eventNodeActual.getVictim(),
+                        () -> "should return event node with victim: " + victimNodeExpected + ", but was: "
+                                + eventNodeActual.getVictim()),
                 () -> assertEquals(victimNodeExpected.getId(), eventNodeActual.getVictim().getId(),
                         () -> "should return event node with victim node id: " + victimNodeExpected.getId() + ", but was: "
                                 + eventNodeActual.getVictim().getId()),
