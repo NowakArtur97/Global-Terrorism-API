@@ -227,7 +227,8 @@ class EventServiceImplTest {
                         () -> "should return event node with victim number of perpetrator fatalities: "
                                 + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
-                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
+                () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
+                        eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
@@ -970,7 +971,8 @@ class EventServiceImplTest {
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
                 .withLongitude(updatedCityLongitude).withProvince(provinceDTO).build(ObjectType.DTO);
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(updatedCountryName).build(ObjectType.DTO);
-        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTO).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withTarget(updatedTargetName).withCountry(countryDTO)
+                .build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
                 .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
