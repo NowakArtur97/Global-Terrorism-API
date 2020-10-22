@@ -1,9 +1,11 @@
-package com.nowakArtur97.globalTerrorismAPI.feature.victim;
+package com.nowakArtur97.globalTerrorismAPI.feature.region;
 
 import com.nowakArtur97.globalTerrorismAPI.common.controller.BasicGenericRestController;
+import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
+import com.nowakArtur97.globalTerrorismAPI.feature.region.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,29 +26,29 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("VictimController_Tests")
-class VictimControllerOptionsMethodTest {
+@Tag("RegionController_Tests")
+class RegionControllerOptionsMethodTest {
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/victims";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/regions";
 
     private MockMvc mockMvc;
 
     @Mock
-    private GenericService<VictimNode, VictimDTO> victimService;
+    private BasicGenericService<RegionNode> regionService;
 
     @Mock
-    private VictimModelAssembler modelAssembler;
+    private RegionModelAssembler modelAssembler;
 
     @Mock
-    private PagedResourcesAssembler<VictimNode> pagedResourcesAssembler;
+    private PagedResourcesAssembler<RegionNode> pagedResourcesAssembler;
 
     @BeforeEach
     private void setUp() {
 
-        BasicGenericRestController<VictimModel> victimController
-                = new VictimController(victimService, modelAssembler, pagedResourcesAssembler);
+        BasicGenericRestController<RegionModel> regionController
+                = new RegionController(regionService, modelAssembler, pagedResourcesAssembler);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(victimController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(regionController).build();
     }
 
     @Test
@@ -60,7 +62,7 @@ class VictimControllerOptionsMethodTest {
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(victimService),
+                () -> verifyNoInteractions(regionService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler));
     }
@@ -69,18 +71,18 @@ class VictimControllerOptionsMethodTest {
     @SneakyThrows
     void when_show_endpoint_options_for_singular_resource_should_show_possible_request_methods() {
 
-        Long victimId = 1L;
+        Long regionId = 1L;
 
         String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
 
-        MvcResult mvcResult = mockMvc.perform(options(linkWithParameter, victimId)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(options(linkWithParameter, regionId)).andReturn();
         String allowedMethods = mvcResult.getResponse().getHeader("allow");
 
         assertAll(
                 () -> assertNotNull(allowedMethods, () -> "should header contain allowed methods, but wasn't"),
                 () -> assertTrue(allowedMethods.contains("GET"), () -> "should contain GET option, but was: " + allowedMethods),
                 () -> assertTrue(allowedMethods.contains("OPTIONS"), () -> "should contain OPTIONS option, but was: " + allowedMethods),
-                () -> verifyNoInteractions(victimService),
+                () -> verifyNoInteractions(regionService),
                 () -> verifyNoInteractions(pagedResourcesAssembler),
                 () -> verifyNoInteractions(modelAssembler));
     }
