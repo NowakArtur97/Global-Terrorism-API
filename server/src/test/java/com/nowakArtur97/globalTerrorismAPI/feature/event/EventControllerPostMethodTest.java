@@ -305,9 +305,12 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("errors", hasItem("Event summary cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Event motive cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Event date cannot be null.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information on whether it has been part of many incidents.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was successful.")))
-                        .andExpect(jsonPath("errors", hasItem("Event must have information about whether it was a suicidal attack.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information on whether it has been part of many incidents.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information about whether it was successful.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Event must have information about whether it was a suicidal attack.")))
                         .andExpect(jsonPath("errors", hasItem("Target name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Victim data cannot be empty.")))
@@ -653,7 +656,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -709,7 +713,8 @@ class EventControllerPostMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
-                        .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
+                        .andExpect(jsonPath("errors",
+                                hasItem("Province and target should be located in the same country.")))
                         .andExpect(jsonPath("errors", hasSize(2))));
     }
 
@@ -735,7 +740,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event total number of fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -764,7 +769,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of fatalities must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -790,7 +796,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event number of perpetrator fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -820,7 +826,39 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_should_return_errors() {
+
+        long numberOfPerpetratorFatalities = 20L;
+        long totalNumberOfFatalities = 10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfFatalities(totalNumberOfFatalities)
+                .withNumberOfPerpetratorFatalities(numberOfPerpetratorFatalities).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -846,7 +884,7 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event total number of injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -875,7 +913,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of injured must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -901,7 +940,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -931,7 +971,39 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_add_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_should_return_errors() {
+
+        long numberOfPerpetratorInjured = 20L;
+        long totalNumberOfInjured = 10L;
+
+        CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
+        TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
+        CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfInjured(totalNumberOfInjured)
+                .withNumberOfPerpetratorInjured(numberOfPerpetratorInjured).build(ObjectType.DTO);
+        EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
+                .build(ObjectType.DTO);
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(post(EVENT_BASE_PATH).header("Authorization", "Bearer " + token)
+                                .content(ObjectTestMapper.asJsonString(eventDTO))
+                                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured should not exceed the total number of injured.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -957,7 +1029,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -986,7 +1059,8 @@ class EventControllerPostMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 }

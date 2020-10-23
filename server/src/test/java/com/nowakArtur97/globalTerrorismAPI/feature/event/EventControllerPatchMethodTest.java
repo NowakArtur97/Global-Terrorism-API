@@ -1076,7 +1076,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1101,7 +1102,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of fatalities must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1124,7 +1126,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1149,7 +1152,38 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_patch_should_return_errors() {
+
+            long numberOfPerpetratorFatalities = 20L;
+            long totalNumberOfFatalities = 10L;
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfFatalities\", \"value\": " +
+                    totalNumberOfFatalities + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": " +
+                    numberOfPerpetratorFatalities + " }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1172,7 +1206,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1197,7 +1232,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of injured must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1220,7 +1256,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1245,7 +1282,38 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_patch_should_return_errors() {
+
+            long numberOfPerpetratorInjured = 20L;
+            long totalNumberOfInjured = 10L;
+
+            String jsonPatch = "[" +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfInjured\", \"value\": " +
+                    totalNumberOfInjured + " }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": " +
+                    numberOfPerpetratorInjured + " }]";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonPatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured should not exceed the total number of injured.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1268,7 +1336,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total value of property damage cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1293,7 +1362,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total value of property damage must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
@@ -2237,7 +2307,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2261,7 +2332,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of fatalities must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2283,7 +2355,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2308,7 +2381,35 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
+
+            long numberOfPerpetratorFatalities = 20L;
+            long totalNumberOfFatalities = 10L;
+
+            String jsonMergePatch = "{\"victim\" : {\"totalNumberOfFatalities\" : " + totalNumberOfFatalities + ", " +
+                    "\"numberOfPerpetratorFatalities\" : " + numberOfPerpetratorFatalities +"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2330,7 +2431,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2354,7 +2456,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total number of injured must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2376,7 +2479,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2401,7 +2505,35 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
+
+            long numberOfPerpetratorInjured = 20L;
+            long totalNumberOfInjured = 10L;
+
+            String jsonMergePatch = "{\"victim\" : {\"totalNumberOfInjured\" : " + totalNumberOfInjured + ", " +
+                    "\"numberOfPerpetratorInjured\" : " + numberOfPerpetratorInjured +"}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrator injured should not exceed the total number of injured.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2423,7 +2555,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total value of property damage cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2447,7 +2580,8 @@ class EventControllerPatchMethodTest {
                             .andExpect(status().isBadRequest())
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event total value of property damage must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
     }
