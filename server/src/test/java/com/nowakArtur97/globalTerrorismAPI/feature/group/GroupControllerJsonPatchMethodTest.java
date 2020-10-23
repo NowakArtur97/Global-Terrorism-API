@@ -17,7 +17,6 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfi
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -303,7 +302,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.id", is(targetNode2.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.target", is(targetNode2.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href",
                                 is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
@@ -314,7 +313,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id",
                                 is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name",
                                 is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
@@ -328,7 +327,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", 
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id",
                                 is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
@@ -369,7 +368,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.id", is(targetNode3.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].target.target", is(targetNode3.getTarget())))
-                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[0].href", 
+                        .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[0].href",
                                 is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[1].target.countryOfOrigin.id",
@@ -393,7 +392,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].city.province.name", is(provinceNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[1].city.province.country.id", 
+                        .andExpect(jsonPath("eventsCaused[1].city.province.country.id",
                                 is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[1].city.province.country.region.links[0].href",
@@ -528,7 +527,7 @@ class GroupControllerJsonPatchMethodTest {
         Long updatedTotalNumberOfInjured = 14L;
         Long updatedNumberOfPerpetratorInjured = 3L;
         Long updatedValueOfPropertyDamage = 10000L;
-        
+
         String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
         String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
         String pathToTargetLink = TARGET_BASE_PATH + "/" + targetNode5.getId().intValue();
@@ -750,7 +749,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Target name cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -777,7 +776,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -806,7 +805,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("A country with the provided name does not exist.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -965,7 +964,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("errors", hasItem("City name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City latitude cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("City longitude cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(3))));
+                        .andExpect(jsonPath("errors", hasSize(3))));
     }
 
     @Test
@@ -1082,7 +1081,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1108,7 +1107,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Province name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @ParameterizedTest(name = "{index}: For Group Event Province name: {0}")
@@ -1133,7 +1132,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]", is("Province name cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1157,7 +1156,7 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors", hasItem("Country name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasItem("Province and target should be located in the same country.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(2))));
+                        .andExpect(jsonPath("errors", hasSize(2))));
     }
 
     @Test
@@ -1179,8 +1178,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1204,8 +1204,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1227,8 +1228,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1252,8 +1254,40 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_patch_should_return_errors() {
+
+        long numberOfPerpetratorFatalities = 20L;
+        long totalNumberOfFatalities = 10L;
+
+        String jsonPatch = "[" +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfFatalities\", " +
+                "\"value\": " + totalNumberOfFatalities + " }," +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorFatalities\", " +
+                "\"value\": " + numberOfPerpetratorFatalities + " }" +
+                "]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1275,8 +1309,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1300,8 +1335,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1323,8 +1359,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1348,8 +1385,40 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_patch_should_return_errors() {
+
+        long numberOfPerpetratorInjured = 20L;
+        long totalNumberOfInjured = 10L;
+
+        String jsonPatch = "[" +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/totalNumberOfInjured\", " +
+                "\"value\": " + totalNumberOfInjured + " }," +
+                "{ \"op\": \"replace\", \"path\": \"/eventsCaused/0/victim/numberOfPerpetratorInjured\", " +
+                "\"value\": " + numberOfPerpetratorInjured + " }" +
+                "]";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonPatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured should not exceed the total number of injured.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1371,8 +1440,9 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
@@ -1396,7 +1466,8 @@ class GroupControllerJsonPatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(CoreMatchers.notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
-                        .andExpect(jsonPath("errors", Matchers.hasSize(1))));
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
     }
 }

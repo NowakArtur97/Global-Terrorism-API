@@ -16,8 +16,6 @@ import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.configuration.Neo4jTestConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.database.Neo4jDatabaseUtil;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -396,7 +394,7 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.id", is(targetNode2.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.target", is(updatedTargetName)))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href",
                                 is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
@@ -429,7 +427,7 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
                                 is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", 
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name",
                                 is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", is(pathToVictimLink)))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[1].href").doesNotExist())
@@ -603,7 +601,7 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].date", is(updatedEventDateString)))
                         .andExpect(jsonPath("eventsCaused[0].isSuicidal", is(eventNode4.getIsSuicidal())))
                         .andExpect(jsonPath("eventsCaused[0].isSuccessful", is(eventNode4.getIsSuccessful())))
-                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents", 
+                        .andExpect(jsonPath("eventsCaused[0].isPartOfMultipleIncidents",
                                 is(eventNode4.getIsPartOfMultipleIncidents())))
                         .andExpect(jsonPath("eventsCaused[0].target.links[0].href", is(pathToTargetLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.links[1].href").doesNotExist())
@@ -612,15 +610,15 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[0].href",
                                 is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.id",
                                 is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[0].href",
                                 is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.id",
                                 is(regionNode.getId().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name", 
+                        .andExpect(jsonPath("eventsCaused[0].target.countryOfOrigin.region.name",
                                 is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.links[1].href").doesNotExist())
@@ -634,13 +632,13 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].city.province.name", is(provinceNode2.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[0].href", is(pathToCountryLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id", 
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.id",
                                 is(countryNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.name", is(countryNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[0].href",
                                 is(pathToRegionLink)))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.links[1].href").doesNotExist())
-                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id", 
+                        .andExpect(jsonPath("eventsCaused[0].city.province.country.region.id",
                                 is(regionNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].city.province.country.region.name", is(regionNode.getName())))
                         .andExpect(jsonPath("eventsCaused[0].victim.links[0].href", is(pathToVictimLink)))
@@ -878,7 +876,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("List of Events caused by the Group cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("List of Events caused by the Group cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -903,7 +902,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Group name cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Group name cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2110,7 +2110,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2182,7 +2183,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of fatalities must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2252,7 +2254,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2324,7 +2327,82 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
+
+        long numberOfPerpetratorFatalities = 20L;
+        long totalNumberOfFatalities = 10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + totalNumberOfFatalities + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + numberOfPerpetratorFatalities + "\", " +
+                "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2394,7 +2472,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2466,7 +2545,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total number of injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total number of injured must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2536,7 +2616,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2608,7 +2689,82 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors", hasSize(1))));
+    }
+
+    @Test
+    void when_partial_update_group_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
+
+        long numberOfPerpetratorInjured = 20L;
+        long totalNumberOfInjured = 10L;
+
+        String eventDateString = "2001-08-05";
+
+        String jsonMergePatch = "{\"eventsCaused\" : [{" +
+                "\"id\" : \"" + eventNode.getId().intValue() + "\", " +
+                "\"summary\" : \"" + eventNode.getSummary() + "\", " +
+                "\"motive\" : \"" + eventNode.getMotive() + "\", " +
+                "\"date\" : \"" + eventDateString + "\", " +
+                "\"isPartOfMultipleIncidents\" : \"" + eventNode.getIsPartOfMultipleIncidents() + "\", " +
+                "\"isSuccessful\" : \"" + eventNode.getIsSuccessful() + "\", " +
+                "\"isSuicidal\" : \"" + eventNode.getIsSuicidal() + "\", " +
+                "\"target\" : " +
+                "{" +
+                "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
+                "\"target\" : \"" + targetNode.getTarget() + "\", " +
+                "\"countryOfOrigin\" : " +
+                "{ " +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"" +
+                "}" +
+                "}," +
+                "\"city\" : " +
+                "{ " +
+                "\"id\" : \"" + cityNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + cityNode.getName() + "\"," +
+                "\"latitude\" : " + cityNode.getLatitude() + "," +
+                "\"longitude\" : " + cityNode.getLongitude() + "," +
+                "\"province\" : { " +
+                "\"id\" : \"" + provinceNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + provinceNode.getName() + "\"," +
+                "\"country\" : {" +
+                "\"id\" : \"" + countryNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + countryNode.getName() + "\"," +
+                "\"region\" : {" +
+                "\"id\" : \"" + regionNode.getId().intValue() + "\", " +
+                "\"name\" : \"" + regionNode.getName() + "\"" +
+                "}" +
+                "}" +
+                "}" +
+                "}," +
+                "\"victim\" : " +
+                "{" +
+                "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfInjured\" : \"" + totalNumberOfInjured + "\", " +
+                "\"numberOfPerpetratorInjured\" : \"" + numberOfPerpetratorInjured + "\", " +
+                "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
+                "}" +
+                "}]}";
+
+        String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                List.of(new SimpleGrantedAuthority("user"))));
+
+        assertAll(
+                () -> mockMvc
+                        .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, groupNode.getId())
+                                .header("Authorization", "Bearer " + token)
+                                .content(jsonMergePatch)
+                                .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("timestamp", is(notNullValue())))
+                        .andExpect(jsonPath("status", is(400)))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event number of perpetrator injured should not exceed the total number of injured.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2678,7 +2834,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2750,7 +2907,8 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors", hasItem("Event total value of property damage must be greater or equal to 0.")))
+                        .andExpect(jsonPath("errors[0]",
+                                is("Event total value of property damage must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 }
