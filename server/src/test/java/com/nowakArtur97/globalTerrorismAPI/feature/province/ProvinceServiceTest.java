@@ -29,8 +29,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("ProvinceServiceImpl_Tests")
-class ProvinceServiceImplTest {
+@Tag("ProvinceService_Tests")
+class ProvinceServiceTest {
 
     private final int DEFAULT_DEPTH_FOR_PROVINCE_NODE = 2;
 
@@ -60,7 +60,7 @@ class ProvinceServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        provinceService = new ProvinceServiceImpl(provinceRepository, modelMapper, countryService);
+        provinceService = new ProvinceService(provinceRepository, modelMapper, countryService);
     }
 
     @Test

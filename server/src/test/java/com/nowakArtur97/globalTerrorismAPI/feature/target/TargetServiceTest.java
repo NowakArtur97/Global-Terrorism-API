@@ -29,8 +29,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("TargetServiceImpl_Tests")
-class TargetServiceImplTest {
+@Tag("TargetService_Tests")
+class TargetServiceTest {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
@@ -60,7 +60,7 @@ class TargetServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        targetService = new TargetServiceImpl(targetRepository, modelMapper, countryService);
+        targetService = new TargetService(targetRepository, modelMapper, countryService);
     }
 
     @Test
@@ -191,8 +191,8 @@ class TargetServiceImplTest {
                         () -> "should return target node with id: " + targetNodeExpected.getId() + ", but was: "
                                 + targetNodeActual.getId()),
                 () -> assertEquals(targetNodeExpected.getTarget(), targetNodeActual.getTarget(),
-                () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
-                        + targetNodeActual.getTarget()),
+                        () -> "should return target node with target: " + targetNodeExpected.getTarget() + ", but was: "
+                                + targetNodeActual.getTarget()),
                 () -> assertNotNull(targetNodeActual.getId(),
                         () -> "should return target node with new id, but was: " + targetNodeActual.getId()),
                 () -> assertEquals(countryNodeExpected, targetNodeActual.getCountryOfOrigin(),

@@ -21,8 +21,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("RegionServiceImpl_Tests")
-class RegionServiceImplTest {
+@Tag("RegionService_Tests")
+class RegionServiceTest {
 
     private RegionService regionService;
 
@@ -40,7 +40,7 @@ class RegionServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        regionService = new RegionServiceImpl(regionRepository);
+        regionService = new RegionService(regionRepository);
     }
 
     @Test
@@ -171,7 +171,7 @@ class RegionServiceImplTest {
                 () -> verify(regionRepository, times(1)).findById(regionId),
                 () -> verifyNoMoreInteractions(regionRepository));
     }
-    
+
     @Test
     void when_check_by_name_if_existing_region_exists_should_return_true() {
 

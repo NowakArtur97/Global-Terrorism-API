@@ -36,8 +36,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("GroupServiceImpl_Tests")
-class GroupServiceImplTest {
+@Tag("GroupService_Tests")
+class GroupServiceTest {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
@@ -77,7 +77,7 @@ class GroupServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        groupService = new GroupServiceImpl(groupRepository, modelMapper, eventService);
+        groupService = new GroupService(groupRepository, modelMapper, eventService);
     }
 
     @Test

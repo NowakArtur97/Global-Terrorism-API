@@ -31,8 +31,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("CityServiceImpl_Tests")
-class CityServiceImplTest {
+@Tag("CityService_Tests")
+class CityServiceTest {
 
     private final int DEFAULT_DEPTH_FOR_CITY_NODE = 2;
 
@@ -64,7 +64,7 @@ class CityServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        cityService = new CityServiceImpl(cityRepository, modelMapper, provinceService);
+        cityService = new CityService(cityRepository, modelMapper, provinceService);
     }
 
     @Test

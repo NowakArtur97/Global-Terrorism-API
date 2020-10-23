@@ -23,8 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
-@Tag("CountryServiceImpl_Tests")
-class CountryServiceImplTest {
+@Tag("CountryService_Tests")
+class CountryServiceTest {
 
     private CountryService countryService;
 
@@ -44,7 +44,7 @@ class CountryServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        countryService = new CountryServiceImpl(countryRepository);
+        countryService = new CountryService(countryRepository);
     }
 
     @Test

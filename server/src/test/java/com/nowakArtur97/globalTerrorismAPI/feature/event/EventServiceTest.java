@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(NameWithSpacesGenerator.class)
 @Tag("EventServiceImpl_Tests")
-class EventServiceImplTest {
+class EventServiceTest {
 
     private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
@@ -85,7 +85,7 @@ class EventServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        eventService = new EventServiceImpl(eventRepository, modelMapper, targetService, cityService, victimService);
+        eventService = new EventService(eventRepository, modelMapper, targetService, cityService, victimService);
     }
 
     @Test
