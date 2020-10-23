@@ -11,6 +11,15 @@ class ValidNumberOfPerpetratorFatalitiesConstraintValidator
 
         VictimDTO victim = (VictimDTO) obj;
 
+        // Other annotations are responsible for this validation, therefore the true was returned
+        if (victim == null
+                || victim.getTotalNumberOfFatalities() == null
+                || victim.getTotalNumberOfFatalities() < 0
+                || victim.getNumberOfPerpetratorFatalities() == null
+                || victim.getNumberOfPerpetratorFatalities() < 0) {
+            return true;
+        }
+
         return victim.getTotalNumberOfFatalities() >= victim.getNumberOfPerpetratorFatalities();
     }
 }

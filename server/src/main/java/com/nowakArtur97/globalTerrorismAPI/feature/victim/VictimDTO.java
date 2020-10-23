@@ -14,10 +14,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ValidNumberOfPerpetratorFatalities(message = "{victim.numberOfPerpetratorFatalities.lowerThanTotal}",
-        groups = BasicVictimValidationConstraints.class)
-@ValidNumberOfPerpetratorInjured(message = "{victim.numberOfPerpetratorInjured.lowerThanTotal}",
-        groups = BasicVictimValidationConstraints.class)
+@ValidNumberOfPerpetratorFatalities(message = "{victim.numberOfPerpetratorFatalities.lowerThanTotal}")
+@ValidNumberOfPerpetratorInjured(message = "{victim.numberOfPerpetratorInjured.lowerThanTotal}")
 public class VictimDTO implements DTO, Victim {
 
     @ApiModelProperty(notes = "The event's total number of fatalities", required = true, example = "100")
