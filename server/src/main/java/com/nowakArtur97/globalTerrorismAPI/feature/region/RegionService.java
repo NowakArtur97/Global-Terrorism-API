@@ -1,12 +1,27 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.region;
 
-import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericServiceImpl;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-public interface RegionService extends BasicGenericService<RegionNode> {
+@Service
+public class RegionService extends BasicGenericServiceImpl<RegionNode> {
 
-    Optional<RegionNode> findByName(String name);
+    private final RegionRepository repository;
 
-    boolean existsByName(String name);
+    RegionService(RegionRepository repository) {
+        super(repository);
+        this.repository = repository;
+    }
+
+    public Optional<RegionNode> findByName(String name) {
+
+        return repository.findByName(name);
+    }
+
+    public boolean existsByName(String name) {
+
+        return repository.existsByName(name);
+    }
 }

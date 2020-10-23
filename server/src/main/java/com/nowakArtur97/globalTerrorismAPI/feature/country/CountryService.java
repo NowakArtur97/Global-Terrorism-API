@@ -1,12 +1,28 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.country;
 
-import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.service.BasicGenericServiceImpl;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-public interface CountryService extends BasicGenericService<CountryNode> {
+@Service
+public
+class CountryService extends BasicGenericServiceImpl<CountryNode> {
 
-    Optional<CountryNode> findByName(String name);
+    private final CountryRepository repository;
 
-    boolean existsByName(String name);
+    CountryService(CountryRepository repository) {
+        super(repository);
+        this.repository = repository;
+    }
+
+    public Optional<CountryNode> findByName(String name) {
+
+        return repository.findByName(name);
+    }
+
+    public boolean existsByName(String name) {
+
+        return repository.existsByName(name);
+    }
 }
