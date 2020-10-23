@@ -11,9 +11,6 @@ class ValidNumberOfPerpetratorInjuredConstraintValidator
 
         VictimDTO victim = (VictimDTO) obj;
 
-        return victim != null
-                && victim.getTotalNumberOfInjured() != null
-                && victim.getNumberOfPerpetratorInjured() != null
-                && victim.getTotalNumberOfInjured() >= victim.getNumberOfPerpetratorInjured();
+        return victim.getTotalNumberOfInjured() >= victim.getNumberOfPerpetratorInjured();
     }
 }
