@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ValidNumberOfPerpetratorFatalities
 public class VictimDTO implements DTO, Victim {
 
     @ApiModelProperty(notes = "The event's total number of fatalities", required = true, example = "100")
