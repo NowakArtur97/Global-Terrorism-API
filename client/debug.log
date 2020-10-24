@@ -1,0 +1,4 @@
+[1024/084412.288:ERROR:process_info.cc(329)] VirtualQueryEx: Odmowa dostêpu. (0x5)
+[1024/084412.289:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[1024/084412.289:ERROR:process_memory_win.cc(39)] Failed to initialize ProcessInfo.
+[1024/084412.289:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Podjêto próbê uzyskania dostêpu do procesu koñcz¹cego dzia³anie. (0xc000010a)

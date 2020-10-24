@@ -5,6 +5,7 @@ import City from 'src/app/city/models/city.model';
 
 import Event from '../../models/event.model';
 import EventsGetResponse from '../../models/events-get-response.model';
+import Victim from '../../models/victim.model';
 import EventService from '../../services/event.service';
 import * as EventActions from '../event.actions';
 import EventEffects from '../event.effects';
@@ -12,24 +13,26 @@ import EventEffects from '../event.effects';
 const mockEvents: EventsGetResponse = {
   content: [
     new Event(
-      2,
+      3,
       'summary',
       'motive',
       new Date(),
       true,
       true,
       true,
-      new City(1, 'city', 10, 30)
+      new City(1, 'city', 10, 30),
+      new Victim(2, 10, 1, 12, 2, 1000)
     ),
     new Event(
-      4,
+      6,
       'summary 2',
       'motive 2',
       new Date(),
       false,
       false,
       false,
-      new City(3, 'city 2', 20, 10)
+      new City(4, 'city 2', 20, 10),
+      new Victim(5, 11, 3, 14, 4, 2000)
     ),
   ],
 };
