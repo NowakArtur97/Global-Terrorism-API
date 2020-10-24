@@ -1,13 +1,23 @@
 <div class="app-content">
   <mat-toolbar color="primary">
     <div fxShow="true" fxHide.gt-sm="true">
-      <button mat-icon-button (click)="sidenav.toggle()">
+      <button
+        mat-icon-button
+        (click)="sidenav.toggle()"
+        (click)="sidenavForms.close()"
+        onclick="this.blur()"
+      >
         <mat-icon>menu</mat-icon>
       </button>
     </div>
-    <div>
-      <button mat-icon-button (click)="sidenavForms.toggle()">
-        <mat-icon>menu</mat-icon>
+    <div fxShow="true">
+      <button
+        mat-icon-button
+        (click)="sidenavForms.toggle()"
+        (click)="sidenav.close()"
+        onclick="this.blur()"
+      >
+        <mat-icon>add</mat-icon>
       </button>
     </div>
     <a mat-button class="app-name" routerLink="/">
@@ -44,7 +54,7 @@
       </a>
     </div>
   </mat-toolbar>
-  <mat-sidenav-container fxFlexFill class="example-container">
+  <mat-sidenav-container fxFlexFill>
     <mat-sidenav
       color="primary"
       #sidenav
@@ -92,6 +102,7 @@
       mode="over"
       opened="false"
       position="end"
+      class="sidenav-big"
     >
       <div fxLayout="column">
         <a mat-button href="#" routerLink="map">Map</a>
