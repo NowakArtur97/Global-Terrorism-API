@@ -4,9 +4,10 @@ import { StoreModule } from '@ngrx/store';
 
 import EventEffects from './store/event.effects';
 import eventReducer from './store/event.reducer';
+import { EventFormComponent } from './event-form/event-form.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [EventFormComponent],
   imports: [
     StoreModule.forFeature('event', eventReducer),
     EffectsModule.forFeature([EventEffects]),
