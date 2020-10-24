@@ -12,7 +12,7 @@ export default class EventEffects {
   fetchEvents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventActions.fetchEvents),
-      switchMap(() => this.eventService.getAll()),
+      switchMap(() => this.eventService.getAll(1000)),
       map((response) => response.content),
       map((events) => EventActions.setEvents({ events }))
     )

@@ -18,7 +18,12 @@ export default class MarkerService {
   }
 
   private scaleRadius = (value: number, maxValue: number): number =>
-    20 * value * maxValue;
+    60 * (this.calculateRadius(value, maxValue) / maxValue);
+
+  private calculateRadius(value: number, maxValue: number): number {
+    const oneTenthOfMaxVal = maxValue / 10;
+    return value <= oneTenthOfMaxVal ? oneTenthOfMaxVal : value;
+  }
 
   showCircleMarkers(events: Event[] = [], map: L.Map): L.CircleMarker[] {
     const maxValue = Math.max(
