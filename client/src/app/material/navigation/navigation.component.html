@@ -48,8 +48,8 @@
       opened="false"
       fxHide.gt-sm="true"
     >
-      <a mat-button href="#" routerLink="map">Map</a>
       <div fxLayout="column">
+        <a mat-button href="#" routerLink="map">Map</a>
         <a
           mat-button
           href="#"
@@ -64,18 +64,16 @@
           [routerLink]=""
           (click)="onOpenPopUp('registration')"
           *ngIf="!isAuthenticated"
+          >Register</a
         >
-          Register
-        </a>
         <a
           mat-button
           href="#"
           [routerLink]=""
           (click)="onLogout()"
           *ngIf="isAuthenticated"
+          >Logout</a
         >
-          Logout
-        </a>
       </div>
     </mat-sidenav>
     <mat-sidenav-content fxFlexFill>

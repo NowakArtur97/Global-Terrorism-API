@@ -1,14 +1,14 @@
 .app-content {
-  height: 100vh;
+  height: calc(100vh - 64px);
 }
 
 .app-name {
-  font-size: 150%;
+  font-size: 110%;
 }
 
 a {
   text-decoration: none;
-  font-size: 110%;
+  font-size: 105%;
   white-space: normal;
 }
 
@@ -17,6 +17,6 @@ a {
 }
 
 .mat-sidenav-content {
-  font-size: 200%;
+  font-size: 110%;
   text-align: center;
 }

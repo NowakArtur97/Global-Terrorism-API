@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export default abstract class GenericRestService<T> {
-  private readonly DEFAULT_PAGE_SIZE = 50;
+  private readonly DEFAULT_PAGE_SIZE = 100;
 
   constructor(protected httpClient: HttpClient, protected actionUtl: string) {}
 
