@@ -1,5 +1,7 @@
 import City from 'src/app/city/models/city.model';
 
+import Victim from './victim.model';
+
 export default class Event {
   constructor(
     private readonly _id: number,
@@ -9,7 +11,8 @@ export default class Event {
     private _isPartOfMultipleIncidents: boolean,
     private _isSuccessful: boolean,
     private _isSuicidal: boolean,
-    private _city: City
+    private _city: City,
+    private _victim: Victim
   ) {}
 
   public get id(): number {
@@ -42,5 +45,9 @@ export default class Event {
 
   public get city(): City {
     return this._city;
+  }
+
+  public get victim(): Victim {
+    return this._victim;
   }
 }
