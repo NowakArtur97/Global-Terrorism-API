@@ -5,6 +5,11 @@
         <mat-icon>menu</mat-icon>
       </button>
     </div>
+    <div>
+      <button mat-icon-button (click)="sidenavForms.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
     <a mat-button class="app-name" routerLink="/">
       <span>Global Terrorism Tracker</span>
     </a>
@@ -47,6 +52,7 @@
       mode="over"
       opened="false"
       fxHide.gt-sm="true"
+      position="start"
     >
       <div fxLayout="column">
         <a mat-button href="#" routerLink="map">Map</a>
@@ -79,5 +85,41 @@
     <mat-sidenav-content fxFlexFill>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
+    <mat-sidenav
+      color="primary"
+      #sidenavForms
+      fxLayout="column"
+      mode="over"
+      opened="false"
+      position="end"
+    >
+      <div fxLayout="column">
+        <a mat-button href="#" routerLink="map">Map</a>
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onOpenPopUp('login')"
+          *ngIf="!isAuthenticated"
+          >Login</a
+        >
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onOpenPopUp('registration')"
+          *ngIf="!isAuthenticated"
+          >Register</a
+        >
+        <a
+          mat-button
+          href="#"
+          [routerLink]=""
+          (click)="onLogout()"
+          *ngIf="isAuthenticated"
+          >Logout</a
+        >
+      </div>
+    </mat-sidenav>
   </mat-sidenav-container>
 </div>
