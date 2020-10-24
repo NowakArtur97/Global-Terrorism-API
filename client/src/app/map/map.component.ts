@@ -17,7 +17,7 @@ import * as EventActions from '../event/store/event.actions';
 })
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private map: L.Map;
-  private markers: L.Marker[] = [];
+  private markers: L.CircleMarker[] = [];
   events: Event[] = [];
   citiesSubscription$: Subscription;
   userSubscription$: Subscription;
@@ -86,6 +86,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private showMarkers(): void {
-    this.markers = this.markerService.showMarkers(this.events, this.map);
+    this.markers = this.markerService.showCircleMarkers(this.events, this.map);
   }
 }
