@@ -23,7 +23,8 @@
               User name cannot be <strong>empty</strong>.
             </p>
             <p *ngIf="userName.errors.userNameAlreadyTaken">
-              User name <strong>is already taken</strong>.
+              User name: '{{ userName.value }}'
+              <strong>is already taken</strong>.
             </p>
             <p *ngIf="userName.errors.minlength || userName.errors.maxlength">
               User name must be between <strong>5</strong> and
@@ -46,7 +47,7 @@
               Email must be a <strong>valid</strong> email address.
             </p>
             <p *ngIf="email.errors.emailAlreadyTaken">
-              Email <strong>is already taken</strong>.
+              Email: '{{ email.value }}' <strong>is already taken</strong>.
             </p>
             <p *ngIf="email.errors.notBlank">
               Email cannot be <strong>empty</strong>.
@@ -87,6 +88,9 @@
             <p *ngIf="password.errors.withoutSpaces">
               Password <strong>mustn't contain spaces</strong>.
             </p>
+            <p *ngIf="password.errors.notPopular">
+              Password is on the list of <strong>common passwords</strong>.
+            </p>
             <p *ngIf="password.errors.repetitiveCharacters">
               Password
               <strong
@@ -96,16 +100,13 @@
             </p>
             <div
               *ngIf="
-                password.errors.notPopular ||
+                password.errors.withoutLowercase ||
                 password.errors.withoutUppercase ||
                 password.errors.withoutDigits ||
                 password.errors.withoutSpecial
               "
             >
               <p>Password must meet at least two of the four rules below:</p>
-              <p *ngIf="password.errors.notPopular">
-                Password is on the list of <strong>common passwords</strong>.
-              </p>
               <p *ngIf="password.errors.withoutUppercase">
                 Password must contain <strong>one or more</strong> uppercase
                 characters.
@@ -142,7 +143,7 @@
             "
           >
             <p *ngIf="matchingPassword.errors.notBlank">
-              Password cannot be <strong>empty</strong>.
+              Matching password cannot be <strong>empty</strong>.
             </p>
             <p
               *ngIf="
@@ -175,18 +176,18 @@
                 two characters</strong
               >.
             </p>
+            <p *ngIf="matchingPassword.errors.notPopular">
+              Password is on the list of <strong>common passwords</strong>.
+            </p>
             <div
               *ngIf="
-                matchingPassword.errors.notPopular ||
+                matchingPassword.errors.withoutLowercase ||
                 matchingPassword.errors.withoutUppercase ||
                 matchingPassword.errors.withoutDigits ||
                 matchingPassword.errors.withoutSpecial
               "
             >
               <p>Password must meet at least two of the four rules below:</p>
-              <p *ngIf="matchingPassword.errors.notPopular">
-                Password is on the list of <strong>common passwords</strong>.
-              </p>
               <p *ngIf="matchingPassword.errors.withoutUppercase">
                 Password must contain <strong>one or more</strong> uppercase
                 characters.
