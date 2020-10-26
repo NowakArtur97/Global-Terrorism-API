@@ -32,6 +32,13 @@ export class EventFormComponent implements OnInit {
       target: new FormGroup({
         target: new FormControl('', Validators.required),
       }),
+      victim: new FormGroup({
+        totalNumberOfFatalities: new FormControl('', Validators.required),
+        numberOfPerpetratorFatalities: new FormControl('', Validators.required),
+        totalNumberOfInjured: new FormControl('', Validators.required),
+        numberOfPerpetratorInjured: new FormControl('', Validators.required),
+        valueOfPropertyDamage: new FormControl('', Validators.required),
+      }),
     });
   }
 
@@ -66,5 +73,25 @@ export class EventFormComponent implements OnInit {
 
   get target(): AbstractControl {
     return this.eventForm.get('target.target');
+  }
+
+  get totalNumberOfFatalities(): AbstractControl {
+    return this.eventForm.get('victim.totalNumberOfFatalities');
+  }
+
+  get numberOfPerpetratorFatalities(): AbstractControl {
+    return this.eventForm.get('victim.numberOfPerpetratorFatalities');
+  }
+
+  get totalNumberOfInjured(): AbstractControl {
+    return this.eventForm.get('victim.totalNumberOfInjured');
+  }
+
+  get numberOfPerpetratorInjured(): AbstractControl {
+    return this.eventForm.get('victim.numberOfPerpetratorInjured');
+  }
+
+  get valueOfPropertyDamage(): AbstractControl {
+    return this.eventForm.get('victim.valueOfPropertyDamage');
   }
 }
