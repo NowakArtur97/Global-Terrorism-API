@@ -18,12 +18,20 @@ export class EventFormComponent implements OnInit {
 
   initForm(): void {
     this.eventForm = new FormGroup({
-      summary: new FormControl('', Validators.required),
-      motive: new FormControl('', Validators.required),
-      date: new FormControl('', Validators.required),
-      isPartOfMultipleIncidents: new FormControl('false', Validators.required),
-      isSuccessful: new FormControl('false', Validators.required),
-      isSuicidal: new FormControl('false', Validators.required),
+      event: new FormGroup({
+        summary: new FormControl('', Validators.required),
+        motive: new FormControl('', Validators.required),
+        date: new FormControl('', Validators.required),
+        isPartOfMultipleIncidents: new FormControl(
+          'false',
+          Validators.required
+        ),
+        isSuccessful: new FormControl('false', Validators.required),
+        isSuicidal: new FormControl('false', Validators.required),
+      }),
+      target: new FormGroup({
+        target: new FormControl('', Validators.required),
+      }),
     });
   }
 
@@ -33,26 +41,30 @@ export class EventFormComponent implements OnInit {
   }
 
   get summary(): AbstractControl {
-    return this.eventForm.get('summary');
+    return this.eventForm.get('event.summary');
   }
 
   get motive(): AbstractControl {
-    return this.eventForm.get('motive');
+    return this.eventForm.get('event.motive');
   }
 
   get date(): AbstractControl {
-    return this.eventForm.get('date');
+    return this.eventForm.get('event.date');
   }
 
   get isPartOfMultipleIncidents(): AbstractControl {
-    return this.eventForm.get('isPartOfMultipleIncidents');
+    return this.eventForm.get('event.isPartOfMultipleIncidents');
   }
 
   get isSuccessful(): AbstractControl {
-    return this.eventForm.get('isSuccessful');
+    return this.eventForm.get('event.isSuccessful');
   }
 
   get isSuicidal(): AbstractControl {
-    return this.eventForm.get('isSuicidal');
+    return this.eventForm.get('event.isSuicidal');
+  }
+
+  get target(): AbstractControl {
+    return this.eventForm.get('target.target');
   }
 }
