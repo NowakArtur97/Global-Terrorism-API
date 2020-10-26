@@ -39,7 +39,7 @@ describe('cityService', () => {
         expect(res).toEqual(cities);
       });
 
-      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=50`);
+      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=100`);
       expect(req.request.method).toBe('GET');
       req.flush(cities);
     });

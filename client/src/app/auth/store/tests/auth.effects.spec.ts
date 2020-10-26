@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
-import ErrorResponse from 'src/app/shared/models/error-response.model';
+import ErrorResponse from 'src/app/common/models/error-response.model';
 
 import AuthResponse from '../../models/auth-response.model';
 import LoginData from '../../models/login-data.model';

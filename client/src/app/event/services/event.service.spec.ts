@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import City from 'src/app/city/models/city.model';
 
@@ -67,7 +64,7 @@ describe('eventsService', () => {
         expect(res).toEqual(events);
       });
 
-      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=50`);
+      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=100`);
       expect(req.request.method).toBe('GET');
       req.flush(events);
     });

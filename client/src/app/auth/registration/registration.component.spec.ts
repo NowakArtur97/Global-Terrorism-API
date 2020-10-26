@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import { MaterialModule } from 'src/app/material/material.module';
+import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationCheckResponse from '../models/registration-check-response.model';
