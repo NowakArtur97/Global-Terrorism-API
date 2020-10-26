@@ -43,13 +43,7 @@ export class EventFormComponent implements OnInit {
       country: new FormGroup({
         name: new FormControl('', Validators.required),
       }),
-      victim: new FormGroup({
-        totalNumberOfFatalities: new FormControl('', Validators.required),
-        numberOfPerpetratorFatalities: new FormControl('', Validators.required),
-        totalNumberOfInjured: new FormControl('', Validators.required),
-        numberOfPerpetratorInjured: new FormControl('', Validators.required),
-        valueOfPropertyDamage: new FormControl('', Validators.required),
-      }),
+      victim: new FormControl(''),
     });
   }
 

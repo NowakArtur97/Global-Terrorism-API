@@ -159,78 +159,7 @@
             </mat-form-field>
           </p>
         </div>
-        <div formGroupName="victim">
-          <p>
-            <mat-form-field>
-              <mat-label for="totalNumberOfFatalities"
-                >Total number of fatalities</mat-label
-              >
-              <input
-                id="totalNumberOfFatalities"
-                type="number"
-                autocomplete="on"
-                formControlName="totalNumberOfFatalities"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label for="numberOfPerpetratorFatalities"
-                >Number of perpetrator fatalities</mat-label
-              >
-              <input
-                id="numberOfPerpetratorFatalities"
-                type="number"
-                autocomplete="on"
-                formControlName="numberOfPerpetratorFatalities"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label for="totalNumberOfInjured"
-                >Total number of injured</mat-label
-              >
-              <input
-                id="totalNumberOfInjured"
-                type="number"
-                autocomplete="on"
-                formControlName="totalNumberOfInjured"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label for="numberOfPerpetratorInjured"
-                >Number of perpetrator injured</mat-label
-              >
-              <input
-                id="numberOfPerpetratorInjured"
-                type="number"
-                autocomplete="on"
-                formControlName="numberOfPerpetratorInjured"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label for="valueOfPropertyDamage"
-                >Value of property damage</mat-label
-              >
-              <input
-                id="valueOfPropertyDamage"
-                type="number"
-                autocomplete="on"
-                formControlName="valueOfPropertyDamage"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-        </div>
+        <app-victim-form formControlName="victim"></app-victim-form>
         <!-- <mat-error *ngFor="let errorMessage of eventErrors">
           <div>{{ errorMessage }}</div>
         </mat-error> -->

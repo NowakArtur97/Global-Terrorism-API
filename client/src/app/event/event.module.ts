@@ -5,6 +5,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
 import { MaterialModule } from '../common/material.module';
+import { VictimModule } from '../victim/victim.module';
 import { EventFormComponent } from './event-form/event-form.component';
 import EventEffects from './store/event.effects';
 import eventReducer from './store/event.reducer';
@@ -17,6 +18,8 @@ import eventReducer from './store/event.reducer';
     MaterialModule,
     StoreModule.forFeature('event', eventReducer),
     EffectsModule.forFeature([EventEffects]),
+
+    VictimModule,
   ],
   exports: [EventFormComponent],
 })
