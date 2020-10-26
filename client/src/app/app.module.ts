@@ -17,6 +17,7 @@ import { CoreModule } from './core.module';
 import EventModule from './event/event.module';
 import MapModule from './map/map.module';
 import { SharedModule } from './shared/shared.module';
+import { VictimModule } from './victim/victim.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     CityModule,
     EventModule,
+    VictimModule,
     MapModule,
     AuthModule,
     SharedModule,
