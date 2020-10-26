@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-event-form',
@@ -27,5 +27,32 @@ export class EventFormComponent implements OnInit {
     });
   }
 
-  onAddForm(): void {}
+  onAddForm(): void {
+    console.log(this.eventForm);
+    console.log(this.eventForm.value);
+  }
+
+  get summary(): AbstractControl {
+    return this.eventForm.get('summary');
+  }
+
+  get motive(): AbstractControl {
+    return this.eventForm.get('motive');
+  }
+
+  get date(): AbstractControl {
+    return this.eventForm.get('date');
+  }
+
+  get isPartOfMultipleIncidents(): AbstractControl {
+    return this.eventForm.get('isPartOfMultipleIncidents');
+  }
+
+  get isSuccessful(): AbstractControl {
+    return this.eventForm.get('isSuccessful');
+  }
+
+  get isSuicidal(): AbstractControl {
+    return this.eventForm.get('isSuicidal');
+  }
 }

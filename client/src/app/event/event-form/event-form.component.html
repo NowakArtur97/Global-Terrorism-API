@@ -22,9 +22,24 @@
               id="motive"
               type="text"
               autocomplete="on"
-              formControlName="summary"
+              formControlName="motive"
               matInput
             />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="datePicker"
+              formControlName="date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="datePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
           </mat-form-field>
         </p>
         <p>
@@ -40,7 +55,6 @@
             >
           </mat-radio-group>
         </p>
-
         <p>
           <mat-label for="isSuccessful">Is successful?</mat-label>
           <mat-radio-group formControlName="isSuccessful">
@@ -52,7 +66,6 @@
             >
           </mat-radio-group>
         </p>
-
         <p>
           <mat-label for="isSuicidal">Is suicidal?</mat-label>
           <mat-radio-group formControlName="isSuicidal">
@@ -76,6 +89,7 @@
           <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
             Add Event
           </button>
+          <!-- <button type="submit" mat-raised-button>Add Event</button> -->
           <!-- <button mat-raised-button mat-dialog-close>Cancel</button> -->
         </mat-dialog-actions>
       </form>
