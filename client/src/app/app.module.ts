@@ -12,10 +12,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import AuthModule from './auth/auth.module';
 import CityModule from './city/city.module';
+import { MaterialModule } from './common/material.module';
 import { CoreModule } from './core.module';
 import EventModule from './event/event.module';
 import MapModule from './map/map.module';
-import { MaterialModule } from './material/material.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +39,7 @@ import { MaterialModule } from './material/material.module';
     EventModule,
     MapModule,
     AuthModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

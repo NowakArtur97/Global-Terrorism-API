@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
-import { MaterialModule } from '../material/material.module';
+import { MaterialModule } from '../common/material.module';
 import AuthRoutingModule from './auth-routing.module';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { RegistrationComponent } from './registration/registration.component';

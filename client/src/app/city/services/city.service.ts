@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import GenericRestService from 'src/app/shared/services/generic-rest.service';
+import GenericRestService from 'src/app/common/services/generic-rest.service';
 
 import CitiesGetResponse from '../models/cities-get-response.model';
 

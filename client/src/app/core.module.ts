@@ -2,7 +2,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import JwtInterceptor from './auth/jwt.interceptor';
-import HttpErrorInterceptor from './shared/interceptors/http-error.interceptor';
+import HttpErrorInterceptor from './common/interceptors/http-error.interceptor';
 
 @NgModule({
   providers: [

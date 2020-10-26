@@ -15,8 +15,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
-import { NavigationComponent } from './navigation/navigation.component';
-
 const materialComponents = [
   LayoutModule,
   MatToolbarModule,
@@ -32,7 +30,7 @@ const materialComponents = [
 ];
 
 @NgModule({
-  declarations: [NavigationComponent],
+  declarations: [],
   imports: [
     CommonModule,
     RouterModule,
@@ -40,6 +38,6 @@ const materialComponents = [
     FlexLayoutModule,
     materialComponents,
   ],
-  exports: [NavigationComponent, materialComponents],
+  exports: [materialComponents],
 })
 export class MaterialModule {}

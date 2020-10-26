@@ -1,13 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import CommonValidators from 'src/app/shared/validators/common.validator';
+import CommonValidators from 'src/app/common/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
 import RegistrationData from '../models/registration-data.model';

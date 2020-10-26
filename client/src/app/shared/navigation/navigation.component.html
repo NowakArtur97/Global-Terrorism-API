@@ -105,31 +105,7 @@
       class="sidenav-big"
     >
       <div fxLayout="column">
-        <a mat-button href="#" routerLink="map">Map</a>
-        <a
-          mat-button
-          href="#"
-          [routerLink]=""
-          (click)="onOpenPopUp('login')"
-          *ngIf="!isAuthenticated"
-          >Login</a
-        >
-        <a
-          mat-button
-          href="#"
-          [routerLink]=""
-          (click)="onOpenPopUp('registration')"
-          *ngIf="!isAuthenticated"
-          >Register</a
-        >
-        <a
-          mat-button
-          href="#"
-          [routerLink]=""
-          (click)="onLogout()"
-          *ngIf="isAuthenticated"
-          >Logout</a
-        >
+        <app-event-form></app-event-form>
       </div>
     </mat-sidenav>
   </mat-sidenav-container>

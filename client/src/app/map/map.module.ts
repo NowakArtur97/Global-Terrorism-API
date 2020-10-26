@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import MapRoutingModule from './map-routing.module';
-import { MapComponent } from './map.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [MapComponent],

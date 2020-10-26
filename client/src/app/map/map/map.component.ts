@@ -4,12 +4,12 @@ import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import User from '../auth/models/user.model';
-import Event from '../event/models/event.model';
+import User from '../../auth/models/user.model';
+import Event from '../../event/models/event.model';
 
-import AppStoreState from '../store/app.store.state';
-import MarkerService from './marker.service';
-import * as EventActions from '../event/store/event.actions';
+import AppStoreState from '../../store/app.store.state';
+import MarkerService from './../marker.service';
+import * as EventActions from '../../event/store/event.actions';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',

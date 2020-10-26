@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import ErrorResponse from 'src/app/shared/models/error-response.model';
+import ErrorResponse from 'src/app/common/models/error-response.model';
 
 import AuthResponse from '../models/auth-response.model';
 import User from '../models/user.model';
