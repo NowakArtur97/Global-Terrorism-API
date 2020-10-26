@@ -40,6 +40,9 @@ export class EventFormComponent implements OnInit {
       province: new FormGroup({
         name: new FormControl('', Validators.required),
       }),
+      country: new FormGroup({
+        name: new FormControl('', Validators.required),
+      }),
       victim: new FormGroup({
         totalNumberOfFatalities: new FormControl('', Validators.required),
         numberOfPerpetratorFatalities: new FormControl('', Validators.required),
@@ -97,6 +100,10 @@ export class EventFormComponent implements OnInit {
 
   get provinceName(): AbstractControl {
     return this.eventForm.get('province.name');
+  }
+
+  get countryName(): AbstractControl {
+    return this.eventForm.get('country.name');
   }
 
   get totalNumberOfFatalities(): AbstractControl {
