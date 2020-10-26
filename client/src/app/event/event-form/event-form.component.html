@@ -13,13 +13,6 @@
               formControlName="summary"
               matInput
             />
-            <!-- <mat-error
-              *ngIf="summary.invalid && (summary.touched || summary.dirty)"
-            > -->
-            <!-- <div *ngIf="summary.errors.required">
-                Event summary is <strong>required</strong>
-              </div> -->
-            <!-- </mat-error> -->
           </mat-form-field>
         </p>
         <p>
@@ -32,14 +25,44 @@
               formControlName="summary"
               matInput
             />
-            <!-- <mat-error
-              *ngIf="summary.invalid && (summary.touched || summary.dirty)"
-            > -->
-            <!-- <div *ngIf="summary.errors.required">
-                Event summary is <strong>required</strong>
-              </div> -->
-            <!-- </mat-error> -->
           </mat-form-field>
+        </p>
+        <p>
+          <mat-label for="isPartOfMultipleIncidents"
+            >Is part of multiple incidents?</mat-label
+          >
+          <mat-radio-group formControlName="isPartOfMultipleIncidents">
+            <mat-radio-button value="true" color="primary"
+              >true</mat-radio-button
+            >
+            <mat-radio-button value="false" color="warn"
+              >false</mat-radio-button
+            >
+          </mat-radio-group>
+        </p>
+
+        <p>
+          <mat-label for="isSuccessful">Is successful?</mat-label>
+          <mat-radio-group formControlName="isSuccessful">
+            <mat-radio-button value="true" color="primary"
+              >true</mat-radio-button
+            >
+            <mat-radio-button value="false" color="warn"
+              >false</mat-radio-button
+            >
+          </mat-radio-group>
+        </p>
+
+        <p>
+          <mat-label for="isSuicidal">Is suicidal?</mat-label>
+          <mat-radio-group formControlName="isSuicidal">
+            <mat-radio-button value="true" color="primary"
+              >true</mat-radio-button
+            >
+            <mat-radio-button value="false" color="warn"
+              >false</mat-radio-button
+            >
+          </mat-radio-group>
         </p>
         <!-- <mat-error *ngFor="let errorMessage of eventErrors">
           <div>{{ errorMessage }}</div>
@@ -50,11 +73,10 @@
         </div>
 
         <mat-dialog-actions align="end">
-          <!-- <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
+          <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
             Add Event
-          </button> -->
-          <button type="submit" mat-raised-button>Add Event</button>
-          <button mat-raised-button mat-dialog-close>Cancel</button>
+          </button>
+          <!-- <button mat-raised-button mat-dialog-close>Cancel</button> -->
         </mat-dialog-actions>
       </form>
     </mat-card-content>

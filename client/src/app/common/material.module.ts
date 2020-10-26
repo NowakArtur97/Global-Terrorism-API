@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,6 +28,7 @@ const materialComponents = [
   MatCardModule,
   MatProgressSpinnerModule,
   MatIconModule,
+  MatRadioModule,
   FlexLayoutModule,
 ];
 
