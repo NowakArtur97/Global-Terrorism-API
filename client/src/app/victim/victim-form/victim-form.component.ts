@@ -1,10 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, forwardRef, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-victim-form',
   templateUrl: './victim-form.component.html',
   styleUrls: ['./victim-form.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VictimFormComponent),
+      multi: true,
+    },
+  ],
 })
 export class VictimFormComponent implements OnInit, ControlValueAccessor {
   victimForm: FormGroup;
