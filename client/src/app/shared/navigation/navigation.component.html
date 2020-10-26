@@ -16,6 +16,7 @@
         (click)="sidenavForms.toggle()"
         (click)="sidenav.close()"
         onclick="this.blur()"
+        *ngIf="isAuthenticated"
       >
         <mat-icon>add</mat-icon>
       </button>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-event-form',
@@ -12,7 +12,16 @@ export class EventFormComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm(): void {
+    this.eventForm = new FormGroup({
+      summary: new FormControl('', Validators.required),
+      motive: new FormControl('', Validators.required),
+    });
+  }
 
   onAddForm(): void {}
 }

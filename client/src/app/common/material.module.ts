@@ -27,17 +27,12 @@ const materialComponents = [
   MatCardModule,
   MatProgressSpinnerModule,
   MatIconModule,
+  FlexLayoutModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule,
-    BrowserModule,
-    FlexLayoutModule,
-    materialComponents,
-  ],
+  imports: [CommonModule, RouterModule, BrowserModule, materialComponents],
   exports: [materialComponents],
 })
 export class MaterialModule {}
