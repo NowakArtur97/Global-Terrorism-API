@@ -37,6 +37,9 @@ export class EventFormComponent implements OnInit {
         latitude: new FormControl('', Validators.required),
         longitude: new FormControl('', Validators.required),
       }),
+      province: new FormGroup({
+        name: new FormControl('', Validators.required),
+      }),
       victim: new FormGroup({
         totalNumberOfFatalities: new FormControl('', Validators.required),
         numberOfPerpetratorFatalities: new FormControl('', Validators.required),
@@ -80,7 +83,7 @@ export class EventFormComponent implements OnInit {
     return this.eventForm.get('target.target');
   }
 
-  get name(): AbstractControl {
+  get cityName(): AbstractControl {
     return this.eventForm.get('city.name');
   }
 
@@ -90,6 +93,10 @@ export class EventFormComponent implements OnInit {
 
   get longitude(): AbstractControl {
     return this.eventForm.get('city.longitude');
+  }
+
+  get provinceName(): AbstractControl {
+    return this.eventForm.get('province.name');
   }
 
   get totalNumberOfFatalities(): AbstractControl {
