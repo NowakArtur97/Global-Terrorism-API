@@ -5,9 +5,10 @@ import { StoreModule } from '@ngrx/store';
 
 import CityEffects from './store/city.effects';
 import cityReducer from './store/city.reducer';
+import { CityFormComponent } from './city-form/city-form.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [CityFormComponent],
   imports: [
     StoreModule.forFeature('city', cityReducer),
     EffectsModule.forFeature([CityEffects]),
