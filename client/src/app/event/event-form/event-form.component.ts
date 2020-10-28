@@ -32,11 +32,7 @@ export class EventFormComponent implements OnInit {
       target: new FormGroup({
         target: new FormControl('', Validators.required),
       }),
-      city: new FormGroup({
-        name: new FormControl('', Validators.required),
-        latitude: new FormControl('', Validators.required),
-        longitude: new FormControl('', Validators.required),
-      }),
+      city: new FormControl(''),
       province: new FormGroup({
         name: new FormControl('', Validators.required),
       }),
