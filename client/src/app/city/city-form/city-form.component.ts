@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, forwardRef, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
   FormControl,
   FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
   Validators,
@@ -13,6 +15,18 @@ import {
   selector: 'app-city-form',
   templateUrl: './city-form.component.html',
   styleUrls: ['./city-form.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CityFormComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => CityFormComponent),
+      multi: true,
+    },
+  ],
 })
 export class CityFormComponent
   implements OnInit, ControlValueAccessor, Validator {
