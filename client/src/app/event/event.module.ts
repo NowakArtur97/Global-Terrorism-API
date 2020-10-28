@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
+import CityModule from '../city/city.module';
 import { MaterialModule } from '../common/material.module';
 import { VictimModule } from '../victim/victim.module';
 import { EventFormComponent } from './event-form/event-form.component';
@@ -20,6 +21,7 @@ import eventReducer from './store/event.reducer';
     EffectsModule.forFeature([EventEffects]),
 
     VictimModule,
+    CityModule,
   ],
   exports: [EventFormComponent],
 })

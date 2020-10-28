@@ -3,9 +3,9 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
+import { CityFormComponent } from './city-form/city-form.component';
 import CityEffects from './store/city.effects';
 import cityReducer from './store/city.reducer';
-import { CityFormComponent } from './city-form/city-form.component';
 
 @NgModule({
   declarations: [CityFormComponent],
@@ -15,6 +15,6 @@ import { CityFormComponent } from './city-form/city-form.component';
 
     LeafletModule,
   ],
-  exports: [],
+  exports: [CityFormComponent],
 })
 export default class CityModule {}
