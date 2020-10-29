@@ -1,7 +1,14 @@
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator } from '@angular/forms';
 
-export abstract class AbstractForm implements ControlValueAccessor, Validator {
+@Component({ template: '' })
+export abstract class AbstractForm
+  implements OnInit, ControlValueAccessor, Validator {
   formGroup: FormGroup;
+
+  ngOnInit(): void {
+    this.initForm();
+  }
 
   abstract initForm(): void;
 

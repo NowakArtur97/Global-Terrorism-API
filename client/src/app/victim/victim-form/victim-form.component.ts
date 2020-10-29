@@ -1,13 +1,5 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { Component, forwardRef } from '@angular/core';
+import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { AbstractForm } from 'src/app/common/components/abstract-form.component';
 
 @Component({
@@ -27,11 +19,7 @@ import { AbstractForm } from 'src/app/common/components/abstract-form.component'
     },
   ],
 })
-export class VictimFormComponent extends AbstractForm implements OnInit {
-  ngOnInit(): void {
-    this.initForm();
-  }
-
+export class VictimFormComponent extends AbstractForm {
   initForm(): void {
     this.formGroup = new FormGroup({
       totalNumberOfFatalities: new FormControl('', Validators.required),
@@ -40,17 +28,5 @@ export class VictimFormComponent extends AbstractForm implements OnInit {
       numberOfPerpetratorInjured: new FormControl('', Validators.required),
       valueOfPropertyDamage: new FormControl('', Validators.required),
     });
-  }
-
-  validate(control: AbstractControl): ValidationErrors {
-    console.log('validate2');
-    return this.formGroup.valid
-      ? null
-      : {
-          invalidForm: {
-            valid: false,
-            message: 'Form fields are invalid.',
-          },
-        };
   }
 }
