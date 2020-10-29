@@ -14,8 +14,10 @@ import AuthModule from './auth/auth.module';
 import CityModule from './city/city.module';
 import { MaterialModule } from './common/material.module';
 import { CoreModule } from './core.module';
+import { CountryModule } from './country/country.module';
 import EventModule from './event/event.module';
 import MapModule from './map/map.module';
+import { ProvinceModule } from './province/province.module';
 import { SharedModule } from './shared/shared.module';
 import { TargetModule } from './target/target.module';
 import { VictimModule } from './victim/victim.module';
@@ -41,6 +43,9 @@ import { VictimModule } from './victim/victim.module';
     TargetModule,
     CityModule,
     VictimModule,
+    ProvinceModule,
+    CountryModule,
+
     MapModule,
     AuthModule,
     SharedModule,

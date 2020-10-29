@@ -7,21 +7,7 @@
         <app-target-form formControlName="target"></app-target-form>
         <app-city-form formControlName="city"></app-city-form>
         <app-province-form formControlName="province"></app-province-form>
-
-        <div formGroupName="country">
-          <p>
-            <mat-form-field>
-              <mat-label for="name">Name</mat-label>
-              <input
-                id="name"
-                type="type"
-                autocomplete="on"
-                formControlName="name"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-        </div>
+        <app-country-form formControlName="country"></app-country-form>
         <app-victim-form formControlName="victim"></app-victim-form>
         <!-- <mat-error *ngFor="let errorMessage of eventErrors">
           <div>{{ errorMessage }}</div>

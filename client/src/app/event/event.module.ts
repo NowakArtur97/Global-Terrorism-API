@@ -6,6 +6,8 @@ import { StoreModule } from '@ngrx/store';
 
 import CityModule from '../city/city.module';
 import { MaterialModule } from '../common/material.module';
+import { CountryModule } from '../country/country.module';
+import { ProvinceModule } from '../province/province.module';
 import { TargetModule } from '../target/target.module';
 import { VictimModule } from '../victim/victim.module';
 import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapper.component';
@@ -25,6 +27,8 @@ import eventReducer from './store/event.reducer';
     VictimModule,
     TargetModule,
     CityModule,
+    ProvinceModule,
+    CountryModule,
   ],
   exports: [EventFormWrapperComponent],
 })

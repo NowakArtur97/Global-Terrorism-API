@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-event-form-wrapper',
@@ -21,11 +21,9 @@ export class EventFormWrapperComponent implements OnInit {
       event: new FormControl(''),
       target: new FormControl(''),
       city: new FormControl(''),
-      province: new FormControl(''),
-      country: new FormGroup({
-        name: new FormControl('', Validators.required),
-      }),
       victim: new FormControl(''),
+      province: new FormControl(''),
+      country: new FormControl(''),
     });
   }
 
