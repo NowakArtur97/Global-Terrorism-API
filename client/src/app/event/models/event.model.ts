@@ -1,4 +1,5 @@
 import City from 'src/app/city/models/city.model';
+import Target from 'src/app/target/models/target.model';
 
 import Victim from '../../victim/models/victim.model';
 
@@ -11,6 +12,7 @@ export default class Event {
     private _isPartOfMultipleIncidents: boolean,
     private _isSuccessful: boolean,
     private _isSuicidal: boolean,
+    private _target: Target,
     private _city: City,
     private _victim: Victim
   ) {}
@@ -41,6 +43,10 @@ export default class Event {
 
   public get isSuicidal(): boolean {
     return this._isSuicidal;
+  }
+
+  public get target(): Target {
+    return this._target;
   }
 
   public get city(): City {
