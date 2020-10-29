@@ -2,9 +2,9 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { getTestBed, TestBed } from '@angular/core/testing';
 import City from 'src/app/city/models/city.model';
 
+import Victim from '../../victim/models/victim.model';
 import Event from '../models/event.model';
 import EventsGetResponse from '../models/events-get-response.model';
-import Victim from '../models/victim.model';
 import EventService from './event.service';
 
 describe('eventsService', () => {

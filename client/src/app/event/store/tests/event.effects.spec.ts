@@ -3,9 +3,9 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject } from 'rxjs';
 import City from 'src/app/city/models/city.model';
 
+import Victim from '../../../victim/models/victim.model';
 import Event from '../../models/event.model';
 import EventsGetResponse from '../../models/events-get-response.model';
-import Victim from '../../models/victim.model';
 import EventService from '../../services/event.service';
 import * as EventActions from '../event.actions';
 import EventEffects from '../event.effects';

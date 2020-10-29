@@ -1,6 +1,6 @@
 import City from 'src/app/city/models/city.model';
 
-import Victim from './victim.model';
+import Victim from '../../victim/models/victim.model';
 
 export default class Event {
   constructor(

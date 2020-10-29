@@ -1,7 +1,7 @@
 import City from 'src/app/city/models/city.model';
 
+import Victim from '../../../victim/models/victim.model';
 import Event from '../../models/event.model';
-import Victim from '../../models/victim.model';
 import * as EventActions from '../event.actions';
 import eventReducer from '../event.reducer';
 import EventStoreState from '../event.store.state';
