@@ -1,41 +1,33 @@
-import { OnInit } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormControl, FormGroup, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator } from '@angular/forms';
 
-interface Controls {
-  totalNumberOfFatalities: FormControl;
-  numberOfPerpetratorFatalities: FormControl;
-  totalNumberOfInjured: FormControl;
-  numberOfPerpetratorInjured: FormControl;
-  valueOfPropertyDamage: FormControl;
-}
-
-export abstract class AbstractForm<T>
-  implements OnInit, ControlValueAccessor, Validator {
+export abstract class AbstractForm implements ControlValueAccessor, Validator {
   formGroup: FormGroup;
-
-  ngOnInit(): void {
-    this.initForm();
-  }
 
   abstract initForm(): void;
 
   writeValue(val: any): void {
     if (val) {
       this.formGroup.setValue(val, { emitEvent: false });
+      console.log('writeValue2');
     }
   }
 
   registerOnChange(fn: any): void {
     this.formGroup.valueChanges.subscribe(fn);
+    console.log('registerOnChange2');
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {
+    console.log('registerOnTouched2');
+  }
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.formGroup.disable() : this.formGroup.enable();
+    console.log('setDisabledState2');
   }
 
   validate(control: AbstractControl): ValidationErrors {
+    console.log('validate2');
     return this.formGroup.valid
       ? null
       : {
@@ -46,5 +38,7 @@ export abstract class AbstractForm<T>
         };
   }
 
-  registerOnValidatorChange?(fn: () => void): void {}
+  registerOnValidatorChange?(fn: () => void): void {
+    console.log('registerOnValidatorChange2');
+  }
 }

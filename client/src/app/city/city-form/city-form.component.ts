@@ -49,20 +49,26 @@ export class CityFormComponent
   writeValue(val: any): void {
     if (val) {
       this.cityForm.setValue(val, { emitEvent: false });
+      console.log('writeValue');
     }
   }
 
   registerOnChange(fn: any): void {
     this.cityForm.valueChanges.subscribe(fn);
+    console.log('registerOnChange');
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {
+    console.log('registerOnTouched');
+  }
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.cityForm.disable() : this.cityForm.enable();
+    console.log('setDisabledState');
   }
 
   validate(control: AbstractControl): ValidationErrors {
+    console.log('validate');
     return this.cityForm.valid
       ? null
       : {
@@ -73,5 +79,7 @@ export class CityFormComponent
         };
   }
 
-  registerOnValidatorChange?(fn: () => void): void {}
+  registerOnValidatorChange?(fn: () => void): void {
+    console.log('registerOnValidatorChange');
+  }
 }
