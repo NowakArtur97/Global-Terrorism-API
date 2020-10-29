@@ -1,15 +1,6 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators,
-} from '@angular/forms';
+import { Component, forwardRef } from '@angular/core';
+import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractForm } from 'src/app/common/components/abstract-form.component';
 
 @Component({
   selector: 'app-city-form',
@@ -28,58 +19,12 @@ import {
     },
   ],
 })
-export class CityFormComponent
-  implements OnInit, ControlValueAccessor, Validator {
-  cityForm: FormGroup;
-
-  constructor() {}
-
-  ngOnInit(): void {
-    this.initForm();
-  }
-
+export class CityFormComponent extends AbstractForm {
   initForm(): void {
-    this.cityForm = new FormGroup({
+    this.formGroup = new FormGroup({
       name: new FormControl('', Validators.required),
       latitude: new FormControl('', Validators.required),
       longitude: new FormControl('', Validators.required),
     });
-  }
-
-  writeValue(val: any): void {
-    if (val) {
-      this.cityForm.setValue(val, { emitEvent: false });
-      console.log('writeValue');
-    }
-  }
-
-  registerOnChange(fn: any): void {
-    this.cityForm.valueChanges.subscribe(fn);
-    console.log('registerOnChange');
-  }
-
-  registerOnTouched(fn: any): void {
-    console.log('registerOnTouched');
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.cityForm.disable() : this.cityForm.enable();
-    console.log('setDisabledState');
-  }
-
-  validate(control: AbstractControl): ValidationErrors {
-    console.log('validate');
-    return this.cityForm.valid
-      ? null
-      : {
-          invalidForm: {
-            valid: false,
-            message: 'City fields are invalid.',
-          },
-        };
-  }
-
-  registerOnValidatorChange?(fn: () => void): void {
-    console.log('registerOnValidatorChange');
   }
 }
