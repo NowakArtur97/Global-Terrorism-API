@@ -4,22 +4,10 @@
     <mat-card-content>
       <form [formGroup]="eventForm" (ngSubmit)="onAddForm()">
         <app-event-form formControlName="event"></app-event-form>
-        <app-city-form formControlName="target"></app-city-form>
+        <app-target-form formControlName="target"></app-target-form>
         <app-city-form formControlName="city"></app-city-form>
-        <div formGroupName="province">
-          <p>
-            <mat-form-field>
-              <mat-label for="name">Name</mat-label>
-              <input
-                id="name"
-                type="type"
-                autocomplete="on"
-                formControlName="name"
-                matInput
-              />
-            </mat-form-field>
-          </p>
-        </div>
+        <app-province-form formControlName="province"></app-province-form>
+
         <div formGroupName="country">
           <p>
             <mat-form-field>
