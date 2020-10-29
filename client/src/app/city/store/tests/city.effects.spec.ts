@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject } from 'rxjs';
+import Country from 'src/app/country/models/country.model';
+import Province from 'src/app/province/models/province.model';
 
 import CitiesGetResponse from '../../models/cities-get-response.model';
 import City from '../../models/city.model';
@@ -9,7 +11,22 @@ import * as CityActions from '../city.actions';
 import CityEffects from '../city.effects';
 
 const mockCities: CitiesGetResponse = {
-  content: [new City(1, 'city1', 10, 12), new City(2, 'city2', 20, 22)],
+  content: [
+    new City(
+      3,
+      'city',
+      20,
+      10,
+      new Province(2, 'province', new Country(1, 'country'))
+    ),
+    new City(
+      6,
+      'city',
+      10,
+      30,
+      new Province(5, 'province 2', new Country(4, 'country 2'))
+    ),
+  ],
 };
 
 describe('CityEffects', () => {

@@ -1,9 +1,27 @@
+import Country from 'src/app/country/models/country.model';
+import Province from 'src/app/province/models/province.model';
+
 import City from '../../models/city.model';
 import * as CityActions from '../city.actions';
 import cityReducer from '../city.reducer';
 import CityStoreState from '../city.store.state';
 
-const cities = [new City(1, 'city', 10, 20), new City(2, 'city2', 20, 10)];
+const cities = [
+  new City(
+    3,
+    'city',
+    20,
+    10,
+    new Province(2, 'province', new Country(1, 'country'))
+  ),
+  new City(
+    6,
+    'city',
+    10,
+    30,
+    new Province(5, 'province 2', new Country(4, 'country 2'))
+  ),
+];
 
 const initialState: CityStoreState = {
   cities: [],
