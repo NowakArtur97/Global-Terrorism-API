@@ -18,17 +18,7 @@ export class EventFormWrapperComponent implements OnInit {
 
   initForm(): void {
     this.eventForm = new FormGroup({
-      event: new FormGroup({
-        summary: new FormControl('', Validators.required),
-        motive: new FormControl('', Validators.required),
-        date: new FormControl('', Validators.required),
-        isPartOfMultipleIncidents: new FormControl(
-          'false',
-          Validators.required
-        ),
-        isSuccessful: new FormControl('false', Validators.required),
-        isSuicidal: new FormControl('false', Validators.required),
-      }),
+      event: new FormControl(''),
       target: new FormGroup({
         target: new FormControl('', Validators.required),
       }),
