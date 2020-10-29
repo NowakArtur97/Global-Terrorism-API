@@ -1,4 +1,5 @@
 import City from 'src/app/city/models/city.model';
+import Target from 'src/app/target/models/target.model';
 
 import Victim from '../../../victim/models/victim.model';
 import Event from '../../models/event.model';
@@ -8,26 +9,28 @@ import EventStoreState from '../event.store.state';
 
 const events = [
   new Event(
-    3,
+    4,
     'summary',
     'motive',
     new Date(),
     true,
     true,
     true,
-    new City(1, 'city', 10, 30),
-    new Victim(2, 10, 1, 12, 2, 1000)
+    new Target(1, 'target'),
+    new City(2, 'city', 10, 30),
+    new Victim(3, 10, 1, 12, 2, 1000)
   ),
   new Event(
-    6,
+    8,
     'summary 2',
     'motive 2',
     new Date(),
     false,
     false,
     false,
-    new City(4, 'city 2', 20, 10),
-    new Victim(5, 11, 3, 14, 4, 2000)
+    new Target(5, 'target 2'),
+    new City(6, 'city 2', 20, 10),
+    new Victim(7, 11, 3, 14, 4, 2000)
   ),
 ];
 
