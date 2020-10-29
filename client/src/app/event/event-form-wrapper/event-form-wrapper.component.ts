@@ -19,9 +19,7 @@ export class EventFormWrapperComponent implements OnInit {
   initForm(): void {
     this.eventForm = new FormGroup({
       event: new FormControl(''),
-      target: new FormGroup({
-        target: new FormControl('', Validators.required),
-      }),
+      target: new FormControl(''),
       city: new FormControl(''),
       province: new FormGroup({
         name: new FormControl('', Validators.required),

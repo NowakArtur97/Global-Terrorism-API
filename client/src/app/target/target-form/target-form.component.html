@@ -1,1 +1,14 @@
-<p>target-form works!</p>
+<ng-container [formGroup]="formGroup"
+  ><p>
+    <mat-form-field>
+      <mat-label for="target">Target</mat-label>
+      <input
+        id="target"
+        type="type"
+        autocomplete="on"
+        formControlName="target"
+        matInput
+      />
+    </mat-form-field>
+  </p>
+</ng-container>

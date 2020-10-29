@@ -53,7 +53,7 @@ public class EventDTO implements DTO, Event {
     @ApiModelProperty(notes = "The event's target", required = true)
     @Valid
     @NotNull(message = "{target.target.notBlank}")
-    private TargetDTO target;
+    private Targe   tDTO target;
 
     @ApiModelProperty(notes = "The event's city", required = true)
     @Valid
