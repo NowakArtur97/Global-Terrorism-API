@@ -1,6 +1,6 @@
 import { Component, forwardRef } from '@angular/core';
 import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { AbstractForm } from 'src/app/common/components/abstract-form.component';
+import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 
 @Component({
   selector: 'app-city-form',
@@ -19,7 +19,7 @@ import { AbstractForm } from 'src/app/common/components/abstract-form.component'
     },
   ],
 })
-export class CityFormComponent extends AbstractForm {
+export class CityFormComponent extends AbstractFormComponent {
   initForm(): void {
     this.formGroup = new FormGroup({
       name: new FormControl('', Validators.required),

@@ -1,6 +1,6 @@
 import { Component, forwardRef } from '@angular/core';
 import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { AbstractForm } from 'src/app/common/components/abstract-form.component';
+import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 
 @Component({
   selector: 'app-victim-form',
@@ -19,7 +19,7 @@ import { AbstractForm } from 'src/app/common/components/abstract-form.component'
     },
   ],
 })
-export class VictimFormComponent extends AbstractForm {
+export class VictimFormComponent extends AbstractFormComponent {
   initForm(): void {
     this.formGroup = new FormGroup({
       totalNumberOfFatalities: new FormControl('', Validators.required),
