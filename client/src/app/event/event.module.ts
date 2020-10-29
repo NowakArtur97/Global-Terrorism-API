@@ -7,10 +7,10 @@ import { StoreModule } from '@ngrx/store';
 import CityModule from '../city/city.module';
 import { MaterialModule } from '../common/material.module';
 import { VictimModule } from '../victim/victim.module';
+import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapper.component';
 import { EventFormComponent } from './event-form/event-form.component';
 import EventEffects from './store/event.effects';
 import eventReducer from './store/event.reducer';
-import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapper.component';
 
 @NgModule({
   declarations: [EventFormComponent, EventFormWrapperComponent],
@@ -24,6 +24,6 @@ import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapp
     VictimModule,
     CityModule,
   ],
-  exports: [EventFormComponent],
+  exports: [EventFormWrapperComponent],
 })
 export default class EventModule {}
