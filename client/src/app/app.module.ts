@@ -17,6 +17,7 @@ import { CoreModule } from './core.module';
 import EventModule from './event/event.module';
 import MapModule from './map/map.module';
 import { SharedModule } from './shared/shared.module';
+import { TargetModule } from './target/target.module';
 import { VictimModule } from './victim/victim.module';
 
 @NgModule({
@@ -36,8 +37,9 @@ import { VictimModule } from './victim/victim.module';
     MaterialModule,
 
     CoreModule,
-    CityModule,
     EventModule,
+    TargetModule,
+    CityModule,
     VictimModule,
     MapModule,
     AuthModule,
