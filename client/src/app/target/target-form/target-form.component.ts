@@ -1,6 +1,7 @@
 import { Component, forwardRef } from '@angular/core';
-import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
+import CommonValidators from 'src/app/common/validators/common.validator';
 
 @Component({
   selector: 'app-target-form',
@@ -22,7 +23,11 @@ import { AbstractFormComponent } from 'src/app/common/components/abstract-form.c
 export class TargetFormComponent extends AbstractFormComponent {
   initForm(): void {
     this.formGroup = new FormGroup({
-      target: new FormControl('', Validators.required),
+      target: new FormControl('', [CommonValidators.notBlank]),
     });
+  }
+
+  get target(): AbstractControl {
+    return this.formGroup.get('target');
   }
 }

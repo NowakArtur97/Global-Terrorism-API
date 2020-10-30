@@ -9,6 +9,11 @@
         formControlName="target"
         matInput
       />
+      <mat-error *ngIf="target.invalid && (target.touched || target.dirty)">
+        <p *ngIf="target.errors.notBlank">
+          Target name cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
 </ng-container>
