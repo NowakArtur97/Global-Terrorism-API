@@ -46,6 +46,9 @@
         <p *ngIf="date.errors.notBlank">
           Event date cannot be <strong>empty</strong>.
         </p>
+        <p *ngIf="date.errors.dateInPast">
+          Event date cannot be in the <strong>future</strong>.
+        </p>
       </mat-error>
     </mat-form-field>
   </p>

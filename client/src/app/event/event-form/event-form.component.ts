@@ -25,7 +25,10 @@ export class EventFormComponent extends AbstractFormComponent {
     this.formGroup = new FormGroup({
       summary: new FormControl('', [CommonValidators.notBlank]),
       motive: new FormControl('', [CommonValidators.notBlank]),
-      date: new FormControl('', [CommonValidators.notBlank]),
+      date: new FormControl('', [
+        CommonValidators.notBlank,
+        CommonValidators.dateInPast,
+      ]),
       isPartOfMultipleIncidents: new FormControl('false', [
         CommonValidators.notBlank,
       ]),
