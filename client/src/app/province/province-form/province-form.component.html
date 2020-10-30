@@ -9,6 +9,11 @@
         formControlName="name"
         matInput
       />
+      <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
+        <p *ngIf="name.errors.notBlank">
+          Province name cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
 </ng-container>
