@@ -89,6 +89,14 @@ describe('EventFormComponent', () => {
       expect(errors.notBlank).toBeTruthy();
     });
 
+    it('with date in the future should be invalid', () => {
+      component.date.setValue(new Date(2100, 1, 1));
+
+      const date = component.date;
+      const errors = date.errors;
+      expect(errors.dateInPast).toBeTruthy();
+    });
+
     it('with empty is part of multiple incidents option should be invalid', () => {
       component.isPartOfMultipleIncidents.setValue('');
 
