@@ -9,5 +9,11 @@
         formControlName="name"
         matInput
       />
-    </mat-form-field></p
-></ng-container>
+      <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
+        <p *ngIf="name.errors.notBlank">
+          Country name cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
+    </mat-form-field>
+  </p></ng-container
+>

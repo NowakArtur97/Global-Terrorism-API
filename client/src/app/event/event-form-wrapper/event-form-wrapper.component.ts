@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-event-form-wrapper',
@@ -30,9 +30,5 @@ export class EventFormWrapperComponent implements OnInit {
   onAddForm(): void {
     console.log(this.eventForm);
     console.log(this.eventForm.value);
-  }
-
-  get countryName(): AbstractControl {
-    return this.eventForm.get('country.name');
   }
 }
