@@ -1,11 +1,8 @@
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export default class CommonValidators {
-  static notBlank(formControl: FormControl): ValidationErrors {
-    return (formControl.value + '').trim().length > 0
-      ? null
-      : { notBlank: true };
-  }
+  static notBlank = (formControl: FormControl): ValidationErrors =>
+    (formControl.value + '').trim().length > 0 ? null : { notBlank: true };
 
   static withoutSpaces = (formControl: FormControl): ValidationErrors =>
     formControl.value?.includes(' ') ? { withoutSpaces: true } : null;
