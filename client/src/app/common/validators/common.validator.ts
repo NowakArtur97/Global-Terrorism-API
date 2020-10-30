@@ -77,4 +77,22 @@ export default class CommonValidators {
       return null;
     };
   }
+
+  static lowerOrEqual(
+    controlNameWithBiggerValue,
+    controlNameToCheck
+  ): ValidatorFn {
+    return (formGroup: FormGroup): ValidationErrors => {
+      const control = formGroup.controls[controlNameToCheck];
+      const controlWithBiggerValue =
+        formGroup.controls[controlNameWithBiggerValue];
+      if (control.value > controlWithBiggerValue.value) {
+        control.setErrors({
+          ...control.errors,
+          lowerOrEqual: true,
+        });
+      }
+      return null;
+    };
+  }
 }
