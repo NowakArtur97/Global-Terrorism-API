@@ -9,6 +9,11 @@
         formControlName="name"
         matInput
       />
+      <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
+        <p *ngIf="name.errors.notBlank">
+          City name cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -20,7 +25,22 @@
         autocomplete="on"
         formControlName="latitude"
         matInput
+        min="-90"
+        max="90"
       />
+      <mat-error
+        *ngIf="latitude.invalid && (latitude.touched || latitude.dirty)"
+      >
+        <p *ngIf="latitude.errors.notBlank">
+          City latitude cannot be <strong>empty</strong>.
+        </p>
+        <p *ngIf="latitude.errors.min">
+          City latitude must be greater or equal to <strong>-90</strong>.
+        </p>
+        <p *ngIf="latitude.errors.max">
+          City latitude must be less or equal to <strong>90</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -32,7 +52,22 @@
         autocomplete="on"
         formControlName="longitude"
         matInput
+        min="-180"
+        max="180"
       />
+      <mat-error
+        *ngIf="longitude.invalid && (longitude.touched || longitude.dirty)"
+      >
+        <p *ngIf="longitude.errors.notBlank">
+          City longitude cannot be <strong>empty</strong>.
+        </p>
+        <p *ngIf="longitude.errors.min">
+          City longitude must be greater or equal to <strong>-180</strong>.
+        </p>
+        <p *ngIf="longitude.errors.max">
+          City longitude must be less or equal to <strong>180</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
 </ng-container>

@@ -60,18 +60,6 @@ export class EventFormWrapperComponent implements OnInit {
     return this.eventForm.get('target.target');
   }
 
-  get cityName(): AbstractControl {
-    return this.eventForm.get('city.name');
-  }
-
-  get latitude(): AbstractControl {
-    return this.eventForm.get('city.latitude');
-  }
-
-  get longitude(): AbstractControl {
-    return this.eventForm.get('city.longitude');
-  }
-
   get provinceName(): AbstractControl {
     return this.eventForm.get('province.name');
   }
