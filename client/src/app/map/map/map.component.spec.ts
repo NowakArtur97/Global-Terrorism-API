@@ -20,8 +20,8 @@ describe('MapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
       declarations: [MapComponent],
+      imports: [StoreModule.forRoot({})],
       providers: [Store],
     }).compileComponents();
   });

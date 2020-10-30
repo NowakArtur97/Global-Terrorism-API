@@ -9,8 +9,8 @@ describe('ProvinceFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
       declarations: [ProvinceFormComponent],
+      imports: [ReactiveFormsModule],
     }).compileComponents();
   });
 

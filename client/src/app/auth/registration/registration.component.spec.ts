@@ -29,6 +29,7 @@ describe('RegistrationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [RegistrationComponent],
       imports: [
         StoreModule.forRoot({}),
         HttpClientTestingModule,
@@ -36,7 +37,6 @@ describe('RegistrationComponent', () => {
         MaterialModule,
         BrowserAnimationsModule,
       ],
-      declarations: [RegistrationComponent],
       providers: [Store, AuthService, UserDataValidators],
     }).compileComponents();
   });

@@ -16,8 +16,8 @@ describe('AuthenticationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), ReactiveFormsModule],
       declarations: [AuthenticationComponent],
+      imports: [StoreModule.forRoot({}), ReactiveFormsModule],
       providers: [Store],
     }).compileComponents();
   });

@@ -9,8 +9,8 @@ describe('CountryFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
       declarations: [CountryFormComponent],
+      imports: [ReactiveFormsModule],
     }).compileComponents();
   });
 
