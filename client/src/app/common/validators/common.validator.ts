@@ -2,10 +2,6 @@ import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/
 
 export default class CommonValidators {
   static notBlank(formControl: FormControl): ValidationErrors {
-    const value = formControl.value;
-    if (!value) {
-      return { notBlank: true };
-    }
     return (formControl.value + '').trim().length > 0
       ? null
       : { notBlank: true };

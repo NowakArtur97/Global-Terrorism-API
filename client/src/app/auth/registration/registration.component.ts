@@ -5,9 +5,7 @@ import { Subscription } from 'rxjs';
 import CommonValidators from 'src/app/common/validators/common.validator';
 import AppStoreState from 'src/app/store/app.store.state';
 
-import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
-import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
 import UserDataValidators from './validators/user-data.validator';
 
@@ -91,7 +89,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   setupFormSubscriptions(): void {
     this.registerFormSubscriptions$.add(
-      this.registerForm.controls.userName.valueChanges.subscribe(() => {
+      this.userName.valueChanges.subscribe(() => {
         this.email.updateValueAndValidity({
           emitEvent: false,
         });
@@ -104,21 +102,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       })
     );
     this.registerFormSubscriptions$.add(
-      this.registerForm.controls.email.valueChanges.subscribe(() => {
+      this.email.valueChanges.subscribe(() => {
         this.userName.updateValueAndValidity({
           emitEvent: false,
         });
       })
     );
     this.registerFormSubscriptions$.add(
-      this.registerForm.controls.password.valueChanges.subscribe(() =>
+      this.password.valueChanges.subscribe(() =>
         this.matchingPassword.updateValueAndValidity({
           emitEvent: false,
         })
       )
     );
     this.registerFormSubscriptions$.add(
-      this.registerForm.controls.matchingPassword.valueChanges.subscribe(() =>
+      this.matchingPassword.valueChanges.subscribe(() =>
         this.password.updateValueAndValidity({
           emitEvent: false,
         })
@@ -133,16 +131,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    this.store.dispatch(
-      AuthActions.registerUserStart({
-        registrationData: new RegistrationData(
-          userName,
-          email,
-          password,
-          matchingPassword
-        ),
-      })
-    );
+    console.log(this.password);
+    // this.store.dispatch(
+    //   AuthActions.registerUserStart({
+    //     registrationData: new RegistrationData(
+    //       userName,
+    //       email,
+    //       password,
+    //       matchingPassword
+    //     ),
+    //   })
+    // );
   }
 
   get userName(): AbstractControl {

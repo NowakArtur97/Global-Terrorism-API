@@ -79,13 +79,7 @@ export default class PasswordValidators {
         characteristicRulesErrors.filter((value) => value).length;
 
       if (numberOfRequirementsToMeet > numberOfFulfilledRequirements) {
-        const errors = Object.assign(
-          {},
-          formControlErrors,
-          ...characteristicRulesErrors
-        );
-
-        return errors;
+        return Object.assign({}, ...characteristicRulesErrors);
       }
     }
     return null;
