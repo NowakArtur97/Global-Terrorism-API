@@ -38,26 +38,24 @@ describe('AuthenticationComponent', () => {
     component.ngOnInit();
   });
 
-  describe('form valdiation', () => {
+  describe('form validation', () => {
     beforeEach(() => {
-      component.loginForm.controls.userNameOrEmail.setValue(
-        loginData.userNameOrEmail
-      );
-      component.loginForm.controls.password.setValue(loginData.password);
+      component.userNameOrEmail.setValue(loginData.userNameOrEmail);
+      component.password.setValue(loginData.password);
     });
 
     it('with empty username/email should be invalid', () => {
-      component.loginForm.controls.userNameOrEmail.setValue('');
+      component.userNameOrEmail.setValue('');
 
-      const userNameOrEmail = component.loginForm.controls.userNameOrEmail;
+      const userNameOrEmail = component.userNameOrEmail;
       const errors = userNameOrEmail.errors;
       expect(errors.required).toBeTruthy();
     });
 
     it('with empty password should be invalid', () => {
-      component.loginForm.controls.password.setValue('');
+      component.password.setValue('');
 
-      const password = component.loginForm.controls.password;
+      const password = component.password;
       const errors = password.errors;
       expect(errors.required).toBeTruthy();
     });
@@ -71,10 +69,8 @@ describe('AuthenticationComponent', () => {
     it('should dispatch loginUserStart action when login form is valid', () => {
       expect(component.loginForm.valid).toBeFalsy();
 
-      component.loginForm.controls.userNameOrEmail.setValue(
-        loginData.userNameOrEmail
-      );
-      component.loginForm.controls.password.setValue(loginData.password);
+      component.userNameOrEmail.setValue(loginData.userNameOrEmail);
+      component.password.setValue(loginData.password);
 
       expect(component.loginForm.valid).toBeTruthy();
 

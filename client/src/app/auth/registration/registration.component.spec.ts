@@ -65,22 +65,16 @@ describe('RegistrationComponent', () => {
     });
   });
 
-  describe('form valdiation', () => {
+  describe('form validation', () => {
     beforeEach(() => {
-      component.registerForm.controls.userName.setValue(
-        registrationData.userName
-      );
-      component.registerForm.controls.email.setValue(registrationData.email);
-      component.registerForm.controls.password.setValue(
-        registrationData.password
-      );
-      component.registerForm.controls.matchingPassword.setValue(
-        registrationData.matchingPassword
-      );
+      component.userName.setValue(registrationData.userName);
+      component.email.setValue(registrationData.email);
+      component.password.setValue(registrationData.password);
+      component.matchingPassword.setValue(registrationData.matchingPassword);
     });
 
     it('with empty user name should be invalid', () => {
-      const userName = component.registerForm.controls.userName;
+      const userName = component.userName;
       userName.setValue('');
       let errors = userName.errors;
 
@@ -98,7 +92,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too short user name should be invalid', () => {
-      const userName = component.registerForm.controls.userName;
+      const userName = component.userName;
       userName.setValue('1');
       const errors = userName.errors;
 
@@ -106,7 +100,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too long user name should be invalid', () => {
-      const userName = component.registerForm.controls.userName;
+      const userName = component.userName;
       userName.setValue('1234567890123456789012345678901');
       const errors = userName.errors;
 
@@ -118,7 +112,7 @@ describe('RegistrationComponent', () => {
         of(new RegistrationCheckResponse(false, true))
       );
 
-      const userName = component.registerForm.controls.userName;
+      const userName = component.userName;
       userName.setValue('usernameTaken');
       const errors = userName.errors;
 
@@ -126,7 +120,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with empty email should be invalid', () => {
-      const email = component.registerForm.controls.email;
+      const email = component.email;
       email.setValue('');
       let errors = email.errors;
 
@@ -144,7 +138,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with incorrect email format should be invalid', () => {
-      const email = component.registerForm.controls.email;
+      const email = component.email;
       email.setValue('wrongemailformat');
       let errors = email.errors;
 
@@ -166,7 +160,7 @@ describe('RegistrationComponent', () => {
         of(new RegistrationCheckResponse(true, false))
       );
 
-      const email = component.registerForm.controls.email;
+      const email = component.email;
       email.setValue('emailTaken@email.com');
       const errors = email.errors;
 
@@ -174,7 +168,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with empty password should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('');
       let errors = password.errors;
 
@@ -192,7 +186,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too short password should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('1');
       const errors = password.errors;
 
@@ -200,7 +194,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too long password should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('1234567890123456789012345678901');
       const errors = password.errors;
 
@@ -208,7 +202,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with password with spaces should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('pass word');
       const errors = password.errors;
 
@@ -216,7 +210,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with password with multiple repetetive characters should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('pAAAsword!');
       const errors = password.errors;
 
@@ -224,7 +218,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with popular password should be invalid', () => {
-      const password = component.registerForm.controls.password;
+      const password = component.password;
       password.setValue('iloveyou');
       const errors = password.errors;
 
@@ -232,8 +226,8 @@ describe('RegistrationComponent', () => {
     });
 
     it('with password including user name should be invalid', () => {
-      const userName = component.registerForm.controls.userName;
-      const password = component.registerForm.controls.password;
+      const userName = component.userName;
+      const password = component.password;
       userName.setValue('userName123');
       password.setValue('someTextuserName123123');
       const errors = password.errors;
@@ -242,7 +236,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with empty matching password should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('');
       let errors = matchingPassword.errors;
 
@@ -260,7 +254,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too short matching password should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('1');
       const errors = matchingPassword.errors;
 
@@ -268,7 +262,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with too long matching password should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('1234567890123456789012345678901');
       const errors = matchingPassword.errors;
 
@@ -276,7 +270,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with matching password with spaces should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('pass word');
       const errors = matchingPassword.errors;
 
@@ -284,7 +278,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with matching password with multiple repetetive characters should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('pAAAsword!');
       const errors = matchingPassword.errors;
 
@@ -292,7 +286,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with popular matching password should be invalid', () => {
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const matchingPassword = component.matchingPassword;
       matchingPassword.setValue('iloveyou');
       const errors = matchingPassword.errors;
 
@@ -300,8 +294,8 @@ describe('RegistrationComponent', () => {
     });
 
     it('with matching password including user name should be invalid', () => {
-      const userName = component.registerForm.controls.userName;
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const userName = component.userName;
+      const matchingPassword = component.matchingPassword;
       userName.setValue('userName123');
       matchingPassword.setValue('someTextuserName123123');
       const errors = matchingPassword.errors;
@@ -310,8 +304,8 @@ describe('RegistrationComponent', () => {
     });
 
     it('with passwords not meeting any characteristic rules should be invalid', () => {
-      const password = component.registerForm.controls.password;
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const password = component.password;
+      const matchingPassword = component.matchingPassword;
       password.setValue('');
       matchingPassword.setValue('');
       const errors = password.errors;
@@ -323,8 +317,8 @@ describe('RegistrationComponent', () => {
     });
 
     it('with passwords meeting only one characteristic rules should be invalid', () => {
-      const password = component.registerForm.controls.password;
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const password = component.password;
+      const matchingPassword = component.matchingPassword;
       password.setValue('A');
       matchingPassword.setValue('A');
       const errors = password.errors;
@@ -339,8 +333,8 @@ describe('RegistrationComponent', () => {
         of(new RegistrationCheckResponse(true, true))
       );
 
-      const password = component.registerForm.controls.password;
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const password = component.password;
+      const matchingPassword = component.matchingPassword;
       password.setValue('Password');
       matchingPassword.setValue('Password');
       const errors = password.errors;
@@ -350,8 +344,8 @@ describe('RegistrationComponent', () => {
     });
 
     it('with passwords not matching should be invalid', () => {
-      const password = component.registerForm.controls.password;
-      const matchingPassword = component.registerForm.controls.matchingPassword;
+      const password = component.password;
+      const matchingPassword = component.matchingPassword;
       password.setValue('PASSWORD!@#1');
       matchingPassword.setValue('password!@#1');
       const errors = password.errors;
