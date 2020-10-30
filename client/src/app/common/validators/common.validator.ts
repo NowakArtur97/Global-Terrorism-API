@@ -88,4 +88,7 @@ export default class CommonValidators {
       return null;
     };
   }
+
+  static dateInPast = (formControl: FormControl): ValidationErrors =>
+    new Date(formControl.value) <= new Date() ? null : { dateInPast: true };
 }
