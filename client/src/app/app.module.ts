@@ -10,8 +10,8 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import AuthModule from './auth/auth.module';
-import CityModule from './city/city.module';
+import { AuthModule } from './auth/auth.module';
+import { CityModule } from './city/city.module';
 import { MaterialModule } from './common/material.module';
 import { CoreModule } from './core.module';
 import { CountryModule } from './country/country.module';

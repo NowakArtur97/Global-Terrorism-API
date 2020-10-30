@@ -24,4 +24,4 @@ import authReducer from './store/auth.reducer';
   ],
   exports: [AuthenticationComponent, RegistrationComponent],
 })
-export default class AuthModule {}
+export class AuthModule {}

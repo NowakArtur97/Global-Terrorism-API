@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
-import CityModule from '../city/city.module';
+import { CityModule } from '../city/city.module';
 import { MaterialModule } from '../common/material.module';
 import { CountryModule } from '../country/country.module';
 import { ProvinceModule } from '../province/province.module';

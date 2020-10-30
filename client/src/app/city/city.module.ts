@@ -24,4 +24,4 @@ import cityReducer from './store/city.reducer';
   ],
   exports: [CityFormComponent],
 })
-export default class CityModule {}
+export class CityModule {}
