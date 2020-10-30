@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { TargetFormComponent } from './target-form.component';
 
@@ -8,18 +9,33 @@ describe('TargetFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TargetFormComponent ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      declarations: [TargetFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TargetFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.ngOnInit();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('form validation', () => {
+    it('with empty target should be invalid', () => {
+      component.target.setValue('');
+
+      const target = component.target;
+      const errors = target.errors;
+      expect(errors.notBlank).toBeTruthy();
+    });
+
+    it('with blank target should be invalid', () => {
+      component.target.setValue('    ');
+
+      const target = component.target;
+      const errors = target.errors;
+      expect(errors.notBlank).toBeTruthy();
+    });
   });
 });
