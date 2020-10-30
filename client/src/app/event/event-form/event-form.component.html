@@ -9,6 +9,11 @@
         formControlName="summary"
         matInput
       />
+      <mat-error *ngIf="summary.invalid && (summary.touched || summary.dirty)">
+        <p *ngIf="summary.errors.notBlank">
+          Event summary cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -21,6 +26,11 @@
         formControlName="motive"
         matInput
       />
+      <mat-error *ngIf="motive.invalid && (motive.touched || motive.dirty)">
+        <p *ngIf="motive.errors.notBlank">
+          Event motive cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -32,6 +42,11 @@
         [for]="datePicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #datePicker></mat-datepicker>
+      <mat-error *ngIf="date.invalid && (date.touched || date.dirty)">
+        <p *ngIf="date.errors.notBlank">
+          Event date cannot be <strong>empty</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>

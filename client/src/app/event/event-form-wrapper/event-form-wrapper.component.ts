@@ -32,30 +32,6 @@ export class EventFormWrapperComponent implements OnInit {
     console.log(this.eventForm.value);
   }
 
-  get summary(): AbstractControl {
-    return this.eventForm.get('event.summary');
-  }
-
-  get motive(): AbstractControl {
-    return this.eventForm.get('event.motive');
-  }
-
-  get date(): AbstractControl {
-    return this.eventForm.get('event.date');
-  }
-
-  get isPartOfMultipleIncidents(): AbstractControl {
-    return this.eventForm.get('event.isPartOfMultipleIncidents');
-  }
-
-  get isSuccessful(): AbstractControl {
-    return this.eventForm.get('event.isSuccessful');
-  }
-
-  get isSuicidal(): AbstractControl {
-    return this.eventForm.get('event.isSuicidal');
-  }
-
   get countryName(): AbstractControl {
     return this.eventForm.get('country.name');
   }

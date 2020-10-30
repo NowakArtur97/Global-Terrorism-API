@@ -1,6 +1,7 @@
 import { Component, forwardRef } from '@angular/core';
-import { FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
+import CommonValidators from 'src/app/common/validators/common.validator';
 
 @Component({
   selector: 'app-event-form',
@@ -22,12 +23,38 @@ import { AbstractFormComponent } from 'src/app/common/components/abstract-form.c
 export class EventFormComponent extends AbstractFormComponent {
   initForm(): void {
     this.formGroup = new FormGroup({
-      summary: new FormControl('', Validators.required),
-      motive: new FormControl('', Validators.required),
-      date: new FormControl('', Validators.required),
-      isPartOfMultipleIncidents: new FormControl('false', Validators.required),
-      isSuccessful: new FormControl('false', Validators.required),
-      isSuicidal: new FormControl('false', Validators.required),
+      summary: new FormControl('', [CommonValidators.notBlank]),
+      motive: new FormControl('', [CommonValidators.notBlank]),
+      date: new FormControl('', [CommonValidators.notBlank]),
+      isPartOfMultipleIncidents: new FormControl('false', [
+        CommonValidators.notBlank,
+      ]),
+      isSuccessful: new FormControl('false', [CommonValidators.notBlank]),
+      isSuicidal: new FormControl('false', [CommonValidators.notBlank]),
     });
+  }
+
+  get summary(): AbstractControl {
+    return this.formGroup.get('summary');
+  }
+
+  get motive(): AbstractControl {
+    return this.formGroup.get('motive');
+  }
+
+  get date(): AbstractControl {
+    return this.formGroup.get('date');
+  }
+
+  get isPartOfMultipleIncidents(): AbstractControl {
+    return this.formGroup.get('isPartOfMultipleIncidents');
+  }
+
+  get isSuccessful(): AbstractControl {
+    return this.formGroup.get('isSuccessful');
+  }
+
+  get isSuicidal(): AbstractControl {
+    return this.formGroup.get('isSuicidal');
   }
 }
