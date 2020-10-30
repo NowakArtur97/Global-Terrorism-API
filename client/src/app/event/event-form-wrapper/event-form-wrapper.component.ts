@@ -56,35 +56,7 @@ export class EventFormWrapperComponent implements OnInit {
     return this.eventForm.get('event.isSuicidal');
   }
 
-  get target(): AbstractControl {
-    return this.eventForm.get('target.target');
-  }
-
-  get provinceName(): AbstractControl {
-    return this.eventForm.get('province.name');
-  }
-
   get countryName(): AbstractControl {
     return this.eventForm.get('country.name');
-  }
-
-  get totalNumberOfFatalities(): AbstractControl {
-    return this.eventForm.get('victim.totalNumberOfFatalities');
-  }
-
-  get numberOfPerpetratorFatalities(): AbstractControl {
-    return this.eventForm.get('victim.numberOfPerpetratorFatalities');
-  }
-
-  get totalNumberOfInjured(): AbstractControl {
-    return this.eventForm.get('victim.totalNumberOfInjured');
-  }
-
-  get numberOfPerpetratorInjured(): AbstractControl {
-    return this.eventForm.get('victim.numberOfPerpetratorInjured');
-  }
-
-  get valueOfPropertyDamage(): AbstractControl {
-    return this.eventForm.get('victim.valueOfPropertyDamage');
   }
 }

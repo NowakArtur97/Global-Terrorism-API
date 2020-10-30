@@ -11,6 +11,20 @@
         formControlName="totalNumberOfFatalities"
         matInput
       />
+      <mat-error
+        *ngIf="
+          totalNumberOfFatalities.invalid &&
+          (totalNumberOfFatalities.touched || totalNumberOfFatalities.dirty)
+        "
+      >
+        <p *ngIf="totalNumberOfFatalities.errors.notBlank">
+          Event total number of fatalities cannot be <strong>empty</strong>.
+        </p>
+        <p *ngIf="totalNumberOfFatalities.errors.min">
+          Event total number of fatalities must be greater or equal to
+          <strong>0</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -25,6 +39,26 @@
         formControlName="numberOfPerpetratorFatalities"
         matInput
       />
+      <mat-error
+        *ngIf="
+          numberOfPerpetratorFatalities.invalid &&
+          (numberOfPerpetratorFatalities.touched ||
+            numberOfPerpetratorFatalities.dirty)
+        "
+      >
+        <p *ngIf="numberOfPerpetratorFatalities.errors.notBlank">
+          Event number of perpetrator fatalities cannot be
+          <strong>empty</strong>.
+        </p>
+        <p *ngIf="numberOfPerpetratorFatalities.errors.min">
+          Event number of perpetrator fatalities must be greater or equal to
+          <strong>0</strong>.
+        </p>
+        <p *ngIf="numberOfPerpetratorFatalities.errors.lowerOrEqual">
+          Event number of perpetrator fatalities
+          <strong>should not exceed</strong> the total number of victims.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -37,6 +71,20 @@
         formControlName="totalNumberOfInjured"
         matInput
       />
+      <mat-error
+        *ngIf="
+          totalNumberOfInjured.invalid &&
+          (totalNumberOfInjured.touched || totalNumberOfInjured.dirty)
+        "
+      >
+        <p *ngIf="totalNumberOfInjured.errors.notBlank">
+          Event total number of injured cannot be <strong>empty</strong>.
+        </p>
+        <p *ngIf="totalNumberOfInjured.errors.min">
+          Event total number of injured must be greater or equal to
+          <strong>0</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -51,6 +99,26 @@
         formControlName="numberOfPerpetratorInjured"
         matInput
       />
+      <mat-error
+        *ngIf="
+          numberOfPerpetratorInjured.invalid &&
+          (numberOfPerpetratorInjured.touched ||
+            numberOfPerpetratorInjured.dirty)
+        "
+      >
+        <p *ngIf="numberOfPerpetratorInjured.errors.notBlank">
+          Event number of perpetrator injured cannot be
+          <strong>empty</strong>.
+        </p>
+        <p *ngIf="numberOfPerpetratorInjured.errors.min">
+          Event number of perpetrator injured must be greater or equal to
+          <strong>0</strong>.
+        </p>
+        <p *ngIf="numberOfPerpetratorInjured.errors.lowerOrEqual">
+          Event number of perpetrator injured
+          <strong>should not exceed</strong> the total number of injured.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
   <p>
@@ -65,6 +133,22 @@
         formControlName="valueOfPropertyDamage"
         matInput
       />
+      <mat-error
+        *ngIf="
+          numberOfPerpetratorInjured.invalid &&
+          (numberOfPerpetratorInjured.touched ||
+            numberOfPerpetratorInjured.dirty)
+        "
+      >
+        <p *ngIf="numberOfPerpetratorInjured.errors.notBlank">
+          Event total value of property damage cannot be
+          <strong>empty</strong>.
+        </p>
+        <p *ngIf="numberOfPerpetratorInjured.errors.min">
+          Event total value of property damage must be greater or equal to
+          <strong>0</strong>.
+        </p>
+      </mat-error>
     </mat-form-field>
   </p>
 </ng-container>
