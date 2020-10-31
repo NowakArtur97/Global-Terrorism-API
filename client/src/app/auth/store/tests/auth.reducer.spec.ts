@@ -18,13 +18,13 @@ const initialStateWithErrors: AuthStoreState = {
 };
 
 const initialStateWithUser: AuthStoreState = {
-  user: new User('token', 36000000),
+  user: new User('token', new Date(Date.now() + 36000000)),
   authErrorMessages: [],
   isLoading: true,
 };
 
 const initialStateWithUserAndErrors: AuthStoreState = {
-  user: new User('token', 36000000),
+  user: new User('token', new Date(Date.now() + 36000000)),
   authErrorMessages: ['ERROR'],
   isLoading: true,
 };
@@ -102,7 +102,7 @@ describe('authReducer', () => {
 
   describe('AuthStoreState.authenticateUserSuccess', () => {
     it('should authenticate user on success', () => {
-      const user = new User('token', 36000000);
+      const user = new User('token', new Date(Date.now() + 36000000));
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
       const actualState = authReducer(initialState, action);
@@ -115,7 +115,7 @@ describe('authReducer', () => {
     });
 
     it('should authenticate user, remove error messages and hide loader on success', () => {
-      const user = new User('token', 36000000);
+      const user = new User('token', new Date(Date.now() + 36000000));
       const authErrorMessages = [];
       const isLoading = false;
       const action = AuthActions.authenticateUserSuccess({ user });

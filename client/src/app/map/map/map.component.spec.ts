@@ -13,7 +13,7 @@ describe('MapComponent', () => {
   let fixture: ComponentFixture<MapComponent>;
   let store: Store<AppStoreState>;
   const initialStateWithUser: AuthStoreState = {
-    user: new User('token', 36000000),
+    user: new User('token', new Date(Date.now() + 36000000)),
     authErrorMessages: [],
     isLoading: false,
   };

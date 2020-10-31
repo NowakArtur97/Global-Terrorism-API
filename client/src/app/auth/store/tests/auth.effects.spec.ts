@@ -19,7 +19,7 @@ const mockRegistrationData = new RegistrationData(
   'password',
   'password'
 );
-const mockUser = new User('secret token', 36000000);
+const mockUser = new User('secret token', new Date(Date.now() + 36000000));
 const mockAuthResponse = new AuthResponse('secret token', 36000000);
 const mockErrorResponse = new HttpErrorResponse({
   error: {
@@ -76,9 +76,7 @@ describe('AuthEffects', () => {
       );
 
       authEffects.loginUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(
-          AuthActions.authenticateUserSuccess({ user: mockUser })
-        );
+        expect(resultAction.type).toEqual('[User] Authenticate User Success');
         expect(authService.loginUser).toHaveBeenCalled();
         expect(authService.setLogoutTimer).toHaveBeenCalled();
         expect(authService.saveUserInLocalStorage).toHaveBeenCalled();
@@ -121,9 +119,7 @@ describe('AuthEffects', () => {
       (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
 
       authEffects.registerUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(
-          AuthActions.authenticateUserSuccess({ user: mockUser })
-        );
+        expect(resultAction.type).toEqual('[User] Authenticate User Success');
         expect(authService.registerUser).toHaveBeenCalled();
         expect(authService.setLogoutTimer).toHaveBeenCalled();
         expect(authService.saveUserInLocalStorage).toHaveBeenCalled();

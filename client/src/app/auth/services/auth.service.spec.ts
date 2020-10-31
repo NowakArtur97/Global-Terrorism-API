@@ -98,18 +98,20 @@ describe('AuthService', () => {
 
   describe('when get user from local storage', () => {
     it('should get user from local storage when user data is stored in local storage', () => {
+      const expirationDate = new Date(Date.now() + 36000000);
       const userData: {
         _token: string;
-        _expirationDateInMilliseconds: number;
-      } = { _token: 'token', _expirationDateInMilliseconds: 36000000 };
-      const userExpected = new User('token', 36000000);
+        _expirationDate: Date;
+      } = { _token: 'token', _expirationDate: expirationDate };
+      const userExpected = new User('token', expirationDate);
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
         JSON.stringify(userData)
       );
       const userActual = authService.getUserFromLocalStorage();
 
-      expect(userActual).toEqual(userExpected);
+      expect(userActual.token).toEqual(userExpected.token);
+      expect(userActual.expirationDate).toBeTruthy();
       expect(localStorage.getItem).toHaveBeenCalled();
     });
 
@@ -132,7 +134,7 @@ describe('AuthService', () => {
 
   describe('when save user in local storage', () => {
     it('should save user in local storage', () => {
-      const user = new User('token', 36000000);
+      const user = new User('token', new Date(Date.now() + 36000000));
 
       spyOn(localStorage, 'setItem').and.callFake(() => JSON.stringify(user));
 
@@ -144,10 +146,10 @@ describe('AuthService', () => {
 
   describe('when set logout timer', () => {
     it('should dispact logoutUser action after some time', fakeAsync(() => {
-      const expirationDateInMilliseconds = 2000;
+      const expirationDate = new Date(Date.now() + 3000);
       spyOn(window, 'setTimeout').and.callThrough();
 
-      authService.setLogoutTimer(expirationDateInMilliseconds);
+      authService.setLogoutTimer(expirationDate.toString());
 
       tick(3000);
 
@@ -158,11 +160,11 @@ describe('AuthService', () => {
 
   describe('when clear logout timer', () => {
     it('should clear timeout', fakeAsync(() => {
-      const expirationDateInMilliseconds = 2000;
+      const expirationDate = new Date(Date.now() + 3000);
       spyOn(window, 'setTimeout').and.callThrough();
       spyOn(window, 'clearTimeout').and.callThrough();
 
-      authService.setLogoutTimer(expirationDateInMilliseconds);
+      authService.setLogoutTimer(expirationDate.toString());
 
       tick(3000);
 
