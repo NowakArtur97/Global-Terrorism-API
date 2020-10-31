@@ -61,10 +61,10 @@ export default class AuthService {
   getUserFromLocalStorage(): User {
     const userData: {
       _token: string;
-      _expirationDateInMilliseconds: number;
+      _expirationDate: Date;
     } = JSON.parse(localStorage.getItem(this.userLocaleStorageKey));
     return userData?._token
-      ? new User(userData._token, userData._expirationDateInMilliseconds)
+      ? new User(userData._token, userData._expirationDate)
       : null;
   }
 
@@ -76,7 +76,9 @@ export default class AuthService {
     localStorage.setItem(this.userLocaleStorageKey, JSON.stringify(user));
   }
 
-  setLogoutTimer(expirationTimeInMilliseconds: number): void {
+  setLogoutTimer(expirationDate: string): void {
+    const expirationTimeInMilliseconds =
+      new Date(expirationDate).getTime() - Date.now();
     this.tokenExpirationTimer = setTimeout(() => {
       this.store.dispatch(AuthActions.logoutUser());
     }, expirationTimeInMilliseconds);
