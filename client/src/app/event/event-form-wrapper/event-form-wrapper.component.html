@@ -1,7 +1,7 @@
-<h2 mat-dialog-title>Add Event</h2>
 <mat-dialog-content class="mat-typography">
   <mat-card>
     <mat-card-content>
+      <h2 mat-dialog-title>Add Event</h2>
       <form [formGroup]="eventForm" (ngSubmit)="onAddForm()">
         <app-event-form formControlName="event"></app-event-form>
         <app-target-form formControlName="target"></app-target-form>

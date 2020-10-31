@@ -18,6 +18,14 @@ mat-form-field .mat-form-field-subscript-wrapper {
   position: static;
 }
 
+mat-radio-button {
+  margin-right: 15%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
 .mat-drawer-backdrop.mat-drawer-shown {
   background-color: rgba(180, 0, 0, 0);
 }
