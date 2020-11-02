@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import CityDTO from 'src/app/city/models/city.dto';
 import CountryDTO from 'src/app/country/models/country.dto';
 import ProvinceDTO from 'src/app/province/models/province.dto';
+import AppStoreState from 'src/app/store/app.store.state';
 import TargetDTO from 'src/app/target/models/target.dto';
 import VictimDTO from 'src/app/victim/models/victim.dto';
 
 import EventDTO from '../models/event.dto';
+import * as EventActions from '../store/event.actions';
 
+// import * as EventActions from '../store/event.actions'
 @Component({
   selector: 'app-event-form-wrapper',
   templateUrl: './event-form-wrapper.component.html',
@@ -17,7 +21,7 @@ export class EventFormWrapperComponent implements OnInit {
   eventForm: FormGroup;
   isLoading = false;
 
-  constructor() {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -73,8 +77,9 @@ export class EventFormWrapperComponent implements OnInit {
   }
 
   onAddForm(): void {
-    const eventDTO = this.getEventFromForm();
+    const event = this.getEventFromForm();
 
-    console.log(eventDTO);
+    console.log(event);
+    this.store.dispatch(EventActions.addEvent({ event }));
   }
 }

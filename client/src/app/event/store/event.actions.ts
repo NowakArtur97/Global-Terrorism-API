@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
+import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
 
 export const setEvents = createAction(
@@ -12,3 +13,8 @@ export const setEvents = createAction(
 export const resetEvents = createAction('[Event] Reset Events');
 
 export const fetchEvents = createAction('[Event] Fetch Events');
+
+export const addEvent = createAction(
+  '[Event] Add Event',
+  props<{ event: EventDTO }>()
+);
