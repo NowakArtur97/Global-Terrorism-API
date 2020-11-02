@@ -1,13 +1,13 @@
-import Country from 'src/app/country/models/country.model';
+import CountryDTO from 'src/app/country/models/country.dto';
 
 export default class TargetDTO {
-  constructor(private _target: string, private _country: Country) {}
+  constructor(private _target: string, private _country: CountryDTO) {}
 
   public get target(): string {
     return this._target;
   }
 
-  public get country(): Country {
+  public get country(): CountryDTO {
     return this._country;
   }
 }
