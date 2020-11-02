@@ -11,7 +11,6 @@ import VictimDTO from 'src/app/victim/models/victim.dto';
 import EventDTO from '../models/event.dto';
 import * as EventActions from '../store/event.actions';
 
-// import * as EventActions from '../store/event.actions'
 @Component({
   selector: 'app-event-form-wrapper',
   templateUrl: './event-form-wrapper.component.html',
@@ -82,7 +81,7 @@ export class EventFormWrapperComponent implements OnInit {
     });
   }
 
-  onAddForm(): void {
+  onAddEvent(): void {
     const event = this.getEventFromForm();
     this.store.dispatch(EventActions.addEvent({ event }));
   }
