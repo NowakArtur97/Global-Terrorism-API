@@ -2,7 +2,7 @@ import CityDTO from 'src/app/city/models/city.dto';
 import TargetDTO from 'src/app/target/models/target.dto';
 import VictimDTO from 'src/app/victim/models/victim.dto';
 
-export default class Event {
+export default class EventDTO {
   constructor(
     private _summary: string,
     private _motive: string,
