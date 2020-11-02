@@ -133,7 +133,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       password,
       matchingPassword,
     } = this.registerForm.value;
-    console.log(this.password);
     this.store.dispatch(
       AuthActions.registerUserStart({
         registrationData: new RegistrationData(

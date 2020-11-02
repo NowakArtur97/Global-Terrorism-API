@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import CountryDTO from 'src/app/country/models/country.dto';
 
 @Component({
   selector: 'app-event-form-wrapper',
@@ -28,7 +29,14 @@ export class EventFormWrapperComponent implements OnInit {
   }
 
   onAddForm(): void {
-    console.log(this.eventForm);
-    console.log(this.eventForm.value);
+    const {
+      event,
+      target,
+      city,
+      victim,
+      province,
+      country,
+    } = this.eventForm.value;
+    const countryDTO = new CountryDTO(country.name);
   }
 }
