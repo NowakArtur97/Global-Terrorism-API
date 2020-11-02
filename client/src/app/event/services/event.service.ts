@@ -16,8 +16,6 @@ export default class EventService extends GenericRestService<
   }
 
   add(event: EventDTO): Observable<Event> {
-    console.log('EventService');
-    console.log(JSON.stringify(event));
     return this.httpClient.post<Event>(
       `${environment.baseApiUrl}/${this.actionUtl}`,
       event

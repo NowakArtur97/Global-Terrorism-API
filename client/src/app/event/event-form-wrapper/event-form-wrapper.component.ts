@@ -42,7 +42,7 @@ export class EventFormWrapperComponent implements OnInit {
       country: countryDTO,
     };
     const cityDTO: CityDTO = {
-      name: country.name,
+      name: city.name,
       latitude: city.latitude,
       longitude: city.longitude,
       province: provinceDTO,
@@ -54,7 +54,10 @@ export class EventFormWrapperComponent implements OnInit {
       numberOfPerpetratorInjured: victim.numberOfPerpetratorInjured,
       valueOfPropertyDamage: victim.valueOfPropertyDamage,
     };
-    const targetDTO: TargetDTO = { target: target.target, country: countryDTO };
+    const targetDTO: TargetDTO = {
+      target: target.target,
+      countryOfOrigin: countryDTO,
+    };
     return {
       summary: event.summary,
       motive: event.motive,
@@ -81,9 +84,6 @@ export class EventFormWrapperComponent implements OnInit {
 
   onAddForm(): void {
     const event = this.getEventFromForm();
-
-    console.log('onAddForm');
-    console.log(event);
     this.store.dispatch(EventActions.addEvent({ event }));
   }
 }

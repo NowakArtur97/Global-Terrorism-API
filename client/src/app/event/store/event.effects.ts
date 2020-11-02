@@ -24,8 +24,6 @@ export default class EventEffects {
       switchMap((action) =>
         this.eventService.add(action.event).pipe(
           map((responseData) => {
-            console.log('responseData');
-            console.log(responseData);
             return { type: 'DUMMY' };
           })
         )
