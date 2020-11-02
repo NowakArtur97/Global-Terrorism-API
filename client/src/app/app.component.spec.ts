@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import { AppComponent } from './app.component';
 import * as AuthActions from './auth/store/auth.actions';

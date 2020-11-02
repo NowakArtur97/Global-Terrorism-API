@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
 import * as EventActions from './event.actions';
-import EventStoreState from './event.store.state';
+import EventStoreState from './event.state';
 
 const initialState: EventStoreState = {
   events: [],

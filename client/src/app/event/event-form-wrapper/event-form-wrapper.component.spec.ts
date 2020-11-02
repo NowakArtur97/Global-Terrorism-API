@@ -11,7 +11,7 @@ import { CountryModule } from 'src/app/country/country.module';
 import CountryDTO from 'src/app/country/models/country.dto';
 import ProvinceDTO from 'src/app/province/models/province.dto';
 import { ProvinceModule } from 'src/app/province/province.module';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 import TargetDTO from 'src/app/target/models/target.dto';
 import { TargetModule } from 'src/app/target/target.module';
 import VictimDTO from 'src/app/victim/models/victim.dto';

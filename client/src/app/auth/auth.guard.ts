@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import AppStoreState from '../store/app.store.state';
+import AppStoreState from '../store/app.state';
 
 @Injectable({ providedIn: 'root' })
 export default class AuthGuard implements CanActivate {

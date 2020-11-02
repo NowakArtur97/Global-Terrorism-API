@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { exhaustMap, map, take } from 'rxjs/operators';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 @Injectable()
 export default class JwtInterceptor implements HttpInterceptor {

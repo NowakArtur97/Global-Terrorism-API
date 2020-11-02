@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { switchMap, take, withLatestFrom } from 'rxjs/operators';
 
-import AppStoreState from '../store/app.store.state';
+import AppStoreState from '../store/app.state';
 import Event from './models/event.model';
 import * as EventActions from './store/event.actions';
 

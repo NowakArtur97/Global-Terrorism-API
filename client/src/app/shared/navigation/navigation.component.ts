@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthenticationComponent } from 'src/app/auth/authentication/authentication.component';
 import { RegistrationComponent } from 'src/app/auth/registration/registration.component';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as CityActions from '../../city/store/city.actions';

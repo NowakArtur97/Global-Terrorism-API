@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';

@@ -7,7 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import User from '../../auth/models/user.model';
 import Event from '../../event/models/event.model';
 
-import AppStoreState from '../../store/app.store.state';
+import AppStoreState from '../../store/app.state';
 import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
 @Component({
@@ -40,7 +40,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         map((eventState) => eventState.events),
         tap((events) => {
-          if (this.map && events.length === 0) {
+          if (this.map && events && events.length === 0) {
             this.markers.forEach((marker) => this.map.removeLayer(marker));
           }
         })

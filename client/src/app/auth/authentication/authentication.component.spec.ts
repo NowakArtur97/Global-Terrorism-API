@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import LoginData from '../models/login-data.model';
 import * as AuthActions from '../store/auth.actions';

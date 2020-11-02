@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import User from '../../auth/models/user.model';
-import AuthStoreState from '../../auth/store/auth.store.state';
+import AuthStoreState from '../../auth/store/auth.state';
 import * as EventActions from '../../event/store/event.actions';
 import { MapComponent } from './map.component';
 

@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
 import * as CityActions from './city.actions';
-import CityStoreState from './city.store.state';
+import CityStoreState from './city.state';
 
 const initialState: CityStoreState = {
   cities: [],

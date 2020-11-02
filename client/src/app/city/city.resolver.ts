@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { switchMap, take, withLatestFrom } from 'rxjs/operators';
 
-import AppStoreState from '../store/app.store.state';
+import AppStoreState from '../store/app.state';
 import City from './models/city.model';
 import * as CityActions from './store/city.actions';
 

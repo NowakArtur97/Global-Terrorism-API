@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import CityDTO from 'src/app/city/models/city.dto';
 import CountryDTO from 'src/app/country/models/country.dto';
 import ProvinceDTO from 'src/app/province/models/province.dto';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 import TargetDTO from 'src/app/target/models/target.dto';
 import VictimDTO from 'src/app/victim/models/victim.dto';
 

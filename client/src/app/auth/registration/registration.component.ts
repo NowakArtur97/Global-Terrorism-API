@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import CommonValidators from 'src/app/common/validators/common.validator';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';

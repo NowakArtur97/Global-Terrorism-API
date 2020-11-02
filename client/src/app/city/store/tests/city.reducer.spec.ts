@@ -4,7 +4,7 @@ import Province from 'src/app/province/models/province.model';
 import City from '../../models/city.model';
 import * as CityActions from '../city.actions';
 import cityReducer from '../city.reducer';
-import CityStoreState from '../city.store.state';
+import CityStoreState from '../city.state';
 
 const cities = [
   new City(

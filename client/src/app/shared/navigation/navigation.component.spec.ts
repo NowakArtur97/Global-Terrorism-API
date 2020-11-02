@@ -13,7 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import AuthService from 'src/app/auth/services/auth.service';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as CityActions from '../../city/store/city.actions';

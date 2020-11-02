@@ -3,7 +3,7 @@ import RegistrationData from '../../models/registration-data.model';
 import User from '../../models/user.model';
 import * as AuthActions from '../auth.actions';
 import authReducer from '../auth.reducer';
-import AuthStoreState from '../auth.store.state';
+import AuthStoreState from '../auth.state';
 
 const initialState: AuthStoreState = {
   user: null,

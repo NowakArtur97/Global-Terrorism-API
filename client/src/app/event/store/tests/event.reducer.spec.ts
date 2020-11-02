@@ -7,7 +7,7 @@ import Victim from '../../../victim/models/victim.model';
 import Event from '../../models/event.model';
 import * as EventActions from '../event.actions';
 import eventReducer from '../event.reducer';
-import EventStoreState from '../event.store.state';
+import EventStoreState from '../event.state';
 
 const events = [
   new Event(

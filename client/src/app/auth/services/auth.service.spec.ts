@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, getTestBed, TestBed, tick } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import AppStoreState from 'src/app/store/app.store.state';
+import AppStoreState from 'src/app/store/app.state';
 
 import AuthResponse from '../models/auth-response.model';
 import LoginData from '../models/login-data.model';

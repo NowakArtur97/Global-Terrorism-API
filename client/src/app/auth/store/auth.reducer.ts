@@ -1,7 +1,7 @@
 import { Action, ActionReducer, createReducer, on } from '@ngrx/store';
 
 import * as AuthActions from './auth.actions';
-import AuthStoreState from './auth.store.state';
+import AuthStoreState from './auth.state';
 
 const initialState: AuthStoreState = {
   user: null,
