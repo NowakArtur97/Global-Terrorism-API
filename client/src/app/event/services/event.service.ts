@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import GenericRestService from 'src/app/common/services/generic-rest.service';
 import { environment } from 'src/environments/environment';
 
@@ -14,8 +15,10 @@ export default class EventService extends GenericRestService<
     super(httpClient, 'events');
   }
 
-  add(event: EventDTO): void {
-    this.httpClient.post<Event>(
+  add(event: EventDTO): Observable<Event> {
+    console.log('EventService');
+    console.log(JSON.stringify(event));
+    return this.httpClient.post<Event>(
       `${environment.baseApiUrl}/${this.actionUtl}`,
       event
     );

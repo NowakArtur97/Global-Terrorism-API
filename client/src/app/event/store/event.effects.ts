@@ -17,4 +17,19 @@ export default class EventEffects {
       map((events) => EventActions.setEvents({ events }))
     )
   );
+
+  addEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.addEvent),
+      switchMap((action) =>
+        this.eventService.add(action.event).pipe(
+          map((responseData) => {
+            console.log('responseData');
+            console.log(responseData);
+            return { type: 'DUMMY' };
+          })
+        )
+      )
+    )
+  );
 }

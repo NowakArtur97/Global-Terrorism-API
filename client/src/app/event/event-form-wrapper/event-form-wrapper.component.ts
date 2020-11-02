@@ -36,33 +36,36 @@ export class EventFormWrapperComponent implements OnInit {
       province,
       country,
     } = this.eventForm.value;
-    const countryDTO = new CountryDTO(country.name);
-    const provinceDTO = new ProvinceDTO(province.name, countryDTO);
-    const cityDTO = new CityDTO(
-      city.name,
-      city.latitude,
-      city.longitude,
-      provinceDTO
-    );
-    const victimDTO = new VictimDTO(
-      victim.totalNumberOfFatalities,
-      victim.numberOfPerpetratorFatalities,
-      victim.totalNumberOfInjured,
-      victim.numberOfPerpetratorInjured,
-      victim.valueOfPropertyDamage
-    );
-    const targetDTO = new TargetDTO(target.target, countryDTO);
-    return new EventDTO(
-      event.summary,
-      event.motive,
-      event.date,
-      event.isPartOfMultipleIncidents,
-      event.isSuccessful,
-      event.isSuicidal,
-      targetDTO,
-      cityDTO,
-      victimDTO
-    );
+    const countryDTO: CountryDTO = { name: country.name };
+    const provinceDTO: ProvinceDTO = {
+      name: province.name,
+      country: countryDTO,
+    };
+    const cityDTO: CityDTO = {
+      name: country.name,
+      latitude: city.latitude,
+      longitude: city.longitude,
+      province: provinceDTO,
+    };
+    const victimDTO: VictimDTO = {
+      totalNumberOfFatalities: victim.totalNumberOfFatalities,
+      numberOfPerpetratorFatalities: victim.numberOfPerpetratorFatalities,
+      totalNumberOfInjured: victim.totalNumberOfInjured,
+      numberOfPerpetratorInjured: victim.numberOfPerpetratorInjured,
+      valueOfPropertyDamage: victim.valueOfPropertyDamage,
+    };
+    const targetDTO: TargetDTO = { target: target.target, country: countryDTO };
+    return {
+      summary: event.summary,
+      motive: event.motive,
+      date: event.date,
+      isPartOfMultipleIncidents: event.isPartOfMultipleIncidents,
+      isSuccessful: event.isSuccessful,
+      isSuicidal: event.isSuicidal,
+      target: targetDTO,
+      city: cityDTO,
+      victim: victimDTO,
+    };
   }
 
   initForm(): void {
@@ -79,6 +82,7 @@ export class EventFormWrapperComponent implements OnInit {
   onAddForm(): void {
     const event = this.getEventFromForm();
 
+    console.log('onAddForm');
     console.log(event);
     this.store.dispatch(EventActions.addEvent({ event }));
   }
