@@ -1,11 +1,12 @@
-import { createEntityAdapter } from '@ngrx/entity';
-import { Action, createReducer, on } from '@ngrx/store';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
-import EventStoreState from './event.state';
 
-export const eventAdapter = createEntityAdapter<Event>();
+export interface EventStoreState extends EntityState<Event> {}
+
+const eventAdapter = createEntityAdapter<Event>();
 
 const initialState = eventAdapter.getInitialState();
 
@@ -29,6 +30,7 @@ export default function eventReducer(
 
 const { selectAll, selectTotal } = eventAdapter.getSelectors();
 
-export const selectAllEvents = selectAll;
+export const selectEventState = createFeatureSelector<EventStoreState>('event');
 
-export const selectEventsTotal = selectTotal;
+export const selectAllEvents = createSelector(selectEventState, selectAll);
+export const selectEventsTotal = createSelector(selectEventState, selectTotal);
