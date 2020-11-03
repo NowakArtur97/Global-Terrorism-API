@@ -1,4 +1,4 @@
-import { createEntityAdapter } from '@ngrx/entity/src';
+import { createEntityAdapter } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
 
 import Event from '../models/event.model';
