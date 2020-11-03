@@ -7,9 +7,10 @@ import { map, tap } from 'rxjs/operators';
 import User from '../../auth/models/user.model';
 import Event from '../../event/models/event.model';
 
-import AppStoreState, { selectAllEvents } from '../../store/app.state';
 import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
+import { selectAllEvents } from 'src/app/event/store/event.reducer';
+import AppStoreState from 'src/app/store/app.state';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',

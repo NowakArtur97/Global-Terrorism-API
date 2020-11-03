@@ -8,6 +8,7 @@ import { switchMap, take, withLatestFrom } from 'rxjs/operators';
 import AppStoreState from '../store/app.state';
 import City from './models/city.model';
 import * as CityActions from './store/city.actions';
+import { selectAllCities } from './store/city.reducer';
 
 @Injectable({ providedIn: 'root' })
 export default class CityResolver implements Resolve<{ cities: City[] }> {
@@ -20,11 +21,11 @@ export default class CityResolver implements Resolve<{ cities: City[] }> {
     cities: City[];
   }> {
     return this.store.select('auth').pipe(
-      withLatestFrom(this.store.select('city')),
+      withLatestFrom(this.store.select(selectAllCities)),
       take(1),
       switchMap((stores) => {
         const isAuth = !!stores[0].user;
-        const cities = stores[1].cities;
+        const cities = stores[1];
         if (isAuth && cities?.length === 0) {
           this.store.dispatch(CityActions.fetchCities());
           return this.actions$.pipe(ofType(CityActions.setCities), take(1));
