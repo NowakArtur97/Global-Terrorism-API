@@ -67,9 +67,9 @@ export default class AuthEffects {
 
   private handleAuthentication = (authResponse: AuthResponse) => {
     const { token, expirationTimeInMilliseconds } = authResponse;
-    const logoutDate = new Date(Date.now() + expirationTimeInMilliseconds);
-    const user = new User(token, logoutDate);
-    this.authService.setLogoutTimer(logoutDate.toString());
+    const expirationDate = new Date(Date.now() + expirationTimeInMilliseconds);
+    const user = new User(token, expirationDate);
+    this.authService.setLogoutTimer(expirationDate.toString());
     this.authService.saveUserInLocalStorage(user);
     return AuthActions.authenticateUserSuccess({
       user,

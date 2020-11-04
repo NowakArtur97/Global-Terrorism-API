@@ -2,18 +2,27 @@ import { BreakpointObserver, LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import AuthService from 'src/app/auth/services/auth.service';
+import { CityModule } from 'src/app/city/city.module';
+import { MaterialModule } from 'src/app/common/material.module';
+import { CountryModule } from 'src/app/country/country.module';
+import { EventFormWrapperComponent } from 'src/app/event/event-form-wrapper/event-form-wrapper.component';
+import EventModule from 'src/app/event/event.module';
+import { ProvinceModule } from 'src/app/province/province.module';
 import AppStoreState from 'src/app/store/app.state';
+import { TargetModule } from 'src/app/target/target.module';
+import { VictimModule } from 'src/app/victim/victim.module';
 
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as CityActions from '../../city/store/city.actions';
@@ -33,7 +42,7 @@ describe('NavigationComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [NavigationComponent],
+      declarations: [NavigationComponent, EventFormWrapperComponent],
       imports: [
         NoopAnimationsModule,
         LayoutModule,
@@ -45,9 +54,19 @@ describe('NavigationComponent', () => {
         OverlayModule,
         MatDialogModule,
 
-        RouterTestingModule,
-        HttpClientTestingModule,
         StoreModule.forRoot({}),
+        ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule,
+        EffectsModule.forRoot(),
+        HttpClientTestingModule,
+
+        EventModule,
+        VictimModule,
+        TargetModule,
+        CityModule,
+        ProvinceModule,
+        CountryModule,
       ],
       providers: [Store, BreakpointObserver, MatDialog, AuthService],
     }).compileComponents();

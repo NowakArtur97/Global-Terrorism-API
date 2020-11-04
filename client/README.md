@@ -50,6 +50,7 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 - RxJS - 6.6.0
 - NgRx Store - 10.0.0
 - NgRx Effects - 10.0.0
+- NgRx Entity - 10.0.1
 - NgRx Store-Devtools - 10.0.0
 - Angular Material - 10.2.1
 - Leaflet - 1.7.1

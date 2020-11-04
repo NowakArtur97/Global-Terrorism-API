@@ -14,12 +14,13 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-The application demos are available on the Heroku platform. 
+The application demos are available on the Heroku platform.
 
 Swagger 2 API Documentation: https://global-terrorism-api.herokuapp.com/swagger-ui.html#
 AngularJS App: https://global-terrorism-tracker.herokuapp.com
 
 To log in as a user please provide:
+
 - User name: testuser
 - Password: Password123!
 
@@ -38,14 +39,15 @@ To access the API endpoints use the previously prepared account:
 It may take a while for the applications to start.
 
 Please see the README for specific applications for more information.
-Backend: 
+Backend:
 https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server
-Frontend: 
+Frontend:
 https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
 
 ## Built With
 
 Backend:
+
 - Java 11
 - Spring (Boot, MVC, HATEOAS, Security, Data Neo4j) - 2.2.5
 - Spring Bulk API - 0.7.0
@@ -66,13 +68,15 @@ Backend:
 - CircleCI
 
 Frontend:
+
 - AngularJS - 10.1.1
 - Typescript - 4.0.2
 - RxJS - 6.6.0
 - NgRx Store - 10.0.0
 - NgRx Effects - 10.0.0
+- NgRx Entity - 10.0.1
 - NgRx Store-Devtools - 10.0.0
-- Angular Material  - 10.2.1
+- Angular Material - 10.2.1
 - Leaflet - 1.7.1
 - Jasmine - 3.6.0
 - Karma - 5.0.0

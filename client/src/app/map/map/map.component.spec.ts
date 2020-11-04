@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EntityState } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { MaterialModule } from 'src/app/common/material.module';
+import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import User from '../../auth/models/user.model';
@@ -17,11 +21,19 @@ describe('MapComponent', () => {
     authErrorMessages: [],
     isLoading: false,
   };
+  const initialStateWithEvents: EntityState<Event> = {
+    ids: [],
+    entities: {},
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MapComponent],
-      imports: [StoreModule.forRoot({})],
+      imports: [
+        StoreModule.forRoot({}),
+        MaterialModule,
+        BrowserAnimationsModule,
+      ],
       providers: [Store],
     }).compileComponents();
   });
@@ -32,8 +44,9 @@ describe('MapComponent', () => {
 
     store = TestBed.inject(Store);
     spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === 'event') {
-        return of([]);
+      if (selector === selectAllEvents) {
+        const emptyArray: Event[] = [];
+        return of(emptyArray);
       }
       if (selector === 'auth') {
         return of(initialStateWithUser);

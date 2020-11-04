@@ -152,7 +152,6 @@ describe('AuthEffects', () => {
       (authService.getUserFromLocalStorage as jasmine.Spy).and.returnValue(
         of(mockUser)
       );
-      console.log(mockUser.expirationDate.toString());
       authEffects.autoUserLogin$.subscribe((resultAction) => {
         expect(resultAction.type).toEqual('[User] Authenticate User Success');
         expect(authService.getUserFromLocalStorage).toHaveBeenCalled();

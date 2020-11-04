@@ -7,14 +7,6 @@ import { MaterialModule } from 'src/app/common/material.module';
 
 import { EventFormComponent } from './event-form.component';
 
-// import { EffectsModule } from '@ngrx/effects';
-// import { Store, StoreModule } from '@ngrx/store';
-
-// import { CityModule } from '../../city/city.module';
-// import { CountryModule } from '../../country/country.module';
-// import { ProvinceModule } from '../../province/province.module';
-// import { TargetModule } from '../../target/target.module';
-// import { VictimModule } from '../../victim/victim.module';
 describe('EventFormComponent', () => {
   let component: EventFormComponent;
   let fixture: ComponentFixture<EventFormComponent>;

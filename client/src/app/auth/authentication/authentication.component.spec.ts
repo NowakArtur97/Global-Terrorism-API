@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.state';
 
 import LoginData from '../models/login-data.model';
@@ -17,7 +19,12 @@ describe('AuthenticationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AuthenticationComponent],
-      imports: [StoreModule.forRoot({}), ReactiveFormsModule],
+      imports: [
+        StoreModule.forRoot({}),
+        ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule,
+      ],
       providers: [Store],
     }).compileComponents();
   });
