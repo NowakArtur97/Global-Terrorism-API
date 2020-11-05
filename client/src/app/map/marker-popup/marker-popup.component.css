@@ -1,0 +1,22 @@
+.app-card-popup {
+  max-height: 600px;
+}
+
+.mat-card {
+  padding: 0;
+}
+
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: none;
+}
+
+.mat-card-header-text {
+  margin: 0;
+}
+
+@media (max-width: 750px) {
+  .app-card-popup {
+    max-height: 400px;
+    overflow: hidden scroll;
+  }
+}
