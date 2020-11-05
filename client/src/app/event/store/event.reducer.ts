@@ -4,11 +4,13 @@ import { Action, createFeatureSelector, createReducer, createSelector, on } from
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
 
-export interface EventStoreState extends EntityState<Event> {}
+export interface EventStoreState extends EntityState<Event> {
+  eventToUpdateId: number;
+}
 
 const eventAdapter = createEntityAdapter<Event>();
 
-const initialState = eventAdapter.getInitialState();
+const initialState = eventAdapter.getInitialState({ eventToUpdateId: null });
 
 const _eventReducer = createReducer(
   initialState,
@@ -36,9 +38,20 @@ export default function eventReducer(
   return _eventReducer(state, action);
 }
 
-const { selectAll, selectTotal } = eventAdapter.getSelectors();
+const getEventToUpdateId = (state: EventStoreState) => state.eventToUpdateId;
+
+const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
 export const selectEventState = createFeatureSelector<EventStoreState>('event');
 
 export const selectAllEvents = createSelector(selectEventState, selectAll);
 export const selectEventsTotal = createSelector(selectEventState, selectTotal);
+export const selectEventEntites = createSelector(
+  selectEventState,
+  selectEntities
+);
+export const selectEventToUpdate = createSelector(
+  selectEventEntites,
+  getEventToUpdateId,
+  (evnetEntities, eventId) => evnetEntities[eventId]
+);
