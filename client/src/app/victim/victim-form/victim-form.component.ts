@@ -3,6 +3,9 @@ import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESS
 import { Subscription } from 'rxjs';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
+import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
+
+import Event from '../../event/models//event.model';
 
 @Component({
   selector: 'app-victim-form',
@@ -31,25 +34,42 @@ export class VictimFormComponent
   }
 
   initForm(): void {
+    let totalNumberOfFatalities = 0;
+    let numberOfPerpetratorFatalities = 0;
+    let totalNumberOfInjured = 0;
+    let numberOfPerpetratorInjured = 0;
+    let valueOfPropertyDamage = 0;
+
+    this.store.select(selectEventToUpdate).subscribe((event: Event) => {
+      if (event?.victim) {
+        const { victim } = event;
+        totalNumberOfFatalities = victim.totalNumberOfFatalities;
+        numberOfPerpetratorFatalities = victim.numberOfPerpetratorFatalities;
+        totalNumberOfInjured = victim.totalNumberOfInjured;
+        valueOfPropertyDamage = victim.numberOfPerpetratorInjured;
+        totalNumberOfFatalities = victim.valueOfPropertyDamage;
+      }
+    });
+
     this.formGroup = new FormGroup(
       {
-        totalNumberOfFatalities: new FormControl('', [
+        totalNumberOfFatalities: new FormControl(totalNumberOfFatalities, [
           Validators.min(0),
           CommonValidators.notBlank,
         ]),
-        numberOfPerpetratorFatalities: new FormControl('', [
+        numberOfPerpetratorFatalities: new FormControl(
+          numberOfPerpetratorFatalities,
+          [Validators.min(0), CommonValidators.notBlank]
+        ),
+        totalNumberOfInjured: new FormControl(totalNumberOfInjured, [
           Validators.min(0),
           CommonValidators.notBlank,
         ]),
-        totalNumberOfInjured: new FormControl('', [
-          Validators.min(0),
-          CommonValidators.notBlank,
-        ]),
-        numberOfPerpetratorInjured: new FormControl('', [
-          Validators.min(0),
-          CommonValidators.notBlank,
-        ]),
-        valueOfPropertyDamage: new FormControl('', [
+        numberOfPerpetratorInjured: new FormControl(
+          numberOfPerpetratorInjured,
+          [Validators.min(0), CommonValidators.notBlank]
+        ),
+        valueOfPropertyDamage: new FormControl(valueOfPropertyDamage, [
           Validators.min(0),
           CommonValidators.notBlank,
         ]),

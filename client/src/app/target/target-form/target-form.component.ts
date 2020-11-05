@@ -29,7 +29,7 @@ export class TargetFormComponent extends AbstractFormComponent {
 
     this.store.select(selectEventToUpdate).subscribe((event: Event) => {
       if (event?.target) {
-        const target = event.target;
+        const { target } = event;
         targetName = target.target;
       }
     });
