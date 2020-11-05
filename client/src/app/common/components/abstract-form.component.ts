@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import AppStoreState from 'src/app/store/app.state';
 
 @Component({ template: '' })
 export abstract class AbstractFormComponent
   implements OnInit, ControlValueAccessor, Validator {
   formGroup: FormGroup;
+
+  constructor(protected store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();

@@ -2,6 +2,7 @@ import { Component, forwardRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
+import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
 
 @Component({
   selector: 'app-city-form',
@@ -22,14 +23,27 @@ import CommonValidators from 'src/app/common/validators/common.validator';
 })
 export class CityFormComponent extends AbstractFormComponent {
   initForm(): void {
+    let name = '';
+    let latitude = 0;
+    let longitude = 0;
+
+    this.store.select(selectEventToUpdate).subscribe((event) => {
+      if (event) {
+        const { city } = event;
+        name = city.name;
+        latitude = city.latitude;
+        longitude = city.longitude;
+      }
+    });
+
     this.formGroup = new FormGroup({
-      name: new FormControl('', [CommonValidators.notBlank]),
-      latitude: new FormControl('', [
+      name: new FormControl(name, [CommonValidators.notBlank]),
+      latitude: new FormControl(latitude, [
         Validators.min(-90),
         Validators.max(90),
         CommonValidators.notBlank,
       ]),
-      longitude: new FormControl('', [
+      longitude: new FormControl(longitude, [
         Validators.min(-180),
         Validators.max(180),
         CommonValidators.notBlank,

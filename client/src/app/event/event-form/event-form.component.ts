@@ -1,9 +1,7 @@
 import { Component, forwardRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
-import AppStoreState from 'src/app/store/app.state';
 
 import { selectEventToUpdate } from '../store/event.reducer';
 
@@ -25,10 +23,6 @@ import { selectEventToUpdate } from '../store/event.reducer';
   ],
 })
 export class EventFormComponent extends AbstractFormComponent {
-  constructor(private store: Store<AppStoreState>) {
-    super();
-  }
-
   initForm(): void {
     let summary = '';
     let motive = '';
