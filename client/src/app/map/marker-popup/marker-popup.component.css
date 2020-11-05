@@ -1,9 +1,10 @@
-.app-card-popup {
-  max-height: 600px;
-}
-
 .mat-card {
   padding: 0;
+}
+
+.mat-card-content {
+  max-height: 600px;
+  overflow: hidden auto;
 }
 
 .mat-card:not([class*="mat-elevation-z"]) {
@@ -15,8 +16,8 @@
 }
 
 @media (max-width: 750px) {
-  .app-card-popup {
-    max-height: 400px;
-    overflow: hidden scroll;
+  .mat-card-content {
+    max-height: 300px;
+    max-width: 280px;
   }
 }

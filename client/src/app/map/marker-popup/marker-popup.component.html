@@ -2,6 +2,10 @@
   <mat-card-header>
     <mat-card-title>{{ event.target.target }}</mat-card-title>
     <mat-card-subtitle> {{ event.date }}</mat-card-subtitle>
+    <mat-card-subtitle
+      >{{ city.name }} ({{ city.latitude }},
+      {{ city.longitude }})</mat-card-subtitle
+    >
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="event.summary.length > 0">
@@ -14,10 +18,8 @@
     </div>
     <div>
       <h3>Casualties</h3>
-      <p>
-        Total number of fatalities: {{ event.victim.totalNumberOfFatalities }}
-      </p>
-      <p>Total number of injured: {{ event.victim.totalNumberOfInjured }}</p>
+      <p>Total number of fatalities: {{ victim.totalNumberOfFatalities }}</p>
+      <p>Total number of injured: {{ victim.totalNumberOfInjured }}</p>
     </div>
   </mat-card-content>
   <mat-card-actions>
