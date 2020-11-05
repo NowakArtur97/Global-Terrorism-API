@@ -14,7 +14,12 @@ export const resetEvents = createAction('[Event] Reset Events');
 
 export const fetchEvents = createAction('[Event] Fetch Events');
 
+export const addEventStart = createAction(
+  '[Event] Add Event Start',
+  props<{ event: EventDTO }>()
+);
+
 export const addEvent = createAction(
   '[Event] Add Event',
-  props<{ event: EventDTO }>()
+  props<{ event: Event }>()
 );

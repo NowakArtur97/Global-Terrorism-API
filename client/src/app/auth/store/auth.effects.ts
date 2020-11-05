@@ -43,7 +43,7 @@ export default class AuthEffects {
       map(() => {
         const user = this.authService.getUserFromLocalStorage();
         if (user) {
-          this.authService.setLogoutTimer(user.expirationDate.toString());
+          this.authService.setLogoutTimer(user.expirationDate?.toString());
           return AuthActions.authenticateUserSuccess({
             user,
           });

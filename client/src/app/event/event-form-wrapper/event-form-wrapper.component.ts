@@ -83,6 +83,6 @@ export class EventFormWrapperComponent implements OnInit {
 
   onAddEvent(): void {
     const event = this.getEventFromForm();
-    this.store.dispatch(EventActions.addEvent({ event }));
+    this.store.dispatch(EventActions.addEventStart({ event }));
   }
 }

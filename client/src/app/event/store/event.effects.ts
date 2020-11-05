@@ -20,11 +20,12 @@ export default class EventEffects {
 
   addEvent$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EventActions.addEvent),
+      ofType(EventActions.addEventStart),
       switchMap((action) =>
         this.eventService.add(action.event).pipe(
-          map((responseData) => {
-            return { type: 'DUMMY' };
+          map((event) => {
+            console.log(event);
+            return EventActions.addEvent({ event });
           })
         )
       )
