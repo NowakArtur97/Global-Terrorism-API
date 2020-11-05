@@ -5,6 +5,7 @@ import GenericRestService from 'src/app/common/services/generic-rest.service';
 import { environment } from 'src/environments/environment';
 
 import EventDTO from '../models/event.dto';
+import Event from '../models/event.model';
 import EventsGetResponse from '../models/events-get-response.model';
 
 @Injectable({ providedIn: 'root' })

@@ -2,7 +2,7 @@
   padding: 0;
 }
 
-.mat-card-content {
+.app-card-popup__content {
   max-height: 600px;
   overflow: hidden auto;
 }
@@ -16,7 +16,7 @@
 }
 
 @media (max-width: 750px) {
-  .mat-card-content {
+  .app-card-popup__content {
     max-height: 300px;
     max-width: 280px;
   }

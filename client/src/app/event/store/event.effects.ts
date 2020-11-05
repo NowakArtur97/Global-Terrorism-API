@@ -22,12 +22,9 @@ export default class EventEffects {
     this.actions$.pipe(
       ofType(EventActions.addEventStart),
       switchMap((action) =>
-        this.eventService.add(action.event).pipe(
-          map((event) => {
-            console.log(event);
-            return EventActions.addEvent({ event });
-          })
-        )
+        this.eventService
+          .add(action.event)
+          .pipe(map((event) => EventActions.addEvent({ event })))
       )
     )
   );

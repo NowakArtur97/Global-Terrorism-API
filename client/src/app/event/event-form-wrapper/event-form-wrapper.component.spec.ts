@@ -61,7 +61,7 @@ describe('EventFormWrapperComponent', () => {
   });
 
   describe('when add event form is submitted', () => {
-    it('should dispatch addEvent action', () => {
+    it('should dispatch addEventStart action', () => {
       const countryDTO: CountryDTO = { name: 'country' };
       const provinceDTO: ProvinceDTO = {
         name: 'province',
@@ -108,7 +108,7 @@ describe('EventFormWrapperComponent', () => {
       component.onAddEvent();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        EventActions.addEvent({
+        EventActions.addEventStart({
           event: eventDTO,
         })
       );

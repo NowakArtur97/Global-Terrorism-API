@@ -10,11 +10,14 @@ export default class MarkerService {
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
+    const { city, victim } = event;
     const markerPopupEl: NgElement &
       WithProperties<MarkerPopupComponent> = document.createElement(
       'app-marker-popup-element'
     ) as any;
     markerPopupEl.event = event;
+    markerPopupEl.city = city;
+    markerPopupEl.victim = victim;
     return markerPopupEl;
   }
 
