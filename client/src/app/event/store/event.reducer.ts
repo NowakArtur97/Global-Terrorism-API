@@ -5,12 +5,12 @@ import Event from '../models/event.model';
 import * as EventActions from './event.actions';
 
 export interface EventStoreState extends EntityState<Event> {
-  eventToUpdateId: number;
+  eventToUpdate: Event;
 }
 
 const eventAdapter = createEntityAdapter<Event>();
 
-const initialState = eventAdapter.getInitialState({ eventToUpdateId: null });
+const initialState = eventAdapter.getInitialState({ eventToUpdate: null });
 
 const _eventReducer = createReducer(
   initialState,
@@ -26,6 +26,11 @@ const _eventReducer = createReducer(
     return eventAdapter.addOne(event, state);
   }),
 
+  on(EventActions.updateEventStart, (state, { eventToUpdate }) => ({
+    ...state,
+    eventToUpdate,
+  })),
+
   on(EventActions.updateEvent, (state, { event }) => {
     return eventAdapter.updateOne(event, state);
   })
@@ -38,7 +43,7 @@ export default function eventReducer(
   return _eventReducer(state, action);
 }
 
-const getEventToUpdateId = (state: EventStoreState) => state.eventToUpdateId;
+const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -51,7 +56,6 @@ export const selectEventEntites = createSelector(
   selectEntities
 );
 export const selectEventToUpdate = createSelector(
-  selectEventEntites,
-  getEventToUpdateId,
-  (evnetEntities, eventId) => evnetEntities[eventId]
+  selectEventState,
+  getEventToUpdate
 );

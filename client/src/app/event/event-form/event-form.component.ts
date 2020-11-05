@@ -1,7 +1,11 @@
 import { Component, forwardRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
+import AppStoreState from 'src/app/store/app.state';
+
+import { selectEventToUpdate } from '../store/event.reducer';
 
 @Component({
   selector: 'app-event-form',
@@ -21,19 +25,42 @@ import CommonValidators from 'src/app/common/validators/common.validator';
   ],
 })
 export class EventFormComponent extends AbstractFormComponent {
+  constructor(private store: Store<AppStoreState>) {
+    super();
+  }
+
   initForm(): void {
+    let summary = '';
+    let motive = '';
+    let date = new Date();
+    let isPartOfMultipleIncidents = false;
+    let isSuccessful = false;
+    let isSuicidal = false;
+
+    this.store.select(selectEventToUpdate).subscribe((event) => {
+      if (event) {
+        console.log(event);
+        summary = event.summary;
+        motive = event.motive;
+        date = event.date;
+        isPartOfMultipleIncidents = event.isPartOfMultipleIncidents;
+        isSuccessful = event.isSuccessful;
+        isSuicidal = event.isSuicidal;
+      }
+    });
+
     this.formGroup = new FormGroup({
-      summary: new FormControl('', [CommonValidators.notBlank]),
-      motive: new FormControl('', [CommonValidators.notBlank]),
+      summary: new FormControl(summary, [CommonValidators.notBlank]),
+      motive: new FormControl(motive, [CommonValidators.notBlank]),
       date: new FormControl('', [
         CommonValidators.notBlank,
         CommonValidators.dateInPast,
       ]),
-      isPartOfMultipleIncidents: new FormControl('false', [
+      isPartOfMultipleIncidents: new FormControl(isPartOfMultipleIncidents, [
         CommonValidators.notBlank,
       ]),
-      isSuccessful: new FormControl('false', [CommonValidators.notBlank]),
-      isSuicidal: new FormControl('false', [CommonValidators.notBlank]),
+      isSuccessful: new FormControl(isSuccessful, [CommonValidators.notBlank]),
+      isSuicidal: new FormControl(isSuicidal, [CommonValidators.notBlank]),
     });
   }
 

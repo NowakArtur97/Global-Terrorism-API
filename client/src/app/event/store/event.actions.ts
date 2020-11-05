@@ -27,7 +27,7 @@ export const addEvent = createAction(
 
 export const updateEventStart = createAction(
   '[Event] Update Event Start',
-  props<{ id: number }>()
+  props<{ eventToUpdate: Event }>()
 );
 
 export const updateEvent = createAction(

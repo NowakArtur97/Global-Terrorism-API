@@ -8,6 +8,7 @@ export abstract class AbstractFormComponent
 
   ngOnInit(): void {
     this.initForm();
+    console.log('init');
   }
 
   abstract initForm(): void;
