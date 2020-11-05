@@ -4,6 +4,8 @@ import { AbstractFormComponent } from 'src/app/common/components/abstract-form.c
 import CommonValidators from 'src/app/common/validators/common.validator';
 import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
 
+import Event from '../../event/models//event.model';
+
 @Component({
   selector: 'app-city-form',
   templateUrl: './city-form.component.html',
@@ -27,7 +29,7 @@ export class CityFormComponent extends AbstractFormComponent {
     let latitude = 0;
     let longitude = 0;
 
-    this.store.select(selectEventToUpdate).subscribe((event) => {
+    this.store.select(selectEventToUpdate).subscribe((event: Event) => {
       if (event) {
         const { city } = event;
         name = city.name;
