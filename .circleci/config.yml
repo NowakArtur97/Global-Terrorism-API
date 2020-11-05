@@ -92,12 +92,12 @@ workflows:
       - backend-deploy:
           requires:
             - backend-tests
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
       - frontend-deploy:
           requires:
             - frontend-tests
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master

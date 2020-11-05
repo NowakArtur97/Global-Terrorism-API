@@ -31,13 +31,11 @@ export default class MarkerService {
 
   private getMaxRadius(events: Event[]): number {
     return Math.max(
-      ...events.map((event) => {
-        console.log(event);
-        return (
+      ...events.map(
+        (event) =>
           event.victim.totalNumberOfFatalities +
           event.victim.totalNumberOfInjured
-        );
-      }),
+      ),
       0
     );
   }
