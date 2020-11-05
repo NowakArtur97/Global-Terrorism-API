@@ -86,6 +86,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private showMarkers(): void {
-    this.markers = this.markerService.showCircleMarkers(this.events, this.map);
+    this.markers = this.markerService.createCircleMarkers(
+      this.events,
+      this.map
+    );
   }
 }

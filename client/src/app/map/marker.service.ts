@@ -6,6 +6,8 @@ import Event from '../event/models/event.model';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
+  private maxRadius: number;
+
   private createMarkerPopup(event: Event): any {
     const { victim } = event;
     return R.responsivePopup({
@@ -21,16 +23,16 @@ export default class MarkerService {
     `);
   }
 
-  private scaleRadius = (value: number, maxValue: number): number =>
-    60 * (this.calculateRadius(value, maxValue) / maxValue);
+  private scaleRadius = (value: number, maxRadius: number): number =>
+    60 * (this.calculateRadius(value, maxRadius) / maxRadius);
 
-  private calculateRadius(value: number, maxValue: number): number {
-    const oneTenthOfMaxVal = maxValue / 10;
+  private calculateRadius(value: number, maxRadius: number): number {
+    const oneTenthOfMaxVal = maxRadius / 10;
     return value <= oneTenthOfMaxVal ? oneTenthOfMaxVal : value;
   }
 
-  showCircleMarkers(events: Event[] = [], map: L.Map): L.CircleMarker[] {
-    const maxValue = Math.max(
+  private getMaxRadius(events: Event[]): number {
+    return Math.max(
       ...events.map(
         (event) =>
           event.victim.totalNumberOfFatalities +
@@ -38,18 +40,25 @@ export default class MarkerService {
       ),
       0
     );
+  }
+
+  private createCircleMarker(event: Event, map: L.Map): L.CircleMarker {
+    const { city, victim } = event;
+    return L.circleMarker([city.latitude, city.longitude], {
+      radius: this.scaleRadius(
+        victim.totalNumberOfFatalities + victim.totalNumberOfInjured,
+        this.maxRadius
+      ),
+    })
+      .addTo(map)
+      .bindPopup(this.createMarkerPopup(event));
+  }
+
+  createCircleMarkers(events: Event[] = [], map: L.Map): L.CircleMarker[] {
+    this.maxRadius = this.getMaxRadius(events);
     const markers: L.CircleMarker[] = [];
     for (const event of events) {
-      const { city, victim } = event;
-      const circle = L.circleMarker([city.latitude, city.longitude], {
-        radius: this.scaleRadius(
-          victim.totalNumberOfFatalities + victim.totalNumberOfInjured,
-          maxValue
-        ),
-      })
-        .addTo(map)
-        .bindPopup(this.createMarkerPopup(event));
-      markers.push(circle);
+      markers.push(this.createCircleMarker(event, map));
     }
     return markers;
   }
