@@ -28,7 +28,7 @@ export class ProvinceFormComponent extends AbstractFormComponent {
     let name = '';
 
     this.store.select(selectEventToUpdate).subscribe((event: Event) => {
-      if (event) {
+      if (event?.city?.province) {
         const province = event.city.province;
         name = province.name;
       }

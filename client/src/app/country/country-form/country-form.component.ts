@@ -35,7 +35,7 @@ export class CountryFormComponent extends AbstractFormComponent {
     });
 
     this.formGroup = new FormGroup({
-      name: new FormControl('', [CommonValidators.notBlank]),
+      name: new FormControl(name, [CommonValidators.notBlank]),
     });
   }
 

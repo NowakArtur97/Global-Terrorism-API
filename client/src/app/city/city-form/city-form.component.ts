@@ -30,7 +30,7 @@ export class CityFormComponent extends AbstractFormComponent {
     let longitude = 0;
 
     this.store.select(selectEventToUpdate).subscribe((event: Event) => {
-      if (event) {
+      if (event?.city) {
         const { city } = event;
         name = city.name;
         latitude = city.latitude;
