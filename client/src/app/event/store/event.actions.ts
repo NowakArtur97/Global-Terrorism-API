@@ -1,3 +1,4 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 
 import EventDTO from '../models/event.dto';
@@ -22,4 +23,14 @@ export const addEventStart = createAction(
 export const addEvent = createAction(
   '[Event] Add Event',
   props<{ event: Event }>()
+);
+
+export const updateEventStart = createAction(
+  '[Event] Update Event Start',
+  props<{ id: number }>()
+);
+
+export const updateEvent = createAction(
+  '[Event] Update Event',
+  props<{ event: Update<Event> }>()
 );
