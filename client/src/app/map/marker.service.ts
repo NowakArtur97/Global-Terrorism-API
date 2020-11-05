@@ -1,27 +1,21 @@
 import { Injectable } from '@angular/core';
+import { NgElement, WithProperties } from '@angular/elements';
 import * as L from 'leaflet';
-import * as R from 'leaflet-responsive-popup';
 
 import Event from '../event/models/event.model';
+import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
-    const { victim } = event;
-    return R.responsivePopup({
-      hasTip: true,
-      offset: [10, 10],
-    }).setContent(`
-    <div>
-    <p>Summary: ${event.summary}</p>
-    <p>Motive: ${event.motive}</p>
-    <p>Date: ${event.date}</p>
-    <p>Total number of fatalities: ${victim.totalNumberOfFatalities}</p>
-    <p>Total number of injured: ${victim.totalNumberOfInjured}</p>
-    </div>
-    `);
+    const markerPopupEl: NgElement &
+      WithProperties<MarkerPopupComponent> = document.createElement(
+      'app-marker-popup-element'
+    ) as any;
+    markerPopupEl.event = event;
+    return markerPopupEl;
   }
 
   private scaleRadius = (value: number, maxRadius: number): number =>
