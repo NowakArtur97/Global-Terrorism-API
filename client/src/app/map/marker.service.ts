@@ -13,7 +13,8 @@ export default class MarkerService {
     return R.responsivePopup({
       hasTip: true,
       offset: [10, 10],
-    }).setContent(`<div>
+    }).setContent(`
+    <div>
     <p>Summary: ${event.summary}</p>
     <p>Motive: ${event.motive}</p>
     <p>Date: ${event.date}</p>

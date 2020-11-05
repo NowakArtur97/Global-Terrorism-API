@@ -4,9 +4,10 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import MapRoutingModule from './map-routing.module';
 import { MapComponent } from './map/map.component';
+import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 @NgModule({
-  declarations: [MapComponent],
+  declarations: [MapComponent, MarkerPopupComponent],
   imports: [HttpClientModule, LeafletModule, MapRoutingModule],
   exports: [MapComponent],
 })
