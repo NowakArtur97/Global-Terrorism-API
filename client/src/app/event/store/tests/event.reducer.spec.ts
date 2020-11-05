@@ -51,6 +51,10 @@ const eventsDictionary: Dictionary<Event> = {
   12: event2,
 };
 
+const eventsDictionaryWithOneEvent: Dictionary<Event> = {
+  6: event1,
+};
+
 const initialState: EntityState<Event> = {
   ids: [],
   entities: {},
@@ -59,6 +63,11 @@ const initialState: EntityState<Event> = {
 const initialStateWithEvents: EntityState<Event> = {
   ids: [6, 12],
   entities: eventsDictionary,
+};
+
+const initialStateWithOneEvent: EntityState<Event> = {
+  ids: [6],
+  entities: eventsDictionaryWithOneEvent,
 };
 
 describe('eventReducer', () => {
@@ -90,6 +99,16 @@ describe('eventReducer', () => {
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.ids.length).toBe(0);
+    });
+  });
+
+  describe('EventActions.addEvent', () => {
+    it('should store event', () => {
+      const action = EventActions.addEvent({ event: event1 });
+      const actualState = eventReducer(initialState, action);
+      const expectedState = { ...initialStateWithOneEvent };
+      expect(actualState).toEqual(expectedState);
+      expect(actualState.ids.length).toBe(1);
     });
   });
 });
