@@ -27,14 +27,14 @@ export class CountryFormComponent extends AbstractFormComponent {
   initForm(): void {
     let name = '';
 
-    this.updateSubscription$ = this.store
-      .select(selectEventToUpdate)
-      .subscribe((event: Event) => {
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((event: Event) => {
         if (event?.city?.province?.country) {
           const country = event.city.province.country;
           name = country.name;
         }
-      });
+      })
+    );
 
     this.formGroup = new FormGroup({
       name: new FormControl(name, [CommonValidators.notBlank]),
