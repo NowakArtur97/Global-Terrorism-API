@@ -32,5 +32,10 @@ export const updateEventStart = createAction(
 
 export const updateEvent = createAction(
   '[Event] Update Event',
+  props<{ eventToUpdate: Event }>()
+);
+
+export const updateEventFinish = createAction(
+  '[Event] Update Event Finish',
   props<{ event: Update<Event> }>()
 );
