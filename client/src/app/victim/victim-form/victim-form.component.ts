@@ -40,9 +40,8 @@ export class VictimFormComponent
     let numberOfPerpetratorInjured = 0;
     let valueOfPropertyDamage = 0;
 
-    this.updateSubscription$ = this.store
-      .select(selectEventToUpdate)
-      .subscribe((event: Event) => {
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((event: Event) => {
         if (event?.victim) {
           const { victim } = event;
           totalNumberOfFatalities = victim.totalNumberOfFatalities;
@@ -51,7 +50,8 @@ export class VictimFormComponent
           valueOfPropertyDamage = victim.numberOfPerpetratorInjured;
           totalNumberOfFatalities = victim.valueOfPropertyDamage;
         }
-      });
+      })
+    );
 
     this.formGroup = new FormGroup(
       {
