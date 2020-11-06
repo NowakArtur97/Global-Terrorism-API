@@ -28,4 +28,21 @@ export default class EventEffects {
       )
     )
   );
+
+  updateEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.updateEventStart),
+      switchMap((action) =>
+        this.eventService
+          .get(action.id)
+          .pipe(
+            map((event) =>
+              EventActions.updateEvent({
+                event: { id: event.id, changes: event },
+              })
+            )
+          )
+      )
+    )
+  );
 }

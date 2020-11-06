@@ -26,8 +26,6 @@ export class MarkerPopupComponent implements OnInit {
   ngOnInit(): void {}
 
   updateEvent() {
-    this.store.dispatch(
-      EventActions.updateEventStart({ eventToUpdate: this.event })
-    );
+    this.store.dispatch(EventActions.updateEventStart({ id: this.event.id }));
   }
 }

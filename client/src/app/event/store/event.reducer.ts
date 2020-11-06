@@ -26,11 +26,6 @@ const _eventReducer = createReducer(
     return eventAdapter.addOne(event, state);
   }),
 
-  on(EventActions.updateEventStart, (state, { eventToUpdate }) => ({
-    ...state,
-    eventToUpdate,
-  })),
-
   on(EventActions.updateEvent, (state, { event }) => {
     return eventAdapter.updateOne(event, state);
   })
