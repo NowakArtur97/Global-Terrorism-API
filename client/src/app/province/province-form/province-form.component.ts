@@ -27,17 +27,16 @@ export class ProvinceFormComponent extends AbstractFormComponent {
   initForm(): void {
     let name = '';
 
-    this.updateSubscription$ = this.store
-      .select(selectEventToUpdate)
-      .subscribe((event: Event) => {
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((event: Event) => {
         if (event?.city?.province) {
-          const province = event.city.province;
-          name = province.name;
+          name = event.city.province.name;
         }
-      });
+      })
+    );
 
     this.formGroup = new FormGroup({
-      name: new FormControl('', [CommonValidators.notBlank]),
+      name: new FormControl(name, [CommonValidators.notBlank]),
     });
   }
 

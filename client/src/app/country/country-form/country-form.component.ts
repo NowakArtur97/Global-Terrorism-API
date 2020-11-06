@@ -30,8 +30,7 @@ export class CountryFormComponent extends AbstractFormComponent {
     this.updateSubscription$.add(
       this.store.select(selectEventToUpdate).subscribe((event: Event) => {
         if (event?.city?.province?.country) {
-          const country = event.city.province.country;
-          name = country.name;
+          name = event.city.province.country.name;
         }
       })
     );
