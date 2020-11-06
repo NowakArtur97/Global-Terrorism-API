@@ -25,7 +25,7 @@ import java.util.Optional;
 public abstract class GenericRestControllerImpl<M extends RepresentationModel<M>, D extends DTO, T extends Node>
         extends BasicGenericRestControllerImpl<M, T> implements GenericRestController<M, D> {
 
-    private final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
+    protected final int DEFAULT_DEPTH_FOR_JSON_PATCH = 5;
 
     private final Class<T> nodeTypeParameterClass;
 

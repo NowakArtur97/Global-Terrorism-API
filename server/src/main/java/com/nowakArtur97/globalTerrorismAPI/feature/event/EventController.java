@@ -4,6 +4,7 @@ import com.github.wnameless.spring.bulkapi.Bulkable;
 import com.nowakArtur97.globalTerrorismAPI.common.annotation.ApiPageable;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestControllerImpl;
+import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
@@ -57,6 +58,28 @@ class EventController extends GenericRestControllerImpl<EventModel, EventDTO, Ev
             @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1")
             @PathVariable("id") Long id) {
         return super.findById(id);
+    }
+
+    @GetMapping("/{id}/{depth}")
+    @ApiOperation(value = "Find Event by id and depth", notes = "Provide an id and depth to look up specific Event")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Event found by provided id and depth", response = EventModel.class),
+            @ApiResponse(code = 400, message = "Invalid Event's id or depth supplied"),
+            @ApiResponse(code = 404, message = "Could not find Event with provided id", response = ErrorResponse.class)})
+    public ResponseEntity<EventModel> findByIdWithDepth(
+            @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1")
+            @PathVariable("id") Long id,
+            @ApiParam(value = "Depth is responsible for the number of nested objects", name = "depth", type = "integer", required = true, example = "1")
+            @PathVariable Integer depth) {
+
+        if (depth > DEFAULT_DEPTH_FOR_JSON_PATCH) {
+            depth = DEFAULT_DEPTH_FOR_JSON_PATCH;
+        } else if (depth < 0) {
+            depth = 0;
+        }
+
+        return service.findById(id, depth).map(modelAssembler::toModel).map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
     }
 
     @PostMapping
