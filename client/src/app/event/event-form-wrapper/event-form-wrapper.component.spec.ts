@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
+import { of } from 'rxjs';
 import { CityModule } from 'src/app/city/city.module';
 import CityDTO from 'src/app/city/models/city.dto';
 import { MaterialModule } from 'src/app/common/material.module';
@@ -20,12 +21,18 @@ import { VictimModule } from 'src/app/victim/victim.module';
 import { EventFormComponent } from '../event-form/event-form.component';
 import EventDTO from '../models/event.dto';
 import * as EventActions from '../store/event.actions';
+import { EventStoreState, selectEventToUpdate } from '../store/event.reducer';
 import { EventFormWrapperComponent } from './event-form-wrapper.component';
 
 describe('EventFormWrapperComponent', () => {
   let component: EventFormWrapperComponent;
   let fixture: ComponentFixture<EventFormWrapperComponent>;
   let store: Store<AppStoreState>;
+  const initialState: EventStoreState = {
+    ids: [],
+    entities: {},
+    eventToUpdate: null,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -54,6 +61,11 @@ describe('EventFormWrapperComponent', () => {
 
     store = TestBed.inject(Store);
 
+    spyOn(store, 'select').and.callFake((selector) => {
+      if (selector === selectEventToUpdate) {
+        return of(initialState);
+      }
+    });
     spyOn(store, 'dispatch');
 
     fixture.detectChanges();
