@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice(basePackages = "com.nowakArtur97.globalTerrorismAPI.feature")
+@Slf4j
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -71,18 +73,8 @@ public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), status);
     }
 
-    @ExceptionHandler({JsonException.class})
-    ResponseEntity<Object> handleJsonException(JsonException exception) {
-
-        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
-
-        errorResponse.addError(exception.getMessage());
-
-        return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+    @ExceptionHandler({JsonException.class, MethodArgumentTypeMismatchException.class})
+    ResponseEntity<Object> handleJsonAndMethodArgumentTypeMismatchException(Exception exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
 
