@@ -58,9 +58,6 @@ export class EventFormComponent extends AbstractFormComponent {
       isSuccessful: new FormControl(isSuccessful, [CommonValidators.notBlank]),
       isSuicidal: new FormControl(isSuicidal, [CommonValidators.notBlank]),
     });
-
-    console.log(date);
-    console.log(this.date.value);
   }
 
   get summary(): AbstractControl {
