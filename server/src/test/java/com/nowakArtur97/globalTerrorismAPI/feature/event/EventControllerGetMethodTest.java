@@ -7,14 +7,17 @@ import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryModel;
+import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceModel;
+import com.nowakArtur97.globalTerrorismAPI.feature.province.ProvinceNode;
+import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionModel;
+import com.nowakArtur97.globalTerrorismAPI.feature.region.RegionNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimModel;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
-import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.CityBuilder;
-import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.EventBuilder;
-import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.TargetBuilder;
-import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.VictimBuilder;
+import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.*;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
@@ -55,10 +58,13 @@ class EventControllerGetMethodTest {
     private static int counterForUtilMethodsModel = 0;
     private static int counterForUtilMethodsNode = 0;
 
-    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
-    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/citites";
-    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String REGION_BASE_PATH = "http://localhost:8080/api/v1/regions";
+    private final String COUNTRY_BASE_PATH = "http://localhost:8080/api/v1/countries";
+    private final String PROVINCE_BASE_PATH = "http://localhost:8080/api/v1/provinces";
+    private final String CITY_BASE_PATH = "http://localhost:8080/api/v1/cities";
     private final String VICTIM_BASE_PATH = "http://localhost:8080/api/v1/victims";
+    private final String TARGET_BASE_PATH = "http://localhost:8080/api/v1/targets";
+    private final String EVENT_BASE_PATH = "http://localhost:8080/api/v1/events";
 
     private MockMvc mockMvc;
 
@@ -77,6 +83,9 @@ class EventControllerGetMethodTest {
     @Mock
     private ViolationUtil<EventNode, EventDTO> violationUtil;
 
+    private static RegionBuilder regionBuilder;
+    private static CountryBuilder countryBuilder;
+    private static ProvinceBuilder provinceBuilder;
     private static CityBuilder cityBuilder;
     private static TargetBuilder targetBuilder;
     private static EventBuilder eventBuilder;
@@ -85,8 +94,11 @@ class EventControllerGetMethodTest {
     @BeforeAll
     private static void setUpBuilders() {
 
-        cityBuilder = new CityBuilder();
+        regionBuilder = new RegionBuilder();
+        countryBuilder = new CountryBuilder();
         targetBuilder = new TargetBuilder();
+        provinceBuilder = new ProvinceBuilder();
+        cityBuilder = new CityBuilder();
         victimBuilder = new VictimBuilder();
         eventBuilder = new EventBuilder();
     }
@@ -618,7 +630,7 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("city.longitude", is(cityModel.getLongitude())))
                         .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
                         .andExpect(jsonPath("victim.id", is(victimModel.getId().intValue())))
-                        .andExpect(jsonPath("victim.totalNumberOfFatalities", 
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimModel.getTotalNumberOfFatalities().intValue())))
                         .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
                                 is(victimModel.getNumberOfPerpetratorFatalities().intValue())))
@@ -630,6 +642,165 @@ class EventControllerGetMethodTest {
                                 is(victimModel.getValueOfPropertyDamage().intValue())))
                         .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink))),
                 () -> verify(eventService, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(modelAssembler, times(1)).toModel(eventNode),
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
+    void when_find_existing_event_with_negative_depth_should_return_only_event_without_nested_objects() {
+
+        Long eventId = 1L;
+        int depth = -5;
+        int depthWhenProvidedNegativeDepth = 0;
+
+        EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
+        EventModel eventModel = (EventModel) eventBuilder.build(ObjectType.MODEL);
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+        eventModel.add(new Link(pathToEventLink));
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/" + "{depth}";
+
+        when(eventService.findById(eventId, depthWhenProvidedNegativeDepth)).thenReturn(Optional.of(eventNode));
+        when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, eventId, depth)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href").doesNotExist())
+                        .andExpect(jsonPath("id", is(eventId.intValue())))
+                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
+                        .andExpect(jsonPath("date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("isSuicidal", is(eventModel.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents()))),
+                () -> verify(eventService, times(1)).findById(eventId, depthWhenProvidedNegativeDepth),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(modelAssembler, times(1)).toModel(eventNode),
+                () -> verifyNoMoreInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
+    void when_find_existing_event_with_large_depth_should_return_event_with_all_nested_objects() {
+
+        Long eventId = 1L;
+        int depth = 15;
+        int depthWhenProvidedToBigDepth = 5;
+
+        RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNode = (CountryNode) countryBuilder.withRegion(regionNode).build(ObjectType.NODE);
+        TargetNode targetNode = (TargetNode) targetBuilder.withCountry(countryNode).build(ObjectType.NODE);
+        ProvinceNode provinceNode = (ProvinceNode) provinceBuilder.withCountry(countryNode).build(ObjectType.NODE);
+        CityNode cityNode = (CityNode) cityBuilder.withProvince(provinceNode).build(ObjectType.NODE);
+        VictimNode victimNode = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode).withVictim(victimNode)
+                .build(ObjectType.NODE);
+
+        RegionModel regionModel = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        String pathToRegionLink = REGION_BASE_PATH + "/" + regionModel.getId().intValue();
+        regionModel.add(new Link(pathToRegionLink));
+        CountryModel countryModel = (CountryModel) countryBuilder.withRegion(regionModel).build(ObjectType.MODEL);
+        String pathToCountryLink = COUNTRY_BASE_PATH + "/" + countryNode.getId().intValue();
+        countryModel.add(new Link(pathToCountryLink));
+        ProvinceModel provinceModel = (ProvinceModel) provinceBuilder.withCountry(countryModel).build(ObjectType.MODEL);
+        String pathToProvinceLink = PROVINCE_BASE_PATH + "/" + provinceModel.getId().intValue();
+        provinceModel.add(new Link(pathToProvinceLink));
+        CityModel cityModel = (CityModel) cityBuilder.withProvince(provinceModel).build(ObjectType.MODEL);
+        String pathToCityLink = CITY_BASE_PATH + "/" + counterForUtilMethodsModel;
+        cityModel.add(new Link(pathToCityLink));
+        TargetModel targetModel = (TargetModel) targetBuilder.withCountry(countryModel).build(ObjectType.MODEL);
+        String pathToTargetLink = TARGET_BASE_PATH + "/" + targetModel.getId();
+        targetModel.add(new Link(pathToTargetLink));
+        VictimModel victimModel = (VictimModel) victimBuilder.build(ObjectType.MODEL);
+        String pathToVictimLink = VICTIM_BASE_PATH + "/" + targetModel.getId();
+        victimModel.add(new Link(pathToVictimLink));
+
+        EventModel eventModel = (EventModel) eventBuilder.withTarget(targetModel).withCity(cityModel).withVictim(victimModel)
+                .build(ObjectType.MODEL);
+        String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
+        eventModel.add(new Link(pathToEventLink));
+        String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
+        eventModel.add(new Link(pathToTargetEventLink, "target"));
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/" + "{depth}";
+
+        when(eventService.findById(eventId, depthWhenProvidedToBigDepth)).thenReturn(Optional.of(eventNode));
+        when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, eventId, depth)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
+                        .andExpect(jsonPath("links[1].href", is(pathToTargetEventLink)))
+                        .andExpect(jsonPath("id", is(eventModel.getId().intValue())))
+                        .andExpect(jsonPath("summary", is(eventModel.getSummary())))
+                        .andExpect(jsonPath("motive", is(eventModel.getMotive())))
+                        .andExpect(jsonPath("date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("isSuicidal", is(eventModel.getIsSuicidal())))
+                        .andExpect(jsonPath("isSuccessful", is(eventModel.getIsSuccessful())))
+                        .andExpect(jsonPath("isPartOfMultipleIncidents", is(eventModel.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("target.links[0].href", is(pathToTargetLink)))
+                        .andExpect(jsonPath("target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.id", is(targetModel.getId().intValue())))
+                        .andExpect(jsonPath("target.target", is(targetModel.getTarget())))
+                        .andExpect(jsonPath("target.countryOfOrigin.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.countryOfOrigin.id", is(countryModel.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.name", is(countryModel.getName())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("target.countryOfOrigin.region.id", is(regionModel.getId().intValue())))
+                        .andExpect(jsonPath("target.countryOfOrigin.region.name", is(regionModel.getName())))
+                        .andExpect(jsonPath("city.id", is(cityModel.getId().intValue())))
+                        .andExpect(jsonPath("city.name", is(cityModel.getName())))
+                        .andExpect(jsonPath("city.latitude", is(cityModel.getLatitude())))
+                        .andExpect(jsonPath("city.longitude", is(cityModel.getLongitude())))
+                        .andExpect(jsonPath("city.links[0].href", is(pathToCityLink)))
+                        .andExpect(jsonPath("city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.links[0].href", is(pathToProvinceLink)))
+                        .andExpect(jsonPath("city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.id", is(provinceModel.getId().intValue())))
+                        .andExpect(jsonPath("city.province.name", is(provinceModel.getName())))
+                        .andExpect(jsonPath("city.province.country.links[0].href", is(pathToCountryLink)))
+                        .andExpect(jsonPath("city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.country.id", is(provinceModel.getId().intValue())))
+                        .andExpect(jsonPath("city.province.country.name", is(countryModel.getName())))
+                        .andExpect(jsonPath("city.province.country.region.links[0].href", is(pathToRegionLink)))
+                        .andExpect(jsonPath("city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("city.province.country.region.id", is(regionModel.getId().intValue())))
+                        .andExpect(jsonPath("city.province.country.region.name", is(regionModel.getName())))
+                        .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink)))
+                        .andExpect(jsonPath("victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("victim.id", is(victimModel.getId().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfFatalities",
+                                is(victimModel.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
+                                is(victimModel.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.totalNumberOfInjured",
+                                is(victimModel.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
+                                is(victimModel.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.valueOfPropertyDamage",
+                                is(victimModel.getValueOfPropertyDamage().intValue()))),
+                () -> verify(eventService, times(1)).findById(eventId, depthWhenProvidedToBigDepth),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verify(modelAssembler, times(1)).toModel(eventNode),
                 () -> verifyNoMoreInteractions(modelAssembler),
