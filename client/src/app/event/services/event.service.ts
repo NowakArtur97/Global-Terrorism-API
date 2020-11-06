@@ -12,13 +12,22 @@ import EventsGetResponse from '../models/events-get-response.model';
 export default class EventService extends GenericRestService<
   EventsGetResponse
 > {
+  private readonly DEFAULT_GET_DEPTH = 5;
+
   constructor(protected httpClient: HttpClient) {
     super(httpClient, 'events');
   }
 
+  get(id: number, depth?: number): Observable<Event> {
+    const depthPathVariable = depth ? `/${depth}` : '';
+    return this.httpClient.get<Event>(
+      `${environment.baseApiUrl}/${this.actionUrl}/${id}${depthPathVariable}`
+    );
+  }
+
   add(event: EventDTO): Observable<Event> {
     return this.httpClient.post<Event>(
-      `${environment.baseApiUrl}/${this.actionUtl}`,
+      `${environment.baseApiUrl}/${this.actionUrl}`,
       event
     );
   }

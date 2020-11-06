@@ -5,11 +5,11 @@ import { environment } from 'src/environments/environment';
 export default abstract class GenericRestService<T> {
   private readonly DEFAULT_PAGE_SIZE = 100;
 
-  constructor(protected httpClient: HttpClient, protected actionUtl: string) {}
+  constructor(protected httpClient: HttpClient, protected actionUrl: string) {}
 
   getAll(pageSize: number = this.DEFAULT_PAGE_SIZE): Observable<T> {
     return this.httpClient.get<T>(
-      `${environment.baseApiUrl}/${this.actionUtl}?page=0&size=${pageSize}`
+      `${environment.baseApiUrl}/${this.actionUrl}?page=0&size=${pageSize}`
     );
   }
 }
