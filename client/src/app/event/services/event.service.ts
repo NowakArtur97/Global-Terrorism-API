@@ -34,4 +34,11 @@ export default class EventService extends GenericRestService<
       event
     );
   }
+
+  update(event: EventDTO): Observable<Event> {
+    return this.httpClient.put<Event>(
+      `${environment.baseApiUrl}/${this.actionUrl}/${event.id}`,
+      event
+    );
+  }
 }

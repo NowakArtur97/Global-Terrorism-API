@@ -3,6 +3,7 @@ import TargetDTO from 'src/app/target/models/target.dto';
 import VictimDTO from 'src/app/victim/models/victim.dto';
 
 export default interface EventDTO {
+  readonly id?: number;
   readonly summary: string;
   readonly motive: string;
   readonly date: Date;
