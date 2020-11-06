@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 @Component({ template: '' })
@@ -13,12 +14,13 @@ export abstract class AbstractFormComponent
   constructor(protected store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.initForm();
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe(() => this.initForm())
+    );
   }
 
   ngOnDestroy(): void {
     this.updateSubscription$?.unsubscribe();
-    console.log('destroy');
   }
 
   abstract initForm(): void;

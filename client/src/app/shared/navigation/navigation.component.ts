@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthenticationComponent } from 'src/app/auth/authentication/authentication.component';
 import { RegistrationComponent } from 'src/app/auth/registration/registration.component';
+import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
@@ -18,12 +19,13 @@ import * as EventActions from '../../event/store/event.actions';
 })
 export class NavigationComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
-  private userSubscription: Subscription;
+  private userSubscription$: Subscription;
+  private updateSubscription$: Subscription;
 
   constructor(private dialog: MatDialog, private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.userSubscription = this.store
+    this.userSubscription$ = this.store
       .select('auth')
       .pipe(map((authState) => authState.user))
       .subscribe((user) => {
@@ -32,10 +34,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
           this.dialog.closeAll();
         }
       });
+
+    this.updateSubscription$ = this.store
+      .select(selectEventToUpdate)
+      .subscribe((event) => {
+        if (event) {
+          // TODO: Open sidenav
+        }
+      });
   }
 
   ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
+    this.userSubscription$.unsubscribe();
   }
 
   onOpenPopUp(type: string): void {

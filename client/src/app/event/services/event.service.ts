@@ -17,15 +17,14 @@ export default class EventService extends GenericRestService<
     super(httpClient, 'events');
   }
 
-  get(id: number, depth?: number): Observable<Event> {
+  get(id: number, depth: number = this.DEFAULT_DEPTH): Observable<Event> {
     if (depth < 0) {
       depth = 0;
     } else if (depth > this.DEFAULT_DEPTH) {
       depth = this.DEFAULT_DEPTH;
     }
-    const depthPathVariable = depth ? `/${depth}` : '';
     return this.httpClient.get<Event>(
-      `${environment.baseApiUrl}/${this.actionUrl}/${id}${depthPathVariable}`
+      `${environment.baseApiUrl}/${this.actionUrl}/${id}/${depth}`
     );
   }
 

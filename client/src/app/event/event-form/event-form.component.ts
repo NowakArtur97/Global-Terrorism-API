@@ -24,17 +24,6 @@ import { selectEventToUpdate } from '../store/event.reducer';
   ],
 })
 export class EventFormComponent extends AbstractFormComponent {
-  ngOnInit(): void {
-    this.updateSubscription$.add(
-      this.store.select(selectEventToUpdate).subscribe((event) => {
-        if (event) {
-          this.initForm();
-        }
-      })
-    );
-    this.initForm();
-  }
-
   initForm(): void {
     let summary = '';
     let motive = '';
