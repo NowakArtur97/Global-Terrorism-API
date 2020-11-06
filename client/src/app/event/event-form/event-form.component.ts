@@ -28,9 +28,9 @@ export class EventFormComponent extends AbstractFormComponent {
     let summary = '';
     let motive = '';
     let date = new Date();
-    let isPartOfMultipleIncidents = false;
-    let isSuccessful = false;
-    let isSuicidal = false;
+    let isPartOfMultipleIncidents = 'false';
+    let isSuccessful = 'false';
+    let isSuicidal = 'false';
 
     this.updateSubscription$.add(
       this.store.select(selectEventToUpdate).subscribe((event: Event) => {
@@ -38,9 +38,9 @@ export class EventFormComponent extends AbstractFormComponent {
           summary = event.summary;
           motive = event.motive;
           date = event.date;
-          isPartOfMultipleIncidents = event.isPartOfMultipleIncidents;
-          isSuccessful = event.isSuccessful;
-          isSuicidal = event.isSuicidal;
+          isPartOfMultipleIncidents = event.isPartOfMultipleIncidents + '';
+          isSuccessful = event.isSuccessful + '';
+          isSuicidal = event.isSuicidal + '';
         }
       })
     );

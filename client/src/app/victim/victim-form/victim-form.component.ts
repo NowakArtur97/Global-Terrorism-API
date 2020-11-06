@@ -30,6 +30,7 @@ export class VictimFormComponent
   private victimFormSubscriptions$ = new Subscription();
 
   ngOnDestroy(): void {
+    super.ngOnDestroy();
     this.victimFormSubscriptions$.unsubscribe();
   }
 
