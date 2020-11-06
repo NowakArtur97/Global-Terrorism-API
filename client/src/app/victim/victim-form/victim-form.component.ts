@@ -48,8 +48,8 @@ export class VictimFormComponent
           totalNumberOfFatalities = victim.totalNumberOfFatalities;
           numberOfPerpetratorFatalities = victim.numberOfPerpetratorFatalities;
           totalNumberOfInjured = victim.totalNumberOfInjured;
-          valueOfPropertyDamage = victim.numberOfPerpetratorInjured;
-          totalNumberOfFatalities = victim.valueOfPropertyDamage;
+          numberOfPerpetratorInjured = victim.numberOfPerpetratorInjured;
+          valueOfPropertyDamage = victim.valueOfPropertyDamage;
         }
       })
     );
