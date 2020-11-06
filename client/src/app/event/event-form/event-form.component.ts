@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESS
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
 
+import Event from '../models/event.model';
 import { selectEventToUpdate } from '../store/event.reducer';
 
 @Component({
@@ -23,6 +24,17 @@ import { selectEventToUpdate } from '../store/event.reducer';
   ],
 })
 export class EventFormComponent extends AbstractFormComponent {
+  ngOnInit(): void {
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((event) => {
+        if (event) {
+          this.initForm();
+        }
+      })
+    );
+    this.initForm();
+  }
+
   initForm(): void {
     let summary = '';
     let motive = '';
@@ -31,11 +43,9 @@ export class EventFormComponent extends AbstractFormComponent {
     let isSuccessful = false;
     let isSuicidal = false;
 
-    this.updateSubscription$ = this.store
-      .select(selectEventToUpdate)
-      .subscribe((event) => {
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((event: Event) => {
         if (event) {
-          console.log(event);
           summary = event.summary;
           motive = event.motive;
           date = event.date;
@@ -43,8 +53,8 @@ export class EventFormComponent extends AbstractFormComponent {
           isSuccessful = event.isSuccessful;
           isSuicidal = event.isSuicidal;
         }
-      });
-    console.log(summary);
+      })
+    );
 
     this.formGroup = new FormGroup({
       summary: new FormControl(summary, [CommonValidators.notBlank]),

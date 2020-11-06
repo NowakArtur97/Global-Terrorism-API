@@ -7,7 +7,7 @@ import AppStoreState from 'src/app/store/app.state';
 @Component({ template: '' })
 export abstract class AbstractFormComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator {
-  protected updateSubscription$: Subscription;
+  protected updateSubscription$ = new Subscription();
   formGroup: FormGroup;
 
   constructor(protected store: Store<AppStoreState>) {}
