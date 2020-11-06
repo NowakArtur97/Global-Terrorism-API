@@ -46,6 +46,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSubscription$.unsubscribe();
+    this.updateSubscription$.unsubscribe();
   }
 
   onOpenPopUp(type: string): void {

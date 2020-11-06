@@ -19,6 +19,7 @@ import { MaterialModule } from 'src/app/common/material.module';
 import { CountryModule } from 'src/app/country/country.module';
 import { EventFormWrapperComponent } from 'src/app/event/event-form-wrapper/event-form-wrapper.component';
 import EventModule from 'src/app/event/event.module';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import { ProvinceModule } from 'src/app/province/province.module';
 import AppStoreState from 'src/app/store/app.state';
 import { TargetModule } from 'src/app/target/target.module';
@@ -39,6 +40,11 @@ describe('NavigationComponent', () => {
     close: null,
   });
   dialogRefSpyObj.componentInstance = { body: '' };
+  const initialState: EventStoreState = {
+    ids: [],
+    entities: {},
+    eventToUpdate: null,
+  };
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -82,6 +88,9 @@ describe('NavigationComponent', () => {
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === 'auth') {
         return of([]);
+      }
+      if (selector === selectEventToUpdate) {
+        return of(initialState);
       }
     });
     spyOn(store, 'dispatch');

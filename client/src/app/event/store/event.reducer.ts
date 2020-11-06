@@ -46,7 +46,7 @@ export default function eventReducer(
   return _eventReducer(state, action);
 }
 
-const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
+export const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
