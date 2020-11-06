@@ -1,4 +1,4 @@
-.mat-card {
+.app-card-popup.mat-card {
   padding: 0;
 }
 
@@ -7,7 +7,7 @@
   overflow: hidden auto;
 }
 
-.mat-card:not([class*="mat-elevation-z"]) {
+.app-card-popup.mat-card:not([class*="mat-elevation-z"]) {
   box-shadow: none;
 }
 

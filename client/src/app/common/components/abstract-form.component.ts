@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import AppStoreState from 'src/app/store/app.state';
 
 @Component({ template: '' })
 export abstract class AbstractFormComponent
-  implements OnInit, ControlValueAccessor, Validator {
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+  protected updateSubscription$: Subscription;
   formGroup: FormGroup;
 
   constructor(protected store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
-    console.log('init');
+  }
+
+  ngOnDestroy(): void {
+    this.updateSubscription$?.unsubscribe();
+    console.log('destroy');
   }
 
   abstract initForm(): void;

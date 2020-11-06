@@ -31,17 +31,20 @@ export class EventFormComponent extends AbstractFormComponent {
     let isSuccessful = false;
     let isSuicidal = false;
 
-    this.store.select(selectEventToUpdate).subscribe((event) => {
-      if (event) {
-        console.log(event);
-        summary = event.summary;
-        motive = event.motive;
-        date = event.date;
-        isPartOfMultipleIncidents = event.isPartOfMultipleIncidents;
-        isSuccessful = event.isSuccessful;
-        isSuicidal = event.isSuicidal;
-      }
-    });
+    this.updateSubscription$ = this.store
+      .select(selectEventToUpdate)
+      .subscribe((event) => {
+        if (event) {
+          console.log(event);
+          summary = event.summary;
+          motive = event.motive;
+          date = event.date;
+          isPartOfMultipleIncidents = event.isPartOfMultipleIncidents;
+          isSuccessful = event.isSuccessful;
+          isSuicidal = event.isSuicidal;
+        }
+      });
+    console.log(summary);
 
     this.formGroup = new FormGroup({
       summary: new FormControl(summary, [CommonValidators.notBlank]),

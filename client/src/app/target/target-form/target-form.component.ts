@@ -27,12 +27,14 @@ export class TargetFormComponent extends AbstractFormComponent {
   initForm(): void {
     let targetName = '';
 
-    this.store.select(selectEventToUpdate).subscribe((event: Event) => {
-      if (event?.target) {
-        const { target } = event;
-        targetName = target.target;
-      }
-    });
+    this.updateSubscription$ = this.store
+      .select(selectEventToUpdate)
+      .subscribe((event: Event) => {
+        if (event?.target) {
+          const { target } = event;
+          targetName = target.target;
+        }
+      });
 
     this.formGroup = new FormGroup({
       target: new FormControl(targetName, [CommonValidators.notBlank]),

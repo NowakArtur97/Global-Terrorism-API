@@ -29,14 +29,16 @@ export class CityFormComponent extends AbstractFormComponent {
     let latitude = 0;
     let longitude = 0;
 
-    this.store.select(selectEventToUpdate).subscribe((event: Event) => {
-      if (event?.city) {
-        const { city } = event;
-        name = city.name;
-        latitude = city.latitude;
-        longitude = city.longitude;
-      }
-    });
+    this.updateSubscription$ = this.store
+      .select(selectEventToUpdate)
+      .subscribe((event: Event) => {
+        if (event?.city) {
+          const { city } = event;
+          name = city.name;
+          latitude = city.latitude;
+          longitude = city.longitude;
+        }
+      });
 
     this.formGroup = new FormGroup({
       name: new FormControl(name, [CommonValidators.notBlank]),
