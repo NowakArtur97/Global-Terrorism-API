@@ -4,7 +4,7 @@ export default class Target {
   constructor(
     private readonly _id: number,
     private _target: string,
-    private _country: Country
+    private _countryOfOrigin: Country
   ) {}
 
   public get id(): number {
@@ -15,7 +15,7 @@ export default class Target {
     return this._target;
   }
 
-  public get country(): Country {
-    return this._country;
+  public get countryOfOrigin(): Country {
+    return this._countryOfOrigin;
   }
 }

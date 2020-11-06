@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 
 import EventService from '../services/event.service';
+import EventMapper from '../utils/event.mapper';
 import * as EventActions from './event.actions';
 
 @Injectable()
@@ -43,5 +44,20 @@ export default class EventEffects {
       )
     )
   );
+
+  updateEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.updateEvent),
+      switchMap((action) => {
+        const eventDTO = EventMapper.mapToModel(action.eventToUpdate);
+        return this.eventService.update(eventDTO).pipe(
+          map((event) =>
+            EventActions.updateEventFinish({
+              event: { id: event.id, changes: event },
+            })
+          )
+        );
+      })
+    )
+  );
 }
-// event: { id: event.id, changes: event },
