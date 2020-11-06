@@ -37,7 +37,7 @@ export class EventFormComponent extends AbstractFormComponent {
         if (event) {
           summary = event.summary;
           motive = event.motive;
-          date = event.date;
+          date = new Date(event.date);
           isPartOfMultipleIncidents = event.isPartOfMultipleIncidents + '';
           isSuccessful = event.isSuccessful + '';
           isSuicidal = event.isSuicidal + '';
@@ -48,7 +48,7 @@ export class EventFormComponent extends AbstractFormComponent {
     this.formGroup = new FormGroup({
       summary: new FormControl(summary, [CommonValidators.notBlank]),
       motive: new FormControl(motive, [CommonValidators.notBlank]),
-      date: new FormControl('', [
+      date: new FormControl(date, [
         CommonValidators.notBlank,
         CommonValidators.dateInPast,
       ]),
@@ -58,6 +58,9 @@ export class EventFormComponent extends AbstractFormComponent {
       isSuccessful: new FormControl(isSuccessful, [CommonValidators.notBlank]),
       isSuicidal: new FormControl(isSuicidal, [CommonValidators.notBlank]),
     });
+
+    console.log(date);
+    console.log(this.date.value);
   }
 
   get summary(): AbstractControl {

@@ -50,13 +50,6 @@ describe('EventFormComponent', () => {
   });
 
   describe('form validation', () => {
-    // it('should have default select options', () => {
-    //   component.initForm();
-    //   expect(component.isPartOfMultipleIncidents.value).toBe('false');
-    //   expect(component.isSuccessful.value).toBe('false');
-    //   expect(component.isSuicidal.value).toBe('false');
-    // });
-
     it('with empty summary should be invalid', () => {
       component.summary.setValue('');
 
