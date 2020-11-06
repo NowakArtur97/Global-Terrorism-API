@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Store, StoreModule } from '@ngrx/store';
 import { MaterialModule } from 'src/app/common/material.module';
 
 import { ProvinceFormComponent } from './province-form.component';
@@ -12,7 +13,13 @@ describe('ProvinceFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ProvinceFormComponent],
-      imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
+      imports: [
+        StoreModule.forRoot({}),
+        ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule,
+      ],
+      providers: [Store],
     }).compileComponents();
   });
 

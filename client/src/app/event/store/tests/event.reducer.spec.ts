@@ -1,4 +1,4 @@
-import { Dictionary, EntityState } from '@ngrx/entity';
+import { Dictionary } from '@ngrx/entity';
 import City from 'src/app/city/models/city.model';
 import Country from 'src/app/country/models/country.model';
 import Province from 'src/app/province/models/province.model';
@@ -7,7 +7,7 @@ import Target from 'src/app/target/models/target.model';
 import Victim from '../../../victim/models/victim.model';
 import Event from '../../models/event.model';
 import * as EventActions from '../event.actions';
-import eventReducer from '../event.reducer';
+import eventReducer, { EventStoreState } from '../event.reducer';
 
 const event1 = new Event(
   6,
@@ -55,19 +55,22 @@ const eventsDictionaryWithOneEvent: Dictionary<Event> = {
   6: event1,
 };
 
-const initialState: EntityState<Event> = {
+const initialState: EventStoreState = {
   ids: [],
   entities: {},
+  eventToUpdate: null,
 };
 
-const initialStateWithEvents: EntityState<Event> = {
+const initialStateWithEvents: EventStoreState = {
   ids: [6, 12],
   entities: eventsDictionary,
+  eventToUpdate: null,
 };
 
-const initialStateWithOneEvent: EntityState<Event> = {
+const initialStateWithOneEvent: EventStoreState = {
   ids: [6],
   entities: eventsDictionaryWithOneEvent,
+  eventToUpdate: null,
 };
 
 describe('eventReducer', () => {

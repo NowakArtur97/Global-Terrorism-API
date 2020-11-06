@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnDestroy } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
@@ -24,9 +24,7 @@ import Event from '../../event/models//event.model';
     },
   ],
 })
-export class VictimFormComponent
-  extends AbstractFormComponent
-  implements OnDestroy {
+export class VictimFormComponent extends AbstractFormComponent {
   private victimFormSubscriptions$ = new Subscription();
 
   ngOnDestroy(): void {

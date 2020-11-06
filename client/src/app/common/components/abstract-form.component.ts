@@ -17,6 +17,7 @@ export abstract class AbstractFormComponent
     this.updateSubscription$.add(
       this.store.select(selectEventToUpdate).subscribe(() => this.initForm())
     );
+    this.initForm();
   }
 
   ngOnDestroy(): void {
