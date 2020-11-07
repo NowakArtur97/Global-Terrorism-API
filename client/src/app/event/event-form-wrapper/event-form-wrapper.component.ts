@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/internal/Subscription';
 import CityDTO from 'src/app/city/models/city.dto';
 import CountryDTO from 'src/app/country/models/country.dto';
 import ProvinceDTO from 'src/app/province/models/province.dto';
@@ -9,21 +10,31 @@ import TargetDTO from 'src/app/target/models/target.dto';
 import VictimDTO from 'src/app/victim/models/victim.dto';
 
 import EventDTO from '../models/event.dto';
-import * as EventActions from '../store/event.actions';
+import { selectEventToUpdate } from '../store/event.reducer';
 
+// import * as EventActions from '../store/event.actions';
 @Component({
   selector: 'app-event-form-wrapper',
   templateUrl: './event-form-wrapper.component.html',
   styleUrls: ['./event-form-wrapper.component.css'],
 })
 export class EventFormWrapperComponent implements OnInit {
+  private updateSubscription$ = new Subscription();
+  title: string;
   eventForm: FormGroup;
+  isUpdating = false;
   isLoading = false;
 
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.updateSubscription$.add(
+      this.store.select(selectEventToUpdate).subscribe((eventToUpdate) => {
+        this.isUpdating = !!eventToUpdate;
+        this.title = this.isUpdating ? 'Update' : 'Add';
+      })
+    );
   }
 
   private getEventFromForm(): EventDTO {
@@ -81,8 +92,26 @@ export class EventFormWrapperComponent implements OnInit {
     });
   }
 
-  onAddEvent(): void {
-    const event = this.getEventFromForm();
-    this.store.dispatch(EventActions.addEventStart({ event }));
+  onSubmitForm(): void {
+    const eventDTO = this.getEventFromForm();
+    console.log(this.eventForm.value);
+
+    // if (this.isUpdating) {
+    //   this.store.dispatch(
+    //     EventActions.updateEvent({
+    //       eventToUpdate: {
+    //         id: eventDTO.id,
+    //         changes: EventMapper.mapToModel(eventDTO),
+    //       },
+    //     })
+    //   );
+    //   this.store.dispatch(
+    //     EventActions.updateEventFinish({
+    //       eventToUpdate: eventDTO,
+    //     })
+    //   );
+    // } else {
+    //   this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
+    // }
   }
 }

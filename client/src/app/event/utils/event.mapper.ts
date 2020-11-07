@@ -1,49 +1,50 @@
-import CityDTO from 'src/app/city/models/city.dto';
-import CountryDTO from 'src/app/country/models/country.dto';
-import ProvinceDTO from 'src/app/province/models/province.dto';
-import TargetDTO from 'src/app/target/models/target.dto';
-import VictimDTO from 'src/app/victim/models/victim.dto';
+import City from 'src/app/city/models/city.model';
+import Country from 'src/app/country/models/country.model';
+import Province from 'src/app/province/models/province.model';
+import Target from 'src/app/target/models/target.model';
+import Victim from 'src/app/victim/models/victim.model';
 
 import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
 
 export default class EventMapper {
-  static mapToModel(event: Event): EventDTO {
+  static mapToModel(event: EventDTO): Event {
     const { target, city, victim } = event;
     const province = city.province;
     const country = target.countryOfOrigin;
-    const countryDTO: CountryDTO = { name: country.name };
-    const provinceDTO: ProvinceDTO = {
-      name: province.name,
-      country: countryDTO,
-    };
-    const cityDTO: CityDTO = {
-      name: city.name,
-      latitude: city.latitude,
-      longitude: city.longitude,
-      province: provinceDTO,
-    };
-    const victimDTO: VictimDTO = {
-      totalNumberOfFatalities: victim.totalNumberOfFatalities,
-      numberOfPerpetratorFatalities: victim.numberOfPerpetratorFatalities,
-      totalNumberOfInjured: victim.totalNumberOfInjured,
-      numberOfPerpetratorInjured: victim.numberOfPerpetratorInjured,
-      valueOfPropertyDamage: victim.valueOfPropertyDamage,
-    };
-    const targetDTO: TargetDTO = {
-      target: target.target,
-      countryOfOrigin: countryDTO,
-    };
-    return {
-      summary: event.summary,
-      motive: event.motive,
-      date: event.date,
-      isPartOfMultipleIncidents: event.isPartOfMultipleIncidents,
-      isSuccessful: event.isSuccessful,
-      isSuicidal: event.isSuicidal,
-      target: targetDTO,
-      city: cityDTO,
-      victim: victimDTO,
-    };
+    const countryModel = new Country(country.id, country.name);
+    const provinceModel = new Province(
+      province.id,
+      province.name,
+      countryModel
+    );
+    const cityModel = new City(
+      city.id,
+      city.name,
+      city.latitude,
+      city.longitude,
+      provinceModel
+    );
+    const victimModel = new Victim(
+      victim.id,
+      victim.totalNumberOfFatalities,
+      victim.numberOfPerpetratorFatalities,
+      victim.totalNumberOfInjured,
+      victim.numberOfPerpetratorInjured,
+      victim.valueOfPropertyDamage
+    );
+    const targetModel = new Target(target.id, target.target, countryModel);
+    return new Event(
+      event.id,
+      event.summary,
+      event.motive,
+      event.date,
+      event.isPartOfMultipleIncidents,
+      event.isSuccessful,
+      event.isSuicidal,
+      targetModel,
+      cityModel,
+      victimModel
+    );
   }
 }

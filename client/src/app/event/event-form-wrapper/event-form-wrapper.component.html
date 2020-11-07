@@ -1,8 +1,8 @@
 <mat-dialog-content class="mat-typography">
   <mat-card>
     <mat-card-content>
-      <h2 mat-dialog-title>Add Event</h2>
-      <form [formGroup]="eventForm" (ngSubmit)="onAddEvent()">
+      <h2 mat-dialog-title>{{ title }} Event</h2>
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmitForm()">
         <app-event-form formControlName="event"></app-event-form>
         <app-target-form formControlName="target"></app-target-form>
         <app-city-form formControlName="city"></app-city-form>
@@ -18,10 +18,10 @@
         </div>
 
         <mat-dialog-actions align="end">
-          <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
+          <!-- <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
             Add Event
-          </button>
-          <!-- <button type="submit" mat-raised-button>Add Event</button> -->
+          </button> -->
+          <button type="submit" mat-raised-button>{{ title }} Event</button>
           <!-- <button mat-raised-button mat-dialog-close>Cancel</button> -->
         </mat-dialog-actions>
       </form>

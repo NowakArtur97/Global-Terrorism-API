@@ -30,12 +30,16 @@ const _eventReducer = createReducer(
     return { ...state, eventToUpdate: null };
   }),
 
-  on(EventActions.updateEvent, (state, { eventToUpdate }) => {
+  on(EventActions.updateEventFetch, (state, { eventToUpdate }) => {
     return { ...state, eventToUpdate };
   }),
 
-  on(EventActions.updateEventFinish, (state, { event }) => {
-    return eventAdapter.updateOne(event, state);
+  on(EventActions.updateEvent, (state, { eventToUpdate }) => {
+    return eventAdapter.updateOne(eventToUpdate, state);
+  }),
+
+  on(EventActions.updateEventFinish, (state) => {
+    return { ...state, eventToUpdate: null };
   })
 );
 
@@ -46,7 +50,7 @@ export default function eventReducer(
   return _eventReducer(state, action);
 }
 
-export const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
+const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 

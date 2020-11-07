@@ -21,7 +21,7 @@ public class TargetModel extends RepresentationModel<TargetModel> implements Tar
 
     @ApiModelProperty(notes = "The target's name")
     private String target;
-
+    
     @ApiModelProperty(notes = "The target's country of origin")
     private CountryModel countryOfOrigin;
 

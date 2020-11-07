@@ -30,12 +30,17 @@ export const updateEventStart = createAction(
   props<{ id: number }>()
 );
 
+export const updateEventFetch = createAction(
+  '[Event] Update Event Fetch',
+  props<{ eventToUpdate: Event }>()
+);
+
 export const updateEvent = createAction(
   '[Event] Update Event',
-  props<{ eventToUpdate: Event }>()
+  props<{ eventToUpdate: Update<Event> }>()
 );
 
 export const updateEventFinish = createAction(
   '[Event] Update Event Finish',
-  props<{ event: Update<Event> }>()
+  props<{ eventToUpdate: EventDTO }>()
 );
