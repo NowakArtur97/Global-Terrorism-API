@@ -31,7 +31,6 @@ export class EventFormWrapperComponent implements OnInit {
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.initForm();
     this.updateSubscription$.add(
       this.store.select(selectEventToUpdate).subscribe((eventToUpdate) => {
         this.isUpdating = !!eventToUpdate;
@@ -42,54 +41,9 @@ export class EventFormWrapperComponent implements OnInit {
     );
   }
 
-  initForm(): void {
+  private initForm(): void {
     if (this.eventToUpdate) {
-      const event = this.eventToUpdate;
-      const {
-        summary,
-        motive,
-        date,
-        isPartOfMultipleIncidents,
-        isSuccessful,
-        isSuicidal,
-        target,
-        city,
-        victim,
-      } = event;
-      const { name, latitude, longitude } = city;
-      const {
-        totalNumberOfFatalities,
-        numberOfPerpetratorFatalities,
-        totalNumberOfInjured,
-        numberOfPerpetratorInjured,
-        valueOfPropertyDamage,
-      } = victim;
-
-      this.eventForm = new FormGroup({
-        event: new FormControl({
-          summary,
-          motive,
-          date: new Date(date),
-          isPartOfMultipleIncidents: isPartOfMultipleIncidents + '',
-          isSuccessful: isSuccessful + '',
-          isSuicidal: isSuicidal + '',
-        }),
-        target: new FormControl({ target: target.target }),
-        city: new FormControl({
-          name,
-          latitude,
-          longitude,
-        }),
-        victim: new FormControl({
-          totalNumberOfFatalities,
-          numberOfPerpetratorFatalities,
-          totalNumberOfInjured,
-          numberOfPerpetratorInjured,
-          valueOfPropertyDamage,
-        }),
-        province: new FormControl({ name: city.province.name }),
-        country: new FormControl({ name: city.province.country.name }),
-      });
+      this.initFormWithDataToUpdate();
     } else {
       this.eventForm = new FormGroup({
         event: new FormControl(''),
@@ -105,13 +59,7 @@ export class EventFormWrapperComponent implements OnInit {
   onSubmitForm(): void {
     const eventDTO = this.getEventFromForm();
     if (this.isUpdating) {
-      const { id, target, city, victim } = this.eventToUpdate;
-      eventDTO.id = id;
-      eventDTO.target.id = target.id;
-      eventDTO.city.id = city.id;
-      eventDTO.victim.id = victim.id;
-      eventDTO.city.province.id = city.province.id;
-      eventDTO.city.province.country.id = city.province.country.id;
+      this.setEventIds(eventDTO);
       this.store.dispatch(
         EventActions.updateEvent({
           eventToUpdate: {
@@ -128,6 +76,55 @@ export class EventFormWrapperComponent implements OnInit {
     } else {
       this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
     }
+  }
+
+  private initFormWithDataToUpdate(): void {
+    const event = this.eventToUpdate;
+    const {
+      summary,
+      motive,
+      date,
+      isPartOfMultipleIncidents,
+      isSuccessful,
+      isSuicidal,
+      target,
+      city,
+      victim,
+    } = event;
+    const { name, latitude, longitude } = city;
+    const {
+      totalNumberOfFatalities,
+      numberOfPerpetratorFatalities,
+      totalNumberOfInjured,
+      numberOfPerpetratorInjured,
+      valueOfPropertyDamage,
+    } = victim;
+
+    this.eventForm = new FormGroup({
+      event: new FormControl({
+        summary,
+        motive,
+        date: new Date(date),
+        isPartOfMultipleIncidents: isPartOfMultipleIncidents + '',
+        isSuccessful: isSuccessful + '',
+        isSuicidal: isSuicidal + '',
+      }),
+      target: new FormControl({ target: target.target }),
+      city: new FormControl({
+        name,
+        latitude,
+        longitude,
+      }),
+      victim: new FormControl({
+        totalNumberOfFatalities,
+        numberOfPerpetratorFatalities,
+        totalNumberOfInjured,
+        numberOfPerpetratorInjured,
+        valueOfPropertyDamage,
+      }),
+      province: new FormControl({ name: city.province.name }),
+      country: new FormControl({ name: city.province.country.name }),
+    });
   }
 
   private getEventFromForm(): EventDTO {
@@ -178,5 +175,15 @@ export class EventFormWrapperComponent implements OnInit {
       city: cityDTO,
       victim: victimDTO,
     };
+  }
+
+  private setEventIds(eventDTO: EventDTO): void {
+    const { id, target, city, victim } = this.eventToUpdate;
+    eventDTO.id = id;
+    eventDTO.target.id = target.id;
+    eventDTO.city.id = city.id;
+    eventDTO.victim.id = victim.id;
+    eventDTO.city.province.id = city.province.id;
+    eventDTO.city.province.country.id = city.province.country.id;
   }
 }
