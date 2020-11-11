@@ -130,6 +130,7 @@ describe('EventFormWrapperComponent', () => {
       const date = new Date();
       const dateString =
         date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
       const eventDTO: EventDTO = {
         summary: 'summary',
         motive: 'motive',
@@ -142,7 +143,9 @@ describe('EventFormWrapperComponent', () => {
         victim: victimDTO,
       };
 
-      component.eventForm.get('event').setValue(eventDTO);
+      component.eventForm
+        .get('event')
+        .setValue({ ...eventDTO, date: new Date() });
       component.eventForm.get('target').setValue(targetDTO);
       component.eventForm.get('city').setValue(cityDTO);
       component.eventForm.get('victim').setValue(victimDTO);
