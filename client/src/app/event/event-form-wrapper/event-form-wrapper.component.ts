@@ -11,10 +11,9 @@ import VictimDTO from 'src/app/victim/models/victim.dto';
 
 import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
-import * as EventActions from '../store/event.actions';
 import { selectEventToUpdate } from '../store/event.reducer';
-import EventMapper from '../utils/event.mapper';
 
+// import * as EventActions from '../store/event.actions';
 @Component({
   selector: 'app-event-form-wrapper',
   templateUrl: './event-form-wrapper.component.html',
@@ -36,11 +35,101 @@ export class EventFormWrapperComponent implements OnInit {
       this.store.select(selectEventToUpdate).subscribe((eventToUpdate) => {
         this.isUpdating = !!eventToUpdate;
         this.title = this.isUpdating ? 'Update' : 'Add';
-        this.eventForm.updateValueAndValidity();
         this.eventToUpdate = eventToUpdate;
         this.initForm();
       })
     );
+  }
+
+  initForm(): void {
+    if (this.eventToUpdate) {
+      const event = this.eventToUpdate;
+      const {
+        summary,
+        motive,
+        date,
+        isPartOfMultipleIncidents,
+        isSuccessful,
+        isSuicidal,
+        target,
+        city,
+        victim,
+      } = event;
+      const { name, latitude, longitude } = city;
+      const {
+        totalNumberOfFatalities,
+        numberOfPerpetratorFatalities,
+        totalNumberOfInjured,
+        numberOfPerpetratorInjured,
+        valueOfPropertyDamage,
+      } = victim;
+
+      this.eventForm = new FormGroup({
+        event: new FormControl({
+          summary,
+          motive,
+          date,
+          isPartOfMultipleIncidents: isPartOfMultipleIncidents + '',
+          isSuccessful: isSuccessful + '',
+          isSuicidal: isSuicidal + '',
+        }),
+        target: new FormControl({ target: target.target }),
+        city: new FormControl({
+          name,
+          latitude,
+          longitude,
+        }),
+        victim: new FormControl({
+          totalNumberOfFatalities,
+          numberOfPerpetratorFatalities,
+          totalNumberOfInjured,
+          numberOfPerpetratorInjured,
+          valueOfPropertyDamage,
+        }),
+        province: new FormControl({ name: city.province.name }),
+        country: new FormControl({ name: city.province.country.name }),
+      });
+    } else {
+      this.eventForm = new FormGroup({
+        event: new FormControl(''),
+        target: new FormControl(''),
+        city: new FormControl(''),
+        victim: new FormControl(''),
+        province: new FormControl(''),
+        country: new FormControl(''),
+      });
+    }
+  }
+
+  onSubmitForm(): void {
+    const eventDTO = this.getEventFromForm();
+    console.log(eventDTO);
+    if (this.isUpdating) {
+      const { id, target, city, victim } = this.eventToUpdate;
+      eventDTO.id = id;
+      eventDTO.target.id = target.id;
+      eventDTO.city.id = city.id;
+      eventDTO.victim.id = victim.id;
+      eventDTO.city.province.id = city.province.id;
+      eventDTO.city.province.country.id = city.province.country.id;
+      // this.store.dispatch(
+      //   EventActions.updateEvent({
+      //     eventToUpdate: {
+      //       id: eventDTO.id,
+      //       changes: EventMapper.mapToModel(eventDTO),
+      //     },
+      //   })
+      // );
+      // this.store.dispatch(
+      //   EventActions.updateEventFinish({
+      //     eventToUpdate: eventDTO,
+      //   })
+      // );
+      console.log('UPDATE');
+    } else {
+      console.log('ADD');
+      // this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
+    }
   }
 
   private getEventFromForm(): EventDTO {
@@ -85,87 +174,5 @@ export class EventFormWrapperComponent implements OnInit {
       city: cityDTO,
       victim: victimDTO,
     };
-  }
-
-  initForm(): void {
-    if (this.eventToUpdate) {
-      const event = this.eventToUpdate;
-      const {
-        summary,
-        motive,
-        date,
-        isPartOfMultipleIncidents,
-        isSuccessful,
-        isSuicidal,
-        target,
-        city,
-        victim,
-      } = event;
-      const { name, latitude, longitude } = city;
-      const {
-        totalNumberOfFatalities,
-        numberOfPerpetratorFatalities,
-        totalNumberOfInjured,
-        numberOfPerpetratorInjured,
-        valueOfPropertyDamage,
-      } = victim;
-      this.eventForm.get('event').setValue({
-        summary,
-        motive,
-        date,
-        isPartOfMultipleIncidents,
-        isSuccessful,
-        isSuicidal,
-      });
-      this.eventForm.get('target').setValue({ target: target.target });
-      this.eventForm.get('city').setValue({
-        name,
-        latitude,
-        longitude,
-      });
-      this.eventForm.get('victim').setValue({
-        totalNumberOfFatalities,
-        numberOfPerpetratorFatalities,
-        totalNumberOfInjured,
-        numberOfPerpetratorInjured,
-        valueOfPropertyDamage,
-      });
-      this.eventForm.get('province').setValue({ name: city.province.name });
-      this.eventForm
-        .get('country')
-        .setValue({ name: city.province.country.name });
-    } else {
-      this.eventForm = new FormGroup({
-        event: new FormControl(''),
-        target: new FormControl(''),
-        city: new FormControl(''),
-        victim: new FormControl(''),
-        province: new FormControl(''),
-        country: new FormControl(''),
-      });
-    }
-  }
-
-  onSubmitForm(): void {
-    console.log(this.eventForm.value);
-    const eventDTO = this.getEventFromForm();
-    console.log(eventDTO);
-    if (this.isUpdating) {
-      this.store.dispatch(
-        EventActions.updateEvent({
-          eventToUpdate: {
-            id: eventDTO.id,
-            changes: EventMapper.mapToModel(eventDTO),
-          },
-        })
-      );
-      this.store.dispatch(
-        EventActions.updateEventFinish({
-          eventToUpdate: eventDTO,
-        })
-      );
-    } else {
-      this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
-    }
   }
 }

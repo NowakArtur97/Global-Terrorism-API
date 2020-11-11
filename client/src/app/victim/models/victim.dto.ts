@@ -1,5 +1,5 @@
 export default interface VictimDTO {
-  readonly id?: number;
+  id?: number;
   readonly totalNumberOfFatalities: number;
   readonly numberOfPerpetratorFatalities: number;
   readonly totalNumberOfInjured: number;

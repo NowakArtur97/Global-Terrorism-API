@@ -1,4 +1,4 @@
 export default interface CountryDTO {
-  readonly id?: number;
+  id?: number;
   readonly name: string;
 }
