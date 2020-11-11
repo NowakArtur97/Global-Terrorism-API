@@ -37,8 +37,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     this.updateSubscription$ = this.store
       .select(selectEventToUpdate)
-      .subscribe((event) => {
-        if (event) {
+      .subscribe((eventToUpdate) => {
+        if (eventToUpdate) {
           // TODO: Open sidenav
         }
       });

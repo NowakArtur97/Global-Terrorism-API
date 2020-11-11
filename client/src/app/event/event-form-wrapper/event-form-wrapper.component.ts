@@ -23,7 +23,7 @@ import EventMapper from '../utils/event.mapper';
 export class EventFormWrapperComponent implements OnInit {
   private updateSubscription$ = new Subscription();
   private eventToUpdate: Event;
-  title: string;
+  action: string;
   eventForm: FormGroup;
   isUpdating = false;
   isLoading = false;
@@ -34,7 +34,7 @@ export class EventFormWrapperComponent implements OnInit {
     this.updateSubscription$.add(
       this.store.select(selectEventToUpdate).subscribe((eventToUpdate) => {
         this.isUpdating = !!eventToUpdate;
-        this.title = this.isUpdating ? 'Update' : 'Add';
+        this.action = this.isUpdating ? 'Update' : 'Add';
         this.eventToUpdate = eventToUpdate;
         this.initForm();
       })
@@ -159,11 +159,11 @@ export class EventFormWrapperComponent implements OnInit {
       countryOfOrigin: countryDTO,
     };
     const date =
-      event.date.getFullYear() +
+      new Date(event.date).getFullYear() +
       '-' +
-      (event.date.getMonth() + 1) +
+      (new Date(event.date).getMonth() + 1) +
       '-' +
-      event.date.getDate();
+      new Date(event.date).getDate();
     return {
       summary: event.summary,
       motive: event.motive,
