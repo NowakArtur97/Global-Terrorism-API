@@ -39,25 +39,80 @@ export class EventFormWrapperComponent implements OnInit {
         this.initForm();
       })
     );
+    this.initForm();
   }
 
   private initForm(): void {
-    if (this.eventToUpdate) {
-      this.initFormWithDataToUpdate();
-    } else {
-      this.eventForm = new FormGroup({
-        event: new FormControl(''),
-        target: new FormControl(''),
-        city: new FormControl(''),
-        victim: new FormControl(''),
-        province: new FormControl(''),
-        country: new FormControl(''),
-      });
-    }
+    const event = this.eventToUpdate;
+    const summary = event?.summary || '',
+      motive = event?.motive || '',
+      date = event?.date || new Date(),
+      isPartOfMultipleIncidents = event?.isPartOfMultipleIncidents || 'false',
+      isSuccessful = event?.isSuccessful || 'false',
+      isSuicidal = event?.isSuicidal || 'false',
+      target = event?.target || null,
+      city = event?.city || null,
+      victim = event?.victim || null;
+
+    const targetName = target?.target || '';
+
+    const cityName = city?.name || '',
+      latitude = city?.latitude || 0,
+      longitude = city?.longitude || 0,
+      provinceName = city?.province.name || '';
+
+    const totalNumberOfFatalities = victim?.totalNumberOfFatalities || 0,
+      numberOfPerpetratorFatalities =
+        victim?.numberOfPerpetratorFatalities || 0,
+      totalNumberOfInjured = victim?.totalNumberOfInjured || 0,
+      numberOfPerpetratorInjured = victim?.numberOfPerpetratorInjured || 0,
+      valueOfPropertyDamage = victim?.valueOfPropertyDamage || 0;
+
+    const countryName = city?.province?.country?.name || '';
+
+    this.eventForm = new FormGroup({
+      event: new FormControl({
+        summary,
+        motive,
+        date: new Date(date),
+        isPartOfMultipleIncidents: isPartOfMultipleIncidents + '',
+        isSuccessful: isSuccessful + '',
+        isSuicidal: isSuicidal + '',
+      }),
+      target: new FormControl({ target: targetName }),
+      city: new FormControl({
+        name: cityName,
+        latitude,
+        longitude,
+      }),
+      victim: new FormControl({
+        totalNumberOfFatalities,
+        numberOfPerpetratorFatalities,
+        totalNumberOfInjured,
+        numberOfPerpetratorInjured,
+        valueOfPropertyDamage,
+      }),
+      province: new FormControl({ name: provinceName }),
+      country: new FormControl({ name: countryName }),
+    });
+
+    // if (this.eventToUpdate) {
+    //   this.initFormWithDataToUpdate();
+    // } else {
+    //   this.eventForm = new FormGroup({
+    //     event: new FormControl(''),
+    //     target: new FormControl(''),
+    //     city: new FormControl(''),
+    //     victim: new FormControl(''),
+    //     province: new FormControl(''),
+    //     country: new FormControl(''),
+    //   });
+    // }
   }
 
   onSubmitForm(): void {
     const eventDTO = this.getEventFromForm();
+    console.log(eventDTO);
     if (this.isUpdating) {
       this.setEventIds(eventDTO);
       this.store.dispatch(
@@ -158,12 +213,13 @@ export class EventFormWrapperComponent implements OnInit {
       target: target.target,
       countryOfOrigin: countryDTO,
     };
+    console.log(event.date);
     const date =
-      new Date(event.date).getFullYear() +
+      event.date.getFullYear() +
       '-' +
-      (new Date(event.date).getMonth() + 1) +
+      (event.date.getMonth() + 1) +
       '-' +
-      new Date(event.date).getDate();
+      event.date.getDate();
     return {
       summary: event.summary,
       motive: event.motive,
