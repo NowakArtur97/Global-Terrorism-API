@@ -3,12 +3,24 @@
     <mat-card-content>
       <h2 mat-dialog-title>{{ title }} Event</h2>
       <form [formGroup]="eventForm" (ngSubmit)="onSubmitForm()">
-        <app-event-form formControlName="event"></app-event-form>
-        <app-target-form formControlName="target"></app-target-form>
-        <app-city-form formControlName="city"></app-city-form>
-        <app-province-form formControlName="province"></app-province-form>
-        <app-country-form formControlName="country"></app-country-form>
-        <app-victim-form formControlName="victim"></app-victim-form>
+        <app-event-form
+          [formControl]="eventForm.controls['event']"
+        ></app-event-form>
+        <app-target-form
+          [formControl]="eventForm.controls['target']"
+        ></app-target-form>
+        <app-city-form
+          [formControl]="eventForm.controls['city']"
+        ></app-city-form>
+        <app-province-form
+          [formControl]="eventForm.controls['province']"
+        ></app-province-form>
+        <app-country-form
+          [formControl]="eventForm.controls['country']"
+        ></app-country-form>
+        <app-victim-form
+          [formControl]="eventForm.controls['victim']"
+        ></app-victim-form>
         <!-- <mat-error *ngFor="let errorMessage of eventErrors">
           <div>{{ errorMessage }}</div>
         </mat-error> -->

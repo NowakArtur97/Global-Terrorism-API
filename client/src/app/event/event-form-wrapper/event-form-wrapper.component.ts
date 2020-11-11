@@ -11,9 +11,10 @@ import VictimDTO from 'src/app/victim/models/victim.dto';
 
 import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
+import * as EventActions from '../store/event.actions';
 import { selectEventToUpdate } from '../store/event.reducer';
+import EventMapper from '../utils/event.mapper';
 
-// import * as EventActions from '../store/event.actions';
 @Component({
   selector: 'app-event-form-wrapper',
   templateUrl: './event-form-wrapper.component.html',
@@ -112,23 +113,21 @@ export class EventFormWrapperComponent implements OnInit {
       eventDTO.victim.id = victim.id;
       eventDTO.city.province.id = city.province.id;
       eventDTO.city.province.country.id = city.province.country.id;
-      // this.store.dispatch(
-      //   EventActions.updateEvent({
-      //     eventToUpdate: {
-      //       id: eventDTO.id,
-      //       changes: EventMapper.mapToModel(eventDTO),
-      //     },
-      //   })
-      // );
-      // this.store.dispatch(
-      //   EventActions.updateEventFinish({
-      //     eventToUpdate: eventDTO,
-      //   })
-      // );
-      console.log('UPDATE');
+      this.store.dispatch(
+        EventActions.updateEvent({
+          eventToUpdate: {
+            id: eventDTO.id,
+            changes: EventMapper.mapToModel(eventDTO),
+          },
+        })
+      );
+      this.store.dispatch(
+        EventActions.updateEventFinish({
+          eventToUpdate: eventDTO,
+        })
+      );
     } else {
-      console.log('ADD');
-      // this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
+      this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
     }
   }
 
