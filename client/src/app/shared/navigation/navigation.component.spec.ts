@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
@@ -17,7 +18,6 @@ import AuthService from 'src/app/auth/services/auth.service';
 import { CityModule } from 'src/app/city/city.module';
 import { MaterialModule } from 'src/app/common/material.module';
 import { CountryModule } from 'src/app/country/country.module';
-import { EventFormWrapperComponent } from 'src/app/event/event-form-wrapper/event-form-wrapper.component';
 import EventModule from 'src/app/event/event.module';
 import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import { ProvinceModule } from 'src/app/province/province.module';
@@ -48,7 +48,7 @@ describe('NavigationComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [NavigationComponent, EventFormWrapperComponent],
+      declarations: [NavigationComponent],
       imports: [
         NoopAnimationsModule,
         LayoutModule,
@@ -66,6 +66,7 @@ describe('NavigationComponent', () => {
         BrowserAnimationsModule,
         EffectsModule.forRoot(),
         HttpClientTestingModule,
+        RouterTestingModule,
 
         EventModule,
         VictimModule,
@@ -90,7 +91,7 @@ describe('NavigationComponent', () => {
         return of([]);
       }
       if (selector === selectEventToUpdate) {
-        return of(initialState);
+        return of(initialState.eventToUpdate);
       }
     });
     spyOn(store, 'dispatch');

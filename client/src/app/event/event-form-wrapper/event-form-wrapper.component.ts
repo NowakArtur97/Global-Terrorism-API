@@ -51,7 +51,6 @@ export class EventFormWrapperComponent implements OnInit {
 
   onSubmitForm(): void {
     const eventDTO = this.getEventFromForm();
-    console.log(eventDTO);
     if (this.isUpdating) {
       this.setEventIds(eventDTO);
       this.store.dispatch(
