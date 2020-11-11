@@ -69,7 +69,7 @@ export class EventFormWrapperComponent implements OnInit {
         event: new FormControl({
           summary,
           motive,
-          date,
+          date: new Date(date),
           isPartOfMultipleIncidents: isPartOfMultipleIncidents + '',
           isSuccessful: isSuccessful + '',
           isSuicidal: isSuicidal + '',
@@ -104,7 +104,6 @@ export class EventFormWrapperComponent implements OnInit {
 
   onSubmitForm(): void {
     const eventDTO = this.getEventFromForm();
-    console.log(eventDTO);
     if (this.isUpdating) {
       const { id, target, city, victim } = this.eventToUpdate;
       eventDTO.id = id;
@@ -162,10 +161,16 @@ export class EventFormWrapperComponent implements OnInit {
       target: target.target,
       countryOfOrigin: countryDTO,
     };
+    const date =
+      event.date.getFullYear() +
+      '-' +
+      (event.date.getMonth() + 1) +
+      '-' +
+      event.date.getDate();
     return {
       summary: event.summary,
       motive: event.motive,
-      date: event.date,
+      date,
       isPartOfMultipleIncidents: event.isPartOfMultipleIncidents,
       isSuccessful: event.isSuccessful,
       isSuicidal: event.isSuicidal,

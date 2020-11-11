@@ -38,7 +38,7 @@ export default class EventMapper {
       event.id,
       event.summary,
       event.motive,
-      event.date,
+      new Date(event.date),
       event.isPartOfMultipleIncidents,
       event.isSuccessful,
       event.isSuicidal,

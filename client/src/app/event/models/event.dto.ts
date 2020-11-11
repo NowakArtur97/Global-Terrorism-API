@@ -6,7 +6,7 @@ export default interface EventDTO {
   id?: number;
   readonly summary: string;
   readonly motive: string;
-  readonly date: Date;
+  readonly date: string;
   readonly isPartOfMultipleIncidents: boolean;
   readonly isSuccessful: boolean;
   readonly isSuicidal: boolean;
