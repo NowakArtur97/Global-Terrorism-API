@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -12,7 +12,6 @@ import VictimDTO from 'src/app/victim/models/victim.dto';
 import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
 import * as EventActions from '../store/event.actions';
-import { selectEventToUpdate } from '../store/event.reducer';
 import EventMapper from '../utils/event.mapper';
 
 @Component({
@@ -20,7 +19,7 @@ import EventMapper from '../utils/event.mapper';
   templateUrl: './event-form-wrapper.component.html',
   styleUrls: ['./event-form-wrapper.component.css'],
 })
-export class EventFormWrapperComponent implements OnInit {
+export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
   private updateSubscription$ = new Subscription();
   private eventToUpdate: Event;
   action: string;
@@ -28,17 +27,25 @@ export class EventFormWrapperComponent implements OnInit {
   isUpdating = false;
   isLoading = false;
 
-  constructor(private store: Store<AppStoreState>) {}
+  constructor(
+    private store: Store<AppStoreState>,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.updateSubscription$.add(
-      this.store.select(selectEventToUpdate).subscribe((eventToUpdate) => {
+      this.store.select('event').subscribe(({ eventToUpdate, isLoading }) => {
         this.isUpdating = !!eventToUpdate;
         this.action = this.isUpdating ? 'Update' : 'Add';
         this.eventToUpdate = eventToUpdate;
+        this.isLoading = isLoading;
         this.initForm();
       })
     );
+  }
+
+  ngAfterViewChecked() {
+    this.cdr.detectChanges();
   }
 
   private initForm(): void {

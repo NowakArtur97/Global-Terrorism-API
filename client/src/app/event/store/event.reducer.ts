@@ -8,6 +8,7 @@ import * as EventActions from './event.actions';
 export interface EventStoreState extends EntityState<Event> {
   eventToUpdate: Event;
   lastUpdatedEvent: EventDTO;
+  isLoading: boolean;
 }
 
 const eventAdapter = createEntityAdapter<Event>();
@@ -15,6 +16,7 @@ const eventAdapter = createEntityAdapter<Event>();
 const initialState = eventAdapter.getInitialState({
   eventToUpdate: null,
   lastUpdatedEvent: null,
+  isLoading: false,
 });
 
 const _eventReducer = createReducer(
@@ -27,12 +29,20 @@ const _eventReducer = createReducer(
     return eventAdapter.removeAll(state);
   }),
 
+  on(EventActions.addEventStart, (state) => {
+    return { ...state, isLoading: true };
+  }),
+
   on(EventActions.addEvent, (state, { event }) => {
-    return eventAdapter.addOne(event, state);
+    return eventAdapter.addOne(event, { ...state, isLoading: false });
   }),
 
   on(EventActions.updateEventStart, (state) => {
-    return { ...state, eventToUpdate: null, lastUpdatedEvent: null };
+    return {
+      ...state,
+      eventToUpdate: null,
+      lastUpdatedEvent: null,
+    };
   }),
 
   on(EventActions.updateEventFetch, (state, { eventToUpdate }) => {
@@ -40,7 +50,10 @@ const _eventReducer = createReducer(
   }),
 
   on(EventActions.updateEvent, (state, { eventToUpdate }) => {
-    return eventAdapter.updateOne(eventToUpdate, state);
+    return eventAdapter.updateOne(eventToUpdate, {
+      ...state,
+      isLoading: true,
+    });
   }),
 
   on(EventActions.updateEventFinish, (state, { eventToUpdate }) => {
@@ -48,6 +61,7 @@ const _eventReducer = createReducer(
       ...state,
       eventToUpdate: null,
       lastUpdatedEvent: { ...eventToUpdate },
+      isLoading: false,
     };
   })
 );
