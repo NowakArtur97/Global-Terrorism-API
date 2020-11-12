@@ -3,12 +3,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EntityState } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import User from '../../auth/models/user.model';
-import AuthStoreState from '../../auth/store/auth.state';
 import * as EventActions from '../../event/store/event.actions';
 import { MapComponent } from './map.component';
 
