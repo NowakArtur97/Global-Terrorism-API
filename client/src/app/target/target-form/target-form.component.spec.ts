@@ -18,6 +18,7 @@ describe('TargetFormComponent', () => {
     entities: {},
     eventToUpdate: null,
     lastUpdatedEvent: null,
+    isLoading: false,
   };
 
   beforeEach(async () => {

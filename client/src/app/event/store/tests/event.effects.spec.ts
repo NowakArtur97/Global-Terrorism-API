@@ -1,13 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject } from 'rxjs';
-import City from 'src/app/city/models/city.model';
-import Country from 'src/app/country/models/country.model';
-import Province from 'src/app/province/models/province.model';
-import Target from 'src/app/target/models/target.model';
 
-import Victim from '../../../victim/models/victim.model';
-import Event from '../../models/event.model';
 import EventsGetResponse from '../../models/events-get-response.model';
 import EventService from '../../services/event.service';
 import * as EventActions from '../event.actions';
@@ -15,42 +9,72 @@ import EventEffects from '../event.effects';
 
 const mockEvents: EventsGetResponse = {
   content: [
-    new Event(
-      6,
-      'summary',
-      'motive',
-      new Date(),
-      false,
-      false,
-      false,
-      new Target(3, 'target', new Country(1, 'country')),
-      new City(
-        4,
-        'city',
-        20,
-        10,
-        new Province(2, 'province', new Country(1, 'country'))
-      ),
-      new Victim(5, 11, 3, 14, 4, 2000)
-    ),
-    new Event(
-      12,
-      'summary 2',
-      'motive 2',
-      new Date(),
-      false,
-      false,
-      false,
-      new Target(9, 'target 2', new Country(1, 'country 2')),
-      new City(
-        10,
-        'city 2',
-        20,
-        10,
-        new Province(8, 'province 2', new Country(7, 'country 2'))
-      ),
-      new Victim(11, 21, 13, 11, 1, 2200)
-    ),
+    {
+      id: 6,
+      summary: 'summary',
+      motive: 'motive',
+      date: new Date(),
+      isPartOfMultipleIncidents: false,
+      isSuccessful: true,
+      isSuicidal: false,
+      target: {
+        id: 3,
+        target: 'target',
+        countryOfOrigin: { id: 1, name: 'country' },
+      },
+      city: {
+        id: 4,
+        name: 'city',
+        latitude: 20,
+        longitude: 10,
+        province: {
+          id: 2,
+          name: 'province',
+          country: { id: 1, name: 'country' },
+        },
+      },
+      victim: {
+        id: 5,
+        totalNumberOfFatalities: 11,
+        numberOfPerpetratorFatalities: 3,
+        totalNumberOfInjured: 14,
+        numberOfPerpetratorInjured: 4,
+        valueOfPropertyDamage: 2000,
+      },
+    },
+    {
+      id: 12,
+      summary: 'summary 2',
+      motive: 'motive 2',
+      date: new Date(),
+      isPartOfMultipleIncidents: true,
+      isSuccessful: false,
+      isSuicidal: true,
+      target: {
+        id: 9,
+        target: 'target 2',
+        countryOfOrigin: { id: 7, name: 'country 2' },
+      },
+      city: {
+        id: 10,
+        name: 'city 2',
+        latitude: 10,
+        longitude: 20,
+        province: {
+          id: 8,
+          name: 'province 2',
+          country: { id: 7, name: 'country 2' },
+        },
+      },
+      victim: {
+        id: 11,
+        totalNumberOfFatalities: 10,
+        numberOfPerpetratorFatalities: 2,
+        totalNumberOfInjured: 11,
+        numberOfPerpetratorInjured: 6,
+        valueOfPropertyDamage: 7000,
+      },
+    },
   ],
 };
 

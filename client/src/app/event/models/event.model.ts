@@ -7,7 +7,7 @@ export default interface Event {
   readonly id: number;
   readonly summary: string;
   readonly motive: string;
-  readonly date: string;
+  readonly date: Date;
   readonly isPartOfMultipleIncidents: boolean;
   readonly isSuccessful: boolean;
   readonly isSuicidal: boolean;
