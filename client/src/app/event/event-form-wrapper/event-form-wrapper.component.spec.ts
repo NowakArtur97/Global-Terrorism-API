@@ -57,12 +57,14 @@ describe('EventFormWrapperComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   const initialStateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {

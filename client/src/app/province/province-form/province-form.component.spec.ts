@@ -17,6 +17,7 @@ describe('ProvinceFormComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {

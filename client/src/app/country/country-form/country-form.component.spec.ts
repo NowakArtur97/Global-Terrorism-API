@@ -17,6 +17,7 @@ describe('CountryFormComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {

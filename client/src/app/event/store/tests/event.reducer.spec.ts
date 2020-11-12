@@ -59,11 +59,13 @@ const initialState: EventStoreState = {
   ids: [],
   entities: {},
   eventToUpdate: null,
+  lastUpdatedEvent: null,
 };
 
 const initialStateWithEvents: EventStoreState = {
   ids: [6, 12],
   entities: eventsDictionary,
+  lastUpdatedEvent: null,
   eventToUpdate: null,
 };
 
@@ -71,6 +73,7 @@ const initialStateWithOneEvent: EventStoreState = {
   ids: [6],
   entities: eventsDictionaryWithOneEvent,
   eventToUpdate: null,
+  lastUpdatedEvent: null,
 };
 
 describe('eventReducer', () => {

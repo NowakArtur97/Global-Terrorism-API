@@ -17,6 +17,7 @@ describe('TargetFormComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {

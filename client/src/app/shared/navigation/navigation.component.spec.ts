@@ -44,6 +44,7 @@ describe('NavigationComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {

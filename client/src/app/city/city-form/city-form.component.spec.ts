@@ -17,6 +17,7 @@ describe('CityFormComponent', () => {
     ids: [],
     entities: {},
     eventToUpdate: null,
+    lastUpdatedEvent: null,
   };
 
   beforeEach(async () => {
