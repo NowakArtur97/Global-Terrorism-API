@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import City from 'src/app/city/models/city.model';
 import { selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
-import EventMapper from 'src/app/event/utils/event.mapper';
 import AppStoreState from 'src/app/store/app.state';
 import Victim from 'src/app/victim/models/victim.model';
 
@@ -33,7 +32,7 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
       .select(selectLastUpdatedEvent)
       .subscribe((lastUpdatedEvent) => {
         if (lastUpdatedEvent?.id === this.event.id) {
-          const eventModel = EventMapper.mapToModel(lastUpdatedEvent);
+          const eventModel = lastUpdatedEvent;
           this.event = eventModel;
           this.city = eventModel.city;
           this.victim = eventModel.victim;

@@ -12,7 +12,6 @@ import VictimDTO from 'src/app/victim/models/victim.dto';
 import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
 import * as EventActions from '../store/event.actions';
-import EventMapper from '../utils/event.mapper';
 
 @Component({
   selector: 'app-event-form-wrapper',
@@ -62,14 +61,6 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
       this.setEventIds(eventDTO);
       this.store.dispatch(
         EventActions.updateEvent({
-          eventToUpdate: {
-            id: eventDTO.id,
-            changes: EventMapper.mapToModel(eventDTO),
-          },
-        })
-      );
-      this.store.dispatch(
-        EventActions.updateEventFinish({
           eventToUpdate: eventDTO,
         })
       );
