@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 
 import EventDTO from '../models/event.dto';
@@ -37,10 +36,10 @@ export const updateEventFetch = createAction(
 
 export const updateEvent = createAction(
   '[Event] Update Event',
-  props<{ eventToUpdate: Update<Event> }>()
+  props<{ eventToUpdate: EventDTO }>()
 );
 
 export const updateEventFinish = createAction(
   '[Event] Update Event Finish',
-  props<{ eventToUpdate: EventDTO }>()
+  props<{ eventToUpdate: Event }>()
 );

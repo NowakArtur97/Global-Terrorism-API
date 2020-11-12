@@ -1,13 +1,12 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
-import EventDTO from '../models/event.dto';
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
 
 export interface EventStoreState extends EntityState<Event> {
   eventToUpdate: Event;
-  lastUpdatedEvent: EventDTO;
+  lastUpdatedEvent: Event;
   isLoading: boolean;
 }
 
@@ -49,20 +48,24 @@ const _eventReducer = createReducer(
     return { ...state, eventToUpdate };
   }),
 
-  on(EventActions.updateEvent, (state, { eventToUpdate }) => {
-    return eventAdapter.updateOne(eventToUpdate, {
+  on(EventActions.updateEvent, (state) => {
+    return {
       ...state,
+      lastUpdatedEvent: null,
       isLoading: true,
-    });
+    };
   }),
 
   on(EventActions.updateEventFinish, (state, { eventToUpdate }) => {
-    return {
-      ...state,
-      eventToUpdate: null,
-      lastUpdatedEvent: { ...eventToUpdate },
-      isLoading: false,
-    };
+    return eventAdapter.updateOne(
+      { id: eventToUpdate.id, changes: { ...eventToUpdate } },
+      {
+        ...state,
+        eventToUpdate: null,
+        lastUpdatedEvent: { ...eventToUpdate },
+        isLoading: false,
+      }
+    );
   })
 );
 

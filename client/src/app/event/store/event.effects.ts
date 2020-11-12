@@ -44,14 +44,18 @@ export default class EventEffects {
     )
   );
 
-  updateEventFinish$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(EventActions.updateEventFinish),
-        switchMap(({ eventToUpdate }) =>
-          this.eventService.update(eventToUpdate)
+  updateEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.updateEvent),
+      switchMap(({ eventToUpdate }) =>
+        this.eventService.update(eventToUpdate).pipe(
+          map((eventToUpdate) =>
+            EventActions.updateEventFinish({
+              eventToUpdate,
+            })
+          )
         )
-      ),
-    { dispatch: false }
+      )
+    )
   );
 }
