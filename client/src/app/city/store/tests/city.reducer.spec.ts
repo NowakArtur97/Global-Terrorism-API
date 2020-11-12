@@ -28,8 +28,8 @@ const city2 = {
 };
 const cities = [city1, city2];
 const citiesDictionary: Dictionary<City> = {
-  3: city1,
-  6: city2,
+  4: city1,
+  10: city2,
 };
 const initialState: EntityState<City> = {
   ids: [],
@@ -37,7 +37,7 @@ const initialState: EntityState<City> = {
 };
 
 const initialStateWithCities: EntityState<City> = {
-  ids: [3, 6],
+  ids: [4, 10],
   entities: citiesDictionary,
 };
 

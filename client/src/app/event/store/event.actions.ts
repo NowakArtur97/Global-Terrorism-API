@@ -36,7 +36,7 @@ export const updateEventFetch = createAction(
 
 export const updateEvent = createAction(
   '[Event] Update Event',
-  props<{ eventToUpdate: EventDTO }>()
+  props<{ eventDTO: EventDTO }>()
 );
 
 export const updateEventFinish = createAction(

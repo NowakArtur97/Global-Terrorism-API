@@ -106,7 +106,9 @@ describe('EventFormWrapperComponent', () => {
     store = TestBed.inject(Store);
 
     spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === selectEventToUpdate) {
+      if (selector === 'event') {
+        return of(initialState);
+      } else if (selector === selectEventToUpdate) {
         return of(initialState.eventToUpdate);
       }
     });

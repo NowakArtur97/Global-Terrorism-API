@@ -43,7 +43,7 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     this.cdr.detectChanges();
   }
 

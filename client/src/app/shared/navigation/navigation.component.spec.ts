@@ -91,8 +91,9 @@ describe('NavigationComponent', () => {
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === 'auth') {
         return of([]);
-      }
-      if (selector === selectEventToUpdate) {
+      } else if (selector === 'event') {
+        return of(initialState);
+      } else if (selector === selectEventToUpdate) {
         return of(initialState.eventToUpdate);
       }
     });
