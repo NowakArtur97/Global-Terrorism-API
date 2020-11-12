@@ -173,7 +173,7 @@ describe('EventFormWrapperComponent', () => {
 
       expect(store.dispatch).toHaveBeenCalledWith(
         EventActions.addEventStart({
-          event: eventDTO,
+          eventDTO,
         })
       );
     });

@@ -61,11 +61,11 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
       this.setEventIds(eventDTO);
       this.store.dispatch(
         EventActions.updateEvent({
-          eventToUpdate: eventDTO,
+          eventDTO,
         })
       );
     } else {
-      this.store.dispatch(EventActions.addEventStart({ event: eventDTO }));
+      this.store.dispatch(EventActions.addEventStart({ eventDTO }));
     }
   }
 

@@ -21,9 +21,9 @@ export default class EventEffects {
   addEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventActions.addEventStart),
-      switchMap((action) =>
+      switchMap(({ eventDTO }) =>
         this.eventService
-          .add(action.event)
+          .add(eventDTO)
           .pipe(map((event) => EventActions.addEvent({ event })))
       )
     )

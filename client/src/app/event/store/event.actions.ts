@@ -16,7 +16,7 @@ export const fetchEvents = createAction('[Event] Fetch Events');
 
 export const addEventStart = createAction(
   '[Event] Add Event Start',
-  props<{ event: EventDTO }>()
+  props<{ eventDTO: EventDTO }>()
 );
 
 export const addEvent = createAction(
