@@ -263,6 +263,7 @@ describe('EventFormComponent', () => {
         expect(component.isSuicidal.value).toBe(eventToUpdate.isSuicidal + '');
       });
     });
+
     it('invalid event should be invalid', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === selectEventToUpdate) {
