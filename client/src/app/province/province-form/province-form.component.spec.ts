@@ -165,20 +165,20 @@ describe('ProvinceFormComponent', () => {
         expect(component.formGroup.valid).toBeTruthy();
         expect(component.name.value).toBe(eventToUpdate.city.province.name);
       });
-    });
 
-    it('invalid event should be invalid', () => {
-      spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectEventToUpdate) {
-          return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
-        }
+      it('invalid event should be invalid', () => {
+        spyOn(store, 'select').and.callFake((selector) => {
+          if (selector === selectEventToUpdate) {
+            return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
+          }
+        });
+
+        fixture.detectChanges();
+        component.ngOnInit();
+
+        expect(component.formGroup.valid).toBeFalsy();
+        expect(component.name.valid).toBeFalsy();
       });
-
-      fixture.detectChanges();
-      component.ngOnInit();
-
-      expect(component.formGroup.valid).toBeFalsy();
-      expect(component.name.valid).toBeFalsy();
     });
   });
 });

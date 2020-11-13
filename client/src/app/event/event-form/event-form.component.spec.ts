@@ -261,25 +261,25 @@ describe('EventFormComponent', () => {
         );
         expect(component.isSuicidal.value).toBe(eventToUpdate.isSuicidal + '');
       });
-    });
 
-    it('invalid event should be invalid', () => {
-      spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectEventToUpdate) {
-          return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
-        }
+      it('invalid event should be invalid', () => {
+        spyOn(store, 'select').and.callFake((selector) => {
+          if (selector === selectEventToUpdate) {
+            return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
+          }
+        });
+
+        fixture.detectChanges();
+        component.ngOnInit();
+
+        expect(component.formGroup.valid).toBeFalsy();
+        expect(component.summary.valid).toBeFalsy();
+        expect(component.motive.valid).toBeFalsy();
+        expect(component.date.valid).toBeFalsy();
+        expect(component.isPartOfMultipleIncidents.valid).toBeTruthy();
+        expect(component.isSuccessful.valid).toBeTruthy();
+        expect(component.isSuicidal.valid).toBeTruthy();
       });
-
-      fixture.detectChanges();
-      component.ngOnInit();
-
-      expect(component.formGroup.valid).toBeFalsy();
-      expect(component.summary.valid).toBeFalsy();
-      expect(component.motive.valid).toBeFalsy();
-      expect(component.date.valid).toBeFalsy();
-      expect(component.isPartOfMultipleIncidents.valid).toBeTruthy();
-      expect(component.isSuccessful.valid).toBeTruthy();
-      expect(component.isSuicidal.valid).toBeTruthy();
     });
   });
 });

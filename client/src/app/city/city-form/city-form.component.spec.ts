@@ -231,52 +231,22 @@ describe('CityFormComponent', () => {
         expect(component.latitude.value).toBe(eventToUpdate.city.latitude);
         expect(component.longitude.value).toEqual(eventToUpdate.city.longitude);
       });
-    });
 
-    it('invalid event should be invalid', () => {
-      spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectEventToUpdate) {
-          return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
-        }
-      });
-
-      fixture.detectChanges();
-      component.ngOnInit();
-
-      expect(component.formGroup.valid).toBeFalsy();
-      expect(component.name.valid).toBeFalsy();
-      expect(component.latitude.valid).toBeFalsy();
-      expect(component.longitude.valid).toBeFalsy();
-    });
-
-    describe('when update', () => {
-      it('valid event should be valid', () => {
+      it('invalid event should be invalid', () => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialStateWithEventToUpdate.eventToUpdate);
+            return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
           }
         });
 
         fixture.detectChanges();
         component.ngOnInit();
 
-        expect(component.formGroup.valid).toBeTruthy();
-        expect(component.name.value).toBe(eventToUpdate.city.name);
+        expect(component.formGroup.valid).toBeFalsy();
+        expect(component.name.valid).toBeFalsy();
+        expect(component.latitude.valid).toBeFalsy();
+        expect(component.longitude.valid).toBeFalsy();
       });
-    });
-
-    it('invalid event should be invalid', () => {
-      spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectEventToUpdate) {
-          return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
-        }
-      });
-
-      fixture.detectChanges();
-      component.ngOnInit();
-
-      expect(component.formGroup.valid).toBeFalsy();
-      expect(component.name.valid).toBeFalsy();
     });
   });
 });
