@@ -248,5 +248,35 @@ describe('CityFormComponent', () => {
       expect(component.latitude.valid).toBeFalsy();
       expect(component.longitude.valid).toBeFalsy();
     });
+
+    describe('when update', () => {
+      it('valid event should be valid', () => {
+        spyOn(store, 'select').and.callFake((selector) => {
+          if (selector === selectEventToUpdate) {
+            return of(initialStateWithEventToUpdate.eventToUpdate);
+          }
+        });
+
+        fixture.detectChanges();
+        component.ngOnInit();
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.name.value).toBe(eventToUpdate.city.name);
+      });
+    });
+
+    it('invalid event should be invalid', () => {
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === selectEventToUpdate) {
+          return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
+        }
+      });
+
+      fixture.detectChanges();
+      component.ngOnInit();
+
+      expect(component.formGroup.valid).toBeFalsy();
+      expect(component.name.valid).toBeFalsy();
+    });
   });
 });
