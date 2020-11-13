@@ -121,7 +121,7 @@ describe('EventFormComponent', () => {
     store = TestBed.inject(Store);
   });
 
-  //TODO: valid add event test
+  // TODO: valid add event test
   describe('form validation', () => {
     describe('when add event', () => {
       beforeEach(() => {
