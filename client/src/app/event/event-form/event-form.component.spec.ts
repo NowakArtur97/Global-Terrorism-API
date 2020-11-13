@@ -13,13 +13,6 @@ describe('EventFormComponent', () => {
   let component: EventFormComponent;
   let fixture: ComponentFixture<EventFormComponent>;
   let store: Store<AppStoreState>;
-  const initialState: EventStoreState = {
-    ids: [],
-    entities: {},
-    eventToUpdate: null,
-    lastUpdatedEvent: null,
-    isLoading: false,
-  };
   const eventToUpdate = {
     id: 6,
     summary: 'summary',
@@ -69,8 +62,8 @@ describe('EventFormComponent', () => {
     city: {
       id: 4,
       name: ' ',
-      latitude: -20,
-      longitude: -10,
+      latitude: -2000,
+      longitude: -1000,
       province: {
         id: 2,
         name: ' ',
@@ -86,6 +79,13 @@ describe('EventFormComponent', () => {
       valueOfPropertyDamage: -2000,
     },
   };
+  const initialState: EventStoreState = {
+    ids: [],
+    entities: {},
+    eventToUpdate: null,
+    lastUpdatedEvent: null,
+    isLoading: false,
+  };
   const initialStateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
@@ -93,7 +93,6 @@ describe('EventFormComponent', () => {
     lastUpdatedEvent: null,
     isLoading: false,
   };
-
   const initialStateWithInvalidEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
