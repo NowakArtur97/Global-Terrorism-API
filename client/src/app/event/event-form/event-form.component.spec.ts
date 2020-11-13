@@ -121,6 +121,7 @@ describe('EventFormComponent', () => {
     store = TestBed.inject(Store);
   });
 
+  //TODO: valid add event test
   describe('form validation', () => {
     describe('when add event', () => {
       beforeEach(() => {
@@ -133,6 +134,7 @@ describe('EventFormComponent', () => {
         fixture.detectChanges();
         component.ngOnInit();
       });
+
       it('with empty summary should be invalid', () => {
         component.summary.setValue('');
 

@@ -33,9 +33,9 @@ describe('EventFormWrapperComponent', () => {
     summary: 'summary',
     motive: 'motive',
     date: new Date(),
-    isPartOfMultipleIncidents: false,
-    isSuccessful: true,
-    isSuicidal: false,
+    isPartOfMultipleIncidents: true,
+    isSuccessful: false,
+    isSuicidal: true,
     target: {
       id: 3,
       target: 'target',
@@ -61,7 +61,39 @@ describe('EventFormWrapperComponent', () => {
       valueOfPropertyDamage: 2000,
     },
   };
-
+  const invalidEventToUpdate = {
+    id: 6,
+    summary: ' ',
+    motive: ' ',
+    date: new Date(Date.now() + 100000),
+    isPartOfMultipleIncidents: false,
+    isSuccessful: false,
+    isSuicidal: false,
+    target: {
+      id: 3,
+      target: ' ',
+      countryOfOrigin: { id: 1, name: ' ' },
+    },
+    city: {
+      id: 4,
+      name: ' ',
+      latitude: -2000,
+      longitude: -1000,
+      province: {
+        id: 2,
+        name: ' ',
+        country: { id: 1, name: ' ' },
+      },
+    },
+    victim: {
+      id: 5,
+      totalNumberOfFatalities: -11,
+      numberOfPerpetratorFatalities: -3,
+      totalNumberOfInjured: -14,
+      numberOfPerpetratorInjured: -4,
+      valueOfPropertyDamage: -2000,
+    },
+  };
   const initialState: EventStoreState = {
     ids: [],
     entities: {},
@@ -69,7 +101,6 @@ describe('EventFormWrapperComponent', () => {
     lastUpdatedEvent: null,
     isLoading: false,
   };
-
   const initialStateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
@@ -104,22 +135,22 @@ describe('EventFormWrapperComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
-
-    spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === 'event') {
-        return of(initialState);
-      } else if (selector === selectEventToUpdate) {
-        return of(initialState.eventToUpdate);
-      }
-    });
-    spyOn(store, 'dispatch');
-
-    fixture.detectChanges();
-    component.ngOnInit();
   });
 
   describe('when add event form is submitted', () => {
     it('should dispatch addEventStart action', () => {
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === 'event') {
+          return of(initialState);
+        } else if (selector === selectEventToUpdate) {
+          return of(initialState.eventToUpdate);
+        }
+      });
+      spyOn(store, 'dispatch');
+
+      fixture.detectChanges();
+      component.ngOnInit();
+
       const countryDTO: CountryDTO = { name: 'country' };
       const provinceDTO: ProvinceDTO = {
         name: 'province',
@@ -158,9 +189,14 @@ describe('EventFormWrapperComponent', () => {
         victim: victimDTO,
       };
 
-      component.eventForm
-        .get('event')
-        .setValue({ ...eventDTO, date: new Date() });
+      component.eventForm.get('event').setValue({
+        summary: 'summary',
+        motive: 'motive',
+        date: new Date(),
+        isPartOfMultipleIncidents: true,
+        isSuccessful: false,
+        isSuicidal: true,
+      });
       component.eventForm.get('target').setValue(targetDTO);
       component.eventForm.get('city').setValue(cityDTO);
       component.eventForm.get('victim').setValue(victimDTO);
@@ -168,11 +204,87 @@ describe('EventFormWrapperComponent', () => {
       component.eventForm.get('country').setValue(countryDTO);
 
       expect(component.eventForm.valid).toBeTruthy();
+      expect(component.action).toBe('Add');
 
       component.onSubmitForm();
 
       expect(store.dispatch).toHaveBeenCalledWith(
         EventActions.addEventStart({
+          eventDTO,
+        })
+      );
+    });
+  });
+
+  describe('when update event form', () => {
+    it('with valid event is submited should dispatch updateEvent action', () => {
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === 'event') {
+          return of(initialStateWithEventToUpdate);
+        } else if (selector === selectEventToUpdate) {
+          return of(initialStateWithEventToUpdate.eventToUpdate);
+        }
+      });
+      spyOn(store, 'dispatch');
+
+      fixture.detectChanges();
+      component.ngOnInit();
+
+      const countryDTO: CountryDTO = {
+        id: 1,
+        name: eventToUpdate.city.province.country.name,
+      };
+      const provinceDTO: ProvinceDTO = {
+        id: 2,
+        name: eventToUpdate.city.province.name,
+        country: countryDTO,
+      };
+      const cityDTO: CityDTO = {
+        id: 4,
+        name: eventToUpdate.city.name,
+        latitude: eventToUpdate.city.latitude,
+        longitude: eventToUpdate.city.longitude,
+        province: provinceDTO,
+      };
+      const victimDTO: VictimDTO = {
+        id: 5,
+        totalNumberOfFatalities: eventToUpdate.victim.totalNumberOfFatalities,
+        numberOfPerpetratorFatalities:
+          eventToUpdate.victim.numberOfPerpetratorFatalities,
+        totalNumberOfInjured: eventToUpdate.victim.totalNumberOfInjured,
+        numberOfPerpetratorInjured:
+          eventToUpdate.victim.numberOfPerpetratorInjured,
+        valueOfPropertyDamage: eventToUpdate.victim.valueOfPropertyDamage,
+      };
+      const targetDTO: TargetDTO = {
+        id: 3,
+        target: eventToUpdate.target.target,
+        countryOfOrigin: countryDTO,
+      };
+      const date = eventToUpdate.date;
+      const dateString =
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+      const eventDTO: EventDTO = {
+        id: 6,
+        summary: eventToUpdate.summary,
+        motive: eventToUpdate.motive,
+        date: dateString,
+        isPartOfMultipleIncidents: eventToUpdate.isPartOfMultipleIncidents,
+        isSuccessful: eventToUpdate.isSuccessful,
+        isSuicidal: eventToUpdate.isSuicidal,
+        target: targetDTO,
+        city: cityDTO,
+        victim: victimDTO,
+      };
+
+      expect(component.eventForm.valid).toBeTruthy();
+      expect(component.action).toBe('Update');
+
+      component.onSubmitForm();
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.updateEvent({
           eventDTO,
         })
       );

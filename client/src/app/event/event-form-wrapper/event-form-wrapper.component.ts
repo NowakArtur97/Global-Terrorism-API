@@ -187,9 +187,10 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
       summary: event.summary,
       motive: event.motive,
       date,
-      isPartOfMultipleIncidents: event.isPartOfMultipleIncidents,
-      isSuccessful: event.isSuccessful,
-      isSuicidal: event.isSuicidal,
+      isPartOfMultipleIncidents:
+        event.isPartOfMultipleIncidents + '' === 'true',
+      isSuccessful: event.isSuccessful + '' === 'true',
+      isSuicidal: event.isSuicidal + '' === 'true',
       target: targetDTO,
       city: cityDTO,
       victim: victimDTO,
