@@ -2,7 +2,6 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
-import ErrorResponse from 'src/app/common/models/error-response.model';
 
 import AuthResponse from '../../models/auth-response.model';
 import LoginData from '../../models/login-data.model';
@@ -32,7 +31,9 @@ const mockAuthResponse: AuthResponse = {
 };
 const mockErrorResponse = new HttpErrorResponse({
   error: {
-    errors: [new ErrorResponse(['Error message.'], 401, new Date())],
+    errors: [
+      { errors: ['Error message.'], status: 401, timestamp: new Date() },
+    ],
   },
   headers: new HttpHeaders('headers'),
   status: 401,
