@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,9 +19,11 @@ import * as EventActions from '../../event/store/event.actions';
   styleUrls: ['./navigation.component.css'],
 })
 export class NavigationComponent implements OnInit, OnDestroy {
-  isAuthenticated = false;
   private userSubscription$: Subscription;
   private updateSubscription$: Subscription;
+  isAuthenticated = false;
+
+  @ViewChild('sidenavForms') sidenavFormsElement: MatSidenav;
 
   constructor(private dialog: MatDialog, private store: Store<AppStoreState>) {}
 
@@ -39,7 +42,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
       .select(selectEventToUpdate)
       .subscribe((eventToUpdate) => {
         if (eventToUpdate) {
-          // TODO: Open sidenav
+          this.sidenavFormsElement.open();
         }
       });
   }
