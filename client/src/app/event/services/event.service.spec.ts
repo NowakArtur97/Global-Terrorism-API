@@ -1,6 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import EventDTO from '../models/event.dto';
+import Event from '../models/event.model';
 import EventsGetResponse from '../models/events-get-response.model';
 import EventService from './event.service';
 
@@ -108,6 +110,176 @@ describe('eventsService', () => {
       const req = httpMock.expectOne(`${BASE_URL}?page=0&size=100`);
       expect(req.request.method).toBe('GET');
       req.flush(events);
+    });
+  });
+
+  describe('when add event', () => {
+    it('should add and return event', () => {
+      const event: Event = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date: new Date(),
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 11,
+          numberOfPerpetratorFatalities: 3,
+          totalNumberOfInjured: 14,
+          numberOfPerpetratorInjured: 4,
+          valueOfPropertyDamage: 2000,
+        },
+      };
+      const date =
+        event.date.getFullYear() +
+        '-' +
+        (event.date.getMonth() + 1) +
+        '-' +
+        event.date.getDate();
+      const eventDTO: EventDTO = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date,
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 11,
+          numberOfPerpetratorFatalities: 3,
+          totalNumberOfInjured: 14,
+          numberOfPerpetratorInjured: 4,
+          valueOfPropertyDamage: 2000,
+        },
+      };
+
+      eventService.add(eventDTO).subscribe((res) => {
+        expect(res).toEqual(event);
+      });
+
+      const req = httpMock.expectOne(BASE_URL);
+      expect(req.request.method).toBe('POST');
+      req.flush(event);
+    });
+  });
+
+  describe('when update event', () => {
+    it('should update and return event', () => {
+      const event: Event = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date: new Date(),
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 11,
+          numberOfPerpetratorFatalities: 3,
+          totalNumberOfInjured: 14,
+          numberOfPerpetratorInjured: 4,
+          valueOfPropertyDamage: 2000,
+        },
+      };
+      const date =
+        event.date.getFullYear() +
+        '-' +
+        (event.date.getMonth() + 1) +
+        '-' +
+        event.date.getDate();
+      const eventDTO: EventDTO = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date,
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 11,
+          numberOfPerpetratorFatalities: 3,
+          totalNumberOfInjured: 14,
+          numberOfPerpetratorInjured: 4,
+          valueOfPropertyDamage: 2000,
+        },
+      };
+
+      eventService.update(eventDTO).subscribe((res) => {
+        expect(res).toEqual(event);
+      });
+
+      const req = httpMock.expectOne(`${BASE_URL}/${event.id}`);
+      expect(req.request.method).toBe('PUT');
+      req.flush(event);
     });
   });
 });
