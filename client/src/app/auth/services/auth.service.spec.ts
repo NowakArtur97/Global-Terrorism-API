@@ -109,7 +109,7 @@ describe('AuthService', () => {
       const userData: {
         token: string;
         expirationDate: Date;
-      } = { token: 'token', expirationDate: expirationDate };
+      } = { token: 'token', expirationDate };
       const userExpected: User = { token: 'token', expirationDate };
 
       spyOn(localStorage, 'getItem').and.callFake(() =>

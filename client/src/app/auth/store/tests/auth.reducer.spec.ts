@@ -8,27 +8,17 @@ const initialState: AuthStoreState = {
   authErrorMessages: [],
   isLoading: false,
 };
-
 const initialStateWithErrors: AuthStoreState = {
   user: null,
   authErrorMessages: ['ERROR'],
   isLoading: true,
 };
-
 const initialStateWithUser: AuthStoreState = {
   user: {
     token: 'secret token',
     expirationDate: new Date(Date.now() + 36000000),
   },
   authErrorMessages: [],
-  isLoading: true,
-};
-const initialStateWithUserAndErrors: AuthStoreState = {
-  user: {
-    token: 'secret token',
-    expirationDate: new Date(Date.now() + 36000000),
-  },
-  authErrorMessages: ['ERROR'],
   isLoading: true,
 };
 
@@ -185,6 +175,14 @@ describe('authReducer', () => {
     });
 
     it('should logout user and remove error messages', () => {
+      const initialStateWithUserAndErrors: AuthStoreState = {
+        user: {
+          token: 'secret token',
+          expirationDate: new Date(Date.now() + 36000000),
+        },
+        authErrorMessages: ['ERROR'],
+        isLoading: true,
+      };
       const user = null;
       const authErrorMessages = [];
       const action = AuthActions.logoutUser();
