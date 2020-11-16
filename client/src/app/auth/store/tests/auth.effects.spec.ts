@@ -12,15 +12,24 @@ import AuthService from '../../services/auth.service';
 import * as AuthActions from '../auth.actions';
 import AuthEffects from '../auth.effects';
 
-const mockLoginData = new LoginData('username', 'password');
-const mockRegistrationData = new RegistrationData(
-  'username',
-  'email@email.com',
-  'password',
-  'password'
-);
-const mockUser = new User('secret token', new Date(Date.now() + 36000000));
-const mockAuthResponse = new AuthResponse('secret token', 36000000);
+const mockLoginData: LoginData = {
+  userNameOrEmail: 'username',
+  password: 'password',
+};
+const mockRegistrationData: RegistrationData = {
+  userName: 'username',
+  email: 'email@email.com',
+  password: 'password',
+  matchingPassword: 'password',
+};
+const mockUser: User = {
+  token: 'secret token',
+  expirationDate: new Date(Date.now() + 36000000),
+};
+const mockAuthResponse: AuthResponse = {
+  token: 'secret token',
+  expirationTimeInMilliseconds: 36000000,
+};
 const mockErrorResponse = new HttpErrorResponse({
   error: {
     errors: [new ErrorResponse(['Error message.'], 401, new Date())],

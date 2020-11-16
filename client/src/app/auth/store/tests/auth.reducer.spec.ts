@@ -1,6 +1,5 @@
 import LoginData from '../../models/login-data.model';
 import RegistrationData from '../../models/registration-data.model';
-import User from '../../models/user.model';
 import * as AuthActions from '../auth.actions';
 import authReducer, { AuthStoreState } from '../auth.reducer';
 
@@ -17,13 +16,18 @@ const initialStateWithErrors: AuthStoreState = {
 };
 
 const initialStateWithUser: AuthStoreState = {
-  user: new User('token', new Date(Date.now() + 36000000)),
+  user: {
+    token: 'secret token',
+    expirationDate: new Date(Date.now() + 36000000),
+  },
   authErrorMessages: [],
   isLoading: true,
 };
-
 const initialStateWithUserAndErrors: AuthStoreState = {
-  user: new User('token', new Date(Date.now() + 36000000)),
+  user: {
+    token: 'secret token',
+    expirationDate: new Date(Date.now() + 36000000),
+  },
   authErrorMessages: ['ERROR'],
   isLoading: true,
 };
@@ -32,7 +36,10 @@ describe('authReducer', () => {
   describe('AuthStoreState.loginUserStart', () => {
     it('should remove display loader when login started', () => {
       const isLoading = true;
-      const loginData = new LoginData('user', 'password');
+      const loginData: LoginData = {
+        userNameOrEmail: 'user',
+        password: 'password',
+      };
       const action = AuthActions.loginUserStart({ loginData });
       const actualState = authReducer(initialStateWithErrors, action);
       const expectedState = {
@@ -46,7 +53,10 @@ describe('authReducer', () => {
 
     it('should remove error messages when login started', () => {
       const authErrorMessages = [];
-      const loginData = new LoginData('user', 'password');
+      const loginData: LoginData = {
+        userNameOrEmail: 'user',
+        password: 'password',
+      };
       const action = AuthActions.loginUserStart({ loginData });
       const actualState = authReducer(initialStateWithErrors, action);
       const expectedState = {
@@ -62,12 +72,12 @@ describe('authReducer', () => {
   describe('AuthStoreState.registerUserStart', () => {
     it('should show loader when registration started', () => {
       const isLoading = true;
-      const registrationData = new RegistrationData(
-        'user',
-        'email',
-        'password',
-        'password'
-      );
+      const registrationData: RegistrationData = {
+        userName: 'username',
+        email: 'email@email.com',
+        password: 'password',
+        matchingPassword: 'password',
+      };
       const action = AuthActions.registerUserStart({ registrationData });
       const actualState = authReducer(initialStateWithErrors, action);
       const expectedState = {
@@ -81,12 +91,12 @@ describe('authReducer', () => {
 
     it('should remove error messages when login started', () => {
       const authErrorMessages = [];
-      const registrationData = new RegistrationData(
-        'user',
-        'email',
-        'password',
-        'password'
-      );
+      const registrationData: RegistrationData = {
+        userName: 'username',
+        email: 'email@email.com',
+        password: 'password',
+        matchingPassword: 'password',
+      };
       const action = AuthActions.registerUserStart({ registrationData });
       const actualState = authReducer(initialStateWithErrors, action);
       const expectedState = {
@@ -101,7 +111,10 @@ describe('authReducer', () => {
 
   describe('AuthStoreState.authenticateUserSuccess', () => {
     it('should authenticate user on success', () => {
-      const user = new User('token', new Date(Date.now() + 36000000));
+      const user = {
+        token: 'secret token',
+        expirationDate: new Date(Date.now() + 36000000),
+      };
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
       const actualState = authReducer(initialState, action);
@@ -114,7 +127,10 @@ describe('authReducer', () => {
     });
 
     it('should authenticate user, remove error messages and hide loader on success', () => {
-      const user = new User('token', new Date(Date.now() + 36000000));
+      const user = {
+        token: 'secret token',
+        expirationDate: new Date(Date.now() + 36000000),
+      };
       const authErrorMessages = [];
       const isLoading = false;
       const action = AuthActions.authenticateUserSuccess({ user });

@@ -14,7 +14,10 @@ describe('AuthenticationComponent', () => {
   let component: AuthenticationComponent;
   let fixture: ComponentFixture<AuthenticationComponent>;
   let store: Store<AppStoreState>;
-  const loginData = new LoginData('login', ' password');
+  const loginData: LoginData = {
+    userNameOrEmail: 'login',
+    password: 'password',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

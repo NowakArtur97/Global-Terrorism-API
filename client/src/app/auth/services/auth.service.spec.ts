@@ -6,7 +6,6 @@ import AppStoreState from 'src/app/store/app.state';
 import AuthResponse from '../models/auth-response.model';
 import LoginData from '../models/login-data.model';
 import RegistrationCheckRequest from '../models/registration-check-request.model';
-import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import User from '../models/user.model';
 import * as AuthActions from '../store/auth.actions';
@@ -42,9 +41,14 @@ describe('AuthService', () => {
 
   describe('when login user', () => {
     it('should login user', () => {
-      const loginData = new LoginData('username', 'password');
-      const authResponse = new AuthResponse('token', 36000000);
-
+      const loginData: LoginData = {
+        userNameOrEmail: 'username',
+        password: 'password',
+      };
+      const authResponse: AuthResponse = {
+        token: 'token',
+        expirationTimeInMilliseconds: 3600000,
+      };
       authService.loginUser(loginData).subscribe((res) => {
         expect(res).toEqual(authResponse);
       });
@@ -57,13 +61,16 @@ describe('AuthService', () => {
 
   describe('when register user', () => {
     it('should register user', () => {
-      const registrationData = new RegistrationData(
-        'username',
-        'email@email.com',
-        'pass',
-        'pass'
-      );
-      const authResponse = new AuthResponse('token', 36000000);
+      const registrationData: RegistrationData = {
+        userName: 'username',
+        email: 'email@email.com',
+        password: 'pass',
+        matchingPassword: 'pass',
+      };
+      const authResponse: AuthResponse = {
+        token: 'token',
+        expirationTimeInMilliseconds: 3600000,
+      };
 
       authService.registerUser(registrationData).subscribe((res) => {
         expect(res).toEqual(authResponse);
@@ -77,14 +84,14 @@ describe('AuthService', () => {
 
   describe('when check user data', () => {
     it('should return user data statuses', () => {
-      const dataToCheck = new RegistrationCheckRequest(
-        'username',
-        'email@email.com'
-      );
-      const registrationCheckResponse = new RegistrationCheckResponse(
-        true,
-        true
-      );
+      const dataToCheck: RegistrationCheckRequest = {
+        userName: 'username',
+        email: 'email@email.com',
+      };
+      const registrationCheckResponse = {
+        isUserNameAvailable: true,
+        isEmailAvailable: true,
+      };
 
       authService.checkUserData(dataToCheck).subscribe((res) => {
         expect(res).toEqual(registrationCheckResponse);
@@ -103,7 +110,7 @@ describe('AuthService', () => {
         _token: string;
         _expirationDate: Date;
       } = { _token: 'token', _expirationDate: expirationDate };
-      const userExpected = new User('token', expirationDate);
+      const userExpected: User = { token: 'token', expirationDate };
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
         JSON.stringify(userData)
@@ -134,7 +141,10 @@ describe('AuthService', () => {
 
   describe('when save user in local storage', () => {
     it('should save user in local storage', () => {
-      const user = new User('token', new Date(Date.now() + 36000000));
+      const user: User = {
+        token: 'token',
+        expirationDate: new Date(Date.now() + 36000000),
+      };
 
       spyOn(localStorage, 'setItem').and.callFake(() => JSON.stringify(user));
 

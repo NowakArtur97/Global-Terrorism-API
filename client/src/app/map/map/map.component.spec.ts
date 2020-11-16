@@ -8,7 +8,6 @@ import { MaterialModule } from 'src/app/common/material.module';
 import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
-import User from '../../auth/models/user.model';
 import * as EventActions from '../../event/store/event.actions';
 import { MapComponent } from './map.component';
 
@@ -17,7 +16,7 @@ describe('MapComponent', () => {
   let fixture: ComponentFixture<MapComponent>;
   let store: Store<AppStoreState>;
   const initialStateWithUser: AuthStoreState = {
-    user: new User('token', new Date(Date.now() + 36000000)),
+    user: { token: 'token', expirationDate: new Date(Date.now() + 36000000) },
     authErrorMessages: [],
     isLoading: false,
   };

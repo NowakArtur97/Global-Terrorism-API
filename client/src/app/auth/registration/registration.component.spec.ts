@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.state';
 
-import RegistrationCheckResponse from '../models/registration-check-response.model';
 import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
 import * as AuthActions from '../store/auth.actions';
@@ -20,12 +19,12 @@ describe('RegistrationComponent', () => {
   let store: Store<AppStoreState>;
   let authService: AuthService;
 
-  const registrationData = new RegistrationData(
-    'UserName',
-    'email@email.com',
-    'Password123!',
-    'Password123!'
-  );
+  const registrationData: RegistrationData = {
+    userName: 'UserName',
+    email: 'email@email.com',
+    password: 'Password123!',
+    matchingPassword: 'Password123!',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -109,7 +108,7 @@ describe('RegistrationComponent', () => {
 
     it('with user name already taken should be invalid', () => {
       spyOn(authService, 'checkUserData').and.callFake(() =>
-        of(new RegistrationCheckResponse(false, true))
+        of({ isUserNameAvailable: false, isEmailAvailable: true })
       );
 
       const userName = component.userName;
@@ -157,7 +156,7 @@ describe('RegistrationComponent', () => {
 
     it('with email already taken should be invalid', () => {
       spyOn(authService, 'checkUserData').and.callFake(() =>
-        of(new RegistrationCheckResponse(true, false))
+        of({ isUserNameAvailable: true, isEmailAvailable: false })
       );
 
       const email = component.email;
@@ -330,7 +329,7 @@ describe('RegistrationComponent', () => {
 
     it('with passwords meeting two characteristic rules should be valid', () => {
       spyOn(authService, 'checkUserData').and.callFake(() =>
-        of(new RegistrationCheckResponse(true, true))
+        of({ isUserNameAvailable: true, isEmailAvailable: true })
       );
 
       const password = component.password;
@@ -363,7 +362,7 @@ describe('RegistrationComponent', () => {
       expect(component.registerForm.valid).toBeFalsy();
 
       spyOn(authService, 'checkUserData').and.callFake(() =>
-        of(new RegistrationCheckResponse(true, true))
+        of({ isUserNameAvailable: true, isEmailAvailable: true })
       );
 
       const {
