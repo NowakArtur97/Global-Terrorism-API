@@ -107,9 +107,9 @@ describe('AuthService', () => {
     it('should get user from local storage when user data is stored in local storage', () => {
       const expirationDate = new Date(Date.now() + 36000000);
       const userData: {
-        _token: string;
-        _expirationDate: Date;
-      } = { _token: 'token', _expirationDate: expirationDate };
+        token: string;
+        expirationDate: Date;
+      } = { token: 'token', expirationDate: expirationDate };
       const userExpected: User = { token: 'token', expirationDate };
 
       spyOn(localStorage, 'getItem').and.callFake(() =>
