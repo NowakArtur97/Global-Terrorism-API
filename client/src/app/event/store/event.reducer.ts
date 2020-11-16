@@ -56,13 +56,13 @@ const _eventReducer = createReducer(
     };
   }),
 
-  on(EventActions.updateEventFinish, (state, { eventToUpdate }) => {
+  on(EventActions.updateEventFinish, (state, { eventUpdated }) => {
     return eventAdapter.updateOne(
-      { id: eventToUpdate.id, changes: { ...eventToUpdate } },
+      { id: eventUpdated.id, changes: { ...eventUpdated } },
       {
         ...state,
         eventToUpdate: null,
-        lastUpdatedEvent: { ...eventToUpdate },
+        lastUpdatedEvent: { ...eventUpdated },
         isLoading: false,
       }
     );

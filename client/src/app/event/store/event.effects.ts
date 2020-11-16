@@ -49,9 +49,9 @@ export default class EventEffects {
       ofType(EventActions.updateEvent),
       switchMap(({ eventDTO }) =>
         this.eventService.update(eventDTO).pipe(
-          map((eventToUpdate) =>
+          map((eventUpdated) =>
             EventActions.updateEventFinish({
-              eventToUpdate,
+              eventUpdated,
             })
           )
         )

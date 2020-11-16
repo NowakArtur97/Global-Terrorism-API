@@ -316,7 +316,7 @@ describe('eventReducer', () => {
         eventToUpdate: event2Updated,
         isLoading: false,
       };
-      const stateWithEventToUpdate: EventStoreState = {
+      const stateWithLastUpdatedEvent: EventStoreState = {
         ids: [6, 12],
         entities: eventsDictionaryWithUpdatedEvents,
         lastUpdatedEvent: event2Updated,
@@ -324,10 +324,10 @@ describe('eventReducer', () => {
         isLoading: false,
       };
       const action = EventActions.updateEventFinish({
-        eventToUpdate: event2Updated,
+        eventUpdated: event2Updated,
       });
       const actualState = eventReducer(stateWithEventsUpdated, action);
-      const expectedState = { ...stateWithEventToUpdate };
+      const expectedState = { ...stateWithLastUpdatedEvent };
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.ids.length).toBe(2);
