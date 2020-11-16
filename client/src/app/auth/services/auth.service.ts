@@ -64,7 +64,7 @@ export default class AuthService {
       _expirationDate: Date;
     } = JSON.parse(localStorage.getItem(this.userLocaleStorageKey));
     return userData?._token
-      ? new User(userData._token, userData._expirationDate)
+      ? { token: userData._token, expirationDate: userData._expirationDate }
       : null;
   }
 

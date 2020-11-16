@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import AppStoreState from 'src/app/store/app.state';
 
-import LoginData from '../models/login-data.model';
 import * as AuthActions from '../store/auth.actions';
 
 @Component({
@@ -46,7 +45,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     const { userNameOrEmail, password } = this.loginForm.value;
     this.store.dispatch(
       AuthActions.loginUserStart({
-        loginData: new LoginData(userNameOrEmail, password),
+        loginData: { userNameOrEmail, password },
       })
     );
   }

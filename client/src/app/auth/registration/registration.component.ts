@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import CommonValidators from 'src/app/common/validators/common.validator';
 import AppStoreState from 'src/app/store/app.state';
 
-import RegistrationData from '../models/registration-data.model';
 import AuthService from '../services/auth.service';
 import * as AuthActions from '../store/auth.actions';
 import PasswordValidators from './validators/password.validator';
@@ -135,12 +134,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     } = this.registerForm.value;
     this.store.dispatch(
       AuthActions.registerUserStart({
-        registrationData: new RegistrationData(
+        registrationData: {
           userName,
           email,
           password,
-          matchingPassword
-        ),
+          matchingPassword,
+        },
       })
     );
   }
