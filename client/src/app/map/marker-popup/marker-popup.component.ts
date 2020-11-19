@@ -47,4 +47,8 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
   updateEvent(): void {
     this.store.dispatch(EventActions.updateEventStart({ id: this.event.id }));
   }
+
+  deleteEvent(): void {
+    this.store.dispatch(EventActions.deleteEventStart({ id: this.event.id }));
+  }
 }
