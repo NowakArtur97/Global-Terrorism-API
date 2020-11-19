@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgElement, WithProperties } from '@angular/elements';
 import * as L from 'leaflet';
+import City from '../city/models/city.model';
 
 import Event from '../event/models/event.model';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
@@ -59,5 +60,17 @@ export default class MarkerService {
       markers.push(this.createCircleMarker(event, map));
     }
     return markers;
+  }
+
+  removeMarker(map: L.Map, markers: L.CircleMarker[], city: City) {
+    const markerToDelete = markers.find((marker) => {
+      const { lat, lng } = marker.getLatLng();
+      const { latitude, longitude } = city;
+      return lat === latitude && lng === longitude;
+    });
+    console.log(markerToDelete);
+    if (markerToDelete) {
+      map.removeLayer(markerToDelete);
+    }
   }
 }

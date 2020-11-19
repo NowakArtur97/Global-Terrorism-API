@@ -1,5 +1,11 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  Action,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
@@ -7,7 +13,7 @@ import * as EventActions from './event.actions';
 export interface EventStoreState extends EntityState<Event> {
   eventToUpdate: Event;
   lastUpdatedEvent: Event;
-  lastDeletedEventId: number;
+  lastDeletedEvent: Event;
   isLoading: boolean;
 }
 
@@ -16,7 +22,7 @@ const eventAdapter = createEntityAdapter<Event>();
 const initialState = eventAdapter.getInitialState({
   eventToUpdate: null,
   lastUpdatedEvent: null,
-  lastDeletedEventId: null,
+  lastDeletedEvent: null,
   isLoading: false,
 });
 
@@ -74,8 +80,11 @@ const _eventReducer = createReducer(
     return { ...state, isLoading: true };
   }),
 
-  on(EventActions.deleteEvent, (state, { id }) => {
-    return eventAdapter.removeOne(id, { ...state, lastDeletedEventId: id });
+  on(EventActions.deleteEvent, (state, { eventDeleted }) => {
+    return eventAdapter.removeOne(eventDeleted.id, {
+      ...state,
+      lastDeletedEvent: eventDeleted,
+    });
   })
 );
 
@@ -88,8 +97,7 @@ export default function eventReducer(
 
 const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 const getLastUpdatedEvent = (state: EventStoreState) => state.lastUpdatedEvent;
-const getLastDeletedEventId = (state: EventStoreState) =>
-  state.lastDeletedEventId;
+const getLastDeletedEvent = (state: EventStoreState) => state.lastDeletedEvent;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -109,7 +117,7 @@ export const selectLastUpdatedEvent = createSelector(
   selectEventState,
   getLastUpdatedEvent
 );
-export const selectLastDeletedEventId = createSelector(
+export const selectLastDeletedEvent = createSelector(
   selectEventState,
-  getLastDeletedEventId
+  getLastDeletedEvent
 );

@@ -9,7 +9,10 @@ import Event from '../../event/models/event.model';
 
 import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
-import { selectAllEvents } from 'src/app/event/store/event.reducer';
+import {
+  selectAllEvents,
+  selectLastDeletedEvent,
+} from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 @Component({
   selector: 'app-map',
@@ -19,9 +22,11 @@ import AppStoreState from 'src/app/store/app.state';
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private map: L.Map;
   private markers: L.CircleMarker[] = [];
+  private eventsSubscription$: Subscription;
+  private userSubscription$: Subscription;
+  private deleteEventSubscription$: Subscription;
+
   events: Event[] = [];
-  citiesSubscription$: Subscription;
-  userSubscription$: Subscription;
 
   icon = icon({
     iconSize: [25, 41],
@@ -36,7 +41,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.citiesSubscription$ = this.store
+    this.eventsSubscription$ = this.store
       .select(selectAllEvents)
       .pipe(
         tap((events) => {
@@ -55,10 +60,22 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.store.dispatch(EventActions.fetchEvents());
         }
       });
+
+    this.deleteEventSubscription$ = this.store
+      .select(selectLastDeletedEvent)
+      .subscribe((lastDeletedEvent) => {
+        if (lastDeletedEvent) {
+          this.markerService.removeMarker(
+            this.map,
+            this.markers,
+            lastDeletedEvent.city
+          );
+        }
+      });
   }
 
   ngOnDestroy(): void {
-    this.citiesSubscription$?.unsubscribe();
+    this.eventsSubscription$?.unsubscribe();
     this.userSubscription$?.unsubscribe();
   }
 

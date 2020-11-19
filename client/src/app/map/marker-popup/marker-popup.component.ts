@@ -1,8 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import City from 'src/app/city/models/city.model';
-import { selectLastDeletedEventId, selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
+import { selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 import Victim from 'src/app/victim/models/victim.model';
 
@@ -17,7 +23,6 @@ import * as EventActions from '../../event/store/event.actions';
 })
 export class MarkerPopupComponent implements OnInit, OnDestroy {
   private updateSubscription$: Subscription;
-  private deleteSubscription$: Subscription;
 
   @Input()
   event: Event;
@@ -39,14 +44,6 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
           this.victim = eventModel.victim;
         }
       });
-
-    this.deleteSubscription$ = this.store
-      .select(selectLastDeletedEventId)
-      .subscribe((lastDeletedEventId) => {
-        if (lastDeletedEventId === this.event.id) {
-          // TODO: Remove markup
-        }
-      });
   }
 
   ngOnDestroy(): void {
@@ -58,6 +55,8 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
   }
 
   deleteEvent(): void {
-    this.store.dispatch(EventActions.deleteEventStart({ id: this.event.id }));
+    this.store.dispatch(
+      EventActions.deleteEventStart({ eventToDelete: this.event })
+    );
   }
 }
