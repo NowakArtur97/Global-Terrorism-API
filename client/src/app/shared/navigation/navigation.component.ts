@@ -23,7 +23,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private updateSubscription$: Subscription;
   isAuthenticated = false;
 
-  @ViewChild('sidenavForms') sidenavFormsElement: MatSidenav;
+  @ViewChild('sidenavForms') sidenavFormElement: MatSidenav;
 
   constructor(private dialog: MatDialog, private store: Store<AppStoreState>) {}
 
@@ -35,6 +35,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.isAuthenticated = !!user;
         if (this.isAuthenticated) {
           this.dialog.closeAll();
+        } else {
+          this.sidenavFormElement?.close();
         }
       });
 
@@ -42,7 +44,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
       .select(selectEventToUpdate)
       .subscribe((eventToUpdate) => {
         if (eventToUpdate) {
-          this.sidenavFormsElement.open();
+          this.sidenavFormElement?.open();
         }
       });
   }
