@@ -61,7 +61,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((events: Event[]) => {
         this.events = events;
-        if (this.map && this.events) {
+        if (this.map && this.events && this.markers?.length === 0) {
           this.showMarkers();
         }
       });
@@ -104,8 +104,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     );
     tiles.addTo(this.map);
-
-    // this.showMarkers();
   }
 
   private showMarkers(): void {

@@ -84,6 +84,7 @@ const _eventReducer = createReducer(
     return eventAdapter.removeOne(eventDeleted.id, {
       ...state,
       lastDeletedEvent: eventDeleted,
+      isLoading: false,
     });
   })
 );
