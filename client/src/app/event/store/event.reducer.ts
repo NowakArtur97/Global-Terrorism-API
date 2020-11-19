@@ -7,6 +7,7 @@ import * as EventActions from './event.actions';
 export interface EventStoreState extends EntityState<Event> {
   eventToUpdate: Event;
   lastUpdatedEvent: Event;
+  lastDeletedEventId: number;
   isLoading: boolean;
 }
 
@@ -15,6 +16,7 @@ const eventAdapter = createEntityAdapter<Event>();
 const initialState = eventAdapter.getInitialState({
   eventToUpdate: null,
   lastUpdatedEvent: null,
+  lastDeletedEventId: null,
   isLoading: false,
 });
 
@@ -73,7 +75,7 @@ const _eventReducer = createReducer(
   }),
 
   on(EventActions.deleteEvent, (state, { id }) => {
-    return eventAdapter.removeOne(id, state);
+    return eventAdapter.removeOne(id, { ...state, lastDeletedEventId: id });
   })
 );
 
@@ -86,6 +88,8 @@ export default function eventReducer(
 
 const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 const getLastUpdatedEvent = (state: EventStoreState) => state.lastUpdatedEvent;
+const getLastDeletedEventId = (state: EventStoreState) =>
+  state.lastDeletedEventId;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -104,4 +108,8 @@ export const selectEventToUpdate = createSelector(
 export const selectLastUpdatedEvent = createSelector(
   selectEventState,
   getLastUpdatedEvent
+);
+export const selectLastDeletedEventId = createSelector(
+  selectEventState,
+  getLastDeletedEventId
 );

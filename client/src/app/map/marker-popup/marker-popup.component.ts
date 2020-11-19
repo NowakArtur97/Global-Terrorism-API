@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import City from 'src/app/city/models/city.model';
-import { selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
+import { selectLastDeletedEventId, selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 import Victim from 'src/app/victim/models/victim.model';
 
@@ -17,6 +17,7 @@ import * as EventActions from '../../event/store/event.actions';
 })
 export class MarkerPopupComponent implements OnInit, OnDestroy {
   private updateSubscription$: Subscription;
+  private deleteSubscription$: Subscription;
 
   @Input()
   event: Event;
@@ -36,6 +37,14 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
           this.event = eventModel;
           this.city = eventModel.city;
           this.victim = eventModel.victim;
+        }
+      });
+
+    this.deleteSubscription$ = this.store
+      .select(selectLastDeletedEventId)
+      .subscribe((lastDeletedEventId) => {
+        if (lastDeletedEventId === this.event.id) {
+          // TODO: Remove markup
         }
       });
   }
