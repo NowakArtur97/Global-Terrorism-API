@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { of, ReplaySubject } from 'rxjs';
+import { empty, Observable, of, ReplaySubject } from 'rxjs';
+import { EMPTY } from 'rxjs/internal/observable/empty';
 
 import EventsGetResponse from '../../models/events-get-response.model';
 import EventService from '../../services/event.service';
@@ -58,6 +59,7 @@ describe('EventEffects', () => {
             'get',
             'add',
             'update',
+            'delete',
           ]),
         },
       ],
@@ -235,6 +237,57 @@ describe('EventEffects', () => {
           EventActions.updateEventFinish({ eventUpdated })
         );
         expect(eventService.update).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('deleteEventStart$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+      actions$.next(EventActions.deleteEventStart);
+      (eventService.delete as jasmine.Spy).and.returnValue(EMPTY);
+    });
+
+    it('should return a deleteEvent action', () => {
+      const eventDeleted = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date: new Date(),
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 10,
+          numberOfPerpetratorFatalities: 2,
+          totalNumberOfInjured: 12,
+          numberOfPerpetratorInjured: 2,
+          valueOfPropertyDamage: 2200,
+        },
+      };
+
+      eventEffects.deleteEventStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.deleteEvent({ eventDeleted })
+        );
+        expect(eventService.delete).toHaveBeenCalled();
       });
     });
   });
