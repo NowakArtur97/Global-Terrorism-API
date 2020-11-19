@@ -61,7 +61,7 @@ export default class MarkerService {
     return markers;
   }
 
-  removeMarker(map: L.Map, markers: L.CircleMarker[], city: City) {
+  removeMarker(map: L.Map, markers: L.CircleMarker[], city: City): void {
     const markerToDelete = markers.find((marker) => {
       const { lat, lng } = marker.getLatLng();
       const { latitude, longitude } = city;
@@ -72,7 +72,7 @@ export default class MarkerService {
     }
   }
 
-  cleanMapFromMarkers(map: L.Map, markers: L.CircleMarker[]) {
+  cleanMapFromMarkers(map: L.Map, markers: L.CircleMarker[]): void {
     markers.forEach((marker) => map.removeLayer(marker));
   }
 }
