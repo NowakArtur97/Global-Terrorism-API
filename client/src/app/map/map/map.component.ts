@@ -41,23 +41,28 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.eventsSubscription$ = this.store
-      .select(selectAllEvents)
-      .pipe(
-        tap((events) => {
-          if (this.map && events && events.length === 0) {
-            this.markers.forEach((marker) => this.map.removeLayer(marker));
-          }
-        })
-      )
-      .subscribe((events: Event[]) => (this.events = events));
-
     this.userSubscription$ = this.store
       .select('auth')
       .pipe(map((authState) => authState.user))
       .subscribe((user: User) => {
         if (user) {
           this.store.dispatch(EventActions.fetchEvents());
+        }
+      });
+
+    this.eventsSubscription$ = this.store
+      .select(selectAllEvents)
+      .pipe(
+        tap((events) => {
+          if (this.map && events && events.length === 0) {
+            this.markerService.cleanMapFromMarkers(this.map, this.markers);
+          }
+        })
+      )
+      .subscribe((events: Event[]) => {
+        this.events = events;
+        if (this.map && this.events) {
+          this.showMarkers();
         }
       });
 
@@ -77,6 +82,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.eventsSubscription$?.unsubscribe();
     this.userSubscription$?.unsubscribe();
+    this.deleteEventSubscription$?.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -99,7 +105,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     tiles.addTo(this.map);
 
-    this.showMarkers();
+    // this.showMarkers();
   }
 
   private showMarkers(): void {

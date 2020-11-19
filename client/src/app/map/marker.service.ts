@@ -33,9 +33,8 @@ export default class MarkerService {
   private getMaxRadius(events: Event[]): number {
     return Math.max(
       ...events.map(
-        (event) =>
-          event.victim.totalNumberOfFatalities +
-          event.victim.totalNumberOfInjured
+        ({ victim }) =>
+          victim.totalNumberOfFatalities + victim.totalNumberOfInjured
       ),
       0
     );
@@ -68,9 +67,12 @@ export default class MarkerService {
       const { latitude, longitude } = city;
       return lat === latitude && lng === longitude;
     });
-    console.log(markerToDelete);
     if (markerToDelete) {
       map.removeLayer(markerToDelete);
     }
+  }
+
+  cleanMapFromMarkers(map: L.Map, markers: L.CircleMarker[]) {
+    markers.forEach((marker) => map.removeLayer(marker));
   }
 }
