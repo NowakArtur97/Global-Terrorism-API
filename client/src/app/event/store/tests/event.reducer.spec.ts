@@ -188,7 +188,6 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWithEvents };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(2);
     });
 
     it('should store empty events list', () => {
@@ -198,7 +197,6 @@ describe('eventReducer', () => {
       const expectedState = { ...state, entities: {} };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
@@ -209,7 +207,6 @@ describe('eventReducer', () => {
       const expectedState = { ...state };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
@@ -228,7 +225,6 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWhenAddEventStart };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
@@ -255,7 +251,6 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWithOneEvent };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(1);
     });
   });
 
@@ -266,7 +261,6 @@ describe('eventReducer', () => {
       const expectedState = { ...state };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
@@ -285,12 +279,11 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWithEventToUpdate };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
   describe('EventActions.updateEvent', () => {
-    it('should start loading', () => {
+    it('should remove last updated event and start loading', () => {
       const stateWithLastUpdatedEvent: EventStoreState = {
         ids: [],
         entities: {},
@@ -312,25 +305,24 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWhenUpdateEvent };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(0);
     });
   });
 
   describe('EventActions.updateEventFinish', () => {
-    it('should start loading', () => {
+    it('should set last updated event and remove event to update', () => {
       const stateWithEventsUpdated: EventStoreState = {
         ids: [6, 12],
         entities: eventsDictionary,
-        lastUpdatedEvent: null,
         eventToUpdate: event2Updated,
+        lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
       };
       const stateWithLastUpdatedEvent: EventStoreState = {
         ids: [6, 12],
         entities: eventsDictionaryWithUpdatedEvents,
-        lastUpdatedEvent: event2Updated,
         eventToUpdate: null,
+        lastUpdatedEvent: event2Updated,
         lastDeletedEvent: null,
         isLoading: false,
       };
@@ -341,7 +333,58 @@ describe('eventReducer', () => {
       const expectedState = { ...stateWithLastUpdatedEvent };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.ids.length).toBe(2);
+    });
+  });
+
+  describe('EventActions.deleteEventStart', () => {
+    it('should remove last deleted event and start loading', () => {
+      const stateWithLastDeletedEvent: EventStoreState = {
+        ids: [],
+        entities: {},
+        eventToUpdate: null,
+        lastUpdatedEvent: null,
+        lastDeletedEvent: event1,
+        isLoading: false,
+      };
+      const stateWhenDeleteEventStart: EventStoreState = {
+        ids: [],
+        entities: {},
+        eventToUpdate: null,
+        lastUpdatedEvent: null,
+        lastDeletedEvent: null,
+        isLoading: true,
+      };
+      const action = EventActions.deleteEventStart({ eventToDelete: event1 });
+      const actualState = eventReducer(stateWithLastDeletedEvent, action);
+      const expectedState = { ...stateWhenDeleteEventStart };
+
+      expect(actualState).toEqual(expectedState);
+    });
+  });
+
+  describe('EventActions.deleteEvent', () => {
+    it('should set last deleted event and stop loading', () => {
+      const stateWhenDeleteEvent: EventStoreState = {
+        ids: [],
+        entities: {},
+        eventToUpdate: null,
+        lastUpdatedEvent: null,
+        lastDeletedEvent: null,
+        isLoading: true,
+      };
+      const stateAfterDeletingEvent: EventStoreState = {
+        ids: [],
+        entities: {},
+        eventToUpdate: null,
+        lastUpdatedEvent: null,
+        lastDeletedEvent: event1,
+        isLoading: false,
+      };
+      const action = EventActions.deleteEvent({ eventDeleted: event1 });
+      const actualState = eventReducer(stateWhenDeleteEvent, action);
+      const expectedState = { ...stateAfterDeletingEvent };
+
+      expect(actualState).toEqual(expectedState);
     });
   });
 });

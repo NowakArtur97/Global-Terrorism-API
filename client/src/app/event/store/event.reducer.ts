@@ -77,7 +77,7 @@ const _eventReducer = createReducer(
   }),
 
   on(EventActions.deleteEventStart, (state) => {
-    return { ...state, isLoading: true };
+    return { ...state, lastDeletedEvent: null, isLoading: true };
   }),
 
   on(EventActions.deleteEvent, (state, { eventDeleted }) => {
