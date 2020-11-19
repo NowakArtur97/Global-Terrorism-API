@@ -79,21 +79,21 @@ describe('CountryFormComponent', () => {
       valueOfPropertyDamage: -2000,
     },
   };
-  const initialState: EventStoreState = {
+  const state: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate: null,
     lastUpdatedEvent: null,
     isLoading: false,
   };
-  const initialStateWithEventToUpdate: EventStoreState = {
+  const stateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate,
     lastUpdatedEvent: null,
     isLoading: false,
   };
-  const initialStateWithInvalidEventToUpdate: EventStoreState = {
+  const stateWithInvalidEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate: invalidEventToUpdate,
@@ -126,7 +126,7 @@ describe('CountryFormComponent', () => {
       beforeEach(() => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialState);
+            return of(state);
           }
         });
 
@@ -162,7 +162,7 @@ describe('CountryFormComponent', () => {
       it('valid event should be valid', () => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialStateWithEventToUpdate.eventToUpdate);
+            return of(stateWithEventToUpdate.eventToUpdate);
           }
         });
 
@@ -178,7 +178,7 @@ describe('CountryFormComponent', () => {
       it('invalid event should be invalid', () => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
+            return of(stateWithInvalidEventToUpdate.eventToUpdate);
           }
         });
 

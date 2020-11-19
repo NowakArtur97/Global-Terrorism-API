@@ -79,21 +79,21 @@ describe('VictimFormComponent', () => {
       valueOfPropertyDamage: -2000,
     },
   };
-  const initialState: EventStoreState = {
+  const state: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate: null,
     lastUpdatedEvent: null,
     isLoading: false,
   };
-  const initialStateWithEventToUpdate: EventStoreState = {
+  const stateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate,
     lastUpdatedEvent: null,
     isLoading: false,
   };
-  const initialStateWithInvalidEventToUpdate: EventStoreState = {
+  const stateWithInvalidEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate: invalidEventToUpdate,
@@ -126,7 +126,7 @@ describe('VictimFormComponent', () => {
       beforeEach(() => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialState.eventToUpdate);
+            return of(state.eventToUpdate);
           }
         });
 
@@ -296,7 +296,7 @@ describe('VictimFormComponent', () => {
       it('valid event should be valid', () => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialStateWithEventToUpdate.eventToUpdate);
+            return of(stateWithEventToUpdate.eventToUpdate);
           }
         });
 
@@ -324,7 +324,7 @@ describe('VictimFormComponent', () => {
       it('invalid event should be invalid', () => {
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
-            return of(initialStateWithInvalidEventToUpdate.eventToUpdate);
+            return of(stateWithInvalidEventToUpdate.eventToUpdate);
           }
         });
 

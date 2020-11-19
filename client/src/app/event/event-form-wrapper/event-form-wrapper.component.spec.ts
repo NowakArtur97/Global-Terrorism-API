@@ -94,14 +94,14 @@ describe('EventFormWrapperComponent', () => {
       valueOfPropertyDamage: -2000,
     },
   };
-  const initialState: EventStoreState = {
+  const state: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate: null,
     lastUpdatedEvent: null,
     isLoading: false,
   };
-  const initialStateWithEventToUpdate: EventStoreState = {
+  const stateWithEventToUpdate: EventStoreState = {
     ids: [],
     entities: {},
     eventToUpdate,
@@ -141,9 +141,9 @@ describe('EventFormWrapperComponent', () => {
     it('should dispatch addEventStart action', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === 'event') {
-          return of(initialState);
+          return of(state);
         } else if (selector === selectEventToUpdate) {
-          return of(initialState.eventToUpdate);
+          return of(state.eventToUpdate);
         }
       });
       spyOn(store, 'dispatch');
@@ -220,9 +220,9 @@ describe('EventFormWrapperComponent', () => {
     it('with valid event is submited should dispatch updateEvent action', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === 'event') {
-          return of(initialStateWithEventToUpdate);
+          return of(stateWithEventToUpdate);
         } else if (selector === selectEventToUpdate) {
-          return of(initialStateWithEventToUpdate.eventToUpdate);
+          return of(stateWithEventToUpdate.eventToUpdate);
         }
       });
       spyOn(store, 'dispatch');

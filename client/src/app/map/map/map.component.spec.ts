@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EntityState } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
@@ -15,14 +14,10 @@ describe('MapComponent', () => {
   let component: MapComponent;
   let fixture: ComponentFixture<MapComponent>;
   let store: Store<AppStoreState>;
-  const initialStateWithUser: AuthStoreState = {
+  const stateWithUser: AuthStoreState = {
     user: { token: 'token', expirationDate: new Date(Date.now() + 36000000) },
     authErrorMessages: [],
     isLoading: false,
-  };
-  const initialStateWithEvents: EntityState<Event> = {
-    ids: [],
-    entities: {},
   };
 
   beforeEach(async () => {
@@ -48,7 +43,7 @@ describe('MapComponent', () => {
         return of(emptyArray);
       }
       if (selector === 'auth') {
-        return of(initialStateWithUser);
+        return of(stateWithUser);
       }
     });
     spyOn(store, 'dispatch');
