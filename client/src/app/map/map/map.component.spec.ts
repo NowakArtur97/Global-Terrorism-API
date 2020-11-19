@@ -4,7 +4,10 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
-import { selectAllEvents } from 'src/app/event/store/event.reducer';
+import {
+  selectAllEvents,
+  selectLastDeletedEvent,
+} from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -39,14 +42,15 @@ describe('MapComponent', () => {
     store = TestBed.inject(Store);
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === selectAllEvents) {
-        const emptyArray: Event[] = [];
-        return of(emptyArray);
-      }
-      if (selector === 'auth') {
+        return of([]);
+      } else if (selector === 'auth') {
         return of(stateWithUser);
+      } else if (selector === selectLastDeletedEvent) {
+        return of();
       }
     });
     spyOn(store, 'dispatch');
+
     fixture.detectChanges();
     component.ngOnInit();
   });

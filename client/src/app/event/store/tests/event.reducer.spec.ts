@@ -160,13 +160,15 @@ const state: EventStoreState = {
   entities: {},
   eventToUpdate: null,
   lastUpdatedEvent: null,
+  lastDeletedEvent: null,
   isLoading: false,
 };
 const stateWithEvents: EventStoreState = {
   ids: [6, 12],
   entities: eventsDictionary,
-  lastUpdatedEvent: null,
   eventToUpdate: null,
+  lastUpdatedEvent: null,
+  lastDeletedEvent: null,
   isLoading: false,
 };
 const stateWithEventToUpdate: EventStoreState = {
@@ -174,6 +176,7 @@ const stateWithEventToUpdate: EventStoreState = {
   entities: {},
   eventToUpdate: event1,
   lastUpdatedEvent: null,
+  lastDeletedEvent: null,
   isLoading: false,
 };
 
@@ -217,6 +220,7 @@ describe('eventReducer', () => {
         entities: {},
         eventToUpdate: null,
         lastUpdatedEvent: null,
+        lastDeletedEvent: null,
         isLoading: true,
       };
       const action = EventActions.addEventStart({ eventDTO });
@@ -235,6 +239,7 @@ describe('eventReducer', () => {
         entities: {},
         eventToUpdate: null,
         lastUpdatedEvent: null,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const stateWithOneEvent: EventStoreState = {
@@ -242,6 +247,7 @@ describe('eventReducer', () => {
         entities: eventsDictionaryWithOneEvent,
         eventToUpdate: null,
         lastUpdatedEvent: null,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const action = EventActions.addEvent({ event: event1 });
@@ -271,6 +277,7 @@ describe('eventReducer', () => {
         entities: {},
         eventToUpdate: null,
         lastUpdatedEvent: null,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const action = EventActions.updateEventFetch({ eventToUpdate: event1 });
@@ -289,6 +296,7 @@ describe('eventReducer', () => {
         entities: {},
         eventToUpdate: null,
         lastUpdatedEvent: event1,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const stateWhenUpdateEvent: EventStoreState = {
@@ -296,6 +304,7 @@ describe('eventReducer', () => {
         entities: {},
         eventToUpdate: null,
         lastUpdatedEvent: null,
+        lastDeletedEvent: null,
         isLoading: true,
       };
       const action = EventActions.updateEvent({ eventDTO });
@@ -314,6 +323,7 @@ describe('eventReducer', () => {
         entities: eventsDictionary,
         lastUpdatedEvent: null,
         eventToUpdate: event2Updated,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const stateWithLastUpdatedEvent: EventStoreState = {
@@ -321,6 +331,7 @@ describe('eventReducer', () => {
         entities: eventsDictionaryWithUpdatedEvents,
         lastUpdatedEvent: event2Updated,
         eventToUpdate: null,
+        lastDeletedEvent: null,
         isLoading: false,
       };
       const action = EventActions.updateEventFinish({

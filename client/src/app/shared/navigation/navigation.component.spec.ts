@@ -9,7 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
@@ -20,7 +23,10 @@ import { CityModule } from 'src/app/city/city.module';
 import { MaterialModule } from 'src/app/common/material.module';
 import { CountryModule } from 'src/app/country/country.module';
 import EventModule from 'src/app/event/event.module';
-import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
+import {
+  EventStoreState,
+  selectEventToUpdate,
+} from 'src/app/event/store/event.reducer';
 import { ProvinceModule } from 'src/app/province/province.module';
 import AppStoreState from 'src/app/store/app.state';
 import { TargetModule } from 'src/app/target/target.module';
@@ -47,6 +53,7 @@ describe('NavigationComponent', () => {
     entities: {},
     eventToUpdate: null,
     lastUpdatedEvent: null,
+    lastDeletedEvent: null,
     isLoading: false,
   };
 
@@ -152,6 +159,7 @@ describe('NavigationComponent', () => {
       entities: {},
       eventToUpdate,
       lastUpdatedEvent: null,
+      lastDeletedEvent: null,
       isLoading: false,
     };
     const user = {
