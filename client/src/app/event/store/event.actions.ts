@@ -43,3 +43,10 @@ export const updateEventFinish = createAction(
   '[Event] Update Event Finish',
   props<{ eventUpdated: Event }>()
 );
+
+export const deleteEventStart = createAction('[Event] Delete Event Start');
+
+export const deleteEvent = createAction(
+  '[Event] Delete Event',
+  props<{ id: number }>()
+);

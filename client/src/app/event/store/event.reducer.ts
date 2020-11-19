@@ -66,6 +66,14 @@ const _eventReducer = createReducer(
         isLoading: false,
       }
     );
+  }),
+
+  on(EventActions.deleteEventStart, (state) => {
+    return { ...state, isLoading: true };
+  }),
+
+  on(EventActions.deleteEvent, (state, { id }) => {
+    return eventAdapter.removeOne(id, state);
   })
 );
 
