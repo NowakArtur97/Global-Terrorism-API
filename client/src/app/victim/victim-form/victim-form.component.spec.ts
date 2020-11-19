@@ -134,6 +134,21 @@ describe('VictimFormComponent', () => {
         component.ngOnInit();
       });
 
+      it('which is valid should be valid', () => {
+        component.totalNumberOfFatalities.setValue(4);
+        component.totalNumberOfInjured.setValue(7);
+        component.numberOfPerpetratorFatalities.setValue(2);
+        component.numberOfPerpetratorInjured.setValue(1);
+        component.valueOfPropertyDamage.setValue(1000);
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.totalNumberOfFatalities.valid).toBeTruthy();
+        expect(component.totalNumberOfInjured.valid).toBeTruthy();
+        expect(component.numberOfPerpetratorFatalities.valid).toBeTruthy();
+        expect(component.numberOfPerpetratorInjured.valid).toBeTruthy();
+        expect(component.valueOfPropertyDamage.valid).toBeTruthy();
+      });
+
       it('with empty total number of fatalities should be invalid', () => {
         component.totalNumberOfFatalities.setValue('');
 

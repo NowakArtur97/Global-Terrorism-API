@@ -134,6 +134,17 @@ describe('CityFormComponent', () => {
         component.ngOnInit();
       });
 
+      it('which is valid should be valid', () => {
+        component.name.setValue('city');
+        component.latitude.setValue(20);
+        component.longitude.setValue(10);
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.name.valid).toBeTruthy();
+        expect(component.latitude.valid).toBeTruthy();
+        expect(component.longitude.valid).toBeTruthy();
+      });
+
       it('with empty name should be invalid', () => {
         component.name.setValue('');
 

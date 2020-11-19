@@ -134,6 +134,13 @@ describe('TargetFormComponent', () => {
         component.ngOnInit();
       });
 
+      it('which is valid should be valid', () => {
+        component.target.setValue('target');
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.target.valid).toBeTruthy();
+      });
+
       it('with empty target should be invalid', () => {
         component.target.setValue('');
 

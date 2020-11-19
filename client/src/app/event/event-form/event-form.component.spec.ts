@@ -121,7 +121,6 @@ describe('EventFormComponent', () => {
     store = TestBed.inject(Store);
   });
 
-  // TODO: valid add event test
   describe('form validation', () => {
     describe('when add event', () => {
       beforeEach(() => {
@@ -133,6 +132,23 @@ describe('EventFormComponent', () => {
 
         fixture.detectChanges();
         component.ngOnInit();
+      });
+
+      it('which is valid should be valid', () => {
+        component.summary.setValue('summary');
+        component.motive.setValue('motive');
+        component.date.setValue(new Date());
+        component.isPartOfMultipleIncidents.setValue('true');
+        component.isSuccessful.setValue('true');
+        component.isSuicidal.setValue('true');
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.summary.valid).toBeTruthy();
+        expect(component.motive.valid).toBeTruthy();
+        expect(component.date.valid).toBeTruthy();
+        expect(component.isPartOfMultipleIncidents.valid).toBeTruthy();
+        expect(component.isSuccessful.valid).toBeTruthy();
+        expect(component.isSuicidal.valid).toBeTruthy();
       });
 
       it('with empty summary should be invalid', () => {

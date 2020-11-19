@@ -134,6 +134,13 @@ describe('CountryFormComponent', () => {
         component.ngOnInit();
       });
 
+      it('which is valid should be valid', () => {
+        component.name.setValue('country');
+
+        expect(component.formGroup.valid).toBeTruthy();
+        expect(component.name.valid).toBeTruthy();
+      });
+
       it('with empty name should be invalid', () => {
         component.name.setValue('');
 
