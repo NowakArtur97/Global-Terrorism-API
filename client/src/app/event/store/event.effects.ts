@@ -58,4 +58,19 @@ export default class EventEffects {
       )
     )
   );
+
+  deleteEventStart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.deleteEventStart),
+      switchMap(({ id }) =>
+        this.eventService.delete(id).pipe(
+          map(() =>
+            EventActions.deleteEvent({
+              id,
+            })
+          )
+        )
+      )
+    )
+  );
 }
