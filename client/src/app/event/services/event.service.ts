@@ -43,7 +43,7 @@ export default class EventService extends GenericRestService<
   }
 
   delete(id: number): Observable<{}> {
-    return this.httpClient.delete<Event>(
+    return this.httpClient.delete<{}>(
       `${environment.baseApiUrl}/${this.actionUrl}/${id}`
     );
   }

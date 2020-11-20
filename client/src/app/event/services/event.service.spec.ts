@@ -12,6 +12,7 @@ describe('eventsService', () => {
   let httpMock: HttpTestingController;
 
   const BASE_URL = 'http://localhost:8080/api/v1/events';
+  const DEFAULT_DEPTH = 5;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -110,6 +111,54 @@ describe('eventsService', () => {
       const req = httpMock.expectOne(`${BASE_URL}?page=0&size=100`);
       expect(req.request.method).toBe('GET');
       req.flush(events);
+    });
+  });
+
+  describe('when get event', () => {
+    it('should return event', () => {
+      const event: Event = {
+        id: 6,
+        summary: 'summary',
+        motive: 'motive',
+        date: new Date(),
+        isPartOfMultipleIncidents: false,
+        isSuccessful: true,
+        isSuicidal: false,
+        target: {
+          id: 3,
+          target: 'target',
+          countryOfOrigin: { id: 1, name: 'country' },
+        },
+        city: {
+          id: 4,
+          name: 'city',
+          latitude: 20,
+          longitude: 10,
+          province: {
+            id: 2,
+            name: 'province',
+            country: { id: 1, name: 'country' },
+          },
+        },
+        victim: {
+          id: 5,
+          totalNumberOfFatalities: 11,
+          numberOfPerpetratorFatalities: 3,
+          totalNumberOfInjured: 14,
+          numberOfPerpetratorInjured: 4,
+          valueOfPropertyDamage: 2000,
+        },
+      };
+
+      eventService.get(event.id).subscribe((res) => {
+        expect(res).toEqual(event);
+      });
+
+      const req = httpMock.expectOne(
+        `${BASE_URL}/${event.id}/${DEFAULT_DEPTH}`
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(event);
     });
   });
 
@@ -280,6 +329,19 @@ describe('eventsService', () => {
       const req = httpMock.expectOne(`${BASE_URL}/${event.id}`);
       expect(req.request.method).toBe('PUT');
       req.flush(event);
+    });
+  });
+
+  describe('when delete event', () => {
+    it('should delete event', () => {
+      const eventId = 1;
+      eventService.delete(eventId).subscribe((res) => {
+        expect(res).toEqual(null);
+      });
+
+      const req = httpMock.expectOne(`${BASE_URL}/${eventId}`);
+      expect(req.request.method).toBe('DELETE');
+      req.flush(null);
     });
   });
 });
