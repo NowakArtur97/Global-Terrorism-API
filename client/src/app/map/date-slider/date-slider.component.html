@@ -1,8 +1,8 @@
-<!-- <mat-slider
-  [min]="min"
-  [max]="max"
-  [displayWith]="formatLabel"
-  [(ngModel)]="date"
-> 
-</mat-slider>-->
-<mat-slider [(ngModel)]="value"> </mat-slider>
+<mat-slider
+  [min]="0"
+  [max]="sliderRange"
+  (change)="onDateChange()"
+  [(ngModel)]="value"
+>
+</mat-slider>
+<input type="text" [value]="selectedDate | date: 'dd/MM/yyyy'" matInput />

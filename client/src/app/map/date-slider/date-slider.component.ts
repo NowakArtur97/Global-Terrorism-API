@@ -6,15 +6,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./date-slider.component.css'],
 })
 export class DateSliderComponent implements OnInit {
-  min = new Date(1970, 0, 1);
-  max = new Date();
-  date = new Date();
+  private minDate = new Date(1970, 0, 1);
+  private maxDate = new Date();
+  sliderRange: number;
+  selectedDate: Date;
   value = 0;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.sliderRange = this.getTimeDifference();
+    this.value = this.sliderRange;
+    this.selectedDate = new Date(this.maxDate);
+  }
 
-  formatLabel(value: Date): string {
-    return value.toTimeString();
+  private getTimeDifference(): number {
+    return Math.abs(this.maxDate.getTime() - this.minDate.getTime());
+  }
+
+  onDateChange(): void {
+    const startDate = new Date(this.minDate);
+    this.selectedDate = new Date(startDate.getTime() + this.value);
+
+    // TODO: Filter  events
+    console.log(this.selectedDate);
   }
 }
