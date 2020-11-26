@@ -47,6 +47,7 @@ describe('TargetFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
+          maxDate: new Date(),
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -124,6 +125,7 @@ describe('TargetFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
+          maxDate: new Date(),
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -179,6 +181,7 @@ describe('TargetFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
+          maxDate: new Date(),
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {

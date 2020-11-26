@@ -162,6 +162,7 @@ const state: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
+  maxDate: new Date(),
 };
 const stateWithEvents: EventStoreState = {
   ids: [6, 12],
@@ -170,6 +171,7 @@ const stateWithEvents: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
+  maxDate: new Date(),
 };
 const stateWithEventToUpdate: EventStoreState = {
   ids: [],
@@ -178,6 +180,7 @@ const stateWithEventToUpdate: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
+  maxDate: new Date(),
 };
 
 describe('eventReducer', () => {
@@ -219,6 +222,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
+        maxDate: new Date(),
       };
       const action = EventActions.addEventStart({ eventDTO });
       const actualState = eventReducer(state, action);
@@ -237,6 +241,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const stateWithOneEvent: EventStoreState = {
         ids: [6],
@@ -245,6 +250,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const action = EventActions.addEvent({ event: event1 });
       const actualState = eventReducer(stateWhenAddEventStart, action);
@@ -273,6 +279,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const action = EventActions.updateEventFetch({ eventToUpdate: event1 });
       const actualState = eventReducer(stateWhenUpdateEventStart, action);
@@ -291,6 +298,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: event1,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const stateWhenUpdateEvent: EventStoreState = {
         ids: [],
@@ -299,6 +307,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
+        maxDate: new Date(),
       };
       const action = EventActions.updateEvent({ eventDTO });
       const actualState = eventReducer(stateWithLastUpdatedEvent, action);
@@ -317,6 +326,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const stateWithLastUpdatedEvent: EventStoreState = {
         ids: [6, 12],
@@ -325,6 +335,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: event2Updated,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       const action = EventActions.updateEventFinish({
         eventUpdated: event2Updated,
@@ -345,6 +356,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: event1,
         isLoading: false,
+        maxDate: new Date(),
       };
       const stateWhenDeleteEventStart: EventStoreState = {
         ids: [],
@@ -353,6 +365,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
+        maxDate: new Date(),
       };
       const action = EventActions.deleteEventStart({ eventToDelete: event1 });
       const actualState = eventReducer(stateWithLastDeletedEvent, action);
@@ -371,6 +384,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
+        maxDate: new Date(),
       };
       const stateAfterDeletingEvent: EventStoreState = {
         ids: [],
@@ -379,6 +393,7 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: event1,
         isLoading: false,
+        maxDate: new Date(),
       };
       const action = EventActions.deleteEvent({ eventDeleted: event1 });
       const actualState = eventReducer(stateWhenDeleteEvent, action);

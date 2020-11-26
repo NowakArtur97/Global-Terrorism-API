@@ -55,6 +55,7 @@ describe('NavigationComponent', () => {
     lastUpdatedEvent: null,
     lastDeletedEvent: null,
     isLoading: false,
+    maxDate: new Date(),
   };
 
   beforeEach(async () => {
@@ -161,6 +162,7 @@ describe('NavigationComponent', () => {
       lastUpdatedEvent: null,
       lastDeletedEvent: null,
       isLoading: false,
+      maxDate: new Date(),
     };
     const user = {
       token: 'token',

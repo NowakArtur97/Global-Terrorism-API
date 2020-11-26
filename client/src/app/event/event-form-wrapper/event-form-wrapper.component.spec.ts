@@ -66,6 +66,7 @@ describe('EventFormWrapperComponent', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === 'event') {
@@ -186,6 +187,7 @@ describe('EventFormWrapperComponent', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
+        maxDate: new Date(),
       };
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === 'event') {
