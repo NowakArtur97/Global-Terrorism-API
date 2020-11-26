@@ -42,7 +42,9 @@ import java.util.*;
 @Slf4j
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist-mini.xlsx";
+    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
+
+    private final static int NUMBER_OF_ROWS_TO_SKIP = 850;
 
     private final Map<String, GroupNode> groupsWithEvents = new HashMap<>();
 
@@ -83,10 +85,14 @@ class OnApplicationStartupEventListener {
             try {
                 Sheet sheet = loadSheetFromFile();
 
+                log.info("##################### Inserting data to database #####################");
+
                 insertDataToDatabase(sheet);
 
                 workbook.close();
                 inputStream.close();
+
+                log.info("##################### All data inserted #####################");
 
             } catch (NullPointerException | FileNotFoundException e) {
 
@@ -116,25 +122,39 @@ class OnApplicationStartupEventListener {
 
         saveUser();
 
+        int numberOfRows = sheet.getLastRowNum();
+        int rowIndexToSave = 1;
+        int rowIndex = 0;
+
         for (Row row : sheet) {
+            rowIndex++;
 
-            RegionNode region = saveRegion(row);
+            if (rowIndexToSave == rowIndex) {
 
-            CountryNode country = saveCountry(row, region);
+                RegionNode region = saveRegion(row);
 
-            ProvinceNode province = saveProvince(row, country);
+                CountryNode country = saveCountry(row, region);
 
-            CityNode city = saveCity(row, province);
+                ProvinceNode province = saveProvince(row, country);
 
-            TargetNode target = saveTarget(row, country);
+                CityNode city = saveCity(row, province);
 
-            VictimNode victim = saveVictim(row);
+                TargetNode target = saveTarget(row, country);
 
-            EventNode event = saveEvent(row, target, city, victim);
+                VictimNode victim = saveVictim(row);
 
-            String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
+                EventNode event = saveEvent(row, target, city, victim);
 
-            manageGroup(groupName, event);
+                String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
+
+                manageGroup(groupName, event);
+
+                rowIndexToSave += NUMBER_OF_ROWS_TO_SKIP;
+            }
+
+            if (numberOfRows <= rowIndex) {
+                break;
+            }
         }
 
         saveAllGroups();
