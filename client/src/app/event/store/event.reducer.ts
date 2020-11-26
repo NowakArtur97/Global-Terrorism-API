@@ -1,5 +1,11 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  Action,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
@@ -123,8 +129,10 @@ export const selectLastDeletedEvent = createSelector(
   selectEventState,
   getLastDeletedEvent
 );
-export const selectEventsAfterDate = createSelector(
+export const selectMaxDate = createSelector(selectEventState, getMaxDate);
+export const selectAllEventsBeforeDate = createSelector(
   selectAllEvents,
-  getMaxDate,
-  (events, maxDate) => events.filter((event) => event.date <= maxDate)
+  selectMaxDate,
+  (events: Event[], maxDate: Date) =>
+    events.filter((event: Event) => new Date(event.date) <= maxDate)
 );
