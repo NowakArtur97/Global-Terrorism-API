@@ -8,9 +8,10 @@ import { MaterialModule } from '../common/material.module';
 import MapRoutingModule from './map-routing.module';
 import { MapComponent } from './map/map.component';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
+import { DateSliderComponent } from './date-slider/date-slider.component';
 
 @NgModule({
-  declarations: [MapComponent, MarkerPopupComponent],
+  declarations: [MapComponent, MarkerPopupComponent, DateSliderComponent],
   imports: [
     CommonModule,
     HttpClientModule,
