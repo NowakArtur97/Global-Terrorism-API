@@ -4,11 +4,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  selectAllEvents,
-  selectAllEventsBeforeDate,
-  selectLastDeletedEvent,
-} from 'src/app/event/store/event.reducer';
+import { selectAllEventsBeforeDate, selectLastDeletedEvent } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -62,7 +58,7 @@ describe('MapComponent', () => {
   describe('when initialize component', () => {
     it('and user is logged in should fetch events', () => {
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEvents) {
+        if (selector === selectAllEventsBeforeDate) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -166,7 +162,7 @@ describe('MapComponent', () => {
 
     it('and events are not fetched should remove markers', () => {
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEvents) {
+        if (selector === selectAllEventsBeforeDate) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -219,7 +215,7 @@ describe('MapComponent', () => {
       };
 
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEvents) {
+        if (selector === selectAllEventsBeforeDate) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
