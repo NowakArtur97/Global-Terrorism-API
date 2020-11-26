@@ -53,3 +53,8 @@ export const deleteEvent = createAction(
   '[Event] Delete Event',
   props<{ eventDeleted: Event }>()
 );
+
+export const changeMaxEventsDate = createAction(
+  '[Event] Change Max Events Date',
+  props<{ maxDate: Date }>()
+);

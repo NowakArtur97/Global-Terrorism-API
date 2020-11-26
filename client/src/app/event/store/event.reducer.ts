@@ -82,6 +82,10 @@ const _eventReducer = createReducer(
       lastDeletedEvent: eventDeleted,
       isLoading: false,
     });
+  }),
+
+  on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {
+    return { ...state, maxDate };
   })
 );
 
