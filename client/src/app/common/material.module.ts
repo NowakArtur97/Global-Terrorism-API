@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -34,6 +35,7 @@ const materialComponents = [
   MatDatepickerModule,
   MatNativeDateModule,
   FlexLayoutModule,
+  MatSliderModule,
 ];
 
 @NgModule({

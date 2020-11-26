@@ -2,3 +2,16 @@
   height: calc(100vh - 64px);
   padding: 0;
 }
+
+.map-container {
+  position: relative;
+}
+
+app-date-slider {
+  position: absolute;
+  bottom: 6%;
+  left: 10%;
+  right: 90%;
+  z-index: 1000;
+  width: 80%;
+}
