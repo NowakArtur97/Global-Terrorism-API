@@ -1,11 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
@@ -15,6 +9,7 @@ export interface EventStoreState extends EntityState<Event> {
   lastUpdatedEvent: Event;
   lastDeletedEvent: Event;
   isLoading: boolean;
+  maxDate: Date;
 }
 
 const eventAdapter = createEntityAdapter<Event>();
@@ -24,6 +19,7 @@ const initialState = eventAdapter.getInitialState({
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
+  maxDate: new Date(),
 });
 
 const _eventReducer = createReducer(
@@ -99,6 +95,7 @@ export default function eventReducer(
 const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 const getLastUpdatedEvent = (state: EventStoreState) => state.lastUpdatedEvent;
 const getLastDeletedEvent = (state: EventStoreState) => state.lastDeletedEvent;
+const getMaxDate = (state: EventStoreState) => state.maxDate;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -121,4 +118,9 @@ export const selectLastUpdatedEvent = createSelector(
 export const selectLastDeletedEvent = createSelector(
   selectEventState,
   getLastDeletedEvent
+);
+export const selectEventsAfterDate = createSelector(
+  selectAllEvents,
+  getMaxDate,
+  (events, maxDate) => events.filter((event) => event.date <= maxDate)
 );
