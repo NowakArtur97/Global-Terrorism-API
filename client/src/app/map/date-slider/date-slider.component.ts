@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import AppStoreState from 'src/app/store/app.state';
+
+import * as EventActions from '../../event/store/event.actions';
 
 @Component({
   selector: 'app-date-slider',
@@ -11,7 +15,7 @@ export class DateSliderComponent implements OnInit {
   sliderRange: number;
   selectedDate: Date;
   value = 0;
-  constructor() {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.sliderRange = this.getTimeDifference();
@@ -27,7 +31,8 @@ export class DateSliderComponent implements OnInit {
     const startDate = new Date(this.minDate);
     this.selectedDate = new Date(startDate.getTime() + this.value);
 
-    // TODO: Filter  events
-    console.log(this.selectedDate);
+    this.store.dispatch(
+      EventActions.changeMaxEventsDate({ maxDate: this.selectedDate })
+    );
   }
 }

@@ -11,6 +11,7 @@ import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
 import {
   selectAllEvents,
+  selectAllEventsBeforeDate,
   selectLastDeletedEvent,
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
@@ -51,7 +52,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.eventsSubscription$ = this.store
-      .select(selectAllEvents)
+      .select(selectAllEventsBeforeDate)
       .pipe(
         tap((events) => {
           if (this.map && events && events.length === 0) {
@@ -62,6 +63,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((events: Event[]) => {
         this.events = events;
         if (this.map && this.events && this.markers?.length === 0) {
+          this.showMarkers();
+        } else if (this.map && events && events.length !== 0) {
+          this.markerService.cleanMapFromMarkers(this.map, this.markers);
           this.showMarkers();
         }
       });
