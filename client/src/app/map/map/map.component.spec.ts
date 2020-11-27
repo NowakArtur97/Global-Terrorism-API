@@ -4,7 +4,10 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
-import { selectAllEventsBeforeDate, selectLastDeletedEvent } from 'src/app/event/store/event.reducer';
+import {
+  selectAllEventsBeforeDate,
+  selectLastDeletedEvent,
+} from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -71,6 +74,7 @@ describe('MapComponent', () => {
       component.ngOnInit();
 
       expect(store.select).toHaveBeenCalled();
+      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
     });
 
@@ -229,6 +233,7 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
       expect(markerService.removeMarker).toHaveBeenCalled();
     });
   });

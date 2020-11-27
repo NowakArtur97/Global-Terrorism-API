@@ -53,20 +53,14 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.eventsSubscription$ = this.store
       .select(selectAllEventsBeforeDate)
-      .pipe(
-        tap((events) => {
-          if (this.map && events && events.length === 0) {
-            this.markerService.cleanMapFromMarkers(this.map, this.markers);
-          }
-        })
-      )
       .subscribe((events: Event[]) => {
         this.events = events;
-        if (this.map && this.events && this.markers?.length === 0) {
-          this.showMarkers();
-        } else if (this.map && events && events.length !== 0) {
+        if (this.map && this.events) {
           this.markerService.cleanMapFromMarkers(this.map, this.markers);
-          this.showMarkers();
+          this.markers = this.markerService.createCircleMarkers(
+            this.events,
+            this.map
+          );
         }
       });
 
@@ -108,12 +102,5 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     );
     tiles.addTo(this.map);
-  }
-
-  private showMarkers(): void {
-    this.markers = this.markerService.createCircleMarkers(
-      this.events,
-      this.map
-    );
   }
 }

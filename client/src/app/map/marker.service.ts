@@ -36,7 +36,7 @@ export default class MarkerService {
         ({ victim }) =>
           victim.totalNumberOfFatalities + victim.totalNumberOfInjured
       ),
-      0
+      1
     );
   }
 
@@ -52,9 +52,12 @@ export default class MarkerService {
       .bindPopup(this.createMarkerPopup(event));
   }
 
-  createCircleMarkers(events: Event[] = [], map: L.Map): L.CircleMarker[] {
-    this.maxRadius = this.getMaxRadius(events);
+  createCircleMarkers(events: Event[], map: L.Map): L.CircleMarker[] {
     const markers: L.CircleMarker[] = [];
+    if (events.length === 0) {
+      return markers;
+    }
+    this.maxRadius = this.getMaxRadius(events);
     for (const event of events) {
       markers.push(this.createCircleMarker(event, map));
     }
@@ -73,6 +76,8 @@ export default class MarkerService {
   }
 
   cleanMapFromMarkers(map: L.Map, markers: L.CircleMarker[]): void {
-    markers.forEach((marker) => map.removeLayer(marker));
+    if (markers.length > 0) {
+      markers.forEach((marker) => map.removeLayer(marker));
+    }
   }
 }
