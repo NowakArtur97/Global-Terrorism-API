@@ -202,7 +202,7 @@ class OnApplicationStartupEventListener {
         String cellValue;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
-        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1900;
+        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1970;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MONTH_OF_EVENT.getIndex());
         int monthOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1;
