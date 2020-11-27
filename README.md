@@ -90,7 +90,7 @@ Project is: in progress
 
 ![Map](./client/screenshots/map.jpg)
 
-Main view with marked cities
+Main view with marked events
 
 ![Documentation](./server/screenshots/documentation.png)
 

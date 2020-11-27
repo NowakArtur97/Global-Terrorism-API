@@ -60,13 +60,15 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 
 ## Features
 
-- User sign in/sign up
-- Displaying cities on the map
+- User sign in/sign up/auto login
+- Displaying events on the map
+- Adding events
+- Sorting events by date
 
 ## To Do
 
-- Adding events/targets/groups
-- Sorting and searching for events
+- Adding targets/groups/etc.
+- More sorting and searching options for events
 - Viewing charts and statistics about events
 
 ## Status
@@ -77,4 +79,4 @@ Project is: in progress
 
 ![Map](./screenshots/map.jpg)
 
-Main view with marked cities
+Main view with marked events
