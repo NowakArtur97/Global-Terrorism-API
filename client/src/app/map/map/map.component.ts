@@ -26,6 +26,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsSubscription$: Subscription;
   private userSubscription$: Subscription;
   private deleteEventSubscription$: Subscription;
+  isUserLoggedIn = false;
 
   events: Event[] = [];
 
@@ -47,7 +48,10 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(map((authState) => authState.user))
       .subscribe((user: User) => {
         if (user) {
+          this.isUserLoggedIn = true;
           this.store.dispatch(EventActions.fetchEvents());
+        } else {
+          this.isUserLoggedIn = false;
         }
       });
 

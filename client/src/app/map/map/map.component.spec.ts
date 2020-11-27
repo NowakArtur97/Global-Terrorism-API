@@ -75,6 +75,7 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkers).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
     });
 
@@ -161,6 +162,7 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkers).toHaveBeenCalled();
     });
 
@@ -181,6 +183,7 @@ describe('MapComponent', () => {
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkers).toHaveBeenCalled();
     });
 
     it('and in store is deleted event should remove marker', () => {
@@ -234,6 +237,7 @@ describe('MapComponent', () => {
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkers).toHaveBeenCalled();
       expect(markerService.removeMarker).toHaveBeenCalled();
     });
   });

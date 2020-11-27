@@ -2,5 +2,5 @@
   <div class="map-frame">
     <div id="map"></div>
   </div>
-  <app-date-slider></app-date-slider>
+  <app-date-slider *ngIf="isUserLoggedIn"></app-date-slider>
 </div>
