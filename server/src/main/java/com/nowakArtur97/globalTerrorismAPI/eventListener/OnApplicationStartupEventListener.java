@@ -28,6 +28,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,8 @@ import java.util.*;
 @Slf4j
 class OnApplicationStartupEventListener {
 
-    private final static String PATH_TO_FILE = "data/globalterrorismdb_0919dist.xlsx";
+    @Value("${app.dataFilePath:data/globalterrorismdb_0919dist.xlsx}")
+    private String PATH_TO_FILE;
 
     private final static int NUMBER_OF_ROWS_TO_SKIP = 850;
 
