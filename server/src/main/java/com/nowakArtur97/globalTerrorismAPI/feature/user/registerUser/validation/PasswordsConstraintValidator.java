@@ -1,17 +1,14 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.validation;
 
+import com.google.common.io.CharStreams;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import org.passay.*;
+import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.WordListDictionary;
-import org.passay.dictionary.WordLists;
-import org.passay.dictionary.sort.ArraysSort;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -101,10 +98,12 @@ class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords
     private void loadCustomPassayMessages() {
 
         Properties props = new Properties();
-        URL resource = this.getClass().getResource(PASSAY_PROPERTIES_FILE);
+
+        InputStream inputStream = getClass().getResourceAsStream(PASSAY_PROPERTIES_FILE);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         try {
-            props.load(new FileInputStream(resource.getPath()));
+            props.load(bufferedReader);
 
         } catch (IOException exception) {
             throw new RuntimeException("Could not find passay properties file with custom messages ", exception);
@@ -116,16 +115,18 @@ class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords
     private void loadCommonPasswordsList() {
 
         try {
-            String invalidPasswordList = this.getClass().getResource(COMMON_PASSWORDS_LIST).getFile();
+            InputStream inputStream = getClass().getResourceAsStream(COMMON_PASSWORDS_LIST);
 
-            notCommonPasswordRule = new DictionaryRule(
-                    new WordListDictionary(WordLists.createFromReader(
-                            new FileReader[]{
-                                    new FileReader(invalidPasswordList)
-                            },
-                            false,
-                            new ArraysSort()
-                    )));
+            String text = "";
+            try (final Reader reader = new InputStreamReader(inputStream)) {
+                text = CharStreams.toString(reader);
+            }
+
+            WordListDictionary wordListDictionary = new WordListDictionary(
+                    new ArrayWordList(new String[]{text}));
+
+            notCommonPasswordRule = new DictionaryRule(wordListDictionary);
+
         } catch (IOException exception) {
             throw new RuntimeException("Could not find list of common passwords ", exception);
         }
