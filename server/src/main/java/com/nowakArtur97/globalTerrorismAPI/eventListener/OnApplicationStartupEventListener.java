@@ -43,7 +43,7 @@ import java.util.*;
 @Slf4j
 class OnApplicationStartupEventListener {
 
-    @Value("${app.dataFilePath:data/globalterrorismdb_0919dist.xlsx}")
+    @Value("${app.dataFilePath:data/globalterrorismdb_0919dist-mini.xlsx}")
     private String PATH_TO_FILE;
 
     private final static int NUMBER_OF_ROWS_TO_SKIP = 850;

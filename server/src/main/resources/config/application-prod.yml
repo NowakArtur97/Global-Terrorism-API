@@ -8,6 +8,3 @@ spring:
       uri: ${GRAPHENEDB_URL}
       username: ${GRAPHENEDB_USER}
       encryption: true
-
-app:
-  dataFilePath: data/globalterrorismdb_0919dist-heroku.xlsx
