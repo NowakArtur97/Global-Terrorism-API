@@ -3,14 +3,13 @@ import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import User from '../../auth/models/user.model';
 import Event from '../../event/models/event.model';
 
 import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
 import {
-  selectAllEvents,
   selectAllEventsBeforeDate,
   selectLastDeletedEvent,
 } from 'src/app/event/store/event.reducer';
