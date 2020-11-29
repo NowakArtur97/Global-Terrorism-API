@@ -47,6 +47,13 @@
       <a
         mat-button
         href="#"
+        routerLink="/chart-dashboard"
+        *ngIf="isAuthenticated"
+        >Statistics</a
+      >
+      <a
+        mat-button
+        href="#"
         [routerLink]=""
         (click)="onLogout()"
         *ngIf="isAuthenticated"
@@ -82,6 +89,13 @@
           (click)="onOpenPopUp('registration')"
           *ngIf="!isAuthenticated"
           >Register</a
+        >
+        <a
+          mat-button
+          href="#"
+          routerLink="/chart-dashboard"
+          *ngIf="isAuthenticated"
+          >Statistics</a
         >
         <a
           mat-button

@@ -1,18 +1,31 @@
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ChartsModule } from 'ng2-charts/lib/charts.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { ChartsModule } from 'ng2-charts';
 
 import { MaterialModule } from '../common/material.module';
+import ChartRoutingModule from './chart-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [DashboardComponent],
-  imports: [CommonModule, ChartsModule, MaterialModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule],
+  imports: [
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
+
+    CommonModule,
+    ChartRoutingModule,
+    ChartsModule,
+    MaterialModule,
+  ],
 })
 export class ChartModule {}
