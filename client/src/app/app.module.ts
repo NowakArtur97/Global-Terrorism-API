@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
+import { ChartModule } from './chart/chart.module';
 import { CityModule } from './city/city.module';
 import { MaterialModule } from './common/material.module';
 import { CoreModule } from './core.module';
@@ -35,9 +36,6 @@ import { VictimModule } from './victim/victim.module';
 
     AppRoutingModule,
 
-    BrowserAnimationsModule,
-    MaterialModule,
-
     CoreModule,
     EventModule,
     TargetModule,
@@ -48,6 +46,10 @@ import { VictimModule } from './victim/victim.module';
 
     MapModule,
     AuthModule,
+    ChartModule,
+
+    BrowserAnimationsModule,
+    MaterialModule,
     SharedModule,
   ],
   providers: [],
