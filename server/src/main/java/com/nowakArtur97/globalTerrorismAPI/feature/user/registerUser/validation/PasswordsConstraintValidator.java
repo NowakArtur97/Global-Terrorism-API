@@ -1,14 +1,18 @@
 package com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.validation;
 
-import com.google.common.io.CharStreams;
 import com.nowakArtur97.globalTerrorismAPI.feature.user.registerUser.UserDTO;
 import org.passay.*;
 import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.WordListDictionary;
+import org.passay.dictionary.sort.ArraysSort;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -115,20 +119,32 @@ class PasswordsConstraintValidator implements ConstraintValidator<ValidPasswords
     private void loadCommonPasswordsList() {
 
         try {
-            InputStream inputStream = getClass().getResourceAsStream(COMMON_PASSWORDS_LIST);
 
-            String text = "";
-            try (final Reader reader = new InputStreamReader(inputStream)) {
-                text = CharStreams.toString(reader);
-            }
+            List<String> forbiddenPasswords = loadCommonPasswordsFromFile();
 
-            WordListDictionary wordListDictionary = new WordListDictionary(
-                    new ArrayWordList(new String[]{text}));
-
-            notCommonPasswordRule = new DictionaryRule(wordListDictionary);
+            notCommonPasswordRule = new DictionaryRule(new WordListDictionary(
+                    new ArrayWordList(forbiddenPasswords.toArray(
+                            new String[0]), false,
+                            new ArraysSort()
+                    )));
 
         } catch (IOException exception) {
             throw new RuntimeException("Could not find list of common passwords ", exception);
         }
+    }
+
+    private List<String> loadCommonPasswordsFromFile() throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream(COMMON_PASSWORDS_LIST);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+        List<String> forbiddenPasswords = new ArrayList<>();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            forbiddenPasswords.add(line);
+        }
+        bufferedReader.close();
+
+        return forbiddenPasswords;
     }
 }
