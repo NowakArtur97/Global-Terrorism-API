@@ -219,12 +219,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -301,12 +301,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -392,12 +392,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -476,12 +476,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -490,9 +490,9 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_victim_using_json_patch_should_return_partially_updated_node() {
 
             Long updatedTotalNumberOfFatalities = 20L;
-            Long updatedNumberOfPerpetratorFatalities = 10L;
+            Long updatedNumberOfPerpetratorsFatalities = 10L;
             Long updatedTotalNumberOfInjured = 14L;
-            Long updatedNumberOfPerpetratorInjured = 3L;
+            Long updatedNumberOfPerpetratorsInjured = 3L;
             Long updatedValueOfPropertyDamage = 10000L;
 
             String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
@@ -507,12 +507,12 @@ class EventControllerPatchMethodTest {
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfFatalities\", \"value\": \"" +
                     updatedTotalNumberOfFatalities + "\" }," +
-                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": \"" +
-                    updatedNumberOfPerpetratorFatalities + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsFatalities\", \"value\": \"" +
+                    updatedNumberOfPerpetratorsFatalities + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfInjured\", \"value\": \"" +
                     updatedTotalNumberOfInjured + "\" }," +
-                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": \"" +
-                    updatedNumberOfPerpetratorInjured + "\" }," +
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsInjured\", \"value\": \"" +
+                    updatedNumberOfPerpetratorsInjured + "\" }," +
                     "{ \"op\": \"replace\", \"path\": \"/victim/valueOfPropertyDamage\", \"value\": \"" +
                     updatedValueOfPropertyDamage + "\" }" +
                     "]";
@@ -573,12 +573,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(updatedTotalNumberOfFatalities.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(updatedNumberOfPerpetratorsFatalities.intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(updatedTotalNumberOfInjured.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(updatedNumberOfPerpetratorsInjured.intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(updatedValueOfPropertyDamage.intValue()))));
         }
@@ -1108,9 +1108,9 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_without_number_of_perpetrator_fatalities_using_json_patch_should_return_errors() {
+        void when_partial_update_event_without_number_of_perpetrators_fatalities_using_json_patch_should_return_errors() {
 
-            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": "
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsFatalities\", \"value\": "
                     + null + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -1127,17 +1127,17 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities cannot be empty.")))
+                                    is("Event number of perpetrators fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_negative_number_of_perpetrator_fatalities_using_json_patch_should_return_errors() {
+        void when_partial_update_event_with_negative_number_of_perpetrators_fatalities_using_json_patch_should_return_errors() {
 
-            long negativeNumberOfPerpetratorFatalities = -10L;
+            long negativeNumberOfPerpetratorsFatalities = -10L;
 
-            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": "
-                    + negativeNumberOfPerpetratorFatalities + " }]";
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsFatalities\", \"value\": "
+                    + negativeNumberOfPerpetratorsFatalities + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1153,21 +1153,21 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                                    is("Event number of perpetrators fatalities must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_patch_should_return_errors() {
+        void when_partial_update_event_with_number_of_perpetrators_fatalities_bigger_than_total_value_of_fatalities_using_json_patch_should_return_errors() {
 
-            long numberOfPerpetratorFatalities = 20L;
+            long numberOfPerpetratorsFatalities = 20L;
             long totalNumberOfFatalities = 10L;
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfFatalities\", \"value\": " +
                     totalNumberOfFatalities + " }," +
-                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorFatalities\", \"value\": " +
-                    numberOfPerpetratorFatalities + " }]";
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsFatalities\", \"value\": " +
+                    numberOfPerpetratorsFatalities + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1183,7 +1183,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
+                                    is("Event number of perpetrators fatalities should not exceed the total number of victims.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1238,9 +1238,9 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_without_number_of_perpetrator_injured_using_json_patch_should_return_errors() {
+        void when_partial_update_event_without_number_of_perpetrators_injured_using_json_patch_should_return_errors() {
 
-            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": "
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsInjured\", \"value\": "
                     + null + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
@@ -1257,17 +1257,17 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured cannot be empty.")))
+                                    is("Event number of perpetrators injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_negative_number_of_perpetrator_injured_using_json_patch_should_return_errors() {
+        void when_partial_update_event_with_negative_number_of_perpetrators_injured_using_json_patch_should_return_errors() {
 
-            long negativeNumberOfPerpetratorInjured = -10L;
+            long negativeNumberOfPerpetratorsInjured = -10L;
 
-            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": "
-                    + negativeNumberOfPerpetratorInjured + " }]";
+            String jsonPatch = "[{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsInjured\", \"value\": "
+                    + negativeNumberOfPerpetratorsInjured + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1283,21 +1283,21 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured must be greater or equal to 0.")))
+                                    is("Event number of perpetrators injured must be greater or equal to 0.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_patch_should_return_errors() {
+        void when_partial_update_event_with_number_of_perpetrators_injured_bigger_than_total_value_of_injured_using_json_patch_should_return_errors() {
 
-            long numberOfPerpetratorInjured = 20L;
+            long numberOfPerpetratorsInjured = 20L;
             long totalNumberOfInjured = 10L;
 
             String jsonPatch = "[" +
                     "{ \"op\": \"replace\", \"path\": \"/victim/totalNumberOfInjured\", \"value\": " +
                     totalNumberOfInjured + " }," +
-                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorInjured\", \"value\": " +
-                    numberOfPerpetratorInjured + " }]";
+                    "{ \"op\": \"replace\", \"path\": \"/victim/numberOfPerpetratorsInjured\", \"value\": " +
+                    numberOfPerpetratorsInjured + " }]";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -1313,7 +1313,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured should not exceed the total number of injured.")))
+                                    is("Event number of perpetrators injured should not exceed the total number of injured.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -1452,12 +1452,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -1533,12 +1533,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -1629,12 +1629,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -1720,12 +1720,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(victimNode.getTotalNumberOfFatalities().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(victimNode.getTotalNumberOfInjured().intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(victimNode.getValueOfPropertyDamage().intValue()))));
         }
@@ -1734,9 +1734,9 @@ class EventControllerPatchMethodTest {
         void when_partial_update_event_victim_using_json_merge_patch_should_return_partially_updated_node() {
 
             Long updatedTotalNumberOfFatalities = 20L;
-            Long updatedNumberOfPerpetratorFatalities = 10L;
+            Long updatedNumberOfPerpetratorsFatalities = 10L;
             Long updatedTotalNumberOfInjured = 14L;
-            Long updatedNumberOfPerpetratorInjured = 3L;
+            Long updatedNumberOfPerpetratorsInjured = 3L;
             Long updatedValueOfPropertyDamage = 10000L;
 
             String pathToRegionLink = REGION_BASE_PATH + "/" + regionNode.getId().intValue();
@@ -1750,9 +1750,9 @@ class EventControllerPatchMethodTest {
 
             String jsonMergePatch = "{\"victim\" : {" +
                     "\"totalNumberOfFatalities\" : " + updatedTotalNumberOfFatalities + "," +
-                    "\"numberOfPerpetratorFatalities\" : " + updatedNumberOfPerpetratorFatalities + "," +
+                    "\"numberOfPerpetratorsFatalities\" : " + updatedNumberOfPerpetratorsFatalities + "," +
                     "\"totalNumberOfInjured\" : " + updatedTotalNumberOfInjured + "," +
-                    "\"numberOfPerpetratorInjured\" : " + updatedNumberOfPerpetratorInjured + "," +
+                    "\"numberOfPerpetratorsInjured\" : " + updatedNumberOfPerpetratorsInjured + "," +
                     "\"valueOfPropertyDamage\" : " + updatedValueOfPropertyDamage + "}" +
                     "}";
 
@@ -1812,12 +1812,12 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("victim.id", is(anotherVictimNode.getId().intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                     is(updatedTotalNumberOfFatalities.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                    is(updatedNumberOfPerpetratorFatalities.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                    is(updatedNumberOfPerpetratorsFatalities.intValue())))
                             .andExpect(jsonPath("victim.totalNumberOfInjured",
                                     is(updatedTotalNumberOfInjured.intValue())))
-                            .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                    is(updatedNumberOfPerpetratorInjured.intValue())))
+                            .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                    is(updatedNumberOfPerpetratorsInjured.intValue())))
                             .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                     is(updatedValueOfPropertyDamage.intValue()))));
         }
@@ -2338,35 +2338,9 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_without_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
+        void when_partial_update_event_without_number_of_perpetrators_fatalities_using_json_merge_patch_should_return_errors() {
 
-            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorFatalities\" : " + null + "}}";
-
-            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                    List.of(new SimpleGrantedAuthority("user"))));
-
-            assertAll(
-                    () -> mockMvc
-                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
-                                    .header("Authorization", "Bearer " + token)
-                                    .content(jsonMergePatch)
-                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
-                                    .accept(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isBadRequest())
-                            .andExpect(jsonPath("timestamp", is(notNullValue())))
-                            .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
-        }
-
-        @Test
-        void when_partial_update_event_with_negative_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
-
-            long negativeNumberOfPerpetratorFatalities = -10L;
-
-            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorFatalities\" : "
-                    + negativeNumberOfPerpetratorFatalities + "}}";
+            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorsFatalities\" : " + null + "}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -2382,18 +2356,44 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                                    is("Event number of perpetrators fatalities cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
+        void when_partial_update_event_with_negative_number_of_perpetrators_fatalities_using_json_merge_patch_should_return_errors() {
 
-            long numberOfPerpetratorFatalities = 20L;
+            long negativeNumberOfPerpetratorsFatalities = -10L;
+
+            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorsFatalities\" : "
+                    + negativeNumberOfPerpetratorsFatalities + "}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrators fatalities must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrators_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
+
+            long numberOfPerpetratorsFatalities = 20L;
             long totalNumberOfFatalities = 10L;
 
             String jsonMergePatch = "{\"victim\" : {\"totalNumberOfFatalities\" : " + totalNumberOfFatalities + ", " +
-                    "\"numberOfPerpetratorFatalities\" : " + numberOfPerpetratorFatalities +"}}";
+                    "\"numberOfPerpetratorsFatalities\" : " + numberOfPerpetratorsFatalities +"}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -2409,7 +2409,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
+                                    is("Event number of perpetrators fatalities should not exceed the total number of victims.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
@@ -2462,35 +2462,9 @@ class EventControllerPatchMethodTest {
         }
 
         @Test
-        void when_partial_update_event_without_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
+        void when_partial_update_event_without_number_of_perpetrators_injured_using_json_merge_patch_should_return_errors() {
 
-            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorInjured\" : " + null + "}}";
-
-            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
-                    List.of(new SimpleGrantedAuthority("user"))));
-
-            assertAll(
-                    () -> mockMvc
-                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
-                                    .header("Authorization", "Bearer " + token)
-                                    .content(jsonMergePatch)
-                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
-                                    .accept(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isBadRequest())
-                            .andExpect(jsonPath("timestamp", is(notNullValue())))
-                            .andExpect(jsonPath("status", is(400)))
-                            .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured cannot be empty.")))
-                            .andExpect(jsonPath("errors", hasSize(1))));
-        }
-
-        @Test
-        void when_partial_update_event_with_negative_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
-
-            long negativeNumberOfPerpetratorInjured = -10L;
-
-            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorInjured\" : "
-                    + negativeNumberOfPerpetratorInjured + "}}";
+            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorsInjured\" : " + null + "}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -2506,18 +2480,44 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured must be greater or equal to 0.")))
+                                    is("Event number of perpetrators injured cannot be empty.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 
         @Test
-        void when_partial_update_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
+        void when_partial_update_event_with_negative_number_of_perpetrators_injured_using_json_merge_patch_should_return_errors() {
 
-            long numberOfPerpetratorInjured = 20L;
+            long negativeNumberOfPerpetratorsInjured = -10L;
+
+            String jsonMergePatch = "{\"victim\" : {\"numberOfPerpetratorsInjured\" : "
+                    + negativeNumberOfPerpetratorsInjured + "}}";
+
+            String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
+                    List.of(new SimpleGrantedAuthority("user"))));
+
+            assertAll(
+                    () -> mockMvc
+                            .perform(patch(LINK_WITH_PARAMETER_FOR_JSON_MERGE_PATCH, eventNode.getId())
+                                    .header("Authorization", "Bearer " + token)
+                                    .content(jsonMergePatch)
+                                    .contentType(PatchMediaType.APPLICATION_JSON_MERGE_PATCH)
+                                    .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest())
+                            .andExpect(jsonPath("timestamp", is(notNullValue())))
+                            .andExpect(jsonPath("status", is(400)))
+                            .andExpect(jsonPath("errors[0]",
+                                    is("Event number of perpetrators injured must be greater or equal to 0.")))
+                            .andExpect(jsonPath("errors", hasSize(1))));
+        }
+
+        @Test
+        void when_partial_update_event_with_number_of_perpetrators_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
+
+            long numberOfPerpetratorsInjured = 20L;
             long totalNumberOfInjured = 10L;
 
             String jsonMergePatch = "{\"victim\" : {\"totalNumberOfInjured\" : " + totalNumberOfInjured + ", " +
-                    "\"numberOfPerpetratorInjured\" : " + numberOfPerpetratorInjured +"}}";
+                    "\"numberOfPerpetratorsInjured\" : " + numberOfPerpetratorsInjured +"}}";
 
             String token = jwtUtil.generateToken(new User(userNode.getUserName(), userNode.getPassword(),
                     List.of(new SimpleGrantedAuthority("user"))));
@@ -2533,7 +2533,7 @@ class EventControllerPatchMethodTest {
                             .andExpect(jsonPath("timestamp", is(notNullValue())))
                             .andExpect(jsonPath("status", is(400)))
                             .andExpect(jsonPath("errors[0]",
-                                    is("Event number of perpetrator injured should not exceed the total number of injured.")))
+                                    is("Event number of perpetrators injured should not exceed the total number of injured.")))
                             .andExpect(jsonPath("errors", hasSize(1))));
         }
 

@@ -64,9 +64,9 @@ describe('VictimsChartComponent', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -97,9 +97,9 @@ describe('VictimsChartComponent', () => {
         victim: {
           id: 11,
           totalNumberOfFatalities: 10,
-          numberOfPerpetratorFatalities: 2,
+          numberOfPerpetratorsFatalities: 2,
           totalNumberOfInjured: 11,
-          numberOfPerpetratorInjured: 6,
+          numberOfPerpetratorsInjured: 6,
           valueOfPropertyDamage: 7000,
         },
       };
@@ -119,15 +119,15 @@ describe('VictimsChartComponent', () => {
           event2.victim.totalNumberOfFatalities
       );
       expect(component.pieChartData[1]).toEqual(
-        event1.victim.numberOfPerpetratorFatalities +
-          event2.victim.numberOfPerpetratorFatalities
+        event1.victim.numberOfPerpetratorsFatalities +
+          event2.victim.numberOfPerpetratorsFatalities
       );
       expect(component.pieChartData[2]).toEqual(
         event1.victim.totalNumberOfInjured + event2.victim.totalNumberOfInjured
       );
       expect(component.pieChartData[3]).toEqual(
-        event1.victim.numberOfPerpetratorInjured +
-          event2.victim.numberOfPerpetratorInjured
+        event1.victim.numberOfPerpetratorsInjured +
+          event2.victim.numberOfPerpetratorsInjured
       );
     });
 

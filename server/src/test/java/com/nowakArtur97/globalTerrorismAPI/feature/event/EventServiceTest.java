@@ -222,21 +222,21 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -406,20 +406,20 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -590,20 +590,20 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -766,20 +766,20 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -945,20 +945,20 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -988,9 +988,9 @@ class EventServiceTest {
         double updatedCityLatitude = 13.0;
         double updatedCityLongitude = -11.0;
         Long updatedVictimTotalNumberOfFatalities = 20L;
-        Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+        Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
         Long updatedVictimTotalNumberOfInjured = 14L;
-        Long updatedVictimNumberOfPerpetratorInjured = 3L;
+        Long updatedVictimNumberOfPerpetratorsInjured = 3L;
         Long updatedVictimValueOfPropertyDamage = 10000L;
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withName(updatedProvinceName).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withName(updatedCityName).withLatitude(updatedCityLatitude)
@@ -1000,9 +1000,9 @@ class EventServiceTest {
                 .build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                 .build(ObjectType.DTO);
 
@@ -1035,9 +1035,9 @@ class EventServiceTest {
         VictimNode victimNode = (VictimNode) victimBuilder.build(ObjectType.NODE);
         VictimNode updatedVictimNode = (VictimNode) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage).build(ObjectType.NODE);
         EventNode eventNodeExpectedBeforeMethod = (EventNode) eventBuilder.withTarget(targetNode).withCity(cityNode)
                 .withVictim(victimNode).build(ObjectType.NODE);
@@ -1172,21 +1172,21 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + updatedVictimNode.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + updatedVictimNode.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + updatedVictimNode.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(),
                         eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + updatedVictimNode.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + updatedVictimNode.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(updatedVictimNode.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -1350,21 +1350,21 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -1485,21 +1485,21 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -1616,20 +1616,20 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(), eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "
@@ -1765,21 +1765,21 @@ class EventServiceTest {
                         () -> "should return event node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         eventNodeActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         eventNodeActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event node with victim value of property damage: "

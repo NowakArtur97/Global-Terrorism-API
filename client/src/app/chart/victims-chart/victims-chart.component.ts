@@ -30,9 +30,9 @@ export class VictimsChartComponent implements OnInit, OnDestroy {
   public pieChartPlugins = [];
 
   private totalNumberOfFatalities = 0;
-  private numberOfPerpetratorFatalities = 0;
+  private numberOfPerpetratorsFatalities = 0;
   private totalNumberOfInjured = 0;
-  private numberOfPerpetratorInjured = 0;
+  private numberOfPerpetratorsInjured = 0;
 
   private eventsSubscription$: Subscription;
 
@@ -43,22 +43,23 @@ export class VictimsChartComponent implements OnInit, OnDestroy {
       .select(selectAllEvents)
       .subscribe((events: Event[]) => {
         this.totalNumberOfFatalities = 0;
-        this.numberOfPerpetratorFatalities = 0;
+        this.numberOfPerpetratorsFatalities = 0;
         this.totalNumberOfInjured = 0;
-        this.numberOfPerpetratorInjured = 0;
+        this.numberOfPerpetratorsInjured = 0;
 
         events.forEach(({ victim }) => {
           this.totalNumberOfFatalities += victim.totalNumberOfFatalities;
-          this.numberOfPerpetratorFatalities +=
-            victim.numberOfPerpetratorFatalities;
+          this.numberOfPerpetratorsFatalities +=
+            victim.numberOfPerpetratorsFatalities;
           this.totalNumberOfInjured += victim.totalNumberOfInjured;
-          this.numberOfPerpetratorInjured += victim.numberOfPerpetratorInjured;
+          this.numberOfPerpetratorsInjured +=
+            victim.numberOfPerpetratorsInjured;
         });
 
         this.pieChartData[0] = this.totalNumberOfFatalities;
-        this.pieChartData[1] = this.numberOfPerpetratorFatalities;
+        this.pieChartData[1] = this.numberOfPerpetratorsFatalities;
         this.pieChartData[2] = this.totalNumberOfInjured;
-        this.pieChartData[3] = this.numberOfPerpetratorInjured;
+        this.pieChartData[3] = this.numberOfPerpetratorsInjured;
       });
   }
 

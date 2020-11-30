@@ -4,10 +4,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  selectAllEventsBeforeDate,
-  selectLastDeletedEvent,
-} from 'src/app/event/store/event.reducer';
+import { selectAllEventsBeforeDate, selectLastDeletedEvent } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -107,9 +104,9 @@ describe('MapComponent', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -140,9 +137,9 @@ describe('MapComponent', () => {
         victim: {
           id: 11,
           totalNumberOfFatalities: 10,
-          numberOfPerpetratorFatalities: 2,
+          numberOfPerpetratorsFatalities: 2,
           totalNumberOfInjured: 11,
-          numberOfPerpetratorInjured: 6,
+          numberOfPerpetratorsInjured: 6,
           valueOfPropertyDamage: 7000,
         },
       };
@@ -214,9 +211,9 @@ describe('MapComponent', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };

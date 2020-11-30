@@ -377,21 +377,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -571,21 +571,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -774,21 +774,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -812,9 +812,9 @@ class GroupServiceTest {
         double updatedCityLatitude = 13.0;
         double updatedCityLongitude = -11.0;
         Long updatedVictimTotalNumberOfFatalities = 20L;
-        Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+        Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
         Long updatedVictimTotalNumberOfInjured = 14L;
-        Long updatedVictimNumberOfPerpetratorInjured = 3L;
+        Long updatedVictimNumberOfPerpetratorsInjured = 3L;
         Long updatedVictimValueOfPropertyDamage = 10000L;
 
         RegionNode regionNode = (RegionNode) regionBuilder.build(ObjectType.NODE);
@@ -834,9 +834,9 @@ class GroupServiceTest {
                 .withLongitude(updatedCityLongitude).withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                 .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
@@ -853,9 +853,9 @@ class GroupServiceTest {
                 .withLongitude(updatedCityLongitude).withProvince(updatedProvinceNode).build(ObjectType.NODE);
         VictimNode updatedVictimNode = (VictimNode) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage).build(ObjectType.NODE);
         EventNode updatedEventNode = (EventNode) eventBuilder.withTarget(updatedTargetNode).withCity(updatedCityNode)
                 .withVictim(updatedVictimNode).build(ObjectType.NODE);
@@ -867,9 +867,9 @@ class GroupServiceTest {
         double updatedCityLatitude2 = 23.0;
         double updatedCityLongitude2 = -21.0;
         Long updatedVictimTotalNumberOfFatalities2 = 21L;
-        Long updatedVictimNumberOfPerpetratorFatalities2 = 11L;
+        Long updatedVictimNumberOfPerpetratorsFatalities2 = 11L;
         Long updatedVictimTotalNumberOfInjured2 = 11L;
-        Long updatedVictimNumberOfPerpetratorInjured2 = 1L;
+        Long updatedVictimNumberOfPerpetratorsInjured2 = 1L;
         Long updatedVictimValueOfPropertyDamage2 = 10100L;
 
         RegionNode regionNode2 = (RegionNode) regionBuilder.build(ObjectType.NODE);
@@ -889,9 +889,9 @@ class GroupServiceTest {
                 .withLongitude(updatedCityLongitude2).withProvince(provinceDTO2).build(ObjectType.DTO);
         VictimDTO victimDTO2 = (VictimDTO) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities2)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities2)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities2)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured2)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured2)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured2)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage2)
                 .build(ObjectType.DTO);
         EventDTO eventDTO2 = (EventDTO) eventBuilder.withTarget(targetDTO2).withCity(cityDTO2).withVictim(victimDTO2)
@@ -906,9 +906,9 @@ class GroupServiceTest {
                 .withLongitude(updatedCityLongitude2).withProvince(updatedProvinceNode2).build(ObjectType.NODE);
         VictimNode updatedVictimNode2 = (VictimNode) victimBuilder
                 .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities2)
-                .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities2)
+                .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities2)
                 .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured2)
-                .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured2)
+                .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured2)
                 .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage2)
                 .build(ObjectType.NODE);
         EventNode updatedEventNode2 = (EventNode) eventBuilder.withTarget(updatedTargetNode2).withCity(updatedCityNode2)
@@ -1080,21 +1080,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + updatedVictimNode.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + updatedVictimNode.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + updatedVictimNode.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(updatedVictimNode.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + updatedVictimNode.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + updatedVictimNode.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + updatedVictimNode.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(updatedVictimNode.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -1245,21 +1245,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + updatedVictimNode2.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + updatedVictimNode2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + updatedVictimNode2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(updatedVictimNode2.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + updatedVictimNode2.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + updatedVictimNode2.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(updatedVictimNode2.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + updatedVictimNode2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(updatedVictimNode2.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -1454,21 +1454,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -1619,21 +1619,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -1849,21 +1849,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -2019,21 +2019,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + newVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + newVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + newVictimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(newVictimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + newVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + newVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(newVictimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + newVictimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(newVictimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -2197,21 +2197,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "
@@ -2316,21 +2316,21 @@ class GroupServiceTest {
                         () -> "should return group node with victim total number of fatalities: "
                                 + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return group node with victim number of perpetrator fatalities: "
-                                + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsFatalities(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return group node with victim number of perpetrators fatalities: "
+                                + victimNodeExpected2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                         () -> "should return group node with victim total number of injured: "
                                 + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
                                 + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
-                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return group node with victim number of perpetrator injured: "
-                                + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsInjured(),
+                        groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return group node with victim number of perpetrators injured: "
+                                + victimNodeExpected2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
                         groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                         () -> "should return group node with victim value of property damage: "

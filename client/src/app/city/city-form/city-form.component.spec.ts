@@ -4,10 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  EventStoreState,
-  selectEventToUpdate,
-} from 'src/app/event/store/event.reducer';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import { CityFormComponent } from './city-form.component';
@@ -180,9 +177,9 @@ describe('CityFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: 11,
-            numberOfPerpetratorFatalities: 3,
+            numberOfPerpetratorsFatalities: 3,
             totalNumberOfInjured: 14,
-            numberOfPerpetratorInjured: 4,
+            numberOfPerpetratorsInjured: 4,
             valueOfPropertyDamage: 2000,
           },
         };
@@ -238,9 +235,9 @@ describe('CityFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: -11,
-            numberOfPerpetratorFatalities: -3,
+            numberOfPerpetratorsFatalities: -3,
             totalNumberOfInjured: -14,
-            numberOfPerpetratorInjured: -4,
+            numberOfPerpetratorsInjured: -4,
             valueOfPropertyDamage: -2000,
           },
         };

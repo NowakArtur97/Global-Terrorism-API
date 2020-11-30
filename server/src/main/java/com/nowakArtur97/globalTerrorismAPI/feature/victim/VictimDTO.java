@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ValidNumberOfPerpetratorFatalities(message = "{victim.numberOfPerpetratorFatalities.lowerThanTotal}")
-@ValidNumberOfPerpetratorInjured(message = "{victim.numberOfPerpetratorInjured.lowerThanTotal}")
+@ValidNumberOfPerpetratorsFatalities(message = "{victim.numberOfPerpetratorsFatalities.lowerThanTotal}")
+@ValidNumberOfPerpetratorsInjured(message = "{victim.numberOfPerpetratorsInjured.lowerThanTotal}")
 public class VictimDTO implements DTO, Victim {
 
     @ApiModelProperty(notes = "The event's total number of fatalities", required = true, example = "100")
@@ -23,20 +23,20 @@ public class VictimDTO implements DTO, Victim {
     @Min(value = 0, message = "{victim.totalNumberOfFatalities.min}")
     private Long totalNumberOfFatalities;
 
-    @ApiModelProperty(notes = "The event's total number of perpetrator fatalities", required = true, example = "100")
-    @NotNull(message = "{victim.numberOfPerpetratorFatalities.notNull}")
-    @Min(value = 0, message = "{victim.numberOfPerpetratorFatalities.min}")
-    private Long numberOfPerpetratorFatalities;
+    @ApiModelProperty(notes = "The event's total number of perpetrators fatalities", required = true, example = "100")
+    @NotNull(message = "{victim.numberOfPerpetratorsFatalities.notNull}")
+    @Min(value = 0, message = "{victim.numberOfPerpetratorsFatalities.min}")
+    private Long numberOfPerpetratorsFatalities;
 
     @ApiModelProperty(notes = "The event's total number of injured", required = true, example = "100")
     @NotNull(message = "{victim.totalNumberOfInjured.notNull}")
     @Min(value = 0, message = "{victim.totalNumberOfInjured.min}")
     private Long totalNumberOfInjured;
 
-    @ApiModelProperty(notes = "The event's total number of perpetrator injured", required = true, example = "100")
-    @NotNull(message = "{victim.numberOfPerpetratorInjured.notNull}")
-    @Min(value = 0, message = "{victim.numberOfPerpetratorInjured.min}")
-    private Long numberOfPerpetratorInjured;
+    @ApiModelProperty(notes = "The event's total number of perpetrators injured", required = true, example = "100")
+    @NotNull(message = "{victim.numberOfPerpetratorsInjured.notNull}")
+    @Min(value = 0, message = "{victim.numberOfPerpetratorsInjured.min}")
+    private Long numberOfPerpetratorsInjured;
 
     @ApiModelProperty(notes = "The event's total value of property damage", required = true, example = "100")
     @NotNull(message = "{victim.valueOfPropertyDamage.notNull}")

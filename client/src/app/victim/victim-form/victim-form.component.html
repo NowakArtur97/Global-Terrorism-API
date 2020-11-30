@@ -30,32 +30,32 @@
   </p>
   <p>
     <mat-form-field>
-      <mat-label for="numberOfPerpetratorFatalities"
+      <mat-label for="numberOfPerpetratorsFatalities"
         >Number of perpetrator fatalities</mat-label
       >
       <input
-        id="numberOfPerpetratorFatalities"
+        id="numberOfPerpetratorsFatalities"
         type="number"
         autocomplete="on"
-        formControlName="numberOfPerpetratorFatalities"
+        formControlName="numberOfPerpetratorsFatalities"
         matInput
       />
       <mat-error
         *ngIf="
-          numberOfPerpetratorFatalities.invalid &&
-          (numberOfPerpetratorFatalities.touched ||
-            numberOfPerpetratorFatalities.dirty)
+          numberOfPerpetratorsFatalities.invalid &&
+          (numberOfPerpetratorsFatalities.touched ||
+            numberOfPerpetratorsFatalities.dirty)
         "
       >
-        <p *ngIf="numberOfPerpetratorFatalities.errors.notBlank">
+        <p *ngIf="numberOfPerpetratorsFatalities.errors.notBlank">
           Event number of perpetrator fatalities cannot be
           <strong>empty</strong>.
         </p>
-        <p *ngIf="numberOfPerpetratorFatalities.errors.min">
+        <p *ngIf="numberOfPerpetratorsFatalities.errors.min">
           Event number of perpetrator fatalities must be greater or equal to
           <strong>0</strong>.
         </p>
-        <p *ngIf="numberOfPerpetratorFatalities.errors.lowerOrEqual">
+        <p *ngIf="numberOfPerpetratorsFatalities.errors.lowerOrEqual">
           Event number of perpetrator fatalities
           <strong>should not exceed</strong> the total number of victims.
         </p>
@@ -90,32 +90,32 @@
   </p>
   <p>
     <mat-form-field>
-      <mat-label for="numberOfPerpetratorInjured"
+      <mat-label for="numberOfPerpetratorsInjured"
         >Number of perpetrator injured</mat-label
       >
       <input
-        id="numberOfPerpetratorInjured"
+        id="numberOfPerpetratorsInjured"
         type="number"
         autocomplete="on"
-        formControlName="numberOfPerpetratorInjured"
+        formControlName="numberOfPerpetratorsInjured"
         matInput
       />
       <mat-error
         *ngIf="
-          numberOfPerpetratorInjured.invalid &&
-          (numberOfPerpetratorInjured.touched ||
-            numberOfPerpetratorInjured.dirty)
+          numberOfPerpetratorsInjured.invalid &&
+          (numberOfPerpetratorsInjured.touched ||
+            numberOfPerpetratorsInjured.dirty)
         "
       >
-        <p *ngIf="numberOfPerpetratorInjured.errors.notBlank">
+        <p *ngIf="numberOfPerpetratorsInjured.errors.notBlank">
           Event number of perpetrator injured cannot be
           <strong>empty</strong>.
         </p>
-        <p *ngIf="numberOfPerpetratorInjured.errors.min">
+        <p *ngIf="numberOfPerpetratorsInjured.errors.min">
           Event number of perpetrator injured must be greater or equal to
           <strong>0</strong>.
         </p>
-        <p *ngIf="numberOfPerpetratorInjured.errors.lowerOrEqual">
+        <p *ngIf="numberOfPerpetratorsInjured.errors.lowerOrEqual">
           Event number of perpetrator injured
           <strong>should not exceed</strong> the total number of injured.
         </p>
@@ -136,16 +136,16 @@
       />
       <mat-error
         *ngIf="
-          numberOfPerpetratorInjured.invalid &&
-          (numberOfPerpetratorInjured.touched ||
-            numberOfPerpetratorInjured.dirty)
+          numberOfPerpetratorsInjured.invalid &&
+          (numberOfPerpetratorsInjured.touched ||
+            numberOfPerpetratorsInjured.dirty)
         "
       >
-        <p *ngIf="numberOfPerpetratorInjured.errors.notBlank">
+        <p *ngIf="numberOfPerpetratorsInjured.errors.notBlank">
           Event total value of property damage cannot be
           <strong>empty</strong>.
         </p>
-        <p *ngIf="numberOfPerpetratorInjured.errors.min">
+        <p *ngIf="numberOfPerpetratorsInjured.errors.min">
           Event total value of property damage must be greater or equal to
           <strong>0</strong>.
         </p>

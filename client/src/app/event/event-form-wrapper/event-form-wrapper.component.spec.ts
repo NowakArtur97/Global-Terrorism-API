@@ -93,9 +93,9 @@ describe('EventFormWrapperComponent', () => {
       };
       const victimDTO: VictimDTO = {
         totalNumberOfFatalities: 10,
-        numberOfPerpetratorFatalities: 1,
+        numberOfPerpetratorsFatalities: 1,
         totalNumberOfInjured: 12,
-        numberOfPerpetratorInjured: 2,
+        numberOfPerpetratorsInjured: 2,
         valueOfPropertyDamage: 15000,
       };
       const targetDTO: TargetDTO = {
@@ -174,9 +174,9 @@ describe('EventFormWrapperComponent', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -220,11 +220,11 @@ describe('EventFormWrapperComponent', () => {
       const victimDTO: VictimDTO = {
         id: 5,
         totalNumberOfFatalities: eventToUpdate.victim.totalNumberOfFatalities,
-        numberOfPerpetratorFatalities:
-          eventToUpdate.victim.numberOfPerpetratorFatalities,
+        numberOfPerpetratorsFatalities:
+          eventToUpdate.victim.numberOfPerpetratorsFatalities,
         totalNumberOfInjured: eventToUpdate.victim.totalNumberOfInjured,
-        numberOfPerpetratorInjured:
-          eventToUpdate.victim.numberOfPerpetratorInjured,
+        numberOfPerpetratorsInjured:
+          eventToUpdate.victim.numberOfPerpetratorsInjured,
         valueOfPropertyDamage: eventToUpdate.victim.valueOfPropertyDamage,
       };
       const targetDTO: TargetDTO = {

@@ -1,9 +1,4 @@
-import {
-  AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -92,9 +87,9 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
       }),
       victim: new FormControl({
         totalNumberOfFatalities: 0,
-        numberOfPerpetratorFatalities: 0,
+        numberOfPerpetratorsFatalities: 0,
         totalNumberOfInjured: 0,
-        numberOfPerpetratorInjured: 0,
+        numberOfPerpetratorsInjured: 0,
         valueOfPropertyDamage: 0,
       }),
       province: new FormControl({ name: '' }),
@@ -118,9 +113,9 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
     const { name, latitude, longitude } = city;
     const {
       totalNumberOfFatalities,
-      numberOfPerpetratorFatalities,
+      numberOfPerpetratorsFatalities,
       totalNumberOfInjured,
-      numberOfPerpetratorInjured,
+      numberOfPerpetratorsInjured,
       valueOfPropertyDamage,
     } = victim;
 
@@ -141,9 +136,9 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
       }),
       victim: new FormControl({
         totalNumberOfFatalities,
-        numberOfPerpetratorFatalities,
+        numberOfPerpetratorsFatalities,
         totalNumberOfInjured,
-        numberOfPerpetratorInjured,
+        numberOfPerpetratorsInjured,
         valueOfPropertyDamage,
       }),
       province: new FormControl({ name: city.province.name }),
@@ -173,9 +168,9 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
     };
     const victimDTO: VictimDTO = {
       totalNumberOfFatalities: victim.totalNumberOfFatalities,
-      numberOfPerpetratorFatalities: victim.numberOfPerpetratorFatalities,
+      numberOfPerpetratorsFatalities: victim.numberOfPerpetratorsFatalities,
       totalNumberOfInjured: victim.totalNumberOfInjured,
-      numberOfPerpetratorInjured: victim.numberOfPerpetratorInjured,
+      numberOfPerpetratorsInjured: victim.numberOfPerpetratorsInjured,
       valueOfPropertyDamage: victim.valueOfPropertyDamage,
     };
     const targetDTO: TargetDTO = {

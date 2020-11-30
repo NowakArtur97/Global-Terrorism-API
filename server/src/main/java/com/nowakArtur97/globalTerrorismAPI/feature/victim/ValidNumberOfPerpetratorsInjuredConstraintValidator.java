@@ -3,8 +3,8 @@ package com.nowakArtur97.globalTerrorismAPI.feature.victim;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-class ValidNumberOfPerpetratorInjuredConstraintValidator
-        implements ConstraintValidator<ValidNumberOfPerpetratorInjured, Object> {
+class ValidNumberOfPerpetratorsInjuredConstraintValidator
+        implements ConstraintValidator<ValidNumberOfPerpetratorsInjured, Object> {
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
@@ -15,11 +15,11 @@ class ValidNumberOfPerpetratorInjuredConstraintValidator
         if (victim == null
                 || victim.getTotalNumberOfInjured() == null
                 || victim.getTotalNumberOfInjured() < 0
-                || victim.getNumberOfPerpetratorInjured() == null
-                || victim.getNumberOfPerpetratorInjured() < 0) {
+                || victim.getNumberOfPerpetratorsInjured() == null
+                || victim.getNumberOfPerpetratorsInjured() < 0) {
             return true;
         }
 
-        return victim.getTotalNumberOfInjured() >= victim.getNumberOfPerpetratorInjured();
+        return victim.getTotalNumberOfInjured() >= victim.getNumberOfPerpetratorsInjured();
     }
 }

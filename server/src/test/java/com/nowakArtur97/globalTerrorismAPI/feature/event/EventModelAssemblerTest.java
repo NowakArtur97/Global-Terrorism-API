@@ -180,20 +180,20 @@ class EventModelAssemblerTest {
                         () -> "should return event model with victim total number of fatalities: "
                                 + victimModel.getTotalNumberOfFatalities() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorFatalities(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event model with victim number of perpetrator fatalities: "
-                                + victimModel.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsFatalities(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event model with victim number of perpetrators fatalities: "
+                                + victimModel.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimModel.getTotalNumberOfInjured(), eventModelActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event model with victim total number of injured: "
                                 + victimModel.getTotalNumberOfInjured() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorInjured(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event model with victim number of perpetrator injured: "
-                                + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsInjured(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event model with victim number of perpetrators injured: "
+                                + victimModel.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimModel.getValueOfPropertyDamage(),
                         eventModelActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event model with victim value of property damage: "
@@ -309,20 +309,20 @@ class EventModelAssemblerTest {
                         () -> "should return event model with victim total number of fatalities: "
                                 + victimModel.getTotalNumberOfFatalities() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorFatalities(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event model with victim number of perpetrator fatalities: "
-                                + victimModel.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsFatalities(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event model with victim number of perpetrators fatalities: "
+                                + victimModel.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimModel.getTotalNumberOfInjured(), eventModelActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event model with victim total number of injured: "
                                 + victimModel.getTotalNumberOfInjured() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorInjured(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event model with victim number of perpetrator injured: "
-                                + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsInjured(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event model with victim number of perpetrators injured: "
+                                + victimModel.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimModel.getValueOfPropertyDamage(),
                         eventModelActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event model with victim value of property damage: "
@@ -431,20 +431,20 @@ class EventModelAssemblerTest {
                         () -> "should return event model with victim total number of fatalities: "
                                 + victimModel.getTotalNumberOfFatalities() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfFatalities()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorFatalities(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
-                        () -> "should return event model with victim number of perpetrator fatalities: "
-                                + victimModel.getNumberOfPerpetratorFatalities() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsFatalities(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                        () -> "should return event model with victim number of perpetrators fatalities: "
+                                + victimModel.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsFatalities()),
                 () -> assertEquals(victimModel.getTotalNumberOfInjured(), eventModelActual.getVictim().getTotalNumberOfInjured(),
                         () -> "should return event model with victim total number of injured: "
                                 + victimModel.getTotalNumberOfInjured() + ", but was: "
                                 + eventModelActual.getVictim().getTotalNumberOfInjured()),
-                () -> assertEquals(victimModel.getNumberOfPerpetratorInjured(),
-                        eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
-                        () -> "should return event model with victim number of perpetrator injured: "
-                                + victimModel.getNumberOfPerpetratorInjured() + ", but was: "
-                                + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                () -> assertEquals(victimModel.getNumberOfPerpetratorsInjured(),
+                        eventModelActual.getVictim().getNumberOfPerpetratorsInjured(),
+                        () -> "should return event model with victim number of perpetrators injured: "
+                                + victimModel.getNumberOfPerpetratorsInjured() + ", but was: "
+                                + eventModelActual.getVictim().getNumberOfPerpetratorsInjured()),
                 () -> assertEquals(victimModel.getValueOfPropertyDamage(),
                         eventModelActual.getVictim().getValueOfPropertyDamage(),
                         () -> "should return event model with victim value of property damage: "

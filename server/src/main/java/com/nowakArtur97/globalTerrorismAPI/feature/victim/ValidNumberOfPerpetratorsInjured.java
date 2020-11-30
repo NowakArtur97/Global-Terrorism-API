@@ -11,12 +11,12 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = ValidNumberOfPerpetratorInjuredConstraintValidator.class)
+@Constraint(validatedBy = ValidNumberOfPerpetratorsInjuredConstraintValidator.class)
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface ValidNumberOfPerpetratorInjured {
+public @interface ValidNumberOfPerpetratorsInjured {
 
-    String message() default "Event number of perpetrator injured should not exceed the total number of injured.";
+    String message() default "Event number of perpetrators injured should not exceed the total number of injured.";
 
     Class<?>[] groups() default {};
 

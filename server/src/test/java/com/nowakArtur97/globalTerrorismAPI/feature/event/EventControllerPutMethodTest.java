@@ -215,12 +215,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -303,12 +303,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -388,12 +388,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -478,12 +478,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -567,12 +567,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -581,9 +581,9 @@ class EventControllerPutMethodTest {
     void when_update_event_victim_should_return_event_with_updated_victim() {
 
         Long updatedTotalNumberOfFatalities = 20L;
-        Long updatedNumberOfPerpetratorFatalities = 10L;
+        Long updatedNumberOfPerpetratorsFatalities = 10L;
         Long updatedTotalNumberOfInjured = 14L;
-        Long updatedNumberOfPerpetratorInjured = 3L;
+        Long updatedNumberOfPerpetratorsInjured = 3L;
         Long updatedValueOfPropertyDamage = 10000L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
@@ -594,9 +594,9 @@ class EventControllerPutMethodTest {
                 .withLongitude(cityNode.getLongitude()).withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
                 .withTotalNumberOfFatalities(updatedTotalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(updatedNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(updatedNumberOfPerpetratorsFatalities)
                 .withTotalNumberOfInjured(updatedTotalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(updatedNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(updatedNumberOfPerpetratorsInjured)
                 .withValueOfPropertyDamage(updatedValueOfPropertyDamage)
                 .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
@@ -666,11 +666,11 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(updatedTotalNumberOfFatalities.intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(updatedNumberOfPerpetratorFatalities.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(updatedNumberOfPerpetratorsFatalities.intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured", is(updatedTotalNumberOfInjured.intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(updatedNumberOfPerpetratorInjured.intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(updatedNumberOfPerpetratorsInjured.intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage", is(updatedValueOfPropertyDamage.intValue()))));
     }
 
@@ -745,12 +745,12 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("victim.id", notNullValue()))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimDTO.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimDTO.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimDTO.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimDTO.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimDTO.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimDTO.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimDTO.getValueOfPropertyDamage().intValue()))));
     }
@@ -1262,13 +1262,13 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_event_without_number_of_perpetrator_fatalities_should_return_errors() {
+    void when_update_event_without_number_of_perpetrators_fatalities_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorFatalities(null).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorsFatalities(null).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
@@ -1285,21 +1285,21 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities cannot be empty.")))
+                                is("Event number of perpetrators fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_update_event_with_negative_number_of_perpetrator_fatalities_should_return_errors() {
+    void when_update_event_with_negative_number_of_perpetrators_fatalities_should_return_errors() {
 
-        long negativeNumberOfPerpetratorFatalities = -10L;
+        long negativeNumberOfPerpetratorsFatalities = -10L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
-                .withNumberOfPerpetratorFatalities(negativeNumberOfPerpetratorFatalities)
+                .withNumberOfPerpetratorsFatalities(negativeNumberOfPerpetratorsFatalities)
                 .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
@@ -1317,14 +1317,14 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                                is("Event number of perpetrators fatalities must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_update_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_should_return_errors() {
+    void when_update_event_with_number_of_perpetrators_fatalities_bigger_than_total_value_of_fatalities_should_return_errors() {
 
-        long numberOfPerpetratorFatalities = 20L;
+        long numberOfPerpetratorsFatalities = 20L;
         long totalNumberOfFatalities = 10L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
@@ -1332,7 +1332,7 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfFatalities(totalNumberOfFatalities)
-                .withNumberOfPerpetratorFatalities(numberOfPerpetratorFatalities).build(ObjectType.DTO);
+                .withNumberOfPerpetratorsFatalities(numberOfPerpetratorsFatalities).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
@@ -1349,7 +1349,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
+                                is("Event number of perpetrators fatalities should not exceed the total number of victims.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -1412,13 +1412,13 @@ class EventControllerPutMethodTest {
     }
 
     @Test
-    void when_update_event_without_number_of_perpetrator_injured_should_return_errors() {
+    void when_update_event_without_number_of_perpetrators_injured_should_return_errors() {
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
-        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorInjured(null).build(ObjectType.DTO);
+        VictimDTO victimDTO = (VictimDTO) victimBuilder.withNumberOfPerpetratorsInjured(null).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
@@ -1434,21 +1434,21 @@ class EventControllerPutMethodTest {
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
-                        .andExpect(jsonPath("errors[0]", is("Event number of perpetrator injured cannot be empty.")))
+                        .andExpect(jsonPath("errors[0]", is("Event number of perpetrators injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_update_event_with_negative_number_of_perpetrator_injured_should_return_errors() {
+    void when_update_event_with_negative_number_of_perpetrators_injured_should_return_errors() {
 
-        long negativeNumberOfPerpetratorInjured = -10L;
+        long negativeNumberOfPerpetratorsInjured = -10L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
         TargetDTO targetDTO = (TargetDTO) targetBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder
-                .withNumberOfPerpetratorInjured(negativeNumberOfPerpetratorInjured)
+                .withNumberOfPerpetratorsInjured(negativeNumberOfPerpetratorsInjured)
                 .build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
@@ -1466,14 +1466,14 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator injured must be greater or equal to 0.")))
+                                is("Event number of perpetrators injured must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_update_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_should_return_errors() {
+    void when_update_event_with_number_of_perpetrators_injured_bigger_than_total_value_of_injured_should_return_errors() {
 
-        long numberOfPerpetratorInjured = 20L;
+        long numberOfPerpetratorsInjured = 20L;
         long totalNumberOfInjured = 10L;
 
         CountryDTO countryDTO = (CountryDTO) countryBuilder.withName(countryNode.getName()).build(ObjectType.DTO);
@@ -1481,7 +1481,7 @@ class EventControllerPutMethodTest {
         ProvinceDTO provinceDTO = (ProvinceDTO) provinceBuilder.withCountry(countryDTO).build(ObjectType.DTO);
         CityDTO cityDTO = (CityDTO) cityBuilder.withProvince(provinceDTO).build(ObjectType.DTO);
         VictimDTO victimDTO = (VictimDTO) victimBuilder.withTotalNumberOfInjured(totalNumberOfInjured)
-                .withNumberOfPerpetratorInjured(numberOfPerpetratorInjured).build(ObjectType.DTO);
+                .withNumberOfPerpetratorsInjured(numberOfPerpetratorsInjured).build(ObjectType.DTO);
         EventDTO eventDTO = (EventDTO) eventBuilder.withTarget(targetDTO).withCity(cityDTO).withVictim(victimDTO)
                 .build(ObjectType.DTO);
 
@@ -1498,7 +1498,7 @@ class EventControllerPutMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator injured should not exceed the total number of injured.")))
+                                is("Event number of perpetrators injured should not exceed the total number of injured.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 

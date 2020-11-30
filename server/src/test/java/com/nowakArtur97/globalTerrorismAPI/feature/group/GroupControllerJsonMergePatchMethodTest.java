@@ -221,12 +221,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
                                 is(victimNode.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
-                                is(victimNode.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsFatalities",
+                                is(victimNode.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
                                 is(victimNode.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
-                                is(victimNode.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsInjured",
+                                is(victimNode.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(victimNode.getValueOfPropertyDamage().intValue())))
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
@@ -307,9 +307,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         "{" +
                         "\"id\" : \"" + victimNode2.getId().intValue() + "\", " +
                         "\"totalNumberOfFatalities\" : \"" + victimNode2.getTotalNumberOfFatalities() + "\", " +
-                        "\"numberOfPerpetratorFatalities\" : \"" + victimNode2.getNumberOfPerpetratorFatalities() + "\", " +
+                        "\"numberOfPerpetratorsFatalities\" : \"" + victimNode2.getNumberOfPerpetratorsFatalities() + "\", " +
                         "\"totalNumberOfInjured\" : \"" + victimNode2.getTotalNumberOfInjured() + "\", " +
-                        "\"numberOfPerpetratorInjured\" : \"" + victimNode2.getNumberOfPerpetratorInjured() + "\", " +
+                        "\"numberOfPerpetratorsInjured\" : \"" + victimNode2.getNumberOfPerpetratorsInjured() + "\", " +
                         "\"valueOfPropertyDamage\" : \"" + victimNode2.getValueOfPropertyDamage() + "\"" +
                         "}" +
                         "}," +
@@ -358,9 +358,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         "{" +
                         "\"id\" : \"" + victimNode3.getId().intValue() + "\", " +
                         "\"totalNumberOfFatalities\" : \"" + victimNode3.getTotalNumberOfFatalities() + "\", " +
-                        "\"numberOfPerpetratorFatalities\" : \"" + victimNode3.getNumberOfPerpetratorFatalities() + "\", " +
+                        "\"numberOfPerpetratorsFatalities\" : \"" + victimNode3.getNumberOfPerpetratorsFatalities() + "\", " +
                         "\"totalNumberOfInjured\" : \"" + victimNode3.getTotalNumberOfInjured() + "\", " +
-                        "\"numberOfPerpetratorInjured\" : \"" + victimNode3.getNumberOfPerpetratorInjured() + "\", " +
+                        "\"numberOfPerpetratorsInjured\" : \"" + victimNode3.getNumberOfPerpetratorsInjured() + "\", " +
                         "\"valueOfPropertyDamage\" : \"" + victimNode3.getValueOfPropertyDamage() + "\"" +
                         "}" +
                         "}]}";
@@ -434,12 +434,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode2.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
                                 is(victimNode2.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
-                                is(victimNode2.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsFatalities",
+                                is(victimNode2.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
                                 is(victimNode2.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
-                                is(victimNode2.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsInjured",
+                                is(victimNode2.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(victimNode2.getValueOfPropertyDamage().intValue())))
 
@@ -496,12 +496,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[1].victim.id", is(victimNode3.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].victim.totalNumberOfFatalities",
                                 is(victimNode3.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("eventsCaused[1].victim.numberOfPerpetratorFatalities",
-                                is(victimNode3.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].victim.numberOfPerpetratorsFatalities",
+                                is(victimNode3.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].victim.totalNumberOfInjured",
                                 is(victimNode3.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("eventsCaused[1].victim.numberOfPerpetratorInjured",
-                                is(victimNode3.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[1].victim.numberOfPerpetratorsInjured",
+                                is(victimNode3.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[1].victim.valueOfPropertyDamage",
                                 is(victimNode3.getValueOfPropertyDamage().intValue())))
                         .andExpect(jsonPath("eventsCaused[2]").doesNotExist()));
@@ -571,9 +571,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         "{" +
                         "\"id\" : \"" + victimNode4.getId().intValue() + "\", " +
                         "\"totalNumberOfFatalities\" : \"" + victimNode4.getTotalNumberOfFatalities() + "\", " +
-                        "\"numberOfPerpetratorFatalities\" : \"" + victimNode4.getNumberOfPerpetratorFatalities() + "\", " +
+                        "\"numberOfPerpetratorsFatalities\" : \"" + victimNode4.getNumberOfPerpetratorsFatalities() + "\", " +
                         "\"totalNumberOfInjured\" : \"" + victimNode4.getTotalNumberOfInjured() + "\", " +
-                        "\"numberOfPerpetratorInjured\" : \"" + victimNode4.getNumberOfPerpetratorInjured() + "\", " +
+                        "\"numberOfPerpetratorsInjured\" : \"" + victimNode4.getNumberOfPerpetratorsInjured() + "\", " +
                         "\"valueOfPropertyDamage\" : \"" + victimNode4.getValueOfPropertyDamage() + "\"" +
                         "}" +
                         "}]}";
@@ -646,12 +646,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode4.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
                                 is(victimNode4.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
-                                is(victimNode4.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsFatalities",
+                                is(victimNode4.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
                                 is(victimNode4.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
-                                is(victimNode4.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsInjured",
+                                is(victimNode4.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(victimNode4.getValueOfPropertyDamage().intValue())))
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
@@ -661,9 +661,9 @@ class GroupControllerJsonMergePatchMethodTest {
     void when_partial_update_group_event_victim_using_json_patch_should_return_partially_updated_node() {
 
         Long updatedTotalNumberOfFatalities = 20L;
-        Long updatedNumberOfPerpetratorFatalities = 10L;
+        Long updatedNumberOfPerpetratorsFatalities = 10L;
         Long updatedTotalNumberOfInjured = 14L;
-        Long updatedNumberOfPerpetratorInjured = 3L;
+        Long updatedNumberOfPerpetratorsInjured = 3L;
         Long updatedValueOfPropertyDamage = 10000L;
 
         String updatedEventDateString = "2011-01-15";
@@ -726,9 +726,9 @@ class GroupControllerJsonMergePatchMethodTest {
                         "{" +
                         "\"id\" : \"" + victimNode5.getId().intValue() + "\", " +
                         "\"totalNumberOfFatalities\" : \"" + updatedTotalNumberOfFatalities + "\", " +
-                        "\"numberOfPerpetratorFatalities\" : \"" + updatedNumberOfPerpetratorFatalities + "\", " +
+                        "\"numberOfPerpetratorsFatalities\" : \"" + updatedNumberOfPerpetratorsFatalities + "\", " +
                         "\"totalNumberOfInjured\" : \"" + updatedTotalNumberOfInjured + "\", " +
-                        "\"numberOfPerpetratorInjured\" : \"" + updatedNumberOfPerpetratorInjured + "\", " +
+                        "\"numberOfPerpetratorsInjured\" : \"" + updatedNumberOfPerpetratorsInjured + "\", " +
                         "\"valueOfPropertyDamage\" : \"" + updatedValueOfPropertyDamage + "\"" +
                         "}" +
                         "}]}";
@@ -801,12 +801,12 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("eventsCaused[0].victim.id", is(victimNode5.getId().intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfFatalities",
                                 is(updatedTotalNumberOfFatalities.intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorFatalities",
-                                is(updatedNumberOfPerpetratorFatalities.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsFatalities",
+                                is(updatedNumberOfPerpetratorsFatalities.intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.totalNumberOfInjured",
                                 is(updatedTotalNumberOfInjured.intValue())))
-                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorInjured",
-                                is(updatedNumberOfPerpetratorInjured.intValue())))
+                        .andExpect(jsonPath("eventsCaused[0].victim.numberOfPerpetratorsInjured",
+                                is(updatedNumberOfPerpetratorsInjured.intValue())))
                         .andExpect(jsonPath("eventsCaused[0].victim.valueOfPropertyDamage",
                                 is(updatedValueOfPropertyDamage.intValue())))
                         .andExpect(jsonPath("eventsCaused[1]").doesNotExist()));
@@ -956,9 +956,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1024,9 +1024,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + targetNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1094,9 +1094,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1209,9 +1209,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1282,9 +1282,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1351,9 +1351,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1421,9 +1421,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1478,9 +1478,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1549,9 +1549,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1619,9 +1619,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1689,9 +1689,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1759,9 +1759,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1827,9 +1827,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1888,9 +1888,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -1959,9 +1959,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2020,9 +2020,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2090,9 +2090,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + null + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2163,9 +2163,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + negativeTotalNumberOfFatalities + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2189,7 +2189,7 @@ class GroupControllerJsonMergePatchMethodTest {
     }
 
     @Test
-    void when_partial_update_group_event_without_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_without_number_of_perpetrators_fatalities_using_json_merge_patch_should_return_errors() {
 
         String eventDateString = "2001-08-05";
 
@@ -2234,9 +2234,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + null + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + null + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2255,14 +2255,14 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities cannot be empty.")))
+                                is("Event number of perpetrators fatalities cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_partial_update_group_event_with_negative_number_of_perpetrator_fatalities_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_with_negative_number_of_perpetrators_fatalities_using_json_merge_patch_should_return_errors() {
 
-        long negativeNumberOfPerpetratorFatalities = -10L;
+        long negativeNumberOfPerpetratorsFatalities = -10L;
 
         String eventDateString = "2001-08-05";
 
@@ -2307,9 +2307,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + negativeNumberOfPerpetratorFatalities + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + negativeNumberOfPerpetratorsFatalities + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2328,14 +2328,14 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities must be greater or equal to 0.")))
+                                is("Event number of perpetrators fatalities must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_partial_update_group_event_with_number_of_perpetrator_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_with_number_of_perpetrators_fatalities_bigger_than_total_value_of_fatalities_using_json_merge_patch_should_return_errors() {
 
-        long numberOfPerpetratorFatalities = 20L;
+        long numberOfPerpetratorsFatalities = 20L;
         long totalNumberOfFatalities = 10L;
 
         String eventDateString = "2001-08-05";
@@ -2381,9 +2381,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + totalNumberOfFatalities + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + numberOfPerpetratorFatalities + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + numberOfPerpetratorsFatalities + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2402,7 +2402,7 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator fatalities should not exceed the total number of victims.")))
+                                is("Event number of perpetrators fatalities should not exceed the total number of victims.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2452,9 +2452,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + null + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2525,9 +2525,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + negativeTotalNumberOfInjured + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2551,7 +2551,7 @@ class GroupControllerJsonMergePatchMethodTest {
     }
 
     @Test
-    void when_partial_update_group_event_without_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_without_number_of_perpetrators_injured_using_json_merge_patch_should_return_errors() {
 
         String eventDateString = "2001-08-05";
 
@@ -2596,9 +2596,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + null + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + null + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2617,14 +2617,14 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator injured cannot be empty.")))
+                                is("Event number of perpetrators injured cannot be empty.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_partial_update_group_event_with_negative_number_of_perpetrator_injured_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_with_negative_number_of_perpetrators_injured_using_json_merge_patch_should_return_errors() {
 
-        long negativeNumberOfPerpetratorInjured = -10L;
+        long negativeNumberOfPerpetratorsInjured = -10L;
 
         String eventDateString = "2001-08-05";
 
@@ -2669,9 +2669,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + negativeNumberOfPerpetratorInjured + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + negativeNumberOfPerpetratorsInjured + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2690,14 +2690,14 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator injured must be greater or equal to 0.")))
+                                is("Event number of perpetrators injured must be greater or equal to 0.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
     @Test
-    void when_partial_update_group_event_with_number_of_perpetrator_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
+    void when_partial_update_group_event_with_number_of_perpetrators_injured_bigger_than_total_value_of_injured_using_json_merge_patch_should_return_errors() {
 
-        long numberOfPerpetratorInjured = 20L;
+        long numberOfPerpetratorsInjured = 20L;
         long totalNumberOfInjured = 10L;
 
         String eventDateString = "2001-08-05";
@@ -2742,10 +2742,10 @@ class GroupControllerJsonMergePatchMethodTest {
                 "\"victim\" : " +
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
-                "\"totalNumberOfFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"totalNumberOfFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + totalNumberOfInjured + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + numberOfPerpetratorInjured + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + numberOfPerpetratorsInjured + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + victimNode.getValueOfPropertyDamage() + "\"" +
                 "}" +
                 "}]}";
@@ -2764,7 +2764,7 @@ class GroupControllerJsonMergePatchMethodTest {
                         .andExpect(jsonPath("timestamp", is(notNullValue())))
                         .andExpect(jsonPath("status", is(400)))
                         .andExpect(jsonPath("errors[0]",
-                                is("Event number of perpetrator injured should not exceed the total number of injured.")))
+                                is("Event number of perpetrators injured should not exceed the total number of injured.")))
                         .andExpect(jsonPath("errors", hasSize(1))));
     }
 
@@ -2814,9 +2814,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + null + "\"" +
                 "}" +
                 "}]}";
@@ -2887,9 +2887,9 @@ class GroupControllerJsonMergePatchMethodTest {
                 "{" +
                 "\"id\" : \"" + victimNode.getId().intValue() + "\", " +
                 "\"totalNumberOfFatalities\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorFatalities\" : \"" + victimNode.getNumberOfPerpetratorFatalities() + "\", " +
+                "\"numberOfPerpetratorsFatalities\" : \"" + victimNode.getNumberOfPerpetratorsFatalities() + "\", " +
                 "\"totalNumberOfInjured\" : \"" + victimNode.getTotalNumberOfInjured() + "\", " +
-                "\"numberOfPerpetratorInjured\" : \"" + victimNode.getNumberOfPerpetratorInjured() + "\", " +
+                "\"numberOfPerpetratorsInjured\" : \"" + victimNode.getNumberOfPerpetratorsInjured() + "\", " +
                 "\"valueOfPropertyDamage\" : \"" + negativeValueOfPropertyDamage + "\"" +
                 "}" +
                 "}]}";

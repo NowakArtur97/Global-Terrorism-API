@@ -4,10 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  EventStoreState,
-  selectEventToUpdate,
-} from 'src/app/event/store/event.reducer';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import { VictimFormComponent } from './victim-form.component';
@@ -62,15 +59,15 @@ describe('VictimFormComponent', () => {
       it('which is valid should be valid', () => {
         component.totalNumberOfFatalities.setValue(4);
         component.totalNumberOfInjured.setValue(7);
-        component.numberOfPerpetratorFatalities.setValue(2);
-        component.numberOfPerpetratorInjured.setValue(1);
+        component.numberOfPerpetratorsFatalities.setValue(2);
+        component.numberOfPerpetratorsInjured.setValue(1);
         component.valueOfPropertyDamage.setValue(1000);
 
         expect(component.formGroup.valid).toBeTruthy();
         expect(component.totalNumberOfFatalities.valid).toBeTruthy();
         expect(component.totalNumberOfInjured.valid).toBeTruthy();
-        expect(component.numberOfPerpetratorFatalities.valid).toBeTruthy();
-        expect(component.numberOfPerpetratorInjured.valid).toBeTruthy();
+        expect(component.numberOfPerpetratorsFatalities.valid).toBeTruthy();
+        expect(component.numberOfPerpetratorsInjured.valid).toBeTruthy();
         expect(component.valueOfPropertyDamage.valid).toBeTruthy();
       });
 
@@ -99,39 +96,39 @@ describe('VictimFormComponent', () => {
       });
 
       it('with empty number of perpetrator fatalities should be invalid', () => {
-        component.numberOfPerpetratorFatalities.setValue('');
+        component.numberOfPerpetratorsFatalities.setValue('');
 
-        const numberOfPerpetratorFatalities =
-          component.numberOfPerpetratorFatalities;
-        const errors = numberOfPerpetratorFatalities.errors;
+        const numberOfPerpetratorsFatalities =
+          component.numberOfPerpetratorsFatalities;
+        const errors = numberOfPerpetratorsFatalities.errors;
         expect(errors.notBlank).toBeTruthy();
       });
 
       it('with blank number of perpetrator fatalities should be invalid', () => {
-        component.numberOfPerpetratorFatalities.setValue('    ');
+        component.numberOfPerpetratorsFatalities.setValue('    ');
 
-        const numberOfPerpetratorFatalities =
-          component.numberOfPerpetratorFatalities;
-        const errors = numberOfPerpetratorFatalities.errors;
+        const numberOfPerpetratorsFatalities =
+          component.numberOfPerpetratorsFatalities;
+        const errors = numberOfPerpetratorsFatalities.errors;
         expect(errors.notBlank).toBeTruthy();
       });
 
       it('with negative number of perpetrator fatalities should be invalid', () => {
-        component.numberOfPerpetratorFatalities.setValue(-1);
+        component.numberOfPerpetratorsFatalities.setValue(-1);
 
-        const numberOfPerpetratorFatalities =
-          component.numberOfPerpetratorFatalities;
-        const errors = numberOfPerpetratorFatalities.errors;
+        const numberOfPerpetratorsFatalities =
+          component.numberOfPerpetratorsFatalities;
+        const errors = numberOfPerpetratorsFatalities.errors;
         expect(errors.min).toBeTruthy();
       });
 
       it('with number of perpetrator fatalities bigger than total value should be invalid', () => {
         component.totalNumberOfFatalities.setValue(10);
-        component.numberOfPerpetratorFatalities.setValue(20);
+        component.numberOfPerpetratorsFatalities.setValue(20);
 
-        const numberOfPerpetratorFatalities =
-          component.numberOfPerpetratorFatalities;
-        const errors = numberOfPerpetratorFatalities.errors;
+        const numberOfPerpetratorsFatalities =
+          component.numberOfPerpetratorsFatalities;
+        const errors = numberOfPerpetratorsFatalities.errors;
         expect(errors.lowerOrEqual).toBeTruthy();
       });
 
@@ -160,35 +157,39 @@ describe('VictimFormComponent', () => {
       });
 
       it('with empty number of perpetrator injured should be invalid', () => {
-        component.numberOfPerpetratorInjured.setValue('');
+        component.numberOfPerpetratorsInjured.setValue('');
 
-        const numberOfPerpetratorInjured = component.numberOfPerpetratorInjured;
-        const errors = numberOfPerpetratorInjured.errors;
+        const numberOfPerpetratorsInjured =
+          component.numberOfPerpetratorsInjured;
+        const errors = numberOfPerpetratorsInjured.errors;
         expect(errors.notBlank).toBeTruthy();
       });
 
       it('with blank number of perpetrator injured should be invalid', () => {
-        component.numberOfPerpetratorInjured.setValue('    ');
+        component.numberOfPerpetratorsInjured.setValue('    ');
 
-        const numberOfPerpetratorInjured = component.numberOfPerpetratorInjured;
-        const errors = numberOfPerpetratorInjured.errors;
+        const numberOfPerpetratorsInjured =
+          component.numberOfPerpetratorsInjured;
+        const errors = numberOfPerpetratorsInjured.errors;
         expect(errors.notBlank).toBeTruthy();
       });
 
       it('with negative number of perpetrator injured should be invalid', () => {
-        component.numberOfPerpetratorInjured.setValue(-1);
+        component.numberOfPerpetratorsInjured.setValue(-1);
 
-        const numberOfPerpetratorInjured = component.numberOfPerpetratorInjured;
-        const errors = numberOfPerpetratorInjured.errors;
+        const numberOfPerpetratorsInjured =
+          component.numberOfPerpetratorsInjured;
+        const errors = numberOfPerpetratorsInjured.errors;
         expect(errors.min).toBeTruthy();
       });
 
       it('with number of perpetrator injured bigger than total value should be invalid', () => {
         component.totalNumberOfInjured.setValue(10);
-        component.numberOfPerpetratorInjured.setValue(20);
+        component.numberOfPerpetratorsInjured.setValue(20);
 
-        const numberOfPerpetratorInjured = component.numberOfPerpetratorInjured;
-        const errors = numberOfPerpetratorInjured.errors;
+        const numberOfPerpetratorsInjured =
+          component.numberOfPerpetratorsInjured;
+        const errors = numberOfPerpetratorsInjured.errors;
         expect(errors.lowerOrEqual).toBeTruthy();
       });
 
@@ -246,9 +247,9 @@ describe('VictimFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: 11,
-            numberOfPerpetratorFatalities: 3,
+            numberOfPerpetratorsFatalities: 3,
             totalNumberOfInjured: 14,
-            numberOfPerpetratorInjured: 4,
+            numberOfPerpetratorsInjured: 4,
             valueOfPropertyDamage: 2000,
           },
         };
@@ -274,14 +275,14 @@ describe('VictimFormComponent', () => {
         expect(component.totalNumberOfFatalities.value).toBe(
           eventToUpdate.victim.totalNumberOfFatalities
         );
-        expect(component.numberOfPerpetratorFatalities.value).toBe(
-          eventToUpdate.victim.numberOfPerpetratorFatalities
+        expect(component.numberOfPerpetratorsFatalities.value).toBe(
+          eventToUpdate.victim.numberOfPerpetratorsFatalities
         );
         expect(component.totalNumberOfInjured.value).toBe(
           eventToUpdate.victim.totalNumberOfInjured
         );
-        expect(component.numberOfPerpetratorInjured.value).toBe(
-          eventToUpdate.victim.numberOfPerpetratorInjured
+        expect(component.numberOfPerpetratorsInjured.value).toBe(
+          eventToUpdate.victim.numberOfPerpetratorsInjured
         );
         expect(component.valueOfPropertyDamage.value).toBe(
           eventToUpdate.victim.valueOfPropertyDamage
@@ -316,9 +317,9 @@ describe('VictimFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: -11,
-            numberOfPerpetratorFatalities: -3,
+            numberOfPerpetratorsFatalities: -3,
             totalNumberOfInjured: -14,
-            numberOfPerpetratorInjured: -4,
+            numberOfPerpetratorsInjured: -4,
             valueOfPropertyDamage: -2000,
           },
         };
@@ -342,9 +343,9 @@ describe('VictimFormComponent', () => {
 
         expect(component.formGroup.valid).toBeFalsy();
         expect(component.totalNumberOfFatalities.valid).toBeFalsy();
-        expect(component.numberOfPerpetratorFatalities.valid).toBeFalsy();
+        expect(component.numberOfPerpetratorsFatalities.valid).toBeFalsy();
         expect(component.totalNumberOfInjured.valid).toBeFalsy();
-        expect(component.numberOfPerpetratorInjured.valid).toBeFalsy();
+        expect(component.numberOfPerpetratorsInjured.valid).toBeFalsy();
         expect(component.valueOfPropertyDamage.valid).toBeFalsy();
       });
     });

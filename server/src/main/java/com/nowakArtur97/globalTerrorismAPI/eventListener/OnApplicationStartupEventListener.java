@@ -269,9 +269,9 @@ class OnApplicationStartupEventListener {
 
         VictimNode victim = VictimNode.builder()
                 .totalNumberOfFatalities(totalNumberOfFatalities)
-                .numberOfPerpetratorFatalities(numberOfPerpetratorFatalities)
+                .numberOfPerpetratorsFatalities(numberOfPerpetratorFatalities)
                 .totalNumberOfInjured(totalNumberOfInjured)
-                .numberOfPerpetratorInjured(numberOfPerpetratorInjured)
+                .numberOfPerpetratorsInjured(numberOfPerpetratorInjured)
                 .valueOfPropertyDamage(valueOfPropertyDamage)
                 .build();
 

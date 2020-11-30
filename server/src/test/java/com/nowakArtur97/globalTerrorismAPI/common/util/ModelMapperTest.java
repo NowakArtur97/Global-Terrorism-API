@@ -485,21 +485,21 @@ class ModelMapperTest {
                             () -> "should return victim node with total number of fatalities: "
                                     + victimDTOExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + victimNodeActual.getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorFatalities(),
-                            victimNodeActual.getNumberOfPerpetratorFatalities(),
-                            () -> "should return victim node with number of perpetrator fatalities: "
-                                    + victimDTOExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + victimNodeActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsFatalities(),
+                            victimNodeActual.getNumberOfPerpetratorsFatalities(),
+                            () -> "should return victim node with number of perpetrators fatalities: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + victimNodeActual.getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimDTOExpected.getTotalNumberOfInjured(),
                             victimNodeActual.getTotalNumberOfInjured(),
                             () -> "should return victim node with total number of injured: "
                                     + victimDTOExpected.getTotalNumberOfInjured() + ", but was: "
                                     + victimNodeActual.getTotalNumberOfInjured()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorInjured(),
-                            victimNodeActual.getNumberOfPerpetratorInjured(),
-                            () -> "should return victim node with number of perpetrator injured: "
-                                    + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + victimNodeActual.getNumberOfPerpetratorInjured()));
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsInjured(),
+                            victimNodeActual.getNumberOfPerpetratorsInjured(),
+                            () -> "should return victim node with number of perpetrators injured: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + victimNodeActual.getNumberOfPerpetratorsInjured()));
         }
 
         @Test
@@ -517,21 +517,21 @@ class ModelMapperTest {
                             () -> "should return victim dto with total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + victimDTOActual.getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            victimDTOActual.getNumberOfPerpetratorFatalities(),
-                            () -> "should return victim dto with number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + victimDTOActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            victimDTOActual.getNumberOfPerpetratorsFatalities(),
+                            () -> "should return victim dto with number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + victimDTOActual.getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             victimDTOActual.getTotalNumberOfInjured(),
                             () -> "should return victim dto with total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + victimDTOActual.getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            victimDTOActual.getNumberOfPerpetratorInjured(),
-                            () -> "should return victim dto with number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + victimDTOActual.getNumberOfPerpetratorInjured()));
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            victimDTOActual.getNumberOfPerpetratorsInjured(),
+                            () -> "should return victim dto with number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + victimDTOActual.getNumberOfPerpetratorsInjured()));
         }
 
         @Test
@@ -552,21 +552,21 @@ class ModelMapperTest {
                             () -> "should return victim model with total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + victimModelActual.getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            victimModelActual.getNumberOfPerpetratorFatalities(),
-                            () -> "should return victim model with number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + victimModelActual.getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            victimModelActual.getNumberOfPerpetratorsFatalities(),
+                            () -> "should return victim model with number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + victimModelActual.getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             victimModelActual.getTotalNumberOfInjured(),
                             () -> "should return victim model with total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + victimModelActual.getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            victimModelActual.getNumberOfPerpetratorInjured(),
-                            () -> "should return victim model with number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + victimModelActual.getNumberOfPerpetratorInjured()));
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            victimModelActual.getNumberOfPerpetratorsInjured(),
+                            () -> "should return victim model with number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + victimModelActual.getNumberOfPerpetratorsInjured()));
         }
     }
 
@@ -658,21 +658,21 @@ class ModelMapperTest {
                             () -> "should return event node with victim total number of fatalities: "
                                     + victimDTOExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorFatalities(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event node with victim number of perpetrator fatalities: "
-                                    + victimDTOExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event node with victim number of perpetrators fatalities: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimDTOExpected.getTotalNumberOfInjured(),
                             eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + victimDTOExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorInjured(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event node with victim number of perpetrator injured: "
-                                    + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event node with victim number of perpetrators injured: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimDTOExpected.getValueOfPropertyDamage(),
                             eventNodeActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event node with victim value of property damage: "
@@ -758,21 +758,21 @@ class ModelMapperTest {
                             () -> "should return event dto with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventDTOActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventDTOActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event dto with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventDTOActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventDTOActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event dto with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventDTOActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             eventDTOActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event dto with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventDTOActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventDTOActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event dto with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventDTOActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventDTOActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event dto with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventDTOActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             eventDTOActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event dto with victim value of property damage: "
@@ -900,21 +900,21 @@ class ModelMapperTest {
                             () -> "should return event model with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventModelActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventModelActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event model with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventModelActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventModelActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event model with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventModelActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             eventModelActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event model with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventModelActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventModelActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event model with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventModelActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventModelActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event model with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventModelActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             eventModelActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event model with victim value of property damage: "
@@ -1044,21 +1044,21 @@ class ModelMapperTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + victimDTOExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + victimDTOExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimDTOExpected.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + victimDTOExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + victimDTOExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + victimDTOExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimDTOExpected.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "
@@ -1148,21 +1148,21 @@ class ModelMapperTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + victimDTOExpected2.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimDTOExpected2.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + victimDTOExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimDTOExpected2.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + victimDTOExpected2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimDTOExpected2.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + victimDTOExpected2.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimDTOExpected2.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + victimDTOExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimDTOExpected2.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + victimDTOExpected2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimDTOExpected2.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "
@@ -1287,21 +1287,21 @@ class ModelMapperTest {
                             () -> "should return group dto with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupDTOActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group dto with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group dto with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             groupDTOActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group dto with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupDTOActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group dto with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group dto with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             groupDTOActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group dto with victim value of property damage: "
@@ -1384,21 +1384,21 @@ class ModelMapperTest {
                             () -> "should return group dto with victim total number of fatalities: "
                                     + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
                                     + groupDTOActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
-                            groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group dto with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsFatalities(),
+                            groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group dto with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
                             groupDTOActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group dto with victim total number of injured: "
                                     + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
                                     + groupDTOActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
-                            groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group dto with victim number of perpetrator injured: "
-                                    + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsInjured(),
+                            groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group dto with victim number of perpetrators injured: "
+                                    + victimNodeExpected2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupDTOActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
                             groupDTOActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group dto with victim value of property damage: "
@@ -1579,21 +1579,21 @@ class ModelMapperTest {
                             () -> "should return group model with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupModelActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group model with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group model with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             groupModelActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group model with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupModelActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group model with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group model with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             groupModelActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group model with victim value of property damage: "
@@ -1732,21 +1732,21 @@ class ModelMapperTest {
                             () -> "should return group model with victim total number of fatalities: "
                                     + victimNodeExpected2.getTotalNumberOfFatalities() + ", but was: "
                                     + groupModelActual.getEventsCaused().get(1).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorFatalities(),
-                            groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group model with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected2.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsFatalities(),
+                            groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group model with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected2.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected2.getTotalNumberOfInjured(),
                             groupModelActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group model with victim total number of injured: "
                                     + victimNodeExpected2.getTotalNumberOfInjured() + ", but was: "
                                     + groupModelActual.getEventsCaused().get(1).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorInjured(),
-                            groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group model with victim number of perpetrator injured: "
-                                    + victimNodeExpected2.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected2.getNumberOfPerpetratorsInjured(),
+                            groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group model with victim number of perpetrators injured: "
+                                    + victimNodeExpected2.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupModelActual.getEventsCaused().get(1).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected2.getValueOfPropertyDamage(),
                             groupModelActual.getEventsCaused().get(1).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group model with victim value of property damage: "

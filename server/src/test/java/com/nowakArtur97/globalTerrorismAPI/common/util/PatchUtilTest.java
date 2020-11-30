@@ -465,21 +465,21 @@ class PatchUtilTest {
                             () -> "should return event node with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event node with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event node with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event node with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event node with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             eventNodeActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event node with victim value of property damage: "
@@ -511,9 +511,9 @@ class PatchUtilTest {
             double updatedCityLongitude = 12.0;
             String updatedTarget = "updated target";
             Long updatedVictimTotalNumberOfFatalities = 20L;
-            Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+            Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
             Long updatedVictimTotalNumberOfInjured = 14L;
-            Long updatedVictimNumberOfPerpetratorInjured = 3L;
+            Long updatedVictimNumberOfPerpetratorsInjured = 3L;
             Long updatedVictimValueOfPropertyDamage = 10000L;
             CountryNode updatedCountryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName)
                     .withRegion(regionNodeExpected).build(ObjectType.NODE);
@@ -526,9 +526,9 @@ class PatchUtilTest {
                     .withProvince(updatedProvinceNodeExpected).build(ObjectType.NODE);
             VictimNode updatedVictimNodeExpected = (VictimNode) victimBuilder
                     .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                    .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                    .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                     .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                    .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                    .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                     .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                     .build(ObjectType.NODE);
             EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNodeExpected)
@@ -543,12 +543,12 @@ class PatchUtilTest {
                     .replace("/city/province/name", updatedProvinceName)
                     .replace("/city/province/country/name", updatedCountryName)
                     .replace("/victim/totalNumberOfFatalities", String.valueOf(updatedVictimTotalNumberOfFatalities))
-                    .replace("/victim/numberOfPerpetratorFatalities",
-                            String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                    .replace("/victim/numberOfPerpetratorsFatalities",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                     .replace("/victim/totalNumberOfInjured",
                             String.valueOf(updatedVictimTotalNumberOfInjured))
-                    .replace("/victim/numberOfPerpetratorInjured",
-                            String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                    .replace("/victim/numberOfPerpetratorsInjured",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                     .replace("/victim/valueOfPropertyDamage",
                             String.valueOf(updatedVictimValueOfPropertyDamage))
                     .build();
@@ -568,12 +568,12 @@ class PatchUtilTest {
                                             .add("name", updatedCountryName))))
                     .add("victim", Json.createObjectBuilder()
                             .add("totalNumberOfFatalities", String.valueOf(updatedVictimTotalNumberOfFatalities))
-                            .add("numberOfPerpetratorFatalities",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                            .add("numberOfPerpetratorsFatalities",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                             .add("totalNumberOfInjured",
                                     String.valueOf(updatedVictimTotalNumberOfInjured))
-                            .add("numberOfPerpetratorInjured",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                            .add("numberOfPerpetratorsInjured",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                             .add("valueOfPropertyDamage",
                                     String.valueOf(updatedVictimValueOfPropertyDamage)))
                     .build();
@@ -711,21 +711,21 @@ class PatchUtilTest {
                             () -> "should return event node with victim total number of fatalities: "
                                     + updatedVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event node with victim number of perpetrator fatalities: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event node with victim number of perpetrators fatalities: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(updatedVictimNodeExpected.getTotalNumberOfInjured(),
                             eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + updatedVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event node with victim number of perpetrator injured: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event node with victim number of perpetrators injured: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
                             eventNodeActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event node with victim value of property damage: "
@@ -908,21 +908,21 @@ class PatchUtilTest {
                             () -> "should return event node with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event node with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event node with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event node with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event node with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             eventNodeActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event node with victim value of property damage: "
@@ -954,9 +954,9 @@ class PatchUtilTest {
             double updatedCityLongitude = 12.0;
             String updatedTarget = "updated target";
             Long updatedVictimTotalNumberOfFatalities = 20L;
-            Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+            Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
             Long updatedVictimTotalNumberOfInjured = 14L;
-            Long updatedVictimNumberOfPerpetratorInjured = 3L;
+            Long updatedVictimNumberOfPerpetratorsInjured = 3L;
             Long updatedVictimValueOfPropertyDamage = 10000L;
 
             CountryNode updatedCountryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName)
@@ -970,9 +970,9 @@ class PatchUtilTest {
                     .withProvince(updatedProvinceNodeExpected).build(ObjectType.NODE);
             VictimNode updatedVictimNodeExpected = (VictimNode) victimBuilder
                     .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                    .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                    .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                     .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                    .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                    .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                     .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                     .build(ObjectType.NODE);
             EventNode eventNodeExpected = (EventNode) eventBuilder.withTarget(updatedTargetNodeExpected)
@@ -990,12 +990,12 @@ class PatchUtilTest {
                                     .add("/city/province/country/name", updatedCountryName)
                                     .add("/victim/totalNumberOfFatalities",
                                             String.valueOf(updatedVictimTotalNumberOfFatalities))
-                                    .add("/victim/numberOfPerpetratorFatalities",
-                                            String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                                    .add("/victim/numberOfPerpetratorsFatalities",
+                                            String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                                     .add("/victim/totalNumberOfInjured",
                                             String.valueOf(updatedVictimTotalNumberOfInjured))
-                                    .add("/victim/numberOfPerpetratorInjured",
-                                            String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                                    .add("/victim/numberOfPerpetratorsInjured",
+                                            String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                                     .add("/victim/valueOfPropertyDamage",
                                             String.valueOf(updatedVictimValueOfPropertyDamage))
                                     .build());
@@ -1012,12 +1012,12 @@ class PatchUtilTest {
                                     .add("country", Json.createObjectBuilder().add("name", updatedCountryName))))
                     .add("victim", Json.createObjectBuilder()
                             .add("totalNumberOfFatalities", String.valueOf(updatedVictimTotalNumberOfFatalities))
-                            .add("numberOfPerpetratorFatalities",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                            .add("numberOfPerpetratorsFatalities",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                             .add("totalNumberOfInjured",
                                     String.valueOf(updatedVictimTotalNumberOfInjured))
-                            .add("numberOfPerpetratorInjured",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                            .add("numberOfPerpetratorsInjured",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                             .add("valueOfPropertyDamage",
                                     String.valueOf(updatedVictimValueOfPropertyDamage)))
                     .build();
@@ -1152,21 +1152,21 @@ class PatchUtilTest {
                             () -> "should return event node with victim total number of fatalities: "
                                     + updatedVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return event node with victim number of perpetrator fatalities: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return event node with victim number of perpetrators fatalities: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(updatedVictimNodeExpected.getTotalNumberOfInjured(),
                             eventNodeActual.getVictim().getTotalNumberOfInjured(),
                             () -> "should return event node with victim total number of injured: "
                                     + updatedVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + eventNodeActual.getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorInjured(),
-                            eventNodeActual.getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return event node with victim number of perpetrator injured: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + eventNodeActual.getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            eventNodeActual.getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return event node with victim number of perpetrators injured: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + eventNodeActual.getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
                             eventNodeActual.getVictim().getValueOfPropertyDamage(),
                             () -> "should return event node with victim value of property damage: "
@@ -1358,21 +1358,21 @@ class PatchUtilTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "
@@ -1413,9 +1413,9 @@ class PatchUtilTest {
             double updatedCityLongitude = 12.0;
             String updatedTarget = "updated target";
             Long updatedVictimTotalNumberOfFatalities = 20L;
-            Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+            Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
             Long updatedVictimTotalNumberOfInjured = 14L;
-            Long updatedVictimNumberOfPerpetratorInjured = 3L;
+            Long updatedVictimNumberOfPerpetratorsInjured = 3L;
             Long updatedVictimValueOfPropertyDamage = 10000L;
             CountryNode updatedCountryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName)
                     .withRegion(regionNodeExpected).build(ObjectType.NODE);
@@ -1428,9 +1428,9 @@ class PatchUtilTest {
                     .withProvince(updatedProvinceNodeExpected).build(ObjectType.NODE);
             VictimNode updatedVictimNodeExpected = (VictimNode) victimBuilder
                     .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                    .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                    .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                     .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                    .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                    .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                     .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                     .build(ObjectType.NODE);
             EventNode updatedEventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
@@ -1459,12 +1459,12 @@ class PatchUtilTest {
                     .replace("/eventsCaused[0]/city/province/country/name", updatedCountryName)
                     .replace("/eventsCaused[0]/victim/totalNumberOfFatalities",
                             String.valueOf(updatedVictimTotalNumberOfFatalities))
-                    .replace("/eventsCaused[0]/victim/numberOfPerpetratorFatalities",
-                            String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                    .replace("/eventsCaused[0]/victim/numberOfPerpetratorsFatalities",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                     .replace("/eventsCaused[0]/victim/totalNumberOfInjured",
                             String.valueOf(updatedVictimTotalNumberOfInjured))
-                    .replace("/eventsCaused[0]/victim/numberOfPerpetratorInjured",
-                            String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                    .replace("/eventsCaused[0]/victim/numberOfPerpetratorsInjured",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                     .replace("/eventsCaused[0]/victim/valueOfPropertyDamage",
                             String.valueOf(updatedVictimValueOfPropertyDamage))
                     .build();
@@ -1491,12 +1491,12 @@ class PatchUtilTest {
                                     .add("victim", Json.createObjectBuilder()
                                             .add("totalNumberOfFatalities",
                                                     String.valueOf(updatedVictimTotalNumberOfFatalities))
-                                            .add("numberOfPerpetratorFatalities",
-                                                    String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                                            .add("numberOfPerpetratorsFatalities",
+                                                    String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                                             .add("totalNumberOfInjured",
                                                     String.valueOf(updatedVictimTotalNumberOfInjured))
-                                            .add("numberOfPerpetratorInjured",
-                                                    String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                                            .add("numberOfPerpetratorsInjured",
+                                                    String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                                             .add("valueOfPropertyDamage",
                                                     String.valueOf(updatedVictimValueOfPropertyDamage)))
                     )
@@ -1678,21 +1678,21 @@ class PatchUtilTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + updatedVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(updatedVictimNodeExpected.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + updatedVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "
@@ -1881,21 +1881,21 @@ class PatchUtilTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + victimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + victimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(victimNodeExpected.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + victimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + victimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(victimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + victimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(victimNodeExpected.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "
@@ -1936,9 +1936,9 @@ class PatchUtilTest {
             double updatedCityLongitude = 12.0;
             String updatedTarget = "updated target";
             Long updatedVictimTotalNumberOfFatalities = 20L;
-            Long updatedVictimNumberOfPerpetratorFatalities = 10L;
+            Long updatedVictimNumberOfPerpetratorsFatalities = 10L;
             Long updatedVictimTotalNumberOfInjured = 14L;
-            Long updatedVictimNumberOfPerpetratorInjured = 3L;
+            Long updatedVictimNumberOfPerpetratorsInjured = 3L;
             Long updatedVictimValueOfPropertyDamage = 10000L;
             CountryNode updatedCountryNodeExpected = (CountryNode) countryBuilder.withName(updatedCountryName)
                     .withRegion(regionNodeExpected).build(ObjectType.NODE);
@@ -1951,9 +1951,9 @@ class PatchUtilTest {
                     .withProvince(updatedProvinceNodeExpected).build(ObjectType.NODE);
             VictimNode updatedVictimNodeExpected = (VictimNode) victimBuilder
                     .withTotalNumberOfFatalities(updatedVictimTotalNumberOfFatalities)
-                    .withNumberOfPerpetratorFatalities(updatedVictimNumberOfPerpetratorFatalities)
+                    .withNumberOfPerpetratorsFatalities(updatedVictimNumberOfPerpetratorsFatalities)
                     .withTotalNumberOfInjured(updatedVictimTotalNumberOfInjured)
-                    .withNumberOfPerpetratorInjured(updatedVictimNumberOfPerpetratorInjured)
+                    .withNumberOfPerpetratorsInjured(updatedVictimNumberOfPerpetratorsInjured)
                     .withValueOfPropertyDamage(updatedVictimValueOfPropertyDamage)
                     .build(ObjectType.NODE);
             EventNode updatedEventNodeExpected = (EventNode) eventBuilder.withSummary(updatedSummary).withMotive(updatedMotive)
@@ -1982,12 +1982,12 @@ class PatchUtilTest {
                     .add("/eventsCaused[0]/city/province/country/name", updatedCountryName)
                     .add("/eventsCaused[0]/victim/totalNumberOfFatalities",
                             String.valueOf(updatedVictimTotalNumberOfFatalities))
-                    .add("/eventsCaused[0]/victim/numberOfPerpetratorFatalities",
-                            String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                    .add("/eventsCaused[0]/victim/numberOfPerpetratorsFatalities",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                     .add("/eventsCaused[0]/victim/totalNumberOfInjured",
                             String.valueOf(updatedVictimTotalNumberOfInjured))
-                    .add("/eventsCaused[0]/victim/numberOfPerpetratorInjured",
-                            String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                    .add("/eventsCaused[0]/victim/numberOfPerpetratorsInjured",
+                            String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                     .add("/eventsCaused[0]/victim/valueOfPropertyDamage",
                             String.valueOf(updatedVictimValueOfPropertyDamage))
                     .build());
@@ -2011,12 +2011,12 @@ class PatchUtilTest {
                                     .add("country", Json.createObjectBuilder().add("name", updatedCountryName))))
                     .add("victim", Json.createObjectBuilder()
                             .add("totalNumberOfFatalities", String.valueOf(updatedVictimTotalNumberOfFatalities))
-                            .add("numberOfPerpetratorFatalities",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorFatalities))
+                            .add("numberOfPerpetratorsFatalities",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsFatalities))
                             .add("totalNumberOfInjured",
                                     String.valueOf(updatedVictimTotalNumberOfInjured))
-                            .add("numberOfPerpetratorInjured",
-                                    String.valueOf(updatedVictimNumberOfPerpetratorInjured))
+                            .add("numberOfPerpetratorsInjured",
+                                    String.valueOf(updatedVictimNumberOfPerpetratorsInjured))
                             .add("valueOfPropertyDamage",
                                     String.valueOf(updatedVictimValueOfPropertyDamage)))
                     .build();
@@ -2197,21 +2197,21 @@ class PatchUtilTest {
                             () -> "should return group node with victim total number of fatalities: "
                                     + updatedVictimNodeExpected.getTotalNumberOfFatalities() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfFatalities()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorFatalities(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities(),
-                            () -> "should return group node with victim number of perpetrator fatalities: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorFatalities() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorFatalities()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities(),
+                            () -> "should return group node with victim number of perpetrators fatalities: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsFatalities() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsFatalities()),
                     () -> assertEquals(updatedVictimNodeExpected.getTotalNumberOfInjured(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured(),
                             () -> "should return group node with victim total number of injured: "
                                     + updatedVictimNodeExpected.getTotalNumberOfInjured() + ", but was: "
                                     + groupNodeActual.getEventsCaused().get(0).getVictim().getTotalNumberOfInjured()),
-                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorInjured(),
-                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured(),
-                            () -> "should return group node with victim number of perpetrator injured: "
-                                    + updatedVictimNodeExpected.getNumberOfPerpetratorInjured() + ", but was: "
-                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorInjured()),
+                    () -> assertEquals(updatedVictimNodeExpected.getNumberOfPerpetratorsInjured(),
+                            groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured(),
+                            () -> "should return group node with victim number of perpetrators injured: "
+                                    + updatedVictimNodeExpected.getNumberOfPerpetratorsInjured() + ", but was: "
+                                    + groupNodeActual.getEventsCaused().get(0).getVictim().getNumberOfPerpetratorsInjured()),
                     () -> assertEquals(updatedVictimNodeExpected.getValueOfPropertyDamage(),
                             groupNodeActual.getEventsCaused().get(0).getVictim().getValueOfPropertyDamage(),
                             () -> "should return group node with victim value of property damage: "

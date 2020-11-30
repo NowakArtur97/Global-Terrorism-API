@@ -197,12 +197,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].victim.id", is(eventModel1.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[0].victim.totalNumberOfFatalities",
                                 is(eventModel1.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorFatalities",
-                                is(eventModel1.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel1.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[0].victim.totalNumberOfInjured",
                                 is(eventModel1.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorInjured",
-                                is(eventModel1.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsInjured",
+                                is(eventModel1.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[0].victim.valueOfPropertyDamage",
                                 is(eventModel1.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -236,12 +236,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].victim.id", is(eventModel2.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[1].victim.totalNumberOfFatalities",
                                 is(eventModel2.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorFatalities",
-                                is(eventModel2.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel2.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[1].victim.totalNumberOfInjured",
                                 is(eventModel2.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorInjured",
-                                is(eventModel2.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsInjured",
+                                is(eventModel2.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[1].victim.valueOfPropertyDamage",
                                 is(eventModel2.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -275,12 +275,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].victim.id", is(eventModel3.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[2].victim.totalNumberOfFatalities",
                                 is(eventModel3.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorFatalities",
-                                is(eventModel3.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel3.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[2].victim.totalNumberOfInjured",
                                 is(eventModel3.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorInjured",
-                                is(eventModel3.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorsInjured",
+                                is(eventModel3.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[2].victim.valueOfPropertyDamage",
                                 is(eventModel3.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -314,12 +314,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[3].victim.id", is(eventModel4.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[3].victim.totalNumberOfFatalities",
                                 is(eventModel4.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[3].victim.numberOfPerpetratorFatalities",
-                                is(eventModel4.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[3].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel4.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[3].victim.totalNumberOfInjured",
                                 is(eventModel4.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[3].victim.numberOfPerpetratorInjured",
-                                is(eventModel4.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[3].victim.numberOfPerpetratorsInjured",
+                                is(eventModel4.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[3].victim.valueOfPropertyDamage",
                                 is(eventModel4.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -416,12 +416,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[0].victim.id", is(eventModel1.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[0].victim.totalNumberOfFatalities",
                                 is(eventModel1.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorFatalities",
-                                is(eventModel1.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel1.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[0].victim.totalNumberOfInjured",
                                 is(eventModel1.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorInjured",
-                                is(eventModel1.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsInjured",
+                                is(eventModel1.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[0].victim.valueOfPropertyDamage",
                                 is(eventModel1.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -455,12 +455,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[1].victim.id", is(eventModel2.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[1].victim.totalNumberOfFatalities",
                                 is(eventModel2.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorFatalities",
-                                is(eventModel2.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel2.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[1].victim.totalNumberOfInjured",
                                 is(eventModel2.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorInjured",
-                                is(eventModel2.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsInjured",
+                                is(eventModel2.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[1].victim.valueOfPropertyDamage",
                                 is(eventModel2.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -494,12 +494,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("content[2].victim.id", is(eventModel3.getVictim().getId().intValue())))
                         .andExpect(jsonPath("content[2].victim.totalNumberOfFatalities",
                                 is(eventModel3.getVictim().getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorFatalities",
-                                is(eventModel3.getVictim().getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorsFatalities",
+                                is(eventModel3.getVictim().getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("content[2].victim.totalNumberOfInjured",
                                 is(eventModel3.getVictim().getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorInjured",
-                                is(eventModel3.getVictim().getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("content[2].victim.numberOfPerpetratorsInjured",
+                                is(eventModel3.getVictim().getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("content[2].victim.valueOfPropertyDamage",
                                 is(eventModel3.getVictim().getValueOfPropertyDamage().intValue())))
 
@@ -632,12 +632,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimModel.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimModel.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimModel.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimModel.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimModel.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimModel.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimModel.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimModel.getValueOfPropertyDamage().intValue())))
                         .andExpect(jsonPath("victim.links[0].href", is(pathToVictimLink))),
@@ -792,12 +792,12 @@ class EventControllerGetMethodTest {
                         .andExpect(jsonPath("victim.id", is(victimModel.getId().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfFatalities",
                                 is(victimModel.getTotalNumberOfFatalities().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorFatalities",
-                                is(victimModel.getNumberOfPerpetratorFatalities().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsFatalities",
+                                is(victimModel.getNumberOfPerpetratorsFatalities().intValue())))
                         .andExpect(jsonPath("victim.totalNumberOfInjured",
                                 is(victimModel.getTotalNumberOfInjured().intValue())))
-                        .andExpect(jsonPath("victim.numberOfPerpetratorInjured",
-                                is(victimModel.getNumberOfPerpetratorInjured().intValue())))
+                        .andExpect(jsonPath("victim.numberOfPerpetratorsInjured",
+                                is(victimModel.getNumberOfPerpetratorsInjured().intValue())))
                         .andExpect(jsonPath("victim.valueOfPropertyDamage",
                                 is(victimModel.getValueOfPropertyDamage().intValue()))),
                 () -> verify(eventService, times(1)).findById(eventId, depthWhenProvidedToBigDepth),
@@ -861,9 +861,9 @@ class EventControllerGetMethodTest {
 
                 VictimNode victimNode = (VictimNode) victimBuilder.withId((long) counterForUtilMethodsNode)
                         .withTotalNumberOfFatalities(20L + counterForUtilMethodsNode)
-                        .withNumberOfPerpetratorFatalities(11L + counterForUtilMethodsNode)
+                        .withNumberOfPerpetratorsFatalities(11L + counterForUtilMethodsNode)
                         .withTotalNumberOfInjured(21L + counterForUtilMethodsNode)
-                        .withNumberOfPerpetratorInjured(10L + counterForUtilMethodsNode)
+                        .withNumberOfPerpetratorsInjured(10L + counterForUtilMethodsNode)
                         .withValueOfPropertyDamage(1000L + counterForUtilMethodsNode)
                         .build(ObjectType.NODE);
 
@@ -894,9 +894,9 @@ class EventControllerGetMethodTest {
 
                 VictimModel victimModel = (VictimModel) victimBuilder.withId((long) counterForUtilMethodsModel)
                         .withTotalNumberOfFatalities(20L + counterForUtilMethodsModel)
-                        .withNumberOfPerpetratorFatalities(11L + counterForUtilMethodsModel)
+                        .withNumberOfPerpetratorsFatalities(11L + counterForUtilMethodsModel)
                         .withTotalNumberOfInjured(21L + counterForUtilMethodsModel)
-                        .withNumberOfPerpetratorInjured(10L + counterForUtilMethodsModel)
+                        .withNumberOfPerpetratorsInjured(10L + counterForUtilMethodsModel)
                         .withValueOfPropertyDamage(1000L + counterForUtilMethodsModel)
                         .build(ObjectType.MODEL);
 

@@ -36,9 +36,9 @@ export class VictimFormComponent
 
   initForm(): void {
     let totalNumberOfFatalities = 0;
-    let numberOfPerpetratorFatalities = 0;
+    let numberOfPerpetratorsFatalities = 0;
     let totalNumberOfInjured = 0;
-    let numberOfPerpetratorInjured = 0;
+    let numberOfPerpetratorsInjured = 0;
     let valueOfPropertyDamage = 0;
 
     this.updateSubscription$.add(
@@ -46,9 +46,10 @@ export class VictimFormComponent
         if (event?.victim) {
           const { victim } = event;
           totalNumberOfFatalities = victim.totalNumberOfFatalities;
-          numberOfPerpetratorFatalities = victim.numberOfPerpetratorFatalities;
+          numberOfPerpetratorsFatalities =
+            victim.numberOfPerpetratorsFatalities;
           totalNumberOfInjured = victim.totalNumberOfInjured;
-          numberOfPerpetratorInjured = victim.numberOfPerpetratorInjured;
+          numberOfPerpetratorsInjured = victim.numberOfPerpetratorsInjured;
           valueOfPropertyDamage = victim.valueOfPropertyDamage;
         }
       })
@@ -60,16 +61,16 @@ export class VictimFormComponent
           Validators.min(0),
           CommonValidators.notBlank,
         ]),
-        numberOfPerpetratorFatalities: new FormControl(
-          numberOfPerpetratorFatalities,
+        numberOfPerpetratorsFatalities: new FormControl(
+          numberOfPerpetratorsFatalities,
           [Validators.min(0), CommonValidators.notBlank]
         ),
         totalNumberOfInjured: new FormControl(totalNumberOfInjured, [
           Validators.min(0),
           CommonValidators.notBlank,
         ]),
-        numberOfPerpetratorInjured: new FormControl(
-          numberOfPerpetratorInjured,
+        numberOfPerpetratorsInjured: new FormControl(
+          numberOfPerpetratorsInjured,
           [Validators.min(0), CommonValidators.notBlank]
         ),
         valueOfPropertyDamage: new FormControl(valueOfPropertyDamage, [
@@ -81,11 +82,11 @@ export class VictimFormComponent
         validators: [
           CommonValidators.lowerOrEqual(
             'totalNumberOfFatalities',
-            'numberOfPerpetratorFatalities'
+            'numberOfPerpetratorsFatalities'
           ),
           CommonValidators.lowerOrEqual(
             'totalNumberOfInjured',
-            'numberOfPerpetratorInjured'
+            'numberOfPerpetratorsInjured'
           ),
           ,
         ],
@@ -97,13 +98,13 @@ export class VictimFormComponent
   private setupFormSubscriptions(): void {
     this.victimFormSubscriptions$.add(
       this.totalNumberOfFatalities.valueChanges.subscribe(() =>
-        this.numberOfPerpetratorFatalities.updateValueAndValidity()
+        this.numberOfPerpetratorsFatalities.updateValueAndValidity()
       )
     );
 
     this.victimFormSubscriptions$.add(
       this.totalNumberOfInjured.valueChanges.subscribe(() =>
-        this.numberOfPerpetratorInjured.updateValueAndValidity()
+        this.numberOfPerpetratorsInjured.updateValueAndValidity()
       )
     );
   }
@@ -112,16 +113,16 @@ export class VictimFormComponent
     return this.formGroup.get('totalNumberOfFatalities');
   }
 
-  get numberOfPerpetratorFatalities(): AbstractControl {
-    return this.formGroup.get('numberOfPerpetratorFatalities');
+  get numberOfPerpetratorsFatalities(): AbstractControl {
+    return this.formGroup.get('numberOfPerpetratorsFatalities');
   }
 
   get totalNumberOfInjured(): AbstractControl {
     return this.formGroup.get('totalNumberOfInjured');
   }
 
-  get numberOfPerpetratorInjured(): AbstractControl {
-    return this.formGroup.get('numberOfPerpetratorInjured');
+  get numberOfPerpetratorsInjured(): AbstractControl {
+    return this.formGroup.get('numberOfPerpetratorsInjured');
   }
 
   get valueOfPropertyDamage(): AbstractControl {

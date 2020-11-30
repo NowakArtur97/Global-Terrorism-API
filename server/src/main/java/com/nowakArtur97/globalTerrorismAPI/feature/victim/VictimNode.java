@@ -15,22 +15,22 @@ public class VictimNode extends Node implements Victim {
 
     private Long totalNumberOfFatalities;
 
-    private Long numberOfPerpetratorFatalities;
+    private Long numberOfPerpetratorsFatalities;
 
     private Long totalNumberOfInjured;
 
-    private Long numberOfPerpetratorInjured;
+    private Long numberOfPerpetratorsInjured;
 
     private Long valueOfPropertyDamage;
 
     @Builder
-    public VictimNode(Long id, Long totalNumberOfFatalities, Long numberOfPerpetratorFatalities, Long totalNumberOfInjured,
-                      Long numberOfPerpetratorInjured, Long valueOfPropertyDamage) {
+    public VictimNode(Long id, Long totalNumberOfFatalities, Long numberOfPerpetratorsFatalities, Long totalNumberOfInjured,
+                      Long numberOfPerpetratorsInjured, Long valueOfPropertyDamage) {
         super(id);
         this.totalNumberOfFatalities = totalNumberOfFatalities;
-        this.numberOfPerpetratorFatalities = numberOfPerpetratorFatalities;
+        this.numberOfPerpetratorsFatalities = numberOfPerpetratorsFatalities;
         this.totalNumberOfInjured = totalNumberOfInjured;
-        this.numberOfPerpetratorInjured = numberOfPerpetratorInjured;
+        this.numberOfPerpetratorsInjured = numberOfPerpetratorsInjured;
         this.valueOfPropertyDamage = valueOfPropertyDamage;
     }
 
@@ -42,15 +42,15 @@ public class VictimNode extends Node implements Victim {
 
         VictimNode that = (VictimNode) o;
         return Objects.equals(getTotalNumberOfFatalities(), that.getTotalNumberOfFatalities()) &&
-                Objects.equals(getNumberOfPerpetratorFatalities(), that.getNumberOfPerpetratorFatalities()) &&
+                Objects.equals(getNumberOfPerpetratorsFatalities(), that.getNumberOfPerpetratorsFatalities()) &&
                 Objects.equals(getTotalNumberOfInjured(), that.getTotalNumberOfInjured()) &&
-                Objects.equals(getNumberOfPerpetratorInjured(), that.getNumberOfPerpetratorInjured()) &&
+                Objects.equals(getNumberOfPerpetratorsInjured(), that.getNumberOfPerpetratorsInjured()) &&
                 Objects.equals(getValueOfPropertyDamage(), that.getValueOfPropertyDamage());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTotalNumberOfFatalities(), getNumberOfPerpetratorFatalities(),
-                getTotalNumberOfInjured(), getNumberOfPerpetratorInjured(), getValueOfPropertyDamage());
+        return Objects.hash(getTotalNumberOfFatalities(), getNumberOfPerpetratorsFatalities(),
+                getTotalNumberOfInjured(), getNumberOfPerpetratorsInjured(), getValueOfPropertyDamage());
     }
 }

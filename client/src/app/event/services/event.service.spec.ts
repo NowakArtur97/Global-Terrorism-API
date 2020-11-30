@@ -62,9 +62,9 @@ describe('eventsService', () => {
             victim: {
               id: 5,
               totalNumberOfFatalities: 11,
-              numberOfPerpetratorFatalities: 3,
+              numberOfPerpetratorsFatalities: 3,
               totalNumberOfInjured: 14,
-              numberOfPerpetratorInjured: 4,
+              numberOfPerpetratorsInjured: 4,
               valueOfPropertyDamage: 2000,
             },
           },
@@ -95,9 +95,9 @@ describe('eventsService', () => {
             victim: {
               id: 11,
               totalNumberOfFatalities: 10,
-              numberOfPerpetratorFatalities: 2,
+              numberOfPerpetratorsFatalities: 2,
               totalNumberOfInjured: 11,
-              numberOfPerpetratorInjured: 6,
+              numberOfPerpetratorsInjured: 6,
               valueOfPropertyDamage: 7000,
             },
           },
@@ -143,9 +143,9 @@ describe('eventsService', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -191,9 +191,9 @@ describe('eventsService', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -230,9 +230,9 @@ describe('eventsService', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -276,9 +276,9 @@ describe('eventsService', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };
@@ -315,9 +315,9 @@ describe('eventsService', () => {
         victim: {
           id: 5,
           totalNumberOfFatalities: 11,
-          numberOfPerpetratorFatalities: 3,
+          numberOfPerpetratorsFatalities: 3,
           totalNumberOfInjured: 14,
-          numberOfPerpetratorInjured: 4,
+          numberOfPerpetratorsInjured: 4,
           valueOfPropertyDamage: 2000,
         },
       };

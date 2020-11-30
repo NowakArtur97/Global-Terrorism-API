@@ -12,11 +12,11 @@ public final class VictimBuilder {
 
     private Long totalNumberOfFatalities = 100L;
 
-    private Long numberOfPerpetratorFatalities = 10L;
+    private Long numberOfPerpetratorsFatalities = 10L;
 
     private Long totalNumberOfInjured = 200L;
 
-    private Long numberOfPerpetratorInjured = 200L;
+    private Long numberOfPerpetratorsInjured = 200L;
 
     private Long valueOfPropertyDamage = 4000L;
 
@@ -34,9 +34,9 @@ public final class VictimBuilder {
         return this;
     }
 
-    public VictimBuilder withNumberOfPerpetratorFatalities(Long numberOfPerpetratorFatalities) {
+    public VictimBuilder withNumberOfPerpetratorsFatalities(Long numberOfPerpetratorsFatalities) {
 
-        this.numberOfPerpetratorFatalities = numberOfPerpetratorFatalities;
+        this.numberOfPerpetratorsFatalities = numberOfPerpetratorsFatalities;
 
         return this;
     }
@@ -48,9 +48,9 @@ public final class VictimBuilder {
         return this;
     }
 
-    public VictimBuilder withNumberOfPerpetratorInjured(Long numberOfPerpetratorInjured) {
+    public VictimBuilder withNumberOfPerpetratorsInjured(Long numberOfPerpetratorsInjured) {
 
-        this.numberOfPerpetratorInjured = numberOfPerpetratorInjured;
+        this.numberOfPerpetratorsInjured = numberOfPerpetratorsInjured;
 
         return this;
     }
@@ -72,9 +72,9 @@ public final class VictimBuilder {
 
                 victim = VictimDTO.builder()
                         .totalNumberOfFatalities(totalNumberOfFatalities)
-                        .numberOfPerpetratorFatalities(numberOfPerpetratorFatalities)
+                        .numberOfPerpetratorsFatalities(numberOfPerpetratorsFatalities)
                         .totalNumberOfInjured(totalNumberOfInjured)
-                        .numberOfPerpetratorInjured(numberOfPerpetratorInjured)
+                        .numberOfPerpetratorsInjured(numberOfPerpetratorsInjured)
                         .valueOfPropertyDamage(valueOfPropertyDamage)
                         .build();
 
@@ -85,9 +85,9 @@ public final class VictimBuilder {
                 victim = VictimNode.builder()
                         .id(id)
                         .totalNumberOfFatalities(totalNumberOfFatalities)
-                        .numberOfPerpetratorFatalities(numberOfPerpetratorFatalities)
+                        .numberOfPerpetratorsFatalities(numberOfPerpetratorsFatalities)
                         .totalNumberOfInjured(totalNumberOfInjured)
-                        .numberOfPerpetratorInjured(numberOfPerpetratorInjured)
+                        .numberOfPerpetratorsInjured(numberOfPerpetratorsInjured)
                         .valueOfPropertyDamage(valueOfPropertyDamage)
                         .build();
 
@@ -98,9 +98,9 @@ public final class VictimBuilder {
                 victim = VictimModel.builder()
                         .id(id)
                         .totalNumberOfFatalities(totalNumberOfFatalities)
-                        .numberOfPerpetratorFatalities(numberOfPerpetratorFatalities)
+                        .numberOfPerpetratorsFatalities(numberOfPerpetratorsFatalities)
                         .totalNumberOfInjured(totalNumberOfInjured)
-                        .numberOfPerpetratorInjured(numberOfPerpetratorInjured)
+                        .numberOfPerpetratorsInjured(numberOfPerpetratorsInjured)
                         .valueOfPropertyDamage(valueOfPropertyDamage)
                         .build();
 
@@ -119,9 +119,9 @@ public final class VictimBuilder {
 
         id = 1L;
         totalNumberOfFatalities = 100L;
-        numberOfPerpetratorFatalities = 10L;
+        numberOfPerpetratorsFatalities = 10L;
         totalNumberOfInjured = 200L;
-        numberOfPerpetratorInjured = 200L;
+        numberOfPerpetratorsInjured = 200L;
         valueOfPropertyDamage = 4000L;
     }
 }

@@ -207,9 +207,9 @@ describe('EventFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: 11,
-            numberOfPerpetratorFatalities: 3,
+            numberOfPerpetratorsFatalities: 3,
             totalNumberOfInjured: 14,
-            numberOfPerpetratorInjured: 4,
+            numberOfPerpetratorsInjured: 4,
             valueOfPropertyDamage: 2000,
           },
         };
@@ -272,9 +272,9 @@ describe('EventFormComponent', () => {
           victim: {
             id: 5,
             totalNumberOfFatalities: -11,
-            numberOfPerpetratorFatalities: -3,
+            numberOfPerpetratorsFatalities: -3,
             totalNumberOfInjured: -14,
-            numberOfPerpetratorInjured: -4,
+            numberOfPerpetratorsInjured: -4,
             valueOfPropertyDamage: -2000,
           },
         };

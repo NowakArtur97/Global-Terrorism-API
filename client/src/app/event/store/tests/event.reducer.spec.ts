@@ -33,9 +33,9 @@ const event1 = {
   victim: {
     id: 5,
     totalNumberOfFatalities: 11,
-    numberOfPerpetratorFatalities: 3,
+    numberOfPerpetratorsFatalities: 3,
     totalNumberOfInjured: 14,
-    numberOfPerpetratorInjured: 4,
+    numberOfPerpetratorsInjured: 4,
     valueOfPropertyDamage: 2000,
   },
 };
@@ -66,9 +66,9 @@ const event2 = {
   victim: {
     id: 11,
     totalNumberOfFatalities: 10,
-    numberOfPerpetratorFatalities: 2,
+    numberOfPerpetratorsFatalities: 2,
     totalNumberOfInjured: 11,
-    numberOfPerpetratorInjured: 6,
+    numberOfPerpetratorsInjured: 6,
     valueOfPropertyDamage: 7000,
   },
 };
@@ -105,9 +105,9 @@ const eventDTO: EventDTO = {
   victim: {
     id: 5,
     totalNumberOfFatalities: 11,
-    numberOfPerpetratorFatalities: 3,
+    numberOfPerpetratorsFatalities: 3,
     totalNumberOfInjured: 14,
-    numberOfPerpetratorInjured: 4,
+    numberOfPerpetratorsInjured: 4,
     valueOfPropertyDamage: 2000,
   },
 };
@@ -311,9 +311,9 @@ describe('eventReducer', () => {
         victim: {
           id: 11,
           totalNumberOfFatalities: 10,
-          numberOfPerpetratorFatalities: 2,
+          numberOfPerpetratorsFatalities: 2,
           totalNumberOfInjured: 11,
-          numberOfPerpetratorInjured: 6,
+          numberOfPerpetratorsInjured: 6,
           valueOfPropertyDamage: 7000,
         },
       };
@@ -457,9 +457,9 @@ describe('eventReducer', () => {
           victim: {
             id: 17,
             totalNumberOfFatalities: 12,
-            numberOfPerpetratorFatalities: 1,
+            numberOfPerpetratorsFatalities: 1,
             totalNumberOfInjured: 1,
-            numberOfPerpetratorInjured: 1,
+            numberOfPerpetratorsInjured: 1,
             valueOfPropertyDamage: 2300,
           },
         };
@@ -490,9 +490,9 @@ describe('eventReducer', () => {
           victim: {
             id: 23,
             totalNumberOfFatalities: 1,
-            numberOfPerpetratorFatalities: 1,
+            numberOfPerpetratorsFatalities: 1,
             totalNumberOfInjured: 7,
-            numberOfPerpetratorInjured: 6,
+            numberOfPerpetratorsInjured: 6,
             valueOfPropertyDamage: 5000,
           },
         };
