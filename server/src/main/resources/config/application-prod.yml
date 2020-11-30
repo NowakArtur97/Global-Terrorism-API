@@ -8,3 +8,6 @@ spring:
       uri: ${GRAPHENEDB_URL}
       username: ${GRAPHENEDB_USER}
       encryption: true
+      
+server:
+  port: ${PORT:5000}
