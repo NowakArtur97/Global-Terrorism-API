@@ -1,0 +1,12 @@
+.victims-chart--canvas {
+  max-height: 500px;
+  width: auto;
+}
+
+.victims-chart {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
