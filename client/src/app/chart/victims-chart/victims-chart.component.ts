@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { ChartOptions, ChartType } from 'chart.js';
 import { Label, SingleDataSet } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { selectAllEventsBeforeDate } from 'src/app/event/store/event.reducer';
+import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import Event from '../../event/models/event.model';
@@ -35,16 +35,19 @@ export class VictimsChartComponent implements OnInit, OnDestroy {
   private numberOfPerpetratorInjured = 0;
 
   private eventsSubscription$: Subscription;
-  events: Event[] = [];
 
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.eventsSubscription$ = this.store
-      .select(selectAllEventsBeforeDate)
+      .select(selectAllEvents)
       .subscribe((events: Event[]) => {
-        this.events = events;
-        this.events.forEach(({ victim }) => {
+        this.totalNumberOfFatalities = 0;
+        this.numberOfPerpetratorFatalities = 0;
+        this.totalNumberOfInjured = 0;
+        this.numberOfPerpetratorInjured = 0;
+
+        events.forEach(({ victim }) => {
           this.totalNumberOfFatalities += victim.totalNumberOfFatalities;
           this.numberOfPerpetratorFatalities +=
             victim.numberOfPerpetratorFatalities;
