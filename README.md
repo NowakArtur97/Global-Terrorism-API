@@ -78,6 +78,8 @@ Frontend:
 - NgRx Store-Devtools - 10.0.0
 - Angular Material - 10.2.1
 - Leaflet - 1.7.1
+- Chart.js - 2.9.4
+- ng2-charts - 2.4.2
 - Jasmine - 3.6.0
 - Karma - 5.0.0
 - Protractor - 7.0.0
