@@ -44,10 +44,15 @@ export class EventsOverYearsChartComponent implements OnInit {
 
         events.forEach(({ date }) => {
           const year = new Date(date).getFullYear();
-          const eventsOverYear: ChartPoint = [
+          const eventsOverYear: number | number[] | ChartPoint = [
             ...this.scatterChartData[0].data,
           ].find((data: ChartPoint) => data.x === year);
-          eventsOverYear.y++;
+          if (
+            typeof eventsOverYear !== 'number' &&
+            !Array.isArray(eventsOverYear)
+          ) {
+            eventsOverYear.y = +eventsOverYear.y + 1;
+          }
         });
       });
   }
