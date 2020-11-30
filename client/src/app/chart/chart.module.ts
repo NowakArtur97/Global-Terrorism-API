@@ -12,9 +12,10 @@ import { MaterialModule } from '../common/material.module';
 import ChartRoutingModule from './chart-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { VictimsChartComponent } from './victims-chart/victims-chart.component';
+import { EventsOverYearsChartComponent } from './events-over-years-chart/events-over-years-chart.component';
 
 @NgModule({
-  declarations: [DashboardComponent, VictimsChartComponent],
+  declarations: [DashboardComponent, VictimsChartComponent, EventsOverYearsChartComponent],
   imports: [
     MatGridListModule,
     MatCardModule,
