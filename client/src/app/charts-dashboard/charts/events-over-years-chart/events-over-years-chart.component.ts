@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ChartDataSets, ChartOptions, ChartPoint, ChartType } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import Event from '../../../event/models/event.model';
   templateUrl: './events-over-years-chart.component.html',
   styleUrls: ['./events-over-years-chart.component.css'],
 })
-export class EventsOverYearsChartComponent implements OnInit {
+export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
   public scatterChartOptions: ChartOptions = {
     responsive: true,
   };
