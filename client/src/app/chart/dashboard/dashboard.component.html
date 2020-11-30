@@ -1,21 +1,13 @@
 <div class="grid-container">
   <h1 class="mat-h1">Statistics</h1>
-  <mat-grid-list cols="2" rowHeight="300px">
+  <mat-grid-list cols="{{ (cardLayout | async)?.columns }}" rowHeight="305px">
     <mat-grid-tile
-      *ngFor="let card of cards | async"
-      [colspan]="card.cols"
-      [rowspan]="card.rows"
+      [colspan]="(cardLayout | async)?.chart.cols"
+      [rowspan]="(cardLayout | async)?.chart.rows"
     >
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <app-victims-chart></app-victims-chart>
-        </mat-card-content>
-      </mat-card>
+      <mat-card-content class="dashboard-card-content">
+        <app-victims-chart></app-victims-chart>
+      </mat-card-content>
     </mat-grid-tile>
   </mat-grid-list>
 </div>

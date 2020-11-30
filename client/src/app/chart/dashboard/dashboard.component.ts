@@ -8,14 +8,19 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  /** Based on the screen size, switch from standard to one column per row */
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+  cardLayout = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
       if (matches) {
-        return [{ title: 'Victims', cols: 1, rows: 2 }];
+        return {
+          columns: 1,
+          chart: { cols: 1, rows: 2 },
+        };
       }
 
-      return [{ title: 'Victims', cols: 1, rows: 2 }];
+      return {
+        columns: 4,
+        chart: { cols: 2, rows: 2 },
+      };
     })
   );
 

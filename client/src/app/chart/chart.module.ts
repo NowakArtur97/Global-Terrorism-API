@@ -10,16 +10,11 @@ import { ChartsModule } from 'ng2-charts';
 
 import { MaterialModule } from '../common/material.module';
 import ChartRoutingModule from './chart-routing.module';
-import { DashboardCardComponent } from './dashboard/dashboard-card/dashboard-card.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { VictimsChartComponent } from './victims-chart/victims-chart.component';
 
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    VictimsChartComponent,
-    DashboardCardComponent,
-  ],
+  declarations: [DashboardComponent, VictimsChartComponent],
   imports: [
     MatGridListModule,
     MatCardModule,
