@@ -9,13 +9,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ChartsModule } from 'ng2-charts';
 
 import { MaterialModule } from '../common/material.module';
-import ChartRoutingModule from './chart-routing.module';
+import ChartsDashboardRoutingModule from './charts-dashboard-routing.module';
+import { EventsOverYearsChartComponent } from './charts/events-over-years-chart/events-over-years-chart.component';
+import { VictimsChartComponent } from './charts/victims-chart/victims-chart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { VictimsChartComponent } from './victims-chart/victims-chart.component';
-import { EventsOverYearsChartComponent } from './events-over-years-chart/events-over-years-chart.component';
 
 @NgModule({
-  declarations: [DashboardComponent, VictimsChartComponent, EventsOverYearsChartComponent],
+  declarations: [
+    DashboardComponent,
+    VictimsChartComponent,
+    EventsOverYearsChartComponent,
+  ],
   imports: [
     MatGridListModule,
     MatCardModule,
@@ -25,9 +29,9 @@ import { EventsOverYearsChartComponent } from './events-over-years-chart/events-
     LayoutModule,
 
     CommonModule,
-    ChartRoutingModule,
+    ChartsDashboardRoutingModule,
     ChartsModule,
     MaterialModule,
   ],
 })
-export class ChartModule {}
+export class ChartsDashboardModule {}

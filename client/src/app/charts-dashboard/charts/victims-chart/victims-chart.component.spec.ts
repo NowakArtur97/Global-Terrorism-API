@@ -7,7 +7,7 @@ import { MaterialModule } from 'src/app/common/material.module';
 import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
-import Event from '../../event/models/event.model';
+import Event from '../../../event/models/event.model';
 import { VictimsChartComponent } from './victims-chart.component';
 
 describe('VictimsChartComponent', () => {

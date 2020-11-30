@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
-import Event from '../../event/models/event.model';
+import Event from '../../../event/models/event.model';
 
 @Component({
   selector: 'app-victims-chart',
