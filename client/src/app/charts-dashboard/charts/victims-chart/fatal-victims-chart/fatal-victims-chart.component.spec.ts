@@ -36,7 +36,7 @@ describe('FatalVictimsChartComponent', () => {
   });
 
   describe('when load chart', () => {
-    it('should add up all victims data', () => {
+    it('should add up all fatal victims data', () => {
       const event1 = {
         id: 6,
         summary: 'summary',
