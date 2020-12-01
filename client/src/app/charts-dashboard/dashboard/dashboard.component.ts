@@ -14,7 +14,7 @@ export class DashboardComponent {
         return {
           columns: 2,
           eventsOverYearsChart: { cols: 2, rows: 1 },
-          victimChart: { cols: 2, rows: 2 },
+          fatalitiesChart: { cols: 2, rows: 2 },
           victimChart2: { cols: 2, rows: 3 },
         };
       }
@@ -22,7 +22,7 @@ export class DashboardComponent {
       return {
         columns: 2,
         eventsOverYearsChart: { cols: 2, rows: 1 },
-        victimChart: { cols: 1, rows: 2 },
+        fatalitiesChart: { cols: 1, rows: 2 },
         victimChart2: { cols: 1, rows: 2 },
       };
     })

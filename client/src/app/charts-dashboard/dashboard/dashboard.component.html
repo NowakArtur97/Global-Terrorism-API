@@ -10,11 +10,11 @@
       </mat-card-content>
     </mat-grid-tile>
     <mat-grid-tile
-      [colspan]="(cardLayout | async)?.victimChart.cols"
-      [rowspan]="(cardLayout | async)?.victimChart.rows"
+      [colspan]="(cardLayout | async)?.fatalitiesChart.cols"
+      [rowspan]="(cardLayout | async)?.fatalitiesChart.rows"
     >
       <mat-card-content class="dashboard-card-content">
-        <app-victims-chart></app-victims-chart>
+        <app-fatalities-chart></app-fatalities-chart>
       </mat-card-content>
     </mat-grid-tile>
     <mat-grid-tile
