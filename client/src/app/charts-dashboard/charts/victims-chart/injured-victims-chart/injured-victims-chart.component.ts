@@ -1,15 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Label } from 'ng2-charts';
+
+import Event from '../../../../event/models/event.model';
+import { AbstractVictimsChartComponent } from '../abstract-victims-chart.component';
 
 @Component({
   selector: 'app-injured-victims-chart',
   templateUrl: './injured-victims-chart.component.html',
-  styleUrls: ['./injured-victims-chart.component.css']
+  styleUrls: ['./injured-victims-chart.component.css'],
 })
-export class InjuredVictimsChartComponent implements OnInit {
+export class InjuredVictimsChartComponent extends AbstractVictimsChartComponent {
+  pieChartLabels: Label[] = [
+    'Number of perpetrator injured',
+    'Number of civilians fainjuredtalities',
+  ];
 
-  constructor() { }
+  private numberOfPerpetratorsInjured = 0;
+  private numberOfCiviliansInjured = 0;
 
-  ngOnInit(): void {
+  protected populateChart(events: Event[]): void {
+    this.numberOfCiviliansInjured = 0;
+    this.numberOfPerpetratorsInjured = 0;
+
+    events.forEach(({ victim }) => {
+      this.numberOfPerpetratorsInjured += victim.numberOfPerpetratorsInjured;
+      this.numberOfCiviliansInjured +=
+        victim.totalNumberOfInjured - victim.numberOfPerpetratorsInjured;
+    });
+
+    this.pieChartData[0] = this.numberOfPerpetratorsInjured;
+    this.pieChartData[1] = this.numberOfCiviliansInjured;
   }
-
 }

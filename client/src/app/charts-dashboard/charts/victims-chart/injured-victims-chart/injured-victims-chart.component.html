@@ -1,1 +1,15 @@
-<p>injured-victims-chart works!</p>
+<div class="chart-container">
+  <canvas
+    class="chart-canvas"
+    width="350"
+    height="350"
+    baseChart
+    [data]="pieChartData"
+    [labels]="pieChartLabels"
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend"
+  >
+  </canvas>
+</div>
