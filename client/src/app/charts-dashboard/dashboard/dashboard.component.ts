@@ -12,14 +12,18 @@ export class DashboardComponent {
     map(({ matches }) => {
       if (matches) {
         return {
-          columns: 1,
-          chart: { cols: 1, rows: 2 },
+          columns: 2,
+          eventsOverYearsChart: { cols: 2, rows: 1 },
+          victimChart: { cols: 2, rows: 2 },
+          victimChart2: { cols: 2, rows: 3 },
         };
       }
 
       return {
-        columns: 4,
-        chart: { cols: 2, rows: 2 },
+        columns: 2,
+        eventsOverYearsChart: { cols: 2, rows: 1 },
+        victimChart: { cols: 1, rows: 2 },
+        victimChart2: { cols: 1, rows: 2 },
       };
     })
   );

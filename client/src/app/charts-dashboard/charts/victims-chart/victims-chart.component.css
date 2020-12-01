@@ -1,6 +1,6 @@
 .chart-canvas {
   width: auto;
-  height: 100%;
+  max-height: 350px;
 }
 
 .chart-container {
