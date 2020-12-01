@@ -5,11 +5,11 @@ import Event from '../../../../event/models/event.model';
 import { VictimsChartComponent } from '../victims-chart.component';
 
 @Component({
-  selector: 'app-fatalities-chart',
-  templateUrl: './fatalities-chart.component.html',
-  styleUrls: ['./fatalities-chart.component.css'],
+  selector: 'app-fatal-victims-chart',
+  templateUrl: './fatal-victims-chart.component.html',
+  styleUrls: ['./fatal-victims-chart.component.css'],
 })
-export class FatalitiesChartComponent extends VictimsChartComponent {
+export class FatalVictimsChartComponent extends VictimsChartComponent {
   pieChartLabels: Label[] = [
     'Number of perpetrator fatalities',
     'Number of civilians fatalities',

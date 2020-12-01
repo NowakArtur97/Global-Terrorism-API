@@ -7,17 +7,17 @@ import { MaterialModule } from 'src/app/common/material.module';
 import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
-import Event from '../../../event/models/event.model';
-import { VictimsChartComponent } from './victims-chart.component';
+import Event from '../../../../event/models/event.model';
+import { FatalVictimsChartComponent } from './fatal-victims-chart.component';
 
-describe('VictimsChartComponent', () => {
-  let component: VictimsChartComponent;
-  let fixture: ComponentFixture<VictimsChartComponent>;
+describe('FatalVictimsChartComponent', () => {
+  let component: FatalVictimsChartComponent;
+  let fixture: ComponentFixture<FatalVictimsChartComponent>;
   let store: Store<AppStoreState>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VictimsChartComponent],
+      declarations: [FatalVictimsChartComponent],
       imports: [
         StoreModule.forRoot({}),
         MaterialModule,
@@ -29,7 +29,7 @@ describe('VictimsChartComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VictimsChartComponent);
+    fixture = TestBed.createComponent(FatalVictimsChartComponent);
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
@@ -115,19 +115,14 @@ describe('VictimsChartComponent', () => {
       component.ngOnInit();
 
       expect(component.pieChartData[0]).toEqual(
-        event1.victim.totalNumberOfFatalities +
-          event2.victim.totalNumberOfFatalities
-      );
-      expect(component.pieChartData[1]).toEqual(
         event1.victim.numberOfPerpetratorsFatalities +
           event2.victim.numberOfPerpetratorsFatalities
       );
-      expect(component.pieChartData[2]).toEqual(
-        event1.victim.totalNumberOfInjured + event2.victim.totalNumberOfInjured
-      );
-      expect(component.pieChartData[3]).toEqual(
-        event1.victim.numberOfPerpetratorsInjured +
-          event2.victim.numberOfPerpetratorsInjured
+      expect(component.pieChartData[1]).toEqual(
+        event1.victim.totalNumberOfFatalities -
+          event1.victim.numberOfPerpetratorsFatalities +
+          event2.victim.totalNumberOfFatalities -
+          event2.victim.numberOfPerpetratorsFatalities
       );
     });
 
@@ -143,8 +138,6 @@ describe('VictimsChartComponent', () => {
 
       expect(component.pieChartData[0]).toEqual(0);
       expect(component.pieChartData[1]).toEqual(0);
-      expect(component.pieChartData[2]).toEqual(0);
-      expect(component.pieChartData[3]).toEqual(0);
     });
   });
 });

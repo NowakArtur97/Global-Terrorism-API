@@ -11,7 +11,7 @@ import { ChartsModule } from 'ng2-charts';
 import { MaterialModule } from '../common/material.module';
 import ChartsDashboardRoutingModule from './charts-dashboard-routing.module';
 import { EventsOverYearsChartComponent } from './charts/events-over-years-chart/events-over-years-chart.component';
-import { FatalitiesChartComponent } from './charts/victims-chart/fatalities-chart/fatalities-chart.component';
+import { FatalitiesChartComponent } from './charts/victims-chart/fatal-victims-chart/fatal-victims-chart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({

@@ -8,11 +8,7 @@ import AppStoreState from 'src/app/store/app.state';
 
 import Event from '../../../event/models/event.model';
 
-@Component({
-  selector: 'app-victims-chart',
-  templateUrl: './victims-chart.component.html',
-  styleUrls: ['./victims-chart.component.css'],
-})
+@Component({ template: '' })
 export abstract class VictimsChartComponent implements OnInit, OnDestroy {
   pieChartOptions: ChartOptions = {
     responsive: true,
