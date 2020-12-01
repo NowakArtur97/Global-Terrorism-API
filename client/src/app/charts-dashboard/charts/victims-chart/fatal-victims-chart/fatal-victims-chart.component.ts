@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Label } from 'ng2-charts';
 
 import Event from '../../../../event/models/event.model';
-import { VictimsChartComponent } from '../victims-chart.component';
+import { AbstractVictimsChartComponent } from '../abstract-victims-chart.component';
 
 @Component({
   selector: 'app-fatal-victims-chart',
   templateUrl: './fatal-victims-chart.component.html',
   styleUrls: ['./fatal-victims-chart.component.css'],
 })
-export class FatalVictimsChartComponent extends VictimsChartComponent {
+export class FatalVictimsChartComponent extends AbstractVictimsChartComponent {
   pieChartLabels: Label[] = [
     'Number of perpetrator fatalities',
     'Number of civilians fatalities',

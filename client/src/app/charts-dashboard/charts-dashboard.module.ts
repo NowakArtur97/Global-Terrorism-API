@@ -13,12 +13,14 @@ import ChartsDashboardRoutingModule from './charts-dashboard-routing.module';
 import { EventsOverYearsChartComponent } from './charts/events-over-years-chart/events-over-years-chart.component';
 import { FatalitiesChartComponent } from './charts/victims-chart/fatal-victims-chart/fatal-victims-chart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { InjuredVictimsChartComponent } from './charts/victims-chart/injured-victims-chart/injured-victims-chart.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     EventsOverYearsChartComponent,
     FatalitiesChartComponent,
+    InjuredVictimsChartComponent,
   ],
   imports: [
     MatGridListModule,

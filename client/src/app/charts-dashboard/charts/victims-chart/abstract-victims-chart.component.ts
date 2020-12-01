@@ -9,7 +9,8 @@ import AppStoreState from 'src/app/store/app.state';
 import Event from '../../../event/models/event.model';
 
 @Component({ template: '' })
-export abstract class VictimsChartComponent implements OnInit, OnDestroy {
+export abstract class AbstractVictimsChartComponent
+  implements OnInit, OnDestroy {
   pieChartOptions: ChartOptions = {
     responsive: true,
   };
