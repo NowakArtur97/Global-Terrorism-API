@@ -1,6 +1,6 @@
 <div class="grid-container">
   <h1 class="mat-h1">Statistics</h1>
-  <mat-grid-list cols="{{ (cardLayout | async)?.columns }}" rowHeight="320px">
+  <mat-grid-list cols="{{ (cardLayout | async)?.columns }}" rowHeight="35t0px">
     <mat-grid-tile
       [colspan]="(cardLayout | async)?.eventsOverYearsChart.cols"
       [rowspan]="(cardLayout | async)?.eventsOverYearsChart.rows"
@@ -10,19 +10,19 @@
       </mat-card-content>
     </mat-grid-tile>
     <mat-grid-tile
-      [colspan]="(cardLayout | async)?.fatalitiesChart.cols"
-      [rowspan]="(cardLayout | async)?.fatalitiesChart.rows"
+      [colspan]="(cardLayout | async)?.fatalVictimsChart.cols"
+      [rowspan]="(cardLayout | async)?.fatalVictimsChart.rows"
     >
       <mat-card-content class="dashboard-card-content">
-        <app-fatalities-chart></app-fatalities-chart>
+        <app-fatal-victims-chart></app-fatal-victims-chart>
       </mat-card-content>
     </mat-grid-tile>
     <mat-grid-tile
-      [colspan]="(cardLayout | async)?.victimChart2.cols"
-      [rowspan]="(cardLayout | async)?.victimChart2.rows"
+      [colspan]="(cardLayout | async)?.injuredVictimsChart.cols"
+      [rowspan]="(cardLayout | async)?.injuredVictimsChart.rows"
     >
       <mat-card-content class="dashboard-card-content">
-        <app-victims-chart></app-victims-chart>
+        <app-injured-victims-chart></app-injured-victims-chart>
       </mat-card-content>
     </mat-grid-tile>
   </mat-grid-list>
