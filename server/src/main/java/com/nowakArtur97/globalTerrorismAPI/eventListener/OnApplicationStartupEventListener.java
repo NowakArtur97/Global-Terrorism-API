@@ -129,7 +129,6 @@ class OnApplicationStartupEventListener {
         int rowIndex = 0;
 
         for (Row row : sheet) {
-            rowIndex++;
 
             if (rowIndexToSave == rowIndex) {
 
@@ -157,6 +156,8 @@ class OnApplicationStartupEventListener {
             if (numberOfRows <= rowIndex) {
                 break;
             }
+
+            rowIndex++;
         }
 
         saveAllGroups();

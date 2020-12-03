@@ -31,10 +31,27 @@ export class EventsInCountriesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.eventsSubscription$ = this.store
       .select(selectAllEvents)
-      .subscribe((events: Event[]) => {});
+      .subscribe((events: Event[]) => this.populateChart(events));
   }
 
   ngOnDestroy(): void {
     this.eventsSubscription$?.unsubscribe();
+  }
+
+  private populateChart(events: Event[]): void {
+    this.barChartLabels = [];
+    events.forEach((event) => {
+      const country = event.target.countryOfOrigin.name;
+      const countryIndex = this.barChartLabels.indexOf(country);
+      if (countryIndex === -1) {
+        const newIndex = this.barChartLabels.push(country) - 1;
+        this.barChartData[0].data[newIndex] = 1;
+      } else {
+        const eventsInCountry = this.barChartData[0].data[countryIndex];
+        if (typeof eventsInCountry === 'number') {
+          this.barChartData[0].data[countryIndex] = +eventsInCountry + 1;
+        }
+      }
+    });
   }
 }

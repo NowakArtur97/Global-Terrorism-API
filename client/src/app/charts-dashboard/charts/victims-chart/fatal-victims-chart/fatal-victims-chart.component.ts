@@ -11,7 +11,7 @@ import { AbstractVictimsChartComponent } from '../abstract-victims-chart.compone
 })
 export class FatalVictimsChartComponent extends AbstractVictimsChartComponent {
   pieChartLabels: Label[] = [
-    'Number of perpetrator fatalities',
+    'Number of perpetrators fatalities',
     'Number of civilians fatalities',
   ];
 
