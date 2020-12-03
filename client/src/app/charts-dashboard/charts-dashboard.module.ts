@@ -14,6 +14,7 @@ import { EventsOverYearsChartComponent } from './charts/events-over-years-chart/
 import { FatalVictimsChartComponent } from './charts/victims-chart/fatal-victims-chart/fatal-victims-chart.component';
 import { InjuredVictimsChartComponent } from './charts/victims-chart/injured-victims-chart/injured-victims-chart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EventsInStatesComponent } from './charts/events-in-states/events-in-states.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     EventsOverYearsChartComponent,
     FatalVictimsChartComponent,
     InjuredVictimsChartComponent,
+    EventsInStatesComponent,
   ],
   imports: [
     MatGridListModule,
