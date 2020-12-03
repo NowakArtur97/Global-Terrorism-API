@@ -69,7 +69,7 @@ class EventControllerGetMethodTest {
     private MockMvc mockMvc;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private EventService eventService;
 
     @Mock
     private EventModelAssembler modelAssembler;
@@ -662,7 +662,7 @@ class EventControllerGetMethodTest {
         String pathToEventLink = EVENT_BASE_PATH + "/" + eventId.intValue();
         eventModel.add(new Link(pathToEventLink));
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/" + "{depth}";
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/depth/" + "{depth}";
 
         when(eventService.findById(eventId, depthWhenProvidedNegativeDepth)).thenReturn(Optional.of(eventNode));
         when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);
@@ -735,7 +735,7 @@ class EventControllerGetMethodTest {
         String pathToTargetEventLink = EVENT_BASE_PATH + "/" + eventModel.getId().intValue() + "/targets";
         eventModel.add(new Link(pathToTargetEventLink, "target"));
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/" + "{depth}";
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/depth/" + "{depth}";
 
         when(eventService.findById(eventId, depthWhenProvidedToBigDepth)).thenReturn(Optional.of(eventNode));
         when(modelAssembler.toModel(eventNode)).thenReturn(eventModel);

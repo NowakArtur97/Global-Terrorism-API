@@ -32,7 +32,7 @@ class EventControllerOptionsMethodTest {
     private MockMvc mockMvc;
 
     @Mock
-    private GenericService<EventNode, EventDTO> eventService;
+    private EventService eventService;
 
     @Mock
     private EventModelAssembler modelAssembler;

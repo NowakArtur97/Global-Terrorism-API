@@ -9,9 +9,7 @@ import Event from '../models/event.model';
 import EventsGetResponse from '../models/events-get-response.model';
 
 @Injectable({ providedIn: 'root' })
-export default class EventService extends GenericRestService<
-  EventsGetResponse
-> {
+export default class EventService extends GenericRestService<EventsGetResponse> {
   private DEFAULT_DEPTH = 5;
   constructor(protected httpClient: HttpClient) {
     super(httpClient, 'events');
@@ -24,7 +22,7 @@ export default class EventService extends GenericRestService<
       depth = this.DEFAULT_DEPTH;
     }
     return this.httpClient.get<Event>(
-      `${environment.baseApiUrl}/${this.actionUrl}/${id}/${depth}`
+      `${environment.baseApiUrl}/${this.actionUrl}/${id}/depth/${depth}`
     );
   }
 

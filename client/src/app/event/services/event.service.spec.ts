@@ -155,7 +155,7 @@ describe('eventsService', () => {
       });
 
       const req = httpMock.expectOne(
-        `${BASE_URL}/${event.id}/${DEFAULT_DEPTH}`
+        `${BASE_URL}/${event.id}/depth/${DEFAULT_DEPTH}`
       );
       expect(req.request.method).toBe('GET');
       req.flush(event);
