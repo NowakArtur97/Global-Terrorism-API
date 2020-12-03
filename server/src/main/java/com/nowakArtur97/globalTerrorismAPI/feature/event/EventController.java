@@ -6,10 +6,10 @@ import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestControllerImpl;
 import com.nowakArtur97.globalTerrorismAPI.common.exception.ResourceNotFoundException;
 import com.nowakArtur97.globalTerrorismAPI.common.mediaType.PatchMediaType;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import io.swagger.annotations.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
@@ -31,11 +31,14 @@ import javax.validation.Valid;
         @ApiResponse(code = 403, message = "Access to the resource is prohibited")})
 class EventController extends GenericRestControllerImpl<EventModel, EventDTO, EventNode> {
 
-    EventController(GenericService<EventNode, EventDTO> service,
+    private final EventService service;
+
+    EventController(EventService service,
                     RepresentationModelAssemblerSupport<EventNode, EventModel> modelAssembler,
                     PagedResourcesAssembler<EventNode> pagedResourcesAssembler,
                     PatchUtil patchUtil, ViolationUtil<EventNode, EventDTO> violationUtil) {
         super(service, modelAssembler, pagedResourcesAssembler, patchUtil, violationUtil);
+        this.service = service;
     }
 
     @GetMapping
@@ -45,6 +48,23 @@ class EventController extends GenericRestControllerImpl<EventModel, EventDTO, Ev
     @ApiPageable
     public ResponseEntity<PagedModel<EventModel>> findAll(Pageable pageable) {
         return super.findAll(pageable);
+    }
+
+    @GetMapping("/depth/{depth}")
+    @ApiOperation(value = "Find All Events with depth", notes = "Look up all events with depth")
+    @ApiResponse(code = 200, message = "Displayed list of all Events", response = PagedModel.class)
+    @ApiPageable
+    public ResponseEntity<PagedModel<EventModel>> findAllWithDepth(Pageable pageable, @ApiParam(
+            value = "Depth is responsible for the number of nested objects", name = "depth", type = "integer",
+            required = true, example = "1")
+    @PathVariable Integer depth) {
+
+        depth = setDepth(depth);
+
+        Page<EventNode> resources = service.findAll(pageable, depth);
+        PagedModel<EventModel> pagedModel = pagedResourcesAssembler.toModel(resources, modelAssembler);
+
+        return new ResponseEntity<>(pagedModel, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -60,7 +80,7 @@ class EventController extends GenericRestControllerImpl<EventModel, EventDTO, Ev
         return super.findById(id);
     }
 
-    @GetMapping("/{id}/{depth}")
+    @GetMapping("/{id}/depth/{depth}")
     @ApiOperation(value = "Find Event by id and depth", notes = "Provide an id and depth to look up specific Event")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Event found by provided id and depth", response = EventModel.class),
@@ -69,14 +89,11 @@ class EventController extends GenericRestControllerImpl<EventModel, EventDTO, Ev
     public ResponseEntity<EventModel> findByIdWithDepth(
             @ApiParam(value = "Event's id value needed to retrieve details", name = "id", type = "integer", required = true, example = "1")
             @PathVariable("id") Long id,
-            @ApiParam(value = "Depth is responsible for the number of nested objects", name = "depth", type = "integer", required = true, example = "1")
+            @ApiParam(value = "Depth is responsible for the number of nested objects", name = "depth", type = "integer",
+                    required = true, example = "1")
             @PathVariable Integer depth) {
 
-        if (depth > DEFAULT_DEPTH_FOR_JSON_PATCH) {
-            depth = DEFAULT_DEPTH_FOR_JSON_PATCH;
-        } else if (depth < 0) {
-            depth = 0;
-        }
+        depth = setDepth(depth);
 
         return service.findById(id, depth).map(modelAssembler::toModel).map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(modelType, id));
@@ -167,5 +184,16 @@ class EventController extends GenericRestControllerImpl<EventModel, EventDTO, Ev
     @ApiResponse(code = 200, message = "Successfully found all Event resource options", response = ResponseEntity.class)
     public ResponseEntity<?> singularOptions() {
         return super.singularOptions();
+    }
+
+    private Integer setDepth(Integer depth) {
+
+        if (depth == null || depth > DEFAULT_DEPTH_FOR_JSON_PATCH) {
+            depth = DEFAULT_DEPTH_FOR_JSON_PATCH;
+        } else if (depth < 0) {
+            depth = 0;
+        }
+
+        return depth;
     }
 }
