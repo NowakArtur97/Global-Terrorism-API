@@ -1,10 +1,13 @@
-<div style="display: block;">
-  <canvas baseChart
+<div class="chart-container">
+  <canvas
+    class="chart-canvas"
+    baseChart
     [datasets]="barChartData"
     [labels]="barChartLabels"
     [options]="barChartOptions"
     [plugins]="barChartPlugins"
     [legend]="barChartLegend"
-    [chartType]="barChartType">
+    [chartType]="barChartType"
+  >
   </canvas>
 </div>
