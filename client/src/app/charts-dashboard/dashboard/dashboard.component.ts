@@ -16,14 +16,16 @@ export class DashboardComponent {
           eventsOverYearsChart: { cols: 2, rows: 1 },
           fatalVictimsChart: { cols: 2, rows: 2 },
           injuredVictimsChart: { cols: 2, rows: 3 },
+          eventsInCountriesChart: { cols: 2, rows: 4 },
         };
       }
 
       return {
         columns: 2,
-        eventsOverYearsChart: { cols: 2, rows: 1 },
+        eventsOverYearsChart: { cols: 1, rows: 1 },
         fatalVictimsChart: { cols: 1, rows: 2 },
         injuredVictimsChart: { cols: 1, rows: 2 },
+        eventsInCountriesChart: { cols: 1, rows: 3 },
       };
     })
   );

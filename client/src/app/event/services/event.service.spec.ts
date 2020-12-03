@@ -13,7 +13,7 @@ describe('eventsService', () => {
 
   const BASE_URL = 'http://localhost:8080/api/v1/events';
   const DEFAULT_PAGE_SIZE = 100;
-  const DEFAULT_DEPTH = 5;
+  const DEFAULT_DEPTH = 2;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -110,7 +110,7 @@ describe('eventsService', () => {
       });
 
       const req = httpMock.expectOne(
-        `${BASE_URL}?page=0&size=${DEFAULT_PAGE_SIZE}/depth/${DEFAULT_DEPTH}`
+        `${BASE_URL}/depth/${DEFAULT_DEPTH}?page=0&size=${DEFAULT_PAGE_SIZE}`
       );
       expect(req.request.method).toBe('GET');
       req.flush(events);

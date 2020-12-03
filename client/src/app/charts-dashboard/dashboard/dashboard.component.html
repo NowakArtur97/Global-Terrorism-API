@@ -25,5 +25,13 @@
         <app-injured-victims-chart></app-injured-victims-chart>
       </mat-card-content>
     </mat-grid-tile>
+    <mat-grid-tile
+      [colspan]="(cardLayout | async)?.eventsInCountriesChart.cols"
+      [rowspan]="(cardLayout | async)?.eventsInCountriesChart.rows"
+    >
+      <mat-card-content class="dashboard-card-content">
+        <app-events-in-countries></app-events-in-countries>
+      </mat-card-content>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>

@@ -10,7 +10,7 @@ import EventsGetResponse from '../models/events-get-response.model';
 
 @Injectable({ providedIn: 'root' })
 export default class EventService extends GenericRestService<EventsGetResponse> {
-  private DEFAULT_DEPTH = 5;
+  private DEFAULT_DEPTH = 2;
   constructor(protected httpClient: HttpClient) {
     super(httpClient, 'events');
   }
@@ -31,7 +31,7 @@ export default class EventService extends GenericRestService<EventsGetResponse> 
     depth: number = this.DEFAULT_DEPTH
   ): Observable<EventsGetResponse> {
     return this.httpClient.get<EventsGetResponse>(
-      `${environment.baseApiUrl}/${this.actionUrl}?page=0&size=${pageSize}/depth/${depth}`
+      `${environment.baseApiUrl}/${this.actionUrl}/depth/${depth}?page=0&size=${pageSize}`
     );
   }
 
