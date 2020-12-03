@@ -13,19 +13,18 @@ import Event from '../../../event/models/event.model';
   styleUrls: ['./events-over-years-chart.component.css'],
 })
 export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
-  public scatterChartOptions: ChartOptions = {
+  scatterChartOptions: ChartOptions = {
     responsive: true,
   };
 
-  public scatterChartData: ChartDataSets[] = [
+  scatterChartData: ChartDataSets[] = [
     {
       data: [],
-      // data: [{ x: 1, y: 1 }],
       label: 'Events over the years',
       pointRadius: 10,
     },
   ];
-  public scatterChartType: ChartType = 'scatter';
+  scatterChartType: ChartType = 'scatter';
 
   private eventsSubscription$: Subscription;
 
@@ -34,30 +33,36 @@ export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.eventsSubscription$ = this.store
       .select(selectAllEvents)
-      .subscribe((events: Event[]) => {
-        const actualYear = new Date().getFullYear();
-        let index = 0;
-        for (let year = 1970; year <= actualYear; year++) {
-          this.scatterChartData[0].data[index] = { x: year, y: 0 };
-          index++;
-        }
-
-        events.forEach(({ date }) => {
-          const year = new Date(date).getFullYear();
-          const eventsOverYear: number | number[] | ChartPoint = [
-            ...this.scatterChartData[0].data,
-          ].find((data: ChartPoint) => data.x === year);
-          if (
-            typeof eventsOverYear !== 'number' &&
-            !Array.isArray(eventsOverYear)
-          ) {
-            eventsOverYear.y = +eventsOverYear.y + 1;
-          }
-        });
-      });
+      .subscribe((events: Event[]) => this.populateChart(events));
   }
 
   ngOnDestroy(): void {
     this.eventsSubscription$?.unsubscribe();
+  }
+
+  private populateChart(events: Event[]): void {
+    this.cleanChartData();
+
+    events.forEach(({ date }) => {
+      const year = new Date(date).getFullYear();
+      const eventsOverYear: number | number[] | ChartPoint = [
+        ...this.scatterChartData[0].data,
+      ].find((data: ChartPoint) => data.x === year);
+      if (
+        typeof eventsOverYear !== 'number' &&
+        !Array.isArray(eventsOverYear)
+      ) {
+        eventsOverYear.y = +eventsOverYear.y + 1;
+      }
+    });
+  }
+
+  private cleanChartData() {
+    const actualYear = new Date().getFullYear();
+    let index = 0;
+    for (let year = 1970; year <= actualYear; year++) {
+      this.scatterChartData[0].data[index] = { x: year, y: 0 };
+      index++;
+    }
   }
 }

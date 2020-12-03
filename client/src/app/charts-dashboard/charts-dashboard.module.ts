@@ -10,11 +10,11 @@ import { ChartsModule } from 'ng2-charts';
 
 import { MaterialModule } from '../common/material.module';
 import ChartsDashboardRoutingModule from './charts-dashboard-routing.module';
+import { EventsInCountriesComponent } from './charts/events-in-states/events-in-countries.component';
 import { EventsOverYearsChartComponent } from './charts/events-over-years-chart/events-over-years-chart.component';
 import { FatalVictimsChartComponent } from './charts/victims-chart/fatal-victims-chart/fatal-victims-chart.component';
 import { InjuredVictimsChartComponent } from './charts/victims-chart/injured-victims-chart/injured-victims-chart.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { EventsInStatesComponent } from './charts/events-in-states/events-in-states.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import { EventsInStatesComponent } from './charts/events-in-states/events-in-sta
     EventsOverYearsChartComponent,
     FatalVictimsChartComponent,
     InjuredVictimsChartComponent,
-    EventsInStatesComponent,
+    EventsInCountriesComponent,
   ],
   imports: [
     MatGridListModule,
