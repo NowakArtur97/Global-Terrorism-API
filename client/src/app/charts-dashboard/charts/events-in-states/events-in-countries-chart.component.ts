@@ -9,11 +9,11 @@ import AppStoreState from 'src/app/store/app.state';
 import Event from '../../../event/models/event.model';
 
 @Component({
-  selector: 'app-events-in-countries',
-  templateUrl: './events-in-countries.component.html',
-  styleUrls: ['./events-in-countries.component.css'],
+  selector: 'app-events-in-countries-chart',
+  templateUrl: './events-in-countries-chart.component.html',
+  styleUrls: ['./events-in-countries-chart.component.css'],
 })
-export class EventsInCountriesComponent implements OnInit, OnDestroy {
+export class EventsInCountriesChartComponent implements OnInit, OnDestroy {
   barChartOptions: ChartOptions = {
     responsive: true,
   };

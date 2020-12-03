@@ -8,16 +8,16 @@ import { selectAllEvents } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import Event from '../../../event/models/event.model';
-import { EventsInCountriesComponent } from './events-in-countries.component';
+import { EventsInCountriesChartComponent } from './events-in-countries-chart.component';
 
-describe('EventsInCountriesComponent', () => {
-  let component: EventsInCountriesComponent;
-  let fixture: ComponentFixture<EventsInCountriesComponent>;
+describe('EventsInCountriesChartComponent', () => {
+  let component: EventsInCountriesChartComponent;
+  let fixture: ComponentFixture<EventsInCountriesChartComponent>;
   let store: Store<AppStoreState>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EventsInCountriesComponent],
+      declarations: [EventsInCountriesChartComponent],
       imports: [
         StoreModule.forRoot({}),
         MaterialModule,
@@ -29,7 +29,7 @@ describe('EventsInCountriesComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EventsInCountriesComponent);
+    fixture = TestBed.createComponent(EventsInCountriesChartComponent);
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
