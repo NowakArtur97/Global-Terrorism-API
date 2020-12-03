@@ -11,8 +11,12 @@ import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetDTO;
 import com.nowakArtur97.globalTerrorismAPI.feature.target.TargetNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
+import org.apache.poi.ss.formula.functions.T;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,6 +36,12 @@ public class EventService extends GenericServiceImpl<EventNode, EventDTO> {
         this.targetService = targetService;
         this.cityService = cityService;
         this.victimService = victimService;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<EventNode> findAll(Pageable pageable, int depth) {
+
+        return repository.findAll(pageable, depth);
     }
 
     @Override
