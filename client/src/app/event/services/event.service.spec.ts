@@ -12,6 +12,7 @@ describe('eventsService', () => {
   let httpMock: HttpTestingController;
 
   const BASE_URL = 'http://localhost:8080/api/v1/events';
+  const DEFAULT_PAGE_SIZE = 100;
   const DEFAULT_DEPTH = 5;
 
   beforeEach(() => {
@@ -104,11 +105,13 @@ describe('eventsService', () => {
         ],
       };
 
-      eventService.getAll().subscribe((res) => {
+      eventService.getAll(DEFAULT_PAGE_SIZE, DEFAULT_DEPTH).subscribe((res) => {
         expect(res).toEqual(events);
       });
 
-      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=100`);
+      const req = httpMock.expectOne(
+        `${BASE_URL}?page=0&size=${DEFAULT_PAGE_SIZE}/depth/${DEFAULT_DEPTH}`
+      );
       expect(req.request.method).toBe('GET');
       req.flush(events);
     });

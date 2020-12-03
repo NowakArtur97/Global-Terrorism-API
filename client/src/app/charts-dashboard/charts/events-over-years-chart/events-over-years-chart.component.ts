@@ -57,7 +57,7 @@ export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
     });
   }
 
-  private cleanChartData() {
+  private cleanChartData(): void {
     const actualYear = new Date().getFullYear();
     let index = 0;
     for (let year = 1970; year <= actualYear; year++) {
