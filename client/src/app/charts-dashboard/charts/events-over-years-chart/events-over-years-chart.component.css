@@ -1,15 +1,7 @@
 .chart-canvas {
-  max-height: 340px;
-  height: 350px;
+  max-height: 700px;
+  height: 700px;
   width: 800px;
-}
-
-.chart-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 @media (max-width: 450px) {
