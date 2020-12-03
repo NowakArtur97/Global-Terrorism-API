@@ -2,7 +2,6 @@ package com.nowakArtur97.globalTerrorismAPI.feature.event;
 
 import com.nowakArtur97.globalTerrorismAPI.advice.GenericRestControllerAdvice;
 import com.nowakArtur97.globalTerrorismAPI.common.controller.GenericRestController;
-import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
 import com.nowakArtur97.globalTerrorismAPI.common.util.PatchUtil;
 import com.nowakArtur97.globalTerrorismAPI.common.util.ViolationUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityModel;
@@ -22,6 +21,9 @@ import com.nowakArtur97.globalTerrorismAPI.testUtil.builder.enums.ObjectType;
 import com.nowakArtur97.globalTerrorismAPI.testUtil.nameGenerator.NameWithSpacesGenerator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,8 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.ZoneId;
@@ -575,6 +579,701 @@ class EventControllerGetMethodTest {
     }
 
     @Test
+    void when_find_all_events_with_depth_and_events_exist_should_return_all_events_with_nested_objects() {
+
+        int depth = 5;
+
+        RegionNode regionNode1 = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNode1 = (CountryNode) countryBuilder.withRegion(regionNode1)
+                .build(ObjectType.NODE);
+        TargetNode targetNode1 = (TargetNode) targetBuilder.withCountry(countryNode1)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNode1 = (ProvinceNode) provinceBuilder.withCountry(countryNode1)
+                .build(ObjectType.NODE);
+        CityNode cityNode1 = (CityNode) cityBuilder.withProvince(provinceNode1).build(ObjectType.NODE);
+        VictimNode victimNode1 = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode1 = (EventNode) eventBuilder.withTarget(targetNode1).withCity(cityNode1)
+                .withVictim(victimNode1).build(ObjectType.NODE);
+
+        String pathToRegionLink1 = REGION_BASE_PATH + "/" + regionNode1.getId().intValue();
+        String pathToCountryLink1 = COUNTRY_BASE_PATH + "/" + countryNode1.getId().intValue();
+        String pathToProvinceLink1 = PROVINCE_BASE_PATH + "/" + provinceNode1.getId().intValue();
+        String pathToTargetLink1 = TARGET_BASE_PATH + "/" + targetNode1.getId().intValue();
+        String pathToCityLink1 = CITY_BASE_PATH + "/" + cityNode1.getId().intValue();
+        String pathToVictimLink1 = VICTIM_BASE_PATH + "/" + victimNode1.getId().intValue();
+        String pathToEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue();
+        String pathToTargetEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue() + "/targets";
+
+        RegionModel regionModel1 = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        regionModel1.add(new Link(pathToRegionLink1));
+        CountryModel countryModel1 = (CountryModel) countryBuilder.withRegion(regionModel1)
+                .build(ObjectType.MODEL);
+        countryModel1.add(new Link(pathToCountryLink1));
+        TargetModel targetModel1 = (TargetModel) targetBuilder.withCountry(countryModel1)
+                .build(ObjectType.MODEL);
+        targetModel1.add(new Link(pathToTargetLink1));
+        ProvinceModel provinceModel1 = (ProvinceModel) provinceBuilder.withCountry(countryModel1)
+                .build(ObjectType.MODEL);
+        provinceModel1.add(new Link(pathToProvinceLink1));
+        CityModel cityModel1 = (CityModel) cityBuilder.withProvince(provinceModel1).build(ObjectType.MODEL);
+        cityModel1.add(new Link(pathToCityLink1));
+        VictimModel victimModel1 = (VictimModel) victimBuilder.build(ObjectType.MODEL);
+        victimModel1.add(new Link(pathToVictimLink1));
+        EventModel eventModel1 = (EventModel) eventBuilder.withTarget(targetModel1).withCity(cityModel1)
+                .withVictim(victimModel1).build(ObjectType.MODEL);
+        eventModel1.add(new Link(pathToEventLink1));
+        eventModel1.add(new Link(pathToTargetEventLink1));
+
+        RegionNode regionNode2 = (RegionNode) regionBuilder.withName("region 2").build(ObjectType.NODE);
+        CountryNode countryNode2 = (CountryNode) countryBuilder.withName("country 2").withRegion(regionNode2)
+                .build(ObjectType.NODE);
+        TargetNode targetNode2 = (TargetNode) targetBuilder.withTarget("target 2").withCountry(countryNode2)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNode2 = (ProvinceNode) provinceBuilder.withName("province 2").withCountry(countryNode2)
+                .build(ObjectType.NODE);
+        CityNode cityNode2 = (CityNode) cityBuilder.withName("city 2").withProvince(provinceNode2).build(ObjectType.NODE);
+        VictimNode victimNode2 = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode2 = (EventNode) eventBuilder.withSummary("summary 2").withMotive("motive 2")
+                .withTarget(targetNode2).withCity(cityNode2)
+                .withVictim(victimNode2).build(ObjectType.NODE);
+
+        String pathToRegionLink2 = REGION_BASE_PATH + "/" + regionNode2.getId().intValue();
+        String pathToCountryLink2 = COUNTRY_BASE_PATH + "/" + countryNode2.getId().intValue();
+        String pathToProvinceLink2 = PROVINCE_BASE_PATH + "/" + provinceNode2.getId().intValue();
+        String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetNode2.getId().intValue();
+        String pathToCityLink2 = CITY_BASE_PATH + "/" + cityNode2.getId().intValue();
+        String pathToVictimLink2 = VICTIM_BASE_PATH + "/" + victimNode2.getId().intValue();
+        String pathToEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue();
+        String pathToTargetEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue() + "/targets";
+
+        RegionModel regionModel2 = (RegionModel) regionBuilder.withName("region 2").build(ObjectType.MODEL);
+        regionModel2.add(new Link(pathToRegionLink2));
+        CountryModel countryModel2 = (CountryModel) countryBuilder.withName("country 2").withRegion(regionModel2)
+                .build(ObjectType.MODEL);
+        countryModel2.add(new Link(pathToCountryLink2));
+        TargetModel targetModel2 = (TargetModel) targetBuilder.withTarget("target 2").withCountry(countryModel2)
+                .build(ObjectType.MODEL);
+        targetModel2.add(new Link(pathToTargetLink2));
+        ProvinceModel provinceModel2 = (ProvinceModel) provinceBuilder.withName("province 2").withCountry(countryModel2)
+                .build(ObjectType.MODEL);
+        provinceModel2.add(new Link(pathToProvinceLink2));
+        CityModel cityModel2 = (CityModel) cityBuilder.withName("city 2").withProvince(provinceModel2).build(ObjectType.MODEL);
+        cityModel2.add(new Link(pathToCityLink2));
+        VictimModel victimModel2 = (VictimModel) victimBuilder.build(ObjectType.MODEL);
+        victimModel2.add(new Link(pathToVictimLink2));
+        EventModel eventModel2 = (EventModel) eventBuilder.withSummary("summary 2").withMotive("motive 2")
+                .withTarget(targetModel2).withCity(cityModel2)
+                .withVictim(victimModel2).build(ObjectType.MODEL);
+        eventModel2.add(new Link(pathToEventLink2));
+        eventModel2.add(new Link(pathToTargetEventLink2));
+
+        List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2);
+        List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2);
+        Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
+
+        int sizeExpected = 20;
+        int totalElementsExpected = 2;
+        int totalPagesExpected = 1;
+        int numberExpected = 0;
+        int pageExpected = 0;
+        int lastPageExpected = 0;
+
+        Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+        String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+        String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
+        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+
+        Link pageLink1 = new Link(firstPageLink, "first");
+        Link pageLink2 = new Link(firstPageLink, "self");
+        Link pageLink3 = new Link(lastPageLink, "next");
+        Link pageLink4 = new Link(lastPageLink, "last");
+
+        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
+                pageLink3, pageLink4);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/depth/" + "{depth}";
+
+        when(eventService.findAll(pageable, depth)).thenReturn(eventsExpected);
+        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, depth).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[1].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[2].href", is(lastPageLink)))
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
+                        .andExpect(jsonPath("content[0].links[0].href", is(pathToEventLink1)))
+                        .andExpect(jsonPath("content[0].links[1].href", is(pathToTargetEventLink1)))
+                        .andExpect(jsonPath("content[0].id", is(eventModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].summary", is(eventModel1.getSummary())))
+                        .andExpect(jsonPath("content[0].motive", is(eventModel1.getMotive())))
+                        .andExpect(jsonPath("content[0].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[0].isSuicidal", is(eventModel1.getIsSuicidal())))
+                        .andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
+                        .andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
+                                is(eventModel1.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
+                        .andExpect(jsonPath("content[0].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.id", is(targetModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.target", is(targetModel1.getTarget())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink1)))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.id",
+                                is(countryModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.name", is(countryModel1.getName())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink1)))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.id",
+                                is(regionModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.name", is(regionModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.links[0].href", is(pathToCityLink1)))
+                        .andExpect(jsonPath("content[0].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.id", is(cityModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.name", is(cityModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.latitude", is(cityModel1.getLatitude())))
+                        .andExpect(jsonPath("content[0].city.longitude", is(cityModel1.getLongitude())))
+                        .andExpect(jsonPath("content[0].city.province.links[0].href", is(pathToProvinceLink1)))
+                        .andExpect(jsonPath("content[0].city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.id", is(provinceModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.name", is(provinceModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.province.country.links[0].href", is(pathToCountryLink1)))
+                        .andExpect(jsonPath("content[0].city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.country.id", is(countryModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.country.name", is(countryModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.province.country.region.links[0].href",
+                                is(pathToRegionLink1)))
+                        .andExpect(jsonPath("content[0].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.country.region.id",
+                                is(regionModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.country.region.name", is(regionModel1.getName())))
+                        .andExpect(jsonPath("content[0].victim.links[0].href", is(pathToVictimLink1)))
+                        .andExpect(jsonPath("content[0].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].victim.id", is(victimModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].victim.totalNumberOfFatalities",
+                                is(victimModel1.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsFatalities",
+                                is(victimModel1.getNumberOfPerpetratorsFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.totalNumberOfInjured",
+                                is(victimModel1.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsInjured",
+                                is(victimModel1.getNumberOfPerpetratorsInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.valueOfPropertyDamage",
+                                is(victimModel1.getValueOfPropertyDamage().intValue())))
+
+                        .andExpect(jsonPath("content[1].links[0].href", is(pathToEventLink2)))
+                        .andExpect(jsonPath("content[1].links[1].href", is(pathToTargetEventLink2)))
+                        .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
+                        .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
+                        .andExpect(jsonPath("content[1].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[1].isSuicidal", is(eventModel2.getIsSuicidal())))
+                        .andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
+                        .andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
+                                is(eventModel2.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
+                        .andExpect(jsonPath("content[1].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.id", is(targetModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.target", is(targetModel2.getTarget())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.links[0].href", is(pathToCountryLink2)))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.id",
+                                is(countryModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.name", is(countryModel2.getName())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.links[0].href",
+                                is(pathToRegionLink2)))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.id",
+                                is(regionModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.name", is(regionModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.links[0].href", is(pathToCityLink2)))
+                        .andExpect(jsonPath("content[1].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.id", is(cityModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.name", is(cityModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.latitude", is(cityModel2.getLatitude())))
+                        .andExpect(jsonPath("content[1].city.longitude", is(cityModel2.getLongitude())))
+                        .andExpect(jsonPath("content[1].city.province.links[0].href", is(pathToProvinceLink2)))
+                        .andExpect(jsonPath("content[1].city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.id", is(provinceModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.name", is(provinceModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.province.country.links[0].href", is(pathToCountryLink2)))
+                        .andExpect(jsonPath("content[1].city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.country.id", is(countryModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.country.name", is(countryModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.province.country.region.links[0].href",
+                                is(pathToRegionLink2)))
+                        .andExpect(jsonPath("content[1].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.country.region.id",
+                                is(regionModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.country.region.name",
+                                is(regionModel2.getName())))
+                        .andExpect(jsonPath("content[1].victim.links[0].href", is(pathToVictimLink2)))
+                        .andExpect(jsonPath("content[1].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].victim.id", is(victimModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].victim.totalNumberOfFatalities",
+                                is(victimModel2.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsFatalities",
+                                is(victimModel2.getNumberOfPerpetratorsFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.totalNumberOfInjured",
+                                is(victimModel2.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsInjured",
+                                is(victimModel2.getNumberOfPerpetratorsInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.valueOfPropertyDamage",
+                                is(victimModel2.getValueOfPropertyDamage().intValue())))
+
+                        .andExpect(jsonPath("page.size", is(sizeExpected)))
+                        .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+                        .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+                        .andExpect(jsonPath("page.number", is(numberExpected))),
+                () -> verify(eventService, times(1)).findAll(pageable, depth),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
+    }
+
+    @Test
+    void when_find_all_events_with_negative_depth_should_return_events_without_nested_objects() {
+
+        int depth = -5;
+        int depthWhenProvidedNegativeDepth = 0;
+
+        EventNode eventNode1 = (EventNode) eventBuilder.build(ObjectType.NODE);
+
+        String pathToEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue();
+        String pathToTargetEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue() + "/targets";
+
+        EventModel eventModel1 = (EventModel) eventBuilder.build(ObjectType.MODEL);
+        eventModel1.add(new Link(pathToEventLink1));
+        eventModel1.add(new Link(pathToTargetEventLink1));
+
+        EventNode eventNode2 = (EventNode) eventBuilder.withSummary("summary 2").withMotive("motive 2").build(ObjectType.NODE);
+
+        String pathToEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue();
+        String pathToTargetEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue() + "/targets";
+
+        EventModel eventModel2 = (EventModel) eventBuilder.withSummary("summary 2").withMotive("motive 2").build(ObjectType.MODEL);
+        eventModel2.add(new Link(pathToEventLink2));
+        eventModel2.add(new Link(pathToTargetEventLink2));
+
+        List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2);
+        List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2);
+        Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
+
+        int sizeExpected = 20;
+        int totalElementsExpected = 2;
+        int totalPagesExpected = 1;
+        int numberExpected = 0;
+        int pageExpected = 0;
+        int lastPageExpected = 0;
+
+        Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+        String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+        String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
+        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+
+        Link pageLink1 = new Link(firstPageLink, "first");
+        Link pageLink2 = new Link(firstPageLink, "self");
+        Link pageLink3 = new Link(lastPageLink, "next");
+        Link pageLink4 = new Link(lastPageLink, "last");
+
+        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
+                pageLink3, pageLink4);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/depth/" + "{depth}";
+
+        when(eventService.findAll(pageable, depthWhenProvidedNegativeDepth)).thenReturn(eventsExpected);
+        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, depth).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[1].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[2].href", is(lastPageLink)))
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
+                        .andExpect(jsonPath("content[0].links[0].href", is(pathToEventLink1)))
+                        .andExpect(jsonPath("content[0].links[1].href", is(pathToTargetEventLink1)))
+                        .andExpect(jsonPath("content[0].id", is(eventModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].summary", is(eventModel1.getSummary())))
+                        .andExpect(jsonPath("content[0].motive", is(eventModel1.getMotive())))
+                        .andExpect(jsonPath("content[0].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[0].isSuicidal", is(eventModel1.getIsSuicidal())))
+                        .andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
+                        .andExpect(jsonPath("content[0].isPartOfMultipleIncidents",
+                                is(eventModel1.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[0].target").doesNotExist())
+                        .andExpect(jsonPath("content[0].city").doesNotExist())
+                        .andExpect(jsonPath("content[0].victim").doesNotExist())
+
+                        .andExpect(jsonPath("content[1].links[0].href", is(pathToEventLink2)))
+                        .andExpect(jsonPath("content[1].links[1].href", is(pathToTargetEventLink2)))
+                        .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
+                        .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
+                        .andExpect(jsonPath("content[1].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[1].isSuicidal", is(eventModel2.getIsSuicidal())))
+                        .andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
+                        .andExpect(jsonPath("content[1].isPartOfMultipleIncidents",
+                                is(eventModel2.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[0].target").doesNotExist())
+                        .andExpect(jsonPath("content[0].city").doesNotExist())
+                        .andExpect(jsonPath("content[0].victim").doesNotExist())
+
+                        .andExpect(jsonPath("page.size", is(sizeExpected)))
+                        .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+                        .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+                        .andExpect(jsonPath("page.number", is(numberExpected))),
+                () -> verify(eventService, times(1)).findAll(pageable, depthWhenProvidedNegativeDepth),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
+    }
+
+    @Test
+    void when_find_all_events_with_large_depth_should_return_events_with_all_nested_objects() {
+
+        int depth = 15;
+        int depthWhenProvidedToBigDepth = 5;
+
+        RegionNode regionNode1 = (RegionNode) regionBuilder.build(ObjectType.NODE);
+        CountryNode countryNode1 = (CountryNode) countryBuilder.withRegion(regionNode1)
+                .build(ObjectType.NODE);
+        TargetNode targetNode1 = (TargetNode) targetBuilder.withCountry(countryNode1)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNode1 = (ProvinceNode) provinceBuilder.withCountry(countryNode1)
+                .build(ObjectType.NODE);
+        CityNode cityNode1 = (CityNode) cityBuilder.withProvince(provinceNode1).build(ObjectType.NODE);
+        VictimNode victimNode1 = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode1 = (EventNode) eventBuilder.withTarget(targetNode1).withCity(cityNode1)
+                .withVictim(victimNode1).build(ObjectType.NODE);
+
+        String pathToRegionLink1 = REGION_BASE_PATH + "/" + regionNode1.getId().intValue();
+        String pathToCountryLink1 = COUNTRY_BASE_PATH + "/" + countryNode1.getId().intValue();
+        String pathToProvinceLink1 = PROVINCE_BASE_PATH + "/" + provinceNode1.getId().intValue();
+        String pathToTargetLink1 = TARGET_BASE_PATH + "/" + targetNode1.getId().intValue();
+        String pathToCityLink1 = CITY_BASE_PATH + "/" + cityNode1.getId().intValue();
+        String pathToVictimLink1 = VICTIM_BASE_PATH + "/" + victimNode1.getId().intValue();
+        String pathToEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue();
+        String pathToTargetEventLink1 = EVENT_BASE_PATH + "/" + eventNode1.getId().intValue() + "/targets";
+
+        RegionModel regionModel1 = (RegionModel) regionBuilder.build(ObjectType.MODEL);
+        regionModel1.add(new Link(pathToRegionLink1));
+        CountryModel countryModel1 = (CountryModel) countryBuilder.withRegion(regionModel1)
+                .build(ObjectType.MODEL);
+        countryModel1.add(new Link(pathToCountryLink1));
+        TargetModel targetModel1 = (TargetModel) targetBuilder.withCountry(countryModel1)
+                .build(ObjectType.MODEL);
+        targetModel1.add(new Link(pathToTargetLink1));
+        ProvinceModel provinceModel1 = (ProvinceModel) provinceBuilder.withCountry(countryModel1)
+                .build(ObjectType.MODEL);
+        provinceModel1.add(new Link(pathToProvinceLink1));
+        CityModel cityModel1 = (CityModel) cityBuilder.withProvince(provinceModel1).build(ObjectType.MODEL);
+        cityModel1.add(new Link(pathToCityLink1));
+        VictimModel victimModel1 = (VictimModel) victimBuilder.build(ObjectType.MODEL);
+        victimModel1.add(new Link(pathToVictimLink1));
+        EventModel eventModel1 = (EventModel) eventBuilder.withTarget(targetModel1).withCity(cityModel1)
+                .withVictim(victimModel1).build(ObjectType.MODEL);
+        eventModel1.add(new Link(pathToEventLink1));
+        eventModel1.add(new Link(pathToTargetEventLink1));
+
+        RegionNode regionNode2 = (RegionNode) regionBuilder.withName("region 2").build(ObjectType.NODE);
+        CountryNode countryNode2 = (CountryNode) countryBuilder.withName("country 2").withRegion(regionNode2)
+                .build(ObjectType.NODE);
+        TargetNode targetNode2 = (TargetNode) targetBuilder.withTarget("target 2").withCountry(countryNode2)
+                .build(ObjectType.NODE);
+        ProvinceNode provinceNode2 = (ProvinceNode) provinceBuilder.withName("province 2").withCountry(countryNode2)
+                .build(ObjectType.NODE);
+        CityNode cityNode2 = (CityNode) cityBuilder.withName("city 2").withProvince(provinceNode2).build(ObjectType.NODE);
+        VictimNode victimNode2 = (VictimNode) victimBuilder.build(ObjectType.NODE);
+        EventNode eventNode2 = (EventNode) eventBuilder.withSummary("summary 2").withMotive("motive 2")
+                .withTarget(targetNode2).withCity(cityNode2)
+                .withVictim(victimNode2).build(ObjectType.NODE);
+
+        String pathToRegionLink2 = REGION_BASE_PATH + "/" + regionNode2.getId().intValue();
+        String pathToCountryLink2 = COUNTRY_BASE_PATH + "/" + countryNode2.getId().intValue();
+        String pathToProvinceLink2 = PROVINCE_BASE_PATH + "/" + provinceNode2.getId().intValue();
+        String pathToTargetLink2 = TARGET_BASE_PATH + "/" + targetNode2.getId().intValue();
+        String pathToCityLink2 = CITY_BASE_PATH + "/" + cityNode2.getId().intValue();
+        String pathToVictimLink2 = VICTIM_BASE_PATH + "/" + victimNode2.getId().intValue();
+        String pathToEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue();
+        String pathToTargetEventLink2 = EVENT_BASE_PATH + "/" + eventNode2.getId().intValue() + "/targets";
+
+        RegionModel regionModel2 = (RegionModel) regionBuilder.withName("region 2").build(ObjectType.MODEL);
+        regionModel2.add(new Link(pathToRegionLink2));
+        CountryModel countryModel2 = (CountryModel) countryBuilder.withName("country 2").withRegion(regionModel2)
+                .build(ObjectType.MODEL);
+        countryModel2.add(new Link(pathToCountryLink2));
+        TargetModel targetModel2 = (TargetModel) targetBuilder.withTarget("target 2").withCountry(countryModel2)
+                .build(ObjectType.MODEL);
+        targetModel2.add(new Link(pathToTargetLink2));
+        ProvinceModel provinceModel2 = (ProvinceModel) provinceBuilder.withName("province 2").withCountry(countryModel2)
+                .build(ObjectType.MODEL);
+        provinceModel2.add(new Link(pathToProvinceLink2));
+        CityModel cityModel2 = (CityModel) cityBuilder.withName("city 2").withProvince(provinceModel2).build(ObjectType.MODEL);
+        cityModel2.add(new Link(pathToCityLink2));
+        VictimModel victimModel2 = (VictimModel) victimBuilder.build(ObjectType.MODEL);
+        victimModel2.add(new Link(pathToVictimLink2));
+        EventModel eventModel2 = (EventModel) eventBuilder.withSummary("summary 2").withMotive("motive 2")
+                .withTarget(targetModel2).withCity(cityModel2)
+                .withVictim(victimModel2).build(ObjectType.MODEL);
+        eventModel2.add(new Link(pathToEventLink2));
+        eventModel2.add(new Link(pathToTargetEventLink2));
+
+        List<EventNode> eventNodesListExpected = List.of(eventNode1, eventNode2);
+        List<EventModel> eventModelsListExpected = List.of(eventModel1, eventModel2);
+        Page<EventNode> eventsExpected = new PageImpl<>(eventNodesListExpected);
+
+        int sizeExpected = 20;
+        int totalElementsExpected = 2;
+        int totalPagesExpected = 1;
+        int numberExpected = 0;
+        int pageExpected = 0;
+        int lastPageExpected = 0;
+
+        Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+        String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+        String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
+        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+
+        Link pageLink1 = new Link(firstPageLink, "first");
+        Link pageLink2 = new Link(firstPageLink, "self");
+        Link pageLink3 = new Link(lastPageLink, "next");
+        Link pageLink4 = new Link(lastPageLink, "last");
+
+        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(eventModelsListExpected, metadata, pageLink1, pageLink2,
+                pageLink3, pageLink4);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/depth/" + "{depth}";
+
+        when(eventService.findAll(pageable, depthWhenProvidedToBigDepth)).thenReturn(eventsExpected);
+        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, depth).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[1].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[2].href", is(lastPageLink)))
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
+                        .andExpect(jsonPath("content[0].links[0].href", is(pathToEventLink1)))
+                        .andExpect(jsonPath("content[0].links[1].href", is(pathToTargetEventLink1)))
+                        .andExpect(jsonPath("content[0].id", is(eventModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].summary", is(eventModel1.getSummary())))
+                        .andExpect(jsonPath("content[0].motive", is(eventModel1.getMotive())))
+                        .andExpect(jsonPath("content[0].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel1.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[0].isSuicidal", is(eventModel1.getIsSuicidal())))
+                        .andExpect(jsonPath("content[0].isSuccessful", is(eventModel1.getIsSuccessful())))
+                        .andExpect(jsonPath("content[0].isPartOfMultipleIncidents", is(eventModel1.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[0].target.links[0].href", is(pathToTargetLink1)))
+                        .andExpect(jsonPath("content[0].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.id", is(targetModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.target", is(targetModel1.getTarget())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.links[0].href", is(pathToCountryLink1)))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.id", is(countryModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.name", is(countryModel1.getName())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink1)))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.id", is(regionModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].target.countryOfOrigin.region.name", is(regionModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.links[0].href", is(pathToCityLink1)))
+                        .andExpect(jsonPath("content[0].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.id", is(cityModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.name", is(cityModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.latitude", is(cityModel1.getLatitude())))
+                        .andExpect(jsonPath("content[0].city.longitude", is(cityModel1.getLongitude())))
+                        .andExpect(jsonPath("content[0].city.province.links[0].href", is(pathToProvinceLink1)))
+                        .andExpect(jsonPath("content[0].city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.id", is(provinceModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.name", is(provinceModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.province.country.links[0].href", is(pathToCountryLink1)))
+                        .andExpect(jsonPath("content[0].city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.country.id", is(countryModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.country.name", is(countryModel1.getName())))
+                        .andExpect(jsonPath("content[0].city.province.country.region.links[0].href", is(pathToRegionLink1)))
+                        .andExpect(jsonPath("content[0].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].city.province.country.region.id", is(regionModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].city.province.country.region.name", is(regionModel1.getName())))
+                        .andExpect(jsonPath("content[0].victim.links[0].href", is(pathToVictimLink1)))
+                        .andExpect(jsonPath("content[0].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[0].victim.id", is(victimModel1.getId().intValue())))
+                        .andExpect(jsonPath("content[0].victim.totalNumberOfFatalities",
+                                is(victimModel1.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsFatalities",
+                                is(victimModel1.getNumberOfPerpetratorsFatalities().intValue())))
+                        .andExpect(jsonPath("content[0].victim.totalNumberOfInjured",
+                                is(victimModel1.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.numberOfPerpetratorsInjured",
+                                is(victimModel1.getNumberOfPerpetratorsInjured().intValue())))
+                        .andExpect(jsonPath("content[0].victim.valueOfPropertyDamage",
+                                is(victimModel1.getValueOfPropertyDamage().intValue())))
+
+                        .andExpect(jsonPath("content[1].links[0].href", is(pathToEventLink2)))
+                        .andExpect(jsonPath("content[1].links[1].href", is(pathToTargetEventLink2)))
+                        .andExpect(jsonPath("content[1].id", is(eventModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].summary", is(eventModel2.getSummary())))
+                        .andExpect(jsonPath("content[1].motive", is(eventModel2.getMotive())))
+                        .andExpect(jsonPath("content[1].date",
+                                is(DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        .format(eventModel2.getDate().toInstant().atZone(ZoneId.systemDefault())
+                                                .toLocalDate()))))
+                        .andExpect(jsonPath("content[1].isSuicidal", is(eventModel2.getIsSuicidal())))
+                        .andExpect(jsonPath("content[1].isSuccessful", is(eventModel2.getIsSuccessful())))
+                        .andExpect(jsonPath("content[1].isPartOfMultipleIncidents", is(eventModel2.getIsPartOfMultipleIncidents())))
+                        .andExpect(jsonPath("content[1].target.links[0].href", is(pathToTargetLink2)))
+                        .andExpect(jsonPath("content[1].target.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.id", is(targetModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.target", is(targetModel2.getTarget())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.links[0].href", is(pathToCountryLink2)))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.id", is(countryModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.name", is(countryModel2.getName())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.links[0].href", is(pathToRegionLink2)))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.id", is(regionModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].target.countryOfOrigin.region.name", is(regionModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.links[0].href", is(pathToCityLink2)))
+                        .andExpect(jsonPath("content[1].city.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.id", is(cityModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.name", is(cityModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.latitude", is(cityModel2.getLatitude())))
+                        .andExpect(jsonPath("content[1].city.longitude", is(cityModel2.getLongitude())))
+                        .andExpect(jsonPath("content[1].city.province.links[0].href", is(pathToProvinceLink2)))
+                        .andExpect(jsonPath("content[1].city.province.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.id", is(provinceModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.name", is(provinceModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.province.country.links[0].href", is(pathToCountryLink2)))
+                        .andExpect(jsonPath("content[1].city.province.country.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.country.id", is(countryModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.country.name", is(countryModel2.getName())))
+                        .andExpect(jsonPath("content[1].city.province.country.region.links[0].href", is(pathToRegionLink2)))
+                        .andExpect(jsonPath("content[1].city.province.country.region.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].city.province.country.region.id", is(regionModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].city.province.country.region.name", is(regionModel2.getName())))
+                        .andExpect(jsonPath("content[1].victim.links[0].href", is(pathToVictimLink2)))
+                        .andExpect(jsonPath("content[1].victim.links[1].href").doesNotExist())
+                        .andExpect(jsonPath("content[1].victim.id", is(victimModel2.getId().intValue())))
+                        .andExpect(jsonPath("content[1].victim.totalNumberOfFatalities",
+                                is(victimModel2.getTotalNumberOfFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsFatalities",
+                                is(victimModel2.getNumberOfPerpetratorsFatalities().intValue())))
+                        .andExpect(jsonPath("content[1].victim.totalNumberOfInjured",
+                                is(victimModel2.getTotalNumberOfInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.numberOfPerpetratorsInjured",
+                                is(victimModel2.getNumberOfPerpetratorsInjured().intValue())))
+                        .andExpect(jsonPath("content[1].victim.valueOfPropertyDamage",
+                                is(victimModel2.getValueOfPropertyDamage().intValue())))
+
+                        .andExpect(jsonPath("page.size", is(sizeExpected)))
+                        .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+                        .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+                        .andExpect(jsonPath("page.number", is(numberExpected))),
+                () -> verify(eventService, times(1)).findAll(pageable, depthWhenProvidedToBigDepth),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
+    }
+
+    @Test
+    void when_find_all_events_with_depth_but_events_not_exist_should_return_empty_list() {
+
+        int depth = 5;
+
+        List<EventNode> eventsListExpected = new ArrayList<>();
+
+        List<EventModel> modelsListExpected = new ArrayList<>();
+
+        Page<EventNode> eventsExpected = new PageImpl<>(eventsListExpected);
+
+        int sizeExpected = 20;
+        int totalElementsExpected = 0;
+        int totalPagesExpected = 0;
+        int numberExpected = 0;
+        int pageExpected = 0;
+        int lastPageExpected = 0;
+
+        Pageable pageable = PageRequest.of(pageExpected, sizeExpected);
+
+        String urlParameters1 = "?page=" + pageExpected + "&size=" + sizeExpected;
+        String urlParameters2 = "?page=" + lastPageExpected + "&size=" + sizeExpected;
+        String firstPageLink = EVENT_BASE_PATH + urlParameters1;
+        String lastPageLink = EVENT_BASE_PATH + urlParameters2;
+
+        Link pageLink1 = new Link(firstPageLink, "first");
+        Link pageLink2 = new Link(firstPageLink, "self");
+        Link pageLink3 = new Link(lastPageLink, "next");
+        Link pageLink4 = new Link(lastPageLink, "last");
+
+        PageMetadata metadata = new PagedModel.PageMetadata(sizeExpected, numberExpected, totalElementsExpected);
+        PagedModel<EventModel> resources = new PagedModel<>(modelsListExpected, metadata, pageLink1, pageLink2,
+                pageLink3, pageLink4);
+
+        String linkWithParameter = EVENT_BASE_PATH + "/depth/" + "{depth}";
+
+        when(eventService.findAll(pageable, depth)).thenReturn(eventsExpected);
+        when(pagedResourcesAssembler.toModel(eventsExpected, modelAssembler)).thenReturn(resources);
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, depth)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("links[0].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[1].href", is(firstPageLink)))
+                        .andExpect(jsonPath("links[2].href", is(lastPageLink)))
+                        .andExpect(jsonPath("links[3].href", is(lastPageLink)))
+                        .andExpect(jsonPath("content").isEmpty())
+                        .andExpect(jsonPath("page.size", is(sizeExpected)))
+                        .andExpect(jsonPath("page.totalElements", is(totalElementsExpected)))
+                        .andExpect(jsonPath("page.totalPages", is(totalPagesExpected)))
+                        .andExpect(jsonPath("page.number", is(numberExpected))),
+                () -> verify(eventService, times(1)).findAll(pageable, depth),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verify(pagedResourcesAssembler, times(1)).toModel(eventsExpected, modelAssembler),
+                () -> verifyNoMoreInteractions(pagedResourcesAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil));
+    }
+
+    @Test
     void when_find_existing_event_should_return_event() {
 
         Long eventId = 1L;
@@ -651,10 +1350,36 @@ class EventControllerGetMethodTest {
     }
 
     @Test
-    void when_find_existing_event_with_negative_depth_should_return_only_event_without_nested_objects() {
+    void when_find_event_but_event_does_not_exist_should_return_error_response() {
 
         Long eventId = 1L;
+
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+
+        when(eventService.findById(eventId)).thenReturn(Optional.empty());
+
+        assertAll(
+                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("timestamp").isNotEmpty())
+                        .andExpect(content().json("{'status': 404}"))
+                        .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
+                        .andExpect(jsonPath("errors", hasSize(1))),
+                () -> verify(eventService, times(1)).findById(eventId),
+                () -> verifyNoMoreInteractions(eventService),
+                () -> verifyNoInteractions(modelAssembler),
+                () -> verifyNoInteractions(patchUtil),
+                () -> verifyNoInteractions(violationUtil),
+                () -> verifyNoInteractions(pagedResourcesAssembler));
+    }
+
+    @Test
+    void when_find_existing_event_with_negative_depth_should_return_only_event_without_nested_objects() {
+
         int depth = -5;
+        Long eventId = 1L;
         int depthWhenProvidedNegativeDepth = 0;
 
         EventNode eventNode = (EventNode) eventBuilder.build(ObjectType.NODE);
@@ -670,6 +1395,9 @@ class EventControllerGetMethodTest {
         assertAll(
                 () -> mockMvc.perform(get(linkWithParameter, eventId, depth)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+
+                        .andDo(MockMvcResultHandlers.print())
+
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("links[0].href", is(pathToEventLink)))
@@ -810,16 +1538,17 @@ class EventControllerGetMethodTest {
     }
 
     @Test
-    void when_find_event_but_event_does_not_exist_should_return_error_response() {
+    void when_find_event_with_depth_but_event_does_not_exist_should_return_error_response() {
 
         Long eventId = 1L;
+        int depth = 5;
 
-        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}";
+        String linkWithParameter = EVENT_BASE_PATH + "/" + "{id}" + "/depth/" + "{depth}";
 
-        when(eventService.findById(eventId)).thenReturn(Optional.empty());
+        when(eventService.findById(eventId, depth)).thenReturn(Optional.empty());
 
         assertAll(
-                () -> mockMvc.perform(get(linkWithParameter, eventId)
+                () -> mockMvc.perform(get(linkWithParameter, eventId, depth)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -827,7 +1556,7 @@ class EventControllerGetMethodTest {
                         .andExpect(content().json("{'status': 404}"))
                         .andExpect(jsonPath("errors[0]", is("Could not find EventModel with id: " + eventId + ".")))
                         .andExpect(jsonPath("errors", hasSize(1))),
-                () -> verify(eventService, times(1)).findById(eventId),
+                () -> verify(eventService, times(1)).findById(eventId, depth),
                 () -> verifyNoMoreInteractions(eventService),
                 () -> verifyNoInteractions(modelAssembler),
                 () -> verifyNoInteractions(patchUtil),
