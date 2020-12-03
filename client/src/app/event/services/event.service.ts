@@ -26,6 +26,15 @@ export default class EventService extends GenericRestService<EventsGetResponse> 
     );
   }
 
+  getAll(
+    pageSize: number = this.DEFAULT_PAGE_SIZE,
+    depth: number = this.DEFAULT_DEPTH
+  ): Observable<EventsGetResponse> {
+    return this.httpClient.get<EventsGetResponse>(
+      `${environment.baseApiUrl}/${this.actionUrl}?page=0&size=${pageSize}/depth/${depth}`
+    );
+  }
+
   add(event: EventDTO): Observable<Event> {
     return this.httpClient.post<Event>(
       `${environment.baseApiUrl}/${this.actionUrl}`,
