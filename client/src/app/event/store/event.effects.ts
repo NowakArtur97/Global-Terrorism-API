@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import ErrorResponse from 'src/app/common/models/error-response.model';
 
 import EventService from '../services/event.service';
 import * as EventActions from './event.actions';
@@ -14,7 +16,8 @@ export default class EventEffects {
       ofType(EventActions.fetchEvents),
       switchMap(() => this.eventService.getAll()),
       map((response) => response.content),
-      map((events) => EventActions.setEvents({ events }))
+      map((events) => EventActions.setEvents({ events })),
+      catchError((errorResponse) => this.handleError(errorResponse.error))
     )
   );
 
@@ -22,9 +25,12 @@ export default class EventEffects {
     this.actions$.pipe(
       ofType(EventActions.addEventStart),
       switchMap(({ eventDTO }) =>
-        this.eventService
-          .add(eventDTO)
-          .pipe(map((event) => EventActions.addEvent({ event })))
+        this.eventService.add(eventDTO).pipe(
+          map(
+            (event) => EventActions.addEvent({ event }),
+            catchError((errorResponse) => this.handleError(errorResponse.error))
+          )
+        )
       )
     )
   );
@@ -34,10 +40,12 @@ export default class EventEffects {
       ofType(EventActions.updateEventStart),
       switchMap(({ id }) =>
         this.eventService.get(id).pipe(
-          map((eventToUpdate) =>
-            EventActions.updateEventFetch({
-              eventToUpdate,
-            })
+          map(
+            (eventToUpdate) =>
+              EventActions.updateEventFetch({
+                eventToUpdate,
+              }),
+            catchError((errorResponse) => this.handleError(errorResponse.error))
           )
         )
       )
@@ -49,10 +57,12 @@ export default class EventEffects {
       ofType(EventActions.updateEvent),
       switchMap(({ eventDTO }) =>
         this.eventService.update(eventDTO).pipe(
-          map((eventUpdated) =>
-            EventActions.updateEventFinish({
-              eventUpdated,
-            })
+          map(
+            (eventUpdated) =>
+              EventActions.updateEventFinish({
+                eventUpdated,
+              }),
+            catchError((errorResponse) => this.handleError(errorResponse.error))
           )
         )
       )
@@ -64,13 +74,24 @@ export default class EventEffects {
       ofType(EventActions.deleteEventStart),
       switchMap(({ eventToDelete }) =>
         this.eventService.delete(eventToDelete.id).pipe(
-          map(() =>
-            EventActions.deleteEvent({
-              eventDeleted: eventToDelete,
-            })
+          map(
+            () =>
+              EventActions.deleteEvent({
+                eventDeleted: eventToDelete,
+              }),
+            catchError((errorResponse) => this.handleError(errorResponse.error))
           )
         )
       )
     )
   );
+
+  private handleError = (errorResponse: ErrorResponse) => {
+    const errorMessages = errorResponse?.errors || ['Unknown error.'];
+    return of(
+      EventActions.httpError({
+        errorMessages,
+      })
+    );
+  };
 }
