@@ -54,6 +54,13 @@ export const deleteEvent = createAction(
   props<{ eventDeleted: Event }>()
 );
 
+export const httpError = createAction(
+  '[Event] Http Error',
+  props<{
+    errorMessages: string[];
+  }>()
+);
+
 export const changeMaxEventsDate = createAction(
   '[Event] Change Max Events Date',
   props<{ maxDate: Date }>()
