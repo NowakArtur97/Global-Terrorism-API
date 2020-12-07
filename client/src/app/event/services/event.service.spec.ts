@@ -12,7 +12,7 @@ describe('eventsService', () => {
   let httpMock: HttpTestingController;
 
   const BASE_URL = 'http://localhost:8080/api/v1/events';
-  const DEFAULT_PAGE_SIZE = 100;
+  const DEFAULT_PAGE_SIZE = 200;
   const DEFAULT_DEPTH = 2;
 
   beforeEach(() => {

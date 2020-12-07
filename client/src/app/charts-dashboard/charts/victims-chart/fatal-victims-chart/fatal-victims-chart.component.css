@@ -2,3 +2,11 @@
   width: auto;
   max-height: 350px;
 }
+
+@media (max-width: 640px) {
+  .chart-canvas {
+    max-height: 200px;
+    height: 200px;
+    width: 200px;
+  }
+}

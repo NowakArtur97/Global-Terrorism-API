@@ -13,6 +13,7 @@ export abstract class AbstractVictimsChartComponent
   implements OnInit, OnDestroy {
   pieChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
   };
   pieChartData: SingleDataSet = [];
   pieChartType: ChartType = 'pie';

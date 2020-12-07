@@ -16,6 +16,7 @@ import Event from '../../../event/models/event.model';
 export class EventsInCountriesChartComponent implements OnInit, OnDestroy {
   barChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
   };
   barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
@@ -49,7 +50,7 @@ export class EventsInCountriesChartComponent implements OnInit, OnDestroy {
       } else {
         const eventsInCountry = this.barChartData[0].data[countryIndex];
         if (typeof eventsInCountry === 'number') {
-          this.barChartData[0].data[countryIndex] = +eventsInCountry + 1;
+          this.barChartData[0].data[countryIndex] = eventsInCountry + 1;
         }
       }
     });

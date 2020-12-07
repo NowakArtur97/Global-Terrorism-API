@@ -3,10 +3,3 @@
   height: 700px;
   width: 800px;
 }
-
-@media (max-width: 450px) {
-  .chart-canvas {
-    height: 200px;
-    width: 200px;
-  }
-}

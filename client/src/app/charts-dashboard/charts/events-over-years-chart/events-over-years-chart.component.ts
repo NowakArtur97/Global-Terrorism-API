@@ -15,6 +15,7 @@ import Event from '../../../event/models/event.model';
 export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
   scatterChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
   };
 
   scatterChartData: ChartDataSets[] = [
