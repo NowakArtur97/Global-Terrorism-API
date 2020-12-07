@@ -1,11 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
@@ -16,6 +10,7 @@ export interface EventStoreState extends EntityState<Event> {
   lastDeletedEvent: Event;
   isLoading: boolean;
   maxDate: Date;
+  errorMessages: string[];
 }
 
 const eventAdapter = createEntityAdapter<Event>();
@@ -26,6 +21,7 @@ const initialState = eventAdapter.getInitialState({
   lastDeletedEvent: null,
   isLoading: false,
   maxDate: new Date(),
+  errorMessages: [],
 });
 
 const _eventReducer = createReducer(
@@ -39,11 +35,15 @@ const _eventReducer = createReducer(
   }),
 
   on(EventActions.addEventStart, (state) => {
-    return { ...state, isLoading: true };
+    return { ...state, isLoading: true, errorMessages: [] };
   }),
 
   on(EventActions.addEvent, (state, { event }) => {
-    return eventAdapter.addOne(event, { ...state, isLoading: false });
+    return eventAdapter.addOne(event, {
+      ...state,
+      isLoading: false,
+      errorMessages: [],
+    });
   }),
 
   on(EventActions.updateEventStart, (state) => {
@@ -51,6 +51,7 @@ const _eventReducer = createReducer(
       ...state,
       eventToUpdate: null,
       lastUpdatedEvent: null,
+      errorMessages: [],
     };
   }),
 
@@ -74,12 +75,18 @@ const _eventReducer = createReducer(
         eventToUpdate: null,
         lastUpdatedEvent: { ...eventUpdated },
         isLoading: false,
+        errorMessages: [],
       }
     );
   }),
 
   on(EventActions.deleteEventStart, (state) => {
-    return { ...state, lastDeletedEvent: null, isLoading: true };
+    return {
+      ...state,
+      lastDeletedEvent: null,
+      isLoading: true,
+      errorMessages: [],
+    };
   }),
 
   on(EventActions.deleteEvent, (state, { eventDeleted }) => {
@@ -88,6 +95,10 @@ const _eventReducer = createReducer(
       lastDeletedEvent: eventDeleted,
       isLoading: false,
     });
+  }),
+
+  on(EventActions.httpError, (state, { errorMessages }) => {
+    return { ...state, errorMessages };
   }),
 
   on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {

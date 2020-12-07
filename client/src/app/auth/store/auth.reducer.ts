@@ -36,9 +36,9 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
     isLoading: false,
   })),
 
-  on(AuthActions.authenticateUserFailure, (state, action) => ({
+  on(AuthActions.authenticateUserFailure, (state, { authErrorMessages }) => ({
     ...state,
-    authErrorMessages: action.authErrorMessages,
+    authErrorMessages,
     isLoading: false,
   })),
 
