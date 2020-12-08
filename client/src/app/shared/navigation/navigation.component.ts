@@ -62,10 +62,12 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     switch (type) {
       case 'login': {
+        this.store.dispatch(AuthActions.startFillingOutForm());
         this.dialog.open(AuthenticationComponent, dialogConfig);
         break;
       }
       case 'registration': {
+        this.store.dispatch(AuthActions.startFillingOutForm());
         this.dialog.open(RegistrationComponent, dialogConfig);
         break;
       }

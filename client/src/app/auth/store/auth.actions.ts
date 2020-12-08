@@ -29,3 +29,7 @@ export const authenticateUserFailure = createAction(
 export const autoUserLogin = createAction('[User] Auto User Login');
 
 export const logoutUser = createAction('[User] Logout User');
+
+export const startFillingOutForm = createAction(
+  '[User] User Started Filling Out Form'
+);

@@ -46,6 +46,11 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
     ...state,
     user: null,
     authErrorMessages: [],
+  })),
+
+  on(AuthActions.startFillingOutForm, (state) => ({
+    ...state,
+    authErrorMessages: [],
   }))
 );
 
