@@ -94,6 +94,7 @@ const _eventReducer = createReducer(
       ...state,
       lastDeletedEvent: eventDeleted,
       isLoading: false,
+      errorMessages: [],
     });
   }),
 

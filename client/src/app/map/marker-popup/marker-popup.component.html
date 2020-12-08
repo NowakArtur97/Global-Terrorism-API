@@ -21,6 +21,9 @@
       <p>Total number of fatalities: {{ victim.totalNumberOfFatalities }}</p>
       <p>Total number of injured: {{ victim.totalNumberOfInjured }}</p>
     </div>
+    <mat-error *ngFor="let errorMessage of errorMessages">
+      <div>{{ errorMessage }}</div>
+    </mat-error>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button (click)="updateEvent()">Update</button>

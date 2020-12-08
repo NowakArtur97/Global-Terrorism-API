@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import City from 'src/app/city/models/city.model';
-import { selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 import Victim from 'src/app/victim/models/victim.model';
 
@@ -17,6 +16,7 @@ import * as EventActions from '../../event/store/event.actions';
 })
 export class MarkerPopupComponent implements OnInit, OnDestroy {
   private updateSubscription$: Subscription;
+  errorMessages: string[] = [];
 
   @Input()
   event: Event;
@@ -29,14 +29,15 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateSubscription$ = this.store
-      .select(selectLastUpdatedEvent)
-      .subscribe((lastUpdatedEvent) => {
+      .select('event')
+      .subscribe(({ lastUpdatedEvent, errorMessages }) => {
         if (lastUpdatedEvent?.id === this.event.id) {
           const eventModel = lastUpdatedEvent;
           this.event = eventModel;
           this.city = eventModel.city;
           this.victim = eventModel.victim;
         }
+        this.errorMessages = errorMessages;
       });
   }
 
