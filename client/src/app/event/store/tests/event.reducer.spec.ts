@@ -144,7 +144,7 @@ const stateWithEventToUpdate: EventStoreState = {
   lastDeletedEvent: null,
   isLoading: false,
   maxDate,
-  errorMessages: [],
+  errorMessages: ['ERROR'],
 };
 
 describe('eventReducer', () => {
@@ -206,9 +206,9 @@ describe('eventReducer', () => {
         eventToUpdate: null,
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
-        isLoading: false,
+        isLoading: true,
         maxDate,
-        errorMessages: [],
+        errorMessages: ['ERROR'],
       };
       const eventsDictionaryWithOneEvent: Dictionary<Event> = {
         6: event1,
@@ -251,7 +251,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
-        errorMessages: [],
+        errorMessages: ['ERROR'],
       };
       const action = EventActions.updateEventFetch({ eventToUpdate: event1 });
       const actualState = eventReducer(stateWhenUpdateEventStart, action);
@@ -332,9 +332,9 @@ describe('eventReducer', () => {
         eventToUpdate: event2Updated,
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
-        isLoading: false,
+        isLoading: true,
         maxDate,
-        errorMessages: [],
+        errorMessages: ['ERROR'],
       };
       const eventsDictionaryWithUpdatedEvents: Dictionary<Event> = {
         6: event1,
@@ -370,7 +370,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: event1,
         isLoading: false,
         maxDate,
-        errorMessages: [],
+        errorMessages: ['ERROR'],
       };
       const stateWhenDeleteEventStart: EventStoreState = {
         ids: [],
@@ -400,7 +400,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: true,
         maxDate,
-        errorMessages: [],
+        errorMessages: ['ERROR'],
       };
       const stateAfterDeletingEvent: EventStoreState = {
         ids: [],
