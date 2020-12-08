@@ -124,6 +124,7 @@ const state: EventStoreState = {
   lastDeletedEvent: null,
   isLoading: false,
   maxDate,
+  errorMessages: [],
 };
 const stateWithEvents: EventStoreState = {
   ids: [6, 12],
@@ -133,6 +134,7 @@ const stateWithEvents: EventStoreState = {
   lastDeletedEvent: null,
   isLoading: false,
   maxDate,
+  errorMessages: [],
 };
 const stateWithEventToUpdate: EventStoreState = {
   ids: [],
@@ -142,6 +144,7 @@ const stateWithEventToUpdate: EventStoreState = {
   lastDeletedEvent: null,
   isLoading: false,
   maxDate,
+  errorMessages: [],
 };
 
 describe('eventReducer', () => {
@@ -185,6 +188,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: true,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.addEventStart({ eventDTO });
       const actualState = eventReducer(state, action);
@@ -204,6 +208,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const eventsDictionaryWithOneEvent: Dictionary<Event> = {
         6: event1,
@@ -216,6 +221,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.addEvent({ event: event1 });
       const actualState = eventReducer(stateWhenAddEventStart, action);
@@ -245,6 +251,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.updateEventFetch({ eventToUpdate: event1 });
       const actualState = eventReducer(stateWhenUpdateEventStart, action);
@@ -264,6 +271,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const stateWhenUpdateEvent: EventStoreState = {
         ids: [],
@@ -273,6 +281,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: true,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.updateEvent({ eventDTO });
       const actualState = eventReducer(stateWithLastUpdatedEvent, action);
@@ -325,6 +334,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const eventsDictionaryWithUpdatedEvents: Dictionary<Event> = {
         6: event1,
@@ -338,6 +348,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.updateEventFinish({
         eventUpdated: event2Updated,
@@ -359,6 +370,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: event1,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const stateWhenDeleteEventStart: EventStoreState = {
         ids: [],
@@ -368,6 +380,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: true,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.deleteEventStart({ eventToDelete: event1 });
       const actualState = eventReducer(stateWithLastDeletedEvent, action);
@@ -387,6 +400,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: true,
         maxDate,
+        errorMessages: [],
       };
       const stateAfterDeletingEvent: EventStoreState = {
         ids: [],
@@ -396,6 +410,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: event1,
         isLoading: false,
         maxDate,
+        errorMessages: [],
       };
       const action = EventActions.deleteEvent({ eventDeleted: event1 });
       const actualState = eventReducer(stateWhenDeleteEvent, action);
@@ -416,6 +431,7 @@ describe('eventReducer', () => {
         lastDeletedEvent: null,
         isLoading: false,
         maxDate: newMaxDate,
+        errorMessages: [],
       };
       const action = EventActions.changeMaxEventsDate({
         maxDate: newMaxDate,

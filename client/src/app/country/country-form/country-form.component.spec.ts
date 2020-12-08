@@ -45,6 +45,7 @@ describe('CountryFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -123,6 +124,7 @@ describe('CountryFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -181,6 +183,7 @@ describe('CountryFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {

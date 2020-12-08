@@ -45,6 +45,7 @@ describe('CityFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -191,6 +192,7 @@ describe('CityFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
@@ -249,6 +251,7 @@ describe('CityFormComponent', () => {
           lastDeletedEvent: null,
           isLoading: false,
           maxDate: new Date(),
+          errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
           if (selector === selectEventToUpdate) {
