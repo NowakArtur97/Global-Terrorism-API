@@ -101,6 +101,10 @@ const _eventReducer = createReducer(
     return { ...state, isLoading: false, errorMessages };
   }),
 
+  on(EventActions.startFillingOutForm, (state) => {
+    return { ...state, errorMessages: [] };
+  }),
+
   on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {
     return { ...state, maxDate };
   })

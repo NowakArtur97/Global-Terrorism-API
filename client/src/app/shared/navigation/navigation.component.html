@@ -15,6 +15,7 @@
         mat-icon-button
         (click)="sidenavForms.toggle()"
         (click)="sidenav.close()"
+        (click)="onOpenSidenav()"
         onclick="this.blur()"
         *ngIf="isAuthenticated"
       >

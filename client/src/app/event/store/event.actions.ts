@@ -61,6 +61,10 @@ export const httpError = createAction(
   }>()
 );
 
+export const startFillingOutForm = createAction(
+  '[Event] User Started Filling Out Form'
+);
+
 export const changeMaxEventsDate = createAction(
   '[Event] Change Max Events Date',
   props<{ maxDate: Date }>()

@@ -11,20 +11,6 @@ import AuthService from '../../services/auth.service';
 import * as AuthActions from '../auth.actions';
 import AuthEffects from '../auth.effects';
 
-const mockLoginData: LoginData = {
-  userNameOrEmail: 'username',
-  password: 'password',
-};
-const mockRegistrationData: RegistrationData = {
-  userName: 'username',
-  email: 'email@email.com',
-  password: 'password',
-  matchingPassword: 'password',
-};
-const mockUser: User = {
-  token: 'secret token',
-  expirationDate: new Date(Date.now() + 36000000),
-};
 const mockAuthResponse: AuthResponse = {
   token: 'secret token',
   expirationTimeInMilliseconds: 36000000,
@@ -76,6 +62,10 @@ describe('AuthEffects', () => {
 
   describe('loginUser$', () => {
     beforeEach(() => {
+      const mockLoginData: LoginData = {
+        userNameOrEmail: 'username',
+        password: 'password',
+      };
       actions$ = new ReplaySubject(1);
       actions$.next(AuthActions.loginUserStart({ loginData: mockLoginData }));
     });
@@ -113,6 +103,12 @@ describe('AuthEffects', () => {
 
   describe('registerUser$', () => {
     beforeEach(() => {
+      const mockRegistrationData: RegistrationData = {
+        userName: 'username',
+        email: 'email@email.com',
+        password: 'password',
+        matchingPassword: 'password',
+      };
       actions$ = new ReplaySubject(1);
       actions$.next(
         AuthActions.registerUserStart({
@@ -159,6 +155,10 @@ describe('AuthEffects', () => {
     });
 
     it('should return an authenticateUserSuccess action when user data is stored in local storage', () => {
+      const mockUser: User = {
+        token: 'secret token',
+        expirationDate: new Date(Date.now() + 36000000),
+      };
       (authService.getUserFromLocalStorage as jasmine.Spy).and.returnValue(
         of(mockUser)
       );

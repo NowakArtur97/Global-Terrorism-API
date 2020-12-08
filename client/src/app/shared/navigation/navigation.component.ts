@@ -79,4 +79,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.store.dispatch(CityActions.resetCities());
     this.store.dispatch(EventActions.resetEvents());
   }
+
+  onOpenSidenav(): void {
+    this.store.dispatch(EventActions.startFillingOutForm());
+  }
 }

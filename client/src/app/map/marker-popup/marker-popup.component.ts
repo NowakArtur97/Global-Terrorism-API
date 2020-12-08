@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import City from 'src/app/city/models/city.model';
@@ -51,6 +45,7 @@ export class MarkerPopupComponent implements OnInit, OnDestroy {
   }
 
   updateEvent(): void {
+    this.store.dispatch(EventActions.startFillingOutForm());
     this.store.dispatch(EventActions.updateEventStart({ id: this.event.id }));
   }
 
