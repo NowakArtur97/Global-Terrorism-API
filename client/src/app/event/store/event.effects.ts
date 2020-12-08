@@ -38,13 +38,12 @@ export default class EventEffects {
       ofType(EventActions.updateEventStart),
       switchMap(({ id }) =>
         this.eventService.get(id).pipe(
-          map(
-            (eventToUpdate) =>
-              EventActions.updateEventFetch({
-                eventToUpdate,
-              }),
-            catchError((errorResponse) => this.handleError(errorResponse.error))
-          )
+          map((eventToUpdate) =>
+            EventActions.updateEventFetch({
+              eventToUpdate,
+            })
+          ),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
@@ -55,13 +54,12 @@ export default class EventEffects {
       ofType(EventActions.updateEvent),
       switchMap(({ eventDTO }) =>
         this.eventService.update(eventDTO).pipe(
-          map(
-            (eventUpdated) =>
-              EventActions.updateEventFinish({
-                eventUpdated,
-              }),
-            catchError((errorResponse) => this.handleError(errorResponse.error))
-          )
+          map((eventUpdated) =>
+            EventActions.updateEventFinish({
+              eventUpdated,
+            })
+          ),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
@@ -72,13 +70,12 @@ export default class EventEffects {
       ofType(EventActions.deleteEventStart),
       switchMap(({ eventToDelete }) =>
         this.eventService.delete(eventToDelete.id).pipe(
-          map(
-            () =>
-              EventActions.deleteEvent({
-                eventDeleted: eventToDelete,
-              }),
-            catchError((errorResponse) => this.handleError(errorResponse.error))
-          )
+          map(() =>
+            EventActions.deleteEvent({
+              eventDeleted: eventToDelete,
+            })
+          ),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
