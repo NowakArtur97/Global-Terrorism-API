@@ -64,8 +64,6 @@ export default class PasswordValidators {
     const numberOfRequirementsToMeet = 2;
 
     if (formControl.errors) {
-      const formControlErrors = { ...formControl.errors };
-
       const characteristicRulesErrors: ValidationErrors[] = [];
       characteristicRules.forEach((test) => {
         const result = test(formControl);

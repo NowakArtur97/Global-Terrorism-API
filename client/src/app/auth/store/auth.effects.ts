@@ -77,7 +77,9 @@ export default class AuthEffects {
   };
 
   private handleError = (errorResponse: ErrorResponse) => {
-    const authErrorMessages = errorResponse?.errors || ['Unknown error.'];
+    const authErrorMessages = errorResponse?.errors || [
+      'There was a problem with accessing the page. Please try again in a moment.',
+    ];
     return of(
       AuthActions.authenticateUserFailure({
         authErrorMessages,
