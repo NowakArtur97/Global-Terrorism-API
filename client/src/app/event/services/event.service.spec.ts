@@ -13,7 +13,8 @@ describe('eventsService', () => {
 
   const BASE_URL = 'http://localhost:8080/api/v1/events';
   const DEFAULT_PAGE_SIZE = 200;
-  const DEFAULT_DEPTH = 2;
+  const DEFAULT_DEPTH_FOR_EVENTS = 2;
+  const DEFAULT_DEPTH_FOR_ONE_EVENT = 5;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -105,12 +106,14 @@ describe('eventsService', () => {
         ],
       };
 
-      eventService.getAll(DEFAULT_PAGE_SIZE, DEFAULT_DEPTH).subscribe((res) => {
-        expect(res).toEqual(events);
-      });
+      eventService
+        .getAll(DEFAULT_PAGE_SIZE, DEFAULT_DEPTH_FOR_EVENTS)
+        .subscribe((res) => {
+          expect(res).toEqual(events);
+        });
 
       const req = httpMock.expectOne(
-        `${BASE_URL}/depth/${DEFAULT_DEPTH}?page=0&size=${DEFAULT_PAGE_SIZE}`
+        `${BASE_URL}/depth/${DEFAULT_DEPTH_FOR_EVENTS}?page=0&size=${DEFAULT_PAGE_SIZE}`
       );
       expect(req.request.method).toBe('GET');
       req.flush(events);
@@ -158,7 +161,7 @@ describe('eventsService', () => {
       });
 
       const req = httpMock.expectOne(
-        `${BASE_URL}/${event.id}/depth/${DEFAULT_DEPTH}`
+        `${BASE_URL}/${event.id}/depth/${DEFAULT_DEPTH_FOR_ONE_EVENT}`
       );
       expect(req.request.method).toBe('GET');
       req.flush(event);
