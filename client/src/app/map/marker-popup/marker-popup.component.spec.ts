@@ -84,6 +84,9 @@ describe('MarkerPopupComponent', () => {
       component.updateEvent();
 
       expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.startFillingOutForm()
+      );
+      expect(store.dispatch).toHaveBeenCalledWith(
         EventActions.updateEventStart({ id: event.id })
       );
     });

@@ -524,4 +524,26 @@ describe('eventReducer', () => {
       });
     });
   });
+
+  describe('EventActions.startFillingOutForm', () => {
+    it('should delete error messages', () => {
+      const stateWithErrorMessages: EventStoreState = {
+        ids: [],
+        entities: {},
+        eventToUpdate: null,
+        lastUpdatedEvent: null,
+        lastDeletedEvent: null,
+        isLoading: false,
+        maxDate,
+        errorMessages: ['ERROR'],
+      };
+      const action = EventActions.startFillingOutForm();
+      const actualState = eventReducer(stateWithErrorMessages, action);
+      const expectedState = { ...state };
+
+      expect(actualState).toEqual(expectedState);
+      expect(actualState.errorMessages).toEqual([]);
+      expect(actualState.errorMessages.length).toBe(0);
+    });
+  });
 });
