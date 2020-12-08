@@ -11,11 +11,11 @@ import AuthService from '../../services/auth.service';
 import * as AuthActions from '../auth.actions';
 import AuthEffects from '../auth.effects';
 
-const mockAuthResponse: AuthResponse = {
+const authResponse: AuthResponse = {
   token: 'secret token',
   expirationTimeInMilliseconds: 36000000,
 };
-const mockErrorResponse = new HttpErrorResponse({
+const errorResponse = new HttpErrorResponse({
   error: {
     errors: [
       { errors: ['Error message.'], status: 401, timestamp: new Date() },
@@ -71,9 +71,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return an authenticateUserSuccess action on success', () => {
-      (authService.loginUser as jasmine.Spy).and.returnValue(
-        of(mockAuthResponse)
-      );
+      (authService.loginUser as jasmine.Spy).and.returnValue(of(authResponse));
 
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction.type).toEqual('[User] Authenticate User Success');
@@ -85,7 +83,7 @@ describe('AuthEffects', () => {
 
     it('should return authenticateUserFailure action on failure', () => {
       (authService.loginUser as jasmine.Spy).and.returnValue(
-        throwError(mockErrorResponse)
+        throwError(errorResponse)
       );
       (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
       (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
@@ -93,7 +91,7 @@ describe('AuthEffects', () => {
       authEffects.loginUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserFailure({
-            authErrorMessages: mockErrorResponse.error.errors,
+            authErrorMessages: errorResponse.error.errors,
           })
         );
         expect(authService.loginUser).toHaveBeenCalled();
@@ -119,7 +117,7 @@ describe('AuthEffects', () => {
 
     it('should return an authenticateUserSuccess action on success', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(
-        of(mockAuthResponse)
+        of(authResponse)
       );
       (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
       (authService.saveUserInLocalStorage as jasmine.Spy).and.callThrough();
@@ -134,13 +132,13 @@ describe('AuthEffects', () => {
 
     it('should return an authenticateUserFailure action on failure', () => {
       (authService.registerUser as jasmine.Spy).and.returnValue(
-        throwError(mockErrorResponse)
+        throwError(errorResponse)
       );
 
       authEffects.registerUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           AuthActions.authenticateUserFailure({
-            authErrorMessages: mockErrorResponse.error.errors,
+            authErrorMessages: errorResponse.error.errors,
           })
         );
         expect(authService.registerUser).toHaveBeenCalled();

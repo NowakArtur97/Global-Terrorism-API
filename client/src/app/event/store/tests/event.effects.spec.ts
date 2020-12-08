@@ -1,6 +1,7 @@
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { of, ReplaySubject } from 'rxjs';
+import { of, ReplaySubject, throwError } from 'rxjs';
 
 import EventsGetResponse from '../../models/events-get-response.model';
 import EventService from '../../services/event.service';
@@ -45,6 +46,17 @@ describe('EventEffects', () => {
       valueOfPropertyDamage: 2000,
     },
   };
+  const errorResponse = new HttpErrorResponse({
+    error: {
+      errors: [
+        { errors: ['Error message.'], status: 401, timestamp: new Date() },
+      ],
+    },
+    headers: new HttpHeaders('headers'),
+    status: 401,
+    statusText: 'OK',
+    url: 'http://localhost:8080/api/v1',
+  });
 
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -161,13 +173,28 @@ describe('EventEffects', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(EventActions.addEvent);
-      (eventService.add as jasmine.Spy).and.returnValue(of(event));
     });
 
     it('should return a addEvent action', () => {
+      (eventService.add as jasmine.Spy).and.returnValue(of(event));
+
       eventEffects.addEvent$.subscribe((resultAction) => {
         expect(resultAction).toEqual(EventActions.addEvent({ event }));
         expect(eventService.add).toHaveBeenCalled();
+      });
+    });
+
+    it('should return httpError action on failure', () => {
+      (eventService.add as jasmine.Spy).and.returnValue(
+        throwError(errorResponse)
+      );
+
+      eventEffects.addEvent$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponse.error.errors,
+          })
+        );
       });
     });
   });
@@ -176,15 +203,30 @@ describe('EventEffects', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(EventActions.updateEventStart);
-      (eventService.get as jasmine.Spy).and.returnValue(of(event));
     });
 
     it('should return a updateEventFetch action', () => {
+      (eventService.get as jasmine.Spy).and.returnValue(of(event));
+
       eventEffects.updateEventStart$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           EventActions.updateEventFetch({ eventToUpdate: event })
         );
         expect(eventService.get).toHaveBeenCalled();
+      });
+    });
+
+    it('should return httpError action on failure', () => {
+      (eventService.get as jasmine.Spy).and.returnValue(
+        throwError(errorResponse)
+      );
+
+      eventEffects.updateEventStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponse.error.errors,
+          })
+        );
       });
     });
   });
@@ -227,15 +269,30 @@ describe('EventEffects', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
       actions$.next(EventActions.updateEvent);
-      (eventService.update as jasmine.Spy).and.returnValue(of(eventUpdated));
     });
 
     it('should return a updateEventFinish action', () => {
+      (eventService.update as jasmine.Spy).and.returnValue(of(eventUpdated));
+
       eventEffects.updateEvent$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           EventActions.updateEventFinish({ eventUpdated })
         );
         expect(eventService.update).toHaveBeenCalled();
+      });
+    });
+
+    it('should return httpError action on failure', () => {
+      (eventService.update as jasmine.Spy).and.returnValue(
+        throwError(errorResponse)
+      );
+
+      eventEffects.updateEvent$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponse.error.errors,
+          })
+        );
       });
     });
   });
@@ -280,15 +337,30 @@ describe('EventEffects', () => {
       actions$.next(
         EventActions.deleteEventStart({ eventToDelete: eventDeleted })
       );
-      (eventService.delete as jasmine.Spy).and.returnValue(of(null));
     });
 
     it('should return a deleteEvent action', () => {
+      (eventService.delete as jasmine.Spy).and.returnValue(of(null));
+
       eventEffects.deleteEventStart$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
           EventActions.deleteEvent({ eventDeleted })
         );
         expect(eventService.delete).toHaveBeenCalled();
+      });
+    });
+
+    it('should return httpError action on failure', () => {
+      (eventService.delete as jasmine.Spy).and.returnValue(
+        throwError(errorResponse)
+      );
+
+      eventEffects.deleteEventStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponse.error.errors,
+          })
+        );
       });
     });
   });
