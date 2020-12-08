@@ -252,4 +252,30 @@ describe('NavigationComponent', () => {
       });
     });
   });
+
+  describe('when user is logged in', () => {
+    beforeEach(async () => {
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === 'auth') {
+          return of([]);
+        } else if (selector === 'event') {
+          return of(stateWithoutEvent);
+        } else if (selector === selectEventToUpdate) {
+          return of(stateWithoutEvent.eventToUpdate);
+        }
+      });
+      spyOn(store, 'dispatch');
+
+      fixture.detectChanges();
+      component.ngOnInit();
+    });
+
+    it('and is opening sidenav should dispatch startFillingOutForm action', () => {
+      component.onOpenSidenav();
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.startFillingOutForm()
+      );
+    });
+  });
 });
