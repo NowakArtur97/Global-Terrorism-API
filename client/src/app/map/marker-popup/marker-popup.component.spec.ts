@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import { selectLastUpdatedEvent } from 'src/app/event/store/event.reducer';
+import { EventStoreState } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -46,7 +46,16 @@ describe('MarkerPopupComponent', () => {
       valueOfPropertyDamage: 2000,
     },
   };
-
+  const state: EventStoreState = {
+    ids: [],
+    entities: {},
+    eventToUpdate: null,
+    lastUpdatedEvent: null,
+    lastDeletedEvent: null,
+    isLoading: false,
+    maxDate: new Date(),
+    errorMessages: [],
+  };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MarkerPopupComponent],
@@ -65,8 +74,8 @@ describe('MarkerPopupComponent', () => {
 
     store = TestBed.inject(Store);
     spyOn(store, 'select').and.callFake((selector) => {
-      if (selector === selectLastUpdatedEvent) {
-        return of(event);
+      if (selector === 'event') {
+        return of(state);
       }
     });
     spyOn(store, 'dispatch');
