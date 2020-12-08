@@ -8,7 +8,7 @@ const initialState: AuthStoreState = {
   authErrorMessages: [],
   isLoading: false,
 };
-const initialStateWithErrors: AuthStoreState = {
+const initialStateWithErrorsAndLoading: AuthStoreState = {
   user: null,
   authErrorMessages: ['ERROR'],
   isLoading: true,
@@ -31,7 +31,7 @@ describe('authReducer', () => {
         password: 'password',
       };
       const action = AuthActions.loginUserStart({ loginData });
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
       const expectedState = {
         ...initialState,
         isLoading,
@@ -48,9 +48,9 @@ describe('authReducer', () => {
         password: 'password',
       };
       const action = AuthActions.loginUserStart({ loginData });
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrors,
+        ...initialStateWithErrorsAndLoading,
         authErrorMessages,
       };
 
@@ -69,7 +69,7 @@ describe('authReducer', () => {
         matchingPassword: 'password',
       };
       const action = AuthActions.registerUserStart({ registrationData });
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
       const expectedState = {
         ...initialState,
         isLoading,
@@ -88,9 +88,9 @@ describe('authReducer', () => {
         matchingPassword: 'password',
       };
       const action = AuthActions.registerUserStart({ registrationData });
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrors,
+        ...initialStateWithErrorsAndLoading,
         authErrorMessages,
       };
 
@@ -124,9 +124,9 @@ describe('authReducer', () => {
       const authErrorMessages = [];
       const isLoading = false;
       const action = AuthActions.authenticateUserSuccess({ user });
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrors,
+        ...initialStateWithErrorsAndLoading,
         user,
         authErrorMessages,
         isLoading,
@@ -195,6 +195,26 @@ describe('authReducer', () => {
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.user).toBeNull();
+      expect(actualState.authErrorMessages.length).toBe(0);
+    });
+  });
+
+  describe('AuthStoreState.startFillingOutForm', () => {
+    it('should remove error messages', () => {
+      const initialStateWithErrors: AuthStoreState = {
+        user: null,
+        authErrorMessages: ['ERROR'],
+        isLoading: false,
+      };
+      const action = AuthActions.startFillingOutForm();
+      const actualState = authReducer(initialStateWithErrors, action);
+      const expectedState = {
+        ...initialState,
+        authErrorMessages: [],
+      };
+
+      expect(actualState).toEqual(expectedState);
+      expect(actualState.authErrorMessages).toEqual([]);
       expect(actualState.authErrorMessages.length).toBe(0);
     });
   });
