@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -18,9 +18,11 @@ import * as EventActions from '../store/event.actions';
   templateUrl: './event-form-wrapper.component.html',
   styleUrls: ['./event-form-wrapper.component.css'],
 })
-export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
-  private updateSubscription$ = new Subscription();
+export class EventFormWrapperComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
+  private updateSubscription$: Subscription;
   private eventToUpdate: Event;
+  errorMessages: string[] = [];
   action: string;
   eventForm: FormGroup;
   isUpdating = false;
@@ -28,23 +30,28 @@ export class EventFormWrapperComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private store: Store<AppStoreState>,
-    private cdr: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.updateSubscription$.add(
-      this.store.select('event').subscribe(({ eventToUpdate, isLoading }) => {
+    this.updateSubscription$ = this.store
+      .select('event')
+      .subscribe(({ eventToUpdate, isLoading, errorMessages }) => {
         this.isUpdating = !!eventToUpdate;
         this.action = this.isUpdating ? 'Update' : 'Add';
         this.eventToUpdate = eventToUpdate;
         this.isLoading = isLoading;
+        this.errorMessages = errorMessages;
         this.initForm();
-      })
-    );
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.updateSubscription$?.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   private initForm(): void {

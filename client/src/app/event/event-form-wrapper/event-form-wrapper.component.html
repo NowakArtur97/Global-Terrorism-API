@@ -2,6 +2,9 @@
   <mat-card>
     <mat-card-content>
       <h2 mat-dialog-title>{{ action }} Event</h2>
+      <mat-error *ngFor="let errorMessage of errorMessages">
+        <div>{{ errorMessage }}</div>
+      </mat-error>
       <form [formGroup]="eventForm" (ngSubmit)="onSubmitForm()">
         <div *ngIf="!isLoading">
           <app-event-form
@@ -22,9 +25,6 @@
           <app-victim-form
             [formControl]="eventForm.controls['victim']"
           ></app-victim-form>
-          <!-- <mat-error *ngFor="let errorMessage of eventErrors">
-          <div>{{ errorMessage }}</div>
-        </mat-error> -->
         </div>
 
         <div *ngIf="isLoading">
@@ -35,8 +35,6 @@
           <button type="submit" mat-raised-button [disabled]="!eventForm.valid">
             {{ action }} Event
           </button>
-          <!-- <button type="submit" mat-raised-button>{{ action }} Event</button> -->
-          <!-- <button mat-raised-button mat-dialog-close>Cancel</button> -->
         </mat-dialog-actions>
       </form>
     </mat-card-content>

@@ -26,10 +26,8 @@ export default class EventEffects {
       ofType(EventActions.addEventStart),
       switchMap(({ eventDTO }) =>
         this.eventService.add(eventDTO).pipe(
-          map(
-            (event) => EventActions.addEvent({ event }),
-            catchError((errorResponse) => this.handleError(errorResponse.error))
-          )
+          map((event) => EventActions.addEvent({ event })),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
         )
       )
     )
@@ -87,7 +85,9 @@ export default class EventEffects {
   );
 
   private handleError = (errorResponse: ErrorResponse) => {
-    const errorMessages = errorResponse?.errors || ['Unknown error.'];
+    const errorMessages = errorResponse?.errors || [
+      'There was a problem with accessing the page. Please try again in a moment.',
+    ];
     return of(
       EventActions.httpError({
         errorMessages,

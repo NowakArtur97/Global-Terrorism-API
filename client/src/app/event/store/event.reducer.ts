@@ -98,7 +98,7 @@ const _eventReducer = createReducer(
   }),
 
   on(EventActions.httpError, (state, { errorMessages }) => {
-    return { ...state, errorMessages };
+    return { ...state, isLoading: false, errorMessages };
   }),
 
   on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {

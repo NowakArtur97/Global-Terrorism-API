@@ -12,9 +12,12 @@ export default class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((err) => {
-        const error = err.error.message || err.statusText || err;
-        console.log('HttpError');
-        console.log(error);
+        let error = err.error.message || err.statusText || err;
+        if (error === 'Unknown Error') {
+          error =
+            'There was a problem with accessing the page. Please try again in a moment.';
+        }
+        console.log(err);
         return throwError(err);
       })
     );
