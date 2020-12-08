@@ -221,6 +221,7 @@ describe('NavigationComponent', () => {
           return of(stateWithoutEvent.eventToUpdate);
         }
       });
+      spyOn(store, 'dispatch');
       spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
 
       fixture.detectChanges();
@@ -232,15 +233,21 @@ describe('NavigationComponent', () => {
     });
 
     describe('is opening popup', () => {
-      it('with login option should open login component', () => {
+      it('with login option should open login component and dispatch startFillingOutForm action', () => {
         component.onOpenPopUp('login');
 
+        expect(store.dispatch).toHaveBeenCalledWith(
+          AuthActions.startFillingOutForm()
+        );
         expect(dialog.open).toHaveBeenCalled();
       });
 
-      it('with registration option should open registration component', () => {
+      it('with registration option should open registration component and dispatch startFillingOutForm action', () => {
         component.onOpenPopUp('registration');
 
+        expect(store.dispatch).toHaveBeenCalledWith(
+          AuthActions.startFillingOutForm()
+        );
         expect(dialog.open).toHaveBeenCalled();
       });
     });
