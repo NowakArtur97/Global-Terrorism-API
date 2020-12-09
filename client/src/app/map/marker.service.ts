@@ -52,6 +52,10 @@ export default class MarkerService {
       .bindPopup(this.createMarkerPopup(event));
   }
 
+  createMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
+    return L.marker(latLong).addTo(map);
+  }
+
   createCircleMarkers(events: Event[], map: L.Map): L.CircleMarker[] {
     const markers: L.CircleMarker[] = [];
     if (events.length === 0) {
