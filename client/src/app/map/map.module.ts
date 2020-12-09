@@ -10,9 +10,10 @@ import { DateSliderComponent } from './date-slider/date-slider.component';
 import MapRoutingModule from './map-routing.module';
 import { MapComponent } from './map/map.component';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
+import { EventRadiusSliderComponent } from './event-radius-slider/event-radius-slider.component';
 
 @NgModule({
-  declarations: [MapComponent, MarkerPopupComponent, DateSliderComponent],
+  declarations: [MapComponent, MarkerPopupComponent, DateSliderComponent, EventRadiusSliderComponent],
   imports: [
     CommonModule,
     HttpClientModule,

@@ -65,7 +65,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initMap();
   }
 
-  private setupSubscriptions() {
+  private setupSubscriptions(): void {
     this.userSubscription$ = this.store
       .select('auth')
       .pipe(map((authState) => authState.user))

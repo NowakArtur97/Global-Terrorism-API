@@ -10,8 +10,8 @@ import * as EventActions from '../../event/store/event.actions';
   styleUrls: ['./date-slider.component.css'],
 })
 export class DateSliderComponent implements OnInit {
-  private minDate = new Date(1970, 0, 1);
-  private maxDate = new Date();
+  private readonly minDate = new Date(1970, 0, 1);
+  private readonly maxDate = new Date();
   sliderRange: number;
   selectedDate: Date;
   value = 0;

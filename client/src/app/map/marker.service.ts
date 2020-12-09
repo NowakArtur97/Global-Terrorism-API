@@ -56,7 +56,7 @@ export default class MarkerService {
     const markerText = 'Your position';
     return L.marker(latLong)
       .bindPopup(markerText)
-      .on('mouseover', function (ev) {
+      .on('mouseover', function (): void {
         this.openPopup();
       })
       .addTo(map);
