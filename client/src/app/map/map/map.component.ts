@@ -25,7 +25,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly ICO_SIZE: L.PointExpression = [25, 41];
   private readonly ICON_ANCHOR: L.PointExpression = [13, 41];
   private readonly ICON_URL = 'assets/leaflet/marker-icon.png';
-  private readonly SHADOW_URL = 'assets/leaflet/marker-shadow.png';
   private readonly TILE_LAYER =
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILES_ATRIBUTION =
@@ -44,7 +43,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     iconSize: this.ICO_SIZE,
     iconAnchor: this.ICON_ANCHOR,
     iconUrl: this.ICON_URL,
-    shadowUrl: this.SHADOW_URL,
   });
 
   constructor(
@@ -53,6 +51,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.getUserLocation();
     this.setupSubscriptions();
   }
 
@@ -112,5 +111,16 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       attribution: this.TILES_ATRIBUTION,
     });
     tiles.addTo(this.map);
+  }
+
+  private getUserLocation(): void {
+    if (!navigator.geolocation) {
+      return;
+    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      const coords = position.coords;
+      this.latLong = [coords.latitude, coords.longitude];
+      this.markerService.createMarker(this.latLong, this.map);
+    });
   }
 }
