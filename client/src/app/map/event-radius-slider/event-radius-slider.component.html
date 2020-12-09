@@ -1,8 +1,9 @@
+<p>Radius to events: {{ value }}</p>
 <mat-slider
+  [color]="sliderColor"
   [min]="0"
   [max]="maxRadius"
   (change)="onRadiusChange()"
   [(ngModel)]="value"
 >
 </mat-slider>
-<input type="text" [value]="value" matInput />

@@ -13,7 +13,12 @@ import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 import { EventRadiusSliderComponent } from './event-radius-slider/event-radius-slider.component';
 
 @NgModule({
-  declarations: [MapComponent, MarkerPopupComponent, DateSliderComponent, EventRadiusSliderComponent],
+  declarations: [
+    MapComponent,
+    MarkerPopupComponent,
+    DateSliderComponent,
+    EventRadiusSliderComponent,
+  ],
   imports: [
     CommonModule,
     HttpClientModule,

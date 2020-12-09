@@ -8,9 +8,8 @@ describe('EventRadiusSliderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventRadiusSliderComponent ]
-    })
-    .compileComponents();
+      declarations: [EventRadiusSliderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,3 +1,4 @@
+<p>Events until date: {{ selectedDate | date: "dd/MM/yyyy" }}</p>
 <mat-slider
   [min]="0"
   [max]="sliderRange"
@@ -5,4 +6,3 @@
   [(ngModel)]="value"
 >
 </mat-slider>
-<input type="text" [value]="selectedDate | date: 'dd/MM/yyyy'" matInput />
