@@ -1,5 +1,7 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { of, ReplaySubject, throwError } from 'rxjs';
 
@@ -31,6 +33,7 @@ describe('AuthEffects', () => {
   let authEffects: AuthEffects;
   let actions$: ReplaySubject<any>;
   let authService: AuthService;
+  let router: Router;
 
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -50,12 +53,14 @@ describe('AuthEffects', () => {
           ]),
         },
       ],
+      imports: [RouterTestingModule],
     })
   );
 
   beforeEach(() => {
     authEffects = TestBed.inject(AuthEffects);
     authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
 
     (authService.setLogoutTimer as jasmine.Spy).and.callThrough();
   });
@@ -181,8 +186,12 @@ describe('AuthEffects', () => {
     });
 
     it('should logout user and remove user data from local storage', () => {
+      spyOn(router, 'navigate').and.stub();
+
       authEffects.logoutUser$.subscribe(() => {
+        expect(authService.clearLogoutTimer).toHaveBeenCalled();
         expect(authService.removeUserFromLocalStorage).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['/']);
       });
     });
   });
