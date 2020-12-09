@@ -1,51 +1,51 @@
 version: 2
 jobs:
-  backend-tests:
-    docker:
-      - image: circleci/openjdk:11.0.3-jdk-stretch
-        environment:
-          NEO4J_BOLT: $NEO4J_BOLT
-          NEO4J_USER: $NEO4J_USER
-          NEO4J_PASSWORD: $NEO4J_PASSWORD
-      - image: bitnami/neo4j:latest
-        environment:
-          NEO4J_USER: neo4j
-          NEO4J_PASSWORD: secret
-          NEO4J_HOST: localhost
-    working_directory: ~/global_terrorism_api/server
-    environment:
-      MAVEN_OPTS: -Xmx3200m
-    steps:
-      - checkout:
-          path: ~/global_terrorism_api
-      - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
-      - run: mvn dependency:go-offline
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run:
-          name: Install Neo4j
-          command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
-      - run:
-          name: Wait for Neo4j
-          command: dockerize -wait tcp://localhost:7474 -timeout 1m
-      - run:
-          name: Testing
-          command: mvn test -Dspring-boot.run.profiles=ci
-  backend-deploy:
-    docker:
-      - image: circleci/buildpack-deps:trusty
-    working_directory: ~/global_terrorism_api/server
-    steps:
-      - checkout:
-      - run:
-          name: Deploy app on heroku
-          command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_BACKEND.git master
+  # backend-tests:
+  #   docker:
+  #     - image: circleci/openjdk:11.0.3-jdk-stretch
+  #       environment:
+  #         NEO4J_BOLT: $NEO4J_BOLT
+  #         NEO4J_USER: $NEO4J_USER
+  #         NEO4J_PASSWORD: $NEO4J_PASSWORD
+  #     - image: bitnami/neo4j:latest
+  #       environment:
+  #         NEO4J_USER: neo4j
+  #         NEO4J_PASSWORD: secret
+  #         NEO4J_HOST: localhost
+  #   working_directory: ~/global_terrorism_api/server
+  #   environment:
+  #     MAVEN_OPTS: -Xmx3200m
+  #   steps:
+  #     - checkout:
+  #         path: ~/global_terrorism_api
+  #     - setup_remote_docker
+  #     - restore_cache:
+  #         keys:
+  #           - v1-dependencies-{{ checksum "pom.xml" }}
+  #           - v1-dependencies-
+  #     - run: mvn dependency:go-offline
+  #     - save_cache:
+  #         paths:
+  #           - ~/.m2
+  #         key: v1-dependencies-{{ checksum "pom.xml" }}
+  #     - run:
+  #         name: Install Neo4j
+  #         command: docker run -d --rm --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/secret neo4j:latest
+  #     - run:
+  #         name: Wait for Neo4j
+  #         command: dockerize -wait tcp://localhost:7474 -timeout 1m
+  #     - run:
+  #         name: Testing
+  #         command: mvn test -Dspring-boot.run.profiles=ci
+  # backend-deploy:
+  #   docker:
+  #     - image: circleci/buildpack-deps:trusty
+  #   working_directory: ~/global_terrorism_api/server
+  #   steps:
+  #     - checkout:
+  #     - run:
+  #         name: Deploy app on heroku
+  #         command: git subtree push --prefix server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_BACKEND.git master
   frontend-tests:
     working_directory: ~/global_terrorism_api/client
     docker:
@@ -87,14 +87,14 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - backend-tests
+      # - backend-tests
       - frontend-tests
-      - backend-deploy:
-          requires:
-            - backend-tests
-          # filters:
-          #   branches:
-          #     only: master
+      # - backend-deploy:
+      #     requires:
+      #       - backend-tests
+      #     filters:
+      #       branches:
+      #         only: master
       - frontend-deploy:
           requires:
             - frontend-tests
