@@ -20,20 +20,31 @@ import AppStoreState from 'src/app/store/app.state';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly ZOOM = 3;
+  private readonly MAX_ZOOM = 19;
+  private readonly ICO_SIZE: L.PointExpression = [25, 41];
+  private readonly ICON_ANCHOR: L.PointExpression = [13, 41];
+  private readonly ICON_URL = 'assets/leaflet/marker-icon.png';
+  private readonly SHADOW_URL = 'assets/leaflet/marker-shadow.png';
+  private readonly TILE_LAYER =
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  private readonly TILES_ATRIBUTION =
+    '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
   private map: L.Map;
   private markers: L.CircleMarker[] = [];
   private eventsSubscription$: Subscription;
   private userSubscription$: Subscription;
   private deleteEventSubscription$: Subscription;
+  private latLong: L.LatLngExpression = [40, -100];
+
   isUserLoggedIn = false;
-
   events: Event[] = [];
-
   icon = icon({
-    iconSize: [25, 41],
-    iconAnchor: [13, 41],
-    iconUrl: 'assets/leaflet/marker-icon.png',
-    shadowUrl: 'assets/leaflet/marker-shadow.png',
+    iconSize: this.ICO_SIZE,
+    iconAnchor: this.ICON_ANCHOR,
+    iconUrl: this.ICON_URL,
+    shadowUrl: this.SHADOW_URL,
   });
 
   constructor(
@@ -42,6 +53,20 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.setupSubscriptions();
+  }
+
+  ngOnDestroy(): void {
+    this.eventsSubscription$?.unsubscribe();
+    this.userSubscription$?.unsubscribe();
+    this.deleteEventSubscription$?.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.initMap();
+  }
+
+  private setupSubscriptions() {
     this.userSubscription$ = this.store
       .select('auth')
       .pipe(map((authState) => authState.user))
@@ -80,30 +105,12 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  ngOnDestroy(): void {
-    this.eventsSubscription$?.unsubscribe();
-    this.userSubscription$?.unsubscribe();
-    this.deleteEventSubscription$?.unsubscribe();
-  }
-
-  ngAfterViewInit(): void {
-    this.initMap();
-  }
-
   private initMap(): void {
-    this.map = L.map('map', {
-      center: [39.8282, -98.5795],
-      zoom: 3,
+    this.map = L.map('map').setView(this.latLong, this.ZOOM);
+    const tiles = L.tileLayer(this.TILE_LAYER, {
+      maxZoom: this.MAX_ZOOM,
+      attribution: this.TILES_ATRIBUTION,
     });
-
-    const tiles = L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        maxZoom: 19,
-        attribution:
-          '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }
-    );
     tiles.addTo(this.map);
   }
 }
