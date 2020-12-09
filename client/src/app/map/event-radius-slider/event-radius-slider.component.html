@@ -1,1 +1,8 @@
-<p>event-radius-slider works!</p>
+<mat-slider
+  [min]="0"
+  [max]="maxRadius"
+  (change)="onRadiusChange()"
+  [(ngModel)]="value"
+>
+</mat-slider>
+<input type="text" [value]="value" matInput />
