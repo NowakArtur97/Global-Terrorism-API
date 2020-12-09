@@ -115,12 +115,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private getUserLocation(): void {
     if (!navigator.geolocation) {
+      console.log('Location is not supported');
       return;
     }
     navigator.geolocation.getCurrentPosition((position) => {
       const coords = position.coords;
       this.latLong = [coords.latitude, coords.longitude];
-      this.markerService.createMarker(this.latLong, this.map);
+      this.markerService.createUserPositionMarker(this.latLong, this.map);
     });
   }
 }

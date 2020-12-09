@@ -52,8 +52,14 @@ export default class MarkerService {
       .bindPopup(this.createMarkerPopup(event));
   }
 
-  createMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
-    return L.marker(latLong).addTo(map);
+  createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
+    const markerText = 'Your position';
+    return L.marker(latLong)
+      .bindPopup(markerText)
+      .on('mouseover', function (ev) {
+        this.openPopup();
+      })
+      .addTo(map);
   }
 
   createCircleMarkers(events: Event[], map: L.Map): L.CircleMarker[] {
