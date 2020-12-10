@@ -65,6 +65,12 @@ export default class MarkerService {
     }).addTo(map);
   }
 
+  removeCircleMarker(marker: L.CircleMarker, map: L.Map): void {
+    if (marker) {
+      map.removeLayer(marker);
+    }
+  }
+
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
     const markerText = 'Your position';
     return L.marker(latLong)

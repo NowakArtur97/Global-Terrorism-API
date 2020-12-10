@@ -11,7 +11,7 @@ import * as EventActions from '../../event/store/event.actions';
   styleUrls: ['./event-radius-slider.component.css'],
 })
 export class EventRadiusSliderComponent implements OnInit {
-  readonly maxRadius = 20;
+  readonly maxRadius = 2000;
   @Input()
   radius = 0;
   sliderColor: ThemePalette = 'primary';
