@@ -3,9 +3,12 @@ import { Dictionary } from '@ngrx/entity';
 import EventDTO from '../../models/event.dto';
 import Event from '../../models/event.model';
 import * as EventActions from '../event.actions';
-import eventReducer, { EventStoreState, selectAllEventsBeforeDate } from '../event.reducer';
+import eventReducer, {
+  EventStoreState,
+  selectAllEventsBeforeDate,
+} from '../event.reducer';
 
-const maxDate = new Date();
+const endDateOfEvents = new Date();
 const event1 = {
   id: 6,
   summary: 'summary',
@@ -123,7 +126,8 @@ const state: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
-  maxDate,
+  endDateOfEvents,
+  maxRadiusOfEventsDetection: null,
   errorMessages: [],
 };
 const stateWithEvents: EventStoreState = {
@@ -133,7 +137,8 @@ const stateWithEvents: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
-  maxDate,
+  endDateOfEvents,
+  maxRadiusOfEventsDetection: null,
   errorMessages: [],
 };
 const stateWithEventToUpdate: EventStoreState = {
@@ -143,7 +148,8 @@ const stateWithEventToUpdate: EventStoreState = {
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
-  maxDate,
+  endDateOfEvents,
+  maxRadiusOfEventsDetection: null,
   errorMessages: ['ERROR'],
 };
 
@@ -187,7 +193,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.addEventStart({ eventDTO });
@@ -207,7 +214,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const eventsDictionaryWithOneEvent: Dictionary<Event> = {
@@ -220,7 +228,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.addEvent({ event: event1 });
@@ -250,7 +259,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const action = EventActions.updateEventFetch({ eventToUpdate: event1 });
@@ -270,7 +280,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: event1,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const stateWhenUpdateEvent: EventStoreState = {
@@ -280,7 +291,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.updateEvent({ eventDTO });
@@ -333,7 +345,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const eventsDictionaryWithUpdatedEvents: Dictionary<Event> = {
@@ -347,7 +360,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: event2Updated,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.updateEventFinish({
@@ -369,7 +383,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: event1,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const stateWhenDeleteEventStart: EventStoreState = {
@@ -379,7 +394,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.deleteEventStart({ eventToDelete: event1 });
@@ -399,7 +415,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: true,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const stateAfterDeletingEvent: EventStoreState = {
@@ -409,7 +426,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: event1,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       const action = EventActions.deleteEvent({ eventDeleted: event1 });
@@ -420,8 +438,8 @@ describe('eventReducer', () => {
     });
   });
 
-  describe('EventActions.changeMaxEventsDate', () => {
-    it('should set new max date', () => {
+  describe('EventActions.changeEndDateOfEvents', () => {
+    it('should set new end date of events', () => {
       const newMaxDate = new Date(1997, 0, 1);
       const stateAfterChangingMaxDate: EventStoreState = {
         ids: [],
@@ -430,11 +448,12 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate: newMaxDate,
+        endDateOfEvents: newMaxDate,
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
-      const action = EventActions.changeMaxEventsDate({
-        maxDate: newMaxDate,
+      const action = EventActions.changeEndDateOfEvents({
+        endDateOfEvents: newMaxDate,
       });
       const actualState = eventReducer(state, action);
       const expectedState = { ...stateAfterChangingMaxDate };
@@ -534,7 +553,8 @@ describe('eventReducer', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate,
+        endDateOfEvents,
+        maxRadiusOfEventsDetection: null,
         errorMessages: ['ERROR'],
       };
       const action = EventActions.startFillingOutForm();

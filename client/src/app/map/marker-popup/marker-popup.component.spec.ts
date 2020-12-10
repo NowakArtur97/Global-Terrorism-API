@@ -53,7 +53,8 @@ describe('MarkerPopupComponent', () => {
     lastUpdatedEvent: null,
     lastDeletedEvent: null,
     isLoading: false,
-    maxDate: new Date(),
+    endDateOfEvents: new Date(),
+    maxRadiusOfEventsDetection: null,
     errorMessages: [],
   };
   beforeEach(async () => {

@@ -66,7 +66,8 @@ describe('EventFormWrapperComponent', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate: new Date(),
+        endDateOfEvents: new Date(),
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       spyOn(store, 'select').and.callFake((selector) => {
@@ -188,7 +189,8 @@ describe('EventFormWrapperComponent', () => {
         lastUpdatedEvent: null,
         lastDeletedEvent: null,
         isLoading: false,
-        maxDate: new Date(),
+        endDateOfEvents: new Date(),
+        maxRadiusOfEventsDetection: null,
         errorMessages: [],
       };
       spyOn(store, 'select').and.callFake((selector) => {

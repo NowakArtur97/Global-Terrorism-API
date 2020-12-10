@@ -4,7 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
+import {
+  EventStoreState,
+  selectEventToUpdate,
+} from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import { CountryFormComponent } from './country-form.component';
@@ -44,7 +47,8 @@ describe('CountryFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
-          maxDate: new Date(),
+          endDateOfEvents: new Date(),
+          maxRadiusOfEventsDetection: null,
           errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
@@ -123,7 +127,8 @@ describe('CountryFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
-          maxDate: new Date(),
+          endDateOfEvents: new Date(),
+          maxRadiusOfEventsDetection: null,
           errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {
@@ -182,7 +187,8 @@ describe('CountryFormComponent', () => {
           lastUpdatedEvent: null,
           lastDeletedEvent: null,
           isLoading: false,
-          maxDate: new Date(),
+          endDateOfEvents: new Date(),
+          maxRadiusOfEventsDetection: null,
           errorMessages: [],
         };
         spyOn(store, 'select').and.callFake((selector) => {

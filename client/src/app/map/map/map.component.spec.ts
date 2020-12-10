@@ -4,7 +4,10 @@ import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
-import { selectAllEventsBeforeDate, selectLastDeletedEvent } from 'src/app/event/store/event.reducer';
+import {
+  selectAllEventsInRadius,
+  selectLastDeletedEvent,
+} from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
@@ -21,6 +24,7 @@ describe('MapComponent', () => {
     user: { token: 'token', expirationDate: new Date(Date.now() + 36000000) },
     authErrorMessages: [],
     isLoading: false,
+    userLocation: null,
   };
 
   beforeEach(async () => {
@@ -38,7 +42,7 @@ describe('MapComponent', () => {
           useValue: jasmine.createSpyObj('markerService', [
             'cleanMapFromMarkers',
             'removeMarker',
-            'createCircleMarkers',
+            'createCircleMarkersFromEvents',
           ]),
         },
       ],
@@ -58,7 +62,7 @@ describe('MapComponent', () => {
   describe('when initialize component', () => {
     it('and user is logged in should fetch events', () => {
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEventsBeforeDate) {
+        if (selector === selectAllEventsInRadius) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -72,7 +76,7 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
     });
 
@@ -145,7 +149,7 @@ describe('MapComponent', () => {
       };
 
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEventsBeforeDate) {
+        if (selector === selectAllEventsInRadius) {
           return of([event1, event2]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -160,12 +164,12 @@ describe('MapComponent', () => {
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
     it('and events are not fetched should remove markers', () => {
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEventsBeforeDate) {
+        if (selector === selectAllEventsInRadius) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -180,7 +184,7 @@ describe('MapComponent', () => {
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
     it('and in store is deleted event should remove marker', () => {
@@ -219,7 +223,7 @@ describe('MapComponent', () => {
       };
 
       spyOn(store, 'select').and.callFake((selector) => {
-        if (selector === selectAllEventsBeforeDate) {
+        if (selector === selectAllEventsInRadius) {
           return of([]);
         } else if (selector === 'auth') {
           return of(stateWithUser);
@@ -234,7 +238,7 @@ describe('MapComponent', () => {
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
       expect(markerService.removeMarker).toHaveBeenCalled();
     });
   });

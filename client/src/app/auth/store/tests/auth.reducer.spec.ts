@@ -7,11 +7,13 @@ const initialState: AuthStoreState = {
   user: null,
   authErrorMessages: [],
   isLoading: false,
+  userLocation: null,
 };
 const initialStateWithErrorsAndLoading: AuthStoreState = {
   user: null,
   authErrorMessages: ['ERROR'],
   isLoading: true,
+  userLocation: null,
 };
 const initialStateWithUser: AuthStoreState = {
   user: {
@@ -20,6 +22,7 @@ const initialStateWithUser: AuthStoreState = {
   },
   authErrorMessages: [],
   isLoading: true,
+  userLocation: null,
 };
 
 describe('authReducer', () => {
@@ -182,6 +185,7 @@ describe('authReducer', () => {
         },
         authErrorMessages: ['ERROR'],
         isLoading: true,
+        userLocation: null,
       };
       const user = null;
       const authErrorMessages = [];
@@ -205,6 +209,7 @@ describe('authReducer', () => {
         user: null,
         authErrorMessages: ['ERROR'],
         isLoading: false,
+        userLocation: null,
       };
       const action = AuthActions.startFillingOutForm();
       const actualState = authReducer(initialStateWithErrors, action);

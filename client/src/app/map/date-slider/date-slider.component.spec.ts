@@ -41,8 +41,8 @@ describe('DateSliderComponent', () => {
       component.onDateChange();
 
       expect(store.dispatch).toHaveBeenCalledWith(
-        EventActions.changeMaxEventsDate({
-          maxDate: component.selectedDate,
+        EventActions.changeEndDateOfEvents({
+          endDateOfEvents: component.selectedDate,
         })
       );
     });
