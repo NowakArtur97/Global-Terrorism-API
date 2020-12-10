@@ -33,3 +33,10 @@ export const logoutUser = createAction('[User] Logout User');
 export const startFillingOutForm = createAction(
   '[User] User Started Filling Out Form'
 );
+
+export const setUserLocation = createAction(
+  '[User] Set User Location',
+  props<{
+    userLocation: L.LatLngExpression;
+  }>()
+);

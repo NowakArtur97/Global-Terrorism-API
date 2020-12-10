@@ -1,4 +1,4 @@
-import { Action, ActionReducer, createReducer, on } from '@ngrx/store';
+import { Action, ActionReducer, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
 import User from '../models/user.model';
 import * as AuthActions from './auth.actions';
@@ -7,12 +7,14 @@ export interface AuthStoreState {
   user: User;
   authErrorMessages: string[];
   isLoading: boolean;
+  userLocation: L.LatLngExpression;
 }
 
 const initialState: AuthStoreState = {
   user: null,
   authErrorMessages: [],
   isLoading: false,
+  userLocation: null,
 };
 
 const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
@@ -46,11 +48,16 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
     ...state,
     user: null,
     authErrorMessages: [],
+    userLocation: null,
   })),
 
   on(AuthActions.startFillingOutForm, (state) => ({
     ...state,
     authErrorMessages: [],
+  })),
+  on(AuthActions.setUserLocation, (state, { userLocation }) => ({
+    ...state,
+    userLocation,
   }))
 );
 
@@ -60,3 +67,11 @@ export default function authReducer(
 ): AuthStoreState {
   return _authReducer(state, action);
 }
+
+const getUserLocation = (state: AuthStoreState) => state.userLocation;
+
+export const selectAuthState = createFeatureSelector<AuthStoreState>('auth');
+export const selectUserLocation = createSelector(
+  selectAuthState,
+  getUserLocation
+);
