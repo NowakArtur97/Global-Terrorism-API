@@ -128,6 +128,7 @@ const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 const getLastUpdatedEvent = (state: EventStoreState) => state.lastUpdatedEvent;
 const getLastDeletedEvent = (state: EventStoreState) => state.lastDeletedEvent;
 const getMaxDate = (state: EventStoreState) => state.maxDate;
+const getMaxRadius = (state: EventStoreState) => state.maxRadius;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -157,4 +158,10 @@ export const selectAllEventsBeforeDate = createSelector(
   selectMaxDate,
   (events: Event[], maxDate: Date) =>
     events.filter((event: Event) => new Date(event.date) <= maxDate)
+);
+export const selectMaxRadius = createSelector(selectEventState, getMaxRadius);
+export const selectAllEventsInRadius = createSelector(
+  selectAllEvents,
+  selectMaxRadius,
+  (events: Event[], maxRadius: number) => events.filter((event: Event) => {})
 );

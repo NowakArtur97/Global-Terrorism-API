@@ -33,9 +33,10 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private map: L.Map;
   private markers: L.CircleMarker[] = [];
   private eventsSubscription$: Subscription;
+  private eventsRadiusSubscription$: Subscription;
   private userSubscription$: Subscription;
   private deleteEventSubscription$: Subscription;
-  private latLong: L.LatLngExpression = [40, -100];
+  private userLocation: L.LatLngExpression = [40, -100];
 
   isUserLoggedIn = false;
   events: Event[] = [];
@@ -44,6 +45,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     iconAnchor: this.ICON_ANCHOR,
     iconUrl: this.ICON_URL,
   });
+  eventsRadiusMarker: L.CircleMarker<any>;
 
   constructor(
     private store: Store<AppStoreState>,
@@ -57,6 +59,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.eventsSubscription$?.unsubscribe();
+    this.eventsRadiusSubscription$?.unsubscribe();
     this.userSubscription$?.unsubscribe();
     this.deleteEventSubscription$?.unsubscribe();
   }
@@ -84,8 +87,20 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         this.events = events;
         if (this.map && this.events) {
           this.markerService.cleanMapFromMarkers(this.map, this.markers);
-          this.markers = this.markerService.createCircleMarkers(
+          this.markers = this.markerService.createCircleMarkersFromEvents(
             this.events,
+            this.map
+          );
+        }
+      });
+
+    this.eventsRadiusSubscription$ = this.store
+      .select('event')
+      .subscribe(({ maxRadius }) => {
+        if (this.map && maxRadius > 0) {
+      this.eventsRadiusMarker = this.markerService.createCircleMarker(
+            this.userLocation,
+            maxRadius,
             this.map
           );
         }
@@ -105,7 +120,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initMap(): void {
-    this.map = L.map('map').setView(this.latLong, this.ZOOM);
+    this.map = L.map('map').setView(this.userLocation, this.ZOOM);
     const tiles = L.tileLayer(this.TILE_LAYER, {
       maxZoom: this.MAX_ZOOM,
       attribution: this.TILES_ATRIBUTION,
@@ -120,8 +135,8 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     navigator.geolocation.getCurrentPosition((position) => {
       const coords = position.coords;
-      this.latLong = [coords.latitude, coords.longitude];
-      this.markerService.createUserPositionMarker(this.latLong, this.map);
+      this.userLocation = [coords.latitude, coords.longitude];
+      this.markerService.createUserPositionMarker(this.userLocation, this.map);
     });
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NgElement, WithProperties } from '@angular/elements';
 import * as L from 'leaflet';
-import City from '../city/models/city.model';
 
+import City from '../city/models/city.model';
 import Event from '../event/models/event.model';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
@@ -40,7 +40,10 @@ export default class MarkerService {
     );
   }
 
-  private createCircleMarker(event: Event, map: L.Map): L.CircleMarker {
+  private createCircleMarkerFromEvent(
+    event: Event,
+    map: L.Map
+  ): L.CircleMarker {
     const { city, victim } = event;
     return L.circleMarker([city.latitude, city.longitude], {
       radius: this.scaleRadius(
@@ -50,6 +53,16 @@ export default class MarkerService {
     })
       .addTo(map)
       .bindPopup(this.createMarkerPopup(event));
+  }
+
+  createCircleMarker(
+    location: L.LatLngExpression,
+    radius: number,
+    map: L.Map
+  ): L.CircleMarker {
+    return L.circleMarker(location, {
+      radius,
+    }).addTo(map);
   }
 
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
@@ -62,14 +75,14 @@ export default class MarkerService {
       .addTo(map);
   }
 
-  createCircleMarkers(events: Event[], map: L.Map): L.CircleMarker[] {
+  createCircleMarkersFromEvents(events: Event[], map: L.Map): L.CircleMarker[] {
     const markers: L.CircleMarker[] = [];
     if (events.length === 0) {
       return markers;
     }
     this.maxRadius = this.getMaxRadius(events);
     for (const event of events) {
-      markers.push(this.createCircleMarker(event, map));
+      markers.push(this.createCircleMarkerFromEvent(event, map));
     }
     return markers;
   }
