@@ -37,7 +37,7 @@ describe('DateSliderComponent', () => {
   });
 
   describe('when date change on slider', () => {
-    it('should dispatch changeMaxEventsDate action', () => {
+    it('should dispatch changeEndDateOfEvents action', () => {
       component.onDateChange();
 
       expect(store.dispatch).toHaveBeenCalledWith(
