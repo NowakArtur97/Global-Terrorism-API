@@ -8,6 +8,7 @@ import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
+  private CIRCLE_MARKER_COLOR = '#70EC62';
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
@@ -60,9 +61,13 @@ export default class MarkerService {
     radius: number,
     map: L.Map
   ): L.CircleMarker {
-    return L.circleMarker(location, {
+    return L.circle(location, {
       radius,
-    }).addTo(map);
+    })
+      .setStyle({
+        color: this.CIRCLE_MARKER_COLOR,
+      })
+      .addTo(map);
   }
 
   removeCircleMarker(marker: L.CircleMarker, map: L.Map): void {

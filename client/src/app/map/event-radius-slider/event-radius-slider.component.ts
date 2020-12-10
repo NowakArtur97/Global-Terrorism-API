@@ -11,14 +11,15 @@ import * as EventActions from '../../event/store/event.actions';
   styleUrls: ['./event-radius-slider.component.css'],
 })
 export class EventRadiusSliderComponent implements OnInit {
-  readonly maxRadius = 2000;
+  readonly maxRadius = 16000000;
   @Input()
   radius = 0;
   sliderColor: ThemePalette = 'primary';
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.radius = 10;
+    this.radius = this.maxRadius / 4;
+    this.onRadiusChange();
   }
 
   onRadiusChange(): void {
