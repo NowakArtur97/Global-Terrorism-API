@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { Store } from '@ngrx/store';
+import AppStoreState from 'src/app/store/app.state';
+
+import * as EventActions from '../../event/store/event.actions';
 
 @Component({
   selector: 'app-event-radius-slider',
@@ -9,15 +13,18 @@ import { ThemePalette } from '@angular/material/core';
 export class EventRadiusSliderComponent implements OnInit {
   readonly maxRadius = 20;
   @Input()
-  value = 0;
+  radius = 0;
   sliderColor: ThemePalette = 'primary';
-  // constructor(private store: Store<AppStoreState>) {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.value = 10;
+    this.radius = 10;
   }
 
   onRadiusChange(): void {
-    console.log(this.value);
+    console.log(this.radius);
+    this.store.dispatch(
+      EventActions.changeMaxEventsDetectionRadius({ maxRadius: this.radius })
+    );
   }
 }

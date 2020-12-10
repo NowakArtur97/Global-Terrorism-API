@@ -10,6 +10,7 @@ export interface EventStoreState extends EntityState<Event> {
   lastDeletedEvent: Event;
   isLoading: boolean;
   maxDate: Date;
+  maxRadius: number;
   errorMessages: string[];
 }
 
@@ -21,6 +22,7 @@ const initialState = eventAdapter.getInitialState({
   lastDeletedEvent: null,
   isLoading: false,
   maxDate: new Date(),
+  maxRadius: 10,
   errorMessages: [],
 });
 
@@ -108,6 +110,10 @@ const _eventReducer = createReducer(
 
   on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {
     return { ...state, maxDate };
+  }),
+
+  on(EventActions.changeMaxEventsDetectionRadius, (state, { maxRadius }) => {
+    return { ...state, maxRadius };
   })
 );
 

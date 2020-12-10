@@ -69,3 +69,8 @@ export const changeMaxEventsDate = createAction(
   '[Event] Change Max Events Date',
   props<{ maxDate: Date }>()
 );
+
+export const changeMaxEventsDetectionRadius = createAction(
+  '[Event] Change Max Events Detection Radius',
+  props<{ maxRadius: number }>()
+);
