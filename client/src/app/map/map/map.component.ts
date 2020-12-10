@@ -9,8 +9,10 @@ import Event from '../../event/models/event.model';
 
 import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
+import * as AuthActions from '../../auth/store/auth.actions';
 import {
   selectAllEventsBeforeDate,
+  selectAllEventsInRadius,
   selectLastDeletedEvent,
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
@@ -82,7 +84,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.eventsSubscription$ = this.store
-      .select(selectAllEventsBeforeDate)
+      .select(selectAllEventsInRadius)
       .subscribe((events: Event[]) => {
         this.events = events;
         if (this.map && this.events) {
@@ -141,6 +143,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       const coords = position.coords;
       this.userLocation = [coords.latitude, coords.longitude];
       this.markerService.createUserPositionMarker(this.userLocation, this.map);
+      this.store.dispatch(
+        AuthActions.setUserLocation({ userLocation: this.userLocation })
+      );
     });
   }
 }

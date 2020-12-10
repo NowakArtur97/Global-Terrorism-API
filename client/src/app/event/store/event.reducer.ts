@@ -1,5 +1,6 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import { selectUserLocation } from 'src/app/auth/store/auth.reducer';
 
 import Event from '../models/event.model';
 import * as EventActions from './event.actions';
@@ -161,7 +162,31 @@ export const selectAllEventsBeforeDate = createSelector(
 );
 export const selectMaxRadius = createSelector(selectEventState, getMaxRadius);
 export const selectAllEventsInRadius = createSelector(
-  selectAllEvents,
+  selectAllEventsBeforeDate,
   selectMaxRadius,
-  (events: Event[], maxRadius: number) => events.filter((event: Event) => {})
+  selectUserLocation,
+  (events: Event[], maxRadius: number, userLocation: L.LatLngExpression) => {
+    if (events.length > 0 && maxRadius && userLocation) {
+      const toRadian = (degree) => (degree * Math.PI) / 180;
+      const latUser = toRadian(userLocation[0]);
+      const longUser = toRadian(userLocation[1]);
+      const EARTH_RADIUS = 6371;
+
+      return events.filter((event: Event) => {
+        const latEvent = toRadian(event.city.latitude);
+        const longEvent = toRadian(event.city.longitude);
+        const deltaLat = latUser - latEvent;
+        const deltaLon = longUser - longEvent;
+
+        const a =
+          Math.pow(Math.sin(deltaLat / 2), 2) +
+          Math.cos(latEvent) *
+            Math.cos(latUser) *
+            Math.pow(Math.sin(deltaLon / 2), 2);
+        const c = 2 * Math.asin(Math.sqrt(a));
+
+        return maxRadius >= c * EARTH_RADIUS * 1000;
+      });
+    }
+  }
 );
