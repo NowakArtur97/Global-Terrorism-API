@@ -1,5 +1,11 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  Action,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 import { selectUserLocation } from 'src/app/auth/store/auth.reducer';
 
 import Event from '../models/event.model';
@@ -23,7 +29,7 @@ const initialState = eventAdapter.getInitialState({
   lastDeletedEvent: null,
   isLoading: false,
   endDateOfEvents: new Date(),
-  maxRadiusOfEventsDetection: 10,
+  maxRadiusOfEventsDetection: null,
   errorMessages: [],
 });
 

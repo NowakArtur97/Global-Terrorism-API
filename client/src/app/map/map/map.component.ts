@@ -13,9 +13,12 @@ import * as AuthActions from '../../auth/store/auth.actions';
 import {
   selectAllEventsBeforeDate,
   selectAllEventsInRadius,
+  selectEventState,
   selectLastDeletedEvent,
+  selectMaxRadiusOfEventsDetection,
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
+import { selectAuthState } from 'src/app/auth/store/auth.reducer';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -72,7 +75,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setupSubscriptions(): void {
     this.userSubscription$ = this.store
-      .select('auth')
+      .select(selectAuthState)
       .pipe(map((authState) => authState.user))
       .subscribe((user: User) => {
         if (user) {
@@ -97,8 +100,8 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.eventsRadiusSubscription$ = this.store
-      .select('event')
-      .subscribe(({ maxRadiusOfEventsDetection }) => {
+      .select(selectMaxRadiusOfEventsDetection)
+      .subscribe((maxRadiusOfEventsDetection) => {
         if (this.map && maxRadiusOfEventsDetection > 0) {
           this.markerService.removeCircleMarker(
             this.eventsRadiusMarker,

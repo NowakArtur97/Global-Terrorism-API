@@ -2,11 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
+import {
+  AuthStoreState,
+  selectAuthState,
+} from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
+  EventStoreState,
   selectAllEventsInRadius,
   selectLastDeletedEvent,
+  selectMaxRadiusOfEventsDetection,
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
@@ -64,9 +69,11 @@ describe('MapComponent', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === selectAllEventsInRadius) {
           return of([]);
-        } else if (selector === 'auth') {
+        } else if (selector === selectAuthState) {
           return of(stateWithUser);
         } else if (selector === selectLastDeletedEvent) {
+          return of();
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
           return of();
         }
       });
@@ -151,9 +158,11 @@ describe('MapComponent', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === selectAllEventsInRadius) {
           return of([event1, event2]);
-        } else if (selector === 'auth') {
+        } else if (selector === selectAuthState) {
           return of(stateWithUser);
         } else if (selector === selectLastDeletedEvent) {
+          return of();
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
           return of();
         }
       });
@@ -171,9 +180,11 @@ describe('MapComponent', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === selectAllEventsInRadius) {
           return of([]);
-        } else if (selector === 'auth') {
+        } else if (selector === selectAuthState) {
           return of(stateWithUser);
         } else if (selector === selectLastDeletedEvent) {
+          return of();
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
           return of();
         }
       });
@@ -225,10 +236,12 @@ describe('MapComponent', () => {
       spyOn(store, 'select').and.callFake((selector) => {
         if (selector === selectAllEventsInRadius) {
           return of([]);
-        } else if (selector === 'auth') {
+        } else if (selector === selectAuthState) {
           return of(stateWithUser);
         } else if (selector === selectLastDeletedEvent) {
           return of(event);
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
+          return of();
         }
       });
 
