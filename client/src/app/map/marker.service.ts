@@ -8,7 +8,7 @@ import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
-  private CIRCLE_MARKER_COLOR = '#70EC62';
+  private CIRCLE_MARKER_COLOR = '#1B7915';
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {

@@ -65,12 +65,12 @@ export const startFillingOutForm = createAction(
   '[Event] User Started Filling Out Form'
 );
 
-export const changeMaxEventsDate = createAction(
-  '[Event] Change Max Events Date',
-  props<{ maxDate: Date }>()
+export const changeEndDateOfEvents = createAction(
+  '[Event] Change End Date Of Events',
+  props<{ endDateOfEvents: Date }>()
 );
 
-export const changeMaxEventsDetectionRadius = createAction(
-  '[Event] Change Max Events Detection Radius',
-  props<{ maxRadius: number }>()
+export const changeMaxRadiusOfEventsDetection = createAction(
+  '[Event] Change Max Radius Of Events Detection',
+  props<{ maxRadiusOfEventsDetection: number }>()
 );

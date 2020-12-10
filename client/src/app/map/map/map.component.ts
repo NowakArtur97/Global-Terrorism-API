@@ -98,15 +98,15 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.eventsRadiusSubscription$ = this.store
       .select('event')
-      .subscribe(({ maxRadius }) => {
-        if (this.map && maxRadius > 0) {
+      .subscribe(({ maxRadiusOfEventsDetection }) => {
+        if (this.map && maxRadiusOfEventsDetection > 0) {
           this.markerService.removeCircleMarker(
             this.eventsRadiusMarker,
             this.map
           );
           this.eventsRadiusMarker = this.markerService.createCircleMarker(
             this.userLocation,
-            maxRadius,
+            maxRadiusOfEventsDetection,
             this.map
           );
         }

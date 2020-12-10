@@ -24,7 +24,9 @@ export class EventRadiusSliderComponent implements OnInit {
 
   onRadiusChange(): void {
     this.store.dispatch(
-      EventActions.changeMaxEventsDetectionRadius({ maxRadius: this.radius })
+      EventActions.changeMaxRadiusOfEventsDetection({
+        maxRadiusOfEventsDetection: this.radius,
+      })
     );
   }
 }

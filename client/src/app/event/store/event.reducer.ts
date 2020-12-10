@@ -10,8 +10,8 @@ export interface EventStoreState extends EntityState<Event> {
   lastUpdatedEvent: Event;
   lastDeletedEvent: Event;
   isLoading: boolean;
-  maxDate: Date;
-  maxRadius: number;
+  endDateOfEvents: Date;
+  maxRadiusOfEventsDetection: number;
   errorMessages: string[];
 }
 
@@ -22,8 +22,8 @@ const initialState = eventAdapter.getInitialState({
   lastUpdatedEvent: null,
   lastDeletedEvent: null,
   isLoading: false,
-  maxDate: new Date(),
-  maxRadius: 10,
+  endDateOfEvents: new Date(),
+  maxRadiusOfEventsDetection: 10,
   errorMessages: [],
 });
 
@@ -109,13 +109,16 @@ const _eventReducer = createReducer(
     return { ...state, errorMessages: [] };
   }),
 
-  on(EventActions.changeMaxEventsDate, (state, { maxDate }) => {
-    return { ...state, maxDate };
+  on(EventActions.changeEndDateOfEvents, (state, { endDateOfEvents }) => {
+    return { ...state, endDateOfEvents };
   }),
 
-  on(EventActions.changeMaxEventsDetectionRadius, (state, { maxRadius }) => {
-    return { ...state, maxRadius };
-  })
+  on(
+    EventActions.changeMaxRadiusOfEventsDetection,
+    (state, { maxRadiusOfEventsDetection }) => {
+      return { ...state, maxRadiusOfEventsDetection };
+    }
+  )
 );
 
 export default function eventReducer(
@@ -128,8 +131,9 @@ export default function eventReducer(
 const getEventToUpdate = (state: EventStoreState) => state.eventToUpdate;
 const getLastUpdatedEvent = (state: EventStoreState) => state.lastUpdatedEvent;
 const getLastDeletedEvent = (state: EventStoreState) => state.lastDeletedEvent;
-const getMaxDate = (state: EventStoreState) => state.maxDate;
-const getMaxRadius = (state: EventStoreState) => state.maxRadius;
+const getEndDateOfEvents = (state: EventStoreState) => state.endDateOfEvents;
+const getMaxRadiusOfEventsDetection = (state: EventStoreState) =>
+  state.maxRadiusOfEventsDetection;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -153,24 +157,35 @@ export const selectLastDeletedEvent = createSelector(
   selectEventState,
   getLastDeletedEvent
 );
-export const selectMaxDate = createSelector(selectEventState, getMaxDate);
+export const selectEndDateOfEvents = createSelector(
+  selectEventState,
+  getEndDateOfEvents
+);
 export const selectAllEventsBeforeDate = createSelector(
   selectAllEvents,
-  selectMaxDate,
-  (events: Event[], maxDate: Date) =>
-    events.filter((event: Event) => new Date(event.date) <= maxDate)
+  selectEndDateOfEvents,
+  (events: Event[], endDateOfEvents: Date) =>
+    events.filter((event: Event) => new Date(event.date) <= endDateOfEvents)
 );
-export const selectMaxRadius = createSelector(selectEventState, getMaxRadius);
+export const selectMaxRadiusOfEventsDetection = createSelector(
+  selectEventState,
+  getMaxRadiusOfEventsDetection
+);
 export const selectAllEventsInRadius = createSelector(
   selectAllEventsBeforeDate,
-  selectMaxRadius,
+  selectMaxRadiusOfEventsDetection,
   selectUserLocation,
-  (events: Event[], maxRadius: number, userLocation: L.LatLngExpression) => {
-    if (events.length > 0 && maxRadius && userLocation) {
+  (
+    events: Event[],
+    maxRadiusOfEventsDetection: number,
+    userLocation: L.LatLngExpression
+  ) => {
+    if (events.length > 0 && maxRadiusOfEventsDetection && userLocation) {
       const toRadian = (degree) => (degree * Math.PI) / 180;
       const latUser = toRadian(userLocation[0]);
       const longUser = toRadian(userLocation[1]);
       const EARTH_RADIUS = 6371;
+      const EARTH_RADIUS_IN_METERES = EARTH_RADIUS * 1000;
 
       return events.filter((event: Event) => {
         const latEvent = toRadian(event.city.latitude);
@@ -185,7 +200,7 @@ export const selectAllEventsInRadius = createSelector(
             Math.pow(Math.sin(deltaLon / 2), 2);
         const c = 2 * Math.asin(Math.sqrt(a));
 
-        return maxRadius >= c * EARTH_RADIUS * 1000;
+        return maxRadiusOfEventsDetection >= c * EARTH_RADIUS_IN_METERES;
       });
     }
   }

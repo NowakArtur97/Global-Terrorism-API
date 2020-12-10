@@ -32,7 +32,7 @@ export class DateSliderComponent implements OnInit {
     this.selectedDate = new Date(startDate.getTime() + this.value);
 
     this.store.dispatch(
-      EventActions.changeMaxEventsDate({ maxDate: this.selectedDate })
+      EventActions.changeEndDateOfEvents({ endDateOfEvents: this.selectedDate })
     );
   }
 }
