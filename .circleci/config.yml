@@ -58,22 +58,22 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
-      - run:
-          name: Install local dependencies
-          command: npm install --ignore-scripts
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
-      - run:
-          name: Testing
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run:
-          name: Linting
-          command: npm run lint
-      - run:
-          name: End to End Test
-          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      # - run:
+      #     name: Install local dependencies
+      #     command: npm install --ignore-scripts
+      # - save_cache:
+      #     key: v1-dependencies-{{ checksum "package-lock.json" }}
+      #     paths:
+      #       - node_modules
+      # - run:
+      #     name: Testing
+      #     command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      # - run:
+      #     name: Linting
+      #     command: npm run lint
+      # - run:
+      #     name: End to End Test
+      #     command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
   frontend-deploy:
     docker:
       - image: circleci/buildpack-deps:trusty
@@ -88,7 +88,7 @@ workflows:
   build_test_deploy:
     jobs:
       # - backend-tests
-      - frontend-tests
+      # - frontend-tests
       # - backend-deploy:
       #     requires:
       #       - backend-tests
@@ -96,8 +96,8 @@ workflows:
       #       branches:
       #         only: master
       - frontend-deploy:
-          requires:
-            - frontend-tests
+          # requires:
+          # - frontend-tests
           # filters:
           #   branches:
           #     only: master
