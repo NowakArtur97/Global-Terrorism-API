@@ -11,9 +11,7 @@ import MarkerService from './../marker.service';
 import * as EventActions from '../../event/store/event.actions';
 import * as AuthActions from '../../auth/store/auth.actions';
 import {
-  selectAllEventsBeforeDate,
   selectAllEventsInRadius,
-  selectEventState,
   selectLastDeletedEvent,
   selectMaxRadiusOfEventsDetection,
 } from 'src/app/event/store/event.reducer';

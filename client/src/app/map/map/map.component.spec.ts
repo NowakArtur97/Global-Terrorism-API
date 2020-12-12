@@ -2,19 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import {
-  AuthStoreState,
-  selectAuthState,
-} from 'src/app/auth/store/auth.reducer';
+import { AuthStoreState, selectAuthState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
-  EventStoreState,
   selectAllEventsInRadius,
   selectLastDeletedEvent,
   selectMaxRadiusOfEventsDetection,
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
+import * as AuthActions from '../../auth/store/auth.actions';
 import * as EventActions from '../../event/store/event.actions';
 import MarkerService from '../marker.service';
 import { MapComponent } from './map.component';
@@ -48,6 +45,9 @@ describe('MapComponent', () => {
             'cleanMapFromMarkers',
             'removeMarker',
             'createCircleMarkersFromEvents',
+            'createCircleMarker',
+            'removeCircleMarker',
+            'createUserPositionMarker',
           ]),
         },
       ],
@@ -253,6 +253,54 @@ describe('MapComponent', () => {
       expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
       expect(markerService.removeMarker).toHaveBeenCalled();
+    });
+
+    it('and user location is setted should create circle marker', () => {
+      const maxRadiusOfEventsDetection = 4000000;
+      const latitude = 10;
+      const longitude = 20;
+      const position: Position = {
+        coords: {
+          latitude,
+          longitude,
+          accuracy: 10,
+          altitude: 100,
+          altitudeAccuracy: 10,
+          heading: 2,
+          speed: 10,
+        },
+        timestamp: +new Date(),
+      };
+      const userLocation: L.LatLngExpression = [latitude, longitude];
+
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === selectAllEventsInRadius) {
+          return of([]);
+        } else if (selector === selectAuthState) {
+          return of(stateWithUser);
+        } else if (selector === selectLastDeletedEvent) {
+          return of();
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
+          return of(maxRadiusOfEventsDetection);
+        }
+      });
+      spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
+        function () {
+          arguments[0](position);
+        }
+      );
+
+      fixture.detectChanges();
+      component.ngOnInit();
+
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(
+        AuthActions.setUserLocation({ userLocation })
+      );
+      expect(store.select).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
     });
   });
 });
