@@ -27,7 +27,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly MAX_ZOOM = 19;
   private readonly ICO_SIZE: L.PointExpression = [25, 41];
   private readonly ICON_ANCHOR: L.PointExpression = [13, 41];
-  private readonly ICON_URL = 'assets/leaflet/marker-icon.png';
+  private readonly ICON_URL = 'assets/leaflet/';
   private readonly TILE_LAYER =
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILES_ATRIBUTION =

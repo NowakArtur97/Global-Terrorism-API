@@ -88,7 +88,7 @@ workflows:
   build_test_deploy:
     jobs:
       # - backend-tests
-      # - frontend-tests
+      - frontend-tests
       # - backend-deploy:
       #     requires:
       #       - backend-tests
@@ -96,8 +96,8 @@ workflows:
       #       branches:
       #         only: master
       - frontend-deploy:
-          # requires:
-          # - frontend-tests
+          requires:
+            - frontend-tests
           # filters:
           #   branches:
           #     only: master
