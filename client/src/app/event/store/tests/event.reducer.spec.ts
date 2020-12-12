@@ -3,10 +3,7 @@ import { Dictionary } from '@ngrx/entity';
 import EventDTO from '../../models/event.dto';
 import Event from '../../models/event.model';
 import * as EventActions from '../event.actions';
-import eventReducer, {
-  EventStoreState,
-  selectAllEventsBeforeDate,
-} from '../event.reducer';
+import eventReducer, { EventStoreState, selectAllEventsBeforeDate } from '../event.reducer';
 
 const endDateOfEvents = new Date();
 const event1 = {

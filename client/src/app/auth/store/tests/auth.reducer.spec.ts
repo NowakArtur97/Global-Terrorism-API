@@ -3,19 +3,19 @@ import RegistrationData from '../../models/registration-data.model';
 import * as AuthActions from '../auth.actions';
 import authReducer, { AuthStoreState } from '../auth.reducer';
 
-const initialState: AuthStoreState = {
+const state: AuthStoreState = {
   user: null,
   authErrorMessages: [],
   isLoading: false,
   userLocation: null,
 };
-const initialStateWithErrorsAndLoading: AuthStoreState = {
+const stateWithErrorsAndLoading: AuthStoreState = {
   user: null,
   authErrorMessages: ['ERROR'],
   isLoading: true,
   userLocation: null,
 };
-const initialStateWithUser: AuthStoreState = {
+const stateWithUser: AuthStoreState = {
   user: {
     token: 'secret token',
     expirationDate: new Date(Date.now() + 36000000),
@@ -34,9 +34,9 @@ describe('authReducer', () => {
         password: 'password',
       };
       const action = AuthActions.loginUserStart({ loginData });
-      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
+      const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialState,
+        ...state,
         isLoading,
       };
 
@@ -51,9 +51,9 @@ describe('authReducer', () => {
         password: 'password',
       };
       const action = AuthActions.loginUserStart({ loginData });
-      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
+      const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrorsAndLoading,
+        ...stateWithErrorsAndLoading,
         authErrorMessages,
       };
 
@@ -72,9 +72,9 @@ describe('authReducer', () => {
         matchingPassword: 'password',
       };
       const action = AuthActions.registerUserStart({ registrationData });
-      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
+      const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialState,
+        ...state,
         isLoading,
       };
 
@@ -91,9 +91,9 @@ describe('authReducer', () => {
         matchingPassword: 'password',
       };
       const action = AuthActions.registerUserStart({ registrationData });
-      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
+      const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrorsAndLoading,
+        ...stateWithErrorsAndLoading,
         authErrorMessages,
       };
 
@@ -110,8 +110,8 @@ describe('authReducer', () => {
       };
       const authErrorMessages = [];
       const action = AuthActions.authenticateUserSuccess({ user });
-      const actualState = authReducer(initialState, action);
-      const expectedState = { ...initialState, user, authErrorMessages };
+      const actualState = authReducer(state, action);
+      const expectedState = { ...state, user, authErrorMessages };
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.user).toEqual(user);
@@ -127,9 +127,9 @@ describe('authReducer', () => {
       const authErrorMessages = [];
       const isLoading = false;
       const action = AuthActions.authenticateUserSuccess({ user });
-      const actualState = authReducer(initialStateWithErrorsAndLoading, action);
+      const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
-        ...initialStateWithErrorsAndLoading,
+        ...stateWithErrorsAndLoading,
         user,
         authErrorMessages,
         isLoading,
@@ -147,9 +147,9 @@ describe('authReducer', () => {
       const authErrorMessages = ['error'];
       const isLoading = false;
       const action = AuthActions.authenticateUserFailure({ authErrorMessages });
-      const actualState = authReducer(initialState, action);
+      const actualState = authReducer(state, action);
       const expectedState = {
-        ...initialState,
+        ...state,
         authErrorMessages,
         isLoading,
       };
@@ -165,9 +165,9 @@ describe('authReducer', () => {
       const user = null;
       const authErrorMessages = [];
       const action = AuthActions.logoutUser();
-      const actualState = authReducer(initialStateWithUser, action);
+      const actualState = authReducer(stateWithUser, action);
       const expectedState = {
-        ...initialStateWithUser,
+        ...stateWithUser,
         user,
         authErrorMessages,
       };
@@ -178,7 +178,7 @@ describe('authReducer', () => {
     });
 
     it('should logout user and remove error messages', () => {
-      const initialStateWithUserAndErrors: AuthStoreState = {
+      const stateWithUserAndErrors: AuthStoreState = {
         user: {
           token: 'secret token',
           expirationDate: new Date(Date.now() + 36000000),
@@ -190,9 +190,9 @@ describe('authReducer', () => {
       const user = null;
       const authErrorMessages = [];
       const action = AuthActions.logoutUser();
-      const actualState = authReducer(initialStateWithUserAndErrors, action);
+      const actualState = authReducer(stateWithUserAndErrors, action);
       const expectedState = {
-        ...initialStateWithUser,
+        ...stateWithUser,
         user,
         authErrorMessages,
       };
@@ -205,22 +205,42 @@ describe('authReducer', () => {
 
   describe('AuthStoreState.startFillingOutForm', () => {
     it('should remove error messages', () => {
-      const initialStateWithErrors: AuthStoreState = {
+      const stateWithErrors: AuthStoreState = {
         user: null,
         authErrorMessages: ['ERROR'],
         isLoading: false,
         userLocation: null,
       };
       const action = AuthActions.startFillingOutForm();
-      const actualState = authReducer(initialStateWithErrors, action);
+      const actualState = authReducer(stateWithErrors, action);
       const expectedState = {
-        ...initialState,
+        ...state,
         authErrorMessages: [],
       };
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.authErrorMessages).toEqual([]);
       expect(actualState.authErrorMessages.length).toBe(0);
+    });
+  });
+
+  describe('AuthStoreState.setUserLocation', () => {
+    it('should set user lcoation', () => {
+      const userLocation: L.LatLngExpression = [10, 20];
+      const stateWithUserLocation: AuthStoreState = {
+        user: null,
+        authErrorMessages: [],
+        isLoading: false,
+        userLocation,
+      };
+      const action = AuthActions.setUserLocation({ userLocation });
+      const actualState = authReducer(state, action);
+      const expectedState = {
+        ...stateWithUserLocation,
+      };
+
+      expect(actualState).toEqual(expectedState);
+      expect(actualState.userLocation).toEqual(userLocation);
     });
   });
 });
