@@ -5,16 +5,16 @@ import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
-import { DateSliderComponent } from './date-slider.component';
+import { EventDateSliderComponent } from './event-date-slider.component';
 
-describe('DateSliderComponent', () => {
-  let component: DateSliderComponent;
-  let fixture: ComponentFixture<DateSliderComponent>;
+describe('EventDateSliderComponent', () => {
+  let component: EventDateSliderComponent;
+  let fixture: ComponentFixture<EventDateSliderComponent>;
   let store: Store<AppStoreState>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DateSliderComponent],
+      declarations: [EventDateSliderComponent],
       imports: [
         StoreModule.forRoot({}),
         MaterialModule,
@@ -25,7 +25,7 @@ describe('DateSliderComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DateSliderComponent);
+    fixture = TestBed.createComponent(EventDateSliderComponent);
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);

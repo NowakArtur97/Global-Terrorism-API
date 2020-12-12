@@ -2,18 +2,18 @@ mat-slider {
   width: 100%;
 }
 
-.event-radius-slider__title {
+.event-date-slider__title {
   margin-bottom: 0px;
 }
 
 @media (orientation: landscape) and (max-width: 823px) {
-  .event-radius-slider__title {
+  .event-date-slider__title {
     font-size: 15px;
   }
 }
 
 @media (orientation: landscape) and (max-width: 736px) {
-  .event-radius-slider__title {
+  .event-date-slider__title {
     font-size: 13px;
   }
 }

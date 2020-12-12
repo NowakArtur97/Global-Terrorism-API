@@ -7,7 +7,7 @@
   position: relative;
 }
 
-app-date-slider,
+app-event-date-slider,
 app-event-radius-slider {
   position: absolute;
   left: 10%;
@@ -16,10 +16,20 @@ app-event-radius-slider {
   width: 80%;
 }
 
-app-date-slider {
-  bottom: 1%;
+app-event-date-slider {
+  bottom: 4%;
 }
 
 app-event-radius-slider {
   bottom: 13%;
+}
+
+@media (orientation: landscape) and (max-width: 736px) {
+  app-event-date-slider {
+    bottom: 0%;
+  }
+
+  app-event-radius-slider {
+    bottom: 15%;
+  }
 }

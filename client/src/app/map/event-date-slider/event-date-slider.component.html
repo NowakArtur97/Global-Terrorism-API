@@ -1,4 +1,6 @@
-<p>Events until date: {{ selectedDate | date: "dd/MM/yyyy" }}</p>
+<p class="event-date-slider__title">
+  Events until date: {{ selectedDate | date: "dd/MM/yyyy" }}
+</p>
 <mat-slider
   [min]="0"
   [max]="sliderRange"

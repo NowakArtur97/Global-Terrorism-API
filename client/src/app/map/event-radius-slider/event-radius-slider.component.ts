@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Store } from '@ngrx/store';
 import AppStoreState from 'src/app/store/app.state';
@@ -12,9 +12,9 @@ import * as EventActions from '../../event/store/event.actions';
 })
 export class EventRadiusSliderComponent implements OnInit {
   readonly maxRadius = 16000000;
-  @Input()
   radius = 0;
   sliderColor: ThemePalette = 'primary';
+
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {

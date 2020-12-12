@@ -6,17 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { MaterialModule } from '../common/material.module';
-import { DateSliderComponent } from './date-slider/date-slider.component';
+import { EventDateSliderComponent } from './event-date-slider/event-date-slider.component';
+import { EventRadiusSliderComponent } from './event-radius-slider/event-radius-slider.component';
 import MapRoutingModule from './map-routing.module';
 import { MapComponent } from './map/map.component';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
-import { EventRadiusSliderComponent } from './event-radius-slider/event-radius-slider.component';
 
 @NgModule({
   declarations: [
     MapComponent,
     MarkerPopupComponent,
-    DateSliderComponent,
+    EventDateSliderComponent,
     EventRadiusSliderComponent,
   ],
   imports: [
