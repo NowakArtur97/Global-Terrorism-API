@@ -9,7 +9,7 @@
     "e2e": "ng e2e",
     "start": "node server.js",
     "heroku-prebuild": "rm -rf node_modules && npm cache clean --force && npm i -g http-server && npm i -g @angular/cli",
-    "heroku-postbuild": "ng build --prod"
+    "heroku-postbuild": "ng build --prod --extract-css=false"
   },
   "private": true,
   "dependencies": {
