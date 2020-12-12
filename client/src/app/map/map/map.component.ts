@@ -18,6 +18,20 @@ import {
 import AppStoreState from 'src/app/store/app.state';
 import { selectAuthState } from 'src/app/auth/store/auth.reducer';
 
+const ICO_SIZE: L.PointExpression = [25, 41];
+const ICON_ANCHOR: L.PointExpression = [13, 41];
+const ICON_URL = 'leaflet/marker-icon.png';
+const SHADOW_ICON_URL = 'leaflet/marker-shadow.png';
+const ICON_RETINA_URL = 'leaflet/marker-icon-2x.png';
+const iconDefault = icon({
+  iconSize: ICO_SIZE,
+  iconAnchor: ICON_ANCHOR,
+  iconUrl: ICON_URL,
+  iconRetinaUrl: ICON_RETINA_URL,
+  shadowUrl: SHADOW_ICON_URL,
+});
+L.Marker.prototype.options.icon = iconDefault;
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -26,12 +40,6 @@ import { selectAuthState } from 'src/app/auth/store/auth.reducer';
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly ZOOM = 3;
   private readonly MAX_ZOOM = 19;
-  private readonly ICO_SIZE: L.PointExpression = [25, 41];
-  private readonly ICON_ANCHOR: L.PointExpression = [13, 41];
-  private readonly ICON_URL =
-    './node_modules/leaflet/dist/images/marker-icon.png';
-  private readonly SHADOW_ICON_URL =
-    './node_modules/leaflet/dist/images/marker-shadow.png';
   private readonly TILE_LAYER =
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILES_ATRIBUTION =
@@ -47,12 +55,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isUserLoggedIn = false;
   events: Event[] = [];
-  icon = icon({
-    iconSize: this.ICO_SIZE,
-    iconAnchor: this.ICON_ANCHOR,
-    iconUrl: this.ICON_URL,
-    shadowUrl: this.SHADOW_ICON_URL,
-  });
+
   eventsRadiusMarker: L.CircleMarker<any>;
 
   constructor(

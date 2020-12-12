@@ -22,8 +22,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "node_modules/leaflet/dist/images/",
-                "output": "./assets/leaflet"
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "leaflet/"
               },
               "src/favicon.ico",
               "src/assets"
