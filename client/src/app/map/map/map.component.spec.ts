@@ -284,8 +284,9 @@ describe('MapComponent', () => {
           return of(maxRadiusOfEventsDetection);
         }
       });
+
       spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
-        function () {
+        function (): void {
           arguments[0](position);
         }
       );
