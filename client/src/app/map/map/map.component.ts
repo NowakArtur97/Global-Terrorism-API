@@ -20,9 +20,9 @@ import { selectAuthState } from 'src/app/auth/store/auth.reducer';
 
 const ICO_SIZE: L.PointExpression = [25, 41];
 const ICON_ANCHOR: L.PointExpression = [13, 41];
-const ICON_URL = 'leaflet/marker-icon.png';
-const SHADOW_ICON_URL = 'leaflet/marker-shadow.png';
-const ICON_RETINA_URL = 'leaflet/marker-icon-2x.png';
+const ICON_URL = 'assets/leaflet/marker-icon.png';
+const SHADOW_ICON_URL = 'assets/leaflet/marker-shadow.png';
+const ICON_RETINA_URL = 'assets/leaflet/marker-icon-2x.png';
 const iconDefault = icon({
   iconSize: ICO_SIZE,
   iconAnchor: ICON_ANCHOR,
