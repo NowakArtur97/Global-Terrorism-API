@@ -1,9 +1,10 @@
-.chart-canvas {
+.chart-container {
   position: relative;
   max-height: 700px;
   height: 700px;
   min-width: 930px;
   width: 930px;
+  overflow: auto;
 }
 
 .chart-canvas {

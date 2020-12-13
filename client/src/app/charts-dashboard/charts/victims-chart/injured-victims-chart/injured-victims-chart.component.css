@@ -4,6 +4,7 @@
   height: 350px;
   min-width: 100%;
   width: 350px;
+  overflow: auto;
 }
 
 .chart-canvas {

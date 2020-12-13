@@ -17,7 +17,6 @@ export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
     responsive: true,
     maintainAspectRatio: false,
   };
-
   scatterChartData: ChartDataSets[] = [
     {
       data: [],

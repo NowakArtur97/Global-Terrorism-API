@@ -22,7 +22,6 @@ export class EventsInCountriesChartComponent implements OnInit, OnDestroy {
   barChartType: ChartType = 'bar';
   barChartLegend = true;
   barChartPlugins = [];
-
   barChartData: ChartDataSets[] = [{ data: [], label: 'Events in countries' }];
 
   private eventsSubscription$: Subscription;
