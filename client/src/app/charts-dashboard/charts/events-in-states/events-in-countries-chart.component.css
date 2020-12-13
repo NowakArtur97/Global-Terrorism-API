@@ -1,6 +1,8 @@
 .chart-canvas {
+  position: relative;
   max-height: 700px;
   height: 700px;
+  min-width: 100%;
   width: 930px;
 }
 
