@@ -2,6 +2,7 @@
   <canvas
     class="chart-canvas"
     baseChart
+    (window:resize)="onResize()"
     [data]="pieChartData"
     [labels]="pieChartLabels"
     [chartType]="pieChartType"

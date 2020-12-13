@@ -66,4 +66,8 @@ export class EventsOverYearsChartComponent implements OnInit, OnDestroy {
       index++;
     }
   }
+
+  onResize(): void {
+    this.scatterChartData = this.scatterChartData.slice();
+  }
 }
