@@ -1,5 +1,13 @@
-.chart-canvas {
+.chart-container {
   max-height: 700px;
   height: 700px;
   width: 800px;
+}
+
+@media (max-width: 640px) {
+  .chart-container {
+    max-height: 360px;
+    height: 360px;
+    width: 360px;
+  }
 }

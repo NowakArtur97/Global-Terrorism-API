@@ -1,10 +1,11 @@
-.chart-canvas {
-  width: auto;
+.chart-container {
   max-height: 350px;
+  height: 350px;
+  width: 350px;
 }
 
 @media (max-width: 640px) {
-  .chart-canvas {
+  .chart-container {
     max-height: 200px;
     height: 200px;
     width: 200px;
