@@ -2,8 +2,12 @@
   position: relative;
   max-height: 700px;
   height: 700px;
-  min-width: 100%;
+  min-width: 930px;
   width: 930px;
+}
+
+.chart-canvas {
+  width: 100% !important;
 }
 
 @media (max-width: 640px) {

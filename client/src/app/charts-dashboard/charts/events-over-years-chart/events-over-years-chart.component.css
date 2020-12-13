@@ -6,6 +6,10 @@
   width: 800px;
 }
 
+.chart-canvas {
+  width: 100% !important;
+}
+
 @media (max-width: 640px) {
   .chart-container {
     max-height: 360px;
