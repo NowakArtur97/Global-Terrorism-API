@@ -54,8 +54,4 @@ export class EventsInCountriesChartComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  onResize(): void {
-    this.barChartData = this.barChartData.slice();
-  }
 }

@@ -36,9 +36,5 @@ export abstract class AbstractVictimsChartComponent
     this.eventsSubscription$?.unsubscribe();
   }
 
-  onResize(): void {
-    this.pieChartData = this.pieChartData.slice();
-  }
-
   protected abstract populateChart(events: Event[]): void;
 }
