@@ -10,7 +10,6 @@ import * as AuthActions from '../auth/store/auth.actions';
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
   private CIRCLE_MARKER_COLOR = '#1B7915';
-  private USER_Z_INDEX_OFFSET = -1;
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
@@ -62,7 +61,7 @@ export default class MarkerService {
     location: L.LatLngExpression,
     radius: number,
     map: L.Map
-  ): L.CircleMarker {
+  ): L.Circle {
     return L.circle(location, {
       radius,
     })
@@ -115,7 +114,6 @@ export default class MarkerService {
     const markerText = 'Your position';
     return (
       L.marker(latLong, {
-        zIndexOffset: this.USER_Z_INDEX_OFFSET,
         draggable: true,
       })
         // .bindPopup(markerText)

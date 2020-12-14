@@ -164,14 +164,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userLocation,
         this.map
       );
-      this.userPositionMarker.on('dragend', () => {
-        const newLatitude = this.userPositionMarker.getLatLng().lat;
-        const newLongitude = this.userPositionMarker.getLatLng().lng;
-        console.log(newLatitude, newLongitude);
-        const userLocation: L.LatLngExpression = [newLatitude, newLongitude];
-        this.store.dispatch(AuthActions.setUserLocation({ userLocation }));
-      });
-      this.initEventRadiusMarker();
+      this.userPositionMarker.on('dragend', () => this.onUserPositionChange());
       this.store.dispatch(
         AuthActions.setUserLocation({ userLocation: this.userLocation })
       );
@@ -185,13 +178,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.userLocation,
           this.map
         );
-        this.userPositionMarker.on('dragend', () => {
-          const newLatitude = this.userPositionMarker.getLatLng().lat;
-          const newLongitude = this.userPositionMarker.getLatLng().lng;
-          console.log(newLatitude, newLongitude);
-          const userLocation: L.LatLngExpression = [newLatitude, newLongitude];
-          this.store.dispatch(AuthActions.setUserLocation({ userLocation }));
-        });
+        this.userPositionMarker.on('dragend', () =>
+          this.onUserPositionChange()
+        );
       }
       if (!this.eventsRadiusMarker) {
         this.initEventRadiusMarker();
@@ -204,5 +193,15 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsRadiusMarker = null;
     this.markerService.removeMarker(this.userPositionMarker, this.map);
     this.userPositionMarker = null;
+  }
+
+  private onUserPositionChange(): void {
+    const newLatitude = this.userPositionMarker.getLatLng().lat;
+    const newLongitude = this.userPositionMarker.getLatLng().lng;
+    const userLocation: L.LatLngExpression = [newLatitude, newLongitude];
+    this.store.dispatch(AuthActions.setUserLocation({ userLocation }));
+    this.userLocation = userLocation;
+    this.cleanUserMarkers();
+    this.setupUserMarkers();
   }
 }
