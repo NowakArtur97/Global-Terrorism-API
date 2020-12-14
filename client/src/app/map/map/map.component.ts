@@ -51,12 +51,12 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsRadiusSubscription$: Subscription;
   private userSubscription$: Subscription;
   private deleteEventSubscription$: Subscription;
-  private userLocation: L.LatLngExpression = [40, -100];
+  private userLocation: L.LatLngExpression = [50, 18];
+  private maxRadiusOfEventsDetection: number;
+  private eventsRadiusMarker: L.CircleMarker<any>;
+  private events: Event[] = [];
 
   isUserLoggedIn = false;
-  events: Event[] = [];
-
-  eventsRadiusMarker: L.CircleMarker<any>;
 
   constructor(
     private store: Store<AppStoreState>,
@@ -108,16 +108,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsRadiusSubscription$ = this.store
       .select(selectMaxRadiusOfEventsDetection)
       .subscribe((maxRadiusOfEventsDetection) => {
+        this.maxRadiusOfEventsDetection = maxRadiusOfEventsDetection;
         if (this.map && maxRadiusOfEventsDetection > 0) {
           this.markerService.removeCircleMarker(
             this.eventsRadiusMarker,
             this.map
           );
-          this.eventsRadiusMarker = this.markerService.createCircleMarker(
-            this.userLocation,
-            maxRadiusOfEventsDetection,
-            this.map
-          );
+          this.initEventRadiusMarker();
         }
       });
 
@@ -143,6 +140,15 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     tiles.addTo(this.map);
   }
 
+  private initEventRadiusMarker(): void {
+    this.eventsRadiusMarker = this.markerService.createCircleMarker(
+      this.userLocation,
+      this.maxRadiusOfEventsDetection,
+      this.map
+    );
+    this.map.setView(this.userLocation, this.ZOOM);
+  }
+
   private getUserLocation(): void {
     if (!navigator.geolocation) {
       console.log('Location is not supported');
@@ -155,6 +161,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       this.store.dispatch(
         AuthActions.setUserLocation({ userLocation: this.userLocation })
       );
+      this.initEventRadiusMarker();
     });
   }
 }
