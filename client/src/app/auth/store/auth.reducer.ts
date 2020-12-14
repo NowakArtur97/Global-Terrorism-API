@@ -1,4 +1,11 @@
-import { Action, ActionReducer, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  Action,
+  ActionReducer,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 
 import User from '../models/user.model';
 import * as AuthActions from './auth.actions';
@@ -55,6 +62,7 @@ const _authReducer: ActionReducer<AuthStoreState, Action> = createReducer(
     ...state,
     authErrorMessages: [],
   })),
+
   on(AuthActions.setUserLocation, (state, { userLocation }) => ({
     ...state,
     userLocation,

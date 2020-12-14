@@ -27,25 +27,9 @@ const stateWithUser: AuthStoreState = {
 
 describe('authReducer', () => {
   describe('AuthStoreState.loginUserStart', () => {
-    it('should remove display loader when login started', () => {
-      const isLoading = true;
-      const loginData: LoginData = {
-        userNameOrEmail: 'user',
-        password: 'password',
-      };
-      const action = AuthActions.loginUserStart({ loginData });
-      const actualState = authReducer(stateWithErrorsAndLoading, action);
-      const expectedState = {
-        ...state,
-        isLoading,
-      };
-
-      expect(actualState).toEqual(expectedState);
-      expect(actualState.isLoading).toBeTrue();
-    });
-
-    it('should remove error messages when login started', () => {
+    it('should remove error messagess and display loader when login started', () => {
       const authErrorMessages = [];
+      const isLoading = true;
       const loginData: LoginData = {
         userNameOrEmail: 'user',
         password: 'password',
@@ -55,15 +39,18 @@ describe('authReducer', () => {
       const expectedState = {
         ...stateWithErrorsAndLoading,
         authErrorMessages,
+        isLoading,
       };
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.authErrorMessages.length).toBe(0);
+      expect(actualState.isLoading).toBeTrue();
     });
   });
 
   describe('AuthStoreState.registerUserStart', () => {
-    it('should show loader when registration started', () => {
+    it('should remove error messages and display loader when registration started', () => {
+      const authErrorMessages = [];
       const isLoading = true;
       const registrationData: RegistrationData = {
         userName: 'username',
@@ -75,30 +62,13 @@ describe('authReducer', () => {
       const actualState = authReducer(stateWithErrorsAndLoading, action);
       const expectedState = {
         ...state,
+        authErrorMessages,
         isLoading,
       };
 
       expect(actualState).toEqual(expectedState);
-      expect(actualState.isLoading).toBeTrue();
-    });
-
-    it('should remove error messages when login started', () => {
-      const authErrorMessages = [];
-      const registrationData: RegistrationData = {
-        userName: 'username',
-        email: 'email@email.com',
-        password: 'password',
-        matchingPassword: 'password',
-      };
-      const action = AuthActions.registerUserStart({ registrationData });
-      const actualState = authReducer(stateWithErrorsAndLoading, action);
-      const expectedState = {
-        ...stateWithErrorsAndLoading,
-        authErrorMessages,
-      };
-
-      expect(actualState).toEqual(expectedState);
       expect(actualState.authErrorMessages.length).toBe(0);
+      expect(actualState.isLoading).toBeTrue();
     });
   });
 
@@ -175,31 +145,35 @@ describe('authReducer', () => {
       expect(actualState).toEqual(expectedState);
       expect(actualState.user).toBeNull();
       expect(actualState.authErrorMessages.length).toBe(0);
+      expect(actualState.userLocation).toBeNull();
     });
 
-    it('should logout user and remove error messages', () => {
-      const stateWithUserAndErrors: AuthStoreState = {
+    it('should logout user and remove error messages and location', () => {
+      const stateWithUserLoggedIn: AuthStoreState = {
         user: {
           token: 'secret token',
           expirationDate: new Date(Date.now() + 36000000),
         },
         authErrorMessages: ['ERROR'],
         isLoading: true,
-        userLocation: null,
+        userLocation: [10, 20],
       };
       const user = null;
       const authErrorMessages = [];
+      const userLocation = null;
       const action = AuthActions.logoutUser();
-      const actualState = authReducer(stateWithUserAndErrors, action);
+      const actualState = authReducer(stateWithUserLoggedIn, action);
       const expectedState = {
         ...stateWithUser,
         user,
         authErrorMessages,
+        userLocation,
       };
 
       expect(actualState).toEqual(expectedState);
       expect(actualState.user).toBeNull();
       expect(actualState.authErrorMessages.length).toBe(0);
+      expect(actualState.userLocation).toBeNull();
     });
   });
 
@@ -225,7 +199,7 @@ describe('authReducer', () => {
   });
 
   describe('AuthStoreState.setUserLocation', () => {
-    it('should set user lcoation', () => {
+    it('should set user location', () => {
       const userLocation: L.LatLngExpression = [10, 20];
       const stateWithUserLocation: AuthStoreState = {
         user: null,
