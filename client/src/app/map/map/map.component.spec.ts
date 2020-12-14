@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
-import { AuthStoreState, selectAuthState } from 'src/app/auth/store/auth.reducer';
+import {
+  AuthStoreState,
+  selectAuthState,
+} from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
   selectAllEventsInRadius,
@@ -42,8 +45,8 @@ describe('MapComponent', () => {
         {
           provide: MarkerService,
           useValue: jasmine.createSpyObj('markerService', [
-            'cleanMapFromMarkers',
-            'removeMarker',
+            'cleanMapFromCircleMarkers',
+            'removeCircleMarkerByCity',
             'createCircleMarkersFromEvents',
             'createCircleMarker',
             'removeCircleMarker',
@@ -82,9 +85,11 @@ describe('MapComponent', () => {
       component.ngOnInit();
 
       expect(store.select).toHaveBeenCalled();
-      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
+      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
     it('and events are fetched should show markers', () => {
@@ -172,7 +177,9 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
-      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
@@ -194,7 +201,9 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
-      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
@@ -250,9 +259,11 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
-      expect(markerService.cleanMapFromMarkers).toHaveBeenCalled();
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
-      expect(markerService.removeMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarkerByCity).toHaveBeenCalled();
     });
 
     it('and user location is setted should create circle marker', () => {
@@ -294,12 +305,12 @@ describe('MapComponent', () => {
       fixture.detectChanges();
       component.ngOnInit();
 
-      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(
         AuthActions.setUserLocation({ userLocation })
       );
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
     });

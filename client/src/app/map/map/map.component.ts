@@ -149,7 +149,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       this.maxRadiusOfEventsDetection,
       this.map
     );
-    this.map.setView(this.userLocation, this.ZOOM);
+    this.map?.setView(this.userLocation, this.ZOOM);
   }
 
   private getUserLocation(): void {
