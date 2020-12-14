@@ -54,6 +54,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private userLocation: L.LatLngExpression = [50, 18];
   private maxRadiusOfEventsDetection: number;
   private eventsRadiusMarker: L.CircleMarker<any>;
+  private userPositionMarker: L.Marker<any>;
   private events: Event[] = [];
 
   isUserLoggedIn = false;
@@ -89,6 +90,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.store.dispatch(EventActions.fetchEvents());
         } else {
           this.isUserLoggedIn = false;
+          this.markerService.removeCircleMarker(
+            this.eventsRadiusMarker,
+            this.map
+          );
+          this.eventsRadiusMarker = null;
+          this.markerService.removeMarker(this.userPositionMarker, this.map);
+          this.userPositionMarker = null;
         }
       });
 
@@ -97,7 +105,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((events: Event[]) => {
         this.events = events;
         if (this.map && this.events) {
-          this.markerService.cleanMapFromMarkers(this.map, this.markers);
+          this.markerService.cleanMapFromCircleMarkers(this.map, this.markers);
           this.markers = this.markerService.createCircleMarkersFromEvents(
             this.events,
             this.map
@@ -109,7 +117,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .select(selectMaxRadiusOfEventsDetection)
       .subscribe((maxRadiusOfEventsDetection) => {
         this.maxRadiusOfEventsDetection = maxRadiusOfEventsDetection;
-        if (this.map && maxRadiusOfEventsDetection > 0) {
+        if (this.map && this.maxRadiusOfEventsDetection > 0) {
           this.markerService.removeCircleMarker(
             this.eventsRadiusMarker,
             this.map
@@ -122,7 +130,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .select(selectLastDeletedEvent)
       .subscribe((lastDeletedEvent) => {
         if (lastDeletedEvent) {
-          this.markerService.removeMarker(
+          this.markerService.removeCircleMarkerByCity(
             this.map,
             this.markers,
             lastDeletedEvent.city
@@ -157,7 +165,10 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     navigator.geolocation.getCurrentPosition((position) => {
       const coords = position.coords;
       this.userLocation = [coords.latitude, coords.longitude];
-      this.markerService.createUserPositionMarker(this.userLocation, this.map);
+      this.userPositionMarker = this.markerService.createUserPositionMarker(
+        this.userLocation,
+        this.map
+      );
       this.store.dispatch(
         AuthActions.setUserLocation({ userLocation: this.userLocation })
       );

@@ -76,16 +76,6 @@ export default class MarkerService {
     }
   }
 
-  createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
-    const markerText = 'Your position';
-    return L.marker(latLong)
-      .bindPopup(markerText)
-      .on('mouseover', function (): void {
-        this.openPopup();
-      })
-      .addTo(map);
-  }
-
   createCircleMarkersFromEvents(events: Event[], map: L.Map): L.CircleMarker[] {
     const markers: L.CircleMarker[] = [];
     if (events.length === 0) {
@@ -98,7 +88,11 @@ export default class MarkerService {
     return markers;
   }
 
-  removeMarker(map: L.Map, markers: L.CircleMarker[], city: City): void {
+  removeCircleMarkerByCity(
+    map: L.Map,
+    markers: L.CircleMarker[],
+    city: City
+  ): void {
     const markerToDelete = markers.find((marker) => {
       const { lat, lng } = marker.getLatLng();
       const { latitude, longitude } = city;
@@ -109,9 +103,25 @@ export default class MarkerService {
     }
   }
 
-  cleanMapFromMarkers(map: L.Map, markers: L.CircleMarker[]): void {
+  cleanMapFromCircleMarkers(map: L.Map, markers: L.CircleMarker[]): void {
     if (markers.length > 0) {
       markers.forEach((marker) => map.removeLayer(marker));
+    }
+  }
+
+  createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
+    const markerText = 'Your position';
+    return L.marker(latLong)
+      .bindPopup(markerText)
+      .on('mouseover', function (): void {
+        this.openPopup();
+      })
+      .addTo(map);
+  }
+
+  removeMarker(marker: L.Marker, map: L.Map): void {
+    if (marker) {
+      map.removeLayer(marker);
     }
   }
 }
