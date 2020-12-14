@@ -9,6 +9,7 @@ import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
   private CIRCLE_MARKER_COLOR = '#1B7915';
+  private USER_Z_INDEX_OFFSET = -1;
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
@@ -111,7 +112,7 @@ export default class MarkerService {
 
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
     const markerText = 'Your position';
-    return L.marker(latLong)
+    return L.marker(latLong, { zIndexOffset: this.USER_Z_INDEX_OFFSET })
       .bindPopup(markerText)
       .on('mouseover', function (): void {
         this.openPopup();
