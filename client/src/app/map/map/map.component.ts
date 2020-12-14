@@ -164,6 +164,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userLocation,
         this.map
       );
+      this.userPositionMarker.on('dragend', () => {
+        const newLatitude = this.userPositionMarker.getLatLng().lat;
+        const newLongitude = this.userPositionMarker.getLatLng().lng;
+        console.log(newLatitude, newLongitude);
+        const userLocation: L.LatLngExpression = [newLatitude, newLongitude];
+        this.store.dispatch(AuthActions.setUserLocation({ userLocation }));
+      });
       this.initEventRadiusMarker();
       this.store.dispatch(
         AuthActions.setUserLocation({ userLocation: this.userLocation })
@@ -178,6 +185,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.userLocation,
           this.map
         );
+        this.userPositionMarker.on('dragend', () => {
+          const newLatitude = this.userPositionMarker.getLatLng().lat;
+          const newLongitude = this.userPositionMarker.getLatLng().lng;
+          console.log(newLatitude, newLongitude);
+          const userLocation: L.LatLngExpression = [newLatitude, newLongitude];
+          this.store.dispatch(AuthActions.setUserLocation({ userLocation }));
+        });
       }
       if (!this.eventsRadiusMarker) {
         this.initEventRadiusMarker();

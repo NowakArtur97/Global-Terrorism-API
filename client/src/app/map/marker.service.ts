@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import City from '../city/models/city.model';
 import Event from '../event/models/event.model';
 import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
@@ -112,12 +113,17 @@ export default class MarkerService {
 
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
     const markerText = 'Your position';
-    return L.marker(latLong, { zIndexOffset: this.USER_Z_INDEX_OFFSET })
-      .bindPopup(markerText)
-      .on('mouseover', function (): void {
-        this.openPopup();
+    return (
+      L.marker(latLong, {
+        zIndexOffset: this.USER_Z_INDEX_OFFSET,
+        draggable: true,
       })
-      .addTo(map);
+        // .bindPopup(markerText)
+        // .on('mouseover', function (): void {
+        //   this.openPopup();
+        // })
+        .addTo(map)
+    );
   }
 
   removeMarker(marker: L.Marker, map: L.Map): void {
