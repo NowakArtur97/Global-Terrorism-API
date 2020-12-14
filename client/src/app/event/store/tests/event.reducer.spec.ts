@@ -3,7 +3,11 @@ import { Dictionary } from '@ngrx/entity';
 import EventDTO from '../../models/event.dto';
 import Event from '../../models/event.model';
 import * as EventActions from '../event.actions';
-import eventReducer, { EventStoreState, selectAllEventsBeforeDate } from '../event.reducer';
+import eventReducer, {
+  EventStoreState,
+  selectAllEventsBeforeDate,
+  selectAllEventsInRadius,
+} from '../event.reducer';
 
 const endDateOfEvents = new Date();
 const event1 = {
@@ -182,7 +186,7 @@ describe('eventReducer', () => {
   });
 
   describe('EventActions.addEventStart', () => {
-    it('should start loading', () => {
+    it('should start loading and remove error messages', () => {
       const stateWhenAddEventStart: EventStoreState = {
         ids: [],
         entities: {},
@@ -202,7 +206,7 @@ describe('eventReducer', () => {
     });
   });
 
-  describe('EventActions.addEvent', () => {
+  describe('EventActions.addEvent, remove error messages and stop loading', () => {
     it('should store event', () => {
       const stateWhenAddEventStart: EventStoreState = {
         ids: [],
@@ -238,7 +242,7 @@ describe('eventReducer', () => {
   });
 
   describe('EventActions.updateEventStart', () => {
-    it('should reset previous event to update', () => {
+    it('should reset previous event to update and remove error messages', () => {
       const action = EventActions.updateEventStart({ id: event1.id });
       const actualState = eventReducer(stateWithEventToUpdate, action);
       const expectedState = { ...state };
@@ -301,7 +305,7 @@ describe('eventReducer', () => {
   });
 
   describe('EventActions.updateEventFinish', () => {
-    it('should set last updated event and remove event to update', () => {
+    it('should set last updated event, remove event to update, remove error messages and stop loading', () => {
       const event2Updated = {
         id: 12,
         summary: 'summary 2 ver 2',
@@ -372,7 +376,7 @@ describe('eventReducer', () => {
   });
 
   describe('EventActions.deleteEventStart', () => {
-    it('should remove last deleted event and start loading', () => {
+    it('should remove last deleted event, start loading and remove error massages', () => {
       const stateWithLastDeletedEvent: EventStoreState = {
         ids: [],
         entities: {},
@@ -404,7 +408,7 @@ describe('eventReducer', () => {
   });
 
   describe('EventActions.deleteEvent', () => {
-    it('should set last deleted event and stop loading', () => {
+    it('should set last deleted event, remove error messages and stop loading', () => {
       const stateWhenDeleteEvent: EventStoreState = {
         ids: [],
         entities: {},
@@ -460,75 +464,75 @@ describe('eventReducer', () => {
   });
 
   describe('EventsSelectors', () => {
+    const event3 = {
+      id: 18,
+      summary: 'summary 3',
+      motive: 'motive 3',
+      date: new Date(1999, 2, 2),
+      isPartOfMultipleIncidents: false,
+      isSuccessful: true,
+      isSuicidal: false,
+      target: {
+        id: 15,
+        target: 'target 3',
+        countryOfOrigin: { id: 13, name: 'country 3' },
+      },
+      city: {
+        id: 16,
+        name: 'city 3',
+        latitude: 20,
+        longitude: 10,
+        province: {
+          id: 4,
+          name: 'province 3',
+          country: { id: 13, name: 'country 3' },
+        },
+      },
+      victim: {
+        id: 17,
+        totalNumberOfFatalities: 12,
+        numberOfPerpetratorsFatalities: 1,
+        totalNumberOfInjured: 1,
+        numberOfPerpetratorsInjured: 1,
+        valueOfPropertyDamage: 2300,
+      },
+    };
+    const event4 = {
+      id: 24,
+      summary: 'summary 4',
+      motive: 'motive 4',
+      date: new Date(1998, 5, 11),
+      isPartOfMultipleIncidents: true,
+      isSuccessful: false,
+      isSuicidal: true,
+      target: {
+        id: 21,
+        target: 'target 4',
+        countryOfOrigin: { id: 19, name: 'country 4' },
+      },
+      city: {
+        id: 22,
+        name: 'city 4',
+        latitude: 30,
+        longitude: 40,
+        province: {
+          id: 20,
+          name: 'province 4',
+          country: { id: 19, name: 'country 4' },
+        },
+      },
+      victim: {
+        id: 23,
+        totalNumberOfFatalities: 1,
+        numberOfPerpetratorsFatalities: 1,
+        totalNumberOfInjured: 7,
+        numberOfPerpetratorsInjured: 6,
+        valueOfPropertyDamage: 5000,
+      },
+    };
+
     describe('selectAllEventsBeforeDate', () => {
       it('should select events before max date', () => {
-        const event3 = {
-          id: 18,
-          summary: 'summary 3',
-          motive: 'motive 3',
-          date: new Date(1999, 2, 2),
-          isPartOfMultipleIncidents: false,
-          isSuccessful: true,
-          isSuicidal: false,
-          target: {
-            id: 15,
-            target: 'target 3',
-            countryOfOrigin: { id: 13, name: 'country 3' },
-          },
-          city: {
-            id: 16,
-            name: 'city 3',
-            latitude: 20,
-            longitude: 10,
-            province: {
-              id: 4,
-              name: 'province 3',
-              country: { id: 13, name: 'country 3' },
-            },
-          },
-          victim: {
-            id: 17,
-            totalNumberOfFatalities: 12,
-            numberOfPerpetratorsFatalities: 1,
-            totalNumberOfInjured: 1,
-            numberOfPerpetratorsInjured: 1,
-            valueOfPropertyDamage: 2300,
-          },
-        };
-        const event4 = {
-          id: 24,
-          summary: 'summary 4',
-          motive: 'motive 4',
-          date: new Date(1998, 5, 11),
-          isPartOfMultipleIncidents: true,
-          isSuccessful: false,
-          isSuicidal: true,
-          target: {
-            id: 21,
-            target: 'target 4',
-            countryOfOrigin: { id: 19, name: 'country 4' },
-          },
-          city: {
-            id: 22,
-            name: 'city 4',
-            latitude: 30,
-            longitude: 40,
-            province: {
-              id: 20,
-              name: 'province 4',
-              country: { id: 19, name: 'country 4' },
-            },
-          },
-          victim: {
-            id: 23,
-            totalNumberOfFatalities: 1,
-            numberOfPerpetratorsFatalities: 1,
-            totalNumberOfInjured: 7,
-            numberOfPerpetratorsInjured: 6,
-            valueOfPropertyDamage: 5000,
-          },
-        };
-
         const expectedMaxDate = new Date(1999, 2, 3);
 
         const events: Event[] = [event1, event2, event3, event4];
@@ -537,6 +541,24 @@ describe('eventReducer', () => {
         expect(
           selectAllEventsBeforeDate.projector(events, expectedMaxDate)
         ).toEqual(expctedEvents);
+      });
+    });
+
+    describe('selectAllEventsInRadius', () => {
+      it('should select events in radius', () => {
+        const expectedMaxRadius = 3500000;
+        const expectedUserLocation: L.LatLngExpression = [50, 18];
+
+        const eventsBeforeDate: Event[] = [event1, event2, event3, event4];
+        const expectedEvents: Event[] = [event1, event3, event4];
+
+        expect(
+          selectAllEventsInRadius.projector(
+            eventsBeforeDate,
+            expectedMaxRadius,
+            expectedUserLocation
+          )
+        ).toEqual(expectedEvents);
       });
     });
   });

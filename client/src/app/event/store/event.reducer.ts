@@ -205,7 +205,7 @@ export const selectAllEventsInRadius = createSelector(
             Math.cos(latUser) *
             Math.pow(Math.sin(deltaLon / 2), 2);
         const c = 2 * Math.asin(Math.sqrt(a));
-
+        console.log(c * EARTH_RADIUS_IN_METERES);
         return maxRadiusOfEventsDetection >= c * EARTH_RADIUS_IN_METERES;
       });
     }

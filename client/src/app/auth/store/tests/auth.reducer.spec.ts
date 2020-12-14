@@ -27,7 +27,7 @@ const stateWithUser: AuthStoreState = {
 
 describe('authReducer', () => {
   describe('AuthStoreState.loginUserStart', () => {
-    it('should remove error messagess and display loader when login started', () => {
+    it('should remove error messagess and start loading when login started', () => {
       const authErrorMessages = [];
       const isLoading = true;
       const loginData: LoginData = {
@@ -49,7 +49,7 @@ describe('authReducer', () => {
   });
 
   describe('AuthStoreState.registerUserStart', () => {
-    it('should remove error messages and display loader when registration started', () => {
+    it('should remove error messages and start loading when registration started', () => {
       const authErrorMessages = [];
       const isLoading = true;
       const registrationData: RegistrationData = {
@@ -89,7 +89,7 @@ describe('authReducer', () => {
       expect(actualState.isLoading).toBeFalse();
     });
 
-    it('should authenticate user, remove error messages and hide loader on success', () => {
+    it('should authenticate user, remove error messages and stop loading on success', () => {
       const user = {
         token: 'secret token',
         expirationDate: new Date(Date.now() + 36000000),
@@ -113,7 +113,7 @@ describe('authReducer', () => {
   });
 
   describe('AuthStoreState.authenticateUserFailure', () => {
-    it('should store error messages and hide loader on failure', () => {
+    it('should store error messages and stop loading on failure', () => {
       const authErrorMessages = ['error'];
       const isLoading = false;
       const action = AuthActions.authenticateUserFailure({ authErrorMessages });
