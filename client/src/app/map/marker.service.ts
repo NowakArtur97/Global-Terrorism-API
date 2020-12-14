@@ -111,17 +111,20 @@ export default class MarkerService {
   }
 
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
-    const markerText = 'Your position';
-    return (
-      L.marker(latLong, {
-        draggable: true,
+    const markerText = 'Drag and drop me to change location :D';
+    const popupTextOffset: L.PointExpression = [0, -30];
+    const popup = L.popup({
+      offset: popupTextOffset,
+    }).setContent(markerText);
+
+    return L.marker(latLong, {
+      draggable: true,
+    })
+      .bindPopup(popup)
+      .on('mouseover', function (): void {
+        this.openPopup();
       })
-        // .bindPopup(markerText)
-        // .on('mouseover', function (): void {
-        //   this.openPopup();
-        // })
-        .addTo(map)
-    );
+      .addTo(map);
   }
 
   removeMarker(marker: L.Marker, map: L.Map): void {
