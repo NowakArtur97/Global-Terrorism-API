@@ -88,15 +88,10 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         if (user) {
           this.isUserLoggedIn = true;
           this.store.dispatch(EventActions.fetchEvents());
+          this.setupUserMarkers();
         } else {
           this.isUserLoggedIn = false;
-          this.markerService.removeCircleMarker(
-            this.eventsRadiusMarker,
-            this.map
-          );
-          this.eventsRadiusMarker = null;
-          this.markerService.removeMarker(this.userPositionMarker, this.map);
-          this.userPositionMarker = null;
+          this.cleanUserMarkers();
         }
       });
 
@@ -169,10 +164,31 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userLocation,
         this.map
       );
+      this.initEventRadiusMarker();
       this.store.dispatch(
         AuthActions.setUserLocation({ userLocation: this.userLocation })
       );
-      this.initEventRadiusMarker();
     });
+  }
+
+  private setupUserMarkers(): void {
+    if (this.map && this.userLocation) {
+      if (!this.userPositionMarker) {
+        this.userPositionMarker = this.markerService.createUserPositionMarker(
+          this.userLocation,
+          this.map
+        );
+      }
+      if (!this.eventsRadiusMarker) {
+        this.initEventRadiusMarker();
+      }
+    }
+  }
+
+  private cleanUserMarkers(): void {
+    this.markerService.removeCircleMarker(this.eventsRadiusMarker, this.map);
+    this.eventsRadiusMarker = null;
+    this.markerService.removeMarker(this.userPositionMarker, this.map);
+    this.userPositionMarker = null;
   }
 }
