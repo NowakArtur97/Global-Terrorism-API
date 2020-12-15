@@ -38,12 +38,12 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsRadiusSubscription$?.unsubscribe();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  applyFilter(event: KeyboardEvent) {
+  applyFilter(event: KeyboardEvent): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
