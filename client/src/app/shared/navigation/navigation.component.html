@@ -45,6 +45,9 @@
       >
         Register
       </a>
+      <a mat-button href="#" routerLink="/event-list" *ngIf="isAuthenticated"
+        >Event List</a
+      >
       <a
         mat-button
         href="#"
@@ -90,6 +93,8 @@
           (click)="onOpenPopUp('registration')"
           *ngIf="!isAuthenticated"
           >Register</a
+        ><a mat-button href="#" routerLink="/event-list" *ngIf="isAuthenticated"
+          >Event List</a
         >
         <a
           mat-button
