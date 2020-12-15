@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
+import * as L from 'leaflet';
 import { of } from 'rxjs';
-import {
-  AuthStoreState,
-  selectAuthState,
-} from 'src/app/auth/store/auth.reducer';
+import { AuthStoreState, selectAuthState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
   selectAllEventsInRadius,
@@ -25,12 +23,15 @@ describe('MapComponent', () => {
   let store: Store<AppStoreState>;
   let markerService: MarkerService;
 
+  const userMarkerPosition: L.LatLngExpression = [20, 10];
   const stateWithUser: AuthStoreState = {
     user: { token: 'token', expirationDate: new Date(Date.now() + 36000000) },
     authErrorMessages: [],
     isLoading: false,
-    userLocation: null,
+    userLocation: userMarkerPosition,
   };
+  const maxRadiusOfEventsDetection = 4000000;
+  const userMarker: L.Marker = L.marker(userMarkerPosition);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -40,20 +41,7 @@ describe('MapComponent', () => {
         MaterialModule,
         BrowserAnimationsModule,
       ],
-      providers: [
-        Store,
-        {
-          provide: MarkerService,
-          useValue: jasmine.createSpyObj('markerService', [
-            'cleanMapFromCircleMarkers',
-            'removeCircleMarkerByCity',
-            'createCircleMarkersFromEvents',
-            'createCircleMarker',
-            'removeCircleMarker',
-            'createUserPositionMarker',
-          ]),
-        },
-      ],
+      providers: [Store],
     }).compileComponents();
   });
 
@@ -65,6 +53,15 @@ describe('MapComponent', () => {
     markerService = TestBed.inject(MarkerService);
 
     spyOn(store, 'dispatch');
+    spyOn(markerService, 'cleanMapFromCircleMarkers').and.callThrough();
+    spyOn(markerService, 'removeCircleMarkerByCity').and.callThrough();
+    spyOn(markerService, 'createCircleMarkersFromEvents').and.callThrough();
+    spyOn(markerService, 'createCircleMarker').and.callThrough();
+    spyOn(markerService, 'removeCircleMarker').and.callThrough();
+    spyOn(markerService, 'removeMarker').and.callThrough();
+    spyOn(markerService, 'createUserPositionMarker').and.returnValue(
+      userMarker
+    );
   });
 
   describe('when initialize component', () => {
@@ -77,7 +74,7 @@ describe('MapComponent', () => {
         } else if (selector === selectLastDeletedEvent) {
           return of();
         } else if (selector === selectMaxRadiusOfEventsDetection) {
-          return of();
+          return of(maxRadiusOfEventsDetection);
         }
       });
 
@@ -86,10 +83,10 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
-      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
     it('and events are fetched should show markers', () => {
@@ -168,7 +165,7 @@ describe('MapComponent', () => {
         } else if (selector === selectLastDeletedEvent) {
           return of();
         } else if (selector === selectMaxRadiusOfEventsDetection) {
-          return of();
+          return of(maxRadiusOfEventsDetection);
         }
       });
 
@@ -177,7 +174,9 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
       expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
@@ -192,7 +191,7 @@ describe('MapComponent', () => {
         } else if (selector === selectLastDeletedEvent) {
           return of();
         } else if (selector === selectMaxRadiusOfEventsDetection) {
-          return of();
+          return of(maxRadiusOfEventsDetection);
         }
       });
 
@@ -201,10 +200,10 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
-      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
     });
 
     it('and in store is deleted event should remove marker', () => {
@@ -250,7 +249,7 @@ describe('MapComponent', () => {
         } else if (selector === selectLastDeletedEvent) {
           return of(event);
         } else if (selector === selectMaxRadiusOfEventsDetection) {
-          return of();
+          return of(maxRadiusOfEventsDetection);
         }
       });
 
@@ -259,15 +258,14 @@ describe('MapComponent', () => {
 
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
-      expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
-      expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
       expect(markerService.removeCircleMarkerByCity).toHaveBeenCalled();
     });
 
     it('and user location is setted should create circle marker', () => {
-      const maxRadiusOfEventsDetection = 4000000;
       const latitude = 10;
       const longitude = 20;
       const position: Position = {
@@ -310,6 +308,7 @@ describe('MapComponent', () => {
       );
       expect(store.select).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
+      expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();

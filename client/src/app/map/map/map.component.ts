@@ -85,13 +85,13 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .select(selectAuthState)
       .pipe(map((authState) => authState.user))
       .subscribe((user: User) => {
+        this.cleanUserMarkers();
         if (user) {
           this.isUserLoggedIn = true;
           this.store.dispatch(EventActions.fetchEvents());
           this.setupUserMarkers();
         } else {
           this.isUserLoggedIn = false;
-          this.cleanUserMarkers();
         }
       });
 
@@ -99,7 +99,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       .select(selectAllEventsInRadius)
       .subscribe((events: Event[]) => {
         this.events = events;
-        if (this.map && this.events) {
+        if (this.map && this.events?.length > 0) {
           this.markerService.cleanMapFromCircleMarkers(this.map, this.markers);
           this.markers = this.markerService.createCircleMarkersFromEvents(
             this.events,
@@ -165,7 +165,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
         AuthActions.setUserLocation({ userLocation: this.userLocation })
       );
 
-      if (this.isUserLoggedIn) {
+      if (this.isUserLoggedIn && this.userPositionMarker) {
         this.userPositionMarker.on('dragend', () =>
           this.onUserPositionChange()
         );
@@ -175,18 +175,12 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setupUserMarkers(): void {
     if (this.map && this.userLocation) {
-      if (!this.userPositionMarker) {
-        this.userPositionMarker = this.markerService.createUserPositionMarker(
-          this.userLocation,
-          this.map
-        );
-        this.userPositionMarker.on('dragend', () =>
-          this.onUserPositionChange()
-        );
-      }
-      if (!this.eventsRadiusMarker) {
-        this.initEventRadiusMarker();
-      }
+      this.userPositionMarker = this.markerService.createUserPositionMarker(
+        this.userLocation,
+        this.map
+      );
+      this.userPositionMarker.on('dragend', () => this.onUserPositionChange());
+      this.initEventRadiusMarker();
     }
   }
 
