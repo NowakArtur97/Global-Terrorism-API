@@ -43,6 +43,13 @@ import java.util.*;
 @Slf4j
 class OnApplicationStartupEventListener {
 
+    private static final String DEFAULT_EVENT_SUMMARY = "The specific summary of the attack is unknown.";
+    private static final String DEFAULT_EVENT_MOTIVE = "The specific motive of the attack is unknown.";
+    public static final int DEFAULT_YEAR_OF_EVENT = 1970;
+    public static final int DEFAULT_MONTH_OF_EVENT = 1;
+    public static final int DEFAULT_DAY_OF_EVENT = 1;
+    private static final String DEFAULT_TARGET = "The specific target of the attack is unknown.";
+
     @Value("${app.dataFilePath:data/globalterrorismdb_0919dist-mini.xlsx}")
     private String PATH_TO_FILE;
 
@@ -122,7 +129,7 @@ class OnApplicationStartupEventListener {
 
     private void insertDataToDatabase(Sheet sheet) {
 
-        saveUser();
+        saveDefaultUser();
 
         int numberOfRows = sheet.getLastRowNum();
         int rowIndexToSave = 1;
@@ -163,7 +170,7 @@ class OnApplicationStartupEventListener {
         saveAllGroups();
     }
 
-    private void saveUser() {
+    private void saveDefaultUser() {
 
         userService.register(new UserDTO("testuser", "Password123!", "Password123!",
                 "testuser123@email.com"));
@@ -202,22 +209,20 @@ class OnApplicationStartupEventListener {
 
     private EventNode saveEvent(Row row, TargetNode target, CityNode city, VictimNode victim) {
 
-        String cellValue;
-
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
-        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1970;
+        String cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
+        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_YEAR_OF_EVENT;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MONTH_OF_EVENT.getIndex());
-        int monthOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1;
+        int monthOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_MONTH_OF_EVENT;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.DAY_OF_EVENT.getIndex());
-        int dayOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : 1;
+        int dayOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_DAY_OF_EVENT;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_SUMMARY.getIndex());
-        String eventSummary = !cellValue.isEmpty() ? cellValue : "";
+        String eventSummary = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_EVENT_SUMMARY : cellValue;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_MOTIVE.getIndex());
-        String motive = !cellValue.isEmpty() ? cellValue : "";
+        String motive = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_EVENT_MOTIVE : cellValue;
 
         cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS.getIndex());
         boolean isPartOfMultipleIncidents = parseBoolean(cellValue);
@@ -238,7 +243,8 @@ class OnApplicationStartupEventListener {
 
     private TargetNode saveTarget(Row row, CountryNode country) {
 
-        String targetName = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
+        String cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
+        String targetName = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_TARGET : cellValue;
 
         return targetService.save(new TargetNode(targetName, country));
     }
