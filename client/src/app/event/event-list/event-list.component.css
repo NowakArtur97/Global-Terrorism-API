@@ -1,0 +1,41 @@
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  width: 80%;
+  margin-top: 0.5%;
+}
+
+.mat-table__wrapper .mat-table {
+  min-width: auto !important;
+  width: 100% !important;
+}
+
+.mat-header-row {
+  width: 100%;
+}
+
+.mat-row {
+  width: 100%;
+}
+
+.mat-column-id {
+  flex: 0 0 5% !important;
+  min-width: 50px !important;
+}
+
+.mat-column-summary {
+  flex: 0 0 37% !important;
+  min-width: 50px !important;
+}
+
+.mat-column-motive {
+  flex: 0 0 37% !important;
+  min-width: 50px !important;
+}
+
+.mat-column-date {
+  flex: 0 0 21% !important;
+  min-width: 50px !important;
+}
