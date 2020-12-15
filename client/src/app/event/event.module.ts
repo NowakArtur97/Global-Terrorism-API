@@ -12,12 +12,17 @@ import { TargetModule } from '../target/target.module';
 import { VictimModule } from '../victim/victim.module';
 import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapper.component';
 import { EventFormComponent } from './event-form/event-form.component';
+import { EventListComponent } from './event-list/event-list.component';
+import EventRoutingModule from './event-routing.module';
 import EventEffects from './store/event.effects';
 import eventReducer from './store/event.reducer';
-import { EventListComponent } from './event-list/event-list.component';
 
 @NgModule({
-  declarations: [EventFormComponent, EventFormWrapperComponent, EventListComponent],
+  declarations: [
+    EventFormComponent,
+    EventFormWrapperComponent,
+    EventListComponent,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -25,6 +30,7 @@ import { EventListComponent } from './event-list/event-list.component';
     StoreModule.forFeature('event', eventReducer),
     EffectsModule.forFeature([EventEffects]),
 
+    EventRoutingModule,
     VictimModule,
     TargetModule,
     CityModule,
