@@ -14,9 +14,10 @@ import { EventFormWrapperComponent } from './event-form-wrapper/event-form-wrapp
 import { EventFormComponent } from './event-form/event-form.component';
 import EventEffects from './store/event.effects';
 import eventReducer from './store/event.reducer';
+import { EventListComponent } from './event-list/event-list.component';
 
 @NgModule({
-  declarations: [EventFormComponent, EventFormWrapperComponent],
+  declarations: [EventFormComponent, EventFormWrapperComponent, EventListComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
