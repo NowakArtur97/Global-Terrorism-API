@@ -19,6 +19,7 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   displayedColumns: string[] = ['id', 'summary', 'motive', 'date'];
   dataSource: MatTableDataSource<Event>;
+  pageSize = 100;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
