@@ -12,22 +12,22 @@
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+      <td mat-cell *matCellDef="let event">{{ event.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="summary">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Summary</th>
-      <td mat-cell *matCellDef="let row">{{ row.summary }}</td>
+      <td mat-cell *matCellDef="let event">{{ event.summary }}</td>
     </ng-container>
 
     <ng-container matColumnDef="motive">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Motive</th>
-      <td mat-cell *matCellDef="let row">{{ row.motive }}</td>
+      <td mat-cell *matCellDef="let event">{{ event.motive }}</td>
     </ng-container>
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+      <td mat-cell *matCellDef="let event">{{ event.date }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

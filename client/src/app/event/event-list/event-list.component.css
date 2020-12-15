@@ -1,7 +1,3 @@
-table {
-  width: 100%;
-}
-
 .mat-form-field {
   width: 80%;
   margin-top: 0.5%;
@@ -12,22 +8,27 @@ table {
   width: 100% !important;
 }
 
-.mat-header-cell {
-  text-align: center !important;
+.mat-row {
+  width: 100%;
+}
+
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
 }
 
 .mat-header-row {
   width: 100%;
 }
 
-.mat-row {
-  width: 100%;
+.mat-header-cell,
+.mat-cell,
+.mat-footer-cell {
+  padding: 2%;
 }
 
-th.mat-header-cell,
-td.mat-cell,
-td.mat-footer-cell {
-  padding: 2%;
+.mat-sort-header-sorted {
+  color: black;
 }
 
 .mat-column-id {
