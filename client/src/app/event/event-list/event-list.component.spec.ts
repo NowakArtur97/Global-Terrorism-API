@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.state';
 
+import * as EventActions from '../../event/store/event.actions';
 import { selectAllEvents } from '../store/event.reducer';
 import { EventListComponent } from './event-list.component';
 
@@ -13,6 +14,39 @@ describe('EventListComponent', () => {
   let component: EventListComponent;
   let fixture: ComponentFixture<EventListComponent>;
   let store: Store<AppStoreState>;
+  const event = {
+    id: 6,
+    summary: 'summary',
+    motive: 'motive',
+    date: new Date(),
+    isPartOfMultipleIncidents: false,
+    isSuccessful: true,
+    isSuicidal: false,
+    target: {
+      id: 3,
+      target: 'target',
+      countryOfOrigin: { id: 1, name: 'country' },
+    },
+    city: {
+      id: 4,
+      name: 'city',
+      latitude: 20,
+      longitude: 10,
+      province: {
+        id: 2,
+        name: 'province',
+        country: { id: 1, name: 'country' },
+      },
+    },
+    victim: {
+      id: 5,
+      totalNumberOfFatalities: 11,
+      numberOfPerpetratorsFatalities: 3,
+      totalNumberOfInjured: 14,
+      numberOfPerpetratorsInjured: 4,
+      valueOfPropertyDamage: 2000,
+    },
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,39 +67,6 @@ describe('EventListComponent', () => {
 
     store = TestBed.inject(Store);
 
-    const event1 = {
-      id: 6,
-      summary: 'summary',
-      motive: 'motive',
-      date: new Date(),
-      isPartOfMultipleIncidents: false,
-      isSuccessful: true,
-      isSuicidal: false,
-      target: {
-        id: 3,
-        target: 'target',
-        countryOfOrigin: { id: 1, name: 'country' },
-      },
-      city: {
-        id: 4,
-        name: 'city',
-        latitude: 20,
-        longitude: 10,
-        province: {
-          id: 2,
-          name: 'province',
-          country: { id: 1, name: 'country' },
-        },
-      },
-      victim: {
-        id: 5,
-        totalNumberOfFatalities: 11,
-        numberOfPerpetratorsFatalities: 3,
-        totalNumberOfInjured: 14,
-        numberOfPerpetratorsInjured: 4,
-        valueOfPropertyDamage: 2000,
-      },
-    };
     const event2 = {
       id: 12,
       summary: 'summary 2',
@@ -102,9 +103,12 @@ describe('EventListComponent', () => {
 
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === selectAllEvents) {
-        return of([event1, event2]);
+        return of([event, event2]);
       }
     });
+    spyOn(store, 'dispatch');
+
+    component.expandedElement = event;
 
     fixture.detectChanges();
     component.ngOnInit();
@@ -113,6 +117,29 @@ describe('EventListComponent', () => {
   describe('when initialize component', () => {
     it('should select events from store', () => {
       expect(store.select).toHaveBeenCalled();
+    });
+  });
+
+  describe('when update event', () => {
+    it('should dispatch startFillingOutForm and updateEventStart action', () => {
+      component.updateEvent(event);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.startFillingOutForm()
+      );
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.updateEventStart({ id: event.id })
+      );
+    });
+  });
+
+  describe('when delete event', () => {
+    it('should dispatch deleteEventStart action', () => {
+      component.deleteEvent(event);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.deleteEventStart({ eventToDelete: event })
+      );
     });
   });
 });

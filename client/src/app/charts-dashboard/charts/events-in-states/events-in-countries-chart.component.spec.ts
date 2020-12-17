@@ -147,9 +147,6 @@ describe('EventsInCountriesChartComponent', () => {
       fixture.detectChanges();
       component.ngOnInit();
 
-      console.log(component.barChartData[0]);
-      console.log(component.barChartData[0].data[0]);
-
       expect(component.barChartData[0].data[0]).toEqual(1);
       expect(component.barChartData[0].data[1]).toEqual(2);
     });

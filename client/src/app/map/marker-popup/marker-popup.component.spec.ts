@@ -90,7 +90,7 @@ describe('MarkerPopupComponent', () => {
   });
 
   describe('when update event', () => {
-    it('should dispatch updateEventStart action', () => {
+    it('should dispatch startFillingOutForm and updateEventStart action', () => {
       component.updateEvent();
 
       expect(store.dispatch).toHaveBeenCalledWith(
