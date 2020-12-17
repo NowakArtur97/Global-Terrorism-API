@@ -17,7 +17,14 @@ import { selectAllEvents } from '../store/event.reducer';
 export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsRadiusSubscription$: Subscription;
 
-  displayedColumns: string[] = ['id', 'summary', 'motive', 'date'];
+  displayedColumns: string[] = [
+    'id',
+    'summary',
+    'motive',
+    'date',
+    'update',
+    'delete',
+  ];
   dataSource: MatTableDataSource<Event>;
   pageSize = 100;
 
