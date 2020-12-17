@@ -51,6 +51,11 @@
   min-width: 115px !important;
 }
 
+.mat-column-update:hover,
+.mat-column-delete:hover {
+  cursor: pointer;
+}
+
 @media (max-width: 415px) {
   .mat-column-id {
     min-width: 20px !important;

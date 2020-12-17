@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import AppStoreState from 'src/app/store/app.state';
 
+import * as EventActions from '../../event/store/event.actions';
 import Event from '../models/event.model';
 import { selectAllEvents } from '../store/event.reducer';
 
@@ -57,5 +58,10 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  updateEvent(event: Event): void {
+    this.store.dispatch(EventActions.startFillingOutForm());
+    this.store.dispatch(EventActions.updateEventStart({ id: event.id }));
   }
 }
