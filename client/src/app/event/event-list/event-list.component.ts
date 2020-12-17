@@ -17,7 +17,7 @@ import { selectAllEvents } from '../store/event.reducer';
   styleUrls: ['./event-list.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('collapsed', style({ height: '0', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
@@ -61,9 +61,8 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = (data, sortHeaderId: string) => {
-      return this.getPropertyByPath(data, sortHeaderId);
-    };
+    this.dataSource.sortingDataAccessor = (data, sortHeaderId: string) =>
+      this.getPropertyByPath(data, sortHeaderId);
   }
 
   applyFilter(event: KeyboardEvent): void {
@@ -91,7 +90,7 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource._updateChangeSubscription();
   }
 
-  private getPropertyByPath(obj: Object, pathString: string): string {
-    return pathString.split('.').reduce((o, i) => o[i], obj);
+  private getPropertyByPath(event: Event, pathString: string): string {
+    return pathString.split('.').reduce((o, i) => o[i], event);
   }
 }

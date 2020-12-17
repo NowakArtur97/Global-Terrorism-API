@@ -3,9 +3,9 @@
   margin-top: 0.5%;
 }
 
-.mat-table__wrapper .mat-table {
+.mat-table {
   min-width: auto !important;
-  width: 100% !important;
+  width: 100vw !important;
 }
 
 .mat-row {
@@ -39,14 +39,14 @@
 .mat-column-id,
 .mat-column-update,
 .mat-column-delete {
-  flex: 0 0 5% !important;
+  flex: 0 0 3% !important;
   min-width: 115px !important;
 }
 
-.mat-column-target,
-.mat-column-location,
+.mat-column-target-target,
+.mat-column-city-name,
 .mat-column-date {
-  flex: 0 0 28% !important;
+  flex: 0 0 30.3% !important;
   min-width: 115px !important;
 }
 
@@ -59,16 +59,13 @@
   .mat-column-id,
   .mat-column-update,
   .mat-column-delete {
-    min-width: 20px !important;
+    min-width: 25px !important;
   }
 
-  .mat-column-target,
-  .mat-column-location {
-    min-width: 20px !important;
-  }
-
+  .mat-column-target-target,
+  .mat-column-city-name,
   .mat-column-date {
-    min-width: 20px !important;
+    min-width: 25px !important;
   }
 }
 
