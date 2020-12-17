@@ -64,4 +64,8 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(EventActions.startFillingOutForm());
     this.store.dispatch(EventActions.updateEventStart({ id: event.id }));
   }
+
+  deleteEvent(eventToDelete: Event): void {
+    this.store.dispatch(EventActions.deleteEventStart({ eventToDelete }));
+  }
 }
