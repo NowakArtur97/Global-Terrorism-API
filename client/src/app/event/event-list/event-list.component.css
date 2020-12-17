@@ -13,6 +13,10 @@
   width: 100%;
 }
 
+.mat-header-cell {
+  text-align: center;
+}
+
 ::ng-deep .mat-sort-header-container {
   display: flex;
   justify-content: center;
@@ -35,18 +39,14 @@
 .mat-column-id,
 .mat-column-update,
 .mat-column-delete {
-  flex: 0 0 6% !important;
+  flex: 0 0 5% !important;
   min-width: 115px !important;
 }
 
 .mat-column-target,
-.mat-column-location {
-  flex: 0 0 28% !important;
-  min-width: 115px !important;
-}
-
+.mat-column-location,
 .mat-column-date {
-  flex: 0 0 26% !important;
+  flex: 0 0 28% !important;
   min-width: 115px !important;
 }
 
@@ -70,4 +70,24 @@
   .mat-column-date {
     min-width: 20px !important;
   }
+}
+
+tr.event-details-row {
+  height: 0;
+}
+
+.event-details {
+  overflow: hidden;
+}
+
+.event-row:not(.event-expanded-row):hover {
+  background: whitesmoke;
+}
+
+.event-row:not(.event-expanded-row):active {
+  background: #efefef;
+}
+
+.event-row td {
+  border-bottom-width: 0;
 }
