@@ -31,8 +31,8 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   displayedColumns: string[] = [
     'id',
-    'target',
-    'location',
+    'target.target',
+    'city.name',
     'date',
     'update',
     'delete',
@@ -61,6 +61,9 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (data, sortHeaderId: string) => {
+      return this.getPropertyByPath(data, sortHeaderId);
+    };
   }
 
   applyFilter(event: KeyboardEvent): void {
@@ -86,5 +89,9 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     const eventIndex = this.dataSource.data.indexOf(eventToDelete);
     this.dataSource.data.splice(eventIndex, 1);
     this.dataSource._updateChangeSubscription();
+  }
+
+  private getPropertyByPath(obj: Object, pathString: string): string {
+    return pathString.split('.').reduce((o, i) => o[i], obj);
   }
 }
