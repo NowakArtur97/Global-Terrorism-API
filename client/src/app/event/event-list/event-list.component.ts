@@ -66,6 +66,13 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteEvent(eventToDelete: Event): void {
+    this.deleteEventFromDataSource(eventToDelete);
     this.store.dispatch(EventActions.deleteEventStart({ eventToDelete }));
+  }
+
+  private deleteEventFromDataSource(eventToDelete: Event): void {
+    const index = this.dataSource.data.indexOf(eventToDelete);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription();
   }
 }
