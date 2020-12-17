@@ -9,6 +9,7 @@
 }
 
 .mat-row {
+  cursor: pointer;
   width: 100%;
 }
 
@@ -38,8 +39,8 @@
   min-width: 115px !important;
 }
 
-.mat-column-summary,
-.mat-column-motive {
+.mat-column-target,
+.mat-column-location {
   flex: 0 0 28% !important;
   min-width: 115px !important;
 }
@@ -61,11 +62,8 @@
     min-width: 20px !important;
   }
 
-  .mat-column-summary {
-    min-width: 20px !important;
-  }
-
-  .mat-column-motive {
+  .mat-column-target,
+  .mat-column-location {
     min-width: 20px !important;
   }
 

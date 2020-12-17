@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,20 +15,31 @@ import { selectAllEvents } from '../store/event.reducer';
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
 })
 export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsRadiusSubscription$: Subscription;
 
   displayedColumns: string[] = [
     'id',
-    'summary',
-    'motive',
+    'target',
+    'location',
     'date',
     'update',
     'delete',
   ];
   dataSource: MatTableDataSource<Event>;
   pageSize = 100;
+  expandedElement: Event;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

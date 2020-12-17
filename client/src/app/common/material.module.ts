@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 const materialComponents = [
@@ -42,6 +43,7 @@ const materialComponents = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
+  BrowserAnimationsModule,
 ];
 
 @NgModule({
