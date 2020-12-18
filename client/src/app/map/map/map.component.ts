@@ -46,17 +46,17 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
   private readonly DEFAULT_COUNTRY_STYLE: L.PathOptions = {
     weight: 2,
-    opacity: 0.5,
-    color: '#1ab2ff',
-    fillOpacity: 0.8,
-    fillColor: '#66ccff',
+    opacity: 0.7,
+    color: '#336666',
+    fillOpacity: 0.7,
+    fillColor: '#4d9999',
   };
   private readonly HIGHLIGHTED_COUNTRY_STYLE: L.PathOptions = {
-    weight: 7,
+    weight: 4,
     opacity: 1.0,
-    color: '#00334d',
+    color: '#333d66',
     fillOpacity: 1.0,
-    fillColor: '#006699',
+    fillColor: '#4d5c99',
   };
 
   private map: L.Map;

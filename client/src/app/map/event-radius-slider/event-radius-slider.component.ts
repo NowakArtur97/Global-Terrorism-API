@@ -18,7 +18,7 @@ export class EventRadiusSliderComponent implements OnInit {
   constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.radius = this.maxRadius / 6;
+    this.radius = this.maxRadius / 5;
     this.onRadiusChange();
   }
 
