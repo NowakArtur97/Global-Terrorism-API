@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { NgElement, WithProperties } from '@angular/elements';
 import * as L from 'leaflet';
 
-import City from '../city/models/city.model';
-import Event from '../event/models/event.model';
-import { MarkerPopupComponent } from './marker-popup/marker-popup.component';
-import * as AuthActions from '../auth/store/auth.actions';
+import City from '../../city/models/city.model';
+import Event from '../../event/models/event.model';
+import { MarkerPopupComponent } from '../marker-popup/marker-popup.component';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {

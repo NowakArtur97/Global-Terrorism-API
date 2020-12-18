@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import User from '../../auth/models/user.model';
 import Event from '../../event/models/event.model';
 
-import MarkerService from './../marker.service';
+import MarkerService from '../services/marker.service';
 import * as EventActions from '../../event/store/event.actions';
 import * as AuthActions from '../../auth/store/auth.actions';
 import {

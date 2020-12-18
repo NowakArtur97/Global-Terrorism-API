@@ -3,7 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import * as L from 'leaflet';
 import { of } from 'rxjs';
-import { AuthStoreState, selectAuthState } from 'src/app/auth/store/auth.reducer';
+import {
+  AuthStoreState,
+  selectAuthState,
+} from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
   selectAllEventsInRadius,
@@ -14,7 +17,7 @@ import AppStoreState from 'src/app/store/app.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as EventActions from '../../event/store/event.actions';
-import MarkerService from '../marker.service';
+import MarkerService from '../services/marker.service';
 import { MapComponent } from './map.component';
 
 describe('MapComponent', () => {
