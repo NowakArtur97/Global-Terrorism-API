@@ -26,12 +26,6 @@
   width: 100%;
 }
 
-.mat-header-cell,
-.mat-cell,
-.mat-footer-cell {
-  padding: 2%;
-}
-
 .mat-sort-header-sorted {
   color: black;
 }
