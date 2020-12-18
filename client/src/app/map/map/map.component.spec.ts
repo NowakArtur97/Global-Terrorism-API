@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
@@ -18,6 +19,7 @@ import AppStoreState from 'src/app/store/app.state';
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as EventActions from '../../event/store/event.actions';
 import MarkerService from '../services/marker.service';
+import ShapeService from '../services/shape.service';
 import { MapComponent } from './map.component';
 
 describe('MapComponent', () => {
@@ -25,6 +27,7 @@ describe('MapComponent', () => {
   let fixture: ComponentFixture<MapComponent>;
   let store: Store<AppStoreState>;
   let markerService: MarkerService;
+  let shapeService: ShapeService;
 
   const userMarkerPosition: L.LatLngExpression = [20, 10];
   const stateWithUser: AuthStoreState = {
@@ -41,6 +44,7 @@ describe('MapComponent', () => {
       declarations: [MapComponent],
       imports: [
         StoreModule.forRoot({}),
+        HttpClientTestingModule,
         MaterialModule,
         BrowserAnimationsModule,
       ],
@@ -54,6 +58,7 @@ describe('MapComponent', () => {
 
     store = TestBed.inject(Store);
     markerService = TestBed.inject(MarkerService);
+    shapeService = TestBed.inject(ShapeService);
 
     spyOn(store, 'dispatch');
     spyOn(markerService, 'cleanMapFromCircleMarkers').and.callThrough();
@@ -65,6 +70,7 @@ describe('MapComponent', () => {
     spyOn(markerService, 'createUserPositionMarker').and.returnValue(
       userMarker
     );
+    spyOn(shapeService, 'getCountriesShapes').and.callThrough();
   });
 
   describe('when initialize component', () => {
@@ -90,6 +96,7 @@ describe('MapComponent', () => {
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
     });
 
     it('and events are fetched should show markers', () => {
@@ -183,6 +190,7 @@ describe('MapComponent', () => {
       expect(markerService.createCircleMarker).toHaveBeenCalled();
       expect(markerService.cleanMapFromCircleMarkers).toHaveBeenCalled();
       expect(markerService.createCircleMarkersFromEvents).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
     });
 
     it('and events are not fetched should remove markers', () => {
@@ -207,6 +215,7 @@ describe('MapComponent', () => {
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
     });
 
     it('and in store is deleted event should remove marker', () => {
@@ -266,6 +275,7 @@ describe('MapComponent', () => {
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarkerByCity).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
     });
 
     it('and user location is setted should create circle marker', () => {
@@ -315,6 +325,7 @@ describe('MapComponent', () => {
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
     });
   });
 });
