@@ -67,7 +67,8 @@ export default class MarkerService {
       .setStyle({
         color: this.CIRCLE_MARKER_COLOR,
       })
-      .addTo(map);
+      .addTo(map)
+      .bringToBack();
   }
 
   removeCircleMarker(marker: L.CircleMarker, map: L.Map): void {

@@ -45,6 +45,20 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILES_ATRIBUTION =
     '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+  private readonly DEFAULT_COUNTRY_STYLE: L.PathOptions = {
+    weight: 3,
+    opacity: 0.5,
+    color: '#1ab2ff',
+    fillOpacity: 0.8,
+    fillColor: '#66ccff',
+  };
+  private readonly HIGHLIGHTED_COUNTRY_STYLE: L.PathOptions = {
+    weight: 10,
+    opacity: 1.0,
+    color: '#00334d',
+    fillOpacity: 1.0,
+    fillColor: '#006699',
+  };
 
   private map: L.Map;
   private markers: L.CircleMarker[] = [];
@@ -98,7 +112,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userSubscription$ = this.store
       .select(selectAuthState)
       .pipe(map((authState) => authState.user))
-      .subscribe((user: User) => {
+      .subscribe((user) => {
         this.cleanUserMarkers();
         if (user) {
           this.isUserLoggedIn = true;
@@ -111,7 +125,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.eventsSubscription$ = this.store
       .select(selectAllEventsInRadius)
-      .subscribe((events: Event[]) => {
+      .subscribe((events) => {
         this.events = events;
         if (this.map && this.events?.length > 0) {
           this.markerService.cleanMapFromCircleMarkers(this.map, this.markers);
@@ -159,15 +173,25 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initCountriesLayer(): void {
     const countriesLayer = L.geoJSON(this.countries, {
-      style: (feature) => ({
-        weight: 3,
-        opacity: 0.5,
-        color: '#008f68',
-        fillOpacity: 0.8,
-        fillColor: '#6DB65B',
-      }),
-    });
+      style: () => this.DEFAULT_COUNTRY_STYLE,
+      onEachFeature: (feature, layer) =>
+        layer.on({
+          mouseover: (e) => this.highlightCountry(e),
+          mouseout: (e) => this.resetCountry(e),
+        }),
+    }).bringToFront();
+
     this.map.addLayer(countriesLayer);
+  }
+
+  private highlightCountry(event: L.LeafletMouseEvent): void {
+    const layer = event.target;
+    layer.setStyle(this.HIGHLIGHTED_COUNTRY_STYLE);
+  }
+
+  private resetCountry(event: L.LeafletMouseEvent): void {
+    const layer = event.target;
+    layer.setStyle(this.DEFAULT_COUNTRY_STYLE);
   }
 
   private initEventRadiusMarker(): void {
