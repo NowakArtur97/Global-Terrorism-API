@@ -9,9 +9,6 @@ import { MarkerPopupComponent } from '../marker-popup/marker-popup.component';
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
   private readonly MARKER_POPUP_TAG = 'app-marker-popup-element';
-  private readonly DEFAULT_RADIUS_MARKER_COLOR = '#1B7915';
-  private readonly DEFAULT_EVENT_MARKER_COLOR = '#e60000';
-
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
@@ -46,7 +43,8 @@ export default class MarkerService {
 
   private createCircleMarkerFromEvent(
     event: Event,
-    map: L.Map
+    map: L.Map,
+    styles: L.PathOptions
   ): L.CircleMarker {
     const { city, victim } = event;
     return L.circleMarker([city.latitude, city.longitude], {
@@ -54,8 +52,8 @@ export default class MarkerService {
         victim.totalNumberOfFatalities + victim.totalNumberOfInjured,
         this.maxRadius
       ),
-      color: this.DEFAULT_EVENT_MARKER_COLOR,
     })
+      .setStyle(styles)
       .addTo(map)
       .bindPopup(this.createMarkerPopup(event))
       .bringToFront();
@@ -64,14 +62,13 @@ export default class MarkerService {
   createCircleMarker(
     location: L.LatLngExpression,
     radius: number,
-    map: L.Map
+    map: L.Map,
+    styles: L.PathOptions
   ): L.Circle {
     return L.circle(location, {
       radius,
     })
-      .setStyle({
-        color: this.DEFAULT_RADIUS_MARKER_COLOR,
-      })
+      .setStyle(styles)
       .addTo(map)
       .bringToBack();
   }
@@ -82,14 +79,18 @@ export default class MarkerService {
     }
   }
 
-  createCircleMarkersFromEvents(events: Event[], map: L.Map): L.CircleMarker[] {
+  createCircleMarkersFromEvents(
+    events: Event[],
+    map: L.Map,
+    styles: L.PathOptions
+  ): L.CircleMarker[] {
     const markers: L.CircleMarker[] = [];
     if (events.length === 0) {
       return markers;
     }
     this.maxRadius = this.getMaxRadius(events);
     for (const event of events) {
-      markers.push(this.createCircleMarkerFromEvent(event, map));
+      markers.push(this.createCircleMarkerFromEvent(event, map, styles));
     }
     return markers;
   }

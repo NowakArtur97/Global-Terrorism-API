@@ -46,17 +46,31 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
   private readonly DEFAULT_COUNTRY_STYLE: L.PathOptions = {
     weight: 2,
-    opacity: 0.7,
-    color: '#336666',
-    fillOpacity: 0.7,
-    fillColor: '#4d9999',
+    opacity: 1.0,
+    color: '#00b300',
+    fillOpacity: 0.6,
+    fillColor: '#00ff00',
   };
   private readonly HIGHLIGHTED_COUNTRY_STYLE: L.PathOptions = {
     weight: 4,
     opacity: 1.0,
-    color: '#333d66',
-    fillOpacity: 1.0,
-    fillColor: '#4d5c99',
+    color: '#004d00',
+    fillOpacity: 0.8,
+    fillColor: '#008000',
+  };
+  private readonly RADIUS_MARKER_STYLES: L.PathOptions = {
+    weight: 1,
+    opacity: 1.0,
+    color: '#aa5909',
+    fillOpacity: 0.7,
+    fillColor: '#da730b',
+  };
+  private readonly EVENT_MARKER_STYLES: L.PathOptions = {
+    weight: 1,
+    opacity: 1.0,
+    color: '#b30000',
+    fillOpacity: 0.6,
+    fillColor: '#ff0000',
   };
 
   private map: L.Map;
@@ -131,7 +145,8 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.markerService.cleanMapFromCircleMarkers(this.map, this.markers);
           this.markers = this.markerService.createCircleMarkersFromEvents(
             this.events,
-            this.map
+            this.map,
+            this.EVENT_MARKER_STYLES
           );
         }
       });
@@ -201,7 +216,8 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsRadiusMarker = this.markerService.createCircleMarker(
       this.userLocation,
       this.maxRadiusOfEventsDetection,
-      this.map
+      this.map,
+      this.RADIUS_MARKER_STYLES
     );
     this.map?.setView(this.userLocation, this.ZOOM);
   }
