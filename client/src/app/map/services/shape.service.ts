@@ -7,6 +7,8 @@ export default class ShapeService {
   constructor(private httpClient: HttpClient) {}
 
   getCountriesShapes(): Observable<any> {
-    return this.httpClient.get('/app/map/data/countries.geo.json');
+    return this.httpClient.get('./assets/data/countries.geo.json', {
+      responseType: 'json',
+    });
   }
 }

@@ -17,6 +17,7 @@ import {
 } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 import { selectAuthState } from 'src/app/auth/store/auth.reducer';
+import ShapeService from '../services/shape.service';
 
 const ICO_SIZE: L.PointExpression = [25, 41];
 const ICON_ANCHOR: L.PointExpression = [13, 41];
@@ -47,10 +48,14 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private map: L.Map;
   private markers: L.CircleMarker[] = [];
+  private countries: any;
+
   private eventsSubscription$: Subscription;
   private eventsRadiusSubscription$: Subscription;
   private userSubscription$: Subscription;
   private deleteEventSubscription$: Subscription;
+  private countriesShapeSubscription$: Subscription;
+
   private userLocation: L.LatLngExpression = [50, 18];
   private maxRadiusOfEventsDetection: number;
   private eventsRadiusMarker: L.CircleMarker<any>;
@@ -61,7 +66,8 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private store: Store<AppStoreState>,
-    private markerService: MarkerService
+    private markerService: MarkerService,
+    private shapeService: ShapeService
   ) {}
 
   ngOnInit(): void {
@@ -74,10 +80,18 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsRadiusSubscription$?.unsubscribe();
     this.userSubscription$?.unsubscribe();
     this.deleteEventSubscription$?.unsubscribe();
+    this.countriesShapeSubscription$?.unsubscribe();
   }
 
   ngAfterViewInit(): void {
     this.initMap();
+    // TODO: better approach would be to pre-load the data in a resolver
+    this.countriesShapeSubscription$ = this.shapeService
+      .getCountriesShapes()
+      .subscribe((countries) => {
+        this.countries = countries;
+        this.initCountriesLayer();
+      });
   }
 
   private setupSubscriptions(): void {
@@ -141,6 +155,19 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       attribution: this.TILES_ATRIBUTION,
     });
     tiles.addTo(this.map);
+  }
+
+  private initCountriesLayer(): void {
+    const countriesLayer = L.geoJSON(this.countries, {
+      style: (feature) => ({
+        weight: 3,
+        opacity: 0.5,
+        color: '#008f68',
+        fillOpacity: 0.8,
+        fillColor: '#6DB65B',
+      }),
+    });
+    this.map.addLayer(countriesLayer);
   }
 
   private initEventRadiusMarker(): void {
