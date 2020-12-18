@@ -4,4 +4,7 @@
   </div>
   <app-event-date-slider *ngIf="isUserLoggedIn"></app-event-date-slider>
   <app-event-radius-slider *ngIf="isUserLoggedIn"></app-event-radius-slider>
+  <div class="map-country">
+    <p>{{ highlightedCountry || "No country" }}</p>
+  </div>
 </div>

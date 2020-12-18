@@ -8,14 +8,17 @@ import { MarkerPopupComponent } from '../marker-popup/marker-popup.component';
 
 @Injectable({ providedIn: 'root' })
 export default class MarkerService {
-  private CIRCLE_MARKER_COLOR = '#1B7915';
+  private readonly MARKER_POPUP_TAG = 'app-marker-popup-element';
+  private readonly DEFAULT_RADIUS_MARKER_COLOR = '#1B7915';
+  private readonly DEFAULT_EVENT_MARKER_COLOR = '#e60000';
+
   private maxRadius: number;
 
   private createMarkerPopup(event: Event): any {
     const { city, victim } = event;
     const markerPopupEl: NgElement &
       WithProperties<MarkerPopupComponent> = document.createElement(
-      'app-marker-popup-element'
+      this.MARKER_POPUP_TAG
     ) as any;
     markerPopupEl.event = event;
     markerPopupEl.city = city;
@@ -51,9 +54,11 @@ export default class MarkerService {
         victim.totalNumberOfFatalities + victim.totalNumberOfInjured,
         this.maxRadius
       ),
+      color: this.DEFAULT_EVENT_MARKER_COLOR,
     })
       .addTo(map)
-      .bindPopup(this.createMarkerPopup(event));
+      .bindPopup(this.createMarkerPopup(event))
+      .bringToFront();
   }
 
   createCircleMarker(
@@ -65,7 +70,7 @@ export default class MarkerService {
       radius,
     })
       .setStyle({
-        color: this.CIRCLE_MARKER_COLOR,
+        color: this.DEFAULT_RADIUS_MARKER_COLOR,
       })
       .addTo(map)
       .bringToBack();

@@ -4,7 +4,6 @@ import * as L from 'leaflet';
 import { icon } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import User from '../../auth/models/user.model';
 import Event from '../../event/models/event.model';
 
 import MarkerService from '../services/marker.service';
@@ -39,21 +38,21 @@ L.Marker.prototype.options.icon = iconDefault;
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
-  private readonly ZOOM = 3;
+  private readonly ZOOM = 4;
   private readonly MAX_ZOOM = 19;
   private readonly TILE_LAYER =
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILES_ATRIBUTION =
     '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
   private readonly DEFAULT_COUNTRY_STYLE: L.PathOptions = {
-    weight: 3,
+    weight: 2,
     opacity: 0.5,
     color: '#1ab2ff',
     fillOpacity: 0.8,
     fillColor: '#66ccff',
   };
   private readonly HIGHLIGHTED_COUNTRY_STYLE: L.PathOptions = {
-    weight: 10,
+    weight: 7,
     opacity: 1.0,
     color: '#00334d',
     fillOpacity: 1.0,
@@ -77,6 +76,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   private events: Event[] = [];
 
   isUserLoggedIn = false;
+  highlightedCountry: any;
 
   constructor(
     private store: Store<AppStoreState>,
@@ -176,7 +176,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
       style: () => this.DEFAULT_COUNTRY_STYLE,
       onEachFeature: (feature, layer) =>
         layer.on({
-          mouseover: (e) => this.highlightCountry(e),
+          mouseover: (e) => {
+            this.highlightCountry(e, feature);
+          },
           mouseout: (e) => this.resetCountry(e),
         }),
     }).bringToFront();
@@ -184,8 +186,9 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.addLayer(countriesLayer);
   }
 
-  private highlightCountry(event: L.LeafletMouseEvent): void {
+  private highlightCountry(event: L.LeafletMouseEvent, feature: any): void {
     const layer = event.target;
+    this.highlightedCountry = feature.properties.name;
     layer.setStyle(this.HIGHLIGHTED_COUNTRY_STYLE);
   }
 

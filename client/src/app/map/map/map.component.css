@@ -12,8 +12,8 @@ app-event-radius-slider {
   position: absolute;
   left: 10%;
   right: 90%;
-  z-index: 1000;
   width: 80%;
+  z-index: 1000;
 }
 
 app-event-date-slider {
@@ -22,6 +22,19 @@ app-event-date-slider {
 
 app-event-radius-slider {
   bottom: 13%;
+}
+
+.map-country {
+  padding: 0.2em 0.5em;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  text-align: center;
+  line-height: 1.1em;
+  font-weight: bold;
+  font-size: 2em;
+  color: paleturquoise;
+  z-index: 1001;
 }
 
 @media (orientation: landscape) and (max-width: 736px) {
