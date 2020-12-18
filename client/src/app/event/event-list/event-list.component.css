@@ -49,20 +49,6 @@
   cursor: pointer;
 }
 
-@media (max-width: 415px) {
-  .mat-column-id,
-  .mat-column-update,
-  .mat-column-delete {
-    min-width: 25px !important;
-  }
-
-  .mat-column-target-target,
-  .mat-column-city-name,
-  .mat-column-date {
-    min-width: 25px !important;
-  }
-}
-
 tr.event-details-row {
   height: 0;
 }
@@ -81,4 +67,52 @@ tr.event-details-row {
 
 .event-row td {
   border-bottom-width: 0;
+}
+
+@media (max-width: 735px) {
+  .mat-cell {
+    font-size: 13px;
+  }
+
+  .mat-column-id,
+  .mat-column-update,
+  .mat-column-delete {
+    min-width: 50px !important;
+  }
+
+  .mat-column-target-target,
+  .mat-column-city-name,
+  .mat-column-date {
+    min-width: 50px !important;
+  }
+}
+
+@media (max-width: 415px) {
+  .mat-cell {
+    font-size: 12px;
+  }
+
+  .mat-cell:first-child,
+  .mat-footer-cell:first-child,
+  .mat-header-cell:first-child {
+    padding-left: 3px;
+  }
+
+  .mat-cell:last-child,
+  .mat-footer-cell:last-child,
+  .mat-header-cell:last-child {
+    padding-right: 3px;
+  }
+
+  .mat-column-id,
+  .mat-column-update,
+  .mat-column-delete {
+    min-width: 25px !important;
+  }
+
+  .mat-column-target-target,
+  .mat-column-city-name,
+  .mat-column-date {
+    min-width: 25px !important;
+  }
 }
