@@ -107,7 +107,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with user name already taken should be invalid', () => {
-      spyOn(authService, 'checkUserData').and.callFake(() =>
+      spyOn(authService, 'checkUserData').and.returnValue(
         of({ isUserNameAvailable: false, isEmailAvailable: true })
       );
 
@@ -155,7 +155,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with email already taken should be invalid', () => {
-      spyOn(authService, 'checkUserData').and.callFake(() =>
+      spyOn(authService, 'checkUserData').and.returnValue(
         of({ isUserNameAvailable: true, isEmailAvailable: false })
       );
 
@@ -328,7 +328,7 @@ describe('RegistrationComponent', () => {
     });
 
     it('with passwords meeting two characteristic rules should be valid', () => {
-      spyOn(authService, 'checkUserData').and.callFake(() =>
+      spyOn(authService, 'checkUserData').and.returnValue(
         of({ isUserNameAvailable: true, isEmailAvailable: true })
       );
 
@@ -361,7 +361,7 @@ describe('RegistrationComponent', () => {
     it('should dispatch registerUserStart action when register form is valid', () => {
       expect(component.registerForm.valid).toBeFalsy();
 
-      spyOn(authService, 'checkUserData').and.callFake(() =>
+      spyOn(authService, 'checkUserData').and.returnValue(
         of({ isUserNameAvailable: true, isEmailAvailable: true })
       );
 

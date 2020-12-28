@@ -1,27 +1,29 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  EventStoreState,
-  selectEventToUpdate,
-} from 'src/app/event/store/event.reducer';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
+import CountriesGetResponse from '../models/countries-get-response.model';
+import CountryService from '../services/country.service';
 import { CountryFormComponent } from './country-form.component';
 
 describe('CountryFormComponent', () => {
   let component: CountryFormComponent;
   let fixture: ComponentFixture<CountryFormComponent>;
   let store: Store<AppStoreState>;
+  let countryService: CountryService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CountryFormComponent],
       imports: [
         StoreModule.forRoot({}),
+        HttpClientTestingModule,
         ReactiveFormsModule,
         MaterialModule,
         BrowserAnimationsModule,
@@ -35,6 +37,7 @@ describe('CountryFormComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
+    countryService = TestBed.inject(CountryService);
   });
 
   describe('form validation', () => {
@@ -56,6 +59,21 @@ describe('CountryFormComponent', () => {
             return of(state);
           }
         });
+        const countriesGetResponse: CountriesGetResponse = {
+          content: [
+            {
+              id: 1,
+              name: 'country',
+            },
+            {
+              id: 2,
+              name: 'country 2',
+            },
+          ],
+        };
+        spyOn(countryService, 'getAll').and.returnValue(
+          of(countriesGetResponse)
+        );
 
         fixture.detectChanges();
         component.ngOnInit();
