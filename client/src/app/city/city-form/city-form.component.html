@@ -10,6 +10,14 @@
         formControlName="name"
         matInput
       />
+      <mat-autocomplete
+        #provincesAutocomplete="matAutocomplete"
+        (optionSelected)="selectCity($event)"
+      >
+        <mat-option *ngFor="let city of cities" [value]="city.name">
+          {{ city.name }}
+        </mat-option>
+      </mat-autocomplete>
       <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
         <p *ngIf="name.errors.notBlank">
           City name cannot be <strong>empty</strong>.
