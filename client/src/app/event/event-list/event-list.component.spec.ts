@@ -1,12 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
+import EventService from '../services/event.service';
 import { selectAllEvents } from '../store/event.reducer';
 import { EventListComponent } from './event-list.component';
 
@@ -14,6 +17,8 @@ describe('EventListComponent', () => {
   let component: EventListComponent;
   let fixture: ComponentFixture<EventListComponent>;
   let store: Store<AppStoreState>;
+  let eventService: EventService;
+
   const event = {
     id: 6,
     summary: 'summary',
@@ -53,6 +58,7 @@ describe('EventListComponent', () => {
       declarations: [EventListComponent],
       imports: [
         StoreModule.forRoot({}),
+        HttpClientTestingModule,
         ReactiveFormsModule,
         MaterialModule,
         BrowserAnimationsModule,
@@ -66,7 +72,17 @@ describe('EventListComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
+    eventService = TestBed.inject(EventService);
 
+    const stateWithUser: AuthStoreState = {
+      user: {
+        token: 'token',
+        expirationDate: new Date(Date.now() + 36000000),
+      },
+      authErrorMessages: [],
+      isLoading: false,
+      userLocation: [20, 10],
+    };
     const event2 = {
       id: 12,
       summary: 'summary 2',
@@ -104,9 +120,13 @@ describe('EventListComponent', () => {
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === selectAllEvents) {
         return of([event, event2]);
+      } else if (selector === 'auth') {
+        return of(stateWithUser);
       }
     });
     spyOn(store, 'dispatch');
+
+    spyOn(eventService, 'deleteAll').and.callFake(() => {});
 
     component.expandedElement = event;
 

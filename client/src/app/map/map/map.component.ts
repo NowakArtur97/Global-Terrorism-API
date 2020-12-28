@@ -113,7 +113,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    // TODO: better approach would be to pre-load the data in a resolver
+    // TODO: Better approach would be to pre-load the data in a resolver
     this.countriesShapeSubscription$ = this.shapeService
       .getCountriesShapes()
       .subscribe((countries) => {
@@ -224,7 +224,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private getUserLocation(): void {
     if (!navigator.geolocation) {
-      // TODO: popup with info
+      // TODO: Popup with info
       console.log('Location is not supported');
       return;
     }
