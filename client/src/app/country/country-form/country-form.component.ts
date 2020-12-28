@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -28,7 +28,9 @@ import CountryService from '../services/country.service';
     },
   ],
 })
-export class CountryFormComponent extends AbstractFormComponent {
+export class CountryFormComponent
+  extends AbstractFormComponent
+  implements OnInit, OnDestroy {
   private countriesSubscription: Subscription;
   countries: Country[] = [];
 
@@ -46,6 +48,11 @@ export class CountryFormComponent extends AbstractFormComponent {
       .subscribe(
         (countriesResponse) => (this.countries = countriesResponse.content)
       );
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.countriesSubscription?.unsubscribe();
   }
 
   initForm(): void {
