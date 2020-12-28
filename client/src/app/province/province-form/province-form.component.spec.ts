@@ -1,27 +1,29 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  EventStoreState,
-  selectEventToUpdate,
-} from 'src/app/event/store/event.reducer';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
+import ProvincesGetResponse from '../models/provinces-get-response.model';
+import ProvinceService from '../services/province.service';
 import { ProvinceFormComponent } from './province-form.component';
 
 describe('ProvinceFormComponent', () => {
   let component: ProvinceFormComponent;
   let fixture: ComponentFixture<ProvinceFormComponent>;
   let store: Store<AppStoreState>;
+  let provinceService: ProvinceService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ProvinceFormComponent],
       imports: [
         StoreModule.forRoot({}),
+        HttpClientTestingModule,
         ReactiveFormsModule,
         MaterialModule,
         BrowserAnimationsModule,
@@ -35,6 +37,7 @@ describe('ProvinceFormComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
+    provinceService = TestBed.inject(ProvinceService);
   });
 
   describe('form validation', () => {
@@ -56,6 +59,29 @@ describe('ProvinceFormComponent', () => {
             return of(state.eventToUpdate);
           }
         });
+        const provincesGetResponse: ProvincesGetResponse = {
+          content: [
+            {
+              id: 2,
+              name: 'province',
+              country: {
+                id: 1,
+                name: 'country',
+              },
+            },
+            {
+              id: 4,
+              name: 'province 2',
+              country: {
+                id: 3,
+                name: 'country 2',
+              },
+            },
+          ],
+        };
+        spyOn(provinceService, 'getAll').and.returnValue(
+          of(provincesGetResponse)
+        );
 
         fixture.detectChanges();
         component.ngOnInit();
