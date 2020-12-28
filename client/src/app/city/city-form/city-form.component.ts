@@ -103,8 +103,8 @@ export class CityFormComponent
     const cityName = event.option.value;
     this.name.setValue(cityName);
 
-    const city = this.cities.find((city) => city.name === cityName);
-    this.latitude.setValue(city.latitude);
-    this.longitude.setValue(city.longitude);
+    const selectedCity = this.cities.find((city) => city.name === cityName);
+    this.latitude.setValue(selectedCity.latitude);
+    this.longitude.setValue(selectedCity.longitude);
   }
 }
