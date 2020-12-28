@@ -3,14 +3,7 @@
   <p>
     <mat-form-field>
       <mat-label for="name">Name</mat-label>
-      <input
-        id="countryName"
-        type="type"
-        autocomplete="on"
-        formControlName="name"
-        matInput
-      />
-      <mat-select>
+      <mat-select formControlName="name" placeholder="Name">
         <mat-option *ngFor="let country of countries" [value]="country.name">
           {{ country.name }}
         </mat-option>

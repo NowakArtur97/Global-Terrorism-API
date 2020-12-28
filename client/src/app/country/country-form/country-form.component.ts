@@ -1,10 +1,15 @@
 import { Component, forwardRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
 import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
+import AppStoreState from 'src/app/store/app.state';
 
 import Event from '../../event/models//event.model';
+import Country from '../models/country.model';
+import CountryService from '../services/country.service';
 
 @Component({
   selector: 'app-country-form',
@@ -24,6 +29,25 @@ import Event from '../../event/models//event.model';
   ],
 })
 export class CountryFormComponent extends AbstractFormComponent {
+  private countriesSubscription: Subscription;
+  countries: Country[] = [];
+
+  constructor(
+    protected store: Store<AppStoreState>,
+    private countryService: CountryService
+  ) {
+    super(store);
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.countriesSubscription = this.countryService
+      .getAll()
+      .subscribe(
+        (countriesResponse) => (this.countries = countriesResponse.content)
+      );
+  }
+
   initForm(): void {
     let name = '';
 
