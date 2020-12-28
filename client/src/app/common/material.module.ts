@@ -2,6 +2,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -46,6 +47,7 @@ const materialComponents = [
   MatSortModule,
   BrowserAnimationsModule,
   MatSelectModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

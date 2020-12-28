@@ -9,7 +9,16 @@
         autocomplete="on"
         formControlName="name"
         matInput
+        [matAutocomplete]="provincesAutocomplete"
       />
+      <mat-autocomplete
+        #provincesAutocomplete="matAutocomplete"
+        (optionSelected)="selectProvince($event)"
+      >
+        <mat-option *ngFor="let province of provinces" [value]="province.name">
+          {{ province.name }}
+        </mat-option>
+      </mat-autocomplete>
       <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
         <p *ngIf="name.errors.notBlank">
           Province name cannot be <strong>empty</strong>.

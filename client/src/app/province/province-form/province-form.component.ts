@@ -1,10 +1,16 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AbstractFormComponent } from 'src/app/common/components/abstract-form.component';
 import CommonValidators from 'src/app/common/validators/common.validator';
 import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
+import AppStoreState from 'src/app/store/app.state';
 
 import Event from '../../event/models//event.model';
+import Province from '../models/province.model';
+import ProvinceService from '../services/province.service';
 
 @Component({
   selector: 'app-province-form',
@@ -23,7 +29,32 @@ import Event from '../../event/models//event.model';
     },
   ],
 })
-export class ProvinceFormComponent extends AbstractFormComponent {
+export class ProvinceFormComponent
+  extends AbstractFormComponent
+  implements OnInit, OnDestroy {
+  private provincesSubscription: Subscription;
+  provinces: Province[] = [];
+
+  constructor(
+    protected store: Store<AppStoreState>,
+    private provinceService: ProvinceService
+  ) {
+    super(store);
+  }
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.provincesSubscription = this.provinceService
+      .getAll()
+      .subscribe(
+        (provincesResponse) => (this.provinces = provincesResponse.content)
+      );
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.provincesSubscription?.unsubscribe();
+  }
+
   initForm(): void {
     let name = '';
 
@@ -42,5 +73,12 @@ export class ProvinceFormComponent extends AbstractFormComponent {
 
   get name(): AbstractControl {
     return this.formGroup.get('name');
+  }
+
+  selectProvince(event: MatAutocompleteSelectedEvent): void {
+    if (!event.option) {
+      return;
+    }
+    this.name.setValue(event.option.value);
   }
 }
