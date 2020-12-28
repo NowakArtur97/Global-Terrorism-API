@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import User from 'src/app/auth/models/user.model';
+import BulkRequestMethod from 'src/app/common/models/bulk-request-method.model';
+import BulkRequest from 'src/app/common/models/bulk-request.model';
 import GenericRestService from 'src/app/common/services/generic-rest.service';
 import { environment } from 'src/environments/environment';
 
@@ -57,6 +60,27 @@ export default class EventService extends GenericRestService<EventsGetResponse> 
   delete(id: number): Observable<{}> {
     return this.httpClient.delete<{}>(
       `${environment.baseApiUrl}/${this.actionUrl}/${id}`
+    );
+  }
+
+  deleteAll(events: Event[], user: User): void {
+    if (events.length === 0) {
+      return;
+    }
+
+    const body: BulkRequest = { operations: [] };
+    events.forEach((event) => {
+      const requestMethod: BulkRequestMethod = {
+        method: 'DELETE',
+        url: `/api/v1/events/${event.id}`,
+        headers: { Authentication: `Bearer ${user.token}` },
+      };
+      body.operations.push(requestMethod);
+    });
+
+    this.httpClient.post<BulkRequest>(
+      `${environment.baseApiUrl}/${environment.bulkRequestUrl}`,
+      body
     );
   }
 }
