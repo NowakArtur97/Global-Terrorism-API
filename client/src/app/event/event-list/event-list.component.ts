@@ -1,4 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -30,6 +31,7 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsRadiusSubscription$: Subscription;
 
   displayedColumns: string[] = [
+    'select',
     'id',
     'target.target',
     'city.name',
@@ -38,6 +40,7 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     'delete',
   ];
   dataSource: MatTableDataSource<Event>;
+  selection = new SelectionModel<Event>(true, []);
   pageSize = 100;
   expandedElement: Event;
 
@@ -72,6 +75,28 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+
+    return numSelected === numRows;
+  }
+
+  checkboxLabel(row?: Event): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.id + 1
+    }`;
   }
 
   updateEvent(event: Event): void {
