@@ -1,27 +1,29 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/common/material.module';
-import {
-  EventStoreState,
-  selectEventToUpdate,
-} from 'src/app/event/store/event.reducer';
+import { EventStoreState, selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
+import CitiesGetResponse from '../models/cities-get-response.model';
+import CityService from '../services/city.service';
 import { CityFormComponent } from './city-form.component';
 
 describe('CityFormComponent', () => {
   let component: CityFormComponent;
   let fixture: ComponentFixture<CityFormComponent>;
   let store: Store<AppStoreState>;
+  let cityService: CityService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CityFormComponent],
       imports: [
         StoreModule.forRoot({}),
+        HttpClientTestingModule,
         ReactiveFormsModule,
         MaterialModule,
         BrowserAnimationsModule,
@@ -35,6 +37,7 @@ describe('CityFormComponent', () => {
     component = fixture.componentInstance;
 
     store = TestBed.inject(Store);
+    cityService = TestBed.inject(CityService);
   });
 
   describe('form validation', () => {
@@ -56,6 +59,33 @@ describe('CityFormComponent', () => {
             return of(state.eventToUpdate);
           }
         });
+        const citiesGetResponse: CitiesGetResponse = {
+          content: [
+            {
+              id: 4,
+              name: 'city',
+              latitude: 20,
+              longitude: 10,
+              province: {
+                id: 2,
+                name: 'province',
+                country: { id: 1, name: 'country' },
+              },
+            },
+            {
+              id: 10,
+              name: 'city 2',
+              latitude: 10,
+              longitude: 20,
+              province: {
+                id: 8,
+                name: 'province 2',
+                country: { id: 7, name: 'country 2' },
+              },
+            },
+          ],
+        };
+        spyOn(cityService, 'getAll').and.returnValue(of(citiesGetResponse));
 
         fixture.detectChanges();
         component.ngOnInit();
