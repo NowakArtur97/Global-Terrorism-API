@@ -32,7 +32,7 @@ import ProvinceService from '../services/province.service';
 export class ProvinceFormComponent
   extends AbstractFormComponent
   implements OnInit, OnDestroy {
-  private provincesSubscription: Subscription;
+  private provincesSubscription$: Subscription;
   provinces: Province[] = [];
 
   constructor(
@@ -43,7 +43,7 @@ export class ProvinceFormComponent
   }
   ngOnInit(): void {
     super.ngOnInit();
-    this.provincesSubscription = this.provinceService
+    this.provincesSubscription$ = this.provinceService
       .getAll()
       .subscribe(
         (provincesResponse) => (this.provinces = provincesResponse.content)
@@ -52,7 +52,7 @@ export class ProvinceFormComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.provincesSubscription?.unsubscribe();
+    this.provincesSubscription$?.unsubscribe();
   }
 
   initForm(): void {

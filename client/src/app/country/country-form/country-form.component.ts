@@ -31,7 +31,7 @@ import CountryService from '../services/country.service';
 export class CountryFormComponent
   extends AbstractFormComponent
   implements OnInit, OnDestroy {
-  private countriesSubscription: Subscription;
+  private countriesSubscription$: Subscription;
   countries: Country[] = [];
 
   constructor(
@@ -43,7 +43,7 @@ export class CountryFormComponent
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.countriesSubscription = this.countryService
+    this.countriesSubscription$ = this.countryService
       .getAll()
       .subscribe(
         (countriesResponse) => (this.countries = countriesResponse.content)
@@ -52,7 +52,7 @@ export class CountryFormComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.countriesSubscription?.unsubscribe();
+    this.countriesSubscription$?.unsubscribe();
   }
 
   initForm(): void {

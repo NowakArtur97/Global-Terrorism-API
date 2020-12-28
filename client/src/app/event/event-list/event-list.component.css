@@ -75,7 +75,7 @@ tr.event-details-row {
   border-bottom-width: 0;
 }
 
-@media (max-width: 735px) {
+@media (max-width: 740px) {
   .event-list-menu .mat-form-field {
     flex-basis: 70%;
   }

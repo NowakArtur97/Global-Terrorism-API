@@ -32,7 +32,7 @@ import CityService from '../services/city.service';
 export class CityFormComponent
   extends AbstractFormComponent
   implements OnInit, OnDestroy {
-  private citiesSubscription: Subscription;
+  private citiesSubscription$: Subscription;
   cities: City[] = [];
 
   constructor(
@@ -43,14 +43,14 @@ export class CityFormComponent
   }
   ngOnInit(): void {
     super.ngOnInit();
-    this.citiesSubscription = this.cityService
+    this.citiesSubscription$ = this.cityService
       .getAll()
       .subscribe((citiesResponse) => (this.cities = citiesResponse.content));
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.citiesSubscription?.unsubscribe();
+    this.citiesSubscription$?.unsubscribe();
   }
 
   initForm(): void {
