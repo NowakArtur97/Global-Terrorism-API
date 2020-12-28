@@ -10,6 +10,11 @@
         formControlName="name"
         matInput
       />
+      <mat-select>
+        <mat-option *ngFor="let country of countries" [value]="country.name">
+          {{ country.name }}
+        </mat-option>
+      </mat-select>
       <mat-error *ngIf="name.invalid && (name.touched || name.dirty)">
         <p *ngIf="name.errors.notBlank">
           Country name cannot be <strong>empty</strong>.
