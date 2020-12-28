@@ -90,13 +90,13 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  masterToggle() {
+  masterToggle(): void {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
-  isAllSelected() {
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
 
