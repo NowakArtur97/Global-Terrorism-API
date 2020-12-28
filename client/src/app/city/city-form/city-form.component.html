@@ -9,9 +9,10 @@
         autocomplete="on"
         formControlName="name"
         matInput
+        [matAutocomplete]="citiesAutocomplete"
       />
       <mat-autocomplete
-        #provincesAutocomplete="matAutocomplete"
+        #citiesAutocomplete="matAutocomplete"
         (optionSelected)="selectCity($event)"
       >
         <mat-option *ngFor="let city of cities" [value]="city.name">
