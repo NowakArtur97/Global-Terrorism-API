@@ -63,15 +63,18 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 ## Features
 
 - User sign in/sign up/auto login
-- Displaying events on the map
-- Adding events
+- Displaying events markers on the map with radiuses depending on the number of victims in the attack
+- Recognition of countries on the map
+- Adding/updating/deleting events
 - Sorting events by date
+- Sorting events depending on the distance from the marker
+- Displaying a list of events with the possibility of sorting, filtering and paging
+- Charts with information about events and victims
+- Determining the user's location
 
 ## To Do
 
 - Adding targets/groups/etc.
-- More sorting and searching options for events
-- Viewing charts and statistics about events
 
 ## Status
 
@@ -81,4 +84,16 @@ Project is: in progress
 
 ![Map](./screenshots/map.jpg)
 
-Main view with marked events
+Map with marked events
+
+![Map](./screenshots/map2.jpg)
+
+Map with the description of the event
+
+![Events](./screenshots/events-list.jpg)
+
+List of events
+
+![Charts](./screenshots/charts.jpg)
+
+Charts with information on events and victims

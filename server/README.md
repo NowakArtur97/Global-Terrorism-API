@@ -132,7 +132,6 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 
 ## To Do
 
-- More endpoints
 - Monitoring using Prometheus and Grafana
 
 ## Endpoints List:
@@ -142,6 +141,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | Method | URI                      | Action                             |
 | ------ | ------------------------ | ---------------------------------- |
 | `POST` | `/api/v1/registration`   | `Create an account to use the API` |
+| `POST` | `/api/v1/checkUserData`  | `Check user data before registration`|
 | `POST` | `/api/v1/authentication` | `Generate JWT`                     |
 
 ### Groups
@@ -154,7 +154,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `POST`    | `/api/v1/groups`             | `Add a new group`                                                   |
 | `POST`    | `/api/v1/groups/{id}/events` | `Add a new event to an existing group`                              |
 | `PUT`     | `/api/v1/groups/{id}`        | `Update or add a group`                                             |
-| `PATCH`   | `/api/v1/groups/{id}`        | `Partially update a group(consume Json Patch and Json Merge Patch)` |
+| `PATCH`   | `/api/v1/groups/{id}`        | `Partially update a group (consume Json Patch and Json Merge Patch)` |
 | `DELETE`  | `/api/v1/groups/{id}`        | `Remove a group`                                                    |
 | `DELETE`  | `/api/v1/groups/{id}/events` | `Remove all group's related events`                                 |
 | `OPTIONS` | `/api/v1/groups`             | `Find all supported request methods for list of groups`             |
@@ -166,12 +166,14 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | Method    | URI                           | Action                                                               |
 | --------- | ----------------------------- | -------------------------------------------------------------------- |
 | `GET`     | `/api/v1/events`              | `Get a list of events`                                               |
+| `GET`     | `/api/v1/events/depth/{depth}`| `Get a list of events with depth. Depth is responsible for the number of nested objects`  |
 | `GET`     | `/api/v1/events/{id}`         | `Get information about an event`                                     |
+| `GET`     | `/api/v1/events/{id}/depth/{depth}`| `Get information about an event with depth. Depth is responsible for the number of nested objects`  |
 | `GET`     | `/api/v1/events/{id}/targets` | `Get information about event's related target`                       |
 | `POST`    | `/api/v1/events`              | `Add a new event`                                                    |
 | `PUT`     | `/api/v1/events/{id}`         | `Update or add an event`                                             |
 | `PUT`     | `/api/v1/events/{id}/targets` | `Update or add an event's target`                                    |
-| `PATCH`   | `/api/v1/events/{id}`         | `Partially update an event(consume Json Patch and Json Merge Patch)` |
+| `PATCH`   | `/api/v1/events/{id}`         | `Partially update an event (consume Json Patch and Json Merge Patch)` |
 | `DELETE`  | `/api/v1/events/{id}`         | `Remove an event`                                                    |
 | `DELETE`  | `/api/v1/events/{id}/targets` | `Remove events's related target`                                     |
 | `OPTIONS` | `/api/v1/events`              | `Find all supported request methods for list of events`              |
@@ -185,7 +187,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `GET`     | `/api/v1/targets/{id}` | `Get information about a target`                                     |
 | `POST`    | `/api/v1/targets`      | `Add a new target`                                                   |
 | `PUT`     | `/api/v1/targets/{id}` | `Update or add a target`                                             |
-| `PATCH`   | `/api/v1/targets/{id}` | `Partially update a target(consume Json Patch and Json Merge Patch)` |
+| `PATCH`   | `/api/v1/targets/{id}` | `Partially update a target (consume Json Patch and Json Merge Patch)` |
 | `DELETE`  | `/api/v1/targets/{id}` | `Remove a target`                                                    |
 | `OPTIONS` | `/api/v1/targets`      | `Find all supported request methods for list of targets`             |
 | `OPTIONS` | `/api/v1/targets/{id}` | `Find all supported request methods for target`                      |
@@ -207,7 +209,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `GET`     | `/api/v1/cities/{id}` | `Get information about a city`                                     |
 | `POST`    | `/api/v1/cities`      | `Add a new city`                                                   |
 | `PUT`     | `/api/v1/cities/{id}` | `Update or add a city`                                             |
-| `PATCH`   | `/api/v1/cities/{id}` | `Partially update a city(consume Json Patch and Json Merge Patch)` |
+| `PATCH`   | `/api/v1/cities/{id}` | `Partially update a city (consume Json Patch and Json Merge Patch)` |
 | `DELETE`  | `/api/v1/cities/{id}` | `Remove a city`                                                    |
 | `OPTIONS` | `/api/v1/cities`      | `Find all supported request methods for list of cities`            |
 | `OPTIONS` | `/api/v1/cities/{id}` | `Find all supported request methods for city`                      |
@@ -220,7 +222,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 | `GET`     | `/api/v1/provinces/{id}` | `Get information about a province`                                     |
 | `POST`    | `/api/v1/provinces`      | `Add a new province`                                                   |
 | `PUT`     | `/api/v1/provinces/{id}` | `Update or add a province`                                             |
-| `PATCH`   | `/api/v1/provinces/{id}` | `Partially update a province(consume Json Patch and Json Merge Patch)` |
+| `PATCH`   | `/api/v1/provinces/{id}` | `Partially update a province (consume Json Patch and Json Merge Patch)` |
 | `DELETE`  | `/api/v1/provinces/{id}` | `Remove a province`                                                    |
 | `OPTIONS` | `/api/v1/provinces`      | `Find all supported request methods for list of provinces`             |
 | `OPTIONS` | `/api/v1/provinces/{id}` | `Find all supported request methods for province`                      |
@@ -260,8 +262,8 @@ The previously generated token should be placed in the header. In the example, m
 # Content-Type: application/json
 {
   "operations": [
-    {"method": "GET", "url": "/api/v1/groups", "headers": {"Authentication" : "Bearer TOKEN"}},
-    {"method": "POST", "url": "/api/v1/targets", "headers": {"Authentication" : "Bearer TOKEN"}}
+    {"method": "GET", "url": "/api/v1/groups", "headers": {"Authorization" : "Bearer JWT_TOKEN"}},
+    {"method": "POST", "url": "/api/v1/targets", "params": { "countryOfOrigin": { "name": "Country"}, "target": "Attack target"}, "headers": {"Authorization" : "Bearer JWT_TOKEN"}}
   ]
 }
 ```

@@ -87,7 +87,8 @@ class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, Gr
 
     @PatchMapping(path = "/{id}", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Group' fields using Json Patch", notes = "Update Group's fields using Json Patch", consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
+    @ApiOperation(value = "Update Group' fields using Json Patch", notes = "Update Group's fields using Json Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Group's fields", response = GroupModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
@@ -99,11 +100,12 @@ class GroupController extends GenericRestControllerImpl<GroupModel, GroupDTO, Gr
     }
 
     //     id2 was used because Swagger does not allow two PATCH methods for the same
-//     path – even if they have different parameters (parameters have no effect on
-//     uniqueness)
+    //     path – even if they have different parameters (parameters have no effect on
+    //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Group's fields using Json Merge Patch", notes = "Update Group's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Group's fields using Json Merge Patch", notes = "Update Group's fields using Json Merge Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Group's fields", response = GroupModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})

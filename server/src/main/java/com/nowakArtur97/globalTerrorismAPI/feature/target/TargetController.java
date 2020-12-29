@@ -100,8 +100,8 @@ public class TargetController extends GenericRestControllerImpl<TargetModel, Tar
     }
 
     //     id2 was used because Swagger does not allow two PATCH methods for the same
-//     path – even if they have different parameters (parameters have no effect on
-//     uniqueness)
+    //     path – even if they have different parameters (parameters have no effect on
+    //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
     @ApiOperation(value = "Update Target's fields using Json Merge Patch", notes = "Update Target's fields using Json Merge Patch",

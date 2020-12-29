@@ -101,11 +101,12 @@ class ProvinceController extends GenericRestControllerImpl<ProvinceModel, Provin
     }
 
     //     id2 was used because Swagger does not allow two PATCH methods for the same
-//     path – even if they have different parameters (parameters have no effect on
-//     uniqueness)
+    //     path – even if they have different parameters (parameters have no effect on
+    //     uniqueness)
     @PatchMapping(path = "/{id2}", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @Override
-    @ApiOperation(value = "Update Province's fields using Json Merge Patch", notes = "Update Province's fields using Json Merge Patch", consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
+    @ApiOperation(value = "Update Province's fields using Json Merge Patch", notes = "Update Province's fields using Json Merge Patch",
+            consumes = PatchMediaType.APPLICATION_JSON_MERGE_PATCH_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully updated Province's fields", response = ProvinceModel.class),
             @ApiResponse(code = 400, message = "Incorrectly entered data", response = ErrorResponse.class)})
