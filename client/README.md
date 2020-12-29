@@ -94,6 +94,6 @@ Map with the description of the event
 
 List of events
 
-![Charts with information on events and victims](../screenshots/charts.jpg)
+![Charts with information on events and victims](../screenshots/diagrams.jpg)
 
 Charts with information on events and victims
