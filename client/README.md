@@ -86,14 +86,14 @@ Project is: in progress
 
 Map with marked events
 
-![Map with the description of the event](../screenshots/map2.JPG)
+![Map with the description of the event](../screenshots/map2.jpg)
 
 Map with the description of the event
 
-![List of events](../screenshots/events-list.JPG)
+![List of events](../screenshots/eventsList.jpg)
 
 List of events
 
-![Charts with information on events and victims](../screenshots/charts.JPG)
+![Charts with information on events and victims](../screenshots/charts.jpg)
 
 Charts with information on events and victims
