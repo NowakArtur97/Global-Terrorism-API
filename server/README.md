@@ -138,59 +138,59 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 
 ### Security
 
-| Method | URI                      | Action                             |
-| ------ | ------------------------ | ---------------------------------- |
-| `POST` | `/api/v1/registration`   | `Create an account to use the API` |
-| `POST` | `/api/v1/checkUserData`  | `Check user data before registration`|
-| `POST` | `/api/v1/authentication` | `Generate JWT`                     |
+| Method | URI                      | Action                                |
+| ------ | ------------------------ | ------------------------------------- |
+| `POST` | `/api/v1/registration`   | `Create an account to use the API`    |
+| `POST` | `/api/v1/checkUserData`  | `Check user data before registration` |
+| `POST` | `/api/v1/authentication` | `Generate JWT`                        |
 
 ### Groups
 
-| Method    | URI                          | Action                                                              |
-| --------- | ---------------------------- | ------------------------------------------------------------------- |
-| `GET`     | `/api/v1/groups`             | `Get a list of groups`                                              |
-| `GET`     | `/api/v1/groups/{id}`        | `Get information about a group`                                     |
-| `GET`     | `/api/v1/groups/{id}/events` | `Get information about a group's related events`                    |
-| `POST`    | `/api/v1/groups`             | `Add a new group`                                                   |
-| `POST`    | `/api/v1/groups/{id}/events` | `Add a new event to an existing group`                              |
-| `PUT`     | `/api/v1/groups/{id}`        | `Update or add a group`                                             |
+| Method    | URI                          | Action                                                               |
+| --------- | ---------------------------- | -------------------------------------------------------------------- |
+| `GET`     | `/api/v1/groups`             | `Get a list of groups`                                               |
+| `GET`     | `/api/v1/groups/{id}`        | `Get information about a group`                                      |
+| `GET`     | `/api/v1/groups/{id}/events` | `Get information about a group's related events`                     |
+| `POST`    | `/api/v1/groups`             | `Add a new group`                                                    |
+| `POST`    | `/api/v1/groups/{id}/events` | `Add a new event to an existing group`                               |
+| `PUT`     | `/api/v1/groups/{id}`        | `Update or add a group`                                              |
 | `PATCH`   | `/api/v1/groups/{id}`        | `Partially update a group (consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/groups/{id}`        | `Remove a group`                                                    |
-| `DELETE`  | `/api/v1/groups/{id}/events` | `Remove all group's related events`                                 |
-| `OPTIONS` | `/api/v1/groups`             | `Find all supported request methods for list of groups`             |
-| `OPTIONS` | `/api/v1/groups/{id}`        | `Find all supported request methods for a group`                    |
-| `OPTIONS` | `/api/v1/groups/{id}/events` | `Find all supported request methods for a group's events`           |
+| `DELETE`  | `/api/v1/groups/{id}`        | `Remove a group`                                                     |
+| `DELETE`  | `/api/v1/groups/{id}/events` | `Remove all group's related events`                                  |
+| `OPTIONS` | `/api/v1/groups`             | `Find all supported request methods for list of groups`              |
+| `OPTIONS` | `/api/v1/groups/{id}`        | `Find all supported request methods for a group`                     |
+| `OPTIONS` | `/api/v1/groups/{id}/events` | `Find all supported request methods for a group's events`            |
 
 ### Events
 
-| Method    | URI                           | Action                                                               |
-| --------- | ----------------------------- | -------------------------------------------------------------------- |
-| `GET`     | `/api/v1/events`              | `Get a list of events`                                               |
-| `GET`     | `/api/v1/events/depth/{depth}`| `Get a list of events with depth. Depth is responsible for the number of nested objects`  |
-| `GET`     | `/api/v1/events/{id}`         | `Get information about an event`                                     |
-| `GET`     | `/api/v1/events/{id}/depth/{depth}`| `Get information about an event with depth. Depth is responsible for the number of nested objects`  |
-| `GET`     | `/api/v1/events/{id}/targets` | `Get information about event's related target`                       |
-| `POST`    | `/api/v1/events`              | `Add a new event`                                                    |
-| `PUT`     | `/api/v1/events/{id}`         | `Update or add an event`                                             |
-| `PUT`     | `/api/v1/events/{id}/targets` | `Update or add an event's target`                                    |
-| `PATCH`   | `/api/v1/events/{id}`         | `Partially update an event (consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/events/{id}`         | `Remove an event`                                                    |
-| `DELETE`  | `/api/v1/events/{id}/targets` | `Remove events's related target`                                     |
-| `OPTIONS` | `/api/v1/events`              | `Find all supported request methods for list of events`              |
-| `OPTIONS` | `/api/v1/events/{id}`         | `Find all supported request methods for event`                       |
+| Method    | URI                                 | Action                                                                                             |
+| --------- | ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `GET`     | `/api/v1/events`                    | `Get a list of events`                                                                             |
+| `GET`     | `/api/v1/events/depth/{depth}`      | `Get a list of events with depth. Depth is responsible for the number of nested objects`           |
+| `GET`     | `/api/v1/events/{id}`               | `Get information about an event`                                                                   |
+| `GET`     | `/api/v1/events/{id}/depth/{depth}` | `Get information about an event with depth. Depth is responsible for the number of nested objects` |
+| `GET`     | `/api/v1/events/{id}/targets`       | `Get information about event's related target`                                                     |
+| `POST`    | `/api/v1/events`                    | `Add a new event`                                                                                  |
+| `PUT`     | `/api/v1/events/{id}`               | `Update or add an event`                                                                           |
+| `PUT`     | `/api/v1/events/{id}/targets`       | `Update or add an event's target`                                                                  |
+| `PATCH`   | `/api/v1/events/{id}`               | `Partially update an event (consume Json Patch and Json Merge Patch)`                              |
+| `DELETE`  | `/api/v1/events/{id}`               | `Remove an event`                                                                                  |
+| `DELETE`  | `/api/v1/events/{id}/targets`       | `Remove events's related target`                                                                   |
+| `OPTIONS` | `/api/v1/events`                    | `Find all supported request methods for list of events`                                            |
+| `OPTIONS` | `/api/v1/events/{id}`               | `Find all supported request methods for event`                                                     |
 
 ### Targets
 
-| Method    | URI                    | Action                                                               |
-| --------- | ---------------------- | -------------------------------------------------------------------- |
-| `GET`     | `/api/v1/targets`      | `Get a list of targets`                                              |
-| `GET`     | `/api/v1/targets/{id}` | `Get information about a target`                                     |
-| `POST`    | `/api/v1/targets`      | `Add a new target`                                                   |
-| `PUT`     | `/api/v1/targets/{id}` | `Update or add a target`                                             |
+| Method    | URI                    | Action                                                                |
+| --------- | ---------------------- | --------------------------------------------------------------------- |
+| `GET`     | `/api/v1/targets`      | `Get a list of targets`                                               |
+| `GET`     | `/api/v1/targets/{id}` | `Get information about a target`                                      |
+| `POST`    | `/api/v1/targets`      | `Add a new target`                                                    |
+| `PUT`     | `/api/v1/targets/{id}` | `Update or add a target`                                              |
 | `PATCH`   | `/api/v1/targets/{id}` | `Partially update a target (consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/targets/{id}` | `Remove a target`                                                    |
-| `OPTIONS` | `/api/v1/targets`      | `Find all supported request methods for list of targets`             |
-| `OPTIONS` | `/api/v1/targets/{id}` | `Find all supported request methods for target`                      |
+| `DELETE`  | `/api/v1/targets/{id}` | `Remove a target`                                                     |
+| `OPTIONS` | `/api/v1/targets`      | `Find all supported request methods for list of targets`              |
+| `OPTIONS` | `/api/v1/targets/{id}` | `Find all supported request methods for target`                       |
 
 ### Victims
 
@@ -203,29 +203,29 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 
 ### Cities
 
-| Method    | URI                   | Action                                                             |
-| --------- | --------------------- | ------------------------------------------------------------------ |
-| `GET`     | `/api/v1/cities`      | `Get a list of cities`                                             |
-| `GET`     | `/api/v1/cities/{id}` | `Get information about a city`                                     |
-| `POST`    | `/api/v1/cities`      | `Add a new city`                                                   |
-| `PUT`     | `/api/v1/cities/{id}` | `Update or add a city`                                             |
+| Method    | URI                   | Action                                                              |
+| --------- | --------------------- | ------------------------------------------------------------------- |
+| `GET`     | `/api/v1/cities`      | `Get a list of cities`                                              |
+| `GET`     | `/api/v1/cities/{id}` | `Get information about a city`                                      |
+| `POST`    | `/api/v1/cities`      | `Add a new city`                                                    |
+| `PUT`     | `/api/v1/cities/{id}` | `Update or add a city`                                              |
 | `PATCH`   | `/api/v1/cities/{id}` | `Partially update a city (consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/cities/{id}` | `Remove a city`                                                    |
-| `OPTIONS` | `/api/v1/cities`      | `Find all supported request methods for list of cities`            |
-| `OPTIONS` | `/api/v1/cities/{id}` | `Find all supported request methods for city`                      |
+| `DELETE`  | `/api/v1/cities/{id}` | `Remove a city`                                                     |
+| `OPTIONS` | `/api/v1/cities`      | `Find all supported request methods for list of cities`             |
+| `OPTIONS` | `/api/v1/cities/{id}` | `Find all supported request methods for city`                       |
 
 ### Provinces
 
-| Method    | URI                      | Action                                                                 |
-| --------- | ------------------------ | ---------------------------------------------------------------------- |
-| `GET`     | `/api/v1/provinces`      | `Get a list of provinces`                                              |
-| `GET`     | `/api/v1/provinces/{id}` | `Get information about a province`                                     |
-| `POST`    | `/api/v1/provinces`      | `Add a new province`                                                   |
-| `PUT`     | `/api/v1/provinces/{id}` | `Update or add a province`                                             |
+| Method    | URI                      | Action                                                                  |
+| --------- | ------------------------ | ----------------------------------------------------------------------- |
+| `GET`     | `/api/v1/provinces`      | `Get a list of provinces`                                               |
+| `GET`     | `/api/v1/provinces/{id}` | `Get information about a province`                                      |
+| `POST`    | `/api/v1/provinces`      | `Add a new province`                                                    |
+| `PUT`     | `/api/v1/provinces/{id}` | `Update or add a province`                                              |
 | `PATCH`   | `/api/v1/provinces/{id}` | `Partially update a province (consume Json Patch and Json Merge Patch)` |
-| `DELETE`  | `/api/v1/provinces/{id}` | `Remove a province`                                                    |
-| `OPTIONS` | `/api/v1/provinces`      | `Find all supported request methods for list of provinces`             |
-| `OPTIONS` | `/api/v1/provinces/{id}` | `Find all supported request methods for province`                      |
+| `DELETE`  | `/api/v1/provinces/{id}` | `Remove a province`                                                     |
+| `OPTIONS` | `/api/v1/provinces`      | `Find all supported request methods for list of provinces`              |
+| `OPTIONS` | `/api/v1/provinces/{id}` | `Find all supported request methods for province`                       |
 
 ### Countries
 
@@ -296,6 +296,6 @@ Project is: in progress
 
 ## Screenshots
 
-![Documentation](./screenshots/documentation.png)
+![Documentation using Swagger 2](../screenshots/documentation.png)
 
 Documentation using Swagger 2

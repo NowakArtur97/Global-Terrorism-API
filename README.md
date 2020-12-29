@@ -90,10 +90,22 @@ Project is: in progress
 
 ## Screenshots
 
-![Map](./client/screenshots/map.jpg)
+![Map with marked events](./screenshots/map.jpg)
 
-Main view with marked events
+Map with marked events
 
-![Documentation](./server/screenshots/documentation.png)
+![Map with the description of the event](./screenshots/map2.JPG)
+
+Map with the description of the event
+
+![List of events](./screenshots/events-list.JPG)
+
+List of events
+
+![Charts with information on events and victims](./screenshots/charts.JPG)
+
+Charts with information on events and victims
+
+![Documentation using Swagger 2](./screenshots/documentation.png)
 
 Documentation using Swagger 2
