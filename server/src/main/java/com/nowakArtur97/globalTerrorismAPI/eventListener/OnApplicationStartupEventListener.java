@@ -2,6 +2,7 @@ package com.nowakArtur97.globalTerrorismAPI.eventListener;
 
 import com.monitorjbl.xlsx.StreamingReader;
 import com.nowakArtur97.globalTerrorismAPI.common.service.GenericService;
+import com.nowakArtur97.globalTerrorismAPI.common.util.XlsxUtil;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityService;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryNode;
@@ -22,10 +23,7 @@ import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimNode;
 import com.nowakArtur97.globalTerrorismAPI.feature.victim.VictimService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Value;
@@ -153,7 +151,7 @@ class OnApplicationStartupEventListener {
 
                 EventNode event = saveEvent(row, target, city, victim);
 
-                String groupName = getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
+                String groupName = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.GROUP_NAME.getIndex());
 
                 manageGroup(groupName, event);
 
@@ -188,7 +186,7 @@ class OnApplicationStartupEventListener {
 
             group.addEvent(event);
 
-            if (isUnknown(groupName)) {
+            if (XlsxUtil.isUnknown(groupName)) {
 
                 groupService.save(group);
 
@@ -209,31 +207,31 @@ class OnApplicationStartupEventListener {
 
     private EventNode saveEvent(Row row, TargetNode target, CityNode city, VictimNode victim) {
 
-        String cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
-        int yearOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_YEAR_OF_EVENT;
+        String cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.YEAR_OF_EVENT.getIndex());
+        int yearOfEvent = XlsxUtil.isNumeric(cellValue) ? XlsxUtil.parseInt(cellValue) : DEFAULT_YEAR_OF_EVENT;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.MONTH_OF_EVENT.getIndex());
-        int monthOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_MONTH_OF_EVENT;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.MONTH_OF_EVENT.getIndex());
+        int monthOfEvent = XlsxUtil.isNumeric(cellValue) ? XlsxUtil.parseInt(cellValue) : DEFAULT_MONTH_OF_EVENT;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.DAY_OF_EVENT.getIndex());
-        int dayOfEvent = isNumeric(cellValue) ? parseInt(cellValue) : DEFAULT_DAY_OF_EVENT;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.DAY_OF_EVENT.getIndex());
+        int dayOfEvent = XlsxUtil.isNumeric(cellValue) ? XlsxUtil.parseInt(cellValue) : DEFAULT_DAY_OF_EVENT;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_SUMMARY.getIndex());
-        String eventSummary = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_EVENT_SUMMARY : cellValue;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_SUMMARY.getIndex());
+        String eventSummary = cellValue.isEmpty() || XlsxUtil.isUnknown(cellValue) ? DEFAULT_EVENT_SUMMARY : cellValue;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_MOTIVE.getIndex());
-        String motive = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_EVENT_MOTIVE : cellValue;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.EVENT_MOTIVE.getIndex());
+        String motive = cellValue.isEmpty() || XlsxUtil.isUnknown(cellValue) ? DEFAULT_EVENT_MOTIVE : cellValue;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS.getIndex());
-        boolean isPartOfMultipleIncidents = parseBoolean(cellValue);
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_PART_OF_MULTIPLE_INCIDENTS.getIndex());
+        boolean isPartOfMultipleIncidents = XlsxUtil.parseBoolean(cellValue);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUCCESS.getIndex());
-        boolean isSuccessful = parseBoolean(cellValue);
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUCCESS.getIndex());
+        boolean isSuccessful = XlsxUtil.parseBoolean(cellValue);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUICIDE.getIndex());
-        boolean isSuicidal = parseBoolean(cellValue);
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.WAS_EVENT_SUICIDE.getIndex());
+        boolean isSuicidal = XlsxUtil.parseBoolean(cellValue);
 
-        Date date = getEventDate(yearOfEvent, monthOfEvent, dayOfEvent);
+        Date date = XlsxUtil.getDate(yearOfEvent, monthOfEvent, dayOfEvent);
 
         return eventService.save(EventNode.builder().date(date).summary(eventSummary)
                 .isPartOfMultipleIncidents(isPartOfMultipleIncidents).isSuccessful(isSuccessful)
@@ -243,8 +241,8 @@ class OnApplicationStartupEventListener {
 
     private TargetNode saveTarget(Row row, CountryNode country) {
 
-        String cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
-        String targetName = cellValue.isEmpty() || isUnknown(cellValue) ? DEFAULT_TARGET : cellValue;
+        String cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.TARGET_NAME.getIndex());
+        String targetName = cellValue.isEmpty() || XlsxUtil.isUnknown(cellValue) ? DEFAULT_TARGET : cellValue;
 
         return targetService.save(new TargetNode(targetName, country));
     }
@@ -254,25 +252,25 @@ class OnApplicationStartupEventListener {
 
         String cellValue;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_FATALITIES.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_FATALITIES.getIndex());
         long totalNumberOfFatalities = 0;
-        totalNumberOfFatalities = getPositiveValue(cellValue, totalNumberOfFatalities);
+        totalNumberOfFatalities = XlsxUtil.getPositiveValue(cellValue, totalNumberOfFatalities);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_FATALITIES.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_FATALITIES.getIndex());
         long numberOfPerpetratorFatalities = 0;
-        numberOfPerpetratorFatalities = getPositiveValue(cellValue, numberOfPerpetratorFatalities);
+        numberOfPerpetratorFatalities = XlsxUtil.getPositiveValue(cellValue, numberOfPerpetratorFatalities);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_INJURED.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.TOTAL_NUMBER_OF_INJURED.getIndex());
         long totalNumberOfInjured = 0;
-        totalNumberOfInjured = getPositiveValue(cellValue, totalNumberOfInjured);
+        totalNumberOfInjured = XlsxUtil.getPositiveValue(cellValue, totalNumberOfInjured);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_INJURED.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.NUMBER_OF_PERPETRATOR_INJURED.getIndex());
         long numberOfPerpetratorInjured = 0;
-        numberOfPerpetratorInjured = getPositiveValue(cellValue, numberOfPerpetratorInjured);
+        numberOfPerpetratorInjured = XlsxUtil.getPositiveValue(cellValue, numberOfPerpetratorInjured);
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.VALUE_OF_PROPERTY_DAMAGE.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.VALUE_OF_PROPERTY_DAMAGE.getIndex());
         long valueOfPropertyDamage = 0;
-        valueOfPropertyDamage = getPositiveValue(cellValue, valueOfPropertyDamage);
+        valueOfPropertyDamage = XlsxUtil.getPositiveValue(cellValue, valueOfPropertyDamage);
 
         VictimNode victim = VictimNode.builder()
                 .totalNumberOfFatalities(totalNumberOfFatalities)
@@ -287,7 +285,7 @@ class OnApplicationStartupEventListener {
 
     private CountryNode saveCountry(Row row, RegionNode regionNode) {
 
-        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
+        String name = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.COUNTRY_NAME.getIndex());
 
         CountryNode country = new CountryNode(name, regionNode);
 
@@ -307,7 +305,7 @@ class OnApplicationStartupEventListener {
 
     private RegionNode saveRegion(Row row) {
 
-        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.REGION_NAME.getIndex());
+        String name = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.REGION_NAME.getIndex());
 
         RegionNode region = new RegionNode(name);
 
@@ -327,7 +325,7 @@ class OnApplicationStartupEventListener {
 
     private ProvinceNode saveProvince(Row row, CountryNode country) {
 
-        String name = getCellValueFromRowOnIndex(row, XlsxColumnType.PROVINCE_NAME.getIndex());
+        String name = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.PROVINCE_NAME.getIndex());
 
         ProvinceNode province = new ProvinceNode(name, country);
 
@@ -349,14 +347,14 @@ class OnApplicationStartupEventListener {
 
         String cellValue;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_NAME.getIndex());
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_NAME.getIndex());
         String name = cellValue;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LATITUDE.getIndex());
-        double latitude = isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LATITUDE.getIndex());
+        double latitude = XlsxUtil.isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
 
-        cellValue = getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LONGITUDE.getIndex());
-        double longitude = isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
+        cellValue = XlsxUtil.getCellValueFromRowOnIndex(row, XlsxColumnType.CITY_LONGITUDE.getIndex());
+        double longitude = XlsxUtil.isNumeric(cellValue) ? Double.parseDouble(cellValue) : 0;
 
         CityNode city = new CityNode(name, latitude, longitude, province);
 
@@ -372,99 +370,5 @@ class OnApplicationStartupEventListener {
 
             return city;
         }
-    }
-
-    private Date getEventDate(int yearOfEvent, int monthOfEvent, int dayOfEvent) {
-
-        monthOfEvent = isMonthCorrect(monthOfEvent) ? monthOfEvent - 1 : 0;
-        dayOfEvent = isDayCorrect(dayOfEvent) ? dayOfEvent : 1;
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.YEAR, yearOfEvent);
-        cal.set(Calendar.MONTH, monthOfEvent);
-        cal.set(Calendar.DAY_OF_MONTH, dayOfEvent);
-
-        return cal.getTime();
-    }
-
-    private String getCellValueFromRowOnIndex(Row row, int index) {
-
-        Cell cell = row.getCell(index, MissingCellPolicy.CREATE_NULL_AS_BLANK);
-
-        String value = "";
-
-        switch (cell.getCellType()) {
-
-            case NUMERIC:
-                double doubleValue = cell.getNumericCellValue();
-                value = Double.toString(doubleValue);
-                break;
-
-            case STRING:
-                value = cell.getStringCellValue();
-                break;
-
-            case FORMULA:
-                value = cell.getCellFormula();
-                break;
-
-            case BOOLEAN:
-                boolean booleanValue = cell.getBooleanCellValue();
-                value = "" + booleanValue;
-                break;
-
-            case ERROR:
-                byte byteValue = cell.getErrorCellValue();
-                value = "" + byteValue;
-                break;
-
-            case BLANK:
-            case _NONE:
-            default:
-                break;
-        }
-
-        return value;
-    }
-
-    private boolean isUnknown(String name) {
-
-        return name.equalsIgnoreCase("unknown");
-    }
-
-    private boolean isMonthCorrect(int monthOfEvent) {
-
-        return monthOfEvent > 0 && monthOfEvent <= 12;
-    }
-
-    private boolean isDayCorrect(int dayOfEvent) {
-
-        return dayOfEvent > 0 && dayOfEvent <= 31;
-    }
-
-    private boolean isNumeric(String number) {
-
-        return NumberUtils.isParsable(number);
-    }
-
-    private long getPositiveValue(String cellValue, long value) {
-
-        if (isNumeric(cellValue)) {
-            value = (long) Double.parseDouble(cellValue);
-            value = value >= 0 ? value : 0;
-        }
-
-        return value;
-    }
-
-    private int parseInt(String stringToParse) {
-
-        return (int) Double.parseDouble(stringToParse);
-    }
-
-    private boolean parseBoolean(String stringToParse) {
-
-        return "1".equals(stringToParse) || "1.0".equals(stringToParse);
     }
 }
