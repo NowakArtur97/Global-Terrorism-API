@@ -6,13 +6,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import User from 'src/app/auth/models/user.model';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
 import Event from '../models/event.model';
-import EventService from '../services/event.service';
 import { selectAllEvents } from '../store/event.reducer';
 
 @Component({
@@ -31,10 +28,7 @@ import { selectAllEvents } from '../store/event.reducer';
   ],
 })
 export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
-  // TODO: Clean up
-  private userSubscription$: Subscription;
   private eventsSubscription$: Subscription;
-  private user: User;
 
   displayedColumns: string[] = [
     'select',
@@ -53,17 +47,9 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(
-    private store: Store<AppStoreState>,
-    private eventService: EventService
-  ) {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.userSubscription$ = this.store
-      .select('auth')
-      .pipe(map((authStore) => authStore.user))
-      .subscribe((user: User) => (this.user = user));
-
     this.eventsSubscription$ = this.store
       .select(selectAllEvents)
       .subscribe(
