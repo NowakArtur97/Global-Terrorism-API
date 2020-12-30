@@ -1,7 +1,11 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { Store, StoreModule } from '@ngrx/store';
 import { of, ReplaySubject, throwError } from 'rxjs';
+import { AuthStoreState } from 'src/app/auth/store/auth.reducer';
+import AppStoreState from 'src/app/store/app.state';
+import { environment } from 'src/environments/environment';
 
 import EventsGetResponse from '../../models/events-get-response.model';
 import EventService from '../../services/event.service';
@@ -11,6 +15,7 @@ import EventEffects from '../event.effects';
 describe('EventEffects', () => {
   let eventEffects: EventEffects;
   let actions$: ReplaySubject<any>;
+  let store: Store<AppStoreState>;
   let eventService: EventService;
 
   const event = {
@@ -60,8 +65,10 @@ describe('EventEffects', () => {
 
   beforeEach(() =>
     TestBed.configureTestingModule({
+      imports: [StoreModule.forRoot({})],
       providers: [
         EventEffects,
+        Store,
         provideMockActions(() => actions$),
         {
           provide: EventService,
@@ -71,6 +78,7 @@ describe('EventEffects', () => {
             'add',
             'update',
             'delete',
+            'deleteAll',
           ]),
         },
       ],
@@ -79,6 +87,7 @@ describe('EventEffects', () => {
 
   beforeEach(() => {
     eventEffects = TestBed.inject(EventEffects);
+    store = TestBed.inject(Store);
     eventService = TestBed.inject(EventService);
   });
 
@@ -359,6 +368,146 @@ describe('EventEffects', () => {
         expect(resultAction).toEqual(
           EventActions.httpError({
             errorMessages: errorResponse.error.errors,
+          })
+        );
+      });
+    });
+  });
+
+  describe('deleteEventsStart$', () => {
+    const eventToDelete = {
+      id: 6,
+      summary: 'summary',
+      motive: 'motive',
+      date: new Date(),
+      isPartOfMultipleIncidents: false,
+      isSuccessful: true,
+      isSuicidal: false,
+      target: {
+        id: 3,
+        target: 'target',
+        countryOfOrigin: { id: 1, name: 'country' },
+      },
+      city: {
+        id: 4,
+        name: 'city',
+        latitude: 20,
+        longitude: 10,
+        province: {
+          id: 2,
+          name: 'province',
+          country: { id: 1, name: 'country' },
+        },
+      },
+      victim: {
+        id: 5,
+        totalNumberOfFatalities: 10,
+        numberOfPerpetratorsFatalities: 2,
+        totalNumberOfInjured: 12,
+        numberOfPerpetratorsInjured: 2,
+        valueOfPropertyDamage: 2200,
+      },
+    };
+    const eventToDelete2 = {
+      id: 12,
+      summary: 'summary 2',
+      motive: 'motive 2',
+      date: new Date(),
+      isPartOfMultipleIncidents: true,
+      isSuccessful: false,
+      isSuicidal: true,
+      target: {
+        id: 9,
+        target: 'target 2',
+        countryOfOrigin: { id: 7, name: 'country 2' },
+      },
+      city: {
+        id: 10,
+        name: 'city 2',
+        latitude: 10,
+        longitude: 20,
+        province: {
+          id: 8,
+          name: 'province 2',
+          country: { id: 7, name: 'country 2' },
+        },
+      },
+      victim: {
+        id: 11,
+        totalNumberOfFatalities: 10,
+        numberOfPerpetratorsFatalities: 2,
+        totalNumberOfInjured: 11,
+        numberOfPerpetratorsInjured: 6,
+        valueOfPropertyDamage: 7000,
+      },
+    };
+    const stateWithUser: AuthStoreState = {
+      user: {
+        token: 'token',
+        expirationDate: new Date(Date.now() + 36000000),
+      },
+      authErrorMessages: [],
+      isLoading: false,
+      userLocation: [20, 10],
+    };
+
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+      actions$.next(
+        EventActions.deleteEventsStart({
+          eventsToDelete: [eventToDelete, eventToDelete2],
+        })
+      );
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === 'auth') {
+          return of(stateWithUser);
+        }
+      });
+    });
+
+    it('should return a deleteEvents action', () => {
+      (eventService.deleteAll as jasmine.Spy).and.returnValue(of(null));
+
+      eventEffects.deleteEventsStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.deleteEvents({
+            eventsDeletedIds: [eventToDelete.id, eventToDelete2.id],
+          })
+        );
+        expect(eventService.deleteAll).toHaveBeenCalled();
+      });
+    });
+
+    it('should return httpError action on failure', () => {
+      (eventService.deleteAll as jasmine.Spy).and.returnValue(
+        throwError(errorResponse)
+      );
+
+      eventEffects.deleteEventsStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponse.error.errors,
+          })
+        );
+      });
+    });
+
+    it('should return httpError action on bulk size error', () => {
+      const errorResponseWithBulkError = new HttpErrorResponse({
+        error: `Bulk operations exceed the limitation(${environment.bulkApiLimit})`,
+        headers: new HttpHeaders('headers'),
+        status: 401,
+        statusText: 'OK',
+        url: 'http://localhost:8080/api/v1',
+      });
+      (eventService.deleteAll as jasmine.Spy).and.returnValue(
+        throwError(errorResponseWithBulkError)
+      );
+
+      eventEffects.deleteEventsStart$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          EventActions.httpError({
+            errorMessages: errorResponseWithBulkError.error,
           })
         );
       });
