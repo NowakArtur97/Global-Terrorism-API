@@ -8,7 +8,12 @@
       #input
     />
   </mat-form-field>
-  <button mat-raised-button color="warn" (click)="deleteSelectedEvents()">
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="deleteSelectedEvents()"
+    [disabled]="this.selection.selected.length === 0"
+  >
     Delete selected
   </button>
 </div>
