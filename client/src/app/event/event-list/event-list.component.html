@@ -12,7 +12,7 @@
     mat-raised-button
     color="warn"
     (click)="deleteSelectedEvents()"
-    [disabled]="this.selection.selected.length === 0"
+    [disabled]="selection.selected.length === 0"
   >
     Delete selected
   </button>
@@ -112,8 +112,11 @@
     ></tr>
 
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="6">
-        No data matching the filter "{{ input.value }}"
+      <td class="mat-cell" colspan="6" *ngIf="input.value !== ''">
+        No data matching the filter {{ input.value }}.
+      </td>
+      <td class="mat-cell" colspan="6" *ngIf="dataSource.data.length === 0">
+        No data to display.
       </td>
     </tr>
   </table>

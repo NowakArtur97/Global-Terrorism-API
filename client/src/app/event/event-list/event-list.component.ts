@@ -118,10 +118,10 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(EventActions.deleteEventStart({ eventToDelete }));
   }
 
-  // TODO: Check select all strange behavior
   deleteSelectedEvents(): void {
     const eventsToDelete = this.selection.selected;
     this.store.dispatch(EventActions.deleteEventsStart({ eventsToDelete }));
+    this.selection.selected.forEach((row) => this.selection.deselect(row));
   }
 
   private deleteEventFromDataSource(eventToDelete: Event): void {
