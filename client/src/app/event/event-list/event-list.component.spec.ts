@@ -10,7 +10,7 @@ import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
 import EventService from '../services/event.service';
-import { selectAllEvents } from '../store/event.reducer';
+import { selectAllEvents, selectErrorMessages } from '../store/event.reducer';
 import { EventListComponent } from './event-list.component';
 
 describe('EventListComponent', () => {
@@ -52,6 +52,39 @@ describe('EventListComponent', () => {
       valueOfPropertyDamage: 2000,
     },
   };
+  const event2 = {
+    id: 12,
+    summary: 'summary 2',
+    motive: 'motive 2',
+    date: new Date(),
+    isPartOfMultipleIncidents: true,
+    isSuccessful: false,
+    isSuicidal: true,
+    target: {
+      id: 9,
+      target: 'target 2',
+      countryOfOrigin: { id: 7, name: 'country 2' },
+    },
+    city: {
+      id: 10,
+      name: 'city 2',
+      latitude: 10,
+      longitude: 20,
+      province: {
+        id: 8,
+        name: 'province 2',
+        country: { id: 7, name: 'country 2' },
+      },
+    },
+    victim: {
+      id: 11,
+      totalNumberOfFatalities: 10,
+      numberOfPerpetratorsFatalities: 2,
+      totalNumberOfInjured: 11,
+      numberOfPerpetratorsInjured: 6,
+      valueOfPropertyDamage: 7000,
+    },
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -83,50 +116,19 @@ describe('EventListComponent', () => {
       isLoading: false,
       userLocation: [20, 10],
     };
-    const event2 = {
-      id: 12,
-      summary: 'summary 2',
-      motive: 'motive 2',
-      date: new Date(),
-      isPartOfMultipleIncidents: true,
-      isSuccessful: false,
-      isSuicidal: true,
-      target: {
-        id: 9,
-        target: 'target 2',
-        countryOfOrigin: { id: 7, name: 'country 2' },
-      },
-      city: {
-        id: 10,
-        name: 'city 2',
-        latitude: 10,
-        longitude: 20,
-        province: {
-          id: 8,
-          name: 'province 2',
-          country: { id: 7, name: 'country 2' },
-        },
-      },
-      victim: {
-        id: 11,
-        totalNumberOfFatalities: 10,
-        numberOfPerpetratorsFatalities: 2,
-        totalNumberOfInjured: 11,
-        numberOfPerpetratorsInjured: 6,
-        valueOfPropertyDamage: 7000,
-      },
-    };
 
     spyOn(store, 'select').and.callFake((selector) => {
       if (selector === selectAllEvents) {
         return of([event, event2]);
+      } else if (selector === selectErrorMessages) {
+        return of([]);
       } else if (selector === 'auth') {
         return of(stateWithUser);
       }
     });
     spyOn(store, 'dispatch');
 
-    spyOn(eventService, 'deleteAll').and.callFake(() => {});
+    spyOn(eventService, 'deleteAll').and.callFake(() => of({}));
 
     component.expandedElement = event;
 
@@ -159,6 +161,19 @@ describe('EventListComponent', () => {
 
       expect(store.dispatch).toHaveBeenCalledWith(
         EventActions.deleteEventStart({ eventToDelete: event })
+      );
+    });
+  });
+
+  describe('when delete events', () => {
+    it('should dispatch deleteEventsStart action', () => {
+      component.deleteEvent(event);
+      component.selection.select(event, event2);
+
+      component.deleteSelectedEvents();
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        EventActions.deleteEventsStart({ eventsToDelete: [event, event2] })
       );
     });
   });
