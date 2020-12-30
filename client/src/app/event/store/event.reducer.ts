@@ -1,11 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { selectUserLocation } from 'src/app/auth/store/auth.reducer';
 
 import Event from '../models/event.model';
@@ -102,6 +96,22 @@ const _eventReducer = createReducer(
     return eventAdapter.removeOne(eventDeleted.id, {
       ...state,
       lastDeletedEvent: eventDeleted,
+      isLoading: false,
+      errorMessages: [],
+    });
+  }),
+
+  on(EventActions.deleteEventsStart, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+      errorMessages: [],
+    };
+  }),
+
+  on(EventActions.deleteEvents, (state, { eventsDeletedIds }) => {
+    return eventAdapter.removeMany(eventsDeletedIds, {
+      ...state,
       isLoading: false,
       errorMessages: [],
     });

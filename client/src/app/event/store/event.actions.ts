@@ -54,6 +54,16 @@ export const deleteEvent = createAction(
   props<{ eventDeleted: Event }>()
 );
 
+export const deleteEventsStart = createAction(
+  '[Event] Delete Events Start',
+  props<{ eventsToDelete: Event[] }>()
+);
+
+export const deleteEvents = createAction(
+  '[Event] Delete Events',
+  props<{ eventsDeletedIds: number[] }>()
+);
+
 export const httpError = createAction(
   '[Event] Http Error',
   props<{
