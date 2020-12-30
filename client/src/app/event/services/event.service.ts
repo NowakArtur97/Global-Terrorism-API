@@ -67,18 +67,18 @@ export default class EventService extends GenericRestService<EventsGetResponse> 
     if (events.length === 0) {
       return;
     }
-
+    const eventsUrl = '/api/v1/events';
     const body: BulkRequest = { operations: [] };
     events.forEach((event) => {
       const requestMethod: BulkRequestMethod = {
         method: 'DELETE',
-        url: `/api/v1/events/${event.id}`,
-        headers: { Authentication: `Bearer ${user.token}` },
+        url: `${eventsUrl}/${event.id}`,
+        headers: { Authorization: `Bearer ${user.token}` },
       };
       body.operations.push(requestMethod);
     });
 
-    this.httpClient.post<BulkRequest>(
+    return this.httpClient.post<BulkRequest>(
       `${environment.baseApiUrl}/${environment.bulkRequestUrl}`,
       body
     );

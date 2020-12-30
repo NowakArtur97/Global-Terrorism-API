@@ -11,12 +11,12 @@
   <button mat-raised-button color="warn" (click)="deleteSelectedEvents()">
     Delete selected
   </button>
-  <mat-error *ngFor="let errorMessage of deleteEventsErrors">
-    <p>{{ errorMessage }}</p>
-  </mat-error>
 </div>
 
 <div class="mat-elevation-z8">
+  <mat-error *ngFor="let errorMessage of deleteEventsErrors">
+    <p>{{ errorMessage }}</p>
+  </mat-error>
   <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
