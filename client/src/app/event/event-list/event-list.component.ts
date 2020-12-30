@@ -10,7 +10,7 @@ import AppStoreState from 'src/app/store/app.state';
 
 import * as EventActions from '../../event/store/event.actions';
 import Event from '../models/event.model';
-import { selectAllEvents } from '../store/event.reducer';
+import { selectAllEvents, selectErrorMessages } from '../store/event.reducer';
 
 @Component({
   selector: 'app-event-list',
@@ -59,10 +59,8 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
       );
 
     this.deleteEventsErrorsSubscription$ = this.store
-      .select('event')
-      .subscribe(
-        (eventState) => (this.deleteEventsErrors = eventState.errorMessages)
-      );
+      .select(selectErrorMessages)
+      .subscribe((errorMessages) => (this.deleteEventsErrors = errorMessages));
   }
 
   ngOnDestroy(): void {

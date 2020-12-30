@@ -150,6 +150,7 @@ const getLastDeletedEvent = (state: EventStoreState) => state.lastDeletedEvent;
 const getEndDateOfEvents = (state: EventStoreState) => state.endDateOfEvents;
 const getMaxRadiusOfEventsDetection = (state: EventStoreState) =>
   state.maxRadiusOfEventsDetection;
+const getErrorMessages = (state: EventStoreState) => state.errorMessages;
 
 const { selectAll, selectEntities, selectTotal } = eventAdapter.getSelectors();
 
@@ -220,4 +221,8 @@ export const selectAllEventsInRadius = createSelector(
       });
     }
   }
+);
+export const selectErrorMessages = createSelector(
+  selectEventState,
+  getErrorMessages
 );
