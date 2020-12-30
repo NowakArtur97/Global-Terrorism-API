@@ -11,6 +11,9 @@
   <button mat-raised-button color="warn" (click)="deleteSelectedEvents()">
     Delete selected
   </button>
+  <mat-error *ngFor="let errorMessage of deleteEventsErrors">
+    <p>{{ errorMessage }}</p>
+  </mat-error>
 </div>
 
 <div class="mat-elevation-z8">

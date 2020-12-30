@@ -29,6 +29,8 @@ import { selectAllEvents } from '../store/event.reducer';
 })
 export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   private eventsSubscription$: Subscription;
+  private deleteEventsErrorsSubscription$: Subscription;
+  deleteEventsErrors: string[] = [];
 
   displayedColumns: string[] = [
     'select',
@@ -55,10 +57,17 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(
         (events: Event[]) => (this.dataSource = new MatTableDataSource(events))
       );
+
+    this.deleteEventsErrorsSubscription$ = this.store
+      .select('event')
+      .subscribe(
+        (eventState) => (this.deleteEventsErrors = eventState.errorMessages)
+      );
   }
 
   ngOnDestroy(): void {
     this.eventsSubscription$?.unsubscribe();
+    this.deleteEventsErrorsSubscription$?.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -112,7 +121,6 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
   // TODO: Check select all strange behavior
   deleteSelectedEvents(): void {
     const eventsToDelete = this.selection.selected;
-    // this.eventService.deleteAll(selectedEvents, this.user);
     this.store.dispatch(EventActions.deleteEventsStart({ eventsToDelete }));
   }
 
