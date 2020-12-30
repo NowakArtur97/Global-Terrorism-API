@@ -15,7 +15,7 @@ import * as EventActions from './event.actions';
 export default class EventEffects {
   constructor(
     private actions$: Actions,
-    private store$: Store<AppStoreState>,
+    private store: Store<AppStoreState>,
     private eventService: EventService
   ) {}
 
@@ -92,7 +92,7 @@ export default class EventEffects {
   deleteEventsStart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventActions.deleteEventsStart),
-      withLatestFrom(this.store$.select((state) => state.auth.user)),
+      withLatestFrom(this.store.select((state) => state.auth.user)),
       switchMap(([action, user]) =>
         this.eventService.deleteAll(action.eventsToDelete, user).pipe(
           map(() =>
