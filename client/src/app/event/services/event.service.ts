@@ -63,7 +63,7 @@ export default class EventService extends GenericRestService<EventsGetResponse> 
     );
   }
 
-  deleteAll(events: Event[], user: User): void {
+  deleteAll(events: Event[], user: User): Observable<{}> {
     if (events.length === 0) {
       return;
     }

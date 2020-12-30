@@ -31,6 +31,7 @@ import { selectAllEvents } from '../store/event.reducer';
   ],
 })
 export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
+  // TODO: Clean up
   private userSubscription$: Subscription;
   private eventsSubscription$: Subscription;
   private user: User;
@@ -124,9 +125,9 @@ export class EventListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // TODO: Check select all strange behavior
   deleteSelectedEvents(): void {
-    const selectedEvents = this.selection.selected;
-    this.eventService.deleteAll(selectedEvents, this.user);
-    // TODO: Create and dispatch action
+    const eventsToDelete = this.selection.selected;
+    // this.eventService.deleteAll(selectedEvents, this.user);
+    this.store.dispatch(EventActions.deleteEventsStart({ eventsToDelete }));
   }
 
   private deleteEventFromDataSource(eventToDelete: Event): void {

@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import ErrorResponse from 'src/app/common/models/error-response.model';
+import AppStoreState from 'src/app/store/app.state';
 
 import EventService from '../services/event.service';
 import * as EventActions from './event.actions';
 
 @Injectable()
 export default class EventEffects {
-  constructor(private actions$: Actions, private eventService: EventService) {}
+  constructor(
+    private actions$: Actions,
+    private store$: Store<AppStoreState>,
+    private eventService: EventService
+  ) {}
 
   fetchEvents$ = createEffect(() =>
     this.actions$.pipe(
@@ -73,6 +79,23 @@ export default class EventEffects {
           map(() =>
             EventActions.deleteEvent({
               eventDeleted: eventToDelete,
+            })
+          ),
+          catchError((errorResponse) => this.handleError(errorResponse.error))
+        )
+      )
+    )
+  );
+
+  deleteEventsStart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventActions.deleteEventsStart),
+      withLatestFrom(this.store$.select((state) => state.auth.user)),
+      switchMap(([action, user]) =>
+        this.eventService.deleteAll(action.eventsToDelete, user).pipe(
+          map(() =>
+            EventActions.deleteEvents({
+              eventsDeletedIds: action.eventsToDelete.map((event) => event.id),
             })
           ),
           catchError((errorResponse) => this.handleError(errorResponse.error))
