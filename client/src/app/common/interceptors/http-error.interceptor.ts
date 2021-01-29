@@ -2,6 +2,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export default class HttpErrorInterceptor implements HttpInterceptor {
@@ -17,7 +18,9 @@ export default class HttpErrorInterceptor implements HttpInterceptor {
           error =
             'There was a problem with accessing the page. Please try again in a moment.';
         }
-        console.log(err);
+        if (!environment.production) {
+          console.log(err);
+        }
         return throwError(err);
       })
     );
