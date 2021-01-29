@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  neo4j:
+    restart: always
+    image: neo4j:4.1.2
+    container_name: neo4j
+    volumes:
+      - ./conf:/conf
+      - ./data:/data
+      - ./import:/import
+      - ./logs:/logs
+      - ./plugins:/plugins
+    environment:
+      - NEO4J_AUTH=neo4j/secret
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms.memory.heap.initial_size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G
+    ports:
+      - 7474:7474
+      - 7687:7687
