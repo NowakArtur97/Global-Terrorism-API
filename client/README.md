@@ -17,6 +17,7 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
+!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/
 It may take a while for the application to start.
 

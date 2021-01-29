@@ -17,11 +17,12 @@
 
 REST API providing information on terrorist attacks
 
-The data was downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
+The data has been downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
 
 ## Demo
 
-The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#/ It may take a while for the application to start.
+!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
+The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#/ It may take a while for the application to start. 
 
 To access the endpoints you must have an account. You can use the previously prepared account:
 
@@ -37,15 +38,18 @@ To access the endpoints you must have an account. You can use the previously pre
 
 ## Setup
 
-To start the application, in the "server" folder, enter the following commands in command line:
+To start the application, in the folder, enter the following commands in command line:
 
 - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
-- `docker-compose up`
-  Go to: `http://YOUR_DOCKER_IP:8080/swagger-ui.html`,
-  where YOUR_DOCKER_IP is your docker machine IP address.
-  To stop the application, enter the following key combination on the command line: `Ctrl + C`
+- `docker-compose up -d`
+  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:8080/swagger-ui.html`,
+  where YOUR_DOCKER_IP is your docker machine IP address (or localhost).
   To shut down the containers enter:
 - `docker-compose down`
+
+For a development use commands:
+- `docker-compose -f docker-compose.dev.yml up -d`
+- `docker-compose -f docker-compose.dev.yml down`
 
 Use the login details provided above to generate the token or create new account by sending the appropriate request:
 
@@ -106,9 +110,9 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Jackson (jackson-datatype-jsr353) - 2.10.2
 - JSON Web Token Support For The JVM (jjwt) - 0.9.1
 - Passay - 1.6.0
+- Neo4j
 - Maven
 - Docker
-- Neo4j
 - CircleCI
 
 ## Features

@@ -14,6 +14,7 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
+!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demos are available on the Heroku platform.
 
 Swagger 2 API Documentation: https://global-terrorism-api.herokuapp.com/swagger-ui.html#
