@@ -27,7 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    @Value("#{'${jwt.ignoredEndpoints}'.split(',')}")
+    @Value("#{'${app.jwt.ignoredEndpoints}'.split(',')}")
     private List<String> ignoredEndpointsList;
 
     @Override

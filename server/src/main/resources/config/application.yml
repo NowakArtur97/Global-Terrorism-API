@@ -3,7 +3,6 @@
 #
 spring:
   profiles:
-    #    active: docker
     active: ${SPRING_ACTIVE_PROFILE:ci}
   bulk:
     api:
@@ -14,28 +13,30 @@ spring:
 #
 server:
   port: 8080
-#
-# Swagger Custom Properties
-#
-swagger:
-  authorizationHeader: Authorization
-  contactEmail: https://github.com/NowakArtur97
-  contactName: Artur Nowak
-  contactUrl: https://github.com/NowakArtur97
-  description: REST API providing information on terrorist attacks
-  license: MIT
-  licenseUrl: https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE
-  pathSelectors: /api/**
-  termsOfServiceUrl: https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE
-  title: Global Terrorism API
-  version: 1.0
-#
-# JWT
-#
-jwt:
-  secretKey: secret
-  ignoredEndpoints: /registration,/authentication,/v2/api-docs,/configuration/ui,/swagger-resources,/configuration/security,/swagger-ui.html,/webjars
-  ignoredAntMatchers: /api/v1/registration/**,/api/v1/authentication/**,/v2/api-docs,/configuration/ui,/swagger-resources/**,/configuration/security,/swagger-ui.html,/webjars/**
-
+  #
+  # Custom Properties
+  #
 app:
   dataFilePath: data/globalterrorismdb_0919dist-mini.xlsx
+  #
+  # Swagger Custom Properties
+  #
+  swagger:
+    authorizationHeader: Authorization
+    contactEmail: https://github.com/NowakArtur97
+    contactName: Artur Nowak
+    contactUrl: https://github.com/NowakArtur97
+    description: REST API providing information on terrorist attacks
+    license: MIT
+    licenseUrl: https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE
+    pathSelectors: /api/**
+    termsOfServiceUrl: https://github.com/NowakArtur97/GlobalTerrorismAPI/blob/master/LICENSE
+    title: Global Terrorism API
+    version: 1.0
+  #
+  # JWT
+  #
+  jwt:
+    secretKey: secret
+    ignoredEndpoints: /registration,/authentication,/v2/api-docs,/configuration/ui,/swagger-resources,/configuration/security,/swagger-ui.html,/webjars
+    ignoredAntMatchers: /api/v1/registration/**,/api/v1/authentication/**,/v2/api-docs,/configuration/ui,/swagger-resources/**,/configuration/security,/swagger-ui.html,/webjars/**

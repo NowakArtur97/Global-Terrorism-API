@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConfigurationProperties(prefix = "swagger")
+@ConfigurationProperties(prefix = "app.swagger")
 @ConstructorBinding
 @Getter
 @AllArgsConstructor

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice(basePackages = "com.nowakArtur97.globalTerrorismAPI.feature")
-@Slf4j
 public class RestResponseGlobalEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override

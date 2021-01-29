@@ -29,7 +29,7 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ExceptionHandlerFilter exceptionHandlerFilter;
 
-    @Value("${jwt.ignoredAntMatchers}")
+    @Value("${app.jwt.ignoredAntMatchers}")
     private String[] ignoredAntMatchers;
 
     @Bean
