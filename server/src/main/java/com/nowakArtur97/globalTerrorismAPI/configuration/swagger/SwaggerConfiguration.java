@@ -1,6 +1,5 @@
 package com.nowakArtur97.globalTerrorismAPI.configuration.swagger;
 
-import com.nowakArtur97.globalTerrorismAPI.configuration.BulkApiConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventTag;
@@ -65,9 +64,6 @@ class SwaggerConfiguration {
 
     private ApiInfo getApiDetails(SwaggerConfigurationProperties swaggerConfigurationProperties) {
 
-        Contact contact = new Contact(swaggerConfigurationProperties.getContactName(),
-                swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
-
         return new ApiInfoBuilder()
                 .version(swaggerConfigurationProperties.getVersion())
                 .title(swaggerConfigurationProperties.getTitle())
@@ -75,8 +71,14 @@ class SwaggerConfiguration {
                 .termsOfServiceUrl(swaggerConfigurationProperties.getTermsOfServiceUrl())
                 .license(swaggerConfigurationProperties.getLicense())
                 .licenseUrl(swaggerConfigurationProperties.getLicenseUrl())
-                .contact(contact)
+                .contact(getContact(swaggerConfigurationProperties))
                 .build();
+    }
+
+    private Contact getContact(SwaggerConfigurationProperties swaggerConfigurationProperties) {
+
+        return new Contact(swaggerConfigurationProperties.getContactName(),
+                swaggerConfigurationProperties.getContactUrl(), swaggerConfigurationProperties.getContactEmail());
     }
 
     private ApiKey getApiKey(SwaggerConfigurationProperties swaggerConfigurationProperties) {

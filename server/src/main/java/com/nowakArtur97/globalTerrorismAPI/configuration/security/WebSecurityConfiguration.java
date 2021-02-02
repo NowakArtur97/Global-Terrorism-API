@@ -1,8 +1,6 @@
-package com.nowakArtur97.globalTerrorismAPI.configuration;
+package com.nowakArtur97.globalTerrorismAPI.configuration.security;
 
 import com.nowakArtur97.globalTerrorismAPI.feature.user.shared.CustomUserDetailsService;
-import com.nowakArtur97.globalTerrorismAPI.filter.ExceptionHandlerFilter;
-import com.nowakArtur97.globalTerrorismAPI.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

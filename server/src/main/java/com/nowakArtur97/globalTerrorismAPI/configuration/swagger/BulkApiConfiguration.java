@@ -1,4 +1,4 @@
-package com.nowakArtur97.globalTerrorismAPI.configuration;
+package com.nowakArtur97.globalTerrorismAPI.configuration.swagger;
 
 import com.github.wnameless.spring.bulkapi.EnableBulkApi;
 import org.springframework.context.annotation.Configuration;
