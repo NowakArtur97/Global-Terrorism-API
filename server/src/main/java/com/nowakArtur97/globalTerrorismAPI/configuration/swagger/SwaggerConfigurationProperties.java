@@ -1,4 +1,4 @@
-package com.nowakArtur97.globalTerrorismAPI.configuration;
+package com.nowakArtur97.globalTerrorismAPI.configuration.swagger;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

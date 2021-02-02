@@ -1,4 +1,4 @@
-package com.nowakArtur97.globalTerrorismAPI.filter;
+package com.nowakArtur97.globalTerrorismAPI.configuration.security;
 
 import com.nowakArtur97.globalTerrorismAPI.common.exception.JwtTokenMissingException;
 import com.nowakArtur97.globalTerrorismAPI.common.util.JwtUtil;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class JwtRequestFilter extends OncePerRequestFilter {
+class JwtRequestFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
 

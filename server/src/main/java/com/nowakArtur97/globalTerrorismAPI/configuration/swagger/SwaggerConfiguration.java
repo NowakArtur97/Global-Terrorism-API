@@ -1,5 +1,6 @@
-package com.nowakArtur97.globalTerrorismAPI.configuration;
+package com.nowakArtur97.globalTerrorismAPI.configuration.swagger;
 
+import com.nowakArtur97.globalTerrorismAPI.configuration.BulkApiConfiguration;
 import com.nowakArtur97.globalTerrorismAPI.feature.city.CityTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.country.CountryTag;
 import com.nowakArtur97.globalTerrorismAPI.feature.event.EventTag;

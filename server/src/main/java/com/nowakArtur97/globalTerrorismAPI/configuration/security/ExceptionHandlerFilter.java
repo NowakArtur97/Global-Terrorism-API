@@ -1,4 +1,4 @@
-package com.nowakArtur97.globalTerrorismAPI.filter;
+package com.nowakArtur97.globalTerrorismAPI.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nowakArtur97.globalTerrorismAPI.common.baseModel.ErrorResponse;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class ExceptionHandlerFilter extends OncePerRequestFilter {
+class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
 
