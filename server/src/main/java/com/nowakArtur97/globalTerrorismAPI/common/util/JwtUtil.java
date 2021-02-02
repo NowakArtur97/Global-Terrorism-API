@@ -17,7 +17,7 @@ public class JwtUtil {
 
     public static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
 
-    @Value("${jwt.secretKey:secret}")
+    @Value("${app.jwt.secretKey:secret}")
     private String secretKey;
 
     public String generateToken(UserDetails userDetails) {
