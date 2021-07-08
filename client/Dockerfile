@@ -3,7 +3,7 @@ FROM node:12.7-alpine AS build
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app/
 RUN npm install
-RUN npm run build --configuration=docker
+RUN node_modules/.bin/ng build --configuration=docker
 
 ### STAGE 2: Run ###
 FROM nginx:1.17.1-alpine
