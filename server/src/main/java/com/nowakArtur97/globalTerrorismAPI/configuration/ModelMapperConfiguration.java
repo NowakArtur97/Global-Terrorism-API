@@ -19,7 +19,7 @@ class ModelMapperConfiguration {
 
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
-		Converter<JsonValue, CountryNode> myConverter = context -> {
+		Converter<JsonValue, CountryNode> countryConverter = context -> {
 
 			CountryNode destination = context.getDestination();
 
@@ -28,7 +28,7 @@ class ModelMapperConfiguration {
 			return destination;
 		};
 
-		modelMapper.addConverter(myConverter);
+		modelMapper.addConverter(countryConverter);
 
 		return modelMapper;
 	}

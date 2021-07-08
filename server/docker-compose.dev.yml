@@ -3,7 +3,7 @@ version: '3.7'
 services:
   neo4j:
     restart: always
-    image: neo4j:4.1.2
+    image: neo4j:4.1.4
     container_name: neo4j
     volumes:
       - ./conf:/conf

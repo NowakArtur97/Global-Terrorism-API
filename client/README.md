@@ -17,7 +17,7 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
+### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/
 It may take a while for the application to start.
 
@@ -44,6 +44,17 @@ Run `ng test` to execute the unit tests via Karma.
 
 Run `ng e2e` to execute the end-to-end tests via Protractor.
 
+## Using docker-compose
+
+To start the application, in the folder, enter the following commands in command line:
+
+- `docker-compose up -d`
+  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:4200/map` where `YOUR_DOCKER_IP` is your docker machine IP address (or localhost).
+  Make sure you have launched the backend application before this.
+  It may be necessary to change the API address in the `environment.docker.ts` file in case of a different Docker address.
+  To shut down the containers enter:
+- `docker-compose down`
+
 ## Built With
 
 - AngularJS - 10.1.1
@@ -60,6 +71,8 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 - Jasmine - 3.6.0
 - Karma - 5.0.0
 - Protractor - 7.0.0
+- Docker
+- CircleCI
 
 ## Features
 

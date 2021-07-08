@@ -4,6 +4,7 @@
 
 - [General info](#general-info)
 - [Demo](#demo)
+- [Setup](#setup)
 - [Built With](#built-with)
 - [Status](#status)
 - [Screenshots](#screenshots)
@@ -14,7 +15,7 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
+### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demos are available on the Heroku platform.
 
 Swagger 2 API Documentation: https://global-terrorism-api.herokuapp.com/swagger-ui.html#
@@ -44,6 +45,18 @@ Backend:
 https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server
 Frontend:
 https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
+
+## Setup
+
+To start the application, in the folder, enter the following commands in command line:
+
+- In the `server` folder run: `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
+- `docker-compose up -d`
+  API available at: `http://YOUR_DOCKER_IP_OR_LOCALHOST:8080/swagger-ui.html` and frontend application at: `http://YOUR_DOCKER_IP_OR_LOCALHOST:4200/map`,
+  where `YOUR_DOCKER_IP` is your docker machine IP address (or localhost).
+  It may be necessary to change the API address in the `environment.docker.ts` file in case of a different Docker address. You can do this in the folder with the frontend application.
+  To shut down the containers enter:
+- `docker-compose down`
 
 ## Built With
 

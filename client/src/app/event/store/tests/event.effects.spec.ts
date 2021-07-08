@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { of, ReplaySubject, throwError } from 'rxjs';
-import AppStoreState from 'src/app/store/app.state';
 
 import EventsGetResponse from '../../models/events-get-response.model';
 import EventService from '../../services/event.service';
@@ -13,7 +12,6 @@ import EventEffects from '../event.effects';
 describe('EventEffects', () => {
   let eventEffects: EventEffects;
   let actions$: ReplaySubject<any>;
-  let store: Store<AppStoreState>;
   let eventService: EventService;
 
   const event = {
@@ -85,7 +83,6 @@ describe('EventEffects', () => {
 
   beforeEach(() => {
     eventEffects = TestBed.inject(EventEffects);
-    store = TestBed.inject(Store);
     eventService = TestBed.inject(EventService);
   });
 

@@ -21,7 +21,7 @@ The data has been downloaded from the Global Terrorism Database site - https://w
 
 ## Demo
 
-!!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
+### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#/ It may take a while for the application to start. 
 
 To access the endpoints you must have an account. You can use the previously prepared account:
@@ -42,8 +42,7 @@ To start the application, in the folder, enter the following commands in command
 
 - `mvnw clean package -Dspring-boot.run.profiles=docker -DskipTests`
 - `docker-compose up -d`
-  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:8080/swagger-ui.html`,
-  where YOUR_DOCKER_IP is your docker machine IP address (or localhost).
+  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:8080/swagger-ui.html`, where `YOUR_DOCKER_IP` is your docker machine IP address (or localhost).
   To shut down the containers enter:
 - `docker-compose down`
 

@@ -1,0 +1,8 @@
+Dockerfile*
+docker-compose*
+.dockerignore
+.gitignore
+README.md
+src/
+api.iml
+pom.xml
