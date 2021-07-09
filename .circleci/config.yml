@@ -49,7 +49,7 @@ jobs:
   frontend-tests:
     working_directory: ~/global_terrorism_api/client
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:14.17.0-browsers-legacy
     steps:
       - checkout:
           path: ~/global_terrorism_api

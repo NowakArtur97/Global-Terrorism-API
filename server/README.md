@@ -135,7 +135,7 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 
 ## To Do
 
-- Monitoring using Prometheus and Grafana
+- Upload on Heroku
 
 ## Endpoints List:
 
