@@ -7,7 +7,6 @@
 - [Setup](#setup)
 - [Built With](#built-with)
 - [Features](#features)
-- [To Do](#to-do)
 - [Endpoints List](#endpoints-list)
 - [Examples](#examples)
 - [Status](#status)
@@ -21,7 +20,6 @@ The data has been downloaded from the Global Terrorism Database site - https://w
 
 ## Demo
 
-### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#/ It may take a while for the application to start. 
 
 To access the endpoints you must have an account. You can use the previously prepared account:
@@ -113,6 +111,8 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Maven
 - Docker
 - CircleCI
+- Neo4j Aura
+- Heroku
 
 ## Features
 
@@ -132,10 +132,9 @@ Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-u
 - Documentation created using Swagger 2
 - Loading data from an .xlsx file
 - Custom password validation
-
-## To Do
-
-- Upload on Heroku
+- Connection with the Neo4j Aura database
+- Continuous integration and deployment with CircleCI
+- Deploy on Heroku
 
 ## Endpoints List:
 

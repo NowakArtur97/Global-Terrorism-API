@@ -1,13 +1,15 @@
 #
-# Spring Data Neo4j
+# Neo4j Aura
 #
-spring:
-  data:
-    neo4j:
-      password: ${NEO4J_PASSWORD}
+org:
+  neo4j:
+    driver:
       uri: ${NEO4J_URL}
-      username: ${NEO4J_USER}
-      encryption: true
+      authentication:
+        username: ${NEO4J_USER}
+        password: ${NEO4J_PASSWORD}
+      config:
+        encrypted: true
 #
 # Spring MVC
 #

@@ -5,8 +5,7 @@ spring:
   data:
     neo4j:
       password: secret
-      uri: bolt://192.168.99.100:7687
-      #      uri: bolt://192.168.99.100:7687
+      uri: bolt://localhost:7687
       username: neo4j
 #
 # Spring Boot Actuator
@@ -29,4 +28,3 @@ management:
         enabled: true
   security:
     enabled: false
-

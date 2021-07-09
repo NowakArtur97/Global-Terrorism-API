@@ -15,11 +15,10 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demos are available on the Heroku platform.
 
-Swagger 2 API Documentation: https://global-terrorism-api.herokuapp.com/swagger-ui.html#
-AngularJS App: https://global-terrorism-tracker.herokuapp.com
+API Documentation: https://global-terrorism-api.herokuapp.com/swagger-ui.html#
+Angular app: https://global-terrorism-tracker.herokuapp.com
 
 To log in as a user please provide:
 
@@ -76,10 +75,12 @@ Backend:
 - Jackson (jackson-datatype-jsr353) - 2.10.2
 - JSON Web Token Support For The JVM (jjwt) - 0.9.1
 - Passay - 1.6.0
+- Neo4j
 - Maven
 - Docker
-- Neo4j
 - CircleCI
+- Neo4j Aura
+- Heroku
 
 Frontend:
 
@@ -97,10 +98,13 @@ Frontend:
 - Jasmine - 3.6.0
 - Karma - 5.0.0
 - Protractor - 7.0.0
+- Docker
+- CircleCI
+- Heroku
 
 ## Status
 
-Project is: in progress
+Project is: finished
 
 ## Screenshots
 

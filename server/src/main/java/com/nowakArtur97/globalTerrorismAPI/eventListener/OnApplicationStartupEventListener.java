@@ -43,9 +43,9 @@ class OnApplicationStartupEventListener {
 
     private static final String DEFAULT_EVENT_SUMMARY = "The specific summary of the attack is unknown.";
     private static final String DEFAULT_EVENT_MOTIVE = "The specific motive of the attack is unknown.";
-    public static final int DEFAULT_YEAR_OF_EVENT = 1970;
-    public static final int DEFAULT_MONTH_OF_EVENT = 1;
-    public static final int DEFAULT_DAY_OF_EVENT = 1;
+    private static final int DEFAULT_YEAR_OF_EVENT = 1970;
+    private static final int DEFAULT_MONTH_OF_EVENT = 1;
+    private static final int DEFAULT_DAY_OF_EVENT = 1;
     private static final String DEFAULT_TARGET = "The specific target of the attack is unknown.";
 
     @Value("${app.dataFilePath:data/globalterrorismdb_0919dist-mini.xlsx}")

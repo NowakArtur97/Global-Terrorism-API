@@ -7,7 +7,6 @@
 - [Setup](#setup)
 - [Built With](#built-with)
 - [Features](#features)
-- [To Do](#to-do)
 - [Status](#status)
 - [Screenshots](#screenshots)
 
@@ -17,7 +16,6 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-### !!! Temporarily unavailable due to the end of support for graph databases on Heroku !!!
 The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/
 It may take a while for the application to start.
 
@@ -73,6 +71,7 @@ To start the application, in the folder, enter the following commands in command
 - Protractor - 7.0.0
 - Docker
 - CircleCI
+- Heroku
 
 ## Features
 
@@ -85,14 +84,12 @@ To start the application, in the folder, enter the following commands in command
 - Displaying a list of events with the possibility of sorting, filtering and paging
 - Charts with information about events and victims
 - Determining the user's location
-
-## To Do
-
-- Adding targets/groups/etc.
+- Continuous integration and deployment with CircleCI
+- Deploy on Heroku
 
 ## Status
 
-Project is: in progress
+Project is: finished
 
 ## Screenshots
 
