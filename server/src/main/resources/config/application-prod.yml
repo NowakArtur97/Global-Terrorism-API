@@ -4,9 +4,9 @@
 spring:
   data:
     neo4j:
-      password: ${GRAPHENEDB_PASSWORD}
-      uri: ${GRAPHENEDB_URL}
-      username: ${GRAPHENEDB_USER}
+      password: ${NEO4J_PASSWORD}
+      uri: ${NEO4J_URL}
+      username: ${NEO4J_USER}
       encryption: true
 #
 # Spring MVC
