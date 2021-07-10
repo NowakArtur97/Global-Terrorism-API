@@ -133,6 +133,7 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
           this.store.dispatch(EventActions.fetchEvents());
           this.setupUserMarkers();
         } else {
+          this.markerService.cleanMapFromCircleMarkers(this.map, this.markers);
           this.isUserLoggedIn = false;
         }
       });

@@ -4,10 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Store, StoreModule } from '@ngrx/store';
 import * as L from 'leaflet';
 import { of } from 'rxjs';
-import {
-  AuthStoreState,
-  selectAuthState,
-} from 'src/app/auth/store/auth.reducer';
+import { AuthStoreState, selectAuthState } from 'src/app/auth/store/auth.reducer';
 import { MaterialModule } from 'src/app/common/material.module';
 import {
   selectAllEventsInRadius,
@@ -94,6 +91,33 @@ describe('MapComponent', () => {
       expect(store.dispatch).toHaveBeenCalledWith(EventActions.fetchEvents());
       expect(markerService.removeMarker).toHaveBeenCalled();
       expect(markerService.createUserPositionMarker).toHaveBeenCalled();
+      expect(markerService.removeCircleMarker).toHaveBeenCalled();
+      expect(markerService.createCircleMarker).toHaveBeenCalled();
+      expect(shapeService.getCountriesShapes).toHaveBeenCalled();
+    });
+
+    it('and user is logged out remove markers', () => {
+      spyOn(store, 'select').and.callFake((selector) => {
+        if (selector === selectAllEventsInRadius) {
+          return of([]);
+        } else if (selector === selectAuthState) {
+          return of();
+        } else if (selector === selectLastDeletedEvent) {
+          return of();
+        } else if (selector === selectMaxRadiusOfEventsDetection) {
+          return of(maxRadiusOfEventsDetection);
+        }
+      });
+
+      fixture.detectChanges();
+      component.ngOnInit();
+
+      expect(store.select).toHaveBeenCalled();
+      expect(store.dispatch).not.toHaveBeenCalledWith(
+        EventActions.fetchEvents()
+      );
+      expect(markerService.removeMarker).not.toHaveBeenCalled();
+      expect(markerService.createUserPositionMarker).not.toHaveBeenCalled();
       expect(markerService.removeCircleMarker).toHaveBeenCalled();
       expect(markerService.createCircleMarker).toHaveBeenCalled();
       expect(shapeService.getCountriesShapes).toHaveBeenCalled();
