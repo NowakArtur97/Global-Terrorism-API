@@ -17,6 +17,7 @@ import {
 import AppStoreState from 'src/app/store/app.state';
 import { selectAuthState } from 'src/app/auth/store/auth.reducer';
 import ShapeService from '../services/shape.service';
+import { Title } from '@angular/platform-browser';
 
 const ICO_SIZE: L.PointExpression = [25, 41];
 const ICON_ANCHOR: L.PointExpression = [13, 41];
@@ -95,8 +96,11 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private store: Store<AppStoreState>,
     private markerService: MarkerService,
-    private shapeService: ShapeService
-  ) {}
+    private shapeService: ShapeService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Map');
+  }
 
   ngOnInit(): void {
     this.getUserLocation();
@@ -113,7 +117,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    // TODO: Better approach would be to pre-load the data in a resolver
     this.countriesShapeSubscription$ = this.shapeService
       .getCountriesShapes()
       .subscribe((countries) => {
@@ -225,7 +228,6 @@ export class MapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private getUserLocation(): void {
     if (!navigator.geolocation) {
-      // TODO: Popup with info
       console.log('Location is not supported');
       return;
     }

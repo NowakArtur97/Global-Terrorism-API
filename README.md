@@ -40,10 +40,8 @@ To access the API endpoints use the previously prepared account:
 It may take a while for the applications to start.
 
 Please see the README for specific applications for more information.<br/>
-Backend:<br/>
-https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server<br/>
-Frontend:<br/>
-https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
+Backend: https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/server<br/>
+Frontend: https://github.com/NowakArtur97/GlobalTerrorismAPI/tree/master/client
 
 ## Setup
 

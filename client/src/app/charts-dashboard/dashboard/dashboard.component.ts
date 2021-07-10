@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ResizeEvent } from 'leaflet';
 import { map } from 'rxjs/operators';
 
@@ -33,7 +34,12 @@ export class DashboardComponent implements OnInit {
     })
   );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Statistics');
+  }
 
   ngOnInit(): void {
     this.rowHeight = window.innerWidth > 640 ? '365px' : '200px';

@@ -16,11 +16,11 @@
 
 REST API providing information on terrorist attacks
 
-The data has been downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd/ and used only for learning purposes.
+The data has been downloaded from the Global Terrorism Database site - https://www.start.umd.edu/gtd and used only for learning purposes.
 
 ## Demo
 
-The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#/.<br/>
+The application demo is available on the Heroku platform: https://global-terrorism-api.herokuapp.com/swagger-ui.html#.<br/>
 It may take a while for the application to start.
 
 To access the endpoints you must have an account. You can use the previously prepared account:
@@ -91,7 +91,7 @@ Then generate JWT. The token can be generated using a username or email address.
 }
 ```
 
-Then use the token as a Bearer Token using e.g. Postman or Swagger on /swagger-ui.html endpoint.
+Then use the token as a Bearer Token using e.g. Postman or Swagger on `/swagger-ui.html` endpoint.
 
 ## Built With
 
