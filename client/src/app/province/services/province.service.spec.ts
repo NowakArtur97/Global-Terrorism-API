@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import ProvincesGetResponse from '../models/provinces-get-response.model';
@@ -55,7 +58,7 @@ describe('provinceService', () => {
         expect(res).toEqual(provinces);
       });
 
-      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=200`);
+      const req = httpMock.expectOne(`${BASE_URL}?page=0&size=1000`);
       expect(req.request.method).toBe('GET');
       req.flush(provinces);
     });

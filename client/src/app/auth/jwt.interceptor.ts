@@ -1,7 +1,13 @@
-import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { exhaustMap, map, take } from 'rxjs/operators';
 import AppStoreState from 'src/app/store/app.state';
 
@@ -17,16 +23,22 @@ export default class JwtInterceptor implements HttpInterceptor {
       take(1),
       map((authState) => authState.user),
       exhaustMap((user) => {
-        if (!user) {
+        if (
+          req.url.includes('authentication') ||
+          req.url.includes('registration')
+        ) {
           return next.handle(req);
+        } else if (!user) {
+          return EMPTY;
+        } else {
+          const modifiedRequest = req.clone({
+            headers: new HttpHeaders().set(
+              'Authorization',
+              `Bearer ${user.token}`
+            ),
+          });
+          return next.handle(modifiedRequest);
         }
-        const modifiedRequest = req.clone({
-          headers: new HttpHeaders().set(
-            'Authorization',
-            `Bearer ${user.token}`
-          ),
-        });
-        return next.handle(modifiedRequest);
       })
     );
   }

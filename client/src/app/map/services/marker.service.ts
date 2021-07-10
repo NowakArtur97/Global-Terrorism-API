@@ -117,7 +117,7 @@ export default class MarkerService {
   }
 
   createUserPositionMarker(latLong: L.LatLngExpression, map: L.Map): L.Marker {
-    const markerText = 'Drag and drop me to change location :D';
+    const markerText = 'Drag and drop me to change location';
     const popupTextOffset: L.PointExpression = [0, -30];
     const popup = L.popup({
       offset: popupTextOffset,

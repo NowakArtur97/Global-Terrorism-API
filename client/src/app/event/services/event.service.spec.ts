@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import User from 'src/app/auth/models/user.model';
 import BulkRequestMethod from 'src/app/common/models/bulk-request-method.model';
@@ -16,7 +19,7 @@ describe('eventsService', () => {
 
   const URL = 'http://localhost:8080/api/v1';
   const BASE_URL = `${URL}/events`;
-  const DEFAULT_PAGE_SIZE = 200;
+  const DEFAULT_PAGE_SIZE = 1000;
   const DEFAULT_DEPTH_FOR_EVENTS = 2;
   const DEFAULT_DEPTH_FOR_ONE_EVENT = 5;
 
