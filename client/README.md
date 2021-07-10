@@ -16,7 +16,7 @@ An application that allows you to track terrorist attacks around the world, crea
 
 ## Demo
 
-The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/
+The application demo is available on the Heroku platform: https://global-terrorism-tracker.herokuapp.com/<br/>
 It may take a while for the application to start.
 
 To log in as a user please provide:
@@ -47,9 +47,9 @@ Run `ng e2e` to execute the end-to-end tests via Protractor.
 To start the application, in the folder, enter the following commands in command line:
 
 - `docker-compose up -d`
-  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:4200/map` where `YOUR_DOCKER_IP` is your docker machine IP address (or localhost).
-  Make sure you have launched the backend application before this.
-  It may be necessary to change the API address in the `environment.docker.ts` file in case of a different Docker address.
+  Go to: `http://YOUR_DOCKER_IP_OR_LOCALHOST:4200/map` where `YOUR_DOCKER_IP` is your docker machine IP address (or localhost).<br/>
+  Make sure you have launched the backend application before this.<br/>
+  It may be necessary to change the API address in the `environment.docker.ts` file in case of a different Docker address.<br/>
   To shut down the containers enter:
 - `docker-compose down`
 
