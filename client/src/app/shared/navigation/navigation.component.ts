@@ -10,7 +10,6 @@ import { selectEventToUpdate } from 'src/app/event/store/event.reducer';
 import AppStoreState from 'src/app/store/app.state';
 
 import * as AuthActions from '../../auth/store/auth.actions';
-import * as CityActions from '../../city/store/city.actions';
 import * as EventActions from '../../event/store/event.actions';
 
 @Component({
@@ -76,7 +75,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logoutUser());
-    this.store.dispatch(CityActions.resetCities());
     this.store.dispatch(EventActions.resetEvents());
   }
 
