@@ -128,12 +128,6 @@
             <artifactId>jackson-datatype-jsr353</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.github.wnameless.spring/spring-bulk-api -->
         <dependency>
             <groupId>com.github.wnameless.spring</groupId>
